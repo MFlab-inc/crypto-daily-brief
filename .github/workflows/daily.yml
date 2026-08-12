@@ -92,3 +92,5 @@ jobs:
           name: daily-${{ steps.target.outputs.date }}
           path: outputs/${{ steps.target.outputs.date }}/
           if-no-files-found: ignore
+
+# (no-op) re-index marker — 実行内容には影響しません。
