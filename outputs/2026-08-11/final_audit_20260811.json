@@ -1,0 +1,63 @@
+{
+  "overall": "PASS",
+  "failed": 0,
+  "checked_at_jst": "2026-08-12T23:59:56.079001+09:00",
+  "checks": [
+    {
+      "id": "C1_schema",
+      "result": "PASS",
+      "detail": "全必須キーあり"
+    },
+    {
+      "id": "C2_date_internal",
+      "result": "PASS",
+      "detail": "weekday_ok=True title_ok=True"
+    },
+    {
+      "id": "C3_date_is_yesterday",
+      "result": "PASS",
+      "detail": "target=2026-08-11 expected=2026-08-11"
+    },
+    {
+      "id": "C4_change_format",
+      "result": "PASS",
+      "detail": "±N.NN% 形式・矢印整合"
+    },
+    {
+      "id": "C5_banned_terms",
+      "result": "PASS",
+      "detail": "禁止語・二重括弧なし"
+    },
+    {
+      "id": "C6_jpy_assets",
+      "result": "PASS",
+      "detail": "fx=159.29 で整合"
+    },
+    {
+      "id": "C7_jpy_macro",
+      "result": "PASS",
+      "detail": "整合"
+    },
+    {
+      "id": "C8_apr_recalc",
+      "result": "PASS",
+      "detail": "算式整合"
+    },
+    {
+      "id": "C9_fg_range",
+      "result": "PASS",
+      "detail": "value=37 label=Fear"
+    },
+    {
+      "id": "C10_image_size",
+      "result": "PASS",
+      "detail": "size=(2560, 1440)"
+    }
+  ],
+  "sha256": {
+    "daily_data.json": "3ef2d255d4631c1d13306be1a58318394121db32ce6365cff79b1e3b4ad22ac0",
+    "infographic.png": "772ce496525c67e267886de9c78e1ca094d65d570534c7da7fab7c5992182a9a",
+    "raw_data.json": "493c057db0a44849afb3252b486491ef907df59da18e7f092c338ab43445d278",
+    "apr_screenshot.jpg": "4c96d71cf0efe2388a6841626991d4c29cbea26ab871c906255fe0c0f8657ea0"
+  }
+}
