@@ -118,9 +118,18 @@ def main() -> int:
             det4.append(f"{asset.get('asset')}: {c} なのに direction={asset.get('direction')}")
     au.add("C4_change_format", ok4, "; ".join(det4) or "±N.NN% 形式・矢印整合")
 
-    # C5 禁止表記（基準 §1: 「暗号通貨」表記、「24時間比」ラベル統一）
-    banned = [w for w in ("仮想通貨", "前日比") if w in blob]
-    au.add("C5_banned_terms", not banned, f"found={banned}" if banned else "禁止語なし")
+    # C5 禁止表記（基準 §1: 「暗号通貨」表記、「24時間比」ラベル統一）＋ 二重括弧（v1.1 A-2）
+    banned = [w for w in ("仮想通貨", "前日比", "（（", "））") if w in blob]
+    # 円換算はレンダラー側が丸括弧を付ける。JSON側で括ると画像が二重括弧になるため、
+    # 実効的な回帰ガードとして該当4フィールドの先頭括弧も禁止する。
+    prewrapped = [k for k, src in (("market_cap_jpy", d.get("market", {})),
+                                   ("volume_24h_jpy", d.get("market", {})),
+                                   ("tvl_jpy", d.get("base", {})),
+                                   ("dex_volume_jpy", d.get("base", {})))
+                  if str(src.get(k, "")).startswith("（")]
+    au.add("C5_banned_terms", not banned and not prewrapped,
+           f"found={banned} prewrapped={prewrapped}" if (banned or prewrapped)
+           else "禁止語・二重括弧なし")
 
     # C6 円換算の再計算（±1.5%）: assets
     fx = parse_money(d.get("footer", {}).get("usd_jpy", ""))

@@ -2,10 +2,15 @@
 """Render the approved fixed crypto/DEX daily infographic.
 
 Usage:
-  python3 fixed_infographic_renderer.py daily_data.json output.png
+  python3 infographic_renderer.py daily_data.json output.png
 
 The renderer fixes the approved layout, palette, panel sequence and decoration.
 Only verified values supplied in daily_data.json may change.
+
+Layout version: v1.1 (2026-08-12, owner-approved — see docs/DESIGN_CHANGES.md).
+Panel structure, palette, 2560x1440 and the fail-close contract are unchanged.
+Note: docs/recovered/ holds the v1.0 original and still uses "#BTC"-style asset
+keys; it is reference material and is not rendered by this pipeline.
 """
 from __future__ import annotations
 
@@ -80,27 +85,35 @@ def line(draw: ImageDraw.ImageDraw, a: tuple[int, int], b: tuple[int, int],
     draw.line((a, b), fill=fill, width=width)
 
 
+# v1.1 B-4: バッジをパネル角から内側へ寄せ、角丸(r=18)と枠線(4px)に
+# 斜線アクセントの上端が食われないようにする。
+BADGE_DX, BADGE_DY = 14, 10
+HEADER_RULE_DY = BADGE_DY + 84   # 罫線 = バッジ下端のすぐ下（y1+94）
+
+
 def panel_header(draw: ImageDraw.ImageDraw, box: tuple[int, int, int, int], n: str, label: str) -> None:
     x1, y1, x2, _ = box
-    draw.rounded_rectangle((x1, y1, x1 + 112, y1 + 82), radius=17, fill=NAVY)
-    draw.polygon([(x1 + 105, y1), (x1 + 155, y1), (x1 + 100, y1 + 82), (x1 + 55, y1 + 82)], fill=WHITE)
-    text(draw, (x1 + 52, y1 + 40), n, 58, WHITE, True, "mm")
-    text(draw, (x1 + 185, y1 + 40), label, 42, NAVY, True, "lm")
-    line(draw, (x1 + 28, y1 + 82), (x2 - 28, y1 + 82), NAVY, 4)
+    bx, by = x1 + BADGE_DX, y1 + BADGE_DY
+    draw.rounded_rectangle((bx, by, bx + 112, by + 82), radius=17, fill=NAVY)
+    draw.polygon([(bx + 105, by), (bx + 155, by), (bx + 100, by + 82), (bx + 55, by + 82)], fill=WHITE)
+    text(draw, (bx + 52, by + 40), n, 58, WHITE, True, "mm")
+    text(draw, (bx + 185, by + 40), label, 42, NAVY, True, "lm")
+    line(draw, (x1 + 28, y1 + HEADER_RULE_DY), (x2 - 28, y1 + HEADER_RULE_DY), NAVY, 4)
 
 
 def draw_asset_symbol(draw: ImageDraw.ImageDraw, cx: int, cy: int, asset: str) -> None:
-    if asset == "#BTC":
+    # v1.1 B-3: 画像内の通貨表記は # なし。
+    if asset == "BTC":
         draw.ellipse((cx - 53, cy - 53, cx + 53, cy + 53), fill=ORANGE)
         # Use a stable geometric mark rather than a font-dependent Bitcoin symbol.
         text(draw, (cx, cy), "B", 66, WHITE, True, "mm")
         line(draw, (cx - 17, cy - 36), (cx - 17, cy + 36), WHITE, 4)
         line(draw, (cx - 7, cy - 36), (cx - 7, cy + 36), WHITE, 4)
-    elif asset == "#ETH":
+    elif asset == "ETH":
         draw.ellipse((cx - 53, cy - 53, cx + 53, cy + 53), fill="#F4F5F7", outline=LIGHT_GRAY, width=2)
         draw.polygon([(cx, cy - 43), (cx - 30, cy), (cx, cy + 5), (cx + 30, cy)], fill="#4B4E55")
         draw.polygon([(cx, cy + 13), (cx - 30, cy + 4), (cx, cy + 43), (cx + 30, cy + 4)], fill="#16181C")
-    elif asset == "#BNB":
+    elif asset == "BNB":
         draw.ellipse((cx - 53, cy - 53, cx + 53, cy + 53), fill=GOLD)
         for dx, dy in [(0, -22), (-22, 0), (22, 0), (0, 22)]:
             draw.polygon([(cx + dx, cy + dy - 13), (cx + dx + 13, cy + dy),
@@ -111,7 +124,7 @@ def draw_asset_symbol(draw: ImageDraw.ImageDraw, cx: int, cy: int, asset: str) -
 
 
 def direction(draw: ImageDraw.ImageDraw, x: int, y: int, pct: str, direction_value: str,
-              show_label: bool = True) -> None:
+              show_label: bool = True, anchor: str = "rm") -> None:
     if direction_value == "up":
         color, prefix = GREEN, "▲ "
     elif direction_value == "down":
@@ -122,7 +135,8 @@ def direction(draw: ImageDraw.ImageDraw, x: int, y: int, pct: str, direction_val
     else:
         raise ValueError(f"Unsupported direction: {direction_value}")
     label = "24時間比 " if show_label else ""
-    fitted_text(draw, (x, y), f"{prefix}{label}{pct}", 345, 36, color, True, "ra", 24)
+    # v1.1 B-5: 既定を行中央揃え("rm")にし、直下の罫線と干渉させない。
+    fitted_text(draw, (x, y), f"{prefix}{label}{pct}", 345, 36, color, True, anchor, 24)
 
 
 def draw_gauge(draw: ImageDraw.ImageDraw, cx: int, cy: int, value: int, label: str) -> None:
@@ -177,17 +191,18 @@ def draw_header(draw: ImageDraw.ImageDraw, data: dict[str, Any]) -> None:
     draw.polygon([(62, 24), (95, 24), (20, 180), (0, 180)], fill=WHITE)
     draw.polygon([(W, 24), (W - 180, 24), (W - 105, 180), (W, 180)], fill=NAVY)
     draw.polygon([(W - 62, 24), (W - 95, 24), (W - 20, 180), (W, 180)], fill=WHITE)
-    fitted_text(draw, (W // 2, 75), data["date_title"], 2080, 70, NAVY, True, "mm", 48)
-    fitted_text(draw, (W // 2, 143), data["summary"], 2050, 44, NAVY, True, "mm", 28)
+    # v1.1 B-1: ヘッダーは日付タイトルのみ。summary は下部帯へ移設したため、
+    # 帯状の余白（24–180px）の中央に単独で配置する。
+    fitted_text(draw, (W // 2, 103), data["date_title"], 2080, 76, NAVY, True, "mm", 48)
 
 
 def draw_assets(draw: ImageDraw.ImageDraw, data: dict[str, Any], box: tuple[int, int, int, int]) -> None:
     panel_header(draw, box, "1", "主要暗号通貨の価格")
     x1, y1, x2, _ = box
     # 円換算と変化率の列を分離し、「24時間比」は列見出しとして一度だけ表示する。
-    text(draw, (x1 + 700, y1 + 108), "日本円換算", 22, NAVY, True, "lm")
-    text(draw, (x2 - 28, y1 + 108), "24時間比", 22, NAVY, True, "ra")
-    y_positions = [y1 + 158, y1 + 290, y1 + 422]
+    text(draw, (x1 + 700, y1 + 120), "日本円換算", 22, NAVY, True, "lm")
+    text(draw, (x2 - 28, y1 + 120), "24時間比", 22, NAVY, True, "ra")
+    y_positions = [y1 + 168, y1 + 298, y1 + 428]
     for i, item in enumerate(data["assets"]):
         y = y_positions[i]
         if i:
@@ -195,7 +210,9 @@ def draw_assets(draw: ImageDraw.ImageDraw, data: dict[str, Any], box: tuple[int,
         draw_asset_symbol(draw, x1 + 80, y, item["asset"])
         text(draw, (x1 + 180, y), item["asset"], 48, NAVY, True, "lm")
         text(draw, (x1 + 395, y), item["usd"], 54, NAVY, True, "lm")
-        text(draw, (x1 + 700, y), f"（{item['jpy']}）", 28, NAVY, False, "lm")
+        # 円換算が未取得の日は空の丸括弧「（）」を描かない（v1.1 A-1 と同種の不具合）。
+        if item.get("jpy"):
+            text(draw, (x1 + 700, y), f"（{item['jpy']}）", 28, NAVY, False, "lm")
         direction(draw, x2 - 28, y, item["change_24h"], item["direction"], show_label=False)
 
 
@@ -204,17 +221,17 @@ def draw_market(draw: ImageDraw.ImageDraw, data: dict[str, Any], box: tuple[int,
     x1, y1, x2, _ = box
     gauge = data["market"]["fear_greed"]
     # 見出しと半円ゲージが重ならないよう、見出しを上方へ配置して余白を確保する。
-    text(draw, (x1 + 285, y1 + 112), "Fear & Greed", 34, NAVY, True, "mm")
-    draw_gauge(draw, x1 + 285, y1 + 330, int(gauge["value"]), gauge["label"])
-    line(draw, (x1 + 500, y1 + 100), (x1 + 500, y1 + 500), LINE, 3)
+    text(draw, (x1 + 285, y1 + 124), "Fear & Greed", 34, NAVY, True, "mm")
+    draw_gauge(draw, x1 + 285, y1 + 338, int(gauge["value"]), gauge["label"])
+    line(draw, (x1 + 500, y1 + 112), (x1 + 500, y1 + 500), LINE, 3)
     stats = [
         ("cap", "時価総額", data["market"]["market_cap"], data["market"]["market_cap_jpy"]),
         ("volume", "24時間取引高", data["market"]["volume_24h"], data["market"]["volume_24h_jpy"]),
-        ("btc_dom", "#BTCドミナンス", data["market"]["btc_dominance"], ""),
-        ("eth_dom", "#ETHドミナンス", data["market"]["eth_dominance"], ""),
+        ("btc_dom", "BTCドミナンス", data["market"]["btc_dominance"], ""),
+        ("eth_dom", "ETHドミナンス", data["market"]["eth_dominance"], ""),
     ]
     # 各指標を「ラベル＋数値」の1行へ統合し、区切り線との干渉を防ぐ。
-    stat_y_positions = [y1 + 145 + i * 100 for i in range(len(stats))]
+    stat_y_positions = [y1 + 156 + i * 100 for i in range(len(stats))]
     stat_text_width = x2 - (x1 + 700) - 28
     for i, (kind, label, main, sub) in enumerate(stats):
         y = stat_y_positions[i]
@@ -228,24 +245,25 @@ def draw_market(draw: ImageDraw.ImageDraw, data: dict[str, Any], box: tuple[int,
 def draw_base(draw: ImageDraw.ImageDraw, data: dict[str, Any], box: tuple[int, int, int, int]) -> None:
     panel_header(draw, box, "3", "Baseチェーンの状況")
     x1, y1, x2, _ = box
+    # 列見出しに「24時間比」を1回だけ記載し、行内では変化率数値のみを表示する（基準 §8）。
+    text(draw, (x2 - 28, y1 + 104), "24時間比", 22, NAVY, True, "ra")
     items = [
         ("base", "Base TVL", data["base"]["tvl"], data["base"]["tvl_jpy"], data["base"].get("tvl_change", ""), data["base"].get("tvl_direction", "neutral")),
         ("dex", "Base 24h DEX出来高", data["base"]["dex_volume"], data["base"]["dex_volume_jpy"], "", "neutral"),
-        ("usdc", "#USDCドミナンス", data["base"]["usdc_dominance"], "", "", "neutral"),
+        ("usdc", "USDCドミナンス", data["base"]["usdc_dominance"], "", "", "neutral"),
     ]
     for i, (kind, label, main, sub, change, direction_value) in enumerate(items):
-        y = y1 + 142 + i * 112
+        y = y1 + 158 + i * 104
         if i:
-            line(draw, (x1 + 30, y - 56), (x2 - 30, y - 56), LIGHT_GRAY, 2)
+            line(draw, (x1 + 30, y - 52), (x2 - 30, y - 52), LIGHT_GRAY, 2)
         stat_icon(draw, x1 + 80, y, kind)
         text(draw, (x1 + 165, y), label, 37, NAVY, True, "lm")
         text(draw, (x1 + 560, y), main, 51, NAVY, True, "lm")
         if sub:
             text(draw, (x1 + 770, y), f"（{sub}）", 25, NAVY, False, "lm")
         if change:
-            # 列見出しに「24時間比」を1回だけ記載し、行内では変化率数値のみを表示する。
-            text(draw, (x2 - 80, y - 35), "24時間比", 22, NAVY, True, "mm")
-            direction(draw, x2 - 30, y + 17, change, direction_value, show_label=False)
+            # v1.1 B-5: 行中央に揃え、直下の罫線との重なりを解消する。
+            direction(draw, x2 - 28, y, change, direction_value, show_label=False)
 
 
 def draw_pool_icon(draw: ImageDraw.ImageDraw, cx: int, cy: int) -> None:
@@ -255,13 +273,13 @@ def draw_pool_icon(draw: ImageDraw.ImageDraw, cx: int, cy: int) -> None:
 
 
 def draw_lp(draw: ImageDraw.ImageDraw, data: dict[str, Any], box: tuple[int, int, int, int]) -> None:
-    panel_header(draw, box, "4", "#ETH/#USDC LP確認")
+    panel_header(draw, box, "4", "ETH/USDC LP確認")
     x1, y1, x2, _ = box
-    draw_pool_icon(draw, x1 + 160, y1 + 235)
-    text(draw, (x1 + 160, y1 + 346), "#ETH/#USDC", 35, NAVY, True, "mm")
-    text(draw, (x1 + 160, y1 + 389), "Base 流動性プール", 28, NAVY, True, "mm")
-    line(draw, (x1 + 330, y1 + 105), (x1 + 330, y1 + 375), LINE, 3)
-    pool_boxes = [(x1 + 360, y1 + 98, x2 - 28, y1 + 225), (x1 + 360, y1 + 245, x2 - 28, y1 + 372)]
+    draw_pool_icon(draw, x1 + 160, y1 + 244)
+    text(draw, (x1 + 160, y1 + 352), "ETH/USDC", 35, NAVY, True, "mm")
+    text(draw, (x1 + 160, y1 + 394), "Base 流動性プール", 28, NAVY, True, "mm")
+    line(draw, (x1 + 330, y1 + 116), (x1 + 330, y1 + 380), LINE, 3)
+    pool_boxes = [(x1 + 360, y1 + 112, x2 - 28, y1 + 237), (x1 + 360, y1 + 250, x2 - 28, y1 + 375)]
     for box2, pool in zip(pool_boxes, data["lp"]["pools"]):
         rounded(draw, box2, 14, fill=PALE_BLUE, outline=None, width=0)
         ax1, ay1, ax2, ay2 = box2
@@ -272,16 +290,21 @@ def draw_lp(draw: ImageDraw.ImageDraw, data: dict[str, Any], box: tuple[int, int
         fitted_text(draw, (ax2 - 25, top_line_y), f"APR {pool['apr']}（参考値）", 410, 30, NAVY, True, "rm", 22)
         fitted_text(draw, (ax1 + 28, bottom_line_y), f"TVL {pool['tvl']}", 275, 29, NAVY, True, "lm", 22)
         fitted_text(draw, (ax2 - 25, bottom_line_y), f"24h Volume {pool['volume_24h']}", 410, 29, NAVY, True, "rm", 22)
-    fitted_text(draw, (x2 - 28, y1 + 391), "※ APRは公開画面・実運用レンジを確認", 520, 20, NAVY, False, "ra", 18)
+    fitted_text(draw, (x2 - 28, y1 + 392), "※ APRは公開画面・実運用レンジを確認", 520, 20, NAVY, False, "ra", 18)
 
 
 def draw_bottom(draw: ImageDraw.ImageDraw, data: dict[str, Any]) -> None:
+    """下部帯（v1.1 B-1/B-2）。
+
+    LP確認文は画像から削除し、この帯にはヘッドライン（summary）を表示する。
+    `lp.check_message` は日次JSONには残るが描画しない（フェーズ2のX投稿後編で使用）。
+    """
     draw.rounded_rectangle((60, 1185, W - 60, 1325), radius=15, fill=NAVY)
     sx, sy = 150, 1255
     draw.polygon([(sx, sy - 48), (sx + 40, sy - 28), (sx + 35, sy + 25), (sx, sy + 56), (sx - 35, sy + 25), (sx - 40, sy - 28)], outline=WHITE, width=7)
     text(draw, (sx, sy + 3), "✓", 54, WHITE, True, "mm")
-    # LP確認帯は投資判断時の見落としを避けるため、従来45pxから60pxへ拡大する。
-    fitted_text(draw, (W // 2, 1255), data["lp"]["check_message"], 1840, 60, WHITE, True, "mm", 48)
+    # ヘッドラインは日により長さが大きく変わるため、下限を30pxまで許容して枠内に収める。
+    fitted_text(draw, (W // 2, 1255), data["summary"], 1900, 58, WHITE, True, "mm", 30)
     x, y = W - 145, 1280
     for i, height in enumerate([23, 50, 85]):
         draw.rectangle((x + i * 28, y - height, x + i * 28 + 18, y), fill=WHITE)
@@ -308,10 +331,11 @@ def expected_direction(change_24h: Any) -> str:
 
 
 def validate_data(data: dict[str, Any]) -> None:
-    expected_assets = ["#BTC", "#ETH", "#BNB"]
+    # v1.1 B-3: 画像内の通貨表記は # なし。
+    expected_assets = ["BTC", "ETH", "BNB"]
     assets = data.get("assets")
     if not isinstance(assets, list) or [item.get("asset") for item in assets] != expected_assets:
-        raise ValueError("assets must contain #BTC, #ETH and #BNB in that exact order")
+        raise ValueError("assets must contain BTC, ETH and BNB in that exact order")
 
     target_date_jst = data.get("target_date_jst")
     weekday_jp = data.get("weekday_jp")

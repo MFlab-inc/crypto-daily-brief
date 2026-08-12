@@ -236,6 +236,11 @@ def main() -> int:
         return {"name": name, "apr": UNCONFIRMED, "tvl": UNCONFIRMED,
                 "volume_24h": UNCONFIRMED}
 
+    start_s = t_start.strftime("%Y-%m-%d %H:%M")
+    end_s = t_end.strftime("%H:%M")
+    retrieved_at = (f"{start_s} JST" if start_s.endswith(end_s)
+                    else f"{start_s}–{end_s} JST")
+
     sources = ["CoinMarketCap API" if cmc else None,
                "GeckoTerminal" if (g005 or g03) else None,
                "DefiLlama" if (b_tvl or b_dex or usdc_d is not None) else None,
@@ -247,30 +252,33 @@ def main() -> int:
         "summary": os.environ.get(
             "SUBTITLE_OVERRIDE",
             "（シャドー運用中：ヘッドラインはフェーズ2で生成）"),
-        "assets": [asset("BTC", "#BTC"), asset("ETH", "#ETH"), asset("BNB", "#BNB")],
+        # 画像内の通貨表記は # を付けない（v1.1 B-3）。X投稿本文の # 付与は維持。
+        "assets": [asset("BTC", "BTC"), asset("ETH", "ETH"), asset("BNB", "BNB")],
         "market": {
             "fear_greed": (cmc["fg"] if cmc else {"value": 0, "label": UNCONFIRMED}),
             "market_cap": fmt_cap_usd(cmc["global"]["mcap"]) if cmc else UNCONFIRMED,
-            "market_cap_jpy": f"（{fmt_cap_jpy(cmc['global']['mcap'], fx)}）" if cmc and fx else "",
+            # 丸括弧はレンダラー側で付与する。ここで括ると二重括弧になる（v1.1 A-1）。
+            "market_cap_jpy": fmt_cap_jpy(cmc["global"]["mcap"], fx) if cmc and fx else "",
             "volume_24h": fmt_vol_usd(cmc["global"]["vol"]) if cmc else UNCONFIRMED,
-            "volume_24h_jpy": f"（{fmt_vol_jpy(cmc['global']['vol'], fx)}）" if cmc and fx else "",
+            "volume_24h_jpy": fmt_vol_jpy(cmc["global"]["vol"], fx) if cmc and fx else "",
             "btc_dominance": f"{cmc['global']['btc_d']:.2f}%" if cmc else UNCONFIRMED,
             "eth_dominance": f"{cmc['global']['eth_d']:.2f}%" if cmc else UNCONFIRMED,
         },
         "base": {
             "tvl": fmt_tvl_usd(b_tvl) if b_tvl else UNCONFIRMED,
-            "tvl_jpy": f"（{fmt_vol_jpy(b_tvl, fx)}）" if b_tvl and fx else "",
+            "tvl_jpy": fmt_vol_jpy(b_tvl, fx) if b_tvl and fx else "",
             "tvl_change": fmt_change(b_chg) if b_chg is not None else UNCONFIRMED,
             "tvl_direction": ("up" if b_chg > 0 else "down" if b_chg < 0 else "neutral")
                              if b_chg is not None else "neutral",
             "dex_volume": fmt_dex_usd(b_dex) if b_dex else UNCONFIRMED,
-            "dex_volume_jpy": f"（{fmt_vol_jpy(b_dex, fx)}）" if b_dex and fx else "",
+            "dex_volume_jpy": fmt_vol_jpy(b_dex, fx) if b_dex and fx else "",
             "usdc_dominance": f"{usdc_d:.1f}%" if usdc_d is not None else UNCONFIRMED,
         },
         "lp": {"pools": [pool("Base 0.05%プール", g005), pool("Base 0.3%プール", g03)],
                "check_message": lp_msg},
         "footer": {
-            "retrieved_at": f"{t_start.strftime('%Y-%m-%d %H:%M')}–{t_end.strftime('%H:%M')} JST",
+            # 開始と終了が同分なら範囲表記にせず単一時刻で表す（v1.1 A-3）。
+            "retrieved_at": retrieved_at,
             "usd_jpy": f"¥{fx:.2f}" if fx else UNCONFIRMED,
             "sources": " / ".join(s for s in sources if s) or UNCONFIRMED,
         },
