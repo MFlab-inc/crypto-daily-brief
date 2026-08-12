@@ -6,7 +6,12 @@ Selenium+Firefox → Playwright+Firefox（GitHub Actions向け）。
 待機・再試行・クロップ座標は原版と同一:
   初期読込3秒 / Refresh後8秒 / 最大3試行(+3秒) / 意図的待機 最大27秒
   crop: left=8, top=130, right=width-8, bottom=min(1050, height-10)
-検出文字列: "N/A% TODAY" / "GeckoTerminal取得失敗"
+検出文字列: "N/A%" / "GeckoTerminal取得失敗"
+  ※ 原版は "N/A% TODAY" だが、カードのDOMが
+    <div class="apr-value">N/A<span>%</span></div><span class="apr-label">TODAY</span>
+    と分かれており描画テキストが "N/A%\nTODAY"（間に改行）になるため、
+    原版から一度も一致しなかった。検知の意図（TODAY値の欠落検出）は不変のまま
+    "N/A%" へ短縮して修理（v1.3 承認）。
 
 使い方: python capture_apr.py <出力jpgパス>
 """
@@ -51,7 +56,9 @@ def capture(full_path: str) -> bool:
             # ソースには JS のリテラル（noteEl.textContent = '⚠ GeckoTerminal取得失敗'）が
             # 常に含まれ、正常時も必ず誤検知して3回空振りしていた。
             body = page.inner_text("body")
-            na = body.count("N/A% TODAY")
+            # v1.3 承認: "N/A% TODAY" は DOM 分割により描画テキストでは
+            # "N/A%\nTODAY" となり一致しない。"N/A%" へ短縮して検知を回復する。
+            na = body.count("N/A%")
             err = body.count("GeckoTerminal取得失敗")
             if na == 0 and err == 0:
                 print("  ✓ N/A表示なし。撮影します。")
