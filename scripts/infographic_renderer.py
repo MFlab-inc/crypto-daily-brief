@@ -7,8 +7,11 @@ Usage:
 The renderer fixes the approved layout, palette, panel sequence and decoration.
 Only verified values supplied in daily_data.json may change.
 
-Layout version: v1.1 (2026-08-12, owner-approved — see docs/DESIGN_CHANGES.md).
-Panel structure, palette, 2560x1440 and the fail-close contract are unchanged.
+Layout version: v1.1 — owner-approved and FROZEN 2026-08-12.
+See docs/DESIGN_CHANGES.md. Do not change the fixed layout, palette, panel
+structure or 2560x1440 canvas without a fresh explicit owner approval, per
+operating standard section 5. This applies to bug fixes too when they would
+alter the layout.
 Note: docs/recovered/ holds the v1.0 original and still uses "#BTC"-style asset
 keys; it is reference material and is not rendered by this pipeline.
 """
