@@ -1,0 +1,72 @@
+{
+  "target_date_jst": "2026-07-22",
+  "weekday_jp": "水",
+  "date_title": "2026年7月22日（水）暗号通貨・DEX市場概況",
+  "summary": "主要暗号通貨の要約。事実として確認できる市況のみを記載",
+  "assets": [
+    {
+      "asset": "#BTC",
+      "usd": "$0.00",
+      "jpy": "約0.00万円",
+      "change_24h": "+0.00%",
+      "direction": "up"
+    },
+    {
+      "asset": "#ETH",
+      "usd": "$0.00",
+      "jpy": "約0.00万円",
+      "change_24h": "-0.00%",
+      "direction": "down"
+    },
+    {
+      "asset": "#BNB",
+      "usd": "$0.00",
+      "jpy": "約0.00万円",
+      "change_24h": "未確認",
+      "direction": "neutral"
+    }
+  ],
+  "market": {
+    "fear_greed": {
+      "value": 50,
+      "label": "Neutral"
+    },
+    "market_cap": "未確認",
+    "market_cap_jpy": "",
+    "volume_24h": "未確認",
+    "volume_24h_jpy": "",
+    "btc_dominance": "未確認",
+    "eth_dominance": "未確認"
+  },
+  "base": {
+    "tvl": "未確認",
+    "tvl_jpy": "",
+    "tvl_change": "未確認",
+    "tvl_direction": "neutral",
+    "dex_volume": "未確認",
+    "dex_volume_jpy": "",
+    "usdc_dominance": "未確認"
+  },
+  "lp": {
+    "pools": [
+      {
+        "name": "Base 0.05%プール",
+        "apr": "未確認",
+        "tvl": "未確認",
+        "volume_24h": "未確認"
+      },
+      {
+        "name": "Base 0.3%プール",
+        "apr": "未確認",
+        "tvl": "未確認",
+        "volume_24h": "未確認"
+      }
+    ],
+    "check_message": "#ETHの方向を確認し、#USDC偏り・レンジ外・価格変動耐性を確認"
+  },
+  "footer": {
+    "retrieved_at": "YYYY年M月D日 HH:MM–HH:MM JST",
+    "usd_jpy": "¥0.0000",
+    "sources": "実際に確認した出典のみを記載"
+  }
+}

@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ETH/USDC V3 APR Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg-page: #f1f5f9;
+    --bg-card: #ffffff;
+    --bg-card-hover: #f8fafc;
+    --bg-subtle: #f1f5f9;
+    --border: #e2e8f0;
+    --border-strong: #cbd5e1;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-tertiary: #94a3b8;
+    --accent-blue: #2563eb;
+    --accent-cyan: #0891b2;
+    --accent-green: #059669;
+    --accent-red: #dc2626;
+    --accent-yellow: #d97706;
+    --chain-eth: #6366f1;
+    --chain-base: #2563eb;
+    --chain-arb: #0284c7;
+    --chain-op: #e11d48;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
+    background: var(--bg-page);
+    color: var(--text-primary);
+    min-height: 100vh;
+    padding: 24px;
+    line-height: 1.5;
+  }
+  .container { max-width: 1400px; margin: 0 auto; }
+  header { margin-bottom: 24px; padding-bottom: 18px; border-bottom: 1px solid var(--border); }
+  h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; display: flex; align-items: center; gap: 10px; }
+  h1 .badge { font-size: 11px; font-weight: 600; padding: 3px 10px; background: var(--accent-blue); color: white; border-radius: 4px; }
+  h1 .pair-badge { font-size: 12px; font-weight: 600; padding: 3px 10px; background: var(--accent-green); color: white; border-radius: 4px; }
+  .meta { display: flex; gap: 16px; font-size: 12px; color: var(--text-secondary); margin-top: 6px; }
+  .meta-item { display: flex; align-items: center; gap: 6px; }
+  .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent-green); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  .toolbar { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
+  #refresh-btn { margin-left: auto; background: var(--accent-blue); border: none; color: white; padding: 8px 18px; font-size: 12px; font-weight: 600; cursor: pointer; border-radius: 6px; font-family: inherit; transition: opacity 0.15s; }
+  #refresh-btn:hover { opacity: 0.85; }
+  #refresh-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .loading { text-align: center; padding: 60px 20px; color: var(--text-secondary); }
+  .spinner { display: inline-block; width: 28px; height: 28px; border: 3px solid var(--border); border-top-color: var(--accent-blue); border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 12px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .error { background: #fef2f2; border: 1px solid #fecaca; color: var(--accent-red); padding: 14px 18px; border-radius: 8px; margin: 20px 0; font-size: 13px; }
+  .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 20px; }
+  .summary-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+  .summary-label { font-size: 10px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; font-weight: 600; }
+  .summary-value { font-size: 20px; font-weight: 700; }
+  .summary-value.green { color: var(--accent-green); }
+  .summary-value.cyan { color: var(--accent-cyan); }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  @media (max-width: 1100px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 700px) { .grid { grid-template-columns: 1fr; } body { padding: 16px; } }
+  .pool-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 18px; transition: all 0.15s; position: relative; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+  .pool-card:hover { border-color: var(--border-strong); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+  .pool-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: var(--chain-color, var(--accent-blue)); }
+  .pool-pair { font-size: 15px; font-weight: 700; margin-bottom: 5px; }
+  .pool-tags { display: flex; gap: 5px; font-size: 11px; margin-bottom: 8px; }
+  .tag { padding: 2px 8px; border-radius: 4px; background: var(--bg-subtle); border: 1px solid var(--border); color: var(--text-secondary); font-weight: 500; }
+  .tag.chain { color: var(--chain-color); border-color: var(--chain-color); background: transparent; font-weight: 600; }
+  .tag.fee { color: var(--accent-yellow); border-color: #fde68a; background: #fffbeb; }
+  .apr-value { font-size: 28px; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -0.5px; }
+  .apr-value.low { color: var(--text-tertiary); }
+  .apr-value.mid { color: var(--accent-cyan); }
+  .apr-value.high { color: var(--accent-green); }
+  .apr-label { font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.3px; font-weight: 600; margin-left: 4px; }
+  .avg-row { display: flex; gap: 8px; margin: 8px 0; }
+  .avg-item { display: flex; flex-direction: column; align-items: center; background: var(--bg-subtle); border: 1px solid var(--border); border-radius: 6px; padding: 5px 8px; flex: 1; }
+  .avg-val { font-size: 13px; font-weight: 700; color: var(--accent-cyan); font-variant-numeric: tabular-nums; }
+  .avg-period { font-size: 8px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.3px; margin-top: 1px; font-weight: 600; }
+  .avg-na { font-size: 13px; font-weight: 700; color: var(--text-tertiary); }
+  .sparkline-container { height: 55px; margin: 6px 0; }
+  .sparkline-container canvas { width: 100% !important; height: 55px !important; }
+  .sparkline-loading { height: 55px; display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--text-tertiary); }
+  .data-freshness { font-size: 10px; color: var(--text-tertiary); margin: 2px 0 6px; font-variant-numeric: tabular-nums; }
+  .data-freshness.stale { color: var(--accent-yellow); font-weight: 600; }
+  .data-freshness.very-stale { color: var(--accent-red); font-weight: 700; }
+  .data-freshness.gecko { color: var(--accent-green); font-weight: 600; }
+  .synthetic-note { min-height: 55px; display: flex; align-items: center; font-size: 11px; color: var(--text-tertiary); margin: 6px 0; line-height: 1.5; }
+  .synthetic-note.ok { color: var(--accent-green); font-weight: 600; }
+  .synthetic-note.err { color: var(--accent-red); font-weight: 600; }
+  .pool-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding-top: 10px; border-top: 1px solid var(--border); }
+  .stat-label { color: var(--text-tertiary); font-size: 9px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 2px; }
+  .stat-value { color: var(--text-primary); font-weight: 600; font-size: 13px; font-variant-numeric: tabular-nums; }
+  footer { margin-top: 28px; padding-top: 14px; border-top: 1px solid var(--border); font-size: 11px; color: var(--text-tertiary); text-align: center; line-height: 1.7; }
+  footer a { color: var(--text-secondary); text-decoration: none; }
+  footer a:hover { color: var(--accent-blue); }
+  .tools-section { margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--border); }
+  .tools-header h2 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .tools-header p { font-size: 11px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 12px; }
+  .tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+  .tool-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 14px; text-decoration: none; color: var(--text-primary); transition: all 0.15s; display: flex; flex-direction: column; gap: 6px; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+  .tool-card:hover { border-color: var(--accent-blue); transform: translateY(-1px); box-shadow: 0 4px 10px rgba(0,0,0,0.06); }
+  .tool-name { font-size: 13px; font-weight: 700; color: var(--accent-blue); }
+  .tool-desc { font-size: 10px; color: var(--text-secondary); line-height: 1.5; }
+  .tool-tags { display: flex; gap: 4px; flex-wrap: wrap; }
+  .tool-tag { font-size: 9px; padding: 2px 6px; border-radius: 3px; background: var(--bg-subtle); border: 1px solid var(--border); color: var(--text-tertiary); }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>ETH / USDC <span class="pair-badge">V3</span> <span class="badge">DefiLlama</span></h1>
+    <div class="meta">
+      <div class="meta-item"><span class="status-dot"></span><span id="last-updated">Loading...</span></div>
+      <div class="meta-item">Ethereum・Base・Arbitrum × 0.05% / 0.3%</div>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <button id="refresh-btn">↻ Refresh</button>
+  </div>
+
+  <div id="summary" class="summary" style="display:none;"></div>
+  <div id="content">
+    <div class="loading"><div class="spinner"></div><div>Fetching ETH/USDC pool data...</div></div>
+  </div>
+
+  <div class="tools-section">
+    <div class="tools-header">
+      <h2>📐 レンジAPRシミュレーション</h2>
+      <p>上記APRはフルレンジ前提の参考値です。実際のV3運用ではレンジ設定によりAPR・ILが大きく変わります。</p>
+    </div>
+    <div class="tools-grid">
+      <a href="https://revert.finance/" target="_blank" rel="noopener noreferrer" class="tool-card">
+        <div class="tool-name">Revert Finance</div>
+        <div class="tool-desc">ポジション分析・バックテスト・自動複利。ETH/Base/Arb対応。</div>
+        <div class="tool-tags"><span class="tool-tag">分析</span><span class="tool-tag">バックテスト</span></div>
+      </a>
+      <a href="https://metrix.finance/" target="_blank" rel="noopener noreferrer" class="tool-card">
+        <div class="tool-name">Metrix Finance</div>
+        <div class="tool-desc">V3・V4対応。Fee APR・IL・Net PnLの統合シミュレーション。</div>
+        <div class="tool-tags"><span class="tool-tag">シミュレーター</span><span class="tool-tag">IL計算</span></div>
+      </a>
+      <a href="https://www.metacrypt.org/uniswap-v3-calculator-simulator/" target="_blank" rel="noopener noreferrer" class="tool-card">
+        <div class="tool-name">Metacrypt</div>
+        <div class="tool-desc">レンジ指定APRシミュレーション。Subgraph直接データ。無料。</div>
+        <div class="tool-tags"><span class="tool-tag">計算機</span><span class="tool-tag">無料</span></div>
+      </a>
+      <a href="https://qalc.ai/defi/uniswap-v3-simulator" target="_blank" rel="noopener noreferrer" class="tool-card">
+        <div class="tool-name">Qalc.ai</div>
+        <div class="tool-desc">ストレステスト。価格シナリオ別の損益シミュレーション。アカウント不要。</div>
+        <div class="tool-tags"><span class="tool-tag">ストレステスト</span><span class="tool-tag">無料</span></div>
+      </a>
+    </div>
+  </div>
+
+  <footer>
+    Data source: <a href="https://yields.llama.fi/pools" target="_blank">DefiLlama Yields API</a> ·
+    APR = apyBase (fee-based, full-range) · 90d sparkline · 90d/1y/2y avg<br>
+    ⚠ Numbers may differ from Uniswap official UI.
+    Always verify on <a href="https://app.uniswap.org/explore/pools" target="_blank">app.uniswap.org</a> before allocating capital.
+  </footer>
+</div>
+
+<script>
+var TARGET_CHAINS = ['Ethereum', 'Base', 'Arbitrum'];
+var TARGET_FEES = ['0.05', '0.3'];
+var CHART_DAYS = 90;
+var CHAIN_COLORS = { 'Ethereum': '#6366f1', 'Base': '#2563eb', 'Arbitrum': '#0284c7', 'Optimism': '#e11d48' };
+// GeckoTerminal fallback pool addresses (on-chain, verified via BaseScan/GeckoTerminal 2026-07)
+// USDT pools are out of scope: this dashboard displays ETH/USDC only.
+var GECKO_POOLS = {
+  'Base|USDC|0.05': '0xd0b53d9277642d899df5c87a3966a349a798f224',
+  'Base|USDC|0.3':  '0x6c561b446416e1a00e8e93e221854d6ea4171372'
+};
+var GECKO_NETWORK = 'base';
+
+// ================= API KEY SETTINGS =================
+// The Graph API key (Base historical data: 90d/1y/2y avg + chart).
+// Get / manage at https://thegraph.com/studio/apikeys/
+// SECURITY: this key is visible in page source. ALWAYS set a monthly
+// spending limit on the key in The Graph Studio.
+var THE_GRAPH_API_KEY = 'ここにキーを貼り付け';
+// Messari Uniswap V3 Base subgraph (standardized schema), verified on Graph Explorer 2026-07
+var GRAPH_SUBGRAPH_ID = 'FUbEPQw1oMghy39fwWBFY5fE6MXPXZQtjncQy2cXdrNS';
+function graphKeyIsSet() { return THE_GRAPH_API_KEY && THE_GRAPH_API_KEY.indexOf('ここに') !== 0; }
+// ====================================================
+
+// Synthetic Base pools: shown even when DefiLlama does not return them.
+// Data comes from GeckoTerminal (see fetchGeckoFallback / fetchGeckoDirect).
+var SYNTHETIC_BASE_POOLS = [
+  { chain: 'Base', _pair: 'USDC', _fee: '0.05', _bridged: false, _synthetic: true, pool: null, apyBase: null, tvlUsd: null, volumeUsd1d: null, symbol: 'WETH-USDC' },
+  { chain: 'Base', _pair: 'USDC', _fee: '0.3',  _bridged: false, _synthetic: true, pool: null, apyBase: null, tvlUsd: null, volumeUsd1d: null, symbol: 'WETH-USDC' }
+];
+
+function injectSyntheticBasePools() {
+  SYNTHETIC_BASE_POOLS.forEach(function(syn) {
+    var exists = allPools.some(function(p) { return p.chain === 'Base' && p._fee === syn._fee; });
+    if (!exists) {
+      // Fresh clone each run so stale values don't persist
+      allPools.push({ chain: syn.chain, _pair: syn._pair, _fee: syn._fee, _bridged: syn._bridged, _synthetic: true, pool: null, apyBase: null, tvlUsd: null, volumeUsd1d: null, symbol: syn.symbol });
+    }
+  });
+}
+
+var allPools = [];
+var chartInstances = {};
+
+function getCardId(p) { return (p.chain + '-' + p._fee).replace(/[^a-zA-Z0-9]/g, '_'); }
+function formatLarge(n) { if(n>=1e9)return(n/1e9).toFixed(2)+'B';if(n>=1e6)return(n/1e6).toFixed(2)+'M';if(n>=1e3)return(n/1e3).toFixed(2)+'K';return n.toFixed(0); }
+function escapeHtml(s) { return String(s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+
+async function fetchPools() {
+  var contentEl = document.getElementById('content');
+  var refreshBtn = document.getElementById('refresh-btn');
+  refreshBtn.disabled = true;
+  contentEl.innerHTML = '<div class="loading"><div class="spinner"></div><div>Fetching ETH/USDC pool data...</div></div>';
+
+  try {
+    var response = await fetch('https://yields.llama.fi/pools', { cache: 'no-store' });
+    if (!response.ok) throw new Error('HTTP ' + response.status);
+    var json = await response.json();
+    if (!json.data || !Array.isArray(json.data)) throw new Error('Unexpected response');
+
+    allPools = json.data.filter(function(p) {
+      if (p.project !== 'uniswap-v3') return false;
+      if (TARGET_CHAINS.indexOf(p.chain) === -1) return false;
+      var sym = (p.symbol || '').toUpperCase();
+      var hasEth = /(^|-)W?ETH(-|$)/.test(sym) && !/STETH|RETH|WSTETH|EETH|WEETH/.test(sym);
+      var hasUsdc = /(^|-)USDC(\.E)?(-|$)/.test(sym);
+      if (!hasEth || !hasUsdc) return false;
+      var meta = p.poolMeta || '';
+      var feeMatch = meta.match(/(\d+\.?\d*)\s*%/);
+      if (!feeMatch) return false;
+      var feeStr = parseFloat(feeMatch[1]).toString();
+      if (TARGET_FEES.indexOf(feeStr) === -1) return false;
+      p._fee = feeStr;
+      p._pair = 'USDC';
+      p._bridged = /USDC\.E/.test(sym);
+      return true;
+    });
+
+    // Deduplicate: keep highest TVL per chain+fee
+    var dedupeMap = {};
+    allPools.forEach(function(p) {
+      var key = p.chain + '|' + p._fee;
+      if (!dedupeMap[key] || (p.tvlUsd || 0) > (dedupeMap[key].tvlUsd || 0)) dedupeMap[key] = p;
+    });
+    allPools = Object.values(dedupeMap);
+
+    // Inject synthetic Base pools when DefiLlama does not track them.
+    // (DefiLlama stopped tracking Base Uniswap V3 pools; these are served
+    //  independently via GeckoTerminal so they always appear.)
+    injectSyntheticBasePools();
+
+    // Sort: chain order then fee
+    allPools.sort(function(a, b) {
+      var ci = TARGET_CHAINS.indexOf(a.chain) - TARGET_CHAINS.indexOf(b.chain);
+      if (ci !== 0) return ci;
+      return parseFloat(a._fee) - parseFloat(b._fee);
+    });
+
+    document.getElementById('last-updated').textContent = 'Updated: ' + new Date().toLocaleString('ja-JP', { hour12: false });
+    renderSummary();
+    renderPools();
+    fetchAllChartData();
+  } catch (err) {
+    contentEl.innerHTML = '<div class="error"><strong>Error:</strong> ' + escapeHtml(err.message) + '<br>DefiLlama APIへの接続に失敗しました。</div>';
+  } finally {
+    refreshBtn.disabled = false;
+  }
+}
+
+function renderSummary() {
+  var el = document.getElementById('summary');
+  if (allPools.length === 0) { el.style.display = 'none'; return; }
+  var totalTvl = allPools.reduce(function(s,p){return s+(p.tvlUsd||0);}, 0);
+  var aprs = allPools.map(function(p){return p.apyBase;}).filter(function(v){return typeof v==='number';});
+  var avgApr = aprs.length ? aprs.reduce(function(s,v){return s+v;}, 0)/aprs.length : 0;
+  var maxApr = aprs.length ? Math.max.apply(null, aprs) : 0;
+  var maxPool = allPools.find(function(p){return p.apyBase===maxApr;});
+  el.style.display = 'grid';
+  el.innerHTML =
+    '<div class="summary-card"><div class="summary-label">Pools</div><div class="summary-value">'+allPools.length+'</div></div>'+
+    '<div class="summary-card"><div class="summary-label">Avg APR (today)</div><div class="summary-value cyan">'+avgApr.toFixed(2)+'%</div></div>'+
+    '<div class="summary-card"><div class="summary-label">Max APR</div><div class="summary-value green">'+maxApr.toFixed(2)+'%</div>'+(maxPool?'<div style="font-size:10px;color:var(--text-tertiary);margin-top:3px;">'+maxPool.chain+' · '+maxPool._fee+'%</div>':'')+'</div>'+
+    '<div class="summary-card"><div class="summary-label">Total TVL</div><div class="summary-value">$'+formatLarge(totalTvl)+'</div></div>';
+}
+
+function renderPools() {
+  var el = document.getElementById('content');
+  if (allPools.length === 0) {
+    el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-secondary);">ETH/USDCプールが見つかりませんでした。</div>';
+    return;
+  }
+  var html = '<div class="grid">';
+  html += allPools.map(renderPoolCard).join('');
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+function renderPoolCard(p) {
+  var apr = typeof p.apyBase === 'number' ? p.apyBase : null;
+  var aprClass = apr===null?'low':apr<5?'low':apr<15?'mid':'high';
+  var aprDisplay = apr===null?(p._synthetic?'…':'N/A'):apr.toFixed(2);
+  var tvl = p.tvlUsd ? '$'+formatLarge(p.tvlUsd) : (p._synthetic?'…':'N/A');
+  var volume = p.volumeUsd1d ? '$'+formatLarge(p.volumeUsd1d) : (p._synthetic?'…':'N/A');
+  var cc = CHAIN_COLORS[p.chain] || '#6366f1';
+  var cardId = getCardId(p);
+  var pairLabel = p._bridged ? 'USDC.e' : 'USDC';
+
+  // Synthetic pools (Base): TODAY via GeckoTerminal, history via The Graph.
+  // avg-row and chart start hidden; shown when The Graph history arrives.
+  var midSection = p._synthetic
+    ? '<div class="avg-row" id="avgrow-'+cardId+'" style="display:none;">' +
+        '<div class="avg-item" id="avg90-'+cardId+'"></div>' +
+        '<div class="avg-item" id="avg1y-'+cardId+'"></div>' +
+        '<div class="avg-item" id="avg2y-'+cardId+'"></div>' +
+      '</div>' +
+      '<div class="sparkline-container" id="spark-'+cardId+'" style="display:none;">' +
+        '<div class="sparkline-loading">Loading chart...</div>' +
+      '</div>' +
+      '<div class="synthetic-note" id="note-'+cardId+'">GeckoTerminalから取得中...</div>'
+    : '<div class="avg-row" id="avgrow-'+cardId+'" style="display:none;">' +
+        '<div class="avg-item" id="avg90-'+cardId+'"></div>' +
+        '<div class="avg-item" id="avg1y-'+cardId+'"></div>' +
+        '<div class="avg-item" id="avg2y-'+cardId+'"></div>' +
+      '</div>' +
+      '<div class="sparkline-container" id="spark-'+cardId+'">' +
+        '<div class="sparkline-loading">Loading chart...</div>' +
+      '</div>';
+
+  return '<div class="pool-card" style="--chain-color:'+cc+';">' +
+    '<div class="pool-pair">ETH / '+escapeHtml(pairLabel)+'</div>' +
+    '<div class="pool-tags" id="tags-'+cardId+'">' +
+      '<span class="tag chain" style="--chain-color:'+cc+';">'+escapeHtml(p.chain)+'</span>' +
+      '<span class="tag fee">'+escapeHtml(p._fee)+'%</span>' +
+      '<span class="tag">V3</span>' +
+    '</div>' +
+    '<div style="display:flex;align-items:baseline;gap:4px;margin-bottom:2px;">' +
+      '<div class="apr-value '+aprClass+'" id="apr-'+cardId+'">'+aprDisplay+'<span style="font-size:15px;color:var(--text-tertiary);">%</span></div>' +
+      '<span class="apr-label">TODAY</span>' +
+    '</div>' +
+    midSection +
+    '<div class="data-freshness" id="fresh-'+cardId+'"></div>' +
+    '<div class="pool-stats">' +
+      '<div><div class="stat-label">TVL</div><div class="stat-value" id="tvl-'+cardId+'">'+tvl+'</div></div>' +
+      '<div><div class="stat-label">Vol 24h</div><div class="stat-value" id="vol-'+cardId+'">'+volume+'</div></div>' +
+    '</div>' +
+  '</div>';
+}
+
+// ============ Chart Data ============
+async function fetchAllChartData() {
+  var tasks = [];
+  allPools.forEach(function(pool) {
+    if (pool._synthetic) {
+      var cid = getCardId(pool);
+      // Synthetic Base pools: live values via GeckoTerminal + history via The Graph
+      tasks.push(fetchGeckoDirect(pool, cid));
+      tasks.push(fetchGraphHistory(pool, cid));
+    } else {
+      tasks.push(fetchChartData(pool));
+    }
+  });
+  await Promise.allSettled(tasks);
+}
+
+async function fetchChartData(pool) {
+  var poolId = pool.pool;
+  if (!poolId) return;
+  var cardId = getCardId(pool);
+  var container = document.getElementById('spark-' + cardId);
+  if (!container) return;
+
+  try {
+    var resp = await fetch('https://yields.llama.fi/chart/' + poolId, { cache: 'no-store' });
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    var json = await resp.json();
+    if (!json.data || !Array.isArray(json.data)) throw new Error('No data');
+
+    var allPoints = json.data;
+    if (allPoints.length < 2) { container.innerHTML = '<div class="sparkline-loading">データ不足</div>'; return; }
+    var now = new Date();
+
+    // Data freshness: last timestamp in the chart data array
+    var lastDataTime = new Date(allPoints[allPoints.length - 1].timestamp);
+    var hoursAgo = Math.floor((now - lastDataTime) / (1000 * 60 * 60));
+    var freshEl = document.getElementById('fresh-' + cardId);
+    if (freshEl && !isNaN(lastDataTime.getTime())) {
+      var timeStr = lastDataTime.toLocaleString('ja-JP', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false });
+      var agoStr = hoursAgo < 1 ? '1時間以内' : hoursAgo < 48 ? hoursAgo + '時間前' : Math.floor(hoursAgo / 24) + '日前';
+      if (hoursAgo >= 48) {
+        freshEl.className = 'data-freshness very-stale';
+        freshEl.textContent = '⚠ データ最終更新: ' + timeStr + ' (' + agoStr + ') — API更新停止の可能性';
+      } else if (hoursAgo >= 26) {
+        freshEl.className = 'data-freshness stale';
+        freshEl.textContent = '⚠ データ最終更新: ' + timeStr + ' (' + agoStr + ')';
+      } else {
+        freshEl.className = 'data-freshness';
+        freshEl.textContent = 'データ最終更新: ' + timeStr + ' (' + agoStr + ')';
+      }
+    }
+
+    // GeckoTerminal fallback: only when DefiLlama data is stale (>= 26h)
+    if (hoursAgo >= 26) {
+      fetchGeckoFallback(pool, cardId);
+    }
+
+    function calcAvg(days) {
+      var cutoff = new Date(now); cutoff.setDate(cutoff.getDate() - days);
+      var pts = allPoints.filter(function(d){return new Date(d.timestamp)>=cutoff;});
+      if (pts.length < 1) return null;
+      var vals = pts.map(function(d){return d.apyBase!=null?d.apyBase:d.apy||0;});
+      var sum = vals.reduce(function(s,v){return s+v;},0);
+      var first = new Date(pts[0].timestamp);
+      var last = new Date(pts[pts.length-1].timestamp);
+      var span = Math.round((last-first)/(1000*60*60*24))+1;
+      return {avg:sum/vals.length, days:span};
+    }
+
+    var avg90=calcAvg(90), avg1y=calcAvg(365), avg2y=calcAvg(730);
+    var avgRow = document.getElementById('avgrow-'+cardId);
+    if (avgRow) {
+      avgRow.style.display = 'flex';
+      var el90=document.getElementById('avg90-'+cardId);
+      var el1y=document.getElementById('avg1y-'+cardId);
+      var el2y=document.getElementById('avg2y-'+cardId);
+      if (el90&&avg90) el90.innerHTML='<span class="avg-val">'+avg90.avg.toFixed(2)+'%</span><span class="avg-period">'+avg90.days+'d avg</span>';
+      if (el1y&&avg1y) { var l1=avg1y.days>=350?'1y':avg1y.days+'d'; el1y.innerHTML='<span class="avg-val">'+avg1y.avg.toFixed(2)+'%</span><span class="avg-period">'+l1+' avg</span>'; }
+      else if(el1y) el1y.innerHTML='<span class="avg-na">—</span><span class="avg-period">1y avg</span>';
+      if (el2y&&avg2y) { var l2=avg2y.days>=700?'2y':avg2y.days+'d'; el2y.innerHTML='<span class="avg-val">'+avg2y.avg.toFixed(2)+'%</span><span class="avg-period">'+l2+' avg</span>'; }
+      else if(el2y) el2y.innerHTML='<span class="avg-na">—</span><span class="avg-period">2y avg</span>';
+    }
+
+    var cutoff90 = new Date(now); cutoff90.setDate(cutoff90.getDate()-CHART_DAYS);
+    var chartPts = allPoints.filter(function(d){return new Date(d.timestamp)>=cutoff90;});
+    if (chartPts.length >= 2) {
+      var labels = chartPts.map(function(d){var dt=new Date(d.timestamp);return(dt.getMonth()+1)+'/'+dt.getDate();});
+      var values = chartPts.map(function(d){return d.apyBase!=null?d.apyBase:d.apy||0;});
+      renderSparkline(container, cardId, labels, values, pool);
+    } else { container.innerHTML = '<div class="sparkline-loading">チャートデータ不足</div>'; }
+  } catch(err) {
+    console.warn('Chart failed: '+pool.symbol, err.message);
+    container.innerHTML = '<div class="sparkline-loading">チャート取得失敗</div>';
+  }
+}
+
+// ============ GeckoTerminal Fallback (for stale DefiLlama data) ============
+// APR formula verified against DefiLlama apyBase: vol24h * feeRate / TVL * 365
+// (reproduced Base 0.3% 77.67% with 0.01pt error on 2026-07-05 data)
+async function fetchGeckoFallback(pool, cardId) {
+  var key = pool.chain + '|' + pool._pair + '|' + pool._fee;
+  var addr = GECKO_POOLS[key];
+  if (!addr) return; // pool not in verified fallback list
+
+  try {
+    var resp = await fetch('https://api.geckoterminal.com/api/v2/networks/' + GECKO_NETWORK + '/pools/' + addr, { cache: 'no-store' });
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    var json = await resp.json();
+    var attr = json && json.data && json.data.attributes;
+    if (!attr) throw new Error('Unexpected response structure');
+
+    var vol24 = parseFloat(attr.volume_usd && attr.volume_usd.h24);
+    var tvl = parseFloat(attr.reserve_in_usd);
+    if (!isFinite(vol24) || !isFinite(tvl) || tvl <= 0) throw new Error('Invalid volume/reserve data');
+
+    var feeRate = parseFloat(pool._fee) / 100;
+    var apr = vol24 * feeRate / tvl * 365 * 100;
+
+    // Update APR
+    var aprEl = document.getElementById('apr-' + cardId);
+    if (aprEl) {
+      var aprClass = apr < 5 ? 'low' : apr < 15 ? 'mid' : 'high';
+      aprEl.className = 'apr-value ' + aprClass;
+      aprEl.innerHTML = apr.toFixed(2) + '<span style="font-size:15px;color:var(--text-tertiary);">%</span>';
+    }
+    // Update TVL / Vol
+    var tvlEl = document.getElementById('tvl-' + cardId);
+    if (tvlEl) tvlEl.textContent = '$' + formatLarge(tvl);
+    var volEl = document.getElementById('vol-' + cardId);
+    if (volEl) volEl.textContent = '$' + formatLarge(vol24);
+    // Add source badge (once)
+    var tagsEl = document.getElementById('tags-' + cardId);
+    if (tagsEl && !document.getElementById('gt-' + cardId)) {
+      var span = document.createElement('span');
+      span.id = 'gt-' + cardId;
+      span.className = 'tag';
+      span.style.cssText = 'color:#059669;border-color:#a7f3d0;background:#ecfdf5;font-weight:600;';
+      span.textContent = 'GeckoTerminal';
+      tagsEl.appendChild(span);
+    }
+    // Rewrite freshness line
+    var freshEl = document.getElementById('fresh-' + cardId);
+    if (freshEl) {
+      freshEl.className = 'data-freshness gecko';
+      freshEl.textContent = '✓ TODAY/TVL/Volは代替ソース(GeckoTerminal・リアルタイム計算)。チャート・平均はDefiLlama停止時点の値';
+    }
+    // Sync fallback values into the pool object so summary cards reflect them
+    pool.apyBase = apr;
+    pool.tvlUsd = tvl;
+    pool.volumeUsd1d = vol24;
+    renderSummary();
+  } catch (err) {
+    console.warn('Gecko fallback failed for ' + cardId + ':', err.message);
+    // On failure, keep the stale DefiLlama display with its warning
+  }
+}
+
+// ============ GeckoTerminal Direct (for synthetic Base pools) ============
+// TODAY APR / TVL / Vol come from GeckoTerminal; history comes from The Graph.
+async function fetchGeckoDirect(pool, cardId) {
+  var key = pool.chain + '|' + pool._pair + '|' + pool._fee;
+  var addr = GECKO_POOLS[key];
+  if (!addr) { pool._geckoFail = true; updateSyntheticNote(pool, cardId); return; }
+  try {
+    var resp = await fetch('https://api.geckoterminal.com/api/v2/networks/' + GECKO_NETWORK + '/pools/' + addr, { cache: 'no-store' });
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    var json = await resp.json();
+    var attr = json && json.data && json.data.attributes;
+    if (!attr) throw new Error('Unexpected response structure');
+    var vol24 = parseFloat(attr.volume_usd && attr.volume_usd.h24);
+    var tvl = parseFloat(attr.reserve_in_usd);
+    if (!isFinite(vol24) || !isFinite(tvl) || tvl <= 0) throw new Error('Invalid volume/reserve data');
+
+    var feeRate = parseFloat(pool._fee) / 100;
+    var apr = vol24 * feeRate / tvl * 365 * 100;
+
+    var aprEl = document.getElementById('apr-' + cardId);
+    if (aprEl) {
+      var aprClass = apr < 5 ? 'low' : apr < 15 ? 'mid' : 'high';
+      aprEl.className = 'apr-value ' + aprClass;
+      aprEl.innerHTML = apr.toFixed(2) + '<span style="font-size:15px;color:var(--text-tertiary);">%</span>';
+    }
+    var tvlEl = document.getElementById('tvl-' + cardId);
+    if (tvlEl) tvlEl.textContent = '$' + formatLarge(tvl);
+    var volEl = document.getElementById('vol-' + cardId);
+    if (volEl) volEl.textContent = '$' + formatLarge(vol24);
+    var tagsEl = document.getElementById('tags-' + cardId);
+    if (tagsEl && !document.getElementById('gt-' + cardId)) {
+      var span = document.createElement('span');
+      span.id = 'gt-' + cardId;
+      span.className = 'tag';
+      span.style.cssText = 'color:#059669;border-color:#a7f3d0;background:#ecfdf5;font-weight:600;';
+      span.textContent = 'GeckoTerminal';
+      tagsEl.appendChild(span);
+    }
+    pool.apyBase = apr;
+    pool.tvlUsd = tvl;
+    pool.volumeUsd1d = vol24;
+    pool._geckoOk = true;
+    updateSyntheticNote(pool, cardId);
+    renderSummary();
+  } catch (err) {
+    console.warn('Gecko direct failed for ' + cardId + ':', err.message);
+    pool._geckoFail = true;
+    updateSyntheticNote(pool, cardId);
+    var aprElF = document.getElementById('apr-' + cardId);
+    if (aprElF) aprElF.innerHTML = 'N/A<span style="font-size:15px;color:var(--text-tertiary);">%</span>';
+  }
+}
+
+// ============ The Graph History (for synthetic Base pools) ============
+// Messari standardized schema: liquidityPoolDailySnapshots.
+// APR per day = dailyVolumeUSD * feeRate / totalValueLockedUSD * 365 * 100
+// (same formula as TODAY, keeping consistency with other chains / DefiLlama.)
+async function fetchGraphHistory(pool, cardId) {
+  if (!graphKeyIsSet()) { pool._graphSkipped = true; updateSyntheticNote(pool, cardId); return; }
+  var key = pool.chain + '|' + pool._pair + '|' + pool._fee;
+  var addr = GECKO_POOLS[key];
+  if (!addr) return;
+  try {
+    var gql = { query: '{ liquidityPoolDailySnapshots(where:{pool:"' + addr + '"}, orderBy: timestamp, orderDirection: desc, first: 730) { timestamp dailyVolumeUSD totalValueLockedUSD } }' };
+    var resp = await fetch('https://gateway.thegraph.com/api/' + THE_GRAPH_API_KEY + '/subgraphs/id/' + GRAPH_SUBGRAPH_ID, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(gql),
+      cache: 'no-store'
+    });
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    var json = await resp.json();
+    if (json.errors) throw new Error('GraphQL: ' + JSON.stringify(json.errors).slice(0, 300));
+    var snaps = json.data && json.data.liquidityPoolDailySnapshots;
+    if (!snaps || snaps.length < 2) throw new Error('No/insufficient snapshots');
+
+    snaps.reverse(); // ascending
+    var feeRate = parseFloat(pool._fee) / 100;
+    var series = [];
+    snaps.forEach(function(s) {
+      var tvl = parseFloat(s.totalValueLockedUSD);
+      var vol = parseFloat(s.dailyVolumeUSD);
+      var t = Number(s.timestamp) * 1000;
+      if (!isFinite(tvl) || tvl <= 0 || !isFinite(vol) || !isFinite(t)) return;
+      series.push({ t: t, apr: vol * feeRate / tvl * 365 * 100 });
+    });
+    if (series.length < 2) throw new Error('Insufficient valid data points');
+
+    var now = Date.now();
+    function avgOver(days) {
+      var cutoff = now - days * 86400000;
+      var pts = series.filter(function(d) { return d.t >= cutoff; });
+      if (!pts.length) return null;
+      var sum = 0; pts.forEach(function(d) { sum += d.apr; });
+      var span = Math.round((pts[pts.length - 1].t - pts[0].t) / 86400000) + 1;
+      return { avg: sum / pts.length, days: span };
+    }
+    var a90 = avgOver(90), a1y = avgOver(365), a2y = avgOver(730);
+
+    var avgRow = document.getElementById('avgrow-' + cardId);
+    if (avgRow) {
+      avgRow.style.display = 'flex';
+      var el90 = document.getElementById('avg90-' + cardId);
+      var el1y = document.getElementById('avg1y-' + cardId);
+      var el2y = document.getElementById('avg2y-' + cardId);
+      if (el90) el90.innerHTML = a90 ? '<span class="avg-val">' + a90.avg.toFixed(2) + '%</span><span class="avg-period">' + a90.days + 'd avg</span>' : '<span class="avg-na">—</span><span class="avg-period">90d avg</span>';
+      if (el1y) el1y.innerHTML = a1y ? '<span class="avg-val">' + a1y.avg.toFixed(2) + '%</span><span class="avg-period">' + (a1y.days >= 350 ? '1y' : a1y.days + 'd') + ' avg</span>' : '<span class="avg-na">—</span><span class="avg-period">1y avg</span>';
+      if (el2y) el2y.innerHTML = a2y ? '<span class="avg-val">' + a2y.avg.toFixed(2) + '%</span><span class="avg-period">' + (a2y.days >= 700 ? '2y' : a2y.days + 'd') + ' avg</span>' : '<span class="avg-na">—</span><span class="avg-period">2y avg</span>';
+    }
+
+    var cutoff90 = now - CHART_DAYS * 86400000;
+    var chartPts = series.filter(function(d) { return d.t >= cutoff90; });
+    var container = document.getElementById('spark-' + cardId);
+    if (container && chartPts.length >= 2) {
+      container.style.display = 'block';
+      var labels = chartPts.map(function(d) { var dt = new Date(d.t); return (dt.getMonth() + 1) + '/' + dt.getDate(); });
+      var values = chartPts.map(function(d) { return d.apr; });
+      renderSparkline(container, cardId, labels, values, pool);
+    }
+
+    pool._graphOk = true;
+    updateSyntheticNote(pool, cardId);
+  } catch (err) {
+    console.warn('Graph history failed for ' + cardId + ':', err.message);
+    pool._graphFail = true;
+    updateSyntheticNote(pool, cardId);
+  }
+}
+
+// Shared note for synthetic cards (called by both fetchers as they settle)
+function updateSyntheticNote(pool, cardId) {
+  var noteEl = document.getElementById('note-' + cardId);
+  if (!noteEl) return;
+  if (pool._geckoOk && pool._graphOk) {
+    noteEl.className = 'synthetic-note ok';
+    noteEl.textContent = '✓ TODAY/TVL/Vol: GeckoTerminal · 平均/チャート: The Graph';
+  } else if (pool._geckoOk && pool._graphSkipped) {
+    noteEl.className = 'synthetic-note ok';
+    noteEl.textContent = '✓ GeckoTerminalリアルタイム値(The Graphキー未設定のため平均・チャートなし)';
+  } else if (pool._geckoOk && pool._graphFail) {
+    noteEl.className = 'synthetic-note ok';
+    noteEl.textContent = '✓ GeckoTerminalリアルタイム値(⚠ The Graph履歴の取得失敗 — F12で詳細確認)';
+  } else if (pool._geckoOk) {
+    noteEl.className = 'synthetic-note ok';
+    noteEl.textContent = '✓ GeckoTerminalリアルタイム値';
+  } else if (pool._geckoFail && pool._graphOk) {
+    noteEl.className = 'synthetic-note err';
+    noteEl.textContent = '⚠ TODAY取得失敗(平均・チャートはThe Graphより表示中)';
+  } else if (pool._geckoFail && (pool._graphFail || pool._graphSkipped)) {
+    noteEl.className = 'synthetic-note err';
+    noteEl.textContent = '⚠ データ取得失敗。時間をおいて再試行してください。';
+  } else if (pool._geckoFail) {
+    noteEl.className = 'synthetic-note err';
+    noteEl.textContent = '⚠ GeckoTerminal取得失敗';
+  }
+}
+
+function renderSparkline(container, cardId, labels, values, pool) {
+  if (chartInstances[cardId]) chartInstances[cardId].destroy();
+  container.innerHTML = '<canvas id="canvas-'+cardId+'"></canvas>';
+  var canvas = document.getElementById('canvas-'+cardId);
+  if (!canvas) return;
+  var cc = CHAIN_COLORS[pool.chain]||'#6366f1';
+  var ctx = canvas.getContext('2d');
+  var grad = ctx.createLinearGradient(0,0,0,55);
+  grad.addColorStop(0, cc+'30');
+  grad.addColorStop(1, cc+'05');
+
+  chartInstances[cardId] = new Chart(ctx, {
+    type: 'line',
+    data: { labels: labels, datasets: [{ data: values, borderColor: cc, backgroundColor: grad, borderWidth: 1.5, fill: true, tension: 0.3, pointRadius: 0, pointHitRadius: 8, pointHoverRadius: 3, pointHoverBackgroundColor: cc, pointHoverBorderColor: '#fff', pointHoverBorderWidth: 1 }] },
+    options: {
+      responsive: true, maintainAspectRatio: false, animation: {duration:300},
+      interaction: {mode:'index',intersect:false},
+      plugins: { legend:{display:false}, tooltip: { backgroundColor:'#fff', borderColor:'#e2e8f0', borderWidth:1, titleColor:'#475569', bodyColor:'#0f172a', titleFont:{size:10}, bodyFont:{size:12,weight:'bold'}, padding:8, displayColors:false, callbacks:{ title:function(i){return i[0].label;}, label:function(i){return i.raw.toFixed(2)+'% APR';} } } },
+      scales: { x:{display:false}, y:{display:false,beginAtZero:false,grace:'10%'} }
+    }
+  });
+}
+
+document.getElementById('refresh-btn').addEventListener('click', function() {
+  Object.keys(chartInstances).forEach(function(k){chartInstances[k].destroy();delete chartInstances[k];});
+  fetchPools();
+});
+
+fetchPools();
+</script>
+</body>
+</html>

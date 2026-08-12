@@ -1,0 +1,94 @@
+name: daily-crypto-brief
+
+on:
+  schedule:
+    - cron: "30 22 * * *"   # 22:30 UTC = 07:30 JST（変更はこの1行）
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-crypto-brief
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 対象日を算出（実行時JSTの前日 — 統合運用基準 §1）
+        id: target
+        run: |
+          echo "date=$(TZ=Asia/Tokyo date -d 'yesterday' +%F)" >> "$GITHUB_OUTPUT"
+          echo "compact=$(TZ=Asia/Tokyo date -d 'yesterday' +%Y%m%d)" >> "$GITHUB_OUTPUT"
+
+      - name: 冪等性ガード（同一対象日の再作成禁止 — 自動納品契約）
+        id: guard
+        run: |
+          if [ -f "outputs/${{ steps.target.outputs.date }}/final_audit_${{ steps.target.outputs.compact }}.json" ]; then
+            echo "既に対象日の成果物が存在します。上書きせず停止します。"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/setup-python@v5
+        if: steps.guard.outputs.skip != 'true'
+        with:
+          python-version: "3.12"
+
+      - name: 依存関係（CJKフォント含む）
+        if: steps.guard.outputs.skip != 'true'
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq fonts-noto-cjk
+          pip install -q -r requirements.txt
+          python -m playwright install --with-deps firefox
+
+      - name: ① データ取得 → daily_data.json（LLM不使用）
+        if: steps.guard.outputs.skip != 'true'
+        env:
+          CMC_API_KEY: ${{ secrets.CMC_API_KEY }}
+          OUT_DIR: outputs/${{ steps.target.outputs.date }}
+        run: python scripts/fetch_data.py
+
+      - name: ② インフォグラフィック描画（回収済み固定レンダラー）
+        if: steps.guard.outputs.skip != 'true'
+        run: |
+          python scripts/infographic_renderer.py \
+            "outputs/${{ steps.target.outputs.date }}/daily_data.json" \
+            "outputs/${{ steps.target.outputs.date }}/infographic.png"
+
+      - name: ③ APR実画面撮影（§6・最大27秒待機）
+        if: steps.guard.outputs.skip != 'true'
+        run: |
+          python scripts/capture_apr.py \
+            "outputs/${{ steps.target.outputs.date }}/apr_screenshot.jpg"
+
+      - name: ④ 機械監査（final_audit — failed>0 なら停止）
+        if: steps.guard.outputs.skip != 'true'
+        run: |
+          python scripts/verify_data.py \
+            "outputs/${{ steps.target.outputs.date }}/daily_data.json" \
+            --image "outputs/${{ steps.target.outputs.date }}/infographic.png"
+
+      - name: ⑤ コミット（監査PASS時のみ到達 = フェイルクローズ）
+        if: steps.guard.outputs.skip != 'true'
+        run: |
+          git config user.name "crypto-daily-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add outputs/
+          git commit -m "daily: ${{ steps.target.outputs.date }} (shadow)" || echo "no changes"
+          git pull --rebase origin "${GITHUB_REF_NAME}" || true
+          git push
+
+      - name: デバッグ用アーティファクト（失敗時も保全）
+        if: always() && steps.guard.outputs.skip != 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: daily-${{ steps.target.outputs.date }}
+          path: outputs/${{ steps.target.outputs.date }}/
+          if-no-files-found: ignore
