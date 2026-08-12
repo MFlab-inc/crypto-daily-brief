@@ -98,24 +98,45 @@ def fmt_m(v: float) -> str:            # $10.19M
 
 # ---------- fetchers（各関数は失敗時 None を返し、呼び出し側で「未確認」化） ----------
 
-def fetch_cmc(api_key: str) -> dict | None:
+def fetch_cmc(api_key: str) -> dict:
+    """CMCの3エンドポイントを個別に取得する（v1.2 承認3）。
+
+    以前は1関数で3本を直列に呼んでいたため、1本の失敗（例: プラン外や一時的な
+    エラー）が価格・時価総額まで巻き添えにして全項目「未確認」になっていた。
+    区画ごとに try/except し、取れた区画だけを返す。取れなかった区画はキーを
+    作らず、呼び出し側で「未確認」に落とす（推測で埋めない方針は不変）。
+    """
     h = {"X-CMC_PRO_API_KEY": api_key}
     base = "https://pro-api.coinmarketcap.com"
-    out = {}
-    q = get_json(f"{base}/v1/cryptocurrency/quotes/latest", h,
-                 {"symbol": "BTC,ETH,BNB", "convert": "USD"})["data"]
-    for sym in ("BTC", "ETH", "BNB"):
-        u = q[sym]["quote"]["USD"]
-        out[sym] = {"price": float(u["price"]), "chg": float(u["percent_change_24h"])}
-    g = get_json(f"{base}/v1/global-metrics/quotes/latest", h)["data"]
-    out["global"] = {
-        "mcap": float(g["quote"]["USD"]["total_market_cap"]),
-        "vol": float(g["quote"]["USD"]["total_volume_24h"]),
-        "btc_d": float(g["btc_dominance"]),
-        "eth_d": float(g["eth_dominance"]),
-    }
-    fg = get_json(f"{base}/v3/fear-and-greed/latest", h)["data"]
-    out["fg"] = {"value": int(fg["value"]), "label": str(fg["value_classification"])}
+    out: dict = {}
+
+    try:
+        q = get_json(f"{base}/v1/cryptocurrency/quotes/latest", h,
+                     {"symbol": "BTC,ETH,BNB", "convert": "USD"})["data"]
+        for sym in ("BTC", "ETH", "BNB"):
+            u = q[sym]["quote"]["USD"]
+            out[sym] = {"price": float(u["price"]), "chg": float(u["percent_change_24h"])}
+    except Exception as e:  # noqa: BLE001
+        print(f"[warn] cmc quotes/latest: {e}", file=sys.stderr)
+
+    try:
+        g = get_json(f"{base}/v1/global-metrics/quotes/latest", h)["data"]
+        out["global"] = {
+            "mcap": float(g["quote"]["USD"]["total_market_cap"]),
+            "vol": float(g["quote"]["USD"]["total_volume_24h"]),
+            "btc_d": float(g["btc_dominance"]),
+            "eth_d": float(g["eth_dominance"]),
+        }
+    except Exception as e:  # noqa: BLE001
+        print(f"[warn] cmc global-metrics: {e}", file=sys.stderr)
+
+    try:
+        # 取得元は変更しない（Alternative.me は使用禁止 — 統合運用基準）。
+        fg = get_json(f"{base}/v3/fear-and-greed/latest", h)["data"]
+        out["fg"] = {"value": int(fg["value"]), "label": str(fg["value_classification"])}
+    except Exception as e:  # noqa: BLE001
+        print(f"[warn] cmc fear-and-greed: {e}", file=sys.stderr)
+
     return out
 
 
@@ -210,9 +231,14 @@ def main() -> int:
     usdc_d = safe(fetch_usdc_dominance_base)
     t_end = datetime.now(JST)
 
+    # v1.2 承認3: cmc は区画ごとに欠損しうるため、区画単位で参照する。
+    quotes = cmc or {}
+    g = quotes.get("global")
+    fg = quotes.get("fg")
+
     def asset(sym: str, label: str) -> dict:
-        if cmc and fx:
-            d = cmc[sym]
+        d = quotes.get(sym)
+        if d and fx:
             direction = "up" if d["chg"] > 0 else "down" if d["chg"] < 0 else "neutral"
             return {"asset": label, "usd": fmt_usd_int(d["price"]),
                     "jpy": fmt_jpy_man(d["price"], fx),
@@ -220,9 +246,10 @@ def main() -> int:
         return {"asset": label, "usd": UNCONFIRMED, "jpy": "",
                 "change_24h": UNCONFIRMED, "direction": "neutral"}
 
+    eth = quotes.get("ETH")
     eth_dir = "neutral"
-    if cmc:
-        eth_dir = "up" if cmc["ETH"]["chg"] > 0 else "down" if cmc["ETH"]["chg"] < 0 else "neutral"
+    if eth:
+        eth_dir = "up" if eth["chg"] > 0 else "down" if eth["chg"] < 0 else "neutral"
     lp_msg = {  # 統合運用基準 §4 の決定的ルール（LLM不使用）
         "up": "#ETHが上昇中。#USDC偏り・上限側レンジ外・反落耐性を確認",
         "down": "#ETHが下落中。#ETH偏り・下限側レンジ外・下落耐性を確認",
@@ -255,14 +282,14 @@ def main() -> int:
         # 画像内の通貨表記は # を付けない（v1.1 B-3）。X投稿本文の # 付与は維持。
         "assets": [asset("BTC", "BTC"), asset("ETH", "ETH"), asset("BNB", "BNB")],
         "market": {
-            "fear_greed": (cmc["fg"] if cmc else {"value": 0, "label": UNCONFIRMED}),
-            "market_cap": fmt_cap_usd(cmc["global"]["mcap"]) if cmc else UNCONFIRMED,
+            "fear_greed": (fg if fg else {"value": 0, "label": UNCONFIRMED}),
+            "market_cap": fmt_cap_usd(g["mcap"]) if g else UNCONFIRMED,
             # 丸括弧はレンダラー側で付与する。ここで括ると二重括弧になる（v1.1 A-1）。
-            "market_cap_jpy": fmt_cap_jpy(cmc["global"]["mcap"], fx) if cmc and fx else "",
-            "volume_24h": fmt_vol_usd(cmc["global"]["vol"]) if cmc else UNCONFIRMED,
-            "volume_24h_jpy": fmt_vol_jpy(cmc["global"]["vol"], fx) if cmc and fx else "",
-            "btc_dominance": f"{cmc['global']['btc_d']:.2f}%" if cmc else UNCONFIRMED,
-            "eth_dominance": f"{cmc['global']['eth_d']:.2f}%" if cmc else UNCONFIRMED,
+            "market_cap_jpy": fmt_cap_jpy(g["mcap"], fx) if g and fx else "",
+            "volume_24h": fmt_vol_usd(g["vol"]) if g else UNCONFIRMED,
+            "volume_24h_jpy": fmt_vol_jpy(g["vol"], fx) if g and fx else "",
+            "btc_dominance": f"{g['btc_d']:.2f}%" if g else UNCONFIRMED,
+            "eth_dominance": f"{g['eth_d']:.2f}%" if g else UNCONFIRMED,
         },
         "base": {
             "tvl": fmt_tvl_usd(b_tvl) if b_tvl else UNCONFIRMED,

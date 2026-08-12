@@ -23,7 +23,10 @@ MAX_RETRY = 3
 WAIT_INITIAL = 3
 WAIT_AFTER_REFRESH = 8   # 原版コメント: 0.5秒では不足
 WAIT_BETWEEN = 3
-VIEWPORT = {"width": 1500, "height": 1280}
+# v1.2 承認1: Selenium の set_window_size はブラウザ枠込みの外寸、Playwright の
+# viewport は内寸。1280 のままだと原版より約80px下まで写り、§6が除外を求める
+# 「レンジAPRシミュレーション」が入る。980 で原版のクロップ（1484×840相当）に一致。
+VIEWPORT = {"width": 1500, "height": 980}
 
 
 def capture(full_path: str) -> bool:
@@ -44,9 +47,12 @@ def capture(full_path: str) -> bool:
             print(f"  {WAIT_AFTER_REFRESH}秒待機（GeckoTerminalロード待ち）...")
             time.sleep(WAIT_AFTER_REFRESH)
 
-            src = page.content()
-            na = src.count("N/A% TODAY")
-            err = src.count("GeckoTerminal取得失敗")
+            # v1.2 承認2: HTMLソースではなく描画済みテキストを判定対象にする。
+            # ソースには JS のリテラル（noteEl.textContent = '⚠ GeckoTerminal取得失敗'）が
+            # 常に含まれ、正常時も必ず誤検知して3回空振りしていた。
+            body = page.inner_text("body")
+            na = body.count("N/A% TODAY")
+            err = body.count("GeckoTerminal取得失敗")
             if na == 0 and err == 0:
                 print("  ✓ N/A表示なし。撮影します。")
                 page.screenshot(path=full_path)
