@@ -7,6 +7,86 @@
 
 ---
 
+## v1.4 — 2026-08-13（オーナー承認済み・フェーズ2着手①）
+
+**承認**：2026-08-13・オーナーによる明示指示（国内2社出来高の取得追加）。
+**適用範囲**：`scripts/fetch_data.py`、`scripts/verify_data.py`、
+`.github/workflows/daily.yml`（`TI_API_KEY` の受け渡し1行のみ）。
+**不変**：レンダラー・図版意匠（v1.1凍結 — domestic有無で描画バイト同一を実測）、
+APR撮影（v1.3）、既存C1〜C10のコード・挙動、フェイルクローズ、cron時刻。
+**用途**：domestic は X投稿後編【主要指標（詳細）】専用。図版には描画しない。
+
+### 追加内容
+
+| 項目 | 内容 |
+|---|---|
+| bitFlyer | `GET api.bitflyer.com/v1/ticker?product_code=ETH_JPY` の `volume`（ETH建て・ローリング24h・認証不要）。フォールバック3段: ①公式API → ②TokenInsight → ③取得不能 |
+| Coincheck | `GET coincheck.com/api/ticker?pair=eth_jpy` の `volume`（ETH建て）。数値・文字列どちらの返却形式も受理 |
+| `daily_data.json` | `domestic` セクション新設: `bitflyer_eth_24h` / `coincheck_eth_24h` / `combined_eth` / `combined_usd`（合計ETH×同一実行のETH価格USD）/ `retrieved_at`（JST・分単位）。取引所別の正確な取得時刻（JST ISO）と取得フィールド名は `raw_data.json` に記録（基準 §3.2 の「取得フィールド・時間窓」の正本） |
+| `verify_data.py` | C11 新設: `combined_usd = combined_eth × ETH価格USD` を±0.5%で再計算照合。取得不能・算出不能・未確認、および domestic セクション自体がない旧形式（v1.4以前の出力の再検証）は SKIP（C6/C7と同扱い）。FAIL時は既存どおり exit 1 でフェイルクローズ |
+| 縮退規則 | 片方でも取得不能なら `combined_*` は「算出不能（〜が取得不能のため）」と理由を明記。ETH価格が未確認の日は `combined_usd` のみ「算出不能（ETH価格が未確認のため）」。**BTC/JPY・推定値・前日値による代替はしない**（基準 §3.2） |
+
+### フォールバック②（TokenInsight）の調査結果と実装判断
+
+公開ドキュメント（tokeninsight-api.readme.io）を調査した結果:
+認証は `TI_API_KEY` ヘッダ、確認できたのは `GET /api/v1/exchanges/list` と
+`GET /api/v1/history/exchanges/{id}`（取引所全体の spot / derivatives / total 出来高）まで。
+**ペア別（bitFlyer の ETH/JPY）出来高を返すエンドポイントは確認できなかった。**
+取引所全体の出来高は全ペア合算であり、分母が異なるため ETH/JPY の代替に使うと
+基準 §3.2（分子・分母・期間・通貨の一致要求）に反する。
+オーナー指示「不明なら②をスキップして③へ落とす実装で可」に従い、
+②は `TI_API_KEY` を受け取った上で理由を [warn] ログに残してスキップし③へ落とす。
+`daily.yml` から `TI_API_KEY` は渡済みのため、構造確認後は
+`fetch_bitflyer_eth_volume()` への追記のみで有効化できる。
+
+### 意図的に変更しなかった点
+
+- **フッターの `sources` に bitFlyer/Coincheck を追加していない。** sources は
+  図版に描画されるため、追加すると「domestic は画像に出さない」と衝突する。
+  現行の sources は図版に使ったデータの出典のみを列挙する。後編の出典・取得時刻行は
+  フェーズ2完成時に後編側で持つ（Manus 8/9 見本のフッターに両社が載っていたのは
+  旧パイプラインが図版とX投稿を一体生成していたため）。要再検討ならフェーズ2完成時に。
+
+### 検証（スタブ・実測）
+
+| シナリオ | domestic | C11 | overall |
+|---|---|---|---|
+| 両社取得成功 | 実額+combined | PASS (ratio=1.0000) | PASS/0 |
+| Coincheck文字列volume | 同上（受理） | PASS | PASS/0 |
+| bitFlyer失敗 | 取得不能+算出不能（理由付き） | SKIP | PASS/0 |
+| Coincheck失敗 | 同上（ミラー） | SKIP | PASS/0 |
+| 両社失敗 | 両方取得不能 | SKIP | PASS/0 |
+| ETH価格未確認 | combined_usd のみ算出不能 | SKIP | PASS/0 |
+| combined_usd を+3%改ざん | — | **FAIL** | **FAIL/1 → exit 1** |
+| 8/12コミット済み出力（旧形式） | なし | SKIP（v1.4以前の形式） | PASS/0 |
+| レンダラー | domestic 有無で出力PNGバイト同一 | — | — |
+
+bitFlyer / Coincheck / TokenInsight とも当コンテナからは egress 遮断のため、
+実レスポンスでの最終確認は 2026-08-14 朝の cron 実行で行う（オーナー指示）。
+
+### コミット前の独立レビュー（多視点・反証検証）で確認・修正した欠陥
+
+仕様準拠・正当性・運用回帰の3視点で独立レビューし、指摘は全件、実コードの
+実行による反証検証を経て確定した。確定した実欠陥は1件:
+
+- **C11×表示丸めの不整合（修正済み）**: `combined_usd` を `fmt_m`（$0.01M =
+  1万ドル刻み）で表示すると、真値が$1M未満の日は表示丸めだけで±0.5%を超え、
+  **正しいデータでC11がFAIL→exit 1→無人実行が停止**することを実行で実証
+  （例: 合計93.34 ETH → ratio 1.0053 FAIL。$5,000未満は "$0.00M"→ratio 0 で必ずFAIL）。
+  監査の±0.5%（オーナー指定）には触れず、**表示側を修正**: `combined_usd` は
+  $2M未満を実額表示（`$189,036`）とし、$2M以上は従来どおり `fmt_m`。これにより
+  量子化誤差は全域で±0.5%に対し十分小さくなる（$2M境界で≤0.25%）。あわせて
+  C11のゼロ分岐を `combined_eth` の表示量子（0.01 ETH）の半分まで許容する形に
+  修正し、真値0.005 ETH未満の極限でも正データが落ちないようにした。
+  修正後の再検証: 旧FAIL帯93.34 ETHが ratio 1.0002 でPASS、+3%改ざんと
+  ゼロ分岐の真の不整合（$500表示）は引き続きFAIL（ゲート健在）。
+
+通常出来高（数千ETH＝$5M以上）はレビューでも修正前から健全（最悪偏差0.13%）
+と確認されており、本修正は縮退日の誤停止防止のみが目的。他の指摘は
+レビュー用差分ファイルの生成手順に関するもので、出荷コードへの影響なし。
+
+---
+
 ## v1.3 — 2026-08-12（オーナー承認済み）
 
 **承認**：2026-08-12・オーナーによる明示承認。

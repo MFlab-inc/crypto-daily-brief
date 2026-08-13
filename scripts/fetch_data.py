@@ -14,6 +14,12 @@
 - DefiLlama      api.llama.fi/v2/chains, /v2/historicalChainTvl/Base,
                  /overview/dexs/base, stablecoins.llama.fi/stablecoins
 - ExchangeRate-API open.er-api.com/v6/latest/USD
+- bitFlyer       api.bitflyer.com/v1/ticker?product_code=ETH_JPY（v1.4・後編用）
+- Coincheck      coincheck.com/api/ticker?pair=eth_jpy（v1.4・後編用）
+
+domestic セクション（v1.4）は X投稿後編【主要指標（詳細）】用のデータであり、
+図版には描画しない。片方でも取得不能なら合計は「算出不能」とし、
+BTC/JPY・推定値・前日値による代替は行わない（統合運用基準 §3.2）。
 """
 from __future__ import annotations
 
@@ -200,6 +206,60 @@ def fetch_usdc_dominance_base() -> float | None:
     return usdc / total * 100
 
 
+def _as_float(v) -> float | None:
+    """数値/数値文字列を float へ。それ以外は None（Coincheck は文字列で返す版がある）。"""
+    try:
+        return float(v)
+    except (TypeError, ValueError):
+        return None
+
+
+def fetch_bitflyer_eth_volume() -> dict | None:
+    """bitFlyer ETH/JPY 24時間出来高（ETH建て・ローリング24h・認証不要 — v1.4）。
+
+    フォールバック3段（オーナー承認済み）:
+      ① 公式API /v1/ticker?product_code=ETH_JPY の volume
+      ② TokenInsight — ペア別(ETH/JPY)出来高のエンドポイント・レスポンス構造が
+         公開ドキュメントで確認できなかったためスキップする。確認できたのは
+         取引所全体の出来高（/api/v1/history/exchanges/{id} の spot/derivatives/total）
+         のみで、全ペア合算は分母が異なり ETH/JPY の代替にならない（基準 §3.2）。
+         TI_API_KEY はワークフローから渡済み。構造確認後にここへ実装を追加する。
+      ③ 取得不能（呼び出し側で「取得不能」表記へ落とす）
+    """
+    try:
+        j = get_json("https://api.bitflyer.com/v1/ticker",
+                     params={"product_code": "ETH_JPY"})
+        v = _as_float(j.get("volume"))
+        if v is not None:
+            return {"volume_eth": v, "source": "bitFlyer公式API",
+                    "field": "volume (rolling 24h)",
+                    "retrieved_at": datetime.now(JST).isoformat()}
+        print(f"[warn] bitflyer ticker: volume欠落/形式不正 keys={sorted(j)}",
+              file=sys.stderr)
+    except Exception as e:  # noqa: BLE001
+        print(f"[warn] bitflyer ticker: {e}", file=sys.stderr)
+    if os.environ.get("TI_API_KEY"):
+        print("[warn] bitflyer fallback(2) TokenInsight: ペア別ETH/JPY出来高の"
+              "エンドポイント未確認のためスキップ → 取得不能へ", file=sys.stderr)
+    return None
+
+
+def fetch_coincheck_eth_volume() -> dict | None:
+    """Coincheck ETH/JPY 24時間出来高（ETH建て・認証不要 — v1.4）。"""
+    try:
+        j = get_json("https://coincheck.com/api/ticker", params={"pair": "eth_jpy"})
+        v = _as_float(j.get("volume"))
+        if v is not None:
+            return {"volume_eth": v, "source": "Coincheck公式API",
+                    "field": "volume (24h)",
+                    "retrieved_at": datetime.now(JST).isoformat()}
+        print(f"[warn] coincheck ticker: volume欠落/形式不正 keys={sorted(j)}",
+              file=sys.stderr)
+    except Exception as e:  # noqa: BLE001
+        print(f"[warn] coincheck ticker: {e}", file=sys.stderr)
+    return None
+
+
 def safe(fn, *args):
     try:
         return fn(*args)
@@ -229,6 +289,9 @@ def main() -> int:
     b_chg = safe(fetch_base_tvl_change)
     b_dex = safe(fetch_base_dex_volume)
     usdc_d = safe(fetch_usdc_dominance_base)
+    bf_dom = fetch_bitflyer_eth_volume()   # 失敗時 None（内部でフォールバック処理）
+    cc_dom = fetch_coincheck_eth_volume()
+    dom_t = datetime.now(JST)
     t_end = datetime.now(JST)
 
     # v1.2 承認3: cmc は区画ごとに欠損しうるため、区画単位で参照する。
@@ -262,6 +325,38 @@ def main() -> int:
                     "tvl": fmt_m(g["tvl"]), "volume_24h": fmt_m(g["vol"])}
         return {"name": name, "apr": UNCONFIRMED, "tvl": UNCONFIRMED,
                 "volume_24h": UNCONFIRMED}
+
+    # ---------- 国内2社（v1.4） ----------
+    # 片方でも取得不能なら合計は「算出不能」。BTC/JPY・推定値・前日値で代替しない。
+    def fmt_eth(v: float) -> str:
+        return f"{v:,.2f} ETH"
+
+    def fmt_domestic_usd(v: float) -> str:
+        # $2M未満は実額表示。fmt_m（$0.01M=1万ドル刻み）では表示丸めだけで
+        # C11 の ±0.5% を超え、出来高激減日に正データでフェイルクローズしてしまう
+        # （v1.4 レビューで実証）。通常域（$5M以上）は fmt_m で見本の表記に揃える。
+        if v < 2e6:
+            return f"${round(v):,}"
+        return fmt_m(v)
+
+    eth_px = (quotes.get("ETH") or {}).get("price")
+    if bf_dom and cc_dom:
+        combined = bf_dom["volume_eth"] + cc_dom["volume_eth"]
+        combined_eth_s = fmt_eth(combined)
+        combined_usd_s = (fmt_domestic_usd(combined * eth_px) if eth_px
+                          else "算出不能（ETH価格が未確認のため）")
+    else:
+        miss = "・".join(n for n, v in (("bitFlyer", bf_dom),
+                                        ("Coincheck", cc_dom)) if not v)
+        combined_eth_s = f"算出不能（{miss}が取得不能のため）"
+        combined_usd_s = combined_eth_s
+    domestic = {
+        "bitflyer_eth_24h": fmt_eth(bf_dom["volume_eth"]) if bf_dom else "取得不能",
+        "coincheck_eth_24h": fmt_eth(cc_dom["volume_eth"]) if cc_dom else "取得不能",
+        "combined_eth": combined_eth_s,
+        "combined_usd": combined_usd_s,
+        "retrieved_at": f"{dom_t.strftime('%Y-%m-%d %H:%M')} JST",
+    }
 
     start_s = t_start.strftime("%Y-%m-%d %H:%M")
     end_s = t_end.strftime("%H:%M")
@@ -303,6 +398,8 @@ def main() -> int:
         },
         "lp": {"pools": [pool("Base 0.05%プール", g005), pool("Base 0.3%プール", g03)],
                "check_message": lp_msg},
+        # v1.4: X投稿後編【主要指標（詳細）】用。図版には描画しない。
+        "domestic": domestic,
         "footer": {
             # 開始と終了が同分なら範囲表記にせず単一時刻で表す（v1.1 A-3）。
             "retrieved_at": retrieved_at,
@@ -316,7 +413,10 @@ def main() -> int:
     raw = {"run_id": run_id, "fetched_at": now.isoformat(),
            "cmc": cmc, "fx": fx, "gecko_005": g005, "gecko_03": g03,
            "base_tvl": b_tvl, "base_tvl_chg": b_chg, "base_dex": b_dex,
-           "usdc_dominance": usdc_d}
+           "usdc_dominance": usdc_d,
+           # v1.4: 取得フィールド・取得時刻(JST ISO)を含む個別記録（基準 §3.2 の
+           # 「取得フィールド・時間窓」を後編で記載するための正本）
+           "bitflyer": bf_dom, "coincheck": cc_dom}
     (out_dir / "raw_data.json").write_text(
         json.dumps(raw, ensure_ascii=False, indent=2), encoding="utf-8")
     (out_dir / "run_context.env").write_text(

@@ -52,6 +52,7 @@ jobs:
         if: steps.guard.outputs.skip != 'true'
         env:
           CMC_API_KEY: ${{ secrets.CMC_API_KEY }}
+          TI_API_KEY: ${{ secrets.TI_API_KEY }}   # v1.4: bitFlyerフォールバック②用
           OUT_DIR: outputs/${{ steps.target.outputs.date }}
         run: python scripts/fetch_data.py
 

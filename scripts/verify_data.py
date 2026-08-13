@@ -197,6 +197,38 @@ def main() -> int:
     else:
         au.add("C10_image_size", None, "画像未指定")
 
+    # C11 国内2社合計の再計算（combined_usd = combined_eth × ETH価格USD、±0.5% — v1.4）
+    # 取得不能・算出不能・未確認は不合格ではない（C6/C7と同じSKIP扱い）。
+    dom = d.get("domestic")
+    if not isinstance(dom, dict):
+        au.add("C11_domestic_recalc", None, "domesticセクションなし（v1.4以前の形式）")
+    else:
+        def dom_val(s) -> float | None:
+            s = str(s)
+            if "不能" in s or UNCONFIRMED in s:
+                return None
+            return parse_money(s)
+
+        c_eth = dom_val(dom.get("combined_eth", ""))
+        c_usd = dom_val(dom.get("combined_usd", ""))
+        eth_usd = None
+        for it in d.get("assets", []):
+            if str(it.get("asset", "")).lstrip("#") == "ETH":
+                eth_usd = parse_money(str(it.get("usd", "")))
+        if None in (c_eth, c_usd, eth_usd):
+            au.add("C11_domestic_recalc", None, "取得不能/未確認のためスキップ")
+        else:
+            calc = c_eth * eth_usd
+            if calc == 0:
+                # combined_eth の表示量子は 0.01 ETH（2桁丸め）。真値 <0.005 ETH は
+                # "0.00 ETH" に落ちるため、その半量子ぶんのUSD表示までは整合とみなす。
+                au.add("C11_domestic_recalc", c_usd <= 0.005 * eth_usd,
+                       f"再計算0（combined_eth表示量子未満）に対し表示{c_usd:,.0f}")
+            else:
+                ratio = c_usd / calc
+                au.add("C11_domestic_recalc", abs(ratio - 1) <= 0.005,
+                       f"表示{c_usd:,.0f} 再計算{calc:,.0f} ratio={ratio:.4f}")
+
     # ハッシュ台帳（納品時原本固定: 基準 §7）
     hashes = {jp.name: sha256(jp)}
     if a.image and Path(a.image).exists():
