@@ -222,7 +222,7 @@ def check_c18(au: Audit, sections: dict, llm_section_keys: list[str]) -> None:
 
 # --- C19 監査台帳（L0のみ検査） ---
 
-def check_c19(au: Audit, level: str, audit_ledger, web_search_count: int) -> None:
+def check_c19(au: Audit, level: str, audit_ledger, any_rss_source_ok: bool) -> None:
     if level != "L0":
         au.add("C19_audit_ledger", None, f"level={level} のためSKIP（呼び出しA失敗時は台帳が原理的に存在しない）")
         return
@@ -230,13 +230,14 @@ def check_c19(au: Audit, level: str, audit_ledger, web_search_count: int) -> Non
         au.add("C19_audit_ledger", False, "audit_ledgerがリストでない")
         return
     if not audit_ledger:
-        # v0.4改定: 空配列はweb_searchを実際に行ったうえで採用候補が
-        # 本当に無かった場合のみ許容する。0回のまま空配列は
-        # 「確認を怠った」可能性を区別できないためFAILとする。
-        ok = web_search_count >= 1
+        # v1.15改定: 呼び出しAはweb_searchを使わず、collect_news.pyが取得した
+        # RSS候補から選別するのみになった。空配列を許容できるのは「RSS取得が
+        # 少なくとも1ソース成功したうえで採用に値する候補が無かった」場合のみ。
+        # 全ソース取得失敗のまま空配列は「確認を怠った」可能性と区別できないためFAIL。
+        ok = any_rss_source_ok
         au.add("C19_audit_ledger", ok,
-               f"空配列（web_search {web_search_count}回実行済みのため許容）" if ok
-               else f"空配列だがweb_search {web_search_count}回（未実行のためFAIL）")
+               "空配列（RSS取得成功ソースありのため許容）" if ok
+               else "空配列だが全RSSソース取得失敗（未確認のためFAIL）")
         return
     required_fields = ("source", "url", "published_at", "decision", "reason")
     bad = [i for i, e in enumerate(audit_ledger)
@@ -282,7 +283,12 @@ def run_all(bundle: dict, daily_data: dict) -> Audit:
     check_c16b(au, daily_data, sections, llm_keys, allowlist)
     check_c17(au, sections.get("lp_comment", ""))
     check_c18(au, sections, llm_keys)
-    check_c19(au, bundle["level"], bundle.get("audit_ledger"), bundle.get("web_search_count", 0))
+    news_source_status = bundle.get("news_source_status", {})
+    any_rss_source_ok = any(
+        isinstance(s, dict) and s.get("status") == "ok"
+        for s in news_source_status.values()
+    )
+    check_c19(au, bundle["level"], bundle.get("audit_ledger"), any_rss_source_ok)
     check_c20(au, bundle.get("headline_for_image", ""))
     return au
 

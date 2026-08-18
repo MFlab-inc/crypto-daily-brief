@@ -7,6 +7,98 @@
 
 ---
 
+## v1.15 — 2026-08-18（オーナー指示・呼び出しAからweb_search撤去）
+
+**指示**：2026-08-18・オーナーによる明示指示。v1.13実行結果（v1.14記録）で
+max_uses上限が正しく機能した（56回→22回、トークン約42%減）にもかかわらず
+呼び出しAが2回連続で3試行とも「空応答」のまま失敗したことを受け、
+「パラメータ調整ではなく呼び出し構造の問題」と判断し、呼び出しAから
+web_searchツールを完全に撤去。`collect_news.py`が取得したRSS候補
+（タイトル・要約・公開日時・情報源・tier）をユーザーメッセージへ
+テキストとして埋め込み、その中から選別・執筆させる方式へ転換した。
+呼び出しBと同一の「ツール無し・通常メッセージ呼び出し」構造になる
+（Bは3回のdispatch全てで1回目に成功しており、Aにも同じ安定性を見込む）。
+**適用範囲**：`scripts/generate_post.py`（web_search関連コード全撤去・
+プロンプト全面改定）、`scripts/collect_news.py`（RSSのdescriptionから
+summary抽出を追加）、`scripts/compose_post.py`（`web_search_count`→
+`news_source_status`、`FIXED_HEADLINE`/`FIXED_POINTS`を
+`generate_post.py`参照に統一）、`scripts/verify_post.py`（C19の
+空配列許容条件をweb_search実行回数からRSS取得成功ソース数へ変更）。
+**不変**：金融庁・日本銀行RSSは実候補検出済みの最有力情報源として維持。
+BLSはHTTP 403のまま取得不能として記録し、UA変更後も追跡しない
+（v1.13のオーナー指示を継続）。v1.1固定意匠・既存C1〜C11・cron時刻・
+フェイルクローズ・SEC/FRB/OCC/CFTCのRSS登録。
+
+### 【1】呼び出しAからweb_searchを撤去（scripts/generate_post.py）
+
+- `WEB_SEARCH_TOOL`・`WEB_SEARCH_MAX_USES`・`_count_web_search`・
+  pause_turn再送ループを全て削除。`_call_json`は`tools`パラメータを
+  一切渡さない単一の`client.messages.create()`呼び出しになった
+  （呼び出しBと構造上同一）。
+- `CALL_A_MAX_TOKENS`を8000→4000（台本§5.3の指定値）へ復帰。
+  v1.12〜v1.13で8000へ引き上げていたのはweb_search実行時のトークン
+  肥大対策であり、原因（ツール使用）自体を除去した本改定では不要と
+  判断した。
+- プロンプトを全面改定。`NEWS_SELECTION`セクションで「候補一覧の
+  中から選別し、独自に調べたり候補一覧に無い情報を付け加えたりしない」
+  ことを明記し、旧「必ずweb_searchを実行し」の必須化文言と「候補が
+  空であることを理由に検索を省略してはならない」の文言を削除した。
+  tier 1（公式発表RSS）のsummaryを一次情報として扱ってよいこと、
+  tier 4（Google News）は見出し・URLのみで単独では事実の根拠にしない
+  ことを明記した。
+- 新設`NO_CANDIDATES_FALLBACK`セクションで、tier 1候補が0件または
+  内容不十分な場合の扱いを明記：統合運用基準§3.1の定型文
+  （`FIXED_HEADLINE`/`FIXED_POINTS`）をそのまま使う、audit_ledgerは
+  架空のsource・urlを作らず空配列でよい、と指示した。
+- `FIXED_HEADLINE`/`FIXED_POINTS`を`compose_post.py`から
+  `generate_post.py`へ移設。`NO_CANDIDATES_FALLBACK`はf-stringで
+  この2定数を直接埋め込むため、呼び出しAが自ら出力する定型文と
+  `compose_post.py`が呼び出しA失敗時に代入する定型文が常に同一に
+  なることを構造的に保証する（定義の二重管理を排除）。
+- 副次的に発見・修正: `run()`の`news_today`デフォルト値が
+  CryptoPanic撤去前（v1.11以前）の残骸
+  （`{"cryptopanic": "failed", "count": 0}`）のままだったバグを修正し
+  `{"candidates": [], "source_status": {}}`とした（news_candidates.json
+  欠損時のみ影響。RSS移行後の実行では常にファイルが生成されるため
+  実害は限定的だったが、構造的な誤りのため修正した）。
+
+### 【2】RSSのsummary抽出を追加（scripts/collect_news.py）
+
+`<description>`要素からHTMLタグを除去・空白正規化・500字で省略記号
+付き切り詰めした`summary`を各候補へ付与する。呼び出しAがtier 1候補を
+一次情報として直接利用できるようにするための変更（web_searchで
+確認していた内容を、RSS自体が持つ要約で代替する）。
+
+### 【3】compose_post.py・verify_post.pyの追随
+
+- `compose_post.py`: bundleの`web_search_count`フィールドを
+  `news_source_status`（`generate_post.run()`が返す情報源別成否）へ
+  差し替えた。`GENERATION_STATUS.md`の`web_search: N回`行は削除した
+  （web_search自体が存在しなくなったため）。
+- `verify_post.py`: C19の空配列許容条件を「web_searchが1回以上
+  実行された」から「RSS取得が1ソース以上成功している」へ変更した
+  （`any_rss_source_ok = any(s.get("status") == "ok" for s in
+  news_source_status.values())`）。全ソース取得失敗のまま空配列は
+  引き続きFAILとし、「確認を怠った」可能性と「本当に材料が無かった」
+  ことを区別する設計思想自体はv1.11時点から不変。
+
+### 検証
+
+オフラインモックテスト（`test_bundle2.py`）を全面改定し67件が全てPASS
+（旧: web_search必須文言・`WEB_SEARCH_TOOL`・`_count_web_search`・
+pause_turn再送を検査していた項目は削除。新: ツール無し呼び出しの確認・
+RSS候補summaryのユーザーメッセージへの伝播・C19のRSS成功ソース判定・
+`_clean_summary`のHTMLタグ除去/切り詰めの検査を追加）。実データ7日分
+（2026-08-11〜17）× L0/L1(A失敗)/L1(B失敗)/L2の28通りスイープ、禁止語
+静的スキャン（AST）もいずれも異常なし（禁止語ヒットはプロンプト内の
+「使わない」指示文言と`verify_post.py`自身の`BANNED_TERMS`定義の2件
+のみで、想定どおり）。
+
+**本対処は実APIに対して未検証**（次回`post_draft.yml`実行・対象日
+2026-08-17で実測し、結果は別途記録する）。
+
+---
+
 ## v1.14 — 2026-08-18（v1.13実行結果・要判断）
 
 **内容**：v1.13（RSS追加＋BLSのUA変更）を対象日2026-08-17で実行した結果の

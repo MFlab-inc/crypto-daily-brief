@@ -46,8 +46,10 @@ from compose_numeric import (  # noqa: E402
 from verify_data import CHG_RE  # noqa: E402  24時間比の書式（+2.43%等）を再利用
 
 # --- §7.1 定型文（統合運用基準 §3.1 の逐語引用。言い換えない） ---
-FIXED_HEADLINE = "直近24時間に暗号通貨市場との関係を確認できる主要なマクロ材料は確認できない。"
-FIXED_POINTS = "補足できる検証済み材料は確認できない。"
+# ヘッドライン・主要なポイントの定型文は generate_post.FIXED_HEADLINE /
+# FIXED_POINTS を参照する（v1.15。呼び出しA自身が候補ゼロ時にプロンプトで
+# 同じ文言を出力するため、定義をこちらに二重に持たない — 常に同一の文言で
+# あることを保証する）。
 FIXED_FLOW = "価格変動との関係を確認できる主要材料は確認できない。"
 # 【総括】は§7.1に逐語定型文の指定がない
 # （「（指定文言なし。確認可能な事実だけで簡潔に統合する）」＝人が仕上げる前提）。
@@ -102,8 +104,8 @@ def compose(daily_data: dict, gen: dict[str, Any]) -> dict[str, Any]:
         part1_points_text = _render_bullets(call_a["data"]["part1_points"])
     else:
         headline_for_image = _mechanical_headline_for_image(daily_data)
-        part1_headline = FIXED_HEADLINE
-        part1_points_text = FIXED_POINTS
+        part1_headline = generate_post.FIXED_HEADLINE
+        part1_points_text = generate_post.FIXED_POINTS
 
     if b_ok:
         part2_flow_text = _render_bullets(call_b["data"]["part2_flow"])
@@ -150,8 +152,9 @@ def compose(daily_data: dict, gen: dict[str, Any]) -> dict[str, Any]:
         "llm_section_keys": llm_section_keys,
         "headline_for_image": headline_for_image,
         "audit_ledger": call_a["data"].get("audit_ledger") if a_ok else None,
-        # C19（v0.4改定）: 空配列の許容はweb_searchが実際に実行された場合のみ。
-        "web_search_count": call_a.get("web_search_count", 0),
+        # C19（v1.15改定）: 空配列の許容判定にverify_post.py側で使う
+        # （RSSが1ソース以上成功していれば許容、全滅なら空配列はFAIL）。
+        "news_source_status": gen.get("news_source_status", {}),
         "part1_md": part1_md,
         "part2_md": part2_md,
     }
@@ -194,7 +197,6 @@ def render_generation_status(gen: dict[str, Any]) -> str:
         + (f" ({a['error']} / {a['attempts']}回試行)" if not a["ok"] else f"（{a['attempts']}回試行）"),
         f"call_B: {'OK' if b['ok'] else 'FAILED'}"
         + (f" ({b['error']} / {b['attempts']}回試行)" if not b["ok"] else f"（{b['attempts']}回試行）"),
-        f"web_search: {a.get('web_search_count', 0)}回",
         "token_usage（実消費量）: "
         f"input={gen['total_usage']['input_tokens']}, output={gen['total_usage']['output_tokens']} "
         f"(call_A: in={a['usage']['input_tokens']} out={a['usage']['output_tokens']} / "

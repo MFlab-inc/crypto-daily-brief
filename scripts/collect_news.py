@@ -14,12 +14,15 @@ RSSが最も確実かつ一次情報として価値が高いと判断し、Crypt
 
 優先度4の候補発見層として Google News RSS（Reuters記事の発見のみ）も
 任意で使う。見出しとURLのみを候補として渡し、記事本文を根拠にしない
-（採否・一次情報の裏取りは generate_post.py 側のLLM・web_searchが行う）。
+（v1.15: 呼び出しAはweb_searchを使わず、本スクリプトが渡すsummary
+〈RSSのdescription由来〉のみを根拠に選別・執筆する。tier 4はsummaryが
+無い/薄いため、単独では事実の根拠にできない設計になっている）。
 到達性が不安定でも本スクリプトは失敗しない。
 """
 from __future__ import annotations
 
 import json
+import re
 import sys
 from datetime import date, datetime, timezone, timedelta
 from email.utils import parsedate_to_datetime
@@ -32,9 +35,11 @@ import requests
 JST = timezone(timedelta(hours=9))
 REQUEST_TIMEOUT_SEC = 15
 RAW_ITEM_LIMIT = 50  # 1フィードあたりの取得上限（日付フィルタ前）。暴走防止のガード値。
+SUMMARY_MAX_LEN = 500  # 1候補あたりのsummary長の上限（プロンプト肥大化防止・v1.15）。
 SOURCES_CONFIG_PATH = Path(__file__).parent.parent / "config" / "news_sources.json"
 GOOGLE_NEWS_NAME = "Google News (Reuters検索)"
 GOOGLE_NEWS_URL = "https://news.google.com/rss/search?q=when:24h+allinurl:reuters.com"
+_HTML_TAG_RE = re.compile(r"<[^>]+>")
 # 一般的なブラウザのUser-Agent文字列（v1.13）。BLSがHTTP 403を返した際、
 # 独自UA（旧: "crypto-daily-brief/1.0 (+https://github.com/...)"）が
 # bot対策で拒否されている可能性を疑い変更した。変更後も403が続く場合は
@@ -76,6 +81,17 @@ def _parse_pubdate_jst(raw: str) -> datetime | None:
     return dt.astimezone(JST)
 
 
+def _clean_summary(raw: str) -> str:
+    """<description>由来の要約からHTMLタグを除去し、空白を正規化して長さを
+    上限で切り詰める（呼び出しAのプロンプトへそのまま埋め込むため）。
+    """
+    text = _HTML_TAG_RE.sub("", raw or "").strip()
+    text = re.sub(r"\s+", " ", text)
+    if len(text) > SUMMARY_MAX_LEN:
+        text = text[:SUMMARY_MAX_LEN] + "…"
+    return text
+
+
 def fetch_rss(url: str, timeout: int = REQUEST_TIMEOUT_SEC) -> tuple[str, list[dict[str, str]], str]:
     """1フィードを取得しRSS 2.0の<item>一覧へ変換する。
 
@@ -93,8 +109,9 @@ def fetch_rss(url: str, timeout: int = REQUEST_TIMEOUT_SEC) -> tuple[str, list[d
             title = (item.findtext("title") or "").strip()
             link = (item.findtext("link") or "").strip()
             pub_date = (item.findtext("pubDate") or "").strip()
+            summary = _clean_summary(item.findtext("description") or "")
             if title or link:
-                items.append({"title": title, "url": link, "published_at": pub_date})
+                items.append({"title": title, "url": link, "published_at": pub_date, "summary": summary})
         return "ok", items, ""
     except requests.RequestException as e:
         return "failed", [], f"{type(e).__name__}: {e}"
@@ -118,6 +135,7 @@ def _collect_from_feed(name: str, url: str, target: "date", *, tier: int, kind: 
             "url": it["url"],
             "source": name,
             "published_at": it["published_at"],
+            "summary": it.get("summary", ""),
             "kind": kind,
             "tier": tier,
         })

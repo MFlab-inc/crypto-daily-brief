@@ -1,10 +1,22 @@
 #!/usr/bin/env python3
-"""generate_post.py — 呼び出しA・B（LLM生成）と縮退レベル判定（v0.3 §5・§10 第2弾-5）。
+"""generate_post.py — 呼び出しA・B（LLM生成）と縮退レベル判定（v0.3 §5・§10 第2弾-5・v1.15改定）。
 
-呼び出しA（ヘッドライン・主要なポイント／web_search使用）と呼び出しB（フロー・総括）
-を分離し、片方の失敗が全体を巻き添えにしない（§2.2・§5.3）。各呼び出しは最大
+呼び出しA（ヘッドライン・主要なポイント）と呼び出しB（フロー・総括）を分離し、
+片方の失敗が全体を巻き添えにしない（§2.2・§5.3）。各呼び出しは最大
 MAX_ATTEMPTS回まで試行し、それでも失敗した呼び出しは compose_post.py 側の
 縮退ラダー（§7）へ「失敗」として渡す。
+
+【v1.15: 呼び出しAからweb_searchを撤去（オーナー指示）】
+v1.11〜v1.13でweb_search必須化を試みたが、RSS候補が乏しい日に呼び出しAが
+検索を繰り返し（最大56回・v1.11）、上限（max_uses）を設けても（v1.13）
+3試行とも空応答のまま失敗する事象が2回連続で実測された（DESIGN_CHANGES.md
+v1.12・v1.14）。オーナー判断により、パラメータ調整ではなく呼び出し構造自体の
+問題と結論し、呼び出しAからツールを完全に撤去した。collect_news.py が
+取得したRSS候補（title・summary・published_at・source・tier）をユーザー
+メッセージへテキストとして埋め込み、その中から選別・執筆させる方式へ変更。
+呼び出しBと同一の「ツール無しの通常メッセージ呼び出し」構造になり、Bが
+安定して1回で成功し続けている実績（3回のdispatchで3回とも1回目に成功）が
+Aにもそのまま当てはまる見込み。
 
 縮退レベルの判定について（台本にない状態の扱い・要確認として報告する）:
   台本§7の表は L0=両成功／L1=Aのみ失敗／L2=両失敗 の3値のみを定義しており、
@@ -32,26 +44,28 @@ from typing import Any
 import anthropic
 
 MODEL = "claude-sonnet-5"
-# v1.11実測（2026-08-17・run 32150899390）で判明: web_search必須化後、
-# RSS候補ゼロの日に呼び出しAが検索を56回（3試行合計）実行し、
-# 空応答のまま3試行とも失敗・入力トークン86万を消費した。上限なしの
-# web_searchはコスト・信頼性の両面で危険と判断し、CALL_A_MAX_TOKENSの
-# 引き上げとWEB_SEARCH_TOOLへのmax_uses設定をあわせて行った
-# （DESIGN_CHANGES.md v1.12参照）。
-CALL_A_MAX_TOKENS = 8000  # 台本§5.3は4000。上記事象を受けた実装判断（要確認として報告する）。
+# v1.15: web_search撤去によりツール呼び出しのオーバーヘッドが無くなったため、
+# 台本§5.3の指定値（4000）へ復帰。v1.12〜v1.13で8000へ引き上げていたのは
+# web_search実行時の対策であり、その原因（ツール使用）自体を取り除いた
+# 本改定では不要（DESIGN_CHANGES.md v1.15参照）。
+CALL_A_MAX_TOKENS = 4000
 CALL_B_MAX_TOKENS = 2000
 MAX_ATTEMPTS = 3  # 初回+リトライ2回（§5.3「リトライ: 各2回まで」）
 RETRY_DELAYS_SEC = (2, 4)
-MAX_PAUSE_RESTARTS = 3  # server-side tool の pause_turn 再開回数の上限（暴走防止のガード値。台本に規定なし）
-WEB_SEARCH_MAX_USES = 8  # 1リクエストあたりの検索回数の上限（Anthropic公式ドキュメント記載のmax_uses）。
-
-WEB_SEARCH_TOOL = [{"type": "web_search_20260209", "name": "web_search", "max_uses": WEB_SEARCH_MAX_USES}]
 
 REQUIRED_KEYS_A = [
     "headline_for_image", "part1_headline", "part1_points",
     "reusable_for_summary", "audit_ledger",
 ]
 REQUIRED_KEYS_B = ["part2_flow", "part2_summary"]
+
+# 統合運用基準§3.1の逐語文言。呼び出しAが「候補はあるが書くに足る内容が無い」
+# 場合に自らこの文言を出力する（プロンプトに埋め込む・下記NO_CANDIDATES_FALLBACK）。
+# compose_post.py が呼び出しA自体の失敗時（L1/L2縮退）に代入する文言もこれと
+# 同一（generate_post.FIXED_HEADLINE/FIXED_POINTS として compose_post.py 側が
+# 参照する — 定義を二重に持たず、常に同じ文言であることを保証するため）。
+FIXED_HEADLINE = "直近24時間に暗号通貨市場との関係を確認できる主要なマクロ材料は確認できない。"
+FIXED_POINTS = "補足できる検証済み材料は確認できない。"
 
 # --- プロンプト（v0.3 §5.1・§5.2から逐語転記。台本改定時は本ファイルも追随させる） ---
 
@@ -95,35 +109,47 @@ RULES_CAUSAL = """## 因果表現
 - 次の断定表現を使わない: 「〜が原因で」「〜により上昇した」「〜を受けて
   下落した」「〜のため上昇」「〜のため下落」「〜が牽引した」。"""
 
-WEB_SEARCH_MANDATE = """## web_search の実行（必須・回数に上限あり）
+NEWS_SELECTION = """## ニュース候補の扱いと選定根拠
 
-RSS候補の有無にかかわらず、対象日について必ず web_search を実行し、
-Reuters・Bloomberg等の独立報道と公式発表を確認すること。候補が空である
-ことを理由に検索を省略してはならない。
+news_candidates_today に、collect_news.py が公式発表RSS等から収集した候補が
+title・summary・published_at・source・tier 付きで渡される。web_searchは
+使わない — 独自に調べたり、候補一覧に無い情報を付け加えたりしない。
+本文はこの候補一覧のみを根拠にする。
 
-1回の呼び出しで実行できる検索回数には上限がある。目安として3〜5回程度で、
-SEC・FRB等の当日発表の有無、Reuters・Bloombergでの当日報道の有無を
-確認できれば十分である。同じ対象について検索語を際限なく言い換えて
-繰り返さない。それ以上検索しても新たな材料が見つからない場合は、
-そこで打ち切り、確認できなかった旨を記録する（材料が乏しい日は
-それ自体が正しい結果であり、検索回数を増やすことでは解決しない）。"""
+tier 1: 規制当局・政府機関の公式発表RSS（SEC・FRB・OCC・CFTC・金融庁・
+        日本銀行等）。summaryの記載内容を一次情報として扱ってよい。
+tier 4: Google News経由の候補発見のみの結果（見出し・URLのみで、内容の
+        裏取りをしていない）。単独では事実の根拠にしない。継続監視の
+        対象として reusable_for_summary に記すにとどめ、【ヘッドライン】
+        【主要なポイント】の記述根拠には使わない。
 
-NEWS_SELECTION = """## ニュースの選定と根拠
-
-優先度1: 規制当局・議会・政府・企業・取引所の公式発表
-優先度2: Reuters、Bloomberg 等の独立報道
-優先度3: Financial Times、日経、CoinDesk 等（補完・裏取り）
-優先度4: CoinPost、BeInCrypto Japan 等（論点の発見のみ。主根拠にしない）
-
-- 掲載する事実は優先度1〜3のいずれかで確認できたものに限る。
-- 数値・固有名詞・日時は原典の記載と一致させる。確認できないものは掲載しない
-  （誤りと断定できなくとも、裏取り不足なら不掲載）。
-- 前日の候補一覧に同一の法案・政策・企業動向が含まれる場合、前日から新たな
-  一次情報の更新（具体的な進展・数値・発言）が確認できるときのみ
-  【ヘッドライン】【主要なポイント】へ再掲載する。新展開がなければ、その旨を
+- 掲載する事実はtier 1のsummaryに記載されている内容に限る。
+- 数値・固有名詞・日時はsummary・titleの記載と一致させる。候補に無い情報を
+  推測で補わない（確認できないものは掲載しない）。
+- news_candidates_yesterday に同一の法案・政策・企業動向の候補が含まれる
+  場合、summaryの内容が前日から更新されているときのみ【ヘッドライン】
+  【主要なポイント】へ再掲載する。更新がなければ、その旨を
   reusable_for_summary に記し、本文には書かない。
 - 十分な材料がない日は項目数を埋めない。確認できた事実と、確認できなかった
-  範囲を明記する。"""
+  範囲を明記する。tier 1の候補が0件、またはいずれも書くに足る内容が無い
+  場合は、次の「候補が無い場合の扱い」に従う。"""
+
+NO_CANDIDATES_FALLBACK = f"""## 候補が無い場合の扱い
+
+tier 1の候補が0件、またはいずれも【ヘッドライン】【主要なポイント】に
+書けるだけの内容を持たない場合、以下のとおり出力する。
+
+- part1_headline: 統合運用基準§3.1の指定文言をそのまま使う（言い換えない）:
+  「{FIXED_HEADLINE}」
+- part1_points: 同じく指定文言をそのまま使う（項目数は1件でよい）:
+  「{FIXED_POINTS}」
+- headline_for_image: ニュースが無いため、daily_data.json内のBTC・ETHの
+  direction（up/down）に基づく短い定性的な見出しにとどめる
+  （例:「BTC・ETHともに上昇基調」）。数値は書かない。`#`は使わず全角40字以内。
+- audit_ledger: 空配列 [] でよい。埋めるための架空のsource・url・
+  published_atを作らない（絶対規則2「独自に算出・転記した数値の記載は不可」と
+  同じ理由で、存在しない一次情報の捏造にあたる）。
+- reusable_for_summary: tier 4等の継続監視材料があれば記す。無ければ空配列。"""
 
 WRITES_A = """## あなたが書くもの
 
@@ -131,10 +157,7 @@ WRITES_A = """## あなたが書くもの
 - part1_headline: 前編のヘッドライン。2〜3文。当日の最重要材料と価格の方向。
 - part1_points: 3〜4項目。ヘッドラインと重複しない補足。各項目末尾に
   （媒体名、日付）を付す。材料が乏しい日は項目数を減らし、その旨を書く。
-- audit_ledger: 採否を判断した全候補の記録。web_search実行後もなお採用できる
-  候補が本当に無かった場合は空配列 [] でよい — 埋めるための架空のsource・url・
-  published_atを作らない（絶対規則2「独自に算出・転記した数値の記載は不可」と
-  同じ理由で、存在しない一次情報の捏造にあたる）。
+- audit_ledger: 候補一覧（tier 1・4の両方）の採否を判断した記録。
 - reusable_for_summary: 継続材料で本文に載せなかったものの1行要約（0〜2件）。"""
 
 OUTPUT_FORMAT_A = """## 出力形式
@@ -153,7 +176,7 @@ OUTPUT_FORMAT_A = """## 出力形式
 }"""
 
 SYSTEM_A = "\n\n".join([
-    ROLE_INTRO, RULES_ABSOLUTE, WEB_SEARCH_MANDATE, RULES_HASHTAG, NEWS_SELECTION,
+    ROLE_INTRO, RULES_ABSOLUTE, RULES_HASHTAG, NEWS_SELECTION, NO_CANDIDATES_FALLBACK,
     RULES_CAUSAL, WRITES_A, OUTPUT_FORMAT_A,
 ])
 
@@ -181,17 +204,16 @@ SYSTEM_B = "\n\n".join([
 
 class CallOutcome:
     def __init__(self, ok: bool, data: dict | None, attempts: int, error: str | None,
-                 web_search_count: int = 0, usage: dict[str, int] | None = None):
+                 usage: dict[str, int] | None = None):
         self.ok = ok
         self.data = data
         self.attempts = attempts
         self.error = error
-        self.web_search_count = web_search_count
         self.usage = usage or {"input_tokens": 0, "output_tokens": 0}
 
     def to_dict(self) -> dict:
         return {"ok": self.ok, "attempts": self.attempts, "error": self.error,
-                "web_search_count": self.web_search_count, "usage": self.usage, "data": self.data}
+                "usage": self.usage, "data": self.data}
 
 
 def _extract_text(response: Any) -> str:
@@ -207,23 +229,6 @@ def _strip_code_fence(text: str) -> str:
     return t.strip()
 
 
-def _count_web_search(response: Any) -> int:
-    """公式ドキュメント記載の response.usage.server_tool_use.web_search_requests を
-    優先して使う（1回のserver_tool_useが複数回の検索を内包しうるdynamic filtering
-    経由の場合でも正確なため）。存在しない場合（モック応答等）はcontentブロックの
-    server_tool_use(name=web_search)を数える従来方式にフォールバックする。
-    """
-    usage = getattr(response, "usage", None)
-    server_tool_use = getattr(usage, "server_tool_use", None) if usage else None
-    web_search_requests = getattr(server_tool_use, "web_search_requests", None) if server_tool_use else None
-    if isinstance(web_search_requests, int):
-        return web_search_requests
-    return sum(
-        1 for b in response.content
-        if getattr(b, "type", None) == "server_tool_use" and getattr(b, "name", None) == "web_search"
-    )
-
-
 def _extract_usage(response: Any) -> dict[str, int]:
     usage = getattr(response, "usage", None)
     return {
@@ -237,32 +242,12 @@ def _add_usage(a: dict[str, int], b: dict[str, int]) -> dict[str, int]:
             "output_tokens": a["output_tokens"] + b["output_tokens"]}
 
 
-def _run_with_pause_handling(client: "anthropic.Anthropic", kwargs: dict) -> tuple[Any, int, dict[str, int]]:
-    """server-side tool（web_search）が反復上限で pause_turn を返した場合、
-    会話履歴を引き継いで再送する（SDK付属ドキュメント記載の手順）。
-    GENERATION_STATUS.md報告用に、全リクエストを通じたweb_search呼び出し回数と
-    トークン使用量（実消費量の確認用。オーナー指示）も合算して返す。
-    """
-    messages = kwargs["messages"]
-    response = client.messages.create(**kwargs)
-    web_search_count = _count_web_search(response)
-    usage = _extract_usage(response)
-    restarts = 0
-    while response.stop_reason == "pause_turn" and restarts < MAX_PAUSE_RESTARTS:
-        messages = messages + [{"role": "assistant", "content": response.content}]
-        kwargs = {**kwargs, "messages": messages}
-        response = client.messages.create(**kwargs)
-        web_search_count += _count_web_search(response)
-        usage = _add_usage(usage, _extract_usage(response))
-        restarts += 1
-    return response, web_search_count, usage
-
-
 def _call_json(
     client: "anthropic.Anthropic", *, system: str, user_content: str, max_tokens: int,
-    required_keys: list[str], tools: list[dict] | None = None,
+    required_keys: list[str],
 ) -> CallOutcome:
     """system/userプロンプトでJSON応答を取得し、必須キーの充足まで検証する。
+    ツールは一切使わない通常のメッセージ呼び出し（v1.15。呼び出しA・B共通）。
 
     例外（ネットワーク・認証・レート制限・refusal・空応答・JSON不正・必須キー欠落）は
     すべて「この呼び出しの失敗」として扱い、最大MAX_ATTEMPTS回まで再試行したうえで
@@ -271,23 +256,18 @@ def _call_json(
     （個別の例外型ごとに扱いを変えると、想定外の失敗モードが縮退せずクラッシュしうる）。
     """
     last_err: str | None = None
-    total_web_search = 0
     total_usage = {"input_tokens": 0, "output_tokens": 0}
     for attempt in range(1, MAX_ATTEMPTS + 1):
         try:
-            kwargs: dict[str, Any] = dict(
+            response = client.messages.create(
                 model=MODEL,
                 max_tokens=max_tokens,
                 system=system,
                 messages=[{"role": "user", "content": user_content}],
             )
-            if tools:
-                kwargs["tools"] = tools
-            response, web_search_count, usage = _run_with_pause_handling(client, kwargs)
             # 応答を受け取れた時点で実消費量を確定させる（この後の検証で例外が
             # 出てもトークンは既に消費済みのため、成否によらず加算する）。
-            total_web_search += web_search_count
-            total_usage = _add_usage(total_usage, usage)
+            total_usage = _add_usage(total_usage, _extract_usage(response))
             if response.stop_reason == "refusal":
                 category = getattr(getattr(response, "stop_details", None), "category", None)
                 raise ValueError(f"refusal (category={category})")
@@ -300,12 +280,12 @@ def _call_json(
             missing = [k for k in required_keys if k not in data]
             if missing:
                 raise ValueError(f"必須キー欠落: {missing}")
-            return CallOutcome(True, data, attempt, None, total_web_search, total_usage)
+            return CallOutcome(True, data, attempt, None, total_usage)
         except Exception as e:  # noqa: BLE001 — 上記docstring参照
             last_err = f"{type(e).__name__}: {e}"
             if attempt < MAX_ATTEMPTS:
                 time.sleep(RETRY_DELAYS_SEC[attempt - 1])
-    return CallOutcome(False, None, MAX_ATTEMPTS, last_err, total_web_search, total_usage)
+    return CallOutcome(False, None, MAX_ATTEMPTS, last_err, total_usage)
 
 
 def _build_call_a_user_content(daily_data: dict, news_today: dict, news_yesterday: dict | None) -> str:
@@ -342,7 +322,7 @@ def call_a(client: "anthropic.Anthropic", daily_data: dict, news_today: dict,
     user_content = _build_call_a_user_content(daily_data, news_today, news_yesterday)
     return _call_json(
         client, system=SYSTEM_A, user_content=user_content,
-        max_tokens=CALL_A_MAX_TOKENS, required_keys=REQUIRED_KEYS_A, tools=WEB_SEARCH_TOOL,
+        max_tokens=CALL_A_MAX_TOKENS, required_keys=REQUIRED_KEYS_A,
     )
 
 
@@ -350,7 +330,7 @@ def call_b(client: "anthropic.Anthropic", daily_data: dict, call_a_data: dict | 
     user_content = _build_call_b_user_content(daily_data, call_a_data)
     return _call_json(
         client, system=SYSTEM_B, user_content=user_content,
-        max_tokens=CALL_B_MAX_TOKENS, required_keys=REQUIRED_KEYS_B, tools=None,
+        max_tokens=CALL_B_MAX_TOKENS, required_keys=REQUIRED_KEYS_B,
     )
 
 
@@ -375,7 +355,7 @@ def run(target_date: str, *, client: "anthropic.Anthropic | None" = None) -> dic
     daily_data = json.loads(Path(f"outputs/{target_date}/daily_data.json").read_text(encoding="utf-8"))
 
     news_today = _load_json_or(Path(f"outputs/{target_date}/news_candidates.json"),
-                                default={"candidates": [], "source_status": {"cryptopanic": "failed", "count": 0}})
+                                default={"candidates": [], "source_status": {}})
     prev_date = (date.fromisoformat(target_date) - timedelta(days=1)).isoformat()
     news_yesterday = _load_json_or(Path(f"outputs/{prev_date}/news_candidates.json"), default=None)
 
@@ -412,8 +392,7 @@ def main() -> int:
     u = result["total_usage"]
     print(f"OK: {out_path}（level={result['level']}, call_A={a_status}, call_B={b_status}）")
     print(f"トークン使用量（実消費量）: input={u['input_tokens']}, output={u['output_tokens']} "
-          f"（call_A: in={result['call_a']['usage']['input_tokens']} out={result['call_a']['usage']['output_tokens']} "
-          f"web_search={result['call_a']['web_search_count']}回 / "
+          f"（call_A: in={result['call_a']['usage']['input_tokens']} out={result['call_a']['usage']['output_tokens']} / "
           f"call_B: in={result['call_b']['usage']['input_tokens']} out={result['call_b']['usage']['output_tokens']}）")
     return 0
 
