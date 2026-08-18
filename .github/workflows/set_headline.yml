@@ -62,29 +62,7 @@ jobs:
           HEADLINE: ${{ inputs.headline }}
           TARGET_DIR: outputs/${{ steps.target.outputs.date }}
         run: |
-          python3 - <<'PYEOF'
-          import json
-          import os
-          import sys
-          from pathlib import Path
-
-          headline = os.environ["HEADLINE"]
-          if not headline.strip():
-              print("ERROR: headline が空文字です。プレースホルダーのままコミットしません。",
-                    file=sys.stderr)
-              sys.exit(1)
-
-          jp = Path(os.environ["TARGET_DIR"]) / "daily_data.json"
-          if not jp.exists():
-              print(f"ERROR: {jp} が存在しません。先に daily-crypto-brief で対象日の"
-                    "成果物を生成してください。", file=sys.stderr)
-              sys.exit(1)
-
-          d = json.loads(jp.read_text(encoding="utf-8"))
-          d["summary"] = headline
-          jp.write_text(json.dumps(d, ensure_ascii=False, indent=2), encoding="utf-8")
-          print(f"OK: {jp} の summary を更新しました。")
-          PYEOF
+          python scripts/inject_headline.py
 
       - name: インフォグラフィック再描画（daily_data.json → infographic.png のみ）
         env:
