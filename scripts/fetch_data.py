@@ -463,7 +463,12 @@ def main() -> int:
     sources = ["CoinMarketCap API" if cmc else None,
                "GeckoTerminal" if (g005 or g03) else None,
                "DefiLlama" if (b_tvl or b_dex or usdc_d is not None) else None,
-               "ExchangeRate-API" if fx else None]
+               "ExchangeRate-API" if fx else None,
+               # v1.7: domestic由来の数値（後編の国内2社比較）を掲載するため出典に含める。
+               # 片方のみ成功でも部分成功として反映する（実際に成功した取得元名を使う。
+               # bf_dom["source"]はフォールバック段によって変わりうるため文字列を固定しない）。
+               bf_dom["source"] if bf_dom else None,
+               cc_dom["source"] if cc_dom else None]
     data = {
         "target_date_jst": target.isoformat(),
         "weekday_jp": weekday,

@@ -3,7 +3,7 @@
 国内2社のETH/JPY現物 未確認 vs Base上ETH/USDC 未確認｜参考：Base上DEX全体 $4.950億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません
 ・Baseチェーン：TVL $47.11億（¥7,504億）｜24時間比 +2.04%｜USDCドミナンス 86.3%
 ・ ETH/USDC（Base）参考APR：0.05% 15.32%（TVL $9.99M／24h出来高 $8.39M）｜0.3% 40.66%（TVL $112.41M／24h出来高 $41.73M）※24時間データの単純年率換算
-・出典・取得時刻：CoinMarketCap API / GeckoTerminal / DefiLlama / ExchangeRate-API、2026-08-12 23:59 JST
+・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API、2026年8月12日23:59 JST
 
 【市場のフロー】
 （フェーズ2 第2弾［LLM呼び出し］未実装のため、この下書きでは空欄）

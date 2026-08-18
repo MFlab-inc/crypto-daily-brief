@@ -10,6 +10,7 @@ LLM不使用。daily_data.json の値をそのまま差し込むだけで、独�
 from __future__ import annotations
 
 import json
+import re
 import sys
 from datetime import date
 from pathlib import Path
@@ -17,10 +18,37 @@ from typing import Any
 
 UNCONFIRMED = "未確認"
 
+_RETRIEVED_AT_RE = re.compile(
+    r"^(\d{4})-(\d{2})-(\d{2}) (\d{2}:\d{2}(?:–\d{2}:\d{2})?) JST$")
+
 
 def _paren(jpy: str) -> str:
     """（jpy）を返す。jpyが空文字なら空文字（v1.1 A-1と同じ: 空括弧を作らない）。"""
     return f"（{jpy}）" if jpy else ""
+
+
+def _wareki_retrieved_at(s: str) -> str:
+    """組版時のみ和暦風の日付表記へ変換する（v0.3修正3）。
+    daily_data.json 側の footer.retrieved_at は変更しない（画像側フッターが
+    同じ値をそのまま描画しているため）。単一時刻・範囲表記（v1.1 A-3）の
+    どちらにも対応する。書式が一致しない場合（未確認等）はそのまま返す。
+      "2026-08-18 07:50 JST"       -> "2026年8月18日07:50 JST"
+      "2026-08-18 07:50–07:52 JST" -> "2026年8月18日07:50–07:52 JST"
+    """
+    m = _RETRIEVED_AT_RE.match(str(s))
+    if not m:
+        return s
+    y, mo, d, time_part = m.groups()
+    return f"{int(y)}年{int(mo)}月{int(d)}日{time_part} JST"
+
+
+def _zenkaku_sources(s: str) -> str:
+    """組版時のみ出典区切りを全角スラッシュへ統一する（v0.3修正2）。
+    daily_data.json 側の footer.sources は変更しない（画像側フッターが
+    半角" / "区切りのまま描画しているため）。前編の固定文言
+    「CoinMarketCap API／ExchangeRate-API」と表記を揃える。
+    """
+    return str(s).replace(" / ", "／")
 
 
 def _asset(daily_data: dict, symbol: str) -> dict:
@@ -68,7 +96,8 @@ def compose_part1_numeric(daily_data: dict[str, Any]) -> str:
         fg_line,
         f"・ドミナンス：BTC {m.get('btc_dominance', UNCONFIRMED)}｜ETH {m.get('eth_dominance', UNCONFIRMED)}",
         f"・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、"
-        f"{footer.get('retrieved_at', UNCONFIRMED)}、USD/JPY {footer.get('usd_jpy', UNCONFIRMED)}",
+        f"{_wareki_retrieved_at(footer.get('retrieved_at', UNCONFIRMED))}、"
+        f"USD/JPY {footer.get('usd_jpy', UNCONFIRMED)}",
     ]
     return "\n".join(lines)
 
@@ -95,7 +124,8 @@ def compose_part2_numeric(daily_data: dict[str, Any]) -> str:
         f"0.3% {p03.get('apr', UNCONFIRMED)}"
         f"（TVL {p03.get('tvl', UNCONFIRMED)}／24h出来高 {p03.get('volume_24h', UNCONFIRMED)}）"
         "※24時間データの単純年率換算",
-        f"・出典・取得時刻：{footer.get('sources', UNCONFIRMED)}、{footer.get('retrieved_at', UNCONFIRMED)}",
+        f"・出典・取得時刻：{_zenkaku_sources(footer.get('sources', UNCONFIRMED))}、"
+        f"{_wareki_retrieved_at(footer.get('retrieved_at', UNCONFIRMED))}",
     ]
     return "\n".join(lines)
 

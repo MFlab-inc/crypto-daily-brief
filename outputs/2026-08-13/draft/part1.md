@@ -13,4 +13,4 @@
 ・ #BNB：$610（約9.72万円）｜24時間比 +0.12%
 ・市場心理：Fear & Greed 37（Fear、CoinMarketCap API）
 ・ドミナンス：BTC 58.46%｜ETH 10.45%
-・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026-08-14 08:12 JST、USD/JPY ¥159.29
+・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年8月14日08:12 JST、USD/JPY ¥159.29
