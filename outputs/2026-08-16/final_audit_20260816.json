@@ -1,7 +1,7 @@
 {
   "overall": "PASS",
   "failed": 0,
-  "checked_at_jst": "2026-08-18T10:31:30.403902+09:00",
+  "checked_at_jst": "2026-08-18T10:34:16.706826+09:00",
   "checks": [
     {
       "id": "C1_schema",
@@ -60,8 +60,8 @@
     }
   ],
   "sha256": {
-    "daily_data.json": "6bf1afdc9ba7b6f8f8a3cb5b0c1515673a87518902d0d492424570559f3b2dec",
-    "infographic.png": "9535be660418408affb2dedc56895a2a4a40d3e54f813f7e4009d9c0270179e4",
+    "daily_data.json": "97894de86be7dbf2f3c569ceb71e5119d3da75d67e4a8f966ae0473321a52df8",
+    "infographic.png": "47a8e3e270c33902f2b99e9c7eb4dc017b10e2cf53b2f01a759742dfda615db0",
     "raw_data.json": "e5ea0b9b1c0a5e9b2bbedb5c0ebd1208694b80a4c570be2e9cf5c0586ebfba89",
     "apr_screenshot.jpg": "c4b6fac5f528788e8291896b75389d63d56ec9617562104a17a15fe21d95f5ad"
   }
