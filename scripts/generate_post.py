@@ -32,13 +32,20 @@ from typing import Any
 import anthropic
 
 MODEL = "claude-sonnet-5"
-CALL_A_MAX_TOKENS = 4000
+# v1.11実測（2026-08-17・run 32150899390）で判明: web_search必須化後、
+# RSS候補ゼロの日に呼び出しAが検索を56回（3試行合計）実行し、
+# 空応答のまま3試行とも失敗・入力トークン86万を消費した。上限なしの
+# web_searchはコスト・信頼性の両面で危険と判断し、CALL_A_MAX_TOKENSの
+# 引き上げとWEB_SEARCH_TOOLへのmax_uses設定をあわせて行った
+# （DESIGN_CHANGES.md v1.12参照）。
+CALL_A_MAX_TOKENS = 8000  # 台本§5.3は4000。上記事象を受けた実装判断（要確認として報告する）。
 CALL_B_MAX_TOKENS = 2000
 MAX_ATTEMPTS = 3  # 初回+リトライ2回（§5.3「リトライ: 各2回まで」）
 RETRY_DELAYS_SEC = (2, 4)
 MAX_PAUSE_RESTARTS = 3  # server-side tool の pause_turn 再開回数の上限（暴走防止のガード値。台本に規定なし）
+WEB_SEARCH_MAX_USES = 8  # 1リクエストあたりの検索回数の上限（Anthropic公式ドキュメント記載のmax_uses）。
 
-WEB_SEARCH_TOOL = [{"type": "web_search_20260209", "name": "web_search"}]
+WEB_SEARCH_TOOL = [{"type": "web_search_20260209", "name": "web_search", "max_uses": WEB_SEARCH_MAX_USES}]
 
 REQUIRED_KEYS_A = [
     "headline_for_image", "part1_headline", "part1_points",
@@ -88,11 +95,18 @@ RULES_CAUSAL = """## 因果表現
 - 次の断定表現を使わない: 「〜が原因で」「〜により上昇した」「〜を受けて
   下落した」「〜のため上昇」「〜のため下落」「〜が牽引した」。"""
 
-WEB_SEARCH_MANDATE = """## web_search の実行（必須）
+WEB_SEARCH_MANDATE = """## web_search の実行（必須・回数に上限あり）
 
 RSS候補の有無にかかわらず、対象日について必ず web_search を実行し、
 Reuters・Bloomberg等の独立報道と公式発表を確認すること。候補が空である
-ことを理由に検索を省略してはならない。"""
+ことを理由に検索を省略してはならない。
+
+1回の呼び出しで実行できる検索回数には上限がある。目安として3〜5回程度で、
+SEC・FRB等の当日発表の有無、Reuters・Bloombergでの当日報道の有無を
+確認できれば十分である。同じ対象について検索語を際限なく言い換えて
+繰り返さない。それ以上検索しても新たな材料が見つからない場合は、
+そこで打ち切り、確認できなかった旨を記録する（材料が乏しい日は
+それ自体が正しい結果であり、検索回数を増やすことでは解決しない）。"""
 
 NEWS_SELECTION = """## ニュースの選定と根拠
 
@@ -194,6 +208,16 @@ def _strip_code_fence(text: str) -> str:
 
 
 def _count_web_search(response: Any) -> int:
+    """公式ドキュメント記載の response.usage.server_tool_use.web_search_requests を
+    優先して使う（1回のserver_tool_useが複数回の検索を内包しうるdynamic filtering
+    経由の場合でも正確なため）。存在しない場合（モック応答等）はcontentブロックの
+    server_tool_use(name=web_search)を数える従来方式にフォールバックする。
+    """
+    usage = getattr(response, "usage", None)
+    server_tool_use = getattr(usage, "server_tool_use", None) if usage else None
+    web_search_requests = getattr(server_tool_use, "web_search_requests", None) if server_tool_use else None
+    if isinstance(web_search_requests, int):
+        return web_search_requests
     return sum(
         1 for b in response.content
         if getattr(b, "type", None) == "server_tool_use" and getattr(b, "name", None) == "web_search"
