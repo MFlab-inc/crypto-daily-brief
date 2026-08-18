@@ -1,7 +1,7 @@
 level: L0
 call_A: OK（1回試行）
 call_B: OK（1回試行）
-token_usage（実消費量）: input=6758, output=1245 (call_A: in=4244 out=413 / call_B: in=2514 out=832)
+token_usage（実消費量）: input=7071, output=2140 (call_A: in=4557 out=1403 / call_B: in=2514 out=737)
 news_sources:
   - SEC: ok（対象日0件／取得25件）
   - FRB: ok（対象日0件／取得20件）
@@ -11,6 +11,7 @@ news_sources:
   - 金融庁: ok（対象日3件／取得15件）
   - 日本銀行: ok（対象日2件／取得50件）
   - Google News (Reuters検索): ok（対象日0件／取得0件）
+news_candidates_today: 5件 / audit_ledger: 5件（候補があるのにaudit_ledgerが0件の場合はC19がFAILする想定。要目視確認）
 
 手当が必要な箇所:
   （なし）

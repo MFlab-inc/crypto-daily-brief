@@ -46,12 +46,12 @@
     {
       "id": "C19_audit_ledger",
       "result": "PASS",
-      "detail": "空配列（RSS取得成功ソースありのため許容）"
+      "detail": "5件・全フィールド充足"
     },
     {
       "id": "C20_image_headline",
       "result": "PASS",
-      "detail": "全角換算11.0字・#なし"
+      "detail": "全角換算13.5字・#なし"
     }
   ]
 }
