@@ -83,7 +83,12 @@ def fetch_cryptopanic(api_key: str, plan: str = DEFAULT_PLAN) -> tuple[str, list
             timeout=REQUEST_TIMEOUT_SEC,
         )
         if resp.status_code != 200:
-            print(f"WARN: CryptoPanic HTTP {resp.status_code}", file=sys.stderr)
+            # url・bodyのみ診断用に出す（auth_tokenはparamsで渡しており、ここには含まれない。
+            # 万一含まれてもsecretはActionsのログマスキングで***化されるが、そもそも
+            # トークンを含まない文字列だけを組み立てて二重に防ぐ）。
+            body_snippet = resp.text[:200] if resp.text else ""
+            print(f"WARN: CryptoPanic HTTP {resp.status_code} (url={url}) body={body_snippet!r}",
+                  file=sys.stderr)
             return "failed", []
         body = resp.json()
         results = body.get("results") if isinstance(body, dict) else None
