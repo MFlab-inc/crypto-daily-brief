@@ -7,6 +7,47 @@
 
 ---
 
+## v1.13 — 2026-08-18（オーナー承認・RSS追加とBLS対応）
+
+**指示**：2026-08-18・オーナーによる3件承認。(1) 2026-08-17で再dispatchし
+v1.12のmax_uses対処を実測、(2) 金融庁・日銀・OCC・CFTCのRSSを事前に追加し
+同じdispatchで到達性を実測、(3) BLSのUser-Agentを一般的なブラウザ文字列へ
+変更・403継続時はそこで打ち切り取得不能として記録するのみ（UA偽装を重ねない）。
+**適用範囲**：`config/news_sources.json`（4件追加）、`scripts/collect_news.py`
+（USER_AGENT変更のみ）。
+
+### RSS追加
+
+`config/news_sources.json`へ以下を追加（調査結果はv1.11時点の独立エージェント
+調査。実到達性は本dispatchで初めて実測する）：
+- OCC: `https://www.occ.gov/rss/occ_news.xml`
+- CFTC: `https://www.cftc.gov/RSS/RSSGP/rssgp.xml`
+- 金融庁: `https://www.fsa.go.jp/fsaNewsListAll_rss2.xml`
+- 日本銀行: `https://www.boj.or.jp/rss/whatsnew.xml`（英語版
+  `https://www.boj.or.jp/en/rss/whatsnew.xml`も調査済みだが、本レポートが
+  JST・日本語主体であることに合わせ日本語版を採用）
+
+米財務省は調査エージェントにより現行の公開RSSが無い（2026年3月の移行ログで
+`home.treasury.gov/rss/press-releases`が404と確認済み、代替も見つからず）
+ことが判明しているため追加していない。
+
+### BLSのUser-Agent変更
+
+`USER_AGENT`を独自文字列（`crypto-daily-brief/1.0 (+https://github.com/...)`）
+から一般的なブラウザのUser-Agent文字列へ変更した。オーナー指示どおり、
+変更後も403が続く場合はこれ以上UAを変えて追跡せず、BLSは取得不能として
+記録するにとどめる（CPI・PPI等はFRB・web_search経由で拾えるため設計上の
+実害は限定的、というオーナーの判断による）。
+
+### 検証
+
+既存61件のモックテストを再実行し全てPASSを維持。JSON構文・Python構文の
+静的チェックも実施。実際のRSS到達性（新規4件・BLSのUA変更後の状態）と、
+v1.12のweb_search上限対処が実際に効くかは、本版コミット後の
+`post_draft.yml`再実行（対象日2026-08-17）で実測・報告する。
+
+---
+
 ## v1.12 — 2026-08-18（v1.11実行結果を受けたweb_search暴走の是正）
 
 **内容**：v1.11（web_search必須化）を対象日2026-08-17で実行した結果、

@@ -35,7 +35,13 @@ RAW_ITEM_LIMIT = 50  # 1フィードあたりの取得上限（日付フィル�
 SOURCES_CONFIG_PATH = Path(__file__).parent.parent / "config" / "news_sources.json"
 GOOGLE_NEWS_NAME = "Google News (Reuters検索)"
 GOOGLE_NEWS_URL = "https://news.google.com/rss/search?q=when:24h+allinurl:reuters.com"
-USER_AGENT = "crypto-daily-brief/1.0 (+https://github.com/MFlab-inc/crypto-daily-brief)"
+# 一般的なブラウザのUser-Agent文字列（v1.13）。BLSがHTTP 403を返した際、
+# 独自UA（旧: "crypto-daily-brief/1.0 (+https://github.com/...)"）が
+# bot対策で拒否されている可能性を疑い変更した。変更後も403が続く場合は
+# それ以上UAを変えて追跡せず、取得不能として記録するにとどめる
+# （DESIGN_CHANGES.md参照）。
+USER_AGENT = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+              "(KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36")
 
 
 def _now_jst_iso() -> str:

@@ -1,8 +1,12 @@
 {
-  "_comment": "優先度1（公式発表）RSS一覧（v0.4方針転換）。オーナー指定の3件＋調査で確認できた分を追加。collect_news.pyが1件ずつ独立して取得し、失敗した情報源は他を巻き添えにしない。404が実測で判明したものは除外・記録する（DESIGN_CHANGES.md参照）。",
+  "_comment": "優先度1（公式発表）RSS一覧（v0.4方針転換）。オーナー指定の3件＋調査で確認できた分を追加。collect_news.pyが1件ずつ独立して取得し、失敗した情報源は他を巻き添えにしない。404/403等が実測で判明したものは除外・記録する（DESIGN_CHANGES.md参照）。",
   "sources": [
     { "name": "SEC", "url": "https://www.sec.gov/news/pressreleases.rss" },
     { "name": "FRB", "url": "https://www.federalreserve.gov/feeds/press_all.xml" },
-    { "name": "BLS", "url": "https://www.bls.gov/feed/bls_latest.rss" }
+    { "name": "BLS", "url": "https://www.bls.gov/feed/bls_latest.rss" },
+    { "name": "OCC", "url": "https://www.occ.gov/rss/occ_news.xml" },
+    { "name": "CFTC", "url": "https://www.cftc.gov/RSS/RSSGP/rssgp.xml" },
+    { "name": "金融庁", "url": "https://www.fsa.go.jp/fsaNewsListAll_rss2.xml" },
+    { "name": "日本銀行", "url": "https://www.boj.or.jp/rss/whatsnew.xml" }
   ]
 }
