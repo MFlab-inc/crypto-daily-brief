@@ -2,7 +2,7 @@
   "target_date_jst": "2026-08-16",
   "weekday_jp": "日",
   "date_title": "2026年8月16日（日）暗号通貨・DEX市場概況",
-  "summary": "（シャドー運用中：ヘッドラインはフェーズ2で生成）",
+  "summary": "【動作確認用テスト】v1.5 set-headline 経路の検証（後で正式ヘッドラインへ差し替え予定）",
   "assets": [
     {
       "asset": "BTC",
