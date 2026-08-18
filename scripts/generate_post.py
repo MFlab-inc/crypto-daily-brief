@@ -137,7 +137,8 @@ tier 4: Google News経由の候補発見のみの結果（見出し・URLのみ�
 NO_CANDIDATES_FALLBACK = f"""## 候補が無い場合の扱い
 
 tier 1の候補が0件、またはいずれも【ヘッドライン】【主要なポイント】に
-書けるだけの内容を持たない場合、以下のとおり出力する。
+書けるだけの内容を持たない場合、part1_headline・part1_points・
+headline_for_imageは以下のとおり出力する。
 
 - part1_headline: 統合運用基準§3.1の指定文言をそのまま使う（言い換えない）:
   「{FIXED_HEADLINE}」
@@ -146,10 +147,20 @@ tier 1の候補が0件、またはいずれも【ヘッドライン】【主要�
 - headline_for_image: ニュースが無いため、daily_data.json内のBTC・ETHの
   direction（up/down）に基づく短い定性的な見出しにとどめる
   （例:「BTC・ETHともに上昇基調」）。数値は書かない。`#`は使わず全角40字以内。
-- audit_ledger: 空配列 [] でよい。埋めるための架空のsource・url・
-  published_atを作らない（絶対規則2「独自に算出・転記した数値の記載は不可」と
-  同じ理由で、存在しない一次情報の捏造にあたる）。
-- reusable_for_summary: tier 4等の継続監視材料があれば記す。無ければ空配列。"""
+- reusable_for_summary: tier 4等の継続監視材料があれば記す。無ければ空配列。
+
+**audit_ledgerは上記と切り離して扱う（統合運用基準・台本の要求）。**
+audit_ledgerは「採否を判断した全候補の記録」であり、本文（ヘッドライン・
+主要なポイント）に採用したかどうかとは無関係に、news_candidates_today に
+渡された候補（tier 1・4の両方）を1件残らず記録する。ヘッドライン・
+主要なポイントに使わなかった候補も decision:"不採用" とその理由
+（例:「暗号通貨市場との関係が確認できない」「内容が薄く一次情報として
+不十分」等）を記録する。audit_ledgerを空配列 [] にしてよいのは、
+news_candidates_today が空配列で渡された（候補が1件も無かった）場合の
+みである。候補が1件でも渡されている場合、audit_ledgerを空配列で返して
+はならない。埋めるための架空のsource・url・published_atを作ることは
+禁止のままだが（絶対規則2と同じ理由で捏造にあたる）、渡された候補自体は
+実在するため、その候補について採否と理由を記録することは捏造ではない。"""
 
 WRITES_A = """## あなたが書くもの
 
@@ -371,6 +382,9 @@ def run(target_date: str, *, client: "anthropic.Anthropic | None" = None) -> dic
         "call_a": a.to_dict(),
         "call_b": b.to_dict(),
         "news_source_status": news_today.get("source_status", {}),
+        # C19（v1.17）: audit_ledgerの空配列許容判定に使う（候補自体が
+        # 0件だったのか、候補はあったが採否記録が漏れたのかを区別する）。
+        "news_candidate_count": len(news_today.get("candidates", [])),
         "total_usage": _add_usage(a.usage, b.usage),
     }
 

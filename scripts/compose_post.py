@@ -152,9 +152,11 @@ def compose(daily_data: dict, gen: dict[str, Any]) -> dict[str, Any]:
         "llm_section_keys": llm_section_keys,
         "headline_for_image": headline_for_image,
         "audit_ledger": call_a["data"].get("audit_ledger") if a_ok else None,
-        # C19（v1.15改定）: 空配列の許容判定にverify_post.py側で使う
-        # （RSSが1ソース以上成功していれば許容、全滅なら空配列はFAIL）。
         "news_source_status": gen.get("news_source_status", {}),
+        # C19（v1.17改定）: 空配列の許容判定にverify_post.py側で使う
+        # （当日の候補自体が0件なら許容、候補はあったのに空配列はFAIL —
+        # 「採否を判断した全候補の記録」という台本・統合運用基準の要求どおり）。
+        "news_candidate_count": gen.get("news_candidate_count", 0),
         "part1_md": part1_md,
         "part2_md": part2_md,
     }
@@ -204,6 +206,12 @@ def render_generation_status(gen: dict[str, Any]) -> str:
         "news_sources:",
     ]
     lines += _render_news_source_lines(news_status)
+    audit_ledger = (a.get("data") or {}).get("audit_ledger") if a["ok"] else None
+    ledger_len = len(audit_ledger) if isinstance(audit_ledger, list) else "N/A"
+    lines += [
+        f"news_candidates_today: {gen.get('news_candidate_count', 0)}件 / audit_ledger: {ledger_len}件"
+        "（候補があるのにaudit_ledgerが0件の場合はC19がFAILする想定。要目視確認）",
+    ]
     lines += [
         "",
         "手当が必要な箇所:",

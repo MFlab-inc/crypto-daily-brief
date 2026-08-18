@@ -222,7 +222,7 @@ def check_c18(au: Audit, sections: dict, llm_section_keys: list[str]) -> None:
 
 # --- C19 監査台帳（L0のみ検査） ---
 
-def check_c19(au: Audit, level: str, audit_ledger, any_rss_source_ok: bool) -> None:
+def check_c19(au: Audit, level: str, audit_ledger, candidate_count: int) -> None:
     if level != "L0":
         au.add("C19_audit_ledger", None, f"level={level} のためSKIP（呼び出しA失敗時は台帳が原理的に存在しない）")
         return
@@ -230,14 +230,17 @@ def check_c19(au: Audit, level: str, audit_ledger, any_rss_source_ok: bool) -> N
         au.add("C19_audit_ledger", False, "audit_ledgerがリストでない")
         return
     if not audit_ledger:
-        # v1.15改定: 呼び出しAはweb_searchを使わず、collect_news.pyが取得した
-        # RSS候補から選別するのみになった。空配列を許容できるのは「RSS取得が
-        # 少なくとも1ソース成功したうえで採用に値する候補が無かった」場合のみ。
-        # 全ソース取得失敗のまま空配列は「確認を怠った」可能性と区別できないためFAIL。
-        ok = any_rss_source_ok
+        # v1.17改定: audit_ledgerは「採否を判断した全候補の記録」（台本・
+        # 統合運用基準の要求）。空配列を許容できるのは、当日の候補自体が
+        # 1件も無かった（news_candidates_todayが空）場合のみ。候補が
+        # 1件でも渡されていたのに空配列は「採否記録を怠った」可能性と
+        # 区別できないためFAIL（RSS取得の成否ではなく候補の有無で判定する
+        # — 取得自体は成功しても対象日該当0件のソースがあるため、v1.15の
+        # 「RSSが1ソース成功していれば許容」は緩すぎた）。
+        ok = candidate_count == 0
         au.add("C19_audit_ledger", ok,
-               "空配列（RSS取得成功ソースありのため許容）" if ok
-               else "空配列だが全RSSソース取得失敗（未確認のためFAIL）")
+               "空配列（当日の候補自体が0件のため許容）" if ok
+               else f"空配列だが当日の候補が{candidate_count}件存在（採否記録が必要でFAIL）")
         return
     required_fields = ("source", "url", "published_at", "decision", "reason")
     bad = [i for i, e in enumerate(audit_ledger)
@@ -283,12 +286,10 @@ def run_all(bundle: dict, daily_data: dict) -> Audit:
     check_c16b(au, daily_data, sections, llm_keys, allowlist)
     check_c17(au, sections.get("lp_comment", ""))
     check_c18(au, sections, llm_keys)
-    news_source_status = bundle.get("news_source_status", {})
-    any_rss_source_ok = any(
-        isinstance(s, dict) and s.get("status") == "ok"
-        for s in news_source_status.values()
-    )
-    check_c19(au, bundle["level"], bundle.get("audit_ledger"), any_rss_source_ok)
+    # news_candidate_countが欠落している場合は「0件」と区別できないよう
+    # 負値を渡す（フェイルクローズ。存在しないキーを0件と混同して
+    # 空配列を誤って許容しないようにする）。
+    check_c19(au, bundle["level"], bundle.get("audit_ledger"), bundle.get("news_candidate_count", -1))
     check_c20(au, bundle.get("headline_for_image", ""))
     return au
 
