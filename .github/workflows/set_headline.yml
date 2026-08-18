@@ -1,0 +1,128 @@
+name: set-headline
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_date:
+        description: "対象日 (YYYY-MM-DD)。省略時は実行時JSTの前日"
+        required: false
+        type: string
+      headline:
+        description: "ヘッドライン本文（図版下部帯 summary に差し込み）"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+# daily-crypto-brief と同じグループで直列化し、push の競合を避ける。
+concurrency:
+  group: daily-crypto-brief
+  cancel-in-progress: false
+
+jobs:
+  set-headline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 対象日を決定（入力優先・省略時は実行時JSTの前日）
+        id: target
+        env:
+          INPUT_TARGET_DATE: ${{ inputs.target_date }}
+        run: |
+          if [ -n "$INPUT_TARGET_DATE" ]; then
+            date="$INPUT_TARGET_DATE"
+          else
+            date="$(TZ=Asia/Tokyo date -d 'yesterday' +%F)"
+          fi
+          # YYYY-MM-DD のみ許可。以降はこの検証済み値だけを使い、
+          # 未検証の入力をパス・シェルへ直接展開しない。
+          if ! [[ "$date" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
+            echo "ERROR: target_date の形式が不正です: $date" >&2
+            exit 1
+          fi
+          echo "date=$date" >> "$GITHUB_OUTPUT"
+          echo "compact=${date//-/}" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 依存関係（CJKフォント含む・Playwrightは不要）
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq fonts-noto-cjk
+          pip install -q -r requirements.txt
+
+      - name: ヘッドライン差し込み（daily_data.json の summary を上書き）
+        env:
+          # headline はシェルへ直接展開せず env 経由でのみ Python に渡す（未検証の自由文字列のため）。
+          HEADLINE: ${{ inputs.headline }}
+          TARGET_DIR: outputs/${{ steps.target.outputs.date }}
+        run: |
+          python3 - <<'PYEOF'
+          import json
+          import os
+          import sys
+          from pathlib import Path
+
+          headline = os.environ["HEADLINE"]
+          if not headline.strip():
+              print("ERROR: headline が空文字です。プレースホルダーのままコミットしません。",
+                    file=sys.stderr)
+              sys.exit(1)
+
+          jp = Path(os.environ["TARGET_DIR"]) / "daily_data.json"
+          if not jp.exists():
+              print(f"ERROR: {jp} が存在しません。先に daily-crypto-brief で対象日の"
+                    "成果物を生成してください。", file=sys.stderr)
+              sys.exit(1)
+
+          d = json.loads(jp.read_text(encoding="utf-8"))
+          d["summary"] = headline
+          jp.write_text(json.dumps(d, ensure_ascii=False, indent=2), encoding="utf-8")
+          print(f"OK: {jp} の summary を更新しました。")
+          PYEOF
+
+      - name: インフォグラフィック再描画（daily_data.json → infographic.png のみ）
+        env:
+          TARGET_DIR: outputs/${{ steps.target.outputs.date }}
+        run: |
+          python scripts/infographic_renderer.py "$TARGET_DIR/daily_data.json" "$TARGET_DIR/infographic.png"
+
+      - name: 機械監査を再実行（failed>0 なら停止 = フェイルクローズ）
+        env:
+          TARGET_DIR: outputs/${{ steps.target.outputs.date }}
+        run: |
+          # --skip-date-check: このワークフローは実行日と無関係に過去日を対象に
+          # 差し替えるため、C3（対象日=実行前日）は daily-crypto-brief 専用の
+          # チェックとして省略する（verify_data.py 自体のドキュメント記載どおりの用途）。
+          # C1・C2・C4〜C11 は変更なしで全て実行される。
+          python scripts/verify_data.py \
+            "$TARGET_DIR/daily_data.json" \
+            --image "$TARGET_DIR/infographic.png" \
+            --skip-date-check
+
+      - name: コミット（監査PASS時のみ到達 = フェイルクローズ）
+        env:
+          TARGET_DIR: outputs/${{ steps.target.outputs.date }}
+          TARGET_DATE: ${{ steps.target.outputs.date }}
+        run: |
+          git config user.name "crypto-daily-bot"
+          git config user.email "actions@users.noreply.github.com"
+          # daily_data.json・infographic.png・final_audit のみを対象にする。
+          # raw_data.json・apr_screenshot.jpg・run_context.env は再生成しない。
+          git add "$TARGET_DIR/daily_data.json" "$TARGET_DIR/infographic.png" "$TARGET_DIR"/final_audit_*.json
+          git commit -m "headline: ${TARGET_DATE} (manual set)" || echo "no changes"
+          git pull --rebase origin "${GITHUB_REF_NAME}" || true
+          git push
+
+      - name: デバッグ用アーティファクト（失敗時も保全）
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: headline-${{ steps.target.outputs.date }}
+          path: outputs/${{ steps.target.outputs.date }}/
+          if-no-files-found: ignore

@@ -20,6 +20,13 @@
 domestic セクション（v1.4）は X投稿後編【主要指標（詳細）】用のデータであり、
 図版には描画しない。片方でも取得不能なら合計は「算出不能」とし、
 BTC/JPY・推定値・前日値による代替は行わない（統合運用基準 §3.2）。
+
+v1.5（改善①案B・改善②）: base.dex_volume_eth_usdc は資産ベースを揃えた
+同種比較用（Base ETH/USDCプール0.05%+0.3%の出来高合計、追加API不要）。
+チェーン全体の base.dex_volume は従来どおり参考値として残す。
+lp.pools[].change_vs_prev は前日 daily_data.json との算術的な変化率
+（APR・24時間出来高・TVL）。原因の解釈・推測は行わない。
+どちらも図版には描画しない。
 """
 from __future__ import annotations
 
@@ -244,6 +251,48 @@ def fetch_bitflyer_eth_volume() -> dict | None:
     return None
 
 
+def _parse_prev_apr(s: str) -> float | None:
+    """前日 daily_data.json の pool.apr（例 "12.26%"）を float へ（v1.5）。"""
+    if not s or s == UNCONFIRMED:
+        return None
+    try:
+        return float(str(s).rstrip("%"))
+    except ValueError:
+        return None
+
+
+def _parse_prev_fmt_m(s: str) -> float | None:
+    """前日 daily_data.json の pool.tvl / volume_24h（fmt_m形式）を float(USD) へ（v1.5）。"""
+    if not s or s == UNCONFIRMED:
+        return None
+    t = str(s).replace("$", "").replace(",", "")
+    try:
+        if t.endswith("B"):
+            return float(t[:-1]) * 1e9
+        if t.endswith("M"):
+            return float(t[:-1]) * 1e6
+        return float(t)
+    except ValueError:
+        return None
+
+
+def load_prev_pools(target) -> dict | None:
+    """前日 outputs/{前日}/daily_data.json の lp.pools を name をキーに読み込む（v1.5）。
+
+    ファイルが無い/壊れている場合は None（呼び出し側で「前日データなし」に落とす）。
+    """
+    prev_path = Path(f"outputs/{(target - timedelta(days=1)).isoformat()}/daily_data.json")
+    if not prev_path.exists():
+        return None
+    try:
+        prev = json.loads(prev_path.read_text(encoding="utf-8"))
+        pools = prev.get("lp", {}).get("pools", [])
+        return {p.get("name"): p for p in pools if isinstance(p, dict) and p.get("name")}
+    except Exception as e:  # noqa: BLE001
+        print(f"[warn] load_prev_pools: {e}", file=sys.stderr)
+        return None
+
+
 def fetch_coincheck_eth_volume() -> dict | None:
     """Coincheck ETH/JPY 24時間出来高（ETH建て・認証不要 — v1.4）。"""
     try:
@@ -326,6 +375,54 @@ def main() -> int:
         return {"name": name, "apr": UNCONFIRMED, "tvl": UNCONFIRMED,
                 "volume_24h": UNCONFIRMED}
 
+    # ---------- 同種比較用: Base ETH/USDCプール出来高合計（v1.5 改善①案B） ----------
+    # チェーン全体のDEX合算（b_dex）は資産ベースが揃わない。取得済みの2プール分
+    # （0.05%+0.3%）を合算するだけで、追加APIは使わない。片方でも欠けたら
+    # 部分合算にはせず未確認（推測しない方針は不変）。チェーン全体値は参考として残す。
+    if g005 and g03:
+        dex_eth_usdc_vol = g005["vol"] + g03["vol"]
+        dex_eth_usdc_s = fmt_m(dex_eth_usdc_vol)
+        dex_eth_usdc_jpy_s = fmt_vol_jpy(dex_eth_usdc_vol, fx) if fx else ""
+    else:
+        dex_eth_usdc_s = UNCONFIRMED
+        dex_eth_usdc_jpy_s = ""
+
+    # ---------- APR変化の要因分解（v1.5 改善②）。算術的分解のみ、解釈・推測はしない ----------
+    NO_PREV_DATA = "比較不可（前日データなし）"
+    NO_PREV_VALUE = "比較不可（前日値未確認）"
+    NO_CURR_VALUE = "比較不可（当日値未確認）"
+    prev_pools = load_prev_pools(target)
+
+    def change_field(curr: float | None, prev: float | None) -> str:
+        if curr is None:
+            return NO_CURR_VALUE
+        if prev is None or prev == 0:
+            return NO_PREV_VALUE
+        return fmt_change((curr - prev) / prev * 100)
+
+    def pool_changes(pool_name: str, g: dict | None) -> dict:
+        if prev_pools is None:
+            return {"apr_change": NO_PREV_DATA, "volume_24h_change": NO_PREV_DATA,
+                    "tvl_change": NO_PREV_DATA}
+        prev = prev_pools.get(pool_name)
+        prev_apr = _parse_prev_apr(prev.get("apr", "")) if prev else None
+        prev_tvl = _parse_prev_fmt_m(prev.get("tvl", "")) if prev else None
+        prev_vol = _parse_prev_fmt_m(prev.get("volume_24h", "")) if prev else None
+        curr_apr = g["apr"] if g else None
+        curr_tvl = g["tvl"] if g else None
+        curr_vol = g["vol"] if g else None
+        return {
+            "apr_change": change_field(curr_apr, prev_apr),
+            "volume_24h_change": change_field(curr_vol, prev_vol),
+            "tvl_change": change_field(curr_tvl, prev_tvl),
+        }
+
+    pools_built = [pool("Base 0.05%プール", g005), pool("Base 0.3%プール", g03)]
+    # ループ変数名は既存の CMC グローバル指標 `g`（quotes.get("global")）と
+    # 衝突させない（関数スコープのため上書きしてしまう — v1.5 実装時に検出・修正）。
+    for pd, pool_g in zip(pools_built, (g005, g03)):
+        pd["change_vs_prev"] = pool_changes(pd["name"], pool_g)
+
     # ---------- 国内2社（v1.4） ----------
     # 片方でも取得不能なら合計は「算出不能」。BTC/JPY・推定値・前日値で代替しない。
     def fmt_eth(v: float) -> str:
@@ -394,9 +491,12 @@ def main() -> int:
                              if b_chg is not None else "neutral",
             "dex_volume": fmt_dex_usd(b_dex) if b_dex else UNCONFIRMED,
             "dex_volume_jpy": fmt_vol_jpy(b_dex, fx) if b_dex and fx else "",
+            # v1.5 改善①案B: 資産ベースを揃えた同種比較用（参考: 上のdex_volumeはチェーン全体）
+            "dex_volume_eth_usdc": dex_eth_usdc_s,
+            "dex_volume_eth_usdc_jpy": dex_eth_usdc_jpy_s,
             "usdc_dominance": f"{usdc_d:.1f}%" if usdc_d is not None else UNCONFIRMED,
         },
-        "lp": {"pools": [pool("Base 0.05%プール", g005), pool("Base 0.3%プール", g03)],
+        "lp": {"pools": pools_built,
                "check_message": lp_msg},
         # v1.4: X投稿後編【主要指標（詳細）】用。図版には描画しない。
         "domestic": domestic,
