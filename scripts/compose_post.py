@@ -150,6 +150,8 @@ def compose(daily_data: dict, gen: dict[str, Any]) -> dict[str, Any]:
         "llm_section_keys": llm_section_keys,
         "headline_for_image": headline_for_image,
         "audit_ledger": call_a["data"].get("audit_ledger") if a_ok else None,
+        # C19（v0.4改定）: 空配列の許容はweb_searchが実際に実行された場合のみ。
+        "web_search_count": call_a.get("web_search_count", 0),
         "part1_md": part1_md,
         "part2_md": part2_md,
     }
@@ -169,6 +171,18 @@ def _attention_and_auto_lists(gen: dict[str, Any]) -> tuple[list[str], list[str]
     return attention, auto
 
 
+def _render_news_source_lines(news_status: dict[str, Any]) -> list[str]:
+    if not news_status:
+        return ["  （情報源未実行）"]
+    lines = []
+    for name, st in news_status.items():
+        if st.get("status") == "ok":
+            lines.append(f"  - {name}: ok（対象日{st.get('kept_count', 0)}件／取得{st.get('raw_count', 0)}件）")
+        else:
+            lines.append(f"  - {name}: failed（{st.get('detail', '')}）")
+    return lines
+
+
 def render_generation_status(gen: dict[str, Any]) -> str:
     a, b = gen["call_a"], gen["call_b"]
     news_status = gen.get("news_source_status", {})
@@ -180,13 +194,15 @@ def render_generation_status(gen: dict[str, Any]) -> str:
         + (f" ({a['error']} / {a['attempts']}回試行)" if not a["ok"] else f"（{a['attempts']}回試行）"),
         f"call_B: {'OK' if b['ok'] else 'FAILED'}"
         + (f" ({b['error']} / {b['attempts']}回試行)" if not b["ok"] else f"（{b['attempts']}回試行）"),
-        f"cryptopanic: {news_status.get('cryptopanic', '未実行')}"
-        + (f" ({news_status.get('count', 0)}件)" if news_status.get("cryptopanic") == "ok" else ""),
         f"web_search: {a.get('web_search_count', 0)}回",
         "token_usage（実消費量）: "
         f"input={gen['total_usage']['input_tokens']}, output={gen['total_usage']['output_tokens']} "
         f"(call_A: in={a['usage']['input_tokens']} out={a['usage']['output_tokens']} / "
         f"call_B: in={b['usage']['input_tokens']} out={b['usage']['output_tokens']})",
+        "news_sources:",
+    ]
+    lines += _render_news_source_lines(news_status)
+    lines += [
         "",
         "手当が必要な箇所:",
     ]

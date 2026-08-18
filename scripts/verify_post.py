@@ -222,12 +222,21 @@ def check_c18(au: Audit, sections: dict, llm_section_keys: list[str]) -> None:
 
 # --- C19 監査台帳（L0のみ検査） ---
 
-def check_c19(au: Audit, level: str, audit_ledger) -> None:
+def check_c19(au: Audit, level: str, audit_ledger, web_search_count: int) -> None:
     if level != "L0":
         au.add("C19_audit_ledger", None, f"level={level} のためSKIP（呼び出しA失敗時は台帳が原理的に存在しない）")
         return
-    if not isinstance(audit_ledger, list) or not audit_ledger:
-        au.add("C19_audit_ledger", False, "audit_ledgerが空、またはリストでない")
+    if not isinstance(audit_ledger, list):
+        au.add("C19_audit_ledger", False, "audit_ledgerがリストでない")
+        return
+    if not audit_ledger:
+        # v0.4改定: 空配列はweb_searchを実際に行ったうえで採用候補が
+        # 本当に無かった場合のみ許容する。0回のまま空配列は
+        # 「確認を怠った」可能性を区別できないためFAILとする。
+        ok = web_search_count >= 1
+        au.add("C19_audit_ledger", ok,
+               f"空配列（web_search {web_search_count}回実行済みのため許容）" if ok
+               else f"空配列だがweb_search {web_search_count}回（未実行のためFAIL）")
         return
     required_fields = ("source", "url", "published_at", "decision", "reason")
     bad = [i for i, e in enumerate(audit_ledger)
@@ -273,7 +282,7 @@ def run_all(bundle: dict, daily_data: dict) -> Audit:
     check_c16b(au, daily_data, sections, llm_keys, allowlist)
     check_c17(au, sections.get("lp_comment", ""))
     check_c18(au, sections, llm_keys)
-    check_c19(au, bundle["level"], bundle.get("audit_ledger"))
+    check_c19(au, bundle["level"], bundle.get("audit_ledger"), bundle.get("web_search_count", 0))
     check_c20(au, bundle.get("headline_for_image", ""))
     return au
 

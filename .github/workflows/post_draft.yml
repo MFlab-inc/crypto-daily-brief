@@ -50,17 +50,11 @@ jobs:
       - name: secrets 実在確認（値は出力しない・文字数のみ）
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          CRYPTOPANIC_API_KEY: ${{ secrets.CRYPTOPANIC_API_KEY }}
         run: |
           if [ -n "$ANTHROPIC_API_KEY" ]; then
             echo "ANTHROPIC_API_KEY: 設定あり (length=${#ANTHROPIC_API_KEY})"
           else
             echo "ANTHROPIC_API_KEY: 未設定（この綴りのsecretがありません）"
-          fi
-          if [ -n "$CRYPTOPANIC_API_KEY" ]; then
-            echo "CRYPTOPANIC_API_KEY: 設定あり (length=${#CRYPTOPANIC_API_KEY})"
-          else
-            echo "CRYPTOPANIC_API_KEY: 未設定（この綴りのsecretがありません。collect_news.pyはfailed扱いで縮退続行）"
           fi
 
       - uses: actions/setup-python@v5
@@ -71,9 +65,8 @@ jobs:
         run: |
           pip install -q -r requirements.txt
 
-      - name: (5) ニュース候補の収集
+      - name: (5) ニュース候補の収集（公式発表RSS＋Google News、v0.4）
         env:
-          CRYPTOPANIC_API_KEY: ${{ secrets.CRYPTOPANIC_API_KEY }}
           TARGET_DATE: ${{ steps.target.outputs.date }}
         run: |
           python scripts/collect_news.py "$TARGET_DATE"

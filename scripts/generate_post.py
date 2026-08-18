@@ -88,6 +88,12 @@ RULES_CAUSAL = """## 因果表現
 - 次の断定表現を使わない: 「〜が原因で」「〜により上昇した」「〜を受けて
   下落した」「〜のため上昇」「〜のため下落」「〜が牽引した」。"""
 
+WEB_SEARCH_MANDATE = """## web_search の実行（必須）
+
+RSS候補の有無にかかわらず、対象日について必ず web_search を実行し、
+Reuters・Bloomberg等の独立報道と公式発表を確認すること。候補が空である
+ことを理由に検索を省略してはならない。"""
+
 NEWS_SELECTION = """## ニュースの選定と根拠
 
 優先度1: 規制当局・議会・政府・企業・取引所の公式発表
@@ -111,7 +117,10 @@ WRITES_A = """## あなたが書くもの
 - part1_headline: 前編のヘッドライン。2〜3文。当日の最重要材料と価格の方向。
 - part1_points: 3〜4項目。ヘッドラインと重複しない補足。各項目末尾に
   （媒体名、日付）を付す。材料が乏しい日は項目数を減らし、その旨を書く。
-- audit_ledger: 採否を判断した全候補の記録。
+- audit_ledger: 採否を判断した全候補の記録。web_search実行後もなお採用できる
+  候補が本当に無かった場合は空配列 [] でよい — 埋めるための架空のsource・url・
+  published_atを作らない（絶対規則2「独自に算出・転記した数値の記載は不可」と
+  同じ理由で、存在しない一次情報の捏造にあたる）。
 - reusable_for_summary: 継続材料で本文に載せなかったものの1行要約（0〜2件）。"""
 
 OUTPUT_FORMAT_A = """## 出力形式
@@ -130,8 +139,8 @@ OUTPUT_FORMAT_A = """## 出力形式
 }"""
 
 SYSTEM_A = "\n\n".join([
-    ROLE_INTRO, RULES_ABSOLUTE, RULES_HASHTAG, NEWS_SELECTION, RULES_CAUSAL,
-    WRITES_A, OUTPUT_FORMAT_A,
+    ROLE_INTRO, RULES_ABSOLUTE, WEB_SEARCH_MANDATE, RULES_HASHTAG, NEWS_SELECTION,
+    RULES_CAUSAL, WRITES_A, OUTPUT_FORMAT_A,
 ])
 
 CALL_B_INSTRUCTIONS = """入力として、当日の市場データ（daily_data.json）と、呼び出しAの出力

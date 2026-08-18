@@ -7,6 +7,103 @@
 
 ---
 
+## v1.11 — 2026-08-18（オーナー指示・ニュース取得方針の転換）
+
+**指示**：2026-08-18・オーナーによる明示指示。CryptoPanic連携（HTTP 404が
+実測済み）を撤去し、優先度1（公式発表）RSS＋web_search必須化へ転換。
+台本はv0.4としてオーナーが別途更新予定（本版はv0.3の枠内での実装）。
+**適用範囲**：`scripts/collect_news.py`（全面書き換え）、
+`scripts/generate_post.py`（プロンプト追記）、`scripts/compose_post.py`
+（web_search_count伝播・GENERATION_STATUS.md表示の汎用化）、
+`scripts/verify_post.py`（C19改定）、新規`config/news_sources.json`、
+`.github/workflows/post_draft.yml`（CryptoPanic関連の除去）。
+**不変**：v1.1固定意匠・既存C1〜C11・cron時刻・フェイルクローズ。
+`CRYPTOPANIC_API_KEY`のsecret自体はGitHub側から削除していない
+（オーナー指示どおり将来の再検討用に残置。コードから参照しなくなっただけ）。
+
+### 【1】CryptoPanic連携の撤去
+
+`scripts/collect_news.py`からCryptoPanic関連の関数・エンドポイントを
+全て削除。`.github/workflows/post_draft.yml`の「secrets実在確認」ステップ
+および`collect_news.py`呼び出しステップから`CRYPTOPANIC_API_KEY`の
+env経由の受け渡しも削除した（secret自体は触っていない）。
+
+### 【2】公式発表RSS（優先度1）
+
+`config/news_sources.json`にRSS一覧を定義。現時点でオーナー指定の3件
+（SEC・FRB・BLS）のみを収録し、`scripts/collect_news.py`が1件ずつ独立して
+取得する（`fetch_cmc`の3エンドポイント分離と同じ思想 — 1件の失敗が他を
+巻き添えにしない）。取得した各`<item>`は`pubDate`（RFC 822想定、
+`email.utils.parsedate_to_datetime`で解析）をJSTへ変換し、対象日
+（target_date_jst）の00:00〜23:59（JST）に入るものだけを候補として残す。
+タイムゾーン欠落時はRFC822の慣例どおりUTCとみなす。1件も候補が無い日は
+正常（例外を送出しない）。
+
+米財務省・OCC・CFTC・金融庁・日銀の公式RSSは別途調査中で、確認でき次第
+`config/news_sources.json`へ追記する（本版では未収録）。
+
+### 【3】優先度4の候補発見層（Google News RSS・任意）
+
+`https://news.google.com/rss/search?q=when:24h+allinurl:reuters.com`を
+候補発見のみに使用。見出し・URLのみを候補（`kind: "candidate_discovery"`,
+`tier: 4`）として渡し、記事本文を根拠にしない。他の情報源と同じ
+`fetch_rss`を再利用し、失敗しても他に影響しない。
+
+`news_candidates.json`の`source_status`は`{情報源名: {status, raw_count,
+kept_count}}`（失敗時は`{status: "failed", detail}`）の情報源ごとの
+辞書へ変更した（旧CryptoPanic専用の`{cryptopanic, count}`形式を廃止）。
+`compose_post.py`の`GENERATION_STATUS.md`描画もこの汎用形式に合わせて
+書き換えた（特定の情報源名をハードコードしない）。
+
+### 【4】web_search必須化
+
+前回実行（v1.10・2026-08-17）でweb_search呼び出しが0回だった件への
+根本対処。(a) `tools`にweb_searchが含まれていることをコード上再確認
+（元々正しく配線済みで、0回はモデルの判断によるものと判明）。
+(b) 呼び出しAのプロンプト（`SYSTEM_A`）に、オーナー指定の文言をそのまま
+新設セクション「## web_search の実行（必須）」として追加：「RSS候補の
+有無にかかわらず、対象日について必ずweb_searchを実行し、Reuters・
+Bloomberg等の独立報道と公式発表を確認すること。候補が空であることを
+理由に検索を省略してはならない。」`RULES_ABSOLUTE`の直後という
+目立つ位置に配置した。(c) web_search実行回数のログ・
+GENERATION_STATUS.mdへの記録は前版（v1.9）で実装済みのため変更なし。
+
+**付随して行った1点（オーナー指示外・要確認として報告）**：
+`audit_ledger`の説明（`WRITES_A`）に「web_search実行後もなお採用できる
+候補が本当に無かった場合は空配列でよい。埋めるための架空のsource・url・
+published_atを作らない」という1文を追加した。C19側の空配列許容
+（下記【5】）だけでは、モデルが引き続き前回同様のダミーエントリ
+（source/urlが空文字の2件）を書いてしまうと、非空配列の分岐で
+フィールド欠落FAILになり続けてしまうため、C19改定の効果を実際に
+出すにはプロンプト側の対応が対になって必要と判断した。オーナーの
+指示は【5】（C19のコード側）のみだったため、この1文追加は実装判断で
+行った旨を明記する。
+
+### 【5】C19改定：空配列の許容条件
+
+`verify_post.py`の`check_c19`にweb_search実行回数を渡すよう変更。
+level=L0で`audit_ledger`が空配列の場合、web_search実行回数が1回以上
+なら許容（PASS）、0回のままなら「確認を怠った可能性」を区別できないため
+FAILとする。非空配列の場合の全フィールド充足要求は変更なし。
+`compose_post.py`の`post_bundle.json`に`web_search_count`
+（呼び出しAの実行回数）を新規追加した。
+
+### 検証
+
+RSSの日付フィルタ（JST変換・UTC日境界をまたぐケース含む）、複数フィード
+中1件が404でも他が生存すること、不正XMLでの縮退、情報源ゼロ日の正常
+完了、C19の新分岐（空配列×web_search 1回以上→PASS／0回→FAIL）、
+SYSTEM_Aへの新指示文言の混入確認をモック・合成データで検証（追加14件、
+累計57件）。実データ7日分をL2相当で再実行し全日FAILなしを維持。
+既存のバナー語静的スキャンも新規コードに対して再実行し異常なし。
+
+`config/news_sources.json`記載のURL（SEC・FRB・BLS）の実到達性は
+本サンドボックスからは検証できない（外部ネットワークが遮断されている）。
+オーナー指示どおり、次回`post_draft.yml`の実行結果（Actions上の実測）で
+404の有無を確認・報告する。
+
+---
+
 ## v1.10 — 2026-08-18（`post_draft.yml` 初回実行の結果・要判断2件）
 
 **内容**：オーナー指示（v1.9）どおり`post_draft.yml`を対象日2026-08-17で
