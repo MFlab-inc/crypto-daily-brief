@@ -7,6 +7,86 @@
 
 ---
 
+## v1.9 — 2026-08-18（オーナー指示・v1.8確認後の3件対応）
+
+**指示**：2026-08-18・オーナーによる明示指示（v1.8確認後の3点回答）。
+1. 縮退表の一般化（失敗数→L0/L1/L2）を承認。ただし「Bのみ失敗」時は
+   ヘッドライン・主要なポイント・headline_for_imageを§7.1の定型文/機械生成に
+   落とさず、呼び出しAの実出力のまま使うこと（非対称性）の実装確認を指示。
+2. S1でのヘッドライン注入見送りを承認。
+3. cronへの接続は行わず、手動実行用ワークフローを新設したうえで、
+   (a)secrets実在確認、(b)ワークフロー用意、(c)1回実行してAPI到達性・
+   レスポンス・トークン消費量をログで確認、を指示。
+**適用範囲**：`scripts/generate_post.py`／`compose_post.py`（トークン使用量の
+計測・報告を追加）、新規`.github/workflows/post_draft.yml`。
+**不変**：v1.1固定意匠・既存C1〜C11・cron時刻・フェイルクローズ。
+`.github/workflows/daily.yml`は引き続き無変更。
+
+### 1. 「Bのみ失敗」非対称性の確認
+
+実装（v1.8時点の`compose_post.compose()`）を再確認したところ、
+headline_for_image・part1_headline・part1_pointsの分岐は`call_a["ok"]`
+のみを条件にしており、`call_b`の成否とは独立していることを確認した
+（＝実装は元から意図どおりで、コード変更は不要）。実データ相当の合成値
+（daily_data.jsonの実ファイル＋呼び出しAの実文言相当のダミーデータ）で
+「Aは成功・Bのみ失敗」を再現し、
+`headline_for_image`／`part1_headline`／`part1_points`のすべてが
+呼び出しAの実出力のまま（§7.1の定型文・機械生成文ではない）ことを
+実行結果で確認した。台本§7の非対称性の記述漏れはオーナーがv0.4で
+明文化予定とのこと。
+
+### 2. トークン使用量の計測・報告
+
+`generate_post.py`に`response.usage`（`input_tokens`／`output_tokens`）の
+計測を追加。1回の呼び出し（A・Bそれぞれ）につき、`pause_turn`による
+再送を含む全リクエスト・全リトライ試行分を合算する。失敗した試行でも
+応答自体は受信できていた場合（JSON不正・必須キー欠落・refusal等）は
+その時点までの消費分を加算する（例外送出前に加算を確定させる実装 —
+実際に課金される消費量と一致させるため）。`compose_post.py`の
+`GENERATION_STATUS.md`と標準出力の両方に
+`token_usage: input=.. output=..`（呼び出しA・B内訳つき）を出力し、
+Actionsのログから直接確認できるようにした。
+
+### 3. 手動実行用ワークフロー `post_draft.yml`
+
+`workflow_dispatch`のみ（cronトリガーなし）。`set_headline.yml`と同じ
+`daily-crypto-brief`concurrencyグループを共有し、pushの競合を避ける。
+
+- secrets実在確認ステップを先頭に配置。`ANTHROPIC_API_KEY`・
+  `CRYPTOPANIC_API_KEY`それぞれについて、値そのものは一切出力せず
+  `${#VAR}`（文字数）のみをログへ出す。CMC_API_KEYが別名
+  （COINMARKETCAP_API）で登録され空振りした前例に鑑み、この綴りで
+  実在するかを実行のたびに確認できるようにした。
+- `collect_news.py`→`compose_post.py`（内部で`generate_post.run()`）→
+  `verify_post.py`の順に実行。verify_post.pyは`continue-on-error: true`
+  とし、S1段階では監査結果を停止条件にしない（結果はログと
+  `post_audit_*.json`に記録され、失敗時もその後のコミット・
+  アーティファクト保全は継続する）。
+- コミット対象は`outputs/{対象日}/draft/`と
+  `outputs/{対象日}/GENERATION_STATUS.md`のみ。既存の4点成果物
+  （daily_data.json・infographic.png・apr_screenshot.jpg・final_audit）は
+  対象外（`git add`のパスがこれらと重複しないことを確認済み）。
+- `target_date`入力は`set_headline.yml`と同じ方式で正規表現検証し、
+  検証済みの値のみを以降の全ステップで使用する。検証後の値であっても
+  `run:`ブロック内では`${{ }}`を直接埋め込まず、必ず`env:`経由で
+  `$VAR`として参照する（本セッションで確立済みの方針を徹底 — 実装時に
+  一部`run:`直書きの箇所があったため、レビュー前の自己点検で`env:`経由に
+  修正済み）。
+
+### 検証
+
+`bash -n`で全`run:`ブロックの構文を検証、`yaml.safe_load`でYAML構文を
+検証、`run:`ブロック内に未経由の`${{ }}`が残っていないことを機械的に
+確認。トークン計測はモッククライアント（`.usage`属性なしの応答を含む）
+で例外なく`0`にフォールバックすることを確認。それ以外の既存45件の
+モックテスト・実データ7日分スイープも再実行し全てPASSを維持。
+
+`ANTHROPIC_API_KEY`・`CRYPTOPANIC_API_KEY`のsecrets実在確認、実API到達性、
+実際のトークン消費量は本ワークフローの初回`workflow_dispatch`実行結果で
+別途報告する。
+
+---
+
 ## v1.8 — 2026-08-18（オーナー指示・フェーズ2台本v0.3 §10 第2弾）
 
 **指示**：2026-08-18・オーナーによる明示指示（v1.7の3件修正後、

@@ -183,6 +183,10 @@ def render_generation_status(gen: dict[str, Any]) -> str:
         f"cryptopanic: {news_status.get('cryptopanic', '未実行')}"
         + (f" ({news_status.get('count', 0)}件)" if news_status.get("cryptopanic") == "ok" else ""),
         f"web_search: {a.get('web_search_count', 0)}回",
+        "token_usage（実消費量）: "
+        f"input={gen['total_usage']['input_tokens']}, output={gen['total_usage']['output_tokens']} "
+        f"(call_A: in={a['usage']['input_tokens']} out={a['usage']['output_tokens']} / "
+        f"call_B: in={b['usage']['input_tokens']} out={b['usage']['output_tokens']})",
         "",
         "手当が必要な箇所:",
     ]
@@ -236,9 +240,12 @@ def main() -> int:
         json.dumps(bundle, ensure_ascii=False, indent=2), encoding="utf-8")
 
     status_path = Path(f"outputs/{target_date}/GENERATION_STATUS.md")
-    status_path.write_text(render_generation_status(gen), encoding="utf-8")
+    status_text = render_generation_status(gen)
+    status_path.write_text(status_text, encoding="utf-8")
 
     print(f"OK: level={gen['level']} → {draft_dir}/part1.md, part2.md, post_bundle.json, {status_path}")
+    print("--- GENERATION_STATUS.md ---")
+    print(status_text)
     return 0
 
 

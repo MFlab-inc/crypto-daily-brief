@@ -1,0 +1,115 @@
+name: post-draft
+
+# フェーズ2 第2弾（v0.3 §10）の手動お試し実行用。cronトリガーはない
+# — オーナー指示により、secrets実在確認・実消費量の把握・S1（chat下書きとの
+# 目視比較）のタイミングを揃えるため、当面は手動実行のみで運用する。
+# daily.yml・set_headline.ymlには一切影響しない。
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_date:
+        description: "対象日 (YYYY-MM-DD)。daily_data.jsonとfinal_auditが既にPASSしている日を指定。省略時は実行時JSTの前日"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+# daily-crypto-brief と同じグループで直列化し、push の競合を避ける
+# （set_headline.ymlと同じ理由）。
+concurrency:
+  group: daily-crypto-brief
+  cancel-in-progress: false
+
+jobs:
+  post-draft:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 対象日を決定（入力優先・省略時は実行時JSTの前日）
+        id: target
+        env:
+          INPUT_TARGET_DATE: ${{ inputs.target_date }}
+        run: |
+          if [ -n "$INPUT_TARGET_DATE" ]; then
+            date="$INPUT_TARGET_DATE"
+          else
+            date="$(TZ=Asia/Tokyo date -d 'yesterday' +%F)"
+          fi
+          # YYYY-MM-DD のみ許可。以降はこの検証済み値だけを使い、
+          # 未検証の入力をパス・シェルへ直接展開しない（set_headline.ymlと同じ方針）。
+          if ! [[ "$date" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
+            echo "ERROR: target_date の形式が不正です: $date" >&2
+            exit 1
+          fi
+          echo "date=$date" >> "$GITHUB_OUTPUT"
+
+      - name: secrets 実在確認（値は出力しない・文字数のみ）
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          CRYPTOPANIC_API_KEY: ${{ secrets.CRYPTOPANIC_API_KEY }}
+        run: |
+          if [ -n "$ANTHROPIC_API_KEY" ]; then
+            echo "ANTHROPIC_API_KEY: 設定あり (length=${#ANTHROPIC_API_KEY})"
+          else
+            echo "ANTHROPIC_API_KEY: 未設定（この綴りのsecretがありません）"
+          fi
+          if [ -n "$CRYPTOPANIC_API_KEY" ]; then
+            echo "CRYPTOPANIC_API_KEY: 設定あり (length=${#CRYPTOPANIC_API_KEY})"
+          else
+            echo "CRYPTOPANIC_API_KEY: 未設定（この綴りのsecretがありません。collect_news.pyはfailed扱いで縮退続行）"
+          fi
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 依存関係（画像を扱わないためフォント・Playwrightは不要）
+        run: |
+          pip install -q -r requirements.txt
+
+      - name: (5) ニュース候補の収集
+        env:
+          CRYPTOPANIC_API_KEY: ${{ secrets.CRYPTOPANIC_API_KEY }}
+          TARGET_DATE: ${{ steps.target.outputs.date }}
+        run: |
+          python scripts/collect_news.py "$TARGET_DATE"
+
+      - name: (6)(7) 呼び出しA・B＋縮退ラダー＋本文合成
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          TARGET_DATE: ${{ steps.target.outputs.date }}
+        run: |
+          python scripts/compose_post.py "$TARGET_DATE"
+
+      - name: (8) 本文の機械監査（S1段階では非ブロッキング。結果はログとpost_audit_*.jsonに記録）
+        continue-on-error: true
+        env:
+          TARGET_DIR: outputs/${{ steps.target.outputs.date }}
+        run: |
+          python scripts/verify_post.py "$TARGET_DIR/draft/post_bundle.json"
+
+      - name: コミット（draft/とGENERATION_STATUS.mdのみ。既存4点成果物・監査・コミット判定には触れない）
+        env:
+          TARGET_DIR: outputs/${{ steps.target.outputs.date }}
+          TARGET_DATE: ${{ steps.target.outputs.date }}
+        run: |
+          git config user.name "crypto-daily-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add "$TARGET_DIR/draft" "$TARGET_DIR/GENERATION_STATUS.md"
+          git commit -m "post-draft: ${TARGET_DATE} (manual trial run)" || echo "no changes"
+          git pull --rebase origin "${GITHUB_REF_NAME}" || true
+          git push
+
+      - name: デバッグ用アーティファクト（失敗時も保全）
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: post-draft-${{ steps.target.outputs.date }}
+          path: |
+            outputs/${{ steps.target.outputs.date }}/draft/
+            outputs/${{ steps.target.outputs.date }}/GENERATION_STATUS.md
+          if-no-files-found: ignore

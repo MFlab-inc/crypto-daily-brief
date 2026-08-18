@@ -158,16 +158,17 @@ SYSTEM_B = "\n\n".join([
 
 class CallOutcome:
     def __init__(self, ok: bool, data: dict | None, attempts: int, error: str | None,
-                 web_search_count: int = 0):
+                 web_search_count: int = 0, usage: dict[str, int] | None = None):
         self.ok = ok
         self.data = data
         self.attempts = attempts
         self.error = error
         self.web_search_count = web_search_count
+        self.usage = usage or {"input_tokens": 0, "output_tokens": 0}
 
     def to_dict(self) -> dict:
         return {"ok": self.ok, "attempts": self.attempts, "error": self.error,
-                "web_search_count": self.web_search_count, "data": self.data}
+                "web_search_count": self.web_search_count, "usage": self.usage, "data": self.data}
 
 
 def _extract_text(response: Any) -> str:
@@ -190,22 +191,38 @@ def _count_web_search(response: Any) -> int:
     )
 
 
-def _run_with_pause_handling(client: "anthropic.Anthropic", kwargs: dict) -> tuple[Any, int]:
+def _extract_usage(response: Any) -> dict[str, int]:
+    usage = getattr(response, "usage", None)
+    return {
+        "input_tokens": getattr(usage, "input_tokens", 0) or 0,
+        "output_tokens": getattr(usage, "output_tokens", 0) or 0,
+    }
+
+
+def _add_usage(a: dict[str, int], b: dict[str, int]) -> dict[str, int]:
+    return {"input_tokens": a["input_tokens"] + b["input_tokens"],
+            "output_tokens": a["output_tokens"] + b["output_tokens"]}
+
+
+def _run_with_pause_handling(client: "anthropic.Anthropic", kwargs: dict) -> tuple[Any, int, dict[str, int]]:
     """server-side tool（web_search）が反復上限で pause_turn を返した場合、
     会話履歴を引き継いで再送する（SDK付属ドキュメント記載の手順）。
-    GENERATION_STATUS.md報告用に、全リクエストを通じたweb_search呼び出し回数も返す。
+    GENERATION_STATUS.md報告用に、全リクエストを通じたweb_search呼び出し回数と
+    トークン使用量（実消費量の確認用。オーナー指示）も合算して返す。
     """
     messages = kwargs["messages"]
     response = client.messages.create(**kwargs)
     web_search_count = _count_web_search(response)
+    usage = _extract_usage(response)
     restarts = 0
     while response.stop_reason == "pause_turn" and restarts < MAX_PAUSE_RESTARTS:
         messages = messages + [{"role": "assistant", "content": response.content}]
         kwargs = {**kwargs, "messages": messages}
         response = client.messages.create(**kwargs)
         web_search_count += _count_web_search(response)
+        usage = _add_usage(usage, _extract_usage(response))
         restarts += 1
-    return response, web_search_count
+    return response, web_search_count, usage
 
 
 def _call_json(
@@ -221,6 +238,8 @@ def _call_json(
     （個別の例外型ごとに扱いを変えると、想定外の失敗モードが縮退せずクラッシュしうる）。
     """
     last_err: str | None = None
+    total_web_search = 0
+    total_usage = {"input_tokens": 0, "output_tokens": 0}
     for attempt in range(1, MAX_ATTEMPTS + 1):
         try:
             kwargs: dict[str, Any] = dict(
@@ -231,7 +250,11 @@ def _call_json(
             )
             if tools:
                 kwargs["tools"] = tools
-            response, web_search_count = _run_with_pause_handling(client, kwargs)
+            response, web_search_count, usage = _run_with_pause_handling(client, kwargs)
+            # 応答を受け取れた時点で実消費量を確定させる（この後の検証で例外が
+            # 出てもトークンは既に消費済みのため、成否によらず加算する）。
+            total_web_search += web_search_count
+            total_usage = _add_usage(total_usage, usage)
             if response.stop_reason == "refusal":
                 category = getattr(getattr(response, "stop_details", None), "category", None)
                 raise ValueError(f"refusal (category={category})")
@@ -244,12 +267,12 @@ def _call_json(
             missing = [k for k in required_keys if k not in data]
             if missing:
                 raise ValueError(f"必須キー欠落: {missing}")
-            return CallOutcome(True, data, attempt, None, web_search_count)
+            return CallOutcome(True, data, attempt, None, total_web_search, total_usage)
         except Exception as e:  # noqa: BLE001 — 上記docstring参照
             last_err = f"{type(e).__name__}: {e}"
             if attempt < MAX_ATTEMPTS:
                 time.sleep(RETRY_DELAYS_SEC[attempt - 1])
-    return CallOutcome(False, None, MAX_ATTEMPTS, last_err)
+    return CallOutcome(False, None, MAX_ATTEMPTS, last_err, total_web_search, total_usage)
 
 
 def _build_call_a_user_content(daily_data: dict, news_today: dict, news_yesterday: dict | None) -> str:
@@ -335,6 +358,7 @@ def run(target_date: str, *, client: "anthropic.Anthropic | None" = None) -> dic
         "call_a": a.to_dict(),
         "call_b": b.to_dict(),
         "news_source_status": news_today.get("source_status", {}),
+        "total_usage": _add_usage(a.usage, b.usage),
     }
 
 
@@ -352,7 +376,12 @@ def main() -> int:
 
     a_status = "OK" if result["call_a"]["ok"] else f"FAILED（{result['call_a']['error']}）"
     b_status = "OK" if result["call_b"]["ok"] else f"FAILED（{result['call_b']['error']}）"
+    u = result["total_usage"]
     print(f"OK: {out_path}（level={result['level']}, call_A={a_status}, call_B={b_status}）")
+    print(f"トークン使用量（実消費量）: input={u['input_tokens']}, output={u['output_tokens']} "
+          f"（call_A: in={result['call_a']['usage']['input_tokens']} out={result['call_a']['usage']['output_tokens']} "
+          f"web_search={result['call_a']['web_search_count']}回 / "
+          f"call_B: in={result['call_b']['usage']['input_tokens']} out={result['call_b']['usage']['output_tokens']}）")
     return 0
 
 
