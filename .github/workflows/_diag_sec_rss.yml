@@ -1,0 +1,30 @@
+name: diag-sec-rss
+
+# 一時的な調査用ワークフロー（③ SEC RSS 0件問題の診断・DESIGN_CHANGES.md参照）。
+# 本番パイプライン（daily.yml・set_headline.yml・post_draft.yml）には一切影響しない。
+# サンドボックス環境からsec.govへ到達できないため、フルインターネットアクセスを
+# 持つGitHub Actionsランナー上でフィードの実レスポンスを取得する。
+# 調査完了後、本ファイルとscripts/_diag_sec_rss.pyは削除する。
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 依存関係
+        run: pip install -q requests
+
+      - name: SEC RSSフィードの実レスポンスを取得・診断
+        run: python3 scripts/_diag_sec_rss.py
