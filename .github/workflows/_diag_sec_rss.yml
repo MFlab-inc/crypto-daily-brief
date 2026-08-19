@@ -28,3 +28,20 @@ jobs:
 
       - name: SEC RSSフィードの実レスポンスを取得・診断
         run: python3 scripts/_diag_sec_rss.py
+
+      - name: 本番collect_news.pyでtarget_date=2026-08-19の候補を検証（タイムゾーン境界仮説の確認）
+        working-directory: scripts
+        run: |
+          python3 -c "
+          import json
+          import collect_news
+          result = collect_news.collect_news('2026-08-19')
+          print('=== source_status ===')
+          print(json.dumps(result['source_status'], ensure_ascii=False, indent=2))
+          print()
+          print('=== SEC発の候補一覧（target_date=2026-08-19） ===')
+          sec_cands = [c for c in result['candidates'] if c['source'] == 'SEC']
+          for c in sec_cands:
+              print(json.dumps(c, ensure_ascii=False, indent=2))
+          print(f'SEC候補件数: {len(sec_cands)}')
+          "
