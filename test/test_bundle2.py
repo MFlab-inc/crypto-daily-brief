@@ -224,6 +224,72 @@ check("NEWS_SELECTIONにtier 3単独を主根拠にしない旨の記述があ�
 check("WRITES_Aがtier 1・3・4すべてを記録対象としている",
       "tier 1・3・4のすべて" in generate_post.WRITES_A)
 
+print("=== generate_post.py: tier3候補数上限の確認（v1.21） ===")
+_tier1_fixed = [{"tier": 1, "source": "SEC", "published_at": "Mon, 17 Aug 2026 10:00:00 GMT"} for _ in range(3)]
+_tier3_15 = [{"tier": 3, "source": "CoinDesk", "title": f"item{i}",
+              "published_at": f"Mon, 17 Aug 2026 {i:02d}:00:00 GMT"} for i in range(15)]
+_selected, _stats = generate_post._select_candidates_for_call_a(_tier1_fixed + _tier3_15)
+check("tier1は全件（上限なし）で選定される",
+      sum(1 for c in _selected if c.get("tier") == 1) == 3, str(_stats))
+check(f"tier3は上限{generate_post.TIER3_CANDIDATE_LIMIT}件に絞られる",
+      sum(1 for c in _selected if c.get("tier") == 3) == generate_post.TIER3_CANDIDATE_LIMIT, str(_stats))
+check("tier3は公開日時の新しい順で選定される（最新のitem14が先頭）",
+      [c["title"] for c in _selected if c.get("tier") == 3][0] == "item14",
+      [c["title"] for c in _selected if c.get("tier") == 3])
+check("truncation_statsが正しく報告される（15件中10件選定・5件除外）",
+      _stats == {"tier3_total": 15, "tier3_selected": 10, "tier3_dropped": 5}, str(_stats))
+
+_selected_few, _stats_few = generate_post._select_candidates_for_call_a(_tier1_fixed + _tier3_15[:5])
+check("tier3が上限未満なら全件選定され除外0件",
+      _stats_few == {"tier3_total": 5, "tier3_selected": 5, "tier3_dropped": 0}, str(_stats_few))
+
+# render_generation_status(): 除外があった場合のみ目視確認行を表示する
+_gen_truncated = {"level": "L0", "call_a": {"ok": True, "attempts": 1, "error": None,
+                                             "usage": {"input_tokens": 0, "output_tokens": 0},
+                                             "data": CALL_A_DATA, "truncation_stats": _stats},
+                   "call_b": {"ok": True, "attempts": 1, "error": None,
+                              "usage": {"input_tokens": 0, "output_tokens": 0}, "data": CALL_B_DATA},
+                   "news_source_status": {}, "news_candidate_count": 13,
+                   "total_usage": {"input_tokens": 0, "output_tokens": 0}}
+status_text = compose_post.render_generation_status(_gen_truncated)
+check("GENERATION_STATUS.md: tier3除外があれば目視確認行が表示される",
+      "tier3候補 15件中 10件を選定" in status_text and "5件を件数上限により除外" in status_text,
+      status_text)
+
+_gen_not_truncated = json.loads(json.dumps(_gen_truncated))
+_gen_not_truncated["call_a"]["truncation_stats"] = _stats_few
+_gen_not_truncated["call_a"]["data"] = CALL_A_DATA
+status_text2 = compose_post.render_generation_status(_gen_not_truncated)
+check("GENERATION_STATUS.md: tier3除外が無ければ目視確認行を表示しない",
+      "件数上限により除外" not in status_text2, status_text2)
+
+print("=== generate_post.run(): news_candidate_countは渡した件数基準（v1.21） ===")
+os.makedirs("outputs/2026-08-21", exist_ok=True)
+Path("outputs/2026-08-21/daily_data.json").write_text(
+    json.dumps({**DAILY_DATA, "target_date_jst": "2026-08-21"}, ensure_ascii=False), encoding="utf-8")
+_news_many = {"collected_at": "2026-08-21T09:00:00+09:00", "target_date_jst": "2026-08-21",
+              "source_status": {}, "candidates": _tier1_fixed + _tier3_15}
+Path("outputs/2026-08-21/news_candidates.json").write_text(json.dumps(_news_many, ensure_ascii=False), encoding="utf-8")
+
+
+def _make_run_client_tolerant(a_ok, b_ok):
+    def fn(kw, n):
+        is_call_a = kw.get("system") == generate_post.SYSTEM_A
+        if is_call_a:
+            return json_response(CALL_A_DATA) if a_ok else FakeResponse([FakeTextBlock("bad")])
+        return json_response(CALL_B_DATA) if b_ok else FakeResponse([FakeTextBlock("bad")])
+    return FakeClient(fn)
+
+
+_c = _make_run_client_tolerant(True, True)
+_result21 = generate_post.run("2026-08-21", client=_c)
+# 生の取得総数は 3(tier1) + 15(tier3) = 18件だが、実際に渡すのは 3 + 10(上限) = 13件。
+check("run(): news_candidate_countは取得総数(18)ではなく渡した件数(13)を反映する",
+      _result21["news_candidate_count"] == 13, str(_result21["news_candidate_count"]))
+check("run(): call_a.truncation_statsにtier3の除外情報が記録される",
+      _result21["call_a"]["truncation_stats"] == {"tier3_total": 15, "tier3_selected": 10, "tier3_dropped": 5},
+      str(_result21["call_a"]["truncation_stats"]))
+
 print("=== generate_post.run() レベル判定 ===")
 os.makedirs("outputs/2026-08-17", exist_ok=True)
 Path("outputs/2026-08-17/daily_data.json").write_text(json.dumps(DAILY_DATA, ensure_ascii=False), encoding="utf-8")
@@ -267,7 +333,10 @@ check("run(): news_candidates.jsonに1件ある日はnews_candidate_count==1",
 
 print("=== compose_post.compose() ===")
 
-gen_l0 = {"level": "L0", "call_a": {"ok": True, "data": CALL_A_DATA}, "call_b": {"ok": True, "data": CALL_B_DATA}}
+gen_l0 = {"level": "L0", "call_a": {"ok": True, "data": CALL_A_DATA}, "call_b": {"ok": True, "data": CALL_B_DATA},
+          # v1.21: C19が「渡した候補数」とaudit_ledgerの件数を照合するため、
+          # CALL_A_DATA["audit_ledger"]の件数（1件）と一致させる。
+          "news_candidate_count": len(CALL_A_DATA["audit_ledger"])}
 b = compose_post.compose(DAILY_DATA, gen_l0)
 check("L0: 見出し4件が前編に順序どおり", all(h in b["part1_md"] for h in verify_post.REQUIRED_HEADINGS_PART1))
 check("L0: ヘッドラインは実文言", b["sections"]["part1_headline"] == CALL_A_DATA["part1_headline"])
@@ -413,10 +482,10 @@ check("C18: 断定表現でFAIL", any(x["id"] == "C18_causal_assertion" and x["r
 
 print("=== verify_post: C18強化の確認（v1.20・主語を挟む形の検知） ===")
 for bad_sentence, label in [
-    ("規制緩和によりBTC価格が上昇した。", "により+主語+上昇"),
-    ("規制強化の発表を受けてBTC価格が下落した。", "を受けて+主語+下落"),
-    ("金利上昇のためETH価格が下落した。", "のため+主語+下落"),
-    ("規制緩和が牽引した。", "が牽引した（従来どおり単独検知）"),
+    ("規制緩和によりBTC価格が上昇した。", "により+主語+上昇（限定表現なし）"),
+    ("規制強化の発表を受けてBTC価格が下落した。", "を受けて+主語+下落（限定表現なし）"),
+    ("金利上昇のためETH価格が下落した。", "のため+主語+下落（限定表現なし）"),
+    ("規制緩和が牽引した。", "が牽引した（限定表現なし・従来どおり単独検知）"),
 ]:
     hits = verify_post._causal_violations_in_sentence(bad_sentence)
     check(f"C18: 「{label}」は検知される", len(hits) > 0, str(hits))
@@ -439,6 +508,41 @@ au_with_allow = verify_post.Audit()
 verify_post.check_c18(au_with_allow, bad["sections"], bad["llm_section_keys"], {"規制緩和によりBTC価格が上昇した"})
 c18_with_allow = next(x for x in au_with_allow.checks if x["id"] == "C18_causal_assertion")
 check("C18: allowlist登録でPASS", c18_with_allow["result"] == "PASS", str(c18_with_allow))
+
+print("=== verify_post: C18再設計の確認（v1.22・限定表現による判定へ変更） ===")
+# 独立レビュー2巡目が指摘した誤検知5パターン。限定表現があるものはPASS（hits空）を期待。
+# 3件目（読点で繋がれた無関係な2つの事象が偶然同一文に共存するケース）は
+# 限定表現が無いため今回もFAILのまま——同一文単位判定の構造的な限界として
+# DESIGN_CHANGES.mdに明記する（限定表現チェックでは救えないケース）。
+for sentence, label, expect_pass in [
+    ("規制強化を受けて市場全体のセンチメントが改善した可能性があるが、"
+     "BTC価格の上昇との直接的な因果関係は未確認である。", "可能性+未確認", True),
+    ("規制強化のためリスク回避的な売りが観測されたが、BTC価格が下落した"
+     "複数の要因の一つに過ぎず、単独の原因と断定はできない。", "断定はできない（助詞挿入）", True),
+    ("システム障害のため一部ユーザーが取引できない状態が続いたが、この間もBTC価格は"
+     "堅調に推移し、後場にかけて上昇した点は特筆に値する。", "読点で繋がれた無関係な2事象（既知の限界）", False),
+    ("決算発表を受けて市場心理の改善が意識された可能性はあるが、BTCは緩やかに上昇した。",
+     "意識された可能性", True),
+    ("ETH価格が牽引した可能性が指摘されているが、同時期に確認された他の材料もあり"
+     "因果は未確認である。", "が牽引した+可能性+未確認", True),
+]:
+    hits = verify_post._causal_violations_in_sentence(sentence)
+    ok = (not hits) == expect_pass
+    check(f"C18再設計: 誤検知パターン「{label}」が期待どおり{'PASS' if expect_pass else 'FAIL(既知の限界)'}",
+          ok, f"hits={hits}")
+
+# 独立レビュー2巡目が指摘した回避7パターン。全て検知されることを期待。
+for sentence, label in [
+    ("BTC価格が上昇したことは、ETFの資金流入により説明可能である。", "価格語がマーカーより前（語順逆）"),
+    ("規制強化によってBTC価格が上昇した。", "によって（拡充マーカー）"),
+    ("取引所の障害のせいでBTC価格が下落した。", "せいで（拡充マーカー）"),
+    ("ETF承認を機にBTC価格が上昇した。", "を機に（拡充マーカー）"),
+    ("規制強化のため暴落した。", "暴落（拡充価格語）"),
+    ("好材料を受けて急騰した。", "急騰（拡充価格語）"),
+    ("規制強化により反落した。", "反落（拡充価格語）"),
+]:
+    hits = verify_post._causal_violations_in_sentence(sentence)
+    check(f"C18再設計: 回避パターン「{label}」は検知される", len(hits) > 0, str(hits))
 
 # C19: L0でaudit_ledger不備
 bad = json.loads(json.dumps(b_ok))
@@ -490,8 +594,8 @@ c19 = next(x for x in au.checks if x["id"] == "C19_audit_ledger")
 check("C19: 空配列＋news_candidate_count欠落はFAIL（0件と区別できないためフェイルクローズ）",
       c19["result"] == "FAIL", str(c19))
 
-# 非空audit_ledgerでも候補数と無関係にフィールド充足だけを見ることの確認
-# （全候補を記録しているかまでは機械検査しない設計上の限界。目視確認が必要）
+# v1.21改定: 非空audit_ledgerは「渡した候補数」との件数一致も検査する
+# （フィールド充足だけでは一部取りこぼしを検知できないため。オーナー指示）。
 bad = json.loads(json.dumps(b_ok))
 bad["audit_ledger"] = [{"source": "金融庁", "url": "https://www.fsa.go.jp/x", "title": "...",
                         "published_at": "2026-08-17", "verified_by": "RSS summary",
@@ -499,7 +603,20 @@ bad["audit_ledger"] = [{"source": "金融庁", "url": "https://www.fsa.go.jp/x",
 bad["news_candidate_count"] = 5
 au = verify_post.run_all(bad, DAILY_DATA)
 c19 = next(x for x in au.checks if x["id"] == "C19_audit_ledger")
-check("C19: 候補5件中1件のみ記録でもフィールド充足していればPASS（件数一致は機械検査しない既知の限界）",
+check("C19: 候補5件中1件のみ記録は件数不一致でFAIL（v1.21・取りこぼし検知）",
+      c19["result"] == "FAIL", str(c19))
+
+good = json.loads(json.dumps(b_ok))
+good["audit_ledger"] = [
+    {"source": "金融庁", "url": "https://www.fsa.go.jp/a", "title": "...", "published_at": "2026-08-17",
+     "verified_by": "RSS summary", "decision": "不採用", "reason": "関係なし"},
+    {"source": "日本銀行", "url": "https://www.boj.or.jp/b", "title": "...", "published_at": "2026-08-17",
+     "verified_by": "RSS summary", "decision": "不採用", "reason": "関係なし"},
+]
+good["news_candidate_count"] = 2
+au = verify_post.run_all(good, DAILY_DATA)
+c19 = next(x for x in au.checks if x["id"] == "C19_audit_ledger")
+check("C19: 候補2件・audit_ledger2件で件数一致するとPASS（v1.21）",
       c19["result"] == "PASS", str(c19))
 
 print("=== collect_news.py（RSS方式・CryptoPanic撤去後） ===")

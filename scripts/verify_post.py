@@ -30,14 +30,25 @@ from compose_numeric import (  # noqa: E402
 from verify_data import Audit  # noqa: E402
 
 BANNED_TERMS = ["仮想通貨", "前日比"]
-# C18（v1.20改定）: 助詞と動詞が直接隣接する旧6パターンは、主語を挟む自然な
-# 日本語（例:「規制緩和によりBTC価格が上昇した。」）で回避されることが独立
-# レビューで実行確認された。因果マーカー4種＋同一文内の価格変動語という
-# 組み合わせ判定へ変更し、「が牽引した」のみ単独の断定表現として従来どおり残す
-# （マーカー＋価格語のテンプレートに当てはまらないため）。
-CAUSAL_MARKERS = ["により", "を受けて", "が原因で", "のため"]
-PRICE_MOVEMENT_WORDS = ["上昇", "下落", "高騰", "急落"]
+# C18（v1.22改定・オーナー指示）: v1.20の「マーカー＋同一文内の価格変動語」
+# 判定は、独立レビューの2巡目で誤検知（本パイプライン自身が使うヘッジ語彙
+# 「可能性がある」「因果は未確認」等を含む正当な文まで機械的にFAILさせていた）
+# が実行確認された。判定の趣旨は「断定」を禁じることであり、限定表現で
+# 締められた文は基準が求める正しい書き方であるため、これをFAILさせるのは
+# 設計ミスと判断された。限定表現（LIMITING_EXPRESSIONS）が同一文にあれば
+# PASSへ回す判定へ変更。あわせてマーカー・価格変動語の語彙を拡充し
+# （によって/せいで/を機に、暴落/急騰/反落を追加）、マーカーと価格変動語の
+# 語順を問わない判定へ変更した（価格語が先に来る文も検知）。
+CAUSAL_MARKERS = ["により", "を受けて", "が原因で", "のため", "によって", "せいで", "を機に"]
+PRICE_MOVEMENT_WORDS = ["上昇", "下落", "高騰", "急落", "暴落", "急騰", "反落"]
 CAUSAL_STANDALONE_PHRASES = ["が牽引した"]
+# 限定表現（この語が同一文にあれば「断定」ではなく基準が求める正しい書き方と
+# みなしFAILさせない）。「断定」は「断定はできない」等、助詞が挟まる活用差
+# （でき/できない/できません）を吸収するため活用語尾を含めない広い形で採用。
+# 「確認できません」は活用差を許容すると「確認された」等の非ヘッジ文まで
+# 誤って救済してしまうため、原型のまま採用する（既知の限界：「確認は
+# できません」のように助詞が挟まる形は本語では拾えない）。
+LIMITING_EXPRESSIONS = ["可能性", "未確認", "意識された", "とみられる", "考えられる", "確認できません", "断定"]
 ALLOWED_TAGS = {"BTC", "ETH", "BNB", "USDC"}
 REQUIRED_HEADINGS_PART1 = ["【対象日】", "【ヘッドライン】", "【主要なポイント】", "【主要指標】"]
 REQUIRED_HEADINGS_PART2 = ["【主要指標（詳細）】", "【市場のフロー】", "【LP運用者向けに一言】", "【総括】"]
@@ -225,32 +236,40 @@ def check_c17(au: Audit, lp_comment: str) -> None:
 # --- C18 断定表現 ---
 
 def _causal_violations_in_sentence(sentence: str) -> list[str]:
-    """1文内で「因果マーカー」の後（主語等を挟んでもよい）に価格変動語が
-    現れる組み合わせ、および単独で断定的な表現を検出する（v1.20）。
-    限界: 文単位（句点区切り）の粗い判定であり、マーカーと価格変動語が
-    無関係な文脈で同一文中に現れる誤検知はconfig/c18_allowlist.jsonで
-    個別に除外する運用を前提とする（完全な保証ではない）。
+    """1文内で「因果マーカー」と価格変動語が語順を問わず共存する組み合わせ、
+    および単独で断定的な表現を検出する（v1.22改定）。ただし同一文に
+    LIMITING_EXPRESSIONS（限定表現）が含まれる場合はPASSとする——判定が
+    禁じたいのは「断定」であり、限定表現で締めた文は基準が求める正しい
+    書き方であるため（v1.20時点の誤検知への対処。オーナー指示）。
+
+    限界: 文単位の粗い判定であり、(1) 因果マーカーと価格変動語が実際には
+    無関係な別の節にたまたま同一文中で共存するケース（例: 読点で繋がれた
+    2つの独立した事象）は誤検知として残りうる、(2) LIMITING_EXPRESSIONSの
+    「確認できません」は活用差（「確認はできません」等の助詞挿入）を
+    吸収しない、(3) CAUSAL_MARKERS・PRICE_MOVEMENT_WORDSに無い語彙
+    （例: 「きっかけに」等）は検知対象外。誤検知はconfig/c18_allowlist.json
+    で個別に除外できるが、上記の設計変更により通常は不要な想定
+    （DESIGN_CHANGES.md参照）。
     """
+    hit_markers = [m for m in CAUSAL_MARKERS if m in sentence]
+    hit_words = [w for w in PRICE_MOVEMENT_WORDS if w in sentence]
+    hit_standalone = [p for p in CAUSAL_STANDALONE_PHRASES if p in sentence]
+    if not (hit_markers and hit_words) and not hit_standalone:
+        return []
+    if any(le in sentence for le in LIMITING_EXPRESSIONS):
+        return []
     hits = []
-    for marker in CAUSAL_MARKERS:
-        idx = sentence.find(marker)
-        if idx == -1:
-            continue
-        rest = sentence[idx + len(marker):]
-        for word in PRICE_MOVEMENT_WORDS:
-            if word in rest:
-                hits.append(f"「{marker}」の後に同一文内で「{word}」")
-                break
-    for phrase in CAUSAL_STANDALONE_PHRASES:
-        if phrase in sentence:
-            hits.append(f"「{phrase}」")
+    if hit_markers and hit_words:
+        hits.append(f"マーカー{hit_markers}と価格変動語{hit_words}が同一文に存在（限定表現なし）")
+    if hit_standalone:
+        hits.append(f"断定的表現{hit_standalone}（限定表現なし）")
     return hits
 
 
 def check_c18(au: Audit, sections: dict, llm_section_keys: list[str], allowlist: set[str]) -> None:
     llm_text = "\n".join(sections.get(k, "") for k in llm_section_keys)
     hits = []
-    for sentence in llm_text.replace("\n", "。").split("。"):
+    for sentence in re.split(r"[。\n]", llm_text):
         if not sentence.strip() or any(s in sentence for s in allowlist):
             continue
         hits += _causal_violations_in_sentence(sentence)
@@ -294,7 +313,17 @@ def check_c19(au: Audit, level: str, audit_ledger, candidate_count: int) -> None
     required_fields = ("source", "url", "published_at", "decision", "reason")
     bad = [i for i, e in enumerate(audit_ledger)
            if not isinstance(e, dict) or any(not _field_present(e, f) for f in required_fields)]
-    au.add("C19_audit_ledger", not bad, f"{len(audit_ledger)}件中フィールド欠落: {bad}" if bad else f"{len(audit_ledger)}件・全フィールド充足")
+    if bad:
+        au.add("C19_audit_ledger", False, f"{len(audit_ledger)}件中フィールド欠落: {bad}")
+        return
+    # v1.21改定: 「渡した候補数」とaudit_ledgerの件数を照合する（オーナー指示）。
+    # 渡した全候補を1件残らず記録する設計（v1.17）である以上、件数の不一致は
+    # 「一部を静かに取りこぼした」ことを意味し、フィールド充足だけでは検知できない。
+    if len(audit_ledger) != candidate_count:
+        au.add("C19_audit_ledger", False,
+               f"渡した候補{candidate_count}件に対しaudit_ledgerは{len(audit_ledger)}件（件数不一致）")
+        return
+    au.add("C19_audit_ledger", True, f"{len(audit_ledger)}件・全フィールド充足・渡した候補数と一致")
 
 
 # --- C20 図版ヘッドライン ---

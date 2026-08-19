@@ -70,9 +70,10 @@ def _load_sources() -> list[dict[str, Any]]:
     return [s for s in sources if isinstance(s, dict) and s.get("name") and s.get("url")]
 
 
-def _parse_pubdate_jst(raw: str) -> datetime | None:
+def parse_pubdate_jst(raw: str) -> datetime | None:
     """RSSのpubDate（RFC 822想定）をJST awareなdatetimeへ変換する。
     解釈できない・空の場合はNone（呼び出し側で対象日フィルタから除外する）。
+    公開関数（v1.21よりgenerate_post.pyがtier3候補の新しい順ソートで再利用）。
     """
     if not raw:
         return None
@@ -133,7 +134,7 @@ def _collect_from_feed(name: str, url: str, target: "date", *, tier: int, kind: 
 
     candidates = []
     for it in items:
-        pub_jst = _parse_pubdate_jst(it["published_at"])
+        pub_jst = parse_pubdate_jst(it["published_at"])
         if pub_jst is None or pub_jst.date() != target:
             continue
         candidates.append({

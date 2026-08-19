@@ -37,21 +37,29 @@ import json
 import re
 import sys
 import time
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
 import anthropic
 
+import collect_news
+
 MODEL = "claude-sonnet-5"
-# v1.15: web_search撤去によりツール呼び出しのオーバーヘッドが無くなったため、
-# 台本§5.3の指定値（4000）へ復帰。v1.12〜v1.13で8000へ引き上げていたのは
-# web_search実行時の対策であり、その原因（ツール使用）自体を取り除いた
-# 本改定では不要（DESIGN_CHANGES.md v1.15参照）。
-CALL_A_MAX_TOKENS = 4000
+# v1.21: 4000→8000へ再引き上げ。v1.20でtier3（CoinDesk・Cointelegraph）を
+# 追加した結果、候補急増日（実測30件）でaudit_ledgerの全候補記録が
+# 4000トークンに収まらずJSON途中で打ち切られる事象が実測された
+# （DESIGN_CHANGES.md v1.21参照）。候補数上限（TIER3_CANDIDATE_LIMIT）と
+# 併用し、上限を設けてもなお安全余裕を持たせるための引き上げ。
+CALL_A_MAX_TOKENS = 8000
 CALL_B_MAX_TOKENS = 2000
 MAX_ATTEMPTS = 3  # 初回+リトライ2回（§5.3「リトライ: 各2回まで」）
 RETRY_DELAYS_SEC = (2, 4)
+# v1.21: tier3（CoinDesk・Cointelegraph等）は候補が多い日に急増しうる
+# （実測: 1日で28件）。tier1（公式発表）は全件を渡すが、tier3は公開日時の
+# 新しい順で上位この件数までに絞って呼び出しAへ渡す（DESIGN_CHANGES.md
+# v1.21参照。オーナー指示）。
+TIER3_CANDIDATE_LIMIT = 10
 
 REQUIRED_KEYS_A = [
     "headline_for_image", "part1_headline", "part1_points",
@@ -104,14 +112,14 @@ RULES_HASHTAG = """## ハッシュタグ規則（X投稿本文のみ）
 RULES_CAUSAL = """## 因果表現
 
 - 事実の記述と価格変動の因果を混同しない。
-- 価格との関係は「可能性」「意識された可能性」「同時期に確認された材料」
-  「因果は未確認」等で限定する。
-- 次の断定表現を使わない: 「〜が原因で」「〜により上昇した」「〜を受けて
-  下落した」「〜のため上昇」「〜のため下落」「〜が牽引した」。
-- これらは主語等を挟んだ形（例:「〜によりBTC価格が上昇した」）も同様に
-  断定表現として扱われる。「〜により」「〜を受けて」「〜が原因で」
-  「〜のため」のいずれかを使う文では、同じ文の中で「上昇」「下落」
-  「高騰」「急落」を断定的に結びつけない（機械監査C18の対象）。"""
+- 「により」「を受けて」「が原因で」「のため」「によって」「せいで」
+  「を機に」のいずれかと、「上昇」「下落」「高騰」「急落」「暴落」
+  「急騰」「反落」のいずれかが同じ文の中にある場合、必ず「可能性」
+  「意識された」「とみられる」「考えられる」「未確認」「断定（できない/
+  できません）」のいずれかで文を締め、断定を避ける（語順は問わない。
+  価格変動語が先に来る文にも適用される）。「〜が牽引した」も同様に、
+  限定する語句を伴わない単独の断定表現として扱わない。
+- 上記の限定語句を伴わない断定表現は使わない（機械監査C18の対象）。"""
 
 NEWS_SELECTION = """## ニュース候補の扱いと選定根拠
 
@@ -227,16 +235,17 @@ SYSTEM_B = "\n\n".join([
 
 class CallOutcome:
     def __init__(self, ok: bool, data: dict | None, attempts: int, error: str | None,
-                 usage: dict[str, int] | None = None):
+                 usage: dict[str, int] | None = None, truncation_stats: dict[str, int] | None = None):
         self.ok = ok
         self.data = data
         self.attempts = attempts
         self.error = error
         self.usage = usage or {"input_tokens": 0, "output_tokens": 0}
+        self.truncation_stats = truncation_stats or {}
 
     def to_dict(self) -> dict:
         return {"ok": self.ok, "attempts": self.attempts, "error": self.error,
-                "usage": self.usage, "data": self.data}
+                "usage": self.usage, "data": self.data, "truncation_stats": self.truncation_stats}
 
 
 def _extract_text(response: Any) -> str:
@@ -311,15 +320,43 @@ def _call_json(
     return CallOutcome(False, None, MAX_ATTEMPTS, last_err, total_usage)
 
 
-def _build_call_a_user_content(daily_data: dict, news_today: dict, news_yesterday: dict | None) -> str:
+def _select_candidates_for_call_a(candidates: list[dict]) -> tuple[list[dict], dict[str, int]]:
+    """呼び出しAへ渡す候補を選ぶ（v1.21）。tier 1（公式発表）は全件、
+    tier 3（CoinDesk・Cointelegraph等）は公開日時の新しい順で上位
+    TIER3_CANDIDATE_LIMIT件までに絞る。候補急増日（実測30件・うち
+    tier3が28件）でaudit_ledgerの全候補記録がCALL_A_MAX_TOKENSを
+    超過した事象への対処（DESIGN_CHANGES.md v1.21参照）。tier 4等は
+    実測で毎回0件のため現状据え置き。
+    """
+    tier1 = [c for c in candidates if c.get("tier") == 1]
+    tier3 = [c for c in candidates if c.get("tier") == 3]
+    others = [c for c in candidates if c.get("tier") not in (1, 3)]
+
+    def pub_dt(c: dict):
+        return collect_news.parse_pubdate_jst(c.get("published_at", "")) or datetime.min.replace(
+            tzinfo=collect_news.JST)
+
+    tier3_sorted = sorted(tier3, key=pub_dt, reverse=True)
+    tier3_selected = tier3_sorted[:TIER3_CANDIDATE_LIMIT]
+    stats = {
+        "tier3_total": len(tier3),
+        "tier3_selected": len(tier3_selected),
+        "tier3_dropped": len(tier3) - len(tier3_selected),
+    }
+    return tier1 + tier3_selected + others, stats
+
+
+def _build_call_a_user_content(daily_data: dict, news_today: dict, news_yesterday: dict | None) -> tuple[str, dict]:
+    selected_today, stats = _select_candidates_for_call_a(news_today.get("candidates", []))
+    selected_yesterday, _ = _select_candidates_for_call_a((news_yesterday or {}).get("candidates", []))
     payload = {
         "target_date_jst": daily_data.get("target_date_jst", ""),
         "weekday_jp": daily_data.get("weekday_jp", ""),
         "daily_data": daily_data,
-        "news_candidates_today": news_today.get("candidates", []),
-        "news_candidates_yesterday": (news_yesterday or {}).get("candidates", []),
+        "news_candidates_today": selected_today,
+        "news_candidates_yesterday": selected_yesterday,
     }
-    return json.dumps(payload, ensure_ascii=False, indent=2)
+    return json.dumps(payload, ensure_ascii=False, indent=2), stats
 
 
 def _build_call_b_user_content(daily_data: dict, call_a_data: dict | None) -> str:
@@ -342,11 +379,13 @@ def _build_call_b_user_content(daily_data: dict, call_a_data: dict | None) -> st
 
 def call_a(client: "anthropic.Anthropic", daily_data: dict, news_today: dict,
            news_yesterday: dict | None) -> CallOutcome:
-    user_content = _build_call_a_user_content(daily_data, news_today, news_yesterday)
-    return _call_json(
+    user_content, truncation_stats = _build_call_a_user_content(daily_data, news_today, news_yesterday)
+    outcome = _call_json(
         client, system=SYSTEM_A, user_content=user_content,
         max_tokens=CALL_A_MAX_TOKENS, required_keys=REQUIRED_KEYS_A,
     )
+    outcome.truncation_stats = truncation_stats
+    return outcome
 
 
 def call_b(client: "anthropic.Anthropic", daily_data: dict, call_a_data: dict | None) -> CallOutcome:
@@ -388,15 +427,19 @@ def run(target_date: str, *, client: "anthropic.Anthropic | None" = None) -> dic
     failed_count = (0 if a.ok else 1) + (0 if b.ok else 1)
     level = {0: "L0", 1: "L1", 2: "L2"}[failed_count]
 
+    # C19（v1.21改定）: 「渡した候補数」を基準にする（取得総数ではない）。
+    # tier3を件数上限で絞るため、取得総数のままだと絞り込み後にAが実際に
+    # 見た候補数とaudit_ledgerの記録件数が原理的に一致しなくなる
+    # （オーナー指示・DESIGN_CHANGES.md v1.21参照）。
+    selected_today, _ = _select_candidates_for_call_a(news_today.get("candidates", []))
+
     return {
         "target_date_jst": target_date,
         "level": level,
         "call_a": a.to_dict(),
         "call_b": b.to_dict(),
         "news_source_status": news_today.get("source_status", {}),
-        # C19（v1.17）: audit_ledgerの空配列許容判定に使う（候補自体が
-        # 0件だったのか、候補はあったが採否記録が漏れたのかを区別する）。
-        "news_candidate_count": len(news_today.get("candidates", [])),
+        "news_candidate_count": len(selected_today),
         "total_usage": _add_usage(a.usage, b.usage),
     }
 

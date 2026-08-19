@@ -216,6 +216,12 @@ def render_generation_status(gen: dict[str, Any]) -> str:
         f"news_candidates_today: {gen.get('news_candidate_count', 0)}件 / audit_ledger: {ledger_len}件"
         "（候補があるのにaudit_ledgerが0件の場合はC19がFAILする想定。要目視確認）",
     ]
+    ts = a.get("truncation_stats", {})
+    if ts.get("tier3_dropped", 0) > 0:
+        lines.append(
+            f"tier3候補 {ts['tier3_total']}件中 {ts['tier3_selected']}件を選定"
+            f"（{ts['tier3_dropped']}件を件数上限により除外）"
+        )
     lines += [
         "",
         "手当が必要な箇所:",
