@@ -1,0 +1,68 @@
+{
+  "overall": "PASS",
+  "failed": 0,
+  "checked_at_jst": "2026-08-20T07:51:10.790869+09:00",
+  "checks": [
+    {
+      "id": "C1_schema",
+      "result": "PASS",
+      "detail": "全必須キーあり"
+    },
+    {
+      "id": "C2_date_internal",
+      "result": "PASS",
+      "detail": "weekday_ok=True title_ok=True"
+    },
+    {
+      "id": "C3_date_is_yesterday",
+      "result": "PASS",
+      "detail": "target=2026-08-19 expected=2026-08-19"
+    },
+    {
+      "id": "C4_change_format",
+      "result": "PASS",
+      "detail": "±N.NN% 形式・矢印整合"
+    },
+    {
+      "id": "C5_banned_terms",
+      "result": "PASS",
+      "detail": "禁止語・二重括弧なし"
+    },
+    {
+      "id": "C6_jpy_assets",
+      "result": "PASS",
+      "detail": "fx=159.59 で整合"
+    },
+    {
+      "id": "C7_jpy_macro",
+      "result": "PASS",
+      "detail": "整合"
+    },
+    {
+      "id": "C8_apr_recalc",
+      "result": "PASS",
+      "detail": "算式整合"
+    },
+    {
+      "id": "C9_fg_range",
+      "result": "PASS",
+      "detail": "value=55 label=Neutral"
+    },
+    {
+      "id": "C10_image_size",
+      "result": "PASS",
+      "detail": "size=(2560, 1440)"
+    },
+    {
+      "id": "C11_domestic_recalc",
+      "result": "PASS",
+      "detail": "表示18,620,000 再計算18,620,122 ratio=1.0000"
+    }
+  ],
+  "sha256": {
+    "daily_data.json": "9f5c417339722cf99844de58070713d307a38cdee7e60ce99658860ceaf3b1fa",
+    "infographic.png": "0a01e765426f0552b5d597fc40accd66e5656e14799a748743488aced15e0c77",
+    "raw_data.json": "fd25f765c5b9f7f93dadc93fffb32dfd08f196bdae00033ea58668ace461dc8f",
+    "apr_screenshot.jpg": "23a9bc813e4a0748edf0e6d73a2753f57d438b6301656c062d208ec9776a29f3"
+  }
+}
