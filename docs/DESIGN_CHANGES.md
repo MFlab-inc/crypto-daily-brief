@@ -7,6 +7,136 @@
 
 ---
 
+## v1.20 — 2026-08-18（オーナー指示・独立レビュー指摘8件への対応）
+
+**指示**：2026-08-18・オーナーによる明示指示。v1.19の独立レビュー結果を
+受け、最優先4件・C18強化1件・中2件・情報源階層1件の計8件を実施。
+**適用範囲**：`.github/workflows/post_draft.yml`、`scripts/verify_post.py`、
+`scripts/compose_post.py`、`scripts/generate_post.py`、`scripts/collect_news.py`、
+`config/news_sources.json`（新規3件追加）、`config/c18_allowlist.json`（新規）、
+`test/test_bundle2.py`（新規・リポジトリへ初コミット）。
+
+### 【1】post_draft.ymlのフェイルクローズ化
+
+`verify_post.py`ステップの`continue-on-error: true`を除去。監査FAILは
+ステップを非ゼロ終了させ、後続のコミットステップへ到達しない
+（`daily.yml`の④→⑤と同じ構造）。
+
+### 【2】冪等性ガードの追加（force_redispatchで無視可）
+
+`daily.yml`の`final_audit_*.json`存在チェックと同じ思想で、
+`post_audit_{compact}.json`の`overall`が既に`"PASS"`の対象日は
+再実行をスキップするガードを追加した。ただし`post_draft.yml`は
+本セッション中も繰り返し意図的に再実行してきた手動お試し用
+ワークフローであり、`daily.yml`と同一の「常に1回きり」挙動を
+そのまま適用すると今回の再テスト自体を妨げる。`force_redispatch`
+（既定false）のworkflow_dispatch入力を追加し、trueの場合はガードを
+無視して実行する設計とした（cron接続後の「意図しない二重実行」防止と、
+「意図した再テスト」を両立させるための拡張）。
+
+### 【3】headline_for_imageをC12・C16bの走査対象へ追加
+
+図版下部帯に焼き込まれる`headline_for_image`が、これまで`part1_md`・
+`part2_md`にしか含まれず禁止語検知（C12）・数値転記検知（C16b）の
+対象外だった。両チェックの走査文字列へ追加した。C13・C14も同じ
+`full_text`を使うため副次的に走査対象へ入るが、実害はない
+（headline_for_imageは元々`#`を使わない・表形式になりえない文字列）。
+
+### 【4】C19のnull誤判定を修正
+
+`str(e.get(f, ""))`は、フィールドが辞書に存在してもJSON `null`
+（Pythonの`None`）の場合`str(None)`＝`"None"`（非空文字列）を返すため、
+未充足フィールドを「充足」と誤判定していた。`_field_present()`を新設し、
+`None`を明示的に不充足として扱うよう修正した。
+
+### 【5】C18の強化：主語を挟む形の検知＋allowlist
+
+独立レビューで、旧6パターン（助詞と動詞が直接隣接）が「規制緩和により
+BTC価格が上昇した。」のような自然な日本語（主語を挟む形）で回避される
+ことが実行確認された。オーナー指示の設計に従い、判定を「因果マーカー
+（『〜により』『〜を受けて』『〜が原因で』『〜のため』）の後、**同一文内**に
+価格変動語（『上昇』『下落』『高騰』『急落』）が現れたらFAIL」という
+文単位の組み合わせ判定へ変更した。「が牽引した」は上記テンプレートに
+当てはまらない単独の断定表現として従来どおり維持。誤検知時の個別除外
+用に`config/c18_allowlist.json`（`c16b_allowlist.json`と同一形式・日付＋
+該当文の部分一致文字列）を新設した。あわせて`generate_post.py`の
+`RULES_CAUSAL`プロンプトへ、主語を挟む形も同様に断定表現として扱われる
+旨を追記した（新しい判定基準を呼び出しA自身に伝え、意図せぬFAILを
+防ぐため）。
+
+**限界（完全な保証ではない）**：文単位（句点区切り）の粗い判定であり、
+因果マーカーと価格変動語が無関係な文脈で同一文中に現れる誤検知が
+ありうる。「上昇」「下落」等の語の後にマーカーが来る順序（価格変動語が
+先、マーカーが後）は検知対象外。複文・関係節をまたぐ因果関係の検知も
+対象外。誤検知はconfig/c18_allowlist.jsonで個別除外する運用を前提とする。
+
+### 【6】compose_post.pyのnews_candidate_count既定値をフェイルクローズへ
+
+`gen.get("news_candidate_count", 0)`（フェイルオープン）を`-1`
+（`verify_post.py`側の既存センチネルと同一）へ変更。`compose()`は
+「純粋関数として単体呼び出し可能」と設計時から位置づけられており、
+不完全な`gen`が渡された場合でも「候補0件」と誤認してC19の空配列許容へ
+誤って倒れないようにした（現状`generate_post.run()`は常に値を設定する
+ため実害はないが、将来の呼び出し方法の変化に備えた防御）。
+
+### 【7】オフラインテストをリポジトリへ初コミット
+
+`test_bundle2.py`は本セッション開始からスクラッチディレクトリにのみ
+存在し、一度もコミットされていなかった（v1.19独立レビュー指摘）。
+`test/test_bundle2.py`としてリポジトリへコミットし、パスをセッション
+非依存（`Path(__file__)`基準・`tempfile.mkdtemp()`による一時ディレクトリ
+隔離）へ変更した。今回の8件修正すべてに対応する新規ケースを追加し
+93件（旧72件から21件追加）全PASS。これにより以後
+`docs/DESIGN_CHANGES.md`が引用するテスト結果はリポジトリから
+`python test/test_bundle2.py`で再現可能になった。
+
+なお本コミットの実施過程で、新規追加したC18関連テストが既存の
+`CALL_A_DATA`フィクスチャ（`part1_headline`）自体の不備を検出した
+（「〜を受けて...上昇...」という未ヘッジの因果表現を含んでいた）。
+これは本改修（強化されたC18）が実際に機能している証拠であり、
+フィクスチャ文言をヘッジ表現（「...が確認され、同時期に...（因果は
+未確認）」）へ修正した。
+
+### 【8】優先度2の正式断念と優先度3（CoinDesk・Cointelegraph）の追加
+
+優先度2（Reuters・Bloombergの独立報道）は、Reutersが2020年に公開RSSを
+廃止済み、Bloombergも無料の公開フィードを提供していないことを確認済み
+のため（DESIGN_CHANGES.md v1.11参照）、取得手段なしとして正式に断念する
+（オーナー判断）。代わりに優先度3として`config/news_sources.json`へ
+以下を追加した：
+
+- CoinDesk: `https://www.coindesk.com/arc/outboundfeeds/rss/`
+- Cointelegraph: `https://cointelegraph.com/rss`
+- Cointelegraph Japan: `https://jp.cointelegraph.com/rss`
+  （**未確認**。このセッションのサンドボックスからは
+  `jp.cointelegraph.com`・`cointelegraph.com`ともegressプロキシで
+  遮断され到達性を検証できなかった。WebSearchでjp.cointelegraph.comが
+  Cointelegraphの公式日本語ドメインであることは確認できたが、`/rss`
+  パスの実在は英語版と同じパターンからの推定に留まる。live dispatch
+  での実測が必要）
+
+`scripts/collect_news.py`は各情報源のtierをnews_sources.json側の
+`"tier"`フィールドから読むよう変更（既定1、後方互換）。tier 3は
+`kind="supplementary"`として区別する。`scripts/generate_post.py`の
+プロンプトへtier 3の位置づけを追記：統合運用基準・台本の元々の位置づけ
+（優先度3＝「補完・裏取り」）どおり、tier 1の事実を補強する用途のみに
+限り、tier 3単独を新規項目の根拠にしないことを明記した。
+
+### 検証
+
+オフラインモックテスト93件全PASS。実データ7日分×5パターン
+（L0候補0/候補3・L1(A失敗)・L1(B失敗)・L2）のスイープ、禁止語静的
+スキャンもいずれも想定どおり（L0＋空配列＋候補3件のみ意図的にC19 FAIL、
+禁止語ヒットは想定4件＋テスト内の意図的注入2箇所の計7件）。
+
+**本対処は実APIに対して未検証**（次回`post_draft.yml`実行で、
+対象日2026-08-17（force_redispatch=true・材料なしの日の再確認）と
+2026-08-18（SEC暗号資産規則案発表・材料ありの日）の両方で実測し、
+フェイルクローズの実証・Cointelegraph Japan含む新規情報源の到達性・
+C18強化の実運用影響を確認する）。
+
+---
+
 ## v1.19 — 2026-08-18（オーナー指示・独立レビュー実施。コード変更なし）
 
 **指示**：2026-08-18・オーナー指示によりv1.17時点のコードへ独立レビューを

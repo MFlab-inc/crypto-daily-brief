@@ -156,7 +156,11 @@ def compose(daily_data: dict, gen: dict[str, Any]) -> dict[str, Any]:
         # C19（v1.17改定）: 空配列の許容判定にverify_post.py側で使う
         # （当日の候補自体が0件なら許容、候補はあったのに空配列はFAIL —
         # 「採否を判断した全候補の記録」という台本・統合運用基準の要求どおり）。
-        "news_candidate_count": gen.get("news_candidate_count", 0),
+        # v1.20: 既定値を0（フェイルオープン）から-1（フェイルクローズ）へ
+        # 変更。verify_post.py側のbundle.get("news_candidate_count", -1)と
+        # 同じセンチネルに揃え、genが不完全な状態でcompose()が単体呼び出し
+        # された場合でも「0件」と誤認しないようにする（独立レビュー指摘）。
+        "news_candidate_count": gen.get("news_candidate_count", -1),
         "part1_md": part1_md,
         "part2_md": part2_md,
     }

@@ -30,15 +30,23 @@ from compose_numeric import (  # noqa: E402
 from verify_data import Audit  # noqa: E402
 
 BANNED_TERMS = ["仮想通貨", "前日比"]
-CAUSAL_PHRASES = ["が原因で", "により上昇した", "を受けて下落した", "のため上昇", "のため下落", "が牽引した"]
+# C18（v1.20改定）: 助詞と動詞が直接隣接する旧6パターンは、主語を挟む自然な
+# 日本語（例:「規制緩和によりBTC価格が上昇した。」）で回避されることが独立
+# レビューで実行確認された。因果マーカー4種＋同一文内の価格変動語という
+# 組み合わせ判定へ変更し、「が牽引した」のみ単独の断定表現として従来どおり残す
+# （マーカー＋価格語のテンプレートに当てはまらないため）。
+CAUSAL_MARKERS = ["により", "を受けて", "が原因で", "のため"]
+PRICE_MOVEMENT_WORDS = ["上昇", "下落", "高騰", "急落"]
+CAUSAL_STANDALONE_PHRASES = ["が牽引した"]
 ALLOWED_TAGS = {"BTC", "ETH", "BNB", "USDC"}
 REQUIRED_HEADINGS_PART1 = ["【対象日】", "【ヘッドライン】", "【主要なポイント】", "【主要指標】"]
 REQUIRED_HEADINGS_PART2 = ["【主要指標（詳細）】", "【市場のフロー】", "【LP運用者向けに一言】", "【総括】"]
 C16B_MIN_LEN = 3
 
 
-def _load_allowlist(target_date: str) -> set[str]:
-    path = Path(__file__).parent.parent / "config" / "c16b_allowlist.json"
+def _load_allowlist(target_date: str, filename: str) -> set[str]:
+    """c16b_allowlist.json・c18_allowlist.json共通の読み込み（同一形式）。"""
+    path = Path(__file__).parent.parent / "config" / filename
     if not path.exists():
         return set()
     try:
@@ -196,8 +204,10 @@ def _find_transcriptions(daily_data: dict, llm_text: str, allowlist: set[str]) -
 
 
 def check_c16b(au: Audit, daily_data: dict, sections: dict, llm_section_keys: list[str],
-               allowlist: set[str]) -> None:
-    llm_text = "\n".join(sections.get(k, "") for k in llm_section_keys)
+               allowlist: set[str], headline_for_image: str = "") -> None:
+    # v1.20: headline_for_imageもLLM生成物であり、独立レビューで走査対象外
+    # （図版下部帯に焼き込まれる文言が無検査）と指摘されたため対象に含める。
+    llm_text = "\n".join(sections.get(k, "") for k in llm_section_keys) + "\n" + headline_for_image
     hits = _find_transcriptions(daily_data, llm_text, allowlist)
     detail = (f"検知網ヒット（限界あり・要人手確認。誤爆時は config/c16b_allowlist.json へ登録）: {hits}"
               if hits else "転記検知なし")
@@ -214,13 +224,52 @@ def check_c17(au: Audit, lp_comment: str) -> None:
 
 # --- C18 断定表現 ---
 
-def check_c18(au: Audit, sections: dict, llm_section_keys: list[str]) -> None:
+def _causal_violations_in_sentence(sentence: str) -> list[str]:
+    """1文内で「因果マーカー」の後（主語等を挟んでもよい）に価格変動語が
+    現れる組み合わせ、および単独で断定的な表現を検出する（v1.20）。
+    限界: 文単位（句点区切り）の粗い判定であり、マーカーと価格変動語が
+    無関係な文脈で同一文中に現れる誤検知はconfig/c18_allowlist.jsonで
+    個別に除外する運用を前提とする（完全な保証ではない）。
+    """
+    hits = []
+    for marker in CAUSAL_MARKERS:
+        idx = sentence.find(marker)
+        if idx == -1:
+            continue
+        rest = sentence[idx + len(marker):]
+        for word in PRICE_MOVEMENT_WORDS:
+            if word in rest:
+                hits.append(f"「{marker}」の後に同一文内で「{word}」")
+                break
+    for phrase in CAUSAL_STANDALONE_PHRASES:
+        if phrase in sentence:
+            hits.append(f"「{phrase}」")
+    return hits
+
+
+def check_c18(au: Audit, sections: dict, llm_section_keys: list[str], allowlist: set[str]) -> None:
     llm_text = "\n".join(sections.get(k, "") for k in llm_section_keys)
-    hits = [p for p in CAUSAL_PHRASES if p in llm_text]
-    au.add("C18_causal_assertion", not hits, f"検出: {hits}" if hits else "断定表現なし")
+    hits = []
+    for sentence in llm_text.replace("\n", "。").split("。"):
+        if not sentence.strip() or any(s in sentence for s in allowlist):
+            continue
+        hits += _causal_violations_in_sentence(sentence)
+    detail = (f"検出（限界あり・完全な保証ではない。誤検知時は config/c18_allowlist.json へ登録）: {hits}"
+              if hits else "断定表現なし")
+    au.add("C18_causal_assertion", not hits, detail)
 
 
 # --- C19 監査台帳（L0のみ検査） ---
+
+def _field_present(e: dict, field: str) -> bool:
+    """フィールドが実質的に空でないかを判定する（v1.20）。
+    `str(None)` == "None"（非空文字列）になるため、旧実装の
+    `str(e.get(f, "")).strip()` はJSONのnullを「充足」と誤判定していた
+    （独立レビューで実行確認）。値が存在しない・Noneの場合は不充足として扱う。
+    """
+    v = e.get(field)
+    return v is not None and str(v).strip() != ""
+
 
 def check_c19(au: Audit, level: str, audit_ledger, candidate_count: int) -> None:
     if level != "L0":
@@ -244,7 +293,7 @@ def check_c19(au: Audit, level: str, audit_ledger, candidate_count: int) -> None
         return
     required_fields = ("source", "url", "published_at", "decision", "reason")
     bad = [i for i, e in enumerate(audit_ledger)
-           if not isinstance(e, dict) or any(not str(e.get(f, "")).strip() for f in required_fields)]
+           if not isinstance(e, dict) or any(not _field_present(e, f) for f in required_fields)]
     au.add("C19_audit_ledger", not bad, f"{len(audit_ledger)}件中フィールド欠落: {bad}" if bad else f"{len(audit_ledger)}件・全フィールド充足")
 
 
@@ -275,22 +324,28 @@ def run_all(bundle: dict, daily_data: dict) -> Audit:
     au = Audit()
     sections = bundle["sections"]
     llm_keys = bundle["llm_section_keys"]
-    full_text = bundle["part1_md"] + "\n" + bundle["part2_md"]
-    allowlist = _load_allowlist(bundle.get("target_date_jst", ""))
+    headline_for_image = bundle.get("headline_for_image", "")
+    # v1.20: headline_for_imageもLLM生成物であり、full_text（C12/C13/C14の
+    # 走査対象）へ含める。C13/C14は元々headline_for_imageに違反があれば
+    # 検知して問題ない（副次的な網羅性向上）。
+    full_text = bundle["part1_md"] + "\n" + bundle["part2_md"] + "\n" + headline_for_image
+    target_date = bundle.get("target_date_jst", "")
+    c16b_allowlist = _load_allowlist(target_date, "c16b_allowlist.json")
+    c18_allowlist = _load_allowlist(target_date, "c18_allowlist.json")
 
     check_c12(au, full_text)
     check_c13(au, full_text)
     check_c14(au, full_text)
     check_c15(au, bundle["part1_md"], bundle["part2_md"])
     check_c16(au, daily_data, sections)
-    check_c16b(au, daily_data, sections, llm_keys, allowlist)
+    check_c16b(au, daily_data, sections, llm_keys, c16b_allowlist, headline_for_image)
     check_c17(au, sections.get("lp_comment", ""))
-    check_c18(au, sections, llm_keys)
+    check_c18(au, sections, llm_keys, c18_allowlist)
     # news_candidate_countが欠落している場合は「0件」と区別できないよう
     # 負値を渡す（フェイルクローズ。存在しないキーを0件と混同して
     # 空配列を誤って許容しないようにする）。
     check_c19(au, bundle["level"], bundle.get("audit_ledger"), bundle.get("news_candidate_count", -1))
-    check_c20(au, bundle.get("headline_for_image", ""))
+    check_c20(au, headline_for_image)
     return au
 
 

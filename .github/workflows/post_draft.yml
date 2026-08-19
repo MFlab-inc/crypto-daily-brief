@@ -12,6 +12,11 @@ on:
         description: "対象日 (YYYY-MM-DD)。daily_data.jsonとfinal_auditが既にPASSしている日を指定。省略時は実行時JSTの前日"
         required: false
         type: string
+      force_redispatch:
+        description: "trueの場合、対象日が既にPASS済み下書きを持っていても再実行する（冪等性ガードを無視）"
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -46,8 +51,27 @@ jobs:
             exit 1
           fi
           echo "date=$date" >> "$GITHUB_OUTPUT"
+          echo "compact=$(echo "$date" | tr -d '-')" >> "$GITHUB_OUTPUT"
+
+      - name: 冪等性ガード（同一対象日の重複dispatch防止。force_redispatch=trueで無視可 — v1.20・daily.ymlに準拠）
+        id: guard
+        env:
+          FORCE: ${{ inputs.force_redispatch }}
+          AUDIT_PATH: outputs/${{ steps.target.outputs.date }}/draft/post_audit_${{ steps.target.outputs.compact }}.json
+        run: |
+          if [ "$FORCE" = "true" ]; then
+            echo "force_redispatch=true のためガードを無視して実行します。"
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          elif [ -f "$AUDIT_PATH" ] && grep -q '"overall": *"PASS"' "$AUDIT_PATH"; then
+            echo "既に対象日のPASS済み下書きが存在します（$AUDIT_PATH）。上書きせず停止します。"
+            echo "再実行するには force_redispatch=true を指定してください。"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: secrets 実在確認（値は出力しない・文字数のみ）
+        if: steps.guard.outputs.skip != 'true'
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
@@ -58,34 +82,39 @@ jobs:
           fi
 
       - uses: actions/setup-python@v5
+        if: steps.guard.outputs.skip != 'true'
         with:
           python-version: "3.12"
 
       - name: 依存関係（画像を扱わないためフォント・Playwrightは不要）
+        if: steps.guard.outputs.skip != 'true'
         run: |
           pip install -q -r requirements.txt
 
       - name: (5) ニュース候補の収集（公式発表RSS＋Google News、v0.4）
+        if: steps.guard.outputs.skip != 'true'
         env:
           TARGET_DATE: ${{ steps.target.outputs.date }}
         run: |
           python scripts/collect_news.py "$TARGET_DATE"
 
       - name: (6)(7) 呼び出しA・B＋縮退ラダー＋本文合成
+        if: steps.guard.outputs.skip != 'true'
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           TARGET_DATE: ${{ steps.target.outputs.date }}
         run: |
           python scripts/compose_post.py "$TARGET_DATE"
 
-      - name: (8) 本文の機械監査（S1段階では非ブロッキング。結果はログとpost_audit_*.jsonに記録）
-        continue-on-error: true
+      - name: "(8) 本文の機械監査（v1.20フェイルクローズ化。FAILならここで停止しコミットへ到達しない）"
+        if: steps.guard.outputs.skip != 'true'
         env:
           TARGET_DIR: outputs/${{ steps.target.outputs.date }}
         run: |
           python scripts/verify_post.py "$TARGET_DIR/draft/post_bundle.json"
 
-      - name: コミット（draft/とGENERATION_STATUS.mdのみ。既存4点成果物・監査・コミット判定には触れない）
+      - name: コミット（draft/とGENERATION_STATUS.mdのみ。既存4点成果物・監査・コミット判定には触れない。監査PASS時のみ到達）
+        if: steps.guard.outputs.skip != 'true'
         env:
           TARGET_DIR: outputs/${{ steps.target.outputs.date }}
           TARGET_DATE: ${{ steps.target.outputs.date }}
@@ -98,7 +127,7 @@ jobs:
           git push
 
       - name: デバッグ用アーティファクト（失敗時も保全）
-        if: always()
+        if: always() && steps.guard.outputs.skip != 'true'
         uses: actions/upload-artifact@v4
         with:
           name: post-draft-${{ steps.target.outputs.date }}

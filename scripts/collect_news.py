@@ -7,10 +7,16 @@ Reutersは2020年に公開RSSを廃止済み、CryptoPanicもエンドポイン�
 HTTP 404が実測された。優先度1（規制当局・政府・企業・取引所の公式発表）の
 RSSが最も確実かつ一次情報として価値が高いと判断し、CryptoPanic連携は撤去した。
 
-`config/news_sources.json` に列挙された公式発表RSSを1件ずつ独立して取得する
+`config/news_sources.json` に列挙されたRSSを1件ずつ独立して取得する
 （fetch_cmc の3エンドポイント分離と同じ思想 — 1件の失敗が他を巻き添えにしない）。
 取得した各項目は対象日（target_date_jst）のJST 00:00〜23:59に公開された
 ものだけを候補として残す。1件も候補が無い日があっても正常（停止しない）。
+
+v1.20: 優先度2（Reuters・Bloomberg）は公開RSSが無いため正式に断念し
+（DESIGN_CHANGES.md v1.19の独立レビュー指摘・v1.20参照）、優先度3として
+CoinDesk・Cointelegraph（英語・日本語版）を追加した。tierはnews_sources.json
+側の各エントリで指定し（既定1）、tier 3は「補完・裏取り」用途に限り、
+単独では事実の主根拠にしない（呼び出しA側のプロンプトで指示）。
 
 優先度4の候補発見層として Google News RSS（Reuters記事の発見のみ）も
 任意で使う。見出しとURLのみを候補として渡し、記事本文を根拠にしない
@@ -53,7 +59,7 @@ def _now_jst_iso() -> str:
     return datetime.now(JST).isoformat(timespec="seconds")
 
 
-def _load_sources() -> list[dict[str, str]]:
+def _load_sources() -> list[dict[str, Any]]:
     if not SOURCES_CONFIG_PATH.exists():
         return []
     try:
@@ -143,13 +149,21 @@ def _collect_from_feed(name: str, url: str, target: "date", *, tier: int, kind: 
     return {"status": "ok", "raw_count": len(items), "kept_count": len(candidates)}, candidates
 
 
+_TIER_KIND = {1: "official", 3: "supplementary"}
+
+
 def collect_news(target_date: str) -> dict[str, Any]:
     target = date.fromisoformat(target_date)
     source_status: dict[str, Any] = {}
     all_candidates: list[dict[str, Any]] = []
 
     for src in _load_sources():
-        st, cands = _collect_from_feed(src["name"], src["url"], target, tier=1, kind="official")
+        # v1.20: tierはnews_sources.json側で指定（既定1）。tier 3（CoinDesk等の
+        # 暗号通貨特化メディア）を優先度2の欠落（Reuters/Bloombergとも公開RSS
+        # 廃止済み・DESIGN_CHANGES.md v1.19参照）を補う「補完・裏取り」として追加。
+        tier = src.get("tier", 1)
+        kind = _TIER_KIND.get(tier, "official")
+        st, cands = _collect_from_feed(src["name"], src["url"], target, tier=tier, kind=kind)
         source_status[src["name"]] = st
         all_candidates.extend(cands)
 
