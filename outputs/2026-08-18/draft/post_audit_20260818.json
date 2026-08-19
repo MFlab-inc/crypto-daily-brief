@@ -1,7 +1,7 @@
 {
   "overall": "PASS",
   "failed": 0,
-  "level": "L1",
+  "level": "L0",
   "checks": [
     {
       "id": "C12_banned_terms",
@@ -45,13 +45,13 @@
     },
     {
       "id": "C19_audit_ledger",
-      "result": "SKIP",
-      "detail": "level=L1 のためSKIP（呼び出しA失敗時は台帳が原理的に存在しない）"
+      "result": "PASS",
+      "detail": "12件・全フィールド充足・渡した候補数と一致"
     },
     {
       "id": "C20_image_headline",
       "result": "PASS",
-      "detail": "全角換算19.5字・#なし"
+      "detail": "全角換算16.5字・#なし"
     }
   ]
 }

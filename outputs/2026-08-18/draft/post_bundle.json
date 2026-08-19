@@ -1,15 +1,15 @@
 {
   "target_date_jst": "2026-08-18",
-  "level": "L1",
+  "level": "L0",
   "sections": {
     "part0_target_date": "2026年8月18日（火）",
     "part1_headline": "直近24時間に暗号通貨市場との関係を確認できる主要なマクロ材料は確認できない。",
-    "part1_points": "補足できる検証済み材料は確認できない。",
+    "part1_points": "・補足できる検証済み材料は確認できない。",
     "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.202兆（¥350.8兆）｜24時間取引高 $476.2億（¥7.59兆）\n・ #BTC：$64,582（約1,028.9万円）｜24時間比 +0.52%\n・ #ETH：$1,912（約30.5万円）｜24時間比 +0.48%\n・ #BNB：$603（約9.60万円）｜24時間比 -0.23%\n・市場心理：Fear & Greed 41（Neutral、CoinMarketCap API）\n・ドミナンス：BTC 58.87%｜ETH 10.48%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年8月19日07:50 JST、USD/JPY ¥159.31",
     "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $3.78M vs Base上ETH/USDC $29.28M｜参考：Base上DEX全体 $6.288億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $47.59億（¥7,581億）｜24時間比 +3.51%｜USDCドミナンス 86.0%\n・ ETH/USDC（Base）参考APR：0.05% 9.71%（TVL $10.19M／24h出来高 $5.43M）｜0.3% 23.20%（TVL $112.56M／24h出来高 $23.85M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年8月19日07:50 JST",
-    "part2_flow": "・市場心理を示す指数が中立圏で推移する中、投資家のリスク選好が強まりにくい可能性が意識され、同時期にBTC・ETHともに24時間比で小幅な上昇にとどまる値動きが確認された。ただし心理指数と価格変動の因果関係は未確認である。\n・Base上のLPプールではAPR（年率換算利回り）と24時間出来高がいずれも低下する一方、TVL（預かり資産残高）は増加を維持しており、DEX上の取引活発度がやや一服した可能性が意識された可能性がある。同時期にプールごとの出来高縮小が確認されたが、因果関係は未確認である。",
+    "part2_flow": "・Base上のLPプールではAPR・出来高がともに低下し、TVLはほぼ横ばいで推移したことから、短期的な取引参加の鈍化が意識された可能性があるが、断定はできない。\n・Fear & Greed指数がNeutral圏で推移する中、BTC・ETHが24時間比で小幅上昇、BNBが小幅下落となったことから、方向感に乏しい相場心理が意識された可能性があるが、断定はできない。",
     "lp_comment": "参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは12.72%→9.71%へ低下しました（24時間出来高 -23.35%、TVL +0.44%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは24.00%→23.20%へ低下しました（24時間出来高 -3.17%、TVL +0.16%）。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+0.48%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
-    "part2_summary": "本日はニュース材料が確認できなかったため、市場データに基づく整理にとどめる。BTC・ETHは24時間比でわずかな上昇、BNBはわずかな下落となり、全体として方向感に乏しい横ばい圏の値動きが続いている。市場心理指数も中立圏にあり、明確なリスクオン・リスクオフの偏りは見られない。DEX側ではTVLが増加基調を維持する一方、主要LPプールの出来高とAPRはともに低下しており、取引活発度の変化を今後も確認していく必要がある。翌日以降の値動きやニュースの有無、国内取引所の出来高動向にも注意を払いたい。"
+    "part2_summary": "直近24時間で暗号通貨市場に直接関係する検証済みマクロ材料は確認できず、値動きは主要資産・DEX市場データの範囲内にとどまった。市場心理はNeutral圏で推移しており、方向感を欠く展開が続いている。なお、Citiの機関投資家向けビットコインカストディサービスやMetaplanetの米国トレジャリー会社設立に関する報道はtier3情報源単独のため継続監視とする。翌日以降もTVL・出来高・国内取引所動向の変化を確認しつつ、材料の裏付けに注意したい。"
   },
   "llm_section_keys": [
     "part1_headline",
@@ -17,8 +17,117 @@
     "part2_flow",
     "part2_summary"
   ],
-  "headline_for_image": "8月18日（火）の市況｜BTC 上昇・ETH 上昇",
-  "audit_ledger": null,
+  "headline_for_image": "BTC・ETHが上昇、BNBは小幅安の展開",
+  "audit_ledger": [
+    {
+      "source": "CFTC",
+      "url": "https://www.cftc.gov/PressRoom/PressReleases/9284-26",
+      "title": "CFTC Seeks Public Comment on Proposed Rule Changes for Commodity Pool Operator and Commodity Trading Advisor Registration",
+      "published_at": "Tue, 18 Aug 2026 13:00:02 +0000",
+      "verified_by": "tier1公式発表だがsummaryが空欄で具体的内容を確認できない",
+      "decision": "不採用",
+      "reason": "summaryが空で規則変更の内容・暗号通貨市場との関係を確認できないため一次情報として不十分"
+    },
+    {
+      "source": "金融庁",
+      "url": "https://www.fsa.go.jp/common/recruit/r8/kikaku-02/kikaku-02.html",
+      "title": "採用,職員を募集しています。（国内金融及び金融機関等の行う国際業務に関する制度の企画及び立案等に従事する職員（課長補佐クラス）【弁護士資格を有する者】）",
+      "published_at": "Tue, 18 Aug 2026 10:55:00 JST",
+      "verified_by": "tier1公式発表",
+      "decision": "不採用",
+      "reason": "職員採用募集であり暗号通貨市場との関係が確認できない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/08/18/bitcoin-miners-ai-pivot-pays-off-but-mining-could-revive-with-one-twist",
+      "title": "Bitcoin miners’ AI pivot pays off, but mining could revive with one twist",
+      "published_at": "Tue, 18 Aug 2026 14:41:31 +0000",
+      "verified_by": "tier3のみ、対応するtier1事実なし",
+      "decision": "不採用",
+      "reason": "tier1の裏付けとなる一次情報が無く、tier3単独のため新規項目の根拠にできない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/08/18/global-bond-yields-surge-as-debt-fears-test-bitcoin-s-hedge-narrative",
+      "title": "Global bond yields surge as debt fears test bitcoin’s hedge narrative",
+      "published_at": "Tue, 18 Aug 2026 14:40:41 +0000",
+      "verified_by": "tier3のみ、対応するtier1事実なし",
+      "decision": "不採用",
+      "reason": "tier1の裏付けとなる一次情報が無く、tier3単独のため新規項目の根拠にできない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/08/18/japan-s-metaplanet-launching-u-s-bitcoin-treasury-company-through-usd135-million-nanocap-deal",
+      "title": "Japan's Metaplanet launching U.S. bitcoin treasury company through $135 million nanocap deal",
+      "published_at": "Tue, 18 Aug 2026 14:35:08 +0000",
+      "verified_by": "tier3のみ、対応するtier1事実なし",
+      "decision": "不採用",
+      "reason": "tier1の裏付けとなる一次情報が無く、tier3単独のため新規項目の根拠にできない。継続監視材料としてreusable_for_summaryに記載"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/08/18/hashkey-taps-hong-kong-s-first-regulated-stablecoin-to-settle-insurance-and-trade-deals",
+      "title": "HashKey taps Hong Kong's first regulated stablecoin to settle insurance and trade deals",
+      "published_at": "Tue, 18 Aug 2026 14:03:27 +0000",
+      "verified_by": "tier3のみ、対応するtier1事実なし",
+      "decision": "不採用",
+      "reason": "tier1の裏付けとなる一次情報が無く、tier3単独のため新規項目の根拠にできない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/toyota-finance-tokenized-bond-offering-mobile-payment?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Toyota Finance opens tokenized bonds to retail investors via mobile payment app",
+      "published_at": "Tue, 18 Aug 2026 13:41:56 +0000",
+      "verified_by": "tier3のみ、対応するtier1事実なし",
+      "decision": "不採用",
+      "reason": "tier1の裏付けとなる一次情報が無く、tier3単独のため新規項目の根拠にできない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/08/18/citi-plans-to-launch-bitcoin-custody-for-institutional-clients-later-this-year",
+      "title": "Citi plans to launch bitcoin custody for institutional clients later this year",
+      "published_at": "Tue, 18 Aug 2026 13:25:13 +0000",
+      "verified_by": "tier3のみ、対応するtier1事実なし",
+      "decision": "不採用",
+      "reason": "tier1の裏付けとなる一次情報が無く、tier3単独のため新規項目の根拠にできない。継続監視材料としてreusable_for_summaryに記載"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/08/13/crypto-s-easy-money-era-is-ending-in-a-wave-of-failures",
+      "title": "Crypto’s easy-money era is ending in a wave of failures",
+      "published_at": "Tue, 18 Aug 2026 13:22:40 +0000",
+      "verified_by": "tier3のみ、対応するtier1事実なし",
+      "decision": "不採用",
+      "reason": "個人の見解に基づく論評記事であり、tier1の裏付けが無いため一次情報として不十分"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/08/18/cash-app-s-crypto-support-expands-beyond-bitcoin-and-usdc-via-moonpay",
+      "title": "Cash App's crypto support expands beyond bitcoin and USDC via MoonPay",
+      "published_at": "Tue, 18 Aug 2026 13:00:00 +0000",
+      "verified_by": "tier3のみ、対応するtier1事実なし",
+      "decision": "不採用",
+      "reason": "tier1の裏付けとなる一次情報が無く、tier3単独のため新規項目の根拠にできない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/moonpay-cash-app-pay-crypto-purchases-us-customers?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "MoonPay adds Cash App Pay for crypto purchases by US customers",
+      "published_at": "Tue, 18 Aug 2026 13:00:00 +0000",
+      "verified_by": "tier3のみ、上記CoinDesk記事と同一材料の裏取り",
+      "decision": "不採用",
+      "reason": "tier1の裏付けとなる一次情報が無く、tier3同士の相互補強のみのため新規項目の根拠にできない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/08/18/visa-is-looking-for-a-new-stablecoin-settlement-partner-now-that-bvnk-is-owned-by-mastercard",
+      "title": "Visa looking for new stablecoin settlement partner after BVNK sale to Mastercard",
+      "published_at": "Tue, 18 Aug 2026 12:20:48 +0000",
+      "verified_by": "tier3のみ、対応するtier1事実なし",
+      "decision": "不採用",
+      "reason": "tier1の裏付けとなる一次情報が無く、tier3単独のため新規項目の根拠にできない"
+    }
+  ],
   "news_source_status": {
     "SEC": {
       "status": "ok",
@@ -57,7 +166,7 @@
     "CoinDesk": {
       "status": "ok",
       "raw_count": 25,
-      "kept_count": 12
+      "kept_count": 11
     },
     "Cointelegraph": {
       "status": "ok",
@@ -74,7 +183,7 @@
       "kept_count": 0
     }
   },
-  "news_candidate_count": 30,
-  "part1_md": "【対象日】2026年8月18日（火）\n\n【ヘッドライン】\n直近24時間に暗号通貨市場との関係を確認できる主要なマクロ材料は確認できない。\n\n【主要なポイント】\n補足できる検証済み材料は確認できない。\n\n【主要指標】\n・市場全体：時価総額 $2.202兆（¥350.8兆）｜24時間取引高 $476.2億（¥7.59兆）\n・ #BTC：$64,582（約1,028.9万円）｜24時間比 +0.52%\n・ #ETH：$1,912（約30.5万円）｜24時間比 +0.48%\n・ #BNB：$603（約9.60万円）｜24時間比 -0.23%\n・市場心理：Fear & Greed 41（Neutral、CoinMarketCap API）\n・ドミナンス：BTC 58.87%｜ETH 10.48%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年8月19日07:50 JST、USD/JPY ¥159.31\n",
-  "part2_md": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $3.78M vs Base上ETH/USDC $29.28M｜参考：Base上DEX全体 $6.288億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $47.59億（¥7,581億）｜24時間比 +3.51%｜USDCドミナンス 86.0%\n・ ETH/USDC（Base）参考APR：0.05% 9.71%（TVL $10.19M／24h出来高 $5.43M）｜0.3% 23.20%（TVL $112.56M／24h出来高 $23.85M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年8月19日07:50 JST\n\n【市場のフロー】\n・市場心理を示す指数が中立圏で推移する中、投資家のリスク選好が強まりにくい可能性が意識され、同時期にBTC・ETHともに24時間比で小幅な上昇にとどまる値動きが確認された。ただし心理指数と価格変動の因果関係は未確認である。\n・Base上のLPプールではAPR（年率換算利回り）と24時間出来高がいずれも低下する一方、TVL（預かり資産残高）は増加を維持しており、DEX上の取引活発度がやや一服した可能性が意識された可能性がある。同時期にプールごとの出来高縮小が確認されたが、因果関係は未確認である。\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは12.72%→9.71%へ低下しました（24時間出来高 -23.35%、TVL +0.44%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは24.00%→23.20%へ低下しました（24時間出来高 -3.17%、TVL +0.16%）。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+0.48%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\n本日はニュース材料が確認できなかったため、市場データに基づく整理にとどめる。BTC・ETHは24時間比でわずかな上昇、BNBはわずかな下落となり、全体として方向感に乏しい横ばい圏の値動きが続いている。市場心理指数も中立圏にあり、明確なリスクオン・リスクオフの偏りは見られない。DEX側ではTVLが増加基調を維持する一方、主要LPプールの出来高とAPRはともに低下しており、取引活発度の変化を今後も確認していく必要がある。翌日以降の値動きやニュースの有無、国内取引所の出来高動向にも注意を払いたい。\n"
+  "news_candidate_count": 12,
+  "part1_md": "【対象日】2026年8月18日（火）\n\n【ヘッドライン】\n直近24時間に暗号通貨市場との関係を確認できる主要なマクロ材料は確認できない。\n\n【主要なポイント】\n・補足できる検証済み材料は確認できない。\n\n【主要指標】\n・市場全体：時価総額 $2.202兆（¥350.8兆）｜24時間取引高 $476.2億（¥7.59兆）\n・ #BTC：$64,582（約1,028.9万円）｜24時間比 +0.52%\n・ #ETH：$1,912（約30.5万円）｜24時間比 +0.48%\n・ #BNB：$603（約9.60万円）｜24時間比 -0.23%\n・市場心理：Fear & Greed 41（Neutral、CoinMarketCap API）\n・ドミナンス：BTC 58.87%｜ETH 10.48%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年8月19日07:50 JST、USD/JPY ¥159.31\n",
+  "part2_md": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $3.78M vs Base上ETH/USDC $29.28M｜参考：Base上DEX全体 $6.288億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $47.59億（¥7,581億）｜24時間比 +3.51%｜USDCドミナンス 86.0%\n・ ETH/USDC（Base）参考APR：0.05% 9.71%（TVL $10.19M／24h出来高 $5.43M）｜0.3% 23.20%（TVL $112.56M／24h出来高 $23.85M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年8月19日07:50 JST\n\n【市場のフロー】\n・Base上のLPプールではAPR・出来高がともに低下し、TVLはほぼ横ばいで推移したことから、短期的な取引参加の鈍化が意識された可能性があるが、断定はできない。\n・Fear & Greed指数がNeutral圏で推移する中、BTC・ETHが24時間比で小幅上昇、BNBが小幅下落となったことから、方向感に乏しい相場心理が意識された可能性があるが、断定はできない。\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは12.72%→9.71%へ低下しました（24時間出来高 -23.35%、TVL +0.44%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは24.00%→23.20%へ低下しました（24時間出来高 -3.17%、TVL +0.16%）。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+0.48%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\n直近24時間で暗号通貨市場に直接関係する検証済みマクロ材料は確認できず、値動きは主要資産・DEX市場データの範囲内にとどまった。市場心理はNeutral圏で推移しており、方向感を欠く展開が続いている。なお、Citiの機関投資家向けビットコインカストディサービスやMetaplanetの米国トレジャリー会社設立に関する報道はtier3情報源単独のため継続監視とする。翌日以降もTVL・出来高・国内取引所動向の変化を確認しつつ、材料の裏付けに注意したい。\n"
 }
