@@ -1,0 +1,225 @@
+{
+  "target_date_jst": "2026-08-19",
+  "level": "L0",
+  "sections": {
+    "part0_target_date": "2026年8月19日（水）",
+    "part1_headline": "米SECは暗号資産に関する新規則案「Regulation Crypto Assets」を公表し、投資契約に該当する暗号資産について明確で目的に適した規制枠組みの整備を提案した。同日、BTC・ETH・BNBはいずれも24時間比で上昇しており、規制明確化への期待が意識された可能性があるが、直接の因果関係は断定できない。",
+    "part1_points": "・SECは提案の中で、暗号資産に関わる一定の投資契約について「明確で目的に適した」枠組みを設けるとしており、既存の証券規制の適用の仕方を見直す内容とされる（SEC、2026年8月18日）。\n・SEC委員のHester Peirce氏は本提案を既存の「不適切な」暗号資産規制からの「重要な」前進と評価したと報じられており、暗号通貨業界メディアでもtier1発表内容の受け止めが確認できる（Cointelegraph、2026年8月19日）。\n・同日の金融庁発表は気候変動関連データやつみたて投資枠、トランジション・ファイナンスに関するもので、暗号通貨市場との直接の関係は確認できなかった。\n・SECは同日、Tricolor Holdingsの元経営陣を対象とした証券詐欺容疑での提訴も発表しているが、これは自動車ローン会社に関する内容で暗号通貨市場との関係は確認できない（SEC、2026年8月18日）。",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.362兆（¥377.0兆）｜24時間取引高 $1096.3億（¥17.50兆）\n・ #BTC：$69,090（約1,102.6万円）｜24時間比 +6.98%\n・ #ETH：$2,252（約35.9万円）｜24時間比 +17.75%\n・ #BNB：$629（約10.0万円）｜24時間比 +4.36%\n・市場心理：Fear & Greed 55（Neutral、CoinMarketCap API）\n・ドミナンス：BTC 58.72%｜ETH 11.48%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年8月20日07:50 JST、USD/JPY ¥159.59",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $18.62M vs Base上ETH/USDC $142.85M｜参考：Base上DEX全体 $5.414億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $50.20億（¥8,012億）｜24時間比 +5.84%｜USDCドミナンス 86.0%\n・ ETH/USDC（Base）参考APR：0.05% 67.54%（TVL $9.63M／24h出来高 $35.65M）｜0.3% 104.15%（TVL $112.71M／24h出来高 $107.20M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年8月20日07:50 JST",
+    "part2_flow": "・米SECが暗号資産に関する新規則案「Regulation Crypto Assets」を公表し、Peirce委員が既存規制からの前進と評価したと報じられたことで、暗号資産に対する規制明確化への期待が意識された可能性がある。同日はBTC・ETH・BNBがいずれも24時間比で上昇しており、規制動向への好感が値動きに影響した可能性はあるものの、直接の因果関係は断定できない。\n・ETHの上昇率がBTC・BNBを上回る中、Base上の主要プールではAPR・出来高がともに大幅な増加を示している。ETH需要の高まりが流動性供給側の指標にも波及した可能性が考えられるが、プール単位の変動が個別要因によるものかは断定できない。ETH/USDCのレンジ内では引き続きUSDC偏りの高さが確認されており、上限側レンジ外・反落耐性の確認が引き続き課題となる。",
+    "lp_comment": "参考APRは両プールとも前日から上昇しました。\nBase 0.05%プールの参考APRは9.71%→67.54%へ上昇しました（24時間出来高 +556.60%、TVL -5.45%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは23.20%→104.15%へ上昇しました（24時間出来高 +349.47%、TVL +0.13%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+17.75%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "本日はBTC・ETH・BNBが揃って24時間比で上昇し、恐怖・強欲指数は中立圏を維持した。市場心理は過度な楽観・悲観のいずれにも傾いておらず、規制動向を巡るニュースが好感された可能性はあるが、断定的な評価は避けたい。なお、VanEckがビットコインについて「投げ売り」を示すシグナルを指摘しているとの報道があり（tier3単独情報、継続監視対象）、地合いの反転リスクも念頭に置く必要がある。今後はDEXの出来高動向やUSDCドミナンスの推移、国内取引所の資金フローを含めて、上昇局面の持続性を注視したい。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "暗号資産規制明確化への期待、BTC・ETH上昇",
+  "audit_ledger": [
+    {
+      "source": "SEC",
+      "url": "https://www.sec.gov/newsroom/press-releases/2026-77-sec-charges-former-executives-fraud-connection-19-billion-collapse-subprime-auto-lender-tricolor",
+      "title": "SEC Charges Former Executives With Fraud in Connection With $1.9 Billion Collapse of Subprime Auto Lender Tricolor",
+      "published_at": "Tue, 18 Aug 2026 15:55:10 -0400",
+      "verified_by": "tier1 summary確認",
+      "decision": "不採用",
+      "reason": "自動車ローン会社に関する証券詐欺事件であり、暗号通貨市場との関係が確認できない"
+    },
+    {
+      "source": "SEC",
+      "url": "https://www.sec.gov/newsroom/press-releases/2026-76-sec-proposes-new-regulation-crypto-assets",
+      "title": "SEC Proposes New Regulation Crypto Assets",
+      "published_at": "Tue, 18 Aug 2026 13:15:48 -0400",
+      "verified_by": "tier1 summary確認",
+      "decision": "採用",
+      "reason": "暗号資産に関する新規則案の公表であり、当日の主要材料として本文に採用"
+    },
+    {
+      "source": "金融庁",
+      "url": "https://www.fsa.go.jp/news/r8/sonota/20260819.html",
+      "title": "「第２回　気候変動関連データの活用と適応に関する実践パネル」の開催について公表しました。",
+      "published_at": "Wed, 19 Aug 2026 14:56:00 JST",
+      "verified_by": "tier1 summary確認（summary空欄のためtitleのみ）",
+      "decision": "不採用",
+      "reason": "気候変動関連データの検討会に関する内容で、暗号通貨市場との関係が確認できない"
+    },
+    {
+      "source": "金融庁",
+      "url": "https://www.fsa.go.jp/policy/nisa2/products/index.html",
+      "title": "その他,つみたて投資枠対象商品届出一覧及びつみたて投資枠対象商品の概要を更新しました。",
+      "published_at": "Tue, 18 Aug 2026 17:00:00 JST",
+      "verified_by": "tier1 summary確認",
+      "decision": "不採用",
+      "reason": "NISAつみたて投資枠対象商品の更新情報であり、暗号通貨市場との関係が確認できない"
+    },
+    {
+      "source": "金融庁",
+      "url": "https://www.fsa.go.jp/singi/transition_finance/gijiyousi/20260227.html",
+      "title": "「トランジション・ファイナンス環境整備検討会」（第13回）議事要旨について公表しました。",
+      "published_at": "Tue, 18 Aug 2026 16:00:00 JST",
+      "verified_by": "tier1 summary確認（summary空欄のためtitleのみ）",
+      "decision": "不採用",
+      "reason": "トランジション・ファイナンスに関する議事要旨であり、暗号通貨市場との関係が確認できない"
+    },
+    {
+      "source": "金融庁",
+      "url": "https://www.fsa.go.jp/news/r8/singi/20260818.html",
+      "title": "「トランジション・ファイナンス環境整備検討会」（第14回）の開催について公表しました。",
+      "published_at": "Tue, 18 Aug 2026 16:00:00 JST",
+      "verified_by": "tier1 summary確認（summary空欄のためtitleのみ）",
+      "decision": "不採用",
+      "reason": "検討会開催の告知であり、暗号通貨市場との関係が確認できない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/tech/2026/08/19/ai-could-supercharge-crypto-but-there-s-a-catch-fidelity-digital-assets-says",
+      "title": "AI could supercharge crypto but there's a catch, Fidelity Digital Assets says",
+      "published_at": "Wed, 19 Aug 2026 14:59:07 +0000",
+      "verified_by": "tier3 summary確認（裏付けとなるtier1情報なし）",
+      "decision": "不採用",
+      "reason": "tier3単独情報であり、単独で新規項目の根拠にできないため継続監視対象にも含めず不採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/coindesk-indices/2026/08/18/crypto-long-and-short-where-defi-yield-really-comes-from-and-why-it-broke-this-spring",
+      "title": "Crypto Long & Short: Where DeFi yield really comes from (and why it broke this spring)",
+      "published_at": "Wed, 19 Aug 2026 14:57:35 +0000",
+      "verified_by": "tier3 summary確認（裏付けとなるtier1情報なし）",
+      "decision": "不採用",
+      "reason": "tier3単独情報であり、単独で新規項目の根拠にできない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/08/19/hsbc-standard-chartered-execute-first-live-banking-transaction-on-swift-s-24-7-ledger",
+      "title": "HSBC, Standard Chartered execute first live banking transaction on Swift's 24/7 ledger",
+      "published_at": "Wed, 19 Aug 2026 14:50:33 +0000",
+      "verified_by": "tier3 summary確認（裏付けとなるtier1情報なし）",
+      "decision": "不採用",
+      "reason": "tier3単独情報であり、単独で新規項目の根拠にできない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/08/19/cantor-opens-kalshi-prediction-markets-to-thousands-of-institutional-clients",
+      "title": "Cantor opens Kalshi prediction markets to thousands of institutional clients",
+      "published_at": "Wed, 19 Aug 2026 14:41:55 +0000",
+      "verified_by": "tier3 summary確認（裏付けとなるtier1情報なし）",
+      "decision": "不採用",
+      "reason": "tier3単独情報であり、単独で新規項目の根拠にできない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/magazine/fake-ai-victims-are-scam-baiting-600000-fraudsters-every-month?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "200,000 fake AI 'victims' deployed to scam bait online fraudsters",
+      "published_at": "Wed, 19 Aug 2026 13:30:00 +0000",
+      "verified_by": "tier3 summary確認（裏付けとなるtier1情報なし）",
+      "decision": "不採用",
+      "reason": "tier3単独情報であり、単独で新規項目の根拠にできない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/sec-proposal-forward-inapt-crypto-rules-commissioner-peirce?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "SEC regulatory proposal marks 'important' step forward from 'inapt' crypto rules: Commissioner Peirce",
+      "published_at": "Wed, 19 Aug 2026 13:27:09 +0000",
+      "verified_by": "tier1のSEC提案発表内容をtier3が補強・裏取り",
+      "decision": "採用",
+      "reason": "tier1のSEC規制提案に関する事実を裏付ける補完情報として本文に採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/08/19/beyond-crypto-funding-rates-ethena-diversifies-usde-backing-with-usd1-billion-falconx-facility",
+      "title": "Beyond crypto funding rates: Ethena diversifies USDe backing with $1 billion FalconX facility",
+      "published_at": "Wed, 19 Aug 2026 13:00:00 +0000",
+      "verified_by": "tier3 summary確認（裏付けとなるtier1情報なし）",
+      "decision": "不採用",
+      "reason": "tier3単独情報のため本文新規項目の根拠にはできないが、継続監視材料としてreusable_for_summaryに記載"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/opinion/2026/08/19/strengthen-the-clarity-act",
+      "title": "Strengthen the Clarity Act",
+      "published_at": "Wed, 19 Aug 2026 13:00:00 +0000",
+      "verified_by": "tier3 opinion記事確認（裏付けとなるtier1情報なし）",
+      "decision": "不採用",
+      "reason": "業界団体関係者の意見記事であり、一次情報の裏取りに乏しく本文の根拠にできない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/08/19/bitcoin-is-flashing-8-of-12-capitulation-signals-but-its-not-a-bottom-yet",
+      "title": "Bitcoin is flashing 8 of 12 capitulation signals, but bottom's not yet in, says VanEck",
+      "published_at": "Wed, 19 Aug 2026 12:45:35 +0000",
+      "verified_by": "tier3 summary確認（裏付けとなるtier1情報なし）",
+      "decision": "不採用",
+      "reason": "tier3単独情報のため本文新規項目の根拠にはできないが、継続監視材料としてreusable_for_summaryに記載"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/tech/2026/08/19/a-year-after-losing-usd1-46-billion-bybit-says-ai-helped-it-save-usd700-million",
+      "title": "A year after losing $1.46 billion, Bybit says AI helped it save $700 million",
+      "published_at": "Wed, 19 Aug 2026 12:01:09 +0000",
+      "verified_by": "tier3 summary確認（裏付けとなるtier1情報なし）",
+      "decision": "不採用",
+      "reason": "tier3単独情報であり、単独で新規項目の根拠にできない"
+    }
+  ],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 2
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 0
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 4
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 0
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 18
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 19
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 0,
+      "kept_count": 0
+    }
+  },
+  "news_candidate_count": 16,
+  "part1_md": "【対象日】2026年8月19日（水）\n\n【ヘッドライン】\n米SECは暗号資産に関する新規則案「Regulation Crypto Assets」を公表し、投資契約に該当する暗号資産について明確で目的に適した規制枠組みの整備を提案した。同日、BTC・ETH・BNBはいずれも24時間比で上昇しており、規制明確化への期待が意識された可能性があるが、直接の因果関係は断定できない。\n\n【主要なポイント】\n・SECは提案の中で、暗号資産に関わる一定の投資契約について「明確で目的に適した」枠組みを設けるとしており、既存の証券規制の適用の仕方を見直す内容とされる（SEC、2026年8月18日）。\n・SEC委員のHester Peirce氏は本提案を既存の「不適切な」暗号資産規制からの「重要な」前進と評価したと報じられており、暗号通貨業界メディアでもtier1発表内容の受け止めが確認できる（Cointelegraph、2026年8月19日）。\n・同日の金融庁発表は気候変動関連データやつみたて投資枠、トランジション・ファイナンスに関するもので、暗号通貨市場との直接の関係は確認できなかった。\n・SECは同日、Tricolor Holdingsの元経営陣を対象とした証券詐欺容疑での提訴も発表しているが、これは自動車ローン会社に関する内容で暗号通貨市場との関係は確認できない（SEC、2026年8月18日）。\n\n【主要指標】\n・市場全体：時価総額 $2.362兆（¥377.0兆）｜24時間取引高 $1096.3億（¥17.50兆）\n・ #BTC：$69,090（約1,102.6万円）｜24時間比 +6.98%\n・ #ETH：$2,252（約35.9万円）｜24時間比 +17.75%\n・ #BNB：$629（約10.0万円）｜24時間比 +4.36%\n・市場心理：Fear & Greed 55（Neutral、CoinMarketCap API）\n・ドミナンス：BTC 58.72%｜ETH 11.48%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年8月20日07:50 JST、USD/JPY ¥159.59\n",
+  "part2_md": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $18.62M vs Base上ETH/USDC $142.85M｜参考：Base上DEX全体 $5.414億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $50.20億（¥8,012億）｜24時間比 +5.84%｜USDCドミナンス 86.0%\n・ ETH/USDC（Base）参考APR：0.05% 67.54%（TVL $9.63M／24h出来高 $35.65M）｜0.3% 104.15%（TVL $112.71M／24h出来高 $107.20M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年8月20日07:50 JST\n\n【市場のフロー】\n・米SECが暗号資産に関する新規則案「Regulation Crypto Assets」を公表し、Peirce委員が既存規制からの前進と評価したと報じられたことで、暗号資産に対する規制明確化への期待が意識された可能性がある。同日はBTC・ETH・BNBがいずれも24時間比で上昇しており、規制動向への好感が値動きに影響した可能性はあるものの、直接の因果関係は断定できない。\n・ETHの上昇率がBTC・BNBを上回る中、Base上の主要プールではAPR・出来高がともに大幅な増加を示している。ETH需要の高まりが流動性供給側の指標にも波及した可能性が考えられるが、プール単位の変動が個別要因によるものかは断定できない。ETH/USDCのレンジ内では引き続きUSDC偏りの高さが確認されており、上限側レンジ外・反落耐性の確認が引き続き課題となる。\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から上昇しました。\nBase 0.05%プールの参考APRは9.71%→67.54%へ上昇しました（24時間出来高 +556.60%、TVL -5.45%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは23.20%→104.15%へ上昇しました（24時間出来高 +349.47%、TVL +0.13%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+17.75%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\n本日はBTC・ETH・BNBが揃って24時間比で上昇し、恐怖・強欲指数は中立圏を維持した。市場心理は過度な楽観・悲観のいずれにも傾いておらず、規制動向を巡るニュースが好感された可能性はあるが、断定的な評価は避けたい。なお、VanEckがビットコインについて「投げ売り」を示すシグナルを指摘しているとの報道があり（tier3単独情報、継続監視対象）、地合いの反転リスクも念頭に置く必要がある。今後はDEXの出来高動向やUSDCドミナンスの推移、国内取引所の資金フローを含めて、上昇局面の持続性を注視したい。\n"
+}
