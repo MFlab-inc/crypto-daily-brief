@@ -25,23 +25,43 @@ jobs:
           echo "date=$(TZ=Asia/Tokyo date -d 'yesterday' +%F)" >> "$GITHUB_OUTPUT"
           echo "compact=$(TZ=Asia/Tokyo date -d 'yesterday' +%Y%m%d)" >> "$GITHUB_OUTPUT"
 
-      - name: 冪等性ガード（同一対象日の再作成禁止 — 自動納品契約）
-        id: guard
+      # v1.26（独立レビューによる指摘対応）：フェーズ1・フェーズ2両方の
+      # 「やるべきことがあるか」を、両フェーズが走るより前にここで一括判定する。
+      # 理由：
+      #  ・環境構築（setup-python・pip install）をフェーズ1のガードだけで
+      #    ゲートすると、フェーズ1が既に完了済み（final_audit存在）だが
+      #    フェーズ2が未完了の日に単独再実行した場合、pip installごと
+      #    スキップされ ModuleNotFoundError で確実に失敗する。
+      #  ・この判定を後段（フェーズ1完了後）に置くと、判定ステップ自体が
+      #    スキップされた場合に出力が空文字列になり、always()付きステップの
+      #    `!= 'true'` 判定が意図せず「続行」側に倒れる。
+      # ここで一括・無条件（チェックアウト直後）に計算することで両方を解消する。
+      - name: 実行要否を判定（フェーズ1・フェーズ2それぞれの成果物有無）
+        id: need
+        env:
+          FINAL_AUDIT: outputs/${{ steps.target.outputs.date }}/final_audit_${{ steps.target.outputs.compact }}.json
+          DRAFT_AUDIT: outputs/${{ steps.target.outputs.date }}/draft/post_audit_${{ steps.target.outputs.compact }}.json
         run: |
-          if [ -f "outputs/${{ steps.target.outputs.date }}/final_audit_${{ steps.target.outputs.compact }}.json" ]; then
-            echo "既に対象日の成果物が存在します。上書きせず停止します。"
-            echo "skip=true" >> "$GITHUB_OUTPUT"
+          if [ -f "$FINAL_AUDIT" ]; then
+            echo "フェーズ1: 既に対象日の成果物が存在します（$FINAL_AUDIT）。上書きせず停止します。"
+            echo "phase1=false" >> "$GITHUB_OUTPUT"
           else
-            echo "skip=false" >> "$GITHUB_OUTPUT"
+            echo "phase1=true" >> "$GITHUB_OUTPUT"
+          fi
+          if [ -f "$DRAFT_AUDIT" ] && grep -q '"overall": *"PASS"' "$DRAFT_AUDIT"; then
+            echo "フェーズ2: 既に対象日のPASS済み下書きが存在します（$DRAFT_AUDIT）。上書きせず停止します。"
+            echo "phase2=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "phase2=true" >> "$GITHUB_OUTPUT"
           fi
 
       - uses: actions/setup-python@v5
-        if: steps.guard.outputs.skip != 'true'
+        if: steps.need.outputs.phase1 == 'true' || steps.need.outputs.phase2 == 'true'
         with:
           python-version: "3.12"
 
-      - name: 依存関係（CJKフォント含む）
-        if: steps.guard.outputs.skip != 'true'
+      - name: 依存関係（CJKフォント含む。フェーズ1・フェーズ2共通）
+        if: steps.need.outputs.phase1 == 'true' || steps.need.outputs.phase2 == 'true'
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq fonts-noto-cjk
@@ -49,7 +69,7 @@ jobs:
           python -m playwright install --with-deps firefox
 
       - name: ① データ取得 → daily_data.json（LLM不使用）
-        if: steps.guard.outputs.skip != 'true'
+        if: steps.need.outputs.phase1 == 'true'
         env:
           CMC_API_KEY: ${{ secrets.CMC_API_KEY }}
           TI_API_KEY: ${{ secrets.TI_API_KEY }}   # v1.4: bitFlyerフォールバック②用
@@ -57,27 +77,27 @@ jobs:
         run: python scripts/fetch_data.py
 
       - name: ② インフォグラフィック描画（回収済み固定レンダラー）
-        if: steps.guard.outputs.skip != 'true'
+        if: steps.need.outputs.phase1 == 'true'
         run: |
           python scripts/infographic_renderer.py \
             "outputs/${{ steps.target.outputs.date }}/daily_data.json" \
             "outputs/${{ steps.target.outputs.date }}/infographic.png"
 
       - name: ③ APR実画面撮影（§6・最大27秒待機）
-        if: steps.guard.outputs.skip != 'true'
+        if: steps.need.outputs.phase1 == 'true'
         run: |
           python scripts/capture_apr.py \
             "outputs/${{ steps.target.outputs.date }}/apr_screenshot.jpg"
 
       - name: ④ 機械監査（final_audit — failed>0 なら停止）
-        if: steps.guard.outputs.skip != 'true'
+        if: steps.need.outputs.phase1 == 'true'
         run: |
           python scripts/verify_data.py \
             "outputs/${{ steps.target.outputs.date }}/daily_data.json" \
             --image "outputs/${{ steps.target.outputs.date }}/infographic.png"
 
       - name: ⑤ コミット（監査PASS時のみ到達 = フェイルクローズ）
-        if: steps.guard.outputs.skip != 'true'
+        if: steps.need.outputs.phase1 == 'true'
         run: |
           git config user.name "crypto-daily-bot"
           git config user.email "actions@users.noreply.github.com"
@@ -87,7 +107,14 @@ jobs:
           git push
 
       - name: デバッグ用アーティファクト（フェーズ1。失敗時も保全）
-        if: always() && steps.guard.outputs.skip != 'true'
+        if: always() && steps.need.outputs.phase1 == 'true'
+        # v1.26: 本ステップは付随的なデバッグ用ログに過ぎず、フェーズ1の
+        # 実質的なゲート（④監査・⑤コミット）とは無関係。このアップロードが
+        # 一時的なGitHub側の不調等で失敗しても、その失敗がジョブ全体の
+        # success()を汚し、以降のフェーズ2ステップを巻き添えでスキップさせて
+        # はならないため、continue-on-error で非致命化する（④監査自体には
+        # continue-on-errorを使わない——両者は役割が異なる）。
+        continue-on-error: true
         uses: actions/upload-artifact@v4
         with:
           name: daily-${{ steps.target.outputs.date }}
@@ -95,33 +122,22 @@ jobs:
           if-no-files-found: ignore
 
       # ============================================================
-      # フェーズ2：本文生成（v1.25・オーナー承認によりcron統合。
-      # post_draft.yml と同じ手順を再利用する。post_draft.yml 自体は
-      # 手動再生成用として残置し、本ジョブには一切影響しない。
+      # フェーズ2：本文生成（v1.25・オーナー承認によりcron統合。v1.26で
+      # 独立レビューの指摘を反映。post_draft.yml と同じ手順を再利用する。
+      # post_draft.yml 自体は手動再生成用として残置し、本ジョブには
+      # 一切影響しない。
       #
-      # フェーズ1が失敗した場合、GitHub Actionsの既定動作により
-      # （if: に always()/failure()/cancelled() を含めない限り
-      # success() が暗黙にANDされる）本ブロックは自動的にスキップされる
-      # ——フェーズ1の成果物（図版・APR・数値・final_audit）は⑤で
-      # 既にコミット済みであり、本ブロックの成否に一切影響されない。
-      # 本文の監査（(8)）がFAILした場合も同じ仕組みでコミット
-      # （下記「本文コミット」）に到達せず、本文だけが欠ける。
+      # 以下の各ステップは if: に always()/failure()/cancelled() を
+      # 含めない限りGitHub Actionsの既定動作でsuccess()が暗黙にANDされる。
+      # フェーズ1の実質的なゲート（④監査・⑤コミット）が失敗した場合、
+      # 本ブロックは自動的にスキップされる——フェーズ1の成果物（図版・
+      # APR・数値・final_audit）は⑤で既にコミット済みであり、本ブロックの
+      # 成否に一切影響されない。本文の監査（(8)）がFAILした場合も同じ
+      # 仕組みで本文コミットへ到達せず、本文だけが欠ける。
       # ============================================================
 
-      - name: 冪等性ガード（本文。同一対象日の下書き再作成禁止 — post_draft.yml v1.20と同方式）
-        id: guard2
-        env:
-          AUDIT_PATH: outputs/${{ steps.target.outputs.date }}/draft/post_audit_${{ steps.target.outputs.compact }}.json
-        run: |
-          if [ -f "$AUDIT_PATH" ] && grep -q '"overall": *"PASS"' "$AUDIT_PATH"; then
-            echo "既に対象日のPASS済み下書きが存在します（$AUDIT_PATH）。上書きせず停止します。"
-            echo "skip=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "skip=false" >> "$GITHUB_OUTPUT"
-          fi
-
       - name: secrets 実在確認（値は出力しない・文字数のみ）
-        if: steps.guard2.outputs.skip != 'true'
+        if: steps.need.outputs.phase2 == 'true'
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
@@ -132,14 +148,14 @@ jobs:
           fi
 
       - name: (5) ニュース候補の収集（公式発表RSS＋Google News、v0.4）
-        if: steps.guard2.outputs.skip != 'true'
+        if: steps.need.outputs.phase2 == 'true'
         env:
           TARGET_DATE: ${{ steps.target.outputs.date }}
         run: |
           python scripts/collect_news.py "$TARGET_DATE"
 
       - name: (6)(7) 呼び出しA・B＋縮退ラダー＋本文合成
-        if: steps.guard2.outputs.skip != 'true'
+        if: steps.need.outputs.phase2 == 'true'
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           TARGET_DATE: ${{ steps.target.outputs.date }}
@@ -147,14 +163,14 @@ jobs:
           python scripts/compose_post.py "$TARGET_DATE"
 
       - name: "(8) 本文の機械監査（フェイルクローズ。FAILならここで停止し本文コミットへ到達しない）"
-        if: steps.guard2.outputs.skip != 'true'
+        if: steps.need.outputs.phase2 == 'true'
         env:
           TARGET_DIR: outputs/${{ steps.target.outputs.date }}
         run: |
           python scripts/verify_post.py "$TARGET_DIR/draft/post_bundle.json"
 
       - name: コスト記録（トークン消費のCSVログへ追記。月次累計・監査結果によらず記録）
-        if: always() && steps.guard2.outputs.skip != 'true'
+        if: always() && steps.need.outputs.phase2 == 'true'
         env:
           TARGET_DIR: outputs/${{ steps.target.outputs.date }}
           TARGET_DATE: ${{ steps.target.outputs.date }}
@@ -165,8 +181,13 @@ jobs:
             echo "GENERATION_STATUS.md が無いためコスト記録をスキップします。"
             exit 0
           fi
-          IN=$(grep -oP '(?<=input=)[0-9]+' "$STATUS" | head -1)
-          OUT=$(grep -oP '(?<=output=)[0-9]+' "$STATUS" | head -1)
+          # v1.26: grepが不一致の場合に終了コード1を返し、GitHub Actions既定の
+          # bash -eo pipefail 下でこの行自体がスクリプトを打ち切ってしまう
+          # （IN=$(...)という代入文の終了コードはコマンド置換の終了コードを
+          # そのまま継承するため）。直後の空文字チェックへ確実に到達させる
+          # ため、パイプ全体を || true で明示的に非致命化する。
+          IN=$(grep -oP '(?<=input=)[0-9]+' "$STATUS" | head -1 || true)
+          OUT=$(grep -oP '(?<=output=)[0-9]+' "$STATUS" | head -1 || true)
           if [ -z "$IN" ] || [ -z "$OUT" ]; then
             echo "トークン消費量を抽出できないためコスト記録をスキップします。"
             exit 0
@@ -174,23 +195,33 @@ jobs:
           if [ ! -f "$LOG" ]; then
             echo "date,input_tokens,output_tokens" > "$LOG"
           fi
-          if ! grep -q "^${TARGET_DATE}," "$LOG"; then
-            echo "${TARGET_DATE},${IN},${OUT}" >> "$LOG"
-          fi
+          # v1.26: 同一対象日で複数回実行された場合（監査FAIL後の手動再実行等）、
+          # 日付キーでの重複排除を行うと2回目以降の実消費トークンが記録から
+          # 欠落する。行を追記するだけにし、月次集計側（下の本文コミット
+          # ステップ）で全行を合算することで、リトライ分も正しく累計へ反映する。
+          echo "${TARGET_DATE},${IN},${OUT}" >> "$LOG"
 
           git config user.name "crypto-daily-bot"
           git config user.email "actions@users.noreply.github.com"
           git add "$LOG"
           git commit -m "cost-log: ${TARGET_DATE}" || echo "no changes"
-          git pull --rebase origin "${GITHUB_REF_NAME}" || true
+          # v1.26: pull --rebase がコンフリクトで失敗した場合、|| true だけでは
+          # .git/rebase-merge が残ったまま「成功」扱いになり、直後の本文コミット
+          # ステップが破損したワーキングツリー状態でgit操作を行う危険がある。
+          # 失敗時は明示的にrebaseを中断し、クリーンな状態（このステップの
+          # ローカルコミットは保持される）へ戻す。
+          git pull --rebase origin "${GITHUB_REF_NAME}" || {
+            echo "コスト記録のpull --rebaseに失敗したためrebaseを中断します。"
+            git rebase --abort 2>/dev/null || true
+          }
           # コストログはベストエフォートの付随記録であり、push失敗（一時的な
-          # ネットワーク不調・競合等）が下の本文コミットを巻き添えにして
-          # スキップさせてはならない（success()の暗黙ANDで後続へ伝播するため、
-          # ここだけは明示的に非致命化する）。
+          # ネットワーク不調・上のrebase中断を含む競合等）が下の本文コミットを
+          # 巻き添えにしてスキップさせてはならない（success()の暗黙ANDで
+          # 後続へ伝播するため、ここだけは明示的に非致命化する）。
           git push || echo "コスト記録のpushに失敗しましたが、本文コミットの成否には影響しません。"
 
       - name: 本文コミット（draft/とGENERATION_STATUS.mdのみ。フェーズ1の成果物・監査には触れない。監査PASS時のみ到達）
-        if: steps.guard2.outputs.skip != 'true'
+        if: steps.need.outputs.phase2 == 'true'
         env:
           TARGET_DIR: outputs/${{ steps.target.outputs.date }}
           TARGET_DATE: ${{ steps.target.outputs.date }}
@@ -202,7 +233,7 @@ jobs:
             MONTH_IN=$(awk -F, -v m="$MONTH" 'NR>1 && substr($1,1,7)==m {s+=$2} END{print s+0}' "$LOG")
             MONTH_OUT=$(awk -F, -v m="$MONTH" 'NR>1 && substr($1,1,7)==m {s+=$3} END{print s+0}' "$LOG")
             echo "" >> "$STATUS"
-            echo "月次累計（${MONTH}）: input=${MONTH_IN}, output=${MONTH_OUT}（outputs/token_usage_log.csv集計）" >> "$STATUS"
+            echo "月次累計（${MONTH}）: input=${MONTH_IN}, output=${MONTH_OUT}（outputs/token_usage_log.csv集計・同日複数回実行分を含む）" >> "$STATUS"
           fi
 
           git config user.name "crypto-daily-bot"
@@ -213,7 +244,8 @@ jobs:
           git push
 
       - name: デバッグ用アーティファクト（本文。失敗時も保全）
-        if: always() && steps.guard2.outputs.skip != 'true'
+        if: always() && steps.need.outputs.phase2 == 'true'
+        continue-on-error: true
         uses: actions/upload-artifact@v4
         with:
           name: post-draft-${{ steps.target.outputs.date }}
