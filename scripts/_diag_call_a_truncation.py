@@ -44,13 +44,17 @@ def _describe_raw_text(label: str, text: str, err: Exception | None) -> None:
     print()
 
 
-def _try_call(client, user_content: str, max_tokens: int, label: str) -> None:
-    print(f"=== {label}（max_tokens={max_tokens}） ===")
+def _try_call(client, user_content: str, max_tokens: int, label: str, disable_thinking: bool = False) -> None:
+    print(f"=== {label}（max_tokens={max_tokens}, thinking無効化={disable_thinking}） ===")
+    kwargs = {}
+    if disable_thinking:
+        kwargs["thinking"] = {"type": "disabled"}
     response = client.messages.create(
         model=generate_post.MODEL,
         max_tokens=max_tokens,
         system=generate_post.SYSTEM_A,
         messages=[{"role": "user", "content": user_content}],
+        **kwargs,
     )
     usage = response.usage
     print(f"stop_reason: {response.stop_reason}")
@@ -100,8 +104,8 @@ def main() -> None:
     print()
 
     client = anthropic.Anthropic()
-    _try_call(client, user_content, 8000, "本番同一条件")
-    _try_call(client, user_content, 500, "対照実験（block種別の確認用・コスト最小化のため500に縮小）")
+    _try_call(client, user_content, 8000, "修正案の検証：thinking無効化", disable_thinking=True)
+    _try_call(client, user_content, 3000, "修正案の検証：thinking無効化・小さいmax_tokensでも足りるか", disable_thinking=True)
 
 
 if __name__ == "__main__":
