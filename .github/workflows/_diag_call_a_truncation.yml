@@ -1,0 +1,31 @@
+name: diag-call-a-truncation
+
+# 一時的な調査用ワークフロー（call_Aのmax_tokens打ち切り原因切り分け・
+# DESIGN_CHANGES.md参照）。本番パイプライン（daily.yml・set_headline.yml・
+# post_draft.yml）には一切影響しない。調査完了後、本ファイルと
+# scripts/_diag_call_a_truncation.py は削除する。
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 依存関係
+        run: pip install -q -r requirements.txt
+
+      - name: call_A打ち切りの原因切り分け
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python3 scripts/_diag_call_a_truncation.py
