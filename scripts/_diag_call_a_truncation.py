@@ -55,6 +55,12 @@ def _try_call(client, user_content: str, max_tokens: int, label: str) -> None:
     usage = response.usage
     print(f"stop_reason: {response.stop_reason}")
     print(f"usage: input={usage.input_tokens}, output={usage.output_tokens}")
+    print(f"content block数: {len(response.content)}")
+    for i, b in enumerate(response.content):
+        btype = getattr(b, "type", None)
+        btext = getattr(b, "text", None)
+        blen = len(btext) if isinstance(btext, str) else None
+        print(f"  block[{i}]: type={btype!r} text_len={blen} repr_head={repr(b)[:200]}")
     text = generate_post._strip_code_fence(generate_post._extract_text(response))
     try:
         data = json.loads(text)
@@ -95,7 +101,7 @@ def main() -> None:
 
     client = anthropic.Anthropic()
     _try_call(client, user_content, 8000, "本番同一条件")
-    _try_call(client, user_content, 3000, "対照実験（意図的に狭いmax_tokens）")
+    _try_call(client, user_content, 500, "対照実験（block種別の確認用・コスト最小化のため500に縮小）")
 
 
 if __name__ == "__main__":
