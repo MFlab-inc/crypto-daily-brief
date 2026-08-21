@@ -162,6 +162,12 @@ def check_c16(au: Audit, daily_data: dict, sections: dict) -> None:
 
 _VALUE_UNIT_MARKERS = ("$", "¥", "%", "％", "万", "億", "兆")
 _ETH_QTY_RE = re.compile(r"\d\s*ETH\b")
+# v1.27（オーナー指示）: C16bが検知したいのは「市場データの数値の転記」であり、
+# ラベル（プール名・Fear&Greedの区分名等）は数値ではない。daily_data.json中の
+# "Base 0.3%プール"のようなラベルには数値表現が含まれるため、文字列の内容
+# （数値を含むか）では判定できず、キー名で判定する必要がある（C18の教訓と
+# 同型の欠陥——判定対象を誤ると症状ごとのallowlist対処が際限なく必要になる）。
+_LABEL_KEYS = frozenset({"name", "label"})
 
 
 def _looks_like_market_value(s: str) -> bool:
@@ -179,7 +185,9 @@ def _looks_like_market_value(s: str) -> bool:
 
 def _collect_numeric_strings(obj, out: set[str], min_len: int = C16B_MIN_LEN) -> None:
     if isinstance(obj, dict):
-        for v in obj.values():
+        for k, v in obj.items():
+            if k in _LABEL_KEYS:
+                continue
             _collect_numeric_strings(v, out, min_len)
     elif isinstance(obj, list):
         for v in obj:

@@ -455,6 +455,32 @@ hits_wo = verify_post._find_transcriptions(DAILY_DATA, "BTCは$64,247まで上�
 hits_with = verify_post._find_transcriptions(DAILY_DATA, "BTCは$64,247まで上昇した。", {"$64,247"})
 check("C16b: allowlist登録でヒット除外", hits_wo == ["$64,247"] and hits_with == [], f"{hits_wo} / {hits_with}")
 
+print("=== verify_post: C16b ラベルキー除外の確認（v1.27・「name」「label」誤検知の恒久対応） ===")
+# プール名（"name"キーの値）に数値表現が含まれていても、ラベルであり
+# 「市場データの数値の転記」ではないためFAILしない（2026-08-20実運用で
+# 実際に誤検知した事例。DAILY_DATAの"Base 0.3%プール"がそのまま該当する）。
+hits_name = verify_post._find_transcriptions(
+    DAILY_DATA, "本日はBase 0.3%プールの出来高が急増した点が注目される。", set())
+check("C16b: プール名（nameキーの値）はFAILしない", hits_name == [], str(hits_name))
+
+# fear_greedの"label"キーの値（"Neutral"）も同様に候補から除外される。
+hits_label = verify_post._find_transcriptions(DAILY_DATA, "市場心理はNeutral圏で推移した。", set())
+check("C16b: labelキーの値はFAILしない", hits_label == [], str(hits_label))
+
+# 一方、同じプールの実際の数値（APR・TVL等、nameではないキー配下の値）は
+# 引き続き転記としてFAILする——今回の修正がキー名での判定であり、
+# 「プール名を含む文は無条件にPASSする」という抜け道になっていないことの確認。
+hits_real_numbers = verify_post._find_transcriptions(
+    DAILY_DATA, "Base 0.3%プールのAPRは24.00%に達し、TVLは$112.38Mとなった。", set())
+check("C16b: プール名文中でも実数値（APR・TVL）の転記はFAILする",
+      set(hits_real_numbers) == {"24.00%", "$112.38M"}, str(hits_real_numbers))
+
+candidates_check = set()
+verify_post._collect_numeric_strings(DAILY_DATA, candidates_check)
+check("C16b: 候補集合にラベル値（プール名・Neutral等）が含まれない",
+      not any(c in candidates_check for c in ("Base 0.05%プール", "Base 0.3%プール", "Neutral")),
+      str(sorted(candidates_check)))
+
 print("=== verify_post: headline_for_imageの走査（v1.20） ===")
 bad = json.loads(json.dumps(b_ok))
 bad["headline_for_image"] = "仮想通貨市場が上昇"
