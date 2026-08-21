@@ -1,0 +1,57 @@
+{
+  "overall": "PASS",
+  "failed": 0,
+  "level": "L0",
+  "checks": [
+    {
+      "id": "C12_banned_terms",
+      "result": "PASS",
+      "detail": "禁止語なし"
+    },
+    {
+      "id": "C13_hashtag_boundary",
+      "result": "PASS",
+      "detail": "境界違反なし"
+    },
+    {
+      "id": "C14_no_table",
+      "result": "PASS",
+      "detail": "表形式なし"
+    },
+    {
+      "id": "C15_heading_order",
+      "result": "PASS",
+      "detail": "見出し順序OK"
+    },
+    {
+      "id": "C16_numeric_match",
+      "result": "PASS",
+      "detail": "テンプレート一致"
+    },
+    {
+      "id": "C16b_transcription_scan",
+      "result": "PASS",
+      "detail": "転記検知なし"
+    },
+    {
+      "id": "C17_lp_disclaimers",
+      "result": "PASS",
+      "detail": "定型文完全一致"
+    },
+    {
+      "id": "C18_causal_assertion",
+      "result": "PASS",
+      "detail": "断定表現なし"
+    },
+    {
+      "id": "C19_audit_ledger",
+      "result": "PASS",
+      "detail": "17件・全フィールド充足・渡した候補数と一致"
+    },
+    {
+      "id": "C20_image_headline",
+      "result": "PASS",
+      "detail": "全角換算21.0字・#なし"
+    }
+  ]
+}
