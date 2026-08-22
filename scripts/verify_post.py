@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""verify_post.py — 本文の機械監査 C12〜C20（v0.3 §8・§10 第2弾-6）。
+"""verify_post.py — 本文の機械監査 C12〜C22（v0.3 §8・§10 第2弾-6）。
 
 compose_post.py が書き出す post_bundle.json を入力とする。1件でもFAILなら
 exit 1（既存 verify_data.py の C1〜C11 と同じ fail-close の考え方）が、
@@ -21,6 +21,8 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
+import collect_news  # noqa: E402
+import generate_post  # noqa: E402
 from compose_lp_comment import FIXED_2, FIXED_4, FIXED_5, compose_lp_comment  # noqa: E402
 from compose_numeric import (  # noqa: E402
     compose_part0_target_date,
@@ -357,6 +359,90 @@ def check_c20(au: Audit, headline_for_image: str) -> None:
     au.add("C20_image_headline", not reasons, "; ".join(reasons) or f"全角換算{zlen:.1f}字・#なし")
 
 
+# --- C21・C22共通: ニュースソース名→tier ---
+
+def _load_source_tier_map() -> dict[str, int]:
+    """config/news_sources.jsonのsource名→tierを読み込む。collect_news.pyの
+    Google Newsはニュース設定ファイルに載らない別枠（tier4・候補発見専用）
+    のため個別に加える。読み込み失敗時は空dictを返し、C21・C22はすべての
+    sourceをtier不明として扱う（フェイルクローズ。未知sourceの"採用"を
+    誤ってPASSさせない）。
+    """
+    path = Path(__file__).parent.parent / "config" / "news_sources.json"
+    tier_map: dict[str, int] = {}
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+        for s in data.get("sources", []):
+            if isinstance(s, dict) and "name" in s and "tier" in s:
+                tier_map[s["name"]] = s["tier"]
+    except (ValueError, OSError):
+        pass
+    tier_map.setdefault(collect_news.GOOGLE_NEWS_NAME, 4)
+    return tier_map
+
+
+# --- C21 audit_ledgerのdecisionとtierの整合 ---
+
+def check_c21(au: Audit, level: str, audit_ledger, candidate_count: int,
+              tier_map: dict[str, int]) -> None:
+    if level != "L0" or not isinstance(audit_ledger, list) or not audit_ledger:
+        au.add("C21_decision_tier_consistency", None,
+               f"level={level}・candidate_count={candidate_count}のためSKIP"
+               "（台帳の有無・完全性はC19が判定するためここでは扱わない）")
+        return
+    # v1.29（オーナー承認・案1）: 「独立2ソース」の妥当性は対象日の
+    # audit_ledger内で同一decisionを持つ distinct source の件数のみで
+    # 機械判定する。「同一事実を報じているか」の意味的な照合はしない
+    # （既知の限界。DESIGN_CHANGES.md参照）——C18と同型の判断で、
+    # 機械的に確定できない基準は誤検知を必ず生み、フェイルクローズ下では
+    # 誤検知がそのまま「本文が生成されない日」に直結するため、確実な
+    # 偽陽性を招くより稀な偽陰性を許容する。
+    dual_sources = {
+        e.get("source") for e in audit_ledger
+        if isinstance(e, dict) and e.get("decision") == "採用（独立2ソース）"
+    }
+    violations = []
+    for i, e in enumerate(audit_ledger):
+        if not isinstance(e, dict):
+            violations.append(f"[{i}] エントリがオブジェクトでない")
+            continue
+        decision = e.get("decision")
+        source = e.get("source")
+        if decision == "不採用":
+            continue
+        if decision == "採用":
+            tier = tier_map.get(source)
+            if tier != 1:
+                violations.append(f"[{i}] source={source!r}（tier={tier!r}）が採用だがtier1でない")
+        elif decision == "採用（独立2ソース）":
+            if len(dual_sources) < 2:
+                violations.append(
+                    f"[{i}] source={source!r} が独立2ソースだが対象日のdistinct sourceは"
+                    f"{len(dual_sources)}件（{sorted(dual_sources)}）")
+        else:
+            violations.append(f"[{i}] 未知のdecision値: {decision!r}")
+    detail = "; ".join(violations) if violations else f"{len(audit_ledger)}件・整合性OK"
+    au.add("C21_decision_tier_consistency", not violations, detail)
+
+
+# --- C22 図版でなく本文ヘッドラインのtier1裏付け ---
+
+def check_c22(au: Audit, part1_headline, audit_ledger, tier_map: dict[str, int]) -> None:
+    if not isinstance(part1_headline, str) or part1_headline == generate_post.FIXED_HEADLINE:
+        au.add("C22_headline_tier1_basis", None, "材料なし（定型文ヘッドライン）のためSKIP")
+        return
+    # 簡易版（オーナー承認）: part1_headlineの記述内容とaudit_ledgerの
+    # 個別項目との対応関係までは検証せず、「その日にtier1由来の"採用"が
+    # 1件以上存在するか」で判定する。
+    has_tier1_adopted = isinstance(audit_ledger, list) and any(
+        isinstance(e, dict) and e.get("decision") == "採用" and tier_map.get(e.get("source")) == 1
+        for e in audit_ledger
+    )
+    au.add("C22_headline_tier1_basis", has_tier1_adopted,
+           "tier1由来の採用が存在" if has_tier1_adopted
+           else "ヘッドラインが定型文でないにもかかわらずtier1由来の採用が存在しない")
+
+
 def run_all(bundle: dict, daily_data: dict) -> Audit:
     au = Audit()
     sections = bundle["sections"]
@@ -383,6 +469,9 @@ def run_all(bundle: dict, daily_data: dict) -> Audit:
     # 空配列を誤って許容しないようにする）。
     check_c19(au, bundle["level"], bundle.get("audit_ledger"), bundle.get("news_candidate_count", -1))
     check_c20(au, headline_for_image)
+    tier_map = _load_source_tier_map()
+    check_c21(au, bundle["level"], bundle.get("audit_ledger"), bundle.get("news_candidate_count", -1), tier_map)
+    check_c22(au, sections.get("part1_headline"), bundle.get("audit_ledger"), tier_map)
     return au
 
 

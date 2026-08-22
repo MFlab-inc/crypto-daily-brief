@@ -83,7 +83,10 @@ CALL_A_DATA = {
     "part1_points": ["規制当局高官が友好的な発言（Reuters、2026-08-17）", "機関投資家の資金流入が継続との報道（Bloomberg、2026-08-17）"],
     "reusable_for_summary": ["某国の法整備は継続審議中、新展開なし"],
     "audit_ledger": [
-        {"source": "Reuters", "url": "https://example.com/a", "title": "...", "published_at": "2026-08-17",
+        # v1.29: sourceはC21がtier判定に使うため実在のtier1名（SEC）を使う
+        # （以前は仮の"Reuters"だったが、config/news_sources.jsonに存在せず
+        # C21がtier不明＝FAILと判定してしまうため変更）。
+        {"source": "SEC", "url": "https://example.com/a", "title": "...", "published_at": "2026-08-17",
          "verified_by": "RSS summary", "decision": "採用", "reason": "一次情報で確認"},
     ],
 }
@@ -660,6 +663,112 @@ au = verify_post.run_all(good, DAILY_DATA)
 c19 = next(x for x in au.checks if x["id"] == "C19_audit_ledger")
 check("C19: 候補2件・audit_ledger2件で件数一致するとPASS（v1.21）",
       c19["result"] == "PASS", str(c19))
+
+print("=== verify_post: C21 decisionとtierの整合（v1.29・オーナー指示） ===")
+
+
+def _c21(entries, headline=None, candidate_count=None, level="L0"):
+    b = json.loads(json.dumps(b_ok))
+    b["audit_ledger"] = entries
+    b["level"] = level
+    b["news_candidate_count"] = len(entries) if candidate_count is None else candidate_count
+    if headline is not None:
+        b["sections"]["part1_headline"] = headline
+        b["part1_md"] = b["part1_md"].replace(CALL_A_DATA["part1_headline"], headline)
+    au = verify_post.run_all(b, DAILY_DATA)
+    c21 = next(x for x in au.checks if x["id"] == "C21_decision_tier_consistency")
+    c22 = next(x for x in au.checks if x["id"] == "C22_headline_tier1_basis")
+    return c21, c22
+
+
+# tier1の"採用"はPASS
+c21, _ = _c21([
+    {"source": "SEC", "url": "https://example.com/a", "title": "...", "published_at": "2026-08-17",
+     "verified_by": "v", "decision": "採用", "reason": "一次情報"},
+])
+check("C21: tier1の採用はPASS", c21["result"] == "PASS", str(c21))
+
+# tier3単独の"採用"はFAIL（プロンプトでは防げなかった実際の混入パターン）
+c21, _ = _c21([
+    {"source": "CoinDesk", "url": "https://example.com/b", "title": "...", "published_at": "2026-08-17",
+     "verified_by": "v", "decision": "採用", "reason": "tier1裏付けなしだが補足採用"},
+])
+check("C21: tier3単独の採用はFAIL", c21["result"] == "FAIL", str(c21))
+check("C21: FAIL理由にtierが明記される", "tier=3" in c21["detail"], c21["detail"])
+
+# 独立2ソース: distinct sourceが2件ならPASS（Laser Digital実例の形）
+c21, _ = _c21([
+    {"source": "Cointelegraph", "url": "https://example.com/c1", "title": "A社ライセンス取得",
+     "published_at": "2026-08-17", "verified_by": "v", "decision": "採用（独立2ソース）", "reason": "2媒体一致"},
+    {"source": "CoinDesk", "url": "https://example.com/c2", "title": "A社が認可取得",
+     "published_at": "2026-08-17", "verified_by": "v", "decision": "採用（独立2ソース）", "reason": "2媒体一致"},
+])
+check("C21: distinct source 2件の独立2ソースはPASS", c21["result"] == "PASS", str(c21))
+
+# 独立2ソース: 単独ソースしかないのに独立2ソースを名乗るとFAIL
+# （実データでは発生しなかったが、C21が防ぐべき最も直接的な失敗形）
+c21, _ = _c21([
+    {"source": "CoinDesk", "url": "https://example.com/d", "title": "...", "published_at": "2026-08-17",
+     "verified_by": "v", "decision": "採用（独立2ソース）", "reason": "裏付けなしで独立2ソースを自称"},
+])
+check("C21: 単独sourceで独立2ソースを名乗るとFAIL", c21["result"] == "FAIL", str(c21))
+
+# 同一sourceの複数記事は1件と数える（distinct source条件を満たさない）
+c21, _ = _c21([
+    {"source": "CoinDesk", "url": "https://example.com/e1", "title": "...", "published_at": "2026-08-17",
+     "verified_by": "v", "decision": "採用（独立2ソース）", "reason": "同一媒体の別記事1"},
+    {"source": "CoinDesk", "url": "https://example.com/e2", "title": "...", "published_at": "2026-08-17",
+     "verified_by": "v", "decision": "採用（独立2ソース）", "reason": "同一媒体の別記事2"},
+])
+check("C21: 同一sourceの2記事は1件と数えFAIL", c21["result"] == "FAIL", str(c21))
+
+# 未知のdecision値はFAIL
+c21, _ = _c21([
+    {"source": "SEC", "url": "https://example.com/f", "title": "...", "published_at": "2026-08-17",
+     "verified_by": "v", "decision": "保留", "reason": "..."},
+])
+check("C21: 未知のdecision値はFAIL", c21["result"] == "FAIL", str(c21))
+
+# 不採用は検査しない（tier3単独でも不採用ならFAILにしない）
+c21, _ = _c21([
+    {"source": "CoinDesk", "url": "https://example.com/g", "title": "...", "published_at": "2026-08-17",
+     "verified_by": "v", "decision": "不採用", "reason": "根拠不足"},
+])
+check("C21: 不採用は検査対象外でPASS", c21["result"] == "PASS", str(c21))
+
+# 候補0件の日はSKIP
+c21, _ = _c21([], candidate_count=0)
+check("C21: 候補0件の日はSKIP", c21["result"] == "SKIP", str(c21))
+
+# L0以外（呼び出しA失敗）はSKIP（台帳の有無自体はC19が判定）
+b_non_l0 = json.loads(json.dumps(b_l1))
+au = verify_post.run_all(b_non_l0, DAILY_DATA)
+c21_non_l0 = next(x for x in au.checks if x["id"] == "C21_decision_tier_consistency")
+check("C21: L0以外はSKIP", c21_non_l0["result"] == "SKIP", str(c21_non_l0))
+
+print("=== verify_post: C22 ヘッドラインのtier1裏付け（v1.29・オーナー指示） ===")
+
+# 定型文ヘッドライン（材料なし）はSKIP
+_, c22 = _c21([], headline=generate_post.FIXED_HEADLINE, candidate_count=0)
+check("C22: 定型文ヘッドラインはSKIP", c22["result"] == "SKIP", str(c22))
+
+# 実文言ヘッドライン＋tier1採用ありはPASS
+_, c22 = _c21([
+    {"source": "FRB", "url": "https://example.com/h", "title": "...", "published_at": "2026-08-17",
+     "verified_by": "v", "decision": "採用", "reason": "一次情報"},
+], headline="BTCが上昇し、FRBの発表も重なった一日となった。")
+check("C22: tier1採用がある実文言ヘッドラインはPASS", c22["result"] == "PASS", str(c22))
+
+# 実文言ヘッドライン＋tier1採用なし（独立2ソースのみ）はFAIL
+# （実データ8/21で実際に発生した形：ヘッドラインがtier3単独材料を根拠にしていた）
+_, c22 = _c21([
+    {"source": "Cointelegraph", "url": "https://example.com/i1", "title": "...", "published_at": "2026-08-17",
+     "verified_by": "v", "decision": "採用（独立2ソース）", "reason": "2媒体一致"},
+    {"source": "CoinDesk", "url": "https://example.com/i2", "title": "...", "published_at": "2026-08-17",
+     "verified_by": "v", "decision": "採用（独立2ソース）", "reason": "2媒体一致"},
+], headline="BTCが上昇し、A社のライセンス取得報道も material となった一日。")
+check("C22: tier1採用が無いヘッドラインはFAIL（既知の限界：簡易版のため対応関係は見ない）",
+      c22["result"] == "FAIL", str(c22))
 
 print("=== collect_news.py（RSS方式・CryptoPanic撤去後） ===")
 
