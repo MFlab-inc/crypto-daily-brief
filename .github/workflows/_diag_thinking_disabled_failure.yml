@@ -1,0 +1,32 @@
+name: diag-thinking-disabled-failure
+
+# 一時的な調査用ワークフロー（v1.28 thinking無効化後、call_Aが
+# JSONDecodeError: line 1 column 1 (char 0) で失敗した事象の切り分け）。
+# 本番パイプライン（daily.yml・set_headline.yml・post_draft.yml）には
+# 一切影響しない。調査完了後、本ファイルとscripts/_diag_thinking_disabled_failure.py
+# は削除する。
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 依存関係
+        run: pip install -q -r requirements.txt
+
+      - name: thinking無効化後のJSON解析失敗を切り分け
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python3 scripts/_diag_thinking_disabled_failure.py
