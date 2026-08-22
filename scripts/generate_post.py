@@ -135,15 +135,31 @@ tier 3: CoinDesk・Cointelegraph等の暗号通貨特化メディアRSS。統合
         tier 1のsummaryで確認できた事実を補強する（同一材料が独立して
         報じられていることを示す）用途、またはtier 1のsummaryに無い
         暗号通貨特有の細部を補う用途に限る。tier 3の候補のみを根拠に
-        【ヘッドライン】【主要なポイント】の新規項目を立てない。
+        【ヘッドライン】の新規項目を立てない。【主要なポイント】については
+        下記「独立2ソース規定」の例外を除き、同様に単独では根拠にしない。
 tier 4: Google News経由の候補発見のみの結果（見出し・URLのみで、内容の
         裏取りをしていない）。単独では事実の根拠にしない。継続監視の
         対象として reusable_for_summary に記すにとどめ、【ヘッドライン】
         【主要なポイント】の記述根拠には使わない。
 
-- 掲載する事実はtier 1のsummaryに記載されている内容に限る。tier 3は
-  tier 1の事実を補強する裏取りとしてのみ併記してよく、tier 3単独を
-  新規項目の根拠にしない。
+- 掲載する事実はtier 1のsummaryに記載されている内容、または下記
+  「独立2ソース規定」に該当するtier 3の事実報道に限る。tier 3は
+  原則としてtier 1の事実を補強する裏取りとしてのみ併記してよく、
+  tier 3単独を新規項目の根拠にしない。
+
+### 独立2ソース規定（v1.28・統合運用基準の既定を実装へ反映）
+
+tier3のみで報じられた材料であっても、次の3条件をすべて満たす場合は
+【主要なポイント】への掲載を許可する。
+ (a) 2つ以上の独立したtier3媒体が同一の事実を報じている
+ (b) 意見・予想・分析ではなく、事実の報道である
+     （発表、認可、取得、提携、施行など）
+ (c) 掲載時に媒体名を複数列挙し、一次情報での裏付けが未確認である旨を
+     明記する
+上記に該当しない場合は従来どおりtier1の裏付けを必要とする。
+【ヘッドライン】への昇格は引き続きtier1の裏付けを必要とする。
+この規定で採用した候補は、audit_ledgerのdecisionを
+"採用（独立2ソース）" と記録する（"採用"や"不採用"と区別する）。
 - 数値・固有名詞・日時はsummary・titleの記載と一致させる。候補に無い情報を
   推測で補わない（確認できないものは掲載しない）。
 - news_candidates_yesterday に同一の法案・政策・企業動向の候補が含まれる
@@ -158,11 +174,15 @@ NO_CANDIDATES_FALLBACK = f"""## 候補が無い場合の扱い
 
 tier 1の候補が0件、またはいずれも【ヘッドライン】【主要なポイント】に
 書けるだけの内容を持たない場合、part1_headline・part1_points・
-headline_for_imageは以下のとおり出力する。
+headline_for_imageは以下のとおり出力する。ただし、上記「独立2ソース規定」に
+該当するtier3材料がある場合はpart1_pointsの定型文フォールバックを使わず、
+その材料を記載する（headline_for_image・part1_headlineは独立2ソース材料
+だけでは昇格しないため、この場合も下記のフォールバックのままとする）。
 
 - part1_headline: 統合運用基準§3.1の指定文言をそのまま使う（言い換えない）:
   「{FIXED_HEADLINE}」
-- part1_points: 同じく指定文言をそのまま使う（項目数は1件でよい）:
+- part1_points: 独立2ソース規定に該当する材料が無い場合、同じく指定文言を
+  そのまま使う（項目数は1件でよい）:
   「{FIXED_POINTS}」
 - headline_for_image: ニュースが無いため、daily_data.json内のBTC・ETHの
   direction（up/down）に基づく短い定性的な見出しにとどめる
@@ -202,7 +222,7 @@ OUTPUT_FORMAT_A = """## 出力形式
   "reusable_for_summary": ["..."],
   "audit_ledger": [
     { "source": "", "url": "", "title": "", "published_at": "",
-      "verified_by": "", "decision": "採用/不採用", "reason": "" }
+      "verified_by": "", "decision": "採用/採用（独立2ソース）/不採用", "reason": "" }
   ]
 }"""
 
@@ -296,6 +316,14 @@ def _call_json(
                 max_tokens=max_tokens,
                 system=system,
                 messages=[{"role": "user", "content": user_content}],
+                # v1.28（オーナー承認）: claude-sonnet-5はthinking未指定時に
+                # 既定でadaptive thinkingが動作し、そのトークン消費は
+                # _extract_text（type=="text"のみ抽出）から完全に不可視になる。
+                # 候補急増日でmax_tokensが不可視のthinking消費だけで枯渇し
+                # JSON本体が生成されない事象を実測で確認したため無効化する
+                # （DESIGN_CHANGES.md参照。audit_ledgerの分量そのものを
+                # 縮める対症療法ではなく、不可視消費という根本原因への対応）。
+                thinking={"type": "disabled"},
             )
             # 応答を受け取れた時点で実消費量を確定させる（この後の検証で例外が
             # 出てもトークンは既に消費済みのため、成否によらず加算する）。

@@ -151,6 +151,8 @@ out = generate_post.call_a(c, DAILY_DATA, NEWS_TODAY, None)
 check("callA success 1発", out.ok and out.attempts == 1, str(out.error))
 check("callA: toolsパラメータを渡さない（v1.15・ツール無し呼び出し）",
       "tools" not in c.messages.calls[0], str(list(c.messages.calls[0].keys())))
+check("callA: thinkingを明示的に無効化する（v1.28）",
+      c.messages.calls[0].get("thinking") == {"type": "disabled"}, str(c.messages.calls[0].get("thinking")))
 
 # 2) JSON不正 → リトライで成功
 def flaky_json(kw, n):
@@ -223,6 +225,20 @@ check("NEWS_SELECTIONにtier 3単独を主根拠にしない旨の記述があ�
       "tier 3の候補のみを根拠に" in generate_post.NEWS_SELECTION)
 check("WRITES_Aがtier 1・3・4すべてを記録対象としている",
       "tier 1・3・4のすべて" in generate_post.WRITES_A)
+
+print("=== generate_post.py: 独立2ソース規定の確認（v1.28・統合運用基準の既定を実装へ反映） ===")
+check("NEWS_SELECTIONに独立2ソース規定の3条件が記述されている",
+      all(s in generate_post.NEWS_SELECTION for s in (
+          "独立2ソース規定", "2つ以上の独立したtier3媒体", "意見・予想・分析ではなく",
+          "媒体名を複数列挙")))
+check("独立2ソース規定はヘッドラインへの昇格を認めない",
+      "【ヘッドライン】への昇格は引き続きtier1の裏付けを必要とする" in generate_post.NEWS_SELECTION)
+check("独立2ソース規定採用時のdecision値がOUTPUT_FORMAT_Aの例に含まれる",
+      "採用（独立2ソース）" in generate_post.OUTPUT_FORMAT_A
+      and "採用（独立2ソース）" in generate_post.NEWS_SELECTION)
+check("NO_CANDIDATES_FALLBACKが独立2ソース規定該当時にpart1_pointsの定型文を使わない旨を記述",
+      "独立2ソース規定" in generate_post.NO_CANDIDATES_FALLBACK
+      and "part1_pointsの定型文フォールバックを使わず" in generate_post.NO_CANDIDATES_FALLBACK)
 
 print("=== generate_post.py: tier3候補数上限の確認（v1.21） ===")
 _tier1_fixed = [{"tier": 1, "source": "SEC", "published_at": "Mon, 17 Aug 2026 10:00:00 GMT"} for _ in range(3)]
