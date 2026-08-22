@@ -62,12 +62,13 @@ def _try_once(client, user_content: str, attempt_no: int) -> None:
 def main() -> None:
     print(f"対象日（固定）: {TARGET}")
     news_today = collect_news.collect_news(TARGET)
+    cands = news_today.get("candidates", [])
     tier_counts: dict[int, int] = {}
-    for c in news_today:
+    for c in cands:
         t = c.get("tier")
         tier_counts[t] = tier_counts.get(t, 0) + 1
     print(f"候補件数（本スクリプト実行時点でのライブ取得・8/20時点と同一である保証なし）: "
-          f"合計{len(news_today)}件 tier別内訳={tier_counts}")
+          f"合計{len(cands)}件 tier別内訳={tier_counts}")
     daily_data_path = f"outputs/{TARGET}/daily_data.json"
     if os.path.exists(daily_data_path):
         daily_data = json.loads(open(daily_data_path, encoding="utf-8").read())
