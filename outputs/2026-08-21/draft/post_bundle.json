@@ -3,13 +3,13 @@
   "level": "L0",
   "sections": {
     "part0_target_date": "2026年8月21日（金）",
-    "part1_headline": "直近24時間に暗号通貨市場との関係を確認できる主要なマクロ材料は確認できない。",
-    "part1_points": "・補足できる検証済み材料は確認できない。",
+    "part1_headline": "24時間比でBTC・ETHがともに大きく値を上げ、週間でも強い上昇局面となっている。CoinDeskは今週が2023年以来の好調な週になったと報じており、短期的な急反発を示す動きとして市場参加者の関心が高まっているとみられる。ただし規制当局の一次発表からは暗号通貨市場に直接関わる新規材料は確認できていない。",
+    "part1_points": "・Nomura傘下のLaser Digital Japanが国内で暗号資産交換業者としての登録を取得したと、CoinDeskとCointelegraphの双方が報じている。日本国内での機関投資家向け取引拡大に向けた動きとされるが、一次情報（金融庁等）での確認はできていない（CoinDesk、Cointelegraph、2026-08-21）\n・Standard CharteredのアナリストがBTCの年末目標について従来予想が低すぎる可能性に言及したと報じられており、ETF資金流入の回復期待が背景にあるとみられる（Cointelegraph、2026-08-21）\n・米CFTCがSEF（スワップ実行施設）の注文板要件撤廃案について意見公募を開始したと発表。暗号資産デリバティブ市場への直接的な影響は現時点で確認できない（CFTC、2026-08-20）\n・週末に向けて市場の流動性が薄くなることへの懸念も一部メディアで指摘されており、値動きが大きくなりやすい局面である可能性がある（CoinDesk、2026-08-21）",
     "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.645兆（¥420.1兆）｜24時間取引高 $1713.9億（¥27.22兆）\n・ #BTC：$78,403（約1,245.3万円）｜24時間比 +7.86%\n・ #ETH：$2,525（約40.1万円）｜24時間比 +9.19%\n・ #BNB：$690（約11.0万円）｜24時間比 +5.33%\n・市場心理：Fear & Greed 75（Greed、CoinMarketCap API）\n・ドミナンス：BTC 59.48%｜ETH 11.51%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年8月22日07:50 JST、USD/JPY ¥158.83",
     "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $25.57M vs Base上ETH/USDC $224.92M｜参考：Base上DEX全体 $12.005億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $54.40億（¥8,640億）｜24時間比 +8.23%｜USDCドミナンス 86.5%\n・ ETH/USDC（Base）参考APR：0.05% 75.35%（TVL $8.42M／24h出来高 $34.78M）｜0.3% 186.81%（TVL $111.45M／24h出来高 $190.14M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年8月22日07:50 JST",
-    "part2_flow": "・暗号資産恐怖・強欲指数がGreed領域まで上昇し市場心理の楽観化が意識された可能性があり、同時期にBTC・ETH・BNBはいずれも24時間比で上昇が確認された。ただし指数の変化と価格上昇の因果関係は断定できない。\n・DEXの出来高およびBase上のTVLがともに増加したことでオンチェーン資金の流入姿勢が意識された可能性があり、同時期にLPプール（Base 0.05%・0.3%）のAPRと出来高も上昇が確認された。ただしTVL増加とAPR上昇の因果関係は断定できません。",
+    "part2_flow": "・Standard CharteredのアナリストがBTC年末目標について従来予想が低すぎる可能性に言及したと報じられ、ETF資金流入の回復期待が意識された可能性がある中、24時間比でBTCは大きく上昇しており、強気心理の再燃が背景にあるとみられるが、断定はできない。\n・Nomura傘下のLaser Digital Japanが国内で暗号資産交換業者としての登録を取得したと報じられたことで、日本国内での機関投資家向け取引拡大への期待が意識された可能性があり、同時期にETHも24時間比で大きく値を上げているが、一次情報未確認のため両者の直接的な関連は断定できない。\n・週末に向けて市場流動性が薄くなるとの懸念が一部で指摘される中、Fear&Greed指数はGreed水準を示し、DEXのTVLやプール出来高も増加傾向にあることから、短期的な資金流入の勢いが意識された可能性があるが、薄い流動性下での値動きの持続性については未確認。",
     "lp_comment": "参考APRは両プールとも前日から上昇しました。\nBase 0.05%プールの参考APRは44.07%→75.35%へ上昇しました（24時間出来高 +60.15%、TVL -6.39%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは130.69%→186.81%へ上昇しました（24時間出来高 +42.41%、TVL -0.37%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+9.19%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
-    "part2_summary": "24時間比ではBTC・ETH・BNBが揃って上昇し、市場心理指数もGreed領域にあることから、全体としてリスクオン方向の地合いが意識される局面だが、この強さが持続的かどうかは不確実性が残る。ニュース面では検証済みのマクロ材料は確認できず、Laser Digital Japanの交換業登録取得やStandard CharteredのBTC予想上方修正に関する報道はいずれもtier3情報にとどまり一次情報が未確認であるため、継続的な確認が必要。週明けにかけて出来高やドミナンスの推移、TVL・APRの変化を注視したい。"
+    "part2_summary": "24時間比でBTC・ETHともに大きく上昇し、市場心理はGreed（強気寄り）に傾いている。DEXのTVLやLPプールの出来高・APRも増加傾向が見られ、リスクオン的な地合いがうかがえるが、週末に向けた流動性低下への懸念も指摘されており、値動きの振れ幅には注意が必要とみられる。なお、Solanaのスロット時間短縮など技術面の動きも継続的な監視対象として挙げられている。今後は規制当局からの一次発表や機関投資家動向、ETF資金フローの実際の変化が確認できるかが焦点となる。"
   },
   "llm_section_keys": [
     "part1_headline",
@@ -17,160 +17,160 @@
     "part2_flow",
     "part2_summary"
   ],
-  "headline_for_image": "BTC・ETHともに上昇基調、市場心理は強気優勢",
+  "headline_for_image": "BTC・ETHともに大幅上昇、週間で強い戻り",
   "audit_ledger": [
     {
       "source": "FRB",
       "url": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260820a.htm",
       "title": "Federal Reserve Board announces approval of application by National Westminster Bank Plc",
       "published_at": "Thu, 20 Aug 2026 20:00:00 GMT",
-      "verified_by": "tier1 summary記載内容",
+      "verified_by": "tier1 summary",
       "decision": "不採用",
-      "reason": "銀行免許承認に関する内容で、暗号通貨市場との関係が確認できない"
+      "reason": "銀行免許承認であり暗号通貨市場との関係が確認できない"
     },
     {
       "source": "FRB",
       "url": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820b.htm",
-      "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares, Inc. and announces termination of enforcement action with Deutsche Bank AG, DB USA Corporation, and Deutsche Bank AG New York Branch",
+      "title": "Federal Reserve Board issues enforcement action with SouthPoint Bancshares... Deutsche Bank",
       "published_at": "Thu, 20 Aug 2026 15:00:00 GMT",
-      "verified_by": "tier1 summary記載内容",
+      "verified_by": "tier1 summary",
       "decision": "不採用",
-      "reason": "銀行監督上の措置に関する内容で、暗号通貨市場との関係が確認できない"
+      "reason": "銀行に対する執行措置であり暗号通貨市場との関係が確認できない"
     },
     {
       "source": "FRB",
       "url": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260820a.htm",
-      "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and former employee of United Community Bank",
+      "title": "Federal Reserve Board issues enforcement actions with former employee of Regions Bank and United Community Bank",
       "published_at": "Thu, 20 Aug 2026 15:00:00 GMT",
-      "verified_by": "tier1 summary記載内容",
+      "verified_by": "tier1 summary",
       "decision": "不採用",
-      "reason": "個別銀行員に対する監督措置で、暗号通貨市場との関係が確認できない"
+      "reason": "個人に対する執行措置であり暗号通貨市場との関係が確認できない"
     },
     {
       "source": "CFTC",
       "url": "https://www.cftc.gov/PressRoom/PressReleases/9287-26",
       "title": "CFTC Seeks Public Comments on Proposed Elimination of SEF Order Book Requirement for Permitted Transactions",
       "published_at": "Thu, 20 Aug 2026 16:53:39 +0000",
-      "verified_by": "tier1（summary空欄、title記載内容のみ）",
-      "decision": "不採用",
-      "reason": "スワップ実行ファシリティに関するデリバティブ規制案で、summaryが空欄のため詳細不明、暗号通貨市場との直接的関係が確認できない"
+      "verified_by": "tier1 title",
+      "decision": "採用",
+      "reason": "デリバティブ市場規制に関する当局発表として補足材料に採用。summaryが空欄のためtitleのみで内容を要約"
     },
     {
       "source": "金融庁",
       "url": "https://www.fsa.go.jp/news/r8/sonota/20260821/20260821.html",
       "title": "「事務ガイドライン（第三分冊：金融会社関係）」等の一部改正について公表しました。",
       "published_at": "Fri, 21 Aug 2026 14:00:00 JST",
-      "verified_by": "tier1（summary空欄）",
+      "verified_by": "tier1 title",
       "decision": "不採用",
-      "reason": "summaryが空欄で内容が確認できず、暗号通貨市場との関係も不明"
+      "reason": "金融会社関係の事務ガイドライン改正であり、summaryが空欄で暗号通貨市場との関係が確認できない"
     },
     {
       "source": "日本銀行",
       "url": "http://www.boj.or.jp/research/research_data/reri/index.htm",
       "title": "実質輸出入の動向",
       "published_at": "Fri, 21 Aug 2026 16:00:00 +0900",
-      "verified_by": "tier1（summary空欄）",
+      "verified_by": "tier1 title",
       "decision": "不採用",
-      "reason": "貿易統計に関する定例公表で、暗号通貨市場との関係が確認できない"
+      "reason": "貿易統計に関する情報であり暗号通貨市場との関係が確認できない"
     },
     {
       "source": "日本銀行",
       "url": "http://www.boj.or.jp/about/bcp/fso/fso260821a.pdf",
       "title": "令和8年7月17日から18日にかけての大雨に伴う災害等に対する金融上の措置について（栃木県）",
       "published_at": "Fri, 21 Aug 2026 14:40:00 +0900",
-      "verified_by": "tier1（summary空欄）",
+      "verified_by": "tier1 title",
       "decision": "不採用",
-      "reason": "災害対応の地域金融措置で、暗号通貨市場との関係が確認できない"
+      "reason": "災害対応の金融措置であり暗号通貨市場との関係が確認できない"
     },
     {
       "source": "Cointelegraph",
       "url": "https://cointelegraph.com/news/solana-cuts-blockchain-slot-time-350-milliseconds",
       "title": "Solana cuts blockchain slot time to 350 milliseconds",
       "published_at": "Fri, 21 Aug 2026 13:45:13 +0000",
-      "verified_by": "tier3のみ、tier1裏付けなし",
+      "verified_by": "tier3単独",
       "decision": "不採用",
-      "reason": "tier3単独の情報で一次情報による裏付けがなく、新規項目の根拠にできない"
+      "reason": "tier3単独報道で一次情報の裏付けがなく、継続監視材料としてreusable_for_summaryに記載"
     },
     {
       "source": "Cointelegraph",
       "url": "https://cointelegraph.com/news/nomuras-laser-digital-japans-first-crypto-exchange-4-years",
       "title": "Laser Digital gets Japan's first crypto exchange approval in 4 years",
       "published_at": "Fri, 21 Aug 2026 13:08:12 +0000",
-      "verified_by": "tier3のみ、tier1（金融庁）に対応する一次情報の記載なし",
-      "decision": "不採用",
-      "reason": "tier3単独の情報で、金融庁のtier1候補にsummary記載がなく裏付けが取れないため継続監視扱い"
+      "verified_by": "独立2ソース（Cointelegraph, CoinDesk）",
+      "decision": "採用（独立2ソース）",
+      "reason": "CointelegraphとCoinDeskの独立2媒体が同一事実（Laser Digital Japanの登録取得）を報じており、事実報道に該当するため独立2ソース規定を適用。一次情報（金融庁）での確認は未了である旨を明記して採用"
     },
     {
       "source": "Cointelegraph",
       "url": "https://cointelegraph.com/news/binance-employees-questioned-uae-released",
       "title": "Binance says employees questioned in UAE cleared and released",
       "published_at": "Fri, 21 Aug 2026 12:48:04 +0000",
-      "verified_by": "tier3のみ、tier1裏付けなし",
+      "verified_by": "tier3単独",
       "decision": "不採用",
-      "reason": "tier3単独の情報で一次情報による裏付けがない"
+      "reason": "tier3単独報道で一次情報の裏付けがなく、市場全体への影響も確認できない"
     },
     {
       "source": "CoinDesk",
       "url": "https://www.coindesk.com/tech/2026/08/21/coldcard-ships-firmware-after-usd114-million-bitcoin-theft-says-ai-helped-catch-more-bugs",
       "title": "Coldcard ships firmware after $114 million bitcoin theft; says AI helped catch more bugs",
       "published_at": "Fri, 21 Aug 2026 12:10:55 +0000",
-      "verified_by": "tier3のみ、tier1裏付けなし",
+      "verified_by": "tier3単独",
       "decision": "不採用",
-      "reason": "tier3単独の情報で一次情報による裏付けがない"
+      "reason": "tier3単独報道で一次情報の裏付けがなく、継続監視材料としてreusable_for_summaryに記載"
     },
     {
       "source": "Cointelegraph",
       "url": "https://cointelegraph.com/news/standard-chartered-100k-bitcoin-2026-prediction-low",
       "title": "Standard Chartered wavers on $100K Bitcoin year-end call, says it may be 'too low'",
       "published_at": "Fri, 21 Aug 2026 11:58:10 +0000",
-      "verified_by": "tier3のみ、tier1裏付けなし",
-      "decision": "不採用",
-      "reason": "アナリスト予想の域を出ず、tier3単独で一次情報による裏付けがない"
+      "verified_by": "tier3 summary",
+      "decision": "採用",
+      "reason": "アナリスト見解の事実報道としてtier3を補足材料に採用。予想・分析であることを明記して記載"
     },
     {
       "source": "CoinDesk",
       "url": "https://www.coindesk.com/markets/2026/08/21/analysts-split-on-whether-bitcoin-s-surge-past-key-levels-signals-a-new-bull-run",
       "title": "Analysts split on whether Bitcoin's surge past key levels signals a new bull run",
       "published_at": "Fri, 21 Aug 2026 11:31:30 +0000",
-      "verified_by": "tier3のみ、tier1裏付けなし",
+      "verified_by": "tier3単独",
       "decision": "不採用",
-      "reason": "アナリスト見解の紹介記事で、tier3単独では新規項目の根拠にできない"
+      "reason": "アナリスト間で見解が分かれる分析記事であり、単独では新規事実の根拠にしない"
     },
     {
       "source": "CoinDesk",
       "url": "https://www.coindesk.com/opinion/2026/08/21/the-hard-truth-is-that-the-clarity-act-is-an-anti-crypto-bill",
       "title": "The hard truth is that the Clarity Act is an anti-crypto bill",
       "published_at": "Fri, 21 Aug 2026 11:30:00 +0000",
-      "verified_by": "tier3のみ、意見記事",
+      "verified_by": "tier3意見記事",
       "decision": "不採用",
-      "reason": "個人の意見記事であり、一次情報による事実の裏付けがない"
+      "reason": "個人の意見・論説記事であり事実報道ではない"
     },
     {
       "source": "CoinDesk",
       "url": "https://www.coindesk.com/daybook-us/2026/08/21/bitcoin-faces-usd80-000-test-as-thinner-weekend-liquidity-looms",
       "title": "Bitcoin faces $80,000 test as thinner weekend liquidity looms",
       "published_at": "Fri, 21 Aug 2026 11:26:27 +0000",
-      "verified_by": "tier3のみ、tier1裏付けなし",
-      "decision": "不採用",
-      "reason": "市況見通し記事で、tier3単独では新規項目の根拠にできない"
+      "verified_by": "tier3 summary",
+      "decision": "採用",
+      "reason": "週末の流動性低下に関する市場観測情報として補足材料に採用"
     },
     {
       "source": "CoinDesk",
       "url": "https://www.coindesk.com/policy/2026/08/21/nomura-backed-laser-digital-wins-japan-s-first-crypto-approval-in-four-years",
       "title": "Nomura-backed Laser Digital wins Japan's first crypto approval in four years",
       "published_at": "Fri, 21 Aug 2026 10:38:47 +0000",
-      "verified_by": "tier3のみ、金融庁tier1候補にsummary記載なく裏付け不可",
-      "decision": "不採用",
-      "reason": "Cointelegraph版と同一材料。tier1（金融庁）に対応するsummary記載がなく一次情報での裏付けが取れない"
+      "verified_by": "独立2ソース（CoinDesk, Cointelegraph）",
+      "decision": "採用（独立2ソース）",
+      "reason": "Cointelegraphと合わせて独立2媒体が同一事実を報じているため独立2ソース規定を適用"
     },
     {
       "source": "CoinDesk",
       "url": "https://www.coindesk.com/markets/2026/08/21/bitcoin-tops-usd77-000-as-best-week-since-2023-pulls-altcoins-along-for-the-ride",
       "title": "Bitcoin tops $77,000 as best week since 2023 pulls altcoins along for the ride",
       "published_at": "Fri, 21 Aug 2026 10:15:36 +0000",
-      "verified_by": "tier3のみ、tier1裏付けなし",
-      "decision": "不採用",
-      "reason": "市況記事で、tier3単独では新規項目の根拠にできない"
+      "verified_by": "tier3 summary",
+      "decision": "採用",
+      "reason": "週間の価格動向に関する事実報道として本文の価格解説を補強する材料に採用"
     }
   ],
   "news_source_status": {
@@ -229,6 +229,6 @@
     }
   },
   "news_candidate_count": 17,
-  "part1_md": "【対象日】2026年8月21日（金）\n\n【ヘッドライン】\n直近24時間に暗号通貨市場との関係を確認できる主要なマクロ材料は確認できない。\n\n【主要なポイント】\n・補足できる検証済み材料は確認できない。\n\n【主要指標】\n・市場全体：時価総額 $2.645兆（¥420.1兆）｜24時間取引高 $1713.9億（¥27.22兆）\n・ #BTC：$78,403（約1,245.3万円）｜24時間比 +7.86%\n・ #ETH：$2,525（約40.1万円）｜24時間比 +9.19%\n・ #BNB：$690（約11.0万円）｜24時間比 +5.33%\n・市場心理：Fear & Greed 75（Greed、CoinMarketCap API）\n・ドミナンス：BTC 59.48%｜ETH 11.51%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年8月22日07:50 JST、USD/JPY ¥158.83\n",
-  "part2_md": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $25.57M vs Base上ETH/USDC $224.92M｜参考：Base上DEX全体 $12.005億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $54.40億（¥8,640億）｜24時間比 +8.23%｜USDCドミナンス 86.5%\n・ ETH/USDC（Base）参考APR：0.05% 75.35%（TVL $8.42M／24h出来高 $34.78M）｜0.3% 186.81%（TVL $111.45M／24h出来高 $190.14M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年8月22日07:50 JST\n\n【市場のフロー】\n・暗号資産恐怖・強欲指数がGreed領域まで上昇し市場心理の楽観化が意識された可能性があり、同時期にBTC・ETH・BNBはいずれも24時間比で上昇が確認された。ただし指数の変化と価格上昇の因果関係は断定できない。\n・DEXの出来高およびBase上のTVLがともに増加したことでオンチェーン資金の流入姿勢が意識された可能性があり、同時期にLPプール（Base 0.05%・0.3%）のAPRと出来高も上昇が確認された。ただしTVL増加とAPR上昇の因果関係は断定できません。\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から上昇しました。\nBase 0.05%プールの参考APRは44.07%→75.35%へ上昇しました（24時間出来高 +60.15%、TVL -6.39%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは130.69%→186.81%へ上昇しました（24時間出来高 +42.41%、TVL -0.37%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+9.19%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\n24時間比ではBTC・ETH・BNBが揃って上昇し、市場心理指数もGreed領域にあることから、全体としてリスクオン方向の地合いが意識される局面だが、この強さが持続的かどうかは不確実性が残る。ニュース面では検証済みのマクロ材料は確認できず、Laser Digital Japanの交換業登録取得やStandard CharteredのBTC予想上方修正に関する報道はいずれもtier3情報にとどまり一次情報が未確認であるため、継続的な確認が必要。週明けにかけて出来高やドミナンスの推移、TVL・APRの変化を注視したい。\n"
+  "part1_md": "【対象日】2026年8月21日（金）\n\n【ヘッドライン】\n24時間比でBTC・ETHがともに大きく値を上げ、週間でも強い上昇局面となっている。CoinDeskは今週が2023年以来の好調な週になったと報じており、短期的な急反発を示す動きとして市場参加者の関心が高まっているとみられる。ただし規制当局の一次発表からは暗号通貨市場に直接関わる新規材料は確認できていない。\n\n【主要なポイント】\n・Nomura傘下のLaser Digital Japanが国内で暗号資産交換業者としての登録を取得したと、CoinDeskとCointelegraphの双方が報じている。日本国内での機関投資家向け取引拡大に向けた動きとされるが、一次情報（金融庁等）での確認はできていない（CoinDesk、Cointelegraph、2026-08-21）\n・Standard CharteredのアナリストがBTCの年末目標について従来予想が低すぎる可能性に言及したと報じられており、ETF資金流入の回復期待が背景にあるとみられる（Cointelegraph、2026-08-21）\n・米CFTCがSEF（スワップ実行施設）の注文板要件撤廃案について意見公募を開始したと発表。暗号資産デリバティブ市場への直接的な影響は現時点で確認できない（CFTC、2026-08-20）\n・週末に向けて市場の流動性が薄くなることへの懸念も一部メディアで指摘されており、値動きが大きくなりやすい局面である可能性がある（CoinDesk、2026-08-21）\n\n【主要指標】\n・市場全体：時価総額 $2.645兆（¥420.1兆）｜24時間取引高 $1713.9億（¥27.22兆）\n・ #BTC：$78,403（約1,245.3万円）｜24時間比 +7.86%\n・ #ETH：$2,525（約40.1万円）｜24時間比 +9.19%\n・ #BNB：$690（約11.0万円）｜24時間比 +5.33%\n・市場心理：Fear & Greed 75（Greed、CoinMarketCap API）\n・ドミナンス：BTC 59.48%｜ETH 11.51%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年8月22日07:50 JST、USD/JPY ¥158.83\n",
+  "part2_md": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $25.57M vs Base上ETH/USDC $224.92M｜参考：Base上DEX全体 $12.005億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $54.40億（¥8,640億）｜24時間比 +8.23%｜USDCドミナンス 86.5%\n・ ETH/USDC（Base）参考APR：0.05% 75.35%（TVL $8.42M／24h出来高 $34.78M）｜0.3% 186.81%（TVL $111.45M／24h出来高 $190.14M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年8月22日07:50 JST\n\n【市場のフロー】\n・Standard CharteredのアナリストがBTC年末目標について従来予想が低すぎる可能性に言及したと報じられ、ETF資金流入の回復期待が意識された可能性がある中、24時間比でBTCは大きく上昇しており、強気心理の再燃が背景にあるとみられるが、断定はできない。\n・Nomura傘下のLaser Digital Japanが国内で暗号資産交換業者としての登録を取得したと報じられたことで、日本国内での機関投資家向け取引拡大への期待が意識された可能性があり、同時期にETHも24時間比で大きく値を上げているが、一次情報未確認のため両者の直接的な関連は断定できない。\n・週末に向けて市場流動性が薄くなるとの懸念が一部で指摘される中、Fear&Greed指数はGreed水準を示し、DEXのTVLやプール出来高も増加傾向にあることから、短期的な資金流入の勢いが意識された可能性があるが、薄い流動性下での値動きの持続性については未確認。\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から上昇しました。\nBase 0.05%プールの参考APRは44.07%→75.35%へ上昇しました（24時間出来高 +60.15%、TVL -6.39%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは130.69%→186.81%へ上昇しました（24時間出来高 +42.41%、TVL -0.37%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+9.19%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\n24時間比でBTC・ETHともに大きく上昇し、市場心理はGreed（強気寄り）に傾いている。DEXのTVLやLPプールの出来高・APRも増加傾向が見られ、リスクオン的な地合いがうかがえるが、週末に向けた流動性低下への懸念も指摘されており、値動きの振れ幅には注意が必要とみられる。なお、Solanaのスロット時間短縮など技術面の動きも継続的な監視対象として挙げられている。今後は規制当局からの一次発表や機関投資家動向、ETF資金フローの実際の変化が確認できるかが焦点となる。\n"
 }

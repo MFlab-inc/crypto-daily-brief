@@ -1,7 +1,7 @@
 level: L0
 call_A: OK（1回試行）
 call_B: OK（1回試行）
-token_usage（実消費量）: input=11036, output=6415 (call_A: in=8010 out=5440 / call_B: in=3026 out=975)
+token_usage（実消費量）: input=11991, output=4923 (call_A: in=8550 out=4305 / call_B: in=3441 out=618)
 news_sources:
   - SEC: ok（対象日0件／取得25件）
   - FRB: ok（対象日3件／取得20件）
@@ -25,5 +25,3 @@ tier3候補 36件中 10件を選定（26件を件数上限により除外）
   - 数値全項目（前編・後編）
   - 後編【LP運用者向けに一言】
   - 後編【市場のフロー】【総括】
-
-月次累計（2026-08）: input=22378, output=15316（outputs/token_usage_log.csv集計・同日複数回実行分を含む）
