@@ -1,7 +1,7 @@
 level: L1
-call_A: FAILED (JSONDecodeError: Expecting property name enclosed in double quotes: line 12 column 5 (char 848) / 3回試行)
+call_A: FAILED (JSONDecodeError: Expecting value: line 1 column 1 (char 0) / 3回試行)
 call_B: OK（1回試行）
-token_usage（実消費量）: input=26342, output=25238 (call_A: in=23586 out=24000 / call_B: in=2756 out=1238)
+token_usage（実消費量）: input=26465, output=11647 (call_A: in=23709 out=11177 / call_B: in=2756 out=470)
 news_sources:
   - SEC: ok（対象日0件／取得25件）
   - FRB: ok（対象日1件／取得20件）
@@ -10,12 +10,11 @@ news_sources:
   - CFTC: ok（対象日1件／取得10件）
   - 金融庁: ok（対象日1件／取得15件）
   - 日本銀行: ok（対象日2件／取得50件）
-  - CoinDesk: ok（対象日19件／取得25件）
-  - Cointelegraph: ok（対象日20件／取得30件）
+  - CoinDesk: ok（対象日4件／取得25件）
+  - Cointelegraph: ok（対象日4件／取得30件）
   - Cointelegraph Japan: failed（HTTP 410）
   - Google News (Reuters検索): ok（対象日0件／取得0件）
-news_candidates_today: 16件 / audit_ledger: N/A件（候補があるのにaudit_ledgerが0件の場合はC19がFAILする想定。要目視確認）
-tier3候補 39件中 10件を選定（29件を件数上限により除外）
+news_candidates_today: 14件 / audit_ledger: N/A件（候補があるのにaudit_ledgerが0件の場合はC19がFAILする想定。要目視確認）
 
 手当が必要な箇所:
   - 前編【ヘッドライン】
