@@ -295,6 +295,33 @@ check("WRITES_Aのheadline_for_imageもヘッドラインの判定手順に従�
       "ヘッドラインの判定手順" in generate_post.WRITES_A
       and generate_post.WRITES_A.count("ヘッドラインの判定手順") >= 2)
 
+print("=== generate_post.py: 重要性判定と因果表現の分離（v1.33・オーナー指示） ===")
+check("NEWS_SELECTIONに重要性（関連性）と因果関係を分けて判定する旨が明記されている",
+      "重要性（関連性）と、暗号通貨価格への因果関係を" in generate_post.NEWS_SELECTION
+      and "分けて判定する" in generate_post.NEWS_SELECTION)
+check("NEWS_SELECTIONにA（直接材料）・B（波及経路のあるマクロ）・C（一般ニュース）の3分類がある",
+      all(s in generate_post.NEWS_SELECTION for s in (
+          "A：暗号通貨への直接材料", "B：明確な波及経路があるマクロ・地政学材料",
+          "C：波及経路を説明できない一般ニュース")))
+check("NEWS_SELECTIONにBの波及経路の例（金利・為替・流動性・原油等）が列挙されている",
+      all(s in generate_post.NEWS_SELECTION for s in ("金利", "為替", "流動性", "通商政策・関税", "原油")))
+check("NEWS_SELECTIONに「直接因果が未確認」のみを不採用理由にしてはならない旨が明記されている",
+      "「暗号通貨価格への直接因果が未確認である」ことを、" in generate_post.NEWS_SELECTION
+      and "不採用の理由としてはならない" in generate_post.NEWS_SELECTION)
+check("NEWS_SELECTIONに因果未確認でも掲載したうえで明記する旨が明記されている",
+      "掲載したうえで" in generate_post.NEWS_SELECTION
+      and "暗号通貨価格への直接因果は未確認" in generate_post.NEWS_SELECTION)
+check("NEWS_SELECTIONにA/B/C分類がtierとは別軸である旨が明記されている（tier規律との混同防止）",
+      "下記tier（情報源の信頼性）とは別の軸である" in generate_post.NEWS_SELECTION)
+check("NO_CANDIDATES_FALLBACKにaudit_ledgerのreason冒頭でA/B/C段階を明記する指示がある",
+      "reasonの冒頭に上記A/B/Cのどの段階と判定したか" in generate_post.NO_CANDIDATES_FALLBACK)
+check("NO_CANDIDATES_FALLBACKに直接因果未確認のみを理由にした不採用を禁じる文言がある",
+      "「暗号通貨価格への直接因果が未確認」であること" in generate_post.NO_CANDIDATES_FALLBACK
+      and "のみを理由に不採用としてはならない" in generate_post.NO_CANDIDATES_FALLBACK)
+check("WRITES_Aのpart1_pointsがB分類材料に因果未確認の限定表現を含める旨を参照している",
+      "重要性判定と因果表現の分離" in generate_post.WRITES_A
+      and "暗号通貨価格への直接因果は未確認" in generate_post.WRITES_A)
+
 print("=== generate_post.py: 候補ごとの掲載可否ラベル（v1.29・オーナー指示・修正2） ===")
 _elig_candidates = [
     {"tier": 1, "source": "SEC", "title": "t1", "url": "https://example.com/1",
