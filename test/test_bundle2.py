@@ -282,6 +282,19 @@ check("WRITES_Aの項目数が情報源の規律に従う旨・tier3単独ソー
       "項目数は目標ではなく" in generate_post.WRITES_A
       and "項目数を埋めるためにtier3単独ソースを採用しない" in generate_post.WRITES_A)
 
+print("=== generate_post.py: ヘッドラインの判定手順（v1.30・オーナー指示） ===")
+check("NEWS_SELECTIONにヘッドラインの判定手順が明示的な分岐として記述されている",
+      all(s in generate_post.NEWS_SELECTION for s in (
+          "ヘッドラインの判定手順", "tier1の裏付けがある採用材料",
+          "その材料に基づく実文言のヘッドラインを書く")))
+check("ヘッドラインの判定手順は独立2ソース材料単独では昇格しない旨を明記",
+      "独立2ソース材料は【主要なポイント】には掲載できるが、【ヘッドライン】の"
+      in generate_post.NEWS_SELECTION
+      and "根拠にはできない" in generate_post.NEWS_SELECTION)
+check("WRITES_Aのheadline_for_imageもヘッドラインの判定手順に従う旨を記述",
+      "ヘッドラインの判定手順" in generate_post.WRITES_A
+      and generate_post.WRITES_A.count("ヘッドラインの判定手順") >= 2)
+
 print("=== generate_post.py: 候補ごとの掲載可否ラベル（v1.29・オーナー指示・修正2） ===")
 _elig_candidates = [
     {"tier": 1, "source": "SEC", "title": "t1", "url": "https://example.com/1",
