@@ -1,0 +1,29 @@
+name: diag-new-tier1-sources
+
+# 一時的な調査用ワークフロー（米財務省・USTR・ホワイトハウスのRSS URL調査）。
+# 本番パイプライン（daily.yml・set_headline.yml・post_draft.yml）には
+# 一切影響しない。調査完了後、本ファイルとscripts/_diag_new_tier1_sources.py
+# は削除する。
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 依存関係
+        run: pip install -q requests
+
+      - name: 新規tier1候補のRSS URLを調査
+        run: python3 scripts/_diag_new_tier1_sources.py
