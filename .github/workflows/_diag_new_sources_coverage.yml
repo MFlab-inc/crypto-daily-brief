@@ -29,3 +29,6 @@ jobs:
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python3 scripts/_diag_new_sources_coverage.py
+
+      - name: 新規4情報源の生の取得結果（日付フィルタなし）を出力
+        run: python3 scripts/_diag_raw_feed_contents.py
