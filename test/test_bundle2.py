@@ -992,6 +992,25 @@ tier3_names = {s["name"] for s in real_sources if s.get("tier") == 3}
 check("config/news_sources.json: CoinDesk/Cointelegraph(EN/JP)がtier=3で登録されている",
       {"CoinDesk", "Cointelegraph", "Cointelegraph Japan"}.issubset(tier3_names), str(tier3_names))
 
+print("=== config/news_sources.json: 米財務省・USTR・ホワイトハウスの追加確認（v1.31・オーナー指示） ===")
+tier1_names = {s["name"] for s in real_sources if s.get("tier") == 1}
+check("米財務省・USTR・ホワイトハウス（2本）がtier=1で登録されている",
+      {"米財務省", "USTR", "ホワイトハウス", "ホワイトハウス（大統領令等）"}.issubset(tier1_names), str(tier1_names))
+_new_source_urls = {s["name"]: s["url"] for s in real_sources
+                     if s["name"] in ("米財務省", "USTR", "ホワイトハウス", "ホワイトハウス（大統領令等）")}
+check("追加した4件のURLが実測で確認済みのものと一致する",
+      _new_source_urls == {
+          "米財務省": "https://home.treasury.gov/rss.xml",
+          "USTR": "https://ustr.gov/rss.xml",
+          "ホワイトハウス": "https://www.whitehouse.gov/news/feed/",
+          "ホワイトハウス（大統領令等）": "https://www.whitehouse.gov/presidential-actions/feed/",
+      }, str(_new_source_urls))
+_tier_map_check = verify_post._load_source_tier_map()
+check("verify_post._load_source_tier_map()が新規4件をtier=1として認識する（C21/C22で使う経路）",
+      all(_tier_map_check.get(n) == 1 for n in
+          ("米財務省", "USTR", "ホワイトハウス", "ホワイトハウス（大統領令等）")),
+      str(_tier_map_check))
+
 print("=== post_draft.yml: フェイルクローズ・冪等性ガードの確認（v1.20） ===")
 post_draft_yml = (REPO / ".github" / "workflows" / "post_draft.yml").read_text(encoding="utf-8")
 check("post_draft.yml: continue-on-errorが除去されている（フェイルクローズ化）",

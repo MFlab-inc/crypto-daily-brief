@@ -1,5 +1,5 @@
 {
-  "_comment": "RSS一覧（v0.4方針転換・v1.20で優先度3を追加）。tier=1は規制当局・議会・政府・企業・取引所の公式発表（優先度1・一次情報として直接利用可）。tier=3はCoinDesk・Cointelegraph等の暗号通貨特化メディア（優先度3・v0.3 §「ニュースの選定と根拠」の位置づけどおり『補完・裏取り』のみに用い、単独の主根拠にはしない）。collect_news.pyが1件ずつ独立して取得し、失敗した情報源は他を巻き添えにしない。404/403等が実測で判明したものは除外・記録する（DESIGN_CHANGES.md参照）。Cointelegraph日本語版のURLはこのセッションのサンドボックスからは到達性を検証できず（egress遮断）、live dispatchでの実測待ち（DESIGN_CHANGES.md v1.20参照）。",
+  "_comment": "RSS一覧（v0.4方針転換・v1.20で優先度3を追加・v1.31で米財務省/USTR/ホワイトハウスを追加）。tier=1は規制当局・議会・政府・企業・取引所の公式発表（優先度1・一次情報として直接利用可）。tier=3はCoinDesk・Cointelegraph等の暗号通貨特化メディア（優先度3・v0.3 §「ニュースの選定と根拠」の位置づけどおり『補完・裏取り』のみに用い、単独の主根拠にはしない）。collect_news.pyが1件ずつ独立して取得し、失敗した情報源は他を巻き添えにしない。404/403等が実測で判明したものは除外・記録する（DESIGN_CHANGES.md参照）。Cointelegraph日本語版のURLはこのセッションのサンドボックスからは到達性を検証できず（egress遮断）、live dispatchでの実測待ち（DESIGN_CHANGES.md v1.20参照）。ホワイトハウスは2本（ニュース全般／大統領令・布告等）。関税措置等の通商政策は大統領布告として公表されることが多く「大統領令等」フィードでのみ捕捉される場合があるため2本構成とした（DESIGN_CHANGES.md v1.31参照）。",
   "sources": [
     { "name": "SEC", "url": "https://www.sec.gov/news/pressreleases.rss", "tier": 1 },
     { "name": "FRB", "url": "https://www.federalreserve.gov/feeds/press_all.xml", "tier": 1 },
@@ -8,6 +8,10 @@
     { "name": "CFTC", "url": "https://www.cftc.gov/RSS/RSSGP/rssgp.xml", "tier": 1 },
     { "name": "金融庁", "url": "https://www.fsa.go.jp/fsaNewsListAll_rss2.xml", "tier": 1 },
     { "name": "日本銀行", "url": "https://www.boj.or.jp/rss/whatsnew.xml", "tier": 1 },
+    { "name": "米財務省", "url": "https://home.treasury.gov/rss.xml", "tier": 1 },
+    { "name": "USTR", "url": "https://ustr.gov/rss.xml", "tier": 1 },
+    { "name": "ホワイトハウス", "url": "https://www.whitehouse.gov/news/feed/", "tier": 1 },
+    { "name": "ホワイトハウス（大統領令等）", "url": "https://www.whitehouse.gov/presidential-actions/feed/", "tier": 1 },
     { "name": "CoinDesk", "url": "https://www.coindesk.com/arc/outboundfeeds/rss/", "tier": 3 },
     { "name": "Cointelegraph", "url": "https://cointelegraph.com/rss", "tier": 3 },
     { "name": "Cointelegraph Japan", "url": "https://jp.cointelegraph.com/rss", "tier": 3 }
