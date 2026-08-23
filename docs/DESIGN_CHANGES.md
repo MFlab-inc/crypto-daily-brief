@@ -99,13 +99,37 @@ C21・C22と同じ判断——機械的に確実な側で吸収する）、`_str
 独立2ソース規定の既存の記述が守られていない事象であり、修正1・2の対象外・
 未対応。オーナー報告のみとし、対応要否はオーナー判断を待つ。
 
+### 追加対応：ヘッドラインの判定手順を明示（オーナー指示）
+
+上記のC22 FAILについて、オーナーは「C22は正しくFAILさせているので、
+直すのはプロンプト側」と判断し、修正1・2と同じ手法（ルールを覚えさせる
+のではなく判断材料・手順を明示する）での対応を指示した。
+
+NEWS_SELECTIONへ「ヘッドラインの判定手順」を新設し、part1_headline・
+headline_for_imageの決定を明示的な3段階の分岐として記述した：
+(1) tier1裏付けの採用材料が1件以上あるか確認する、(2) ある場合のみ
+その材料に基づく実文言を書く、(3) 1件もなければ独立2ソース材料が
+【主要なポイント】に採用されていても定型文をそのまま使う。WRITES_Aの
+headline_for_image・part1_headlineの各行からもこの手順を参照させた。
+
+**検証**：8/21・8/22の実データでcall_Aを再度直接検証（各3回試行、計6回）。
+- 8/21：3回ともpart1_headlineが定型文（FIXED_HEADLINE）となり、
+  `C22_headline_tier1_basis`は3回ともSKIP（FAILしていたものが解消。
+  厳密には「PASS」ではなく「定型文のためSKIP」——C22の設計上、定型文の
+  日はそもそも検査対象外になる。これが意図した正しい状態）。
+  Laser Digitalの独立2ソース案件は引き続き3回ともpart1_pointsに
+  正しく記載され、audit_ledgerにも"採用（独立2ソース）"としてCointelegraph・
+  CoinDeskの2件が記録された。`C21_decision_tier_consistency`も3回ともPASS。
+- 8/22：3回とも従来どおり定型文のまま（tier1関連材料なし）。C21 PASS・
+  C22 SKIP。
+
 ### テスト
 
-`test/test_bundle2.py`に新規テスト15件（修正1・2で9件、`_strip_code_fence`
-プリアンブル吸収で6件）を追加。既存137件と合わせ全153件PASS。既存の
-CALL_A_DATAフィクスチャのaudit_ledger sourceが実在しない"Reuters"だった
-ためC21のtier判定でFAILする回帰が判明し、実在のtier1名"SEC"へ修正済み
-（v1.29での修正時に対応済み）。
+`test/test_bundle2.py`に新規テスト18件（修正1・2で9件、`_strip_code_fence`
+プリアンブル吸収で6件、ヘッドライン判定手順で3件）を追加。既存137件と
+合わせ全156件PASS。既存のCALL_A_DATAフィクスチャのaudit_ledger sourceが
+実在しない"Reuters"だったためC21のtier判定でFAILする回帰が判明し、
+実在のtier1名"SEC"へ修正済み（v1.29での修正時に対応済み）。
 
 ---
 
