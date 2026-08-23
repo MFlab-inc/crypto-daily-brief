@@ -42,6 +42,10 @@ LINK_TAG_RE = re.compile(
 )
 HREF_RE = re.compile(r'href=["\']([^"\']+)["\']', re.IGNORECASE)
 URLISH_RE = re.compile(r'https?://[^\s"\'<>)]+\.(?:rdf|xml|rss)[^\s"\'<>)]*', re.IGNORECASE)
+# ファイル拡張子を問わず、RSS一覧・案内ページへのリンク（例: /rss/）も
+# 拾うための広めのフォールバック（URLISH_REは.rdf/.xml/.rss拡張子必須のため
+# 一覧ページ自体のリンクを見落とす）。
+RSS_HREF_RE = re.compile(r'href=["\']([^"\']*rss[^"\']*)["\']', re.IGNORECASE)
 
 
 def _fetch(url: str) -> str | None:
@@ -77,6 +81,11 @@ def main() -> None:
             print(f"  本文中の.rdf/.xml/.rss類似URL: {len(urlish)}件")
             for u in urlish[:30]:
                 print(f"    {u}")
+        rss_hrefs = sorted(set(RSS_HREF_RE.findall(html)))
+        if rss_hrefs:
+            print(f"  'rss'を含むhref（拡張子問わず・一覧ページ探索用）: {len(rss_hrefs)}件")
+            for u in rss_hrefs[:30]:
+                print(f"    {u}")
         if url == "https://www.jiji.com/policy/rss.html":
             print("  --- ページ本文（案内ページのため全文） ---")
             text_only = re.sub(r"<[^>]+>", "\n", html)
@@ -101,6 +110,43 @@ def main() -> None:
     for url in guesses:
         status, items, detail = collect_news.fetch_rss(url)
         print(f"  {url}: status={status} detail={detail} 件数={len(items) if items else 0}")
+
+    print()
+    print("===== ranking.rdfが件数0だった件の切り分け（RSS1.0/RDF名前空間の疑い） =====")
+    _probe_ranking_rdf()
+
+
+def _probe_ranking_rdf() -> None:
+    """jiji.com/rss/ranking.rdfはHTTP 200・整形式XMLだがfetch_rss()は0件を
+    返した。RSS 1.0（RDF）はitem要素が名前空間付き
+    （{http://purl.org/rss/1.0/}item等）になるため、fetch_rss()の
+    root.iter("item")（名前空間なし）が一致しない可能性を切り分ける。
+    """
+    from xml.etree import ElementTree as ET
+
+    url = "https://www.jiji.com/rss/ranking.rdf"
+    try:
+        resp = requests.get(url, timeout=20, headers={"User-Agent": collect_news.USER_AGENT})
+    except requests.RequestException as e:
+        print(f"  取得失敗: {type(e).__name__}: {e}")
+        return
+    print(f"  HTTP {resp.status_code}")
+    print("  先頭1500文字:")
+    print(resp.text[:1500])
+    try:
+        root = ET.fromstring(resp.content)
+    except ET.ParseError as e:
+        print(f"  XML解析失敗: {e}")
+        return
+    bare = list(root.iter("item"))
+    ns_agnostic = [el for el in root.iter() if el.tag.split("}")[-1] == "item"]
+    print(f"  root.iter('item')（名前空間なし・fetch_rss()と同じ）: {len(bare)}件")
+    print(f"  ローカル名一致（名前空間非依存）: {len(ns_agnostic)}件")
+    if ns_agnostic:
+        el = ns_agnostic[0]
+        print(f"  1件目のタグ名: {el.tag}")
+        for child in list(el)[:6]:
+            print(f"    {child.tag} = {(child.text or '')[:80]!r}")
 
 
 if __name__ == "__main__":
