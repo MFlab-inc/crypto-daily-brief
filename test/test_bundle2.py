@@ -243,6 +243,48 @@ check("NO_CANDIDATES_FALLBACKが独立2ソース規定該当時にpart1_points�
       "独立2ソース規定" in generate_post.NO_CANDIDATES_FALLBACK
       and "part1_pointsの定型文フォールバックを使わず" in generate_post.NO_CANDIDATES_FALLBACK)
 
+print("=== generate_post.py: 情報源規律と項目数の優先順位（v1.29・オーナー指示・修正1） ===")
+check("NEWS_SELECTIONに情報源規律が項目数より優先する旨が明記されている",
+      "情報源の規律は項目数より優先する" in generate_post.NEWS_SELECTION)
+check("NEWS_SELECTIONに0項目が正しい結果である旨が明記されている",
+      "は失敗ではなく" in generate_post.NEWS_SELECTION
+      and "が定める正しい結果である" in generate_post.NEWS_SELECTION)
+check("WRITES_Aから固定の「3〜4項目」目標が除かれている（上限のみへ変更）",
+      "3〜4項目" not in generate_post.WRITES_A and "上限4項目" in generate_post.WRITES_A)
+check("WRITES_Aの項目数が情報源の規律に従う旨・tier3単独ソースを埋め草にしない旨を記述",
+      "項目数は目標ではなく" in generate_post.WRITES_A
+      and "項目数を埋めるためにtier3単独ソースを採用しない" in generate_post.WRITES_A)
+
+print("=== generate_post.py: 候補ごとの掲載可否ラベル（v1.29・オーナー指示・修正2） ===")
+_elig_candidates = [
+    {"tier": 1, "source": "SEC", "title": "t1", "url": "https://example.com/1",
+     "published_at": "Mon, 17 Aug 2026 10:00:00 GMT"},
+    {"tier": 3, "source": "CoinDesk", "title": "t3", "url": "https://example.com/3",
+     "published_at": "Mon, 17 Aug 2026 09:00:00 GMT"},
+    {"tier": 4, "source": "Google News (Reuters検索)", "title": "t4", "url": "https://example.com/4",
+     "published_at": "Mon, 17 Aug 2026 08:00:00 GMT"},
+]
+_elig_labeled = generate_post._label_eligibility(_elig_candidates)
+check("tier1候補のeligibilityは「掲載可」",
+      next(c for c in _elig_labeled if c["tier"] == 1)["eligibility"] == "掲載可")
+check("tier3候補のeligibilityは単独不可を明記",
+      "単独では掲載不可" in next(c for c in _elig_labeled if c["tier"] == 3)["eligibility"])
+check("tier4候補のeligibilityは掲載不可",
+      "掲載不可" in next(c for c in _elig_labeled if c["tier"] == 4)["eligibility"])
+check("eligibility付与後も元のフィールド（title等）が保持される",
+      all(c.get("title") and c.get("url") for c in _elig_labeled))
+_news_today_elig = {"candidates": [
+    {"tier": 1, "source": "SEC", "title": "u1", "url": "https://example.com/u1",
+     "published_at": "Mon, 17 Aug 2026 10:00:00 GMT"},
+]}
+_uc, _ = generate_post._build_call_a_user_content(DAILY_DATA, _news_today_elig, None)
+_uc_parsed = json.loads(_uc)
+check("_build_call_a_user_content: news_candidates_todayの各項目にeligibilityが付与される",
+      all("eligibility" in c for c in _uc_parsed["news_candidates_today"]))
+check("NEWS_SELECTIONがeligibilityフィールドの存在と、それに従う旨を候補に明記している",
+      "eligibility" in generate_post.NEWS_SELECTION
+      and "判定に従うこと" in generate_post.NEWS_SELECTION)
+
 print("=== generate_post.py: tier3候補数上限の確認（v1.21） ===")
 _tier1_fixed = [{"tier": 1, "source": "SEC", "published_at": "Mon, 17 Aug 2026 10:00:00 GMT"} for _ in range(3)]
 _tier3_15 = [{"tier": 3, "source": "CoinDesk", "title": f"item{i}",

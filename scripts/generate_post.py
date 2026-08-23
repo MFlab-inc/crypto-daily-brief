@@ -124,7 +124,9 @@ RULES_CAUSAL = """## 因果表現
 NEWS_SELECTION = """## ニュース候補の扱いと選定根拠
 
 news_candidates_today に、collect_news.py が公式発表RSS等から収集した候補が
-title・summary・published_at・source・tier 付きで渡される。web_searchは
+title・summary・published_at・source・tier・eligibility 付きで渡される。
+eligibilityはtierに基づき機械的に付与した掲載可否の判定であり、この
+判定に従うこと（tier番号から自分で可否を導く必要はない）。web_searchは
 使わない — 独自に調べたり、候補一覧に無い情報を付け加えたりしない。
 本文はこの候補一覧のみを根拠にする。
 
@@ -141,6 +143,15 @@ tier 4: Google News経由の候補発見のみの結果（見出し・URLのみ�
         裏取りをしていない）。単独では事実の根拠にしない。継続監視の
         対象として reusable_for_summary に記すにとどめ、【ヘッドライン】
         【主要なポイント】の記述根拠には使わない。
+
+### 情報源規律と項目数の優先順位（v1.29・オーナー指示）
+
+情報源の規律は項目数より優先する。tier1（または下記「独立2ソース規定」に
+該当するtier3）の裏付けがある材料が1件しかなければpart1_pointsは1項目、
+0件なら0項目とし、下記「候補が無い場合の扱い」の定型文を使うこと。
+項目数を満たすためにtier3単独ソースを採用してはならない。0項目
+（定型文のみ）は失敗ではなく、統合運用基準§3.1が定める正しい結果である
+（「根拠が少ない日は数を埋めず、確認できる材料と限界を明記する」）。
 
 - 掲載する事実はtier 1のsummaryに記載されている内容、または下記
   「独立2ソース規定」に該当するtier 3の事実報道に限る。tier 3は
@@ -206,8 +217,11 @@ WRITES_A = """## あなたが書くもの
 
 - headline_for_image: 図版下部帯用。`#` を使わず全角40字以内。体言止め可。
 - part1_headline: 前編のヘッドライン。2〜3文。当日の最重要材料と価格の方向。
-- part1_points: 3〜4項目。ヘッドラインと重複しない補足。各項目末尾に
-  （媒体名、日付）を付す。材料が乏しい日は項目数を減らし、その旨を書く。
+- part1_points: 上限4項目。ヘッドラインと重複しない補足。各項目末尾に
+  （媒体名、日付）を付す。項目数は目標ではなく情報源の規律に従った結果
+  である——tier1（または独立2ソース規定該当のtier3）の裏付けがある
+  材料の件数がそのまま項目数になる（1件なら1項目、0件なら0項目で
+  定型文）。項目数を埋めるためにtier3単独ソースを採用しない。
 - audit_ledger: 候補一覧（tier 1・3・4のすべて）の採否を判断した記録。
 - reusable_for_summary: 継続材料で本文に載せなかったものの1行要約（0〜2件）。"""
 
@@ -374,6 +388,25 @@ def _select_candidates_for_call_a(candidates: list[dict]) -> tuple[list[dict], d
     return tier1 + tier3_selected + others, stats
 
 
+# v1.29（オーナー指示・修正2）: tier1が薄い日にpart1_pointsの項目数を
+# 埋めるためtier3単独ソースが誤って"採用"される事象が実データで
+# 繰り返し再現した（DESIGN_CHANGES.md参照）。ルールをプロンプト文中の
+# 記憶に委ねるのではなく、候補ごとに掲載可否を機械的に付与して渡す。
+_ELIGIBILITY_LABELS = {
+    1: "掲載可",
+    3: "単独では掲載不可（tier1の裏取り、または独立2ソース規定に該当する場合のみ可）",
+    4: "掲載不可（候補発見専用。単独では事実の根拠にしない）",
+}
+_ELIGIBILITY_UNKNOWN = "掲載不可（tier不明）"
+
+
+def _label_eligibility(candidates: list[dict]) -> list[dict]:
+    return [
+        {**c, "eligibility": _ELIGIBILITY_LABELS.get(c.get("tier"), _ELIGIBILITY_UNKNOWN)}
+        for c in candidates
+    ]
+
+
 def _build_call_a_user_content(daily_data: dict, news_today: dict, news_yesterday: dict | None) -> tuple[str, dict]:
     selected_today, stats = _select_candidates_for_call_a(news_today.get("candidates", []))
     selected_yesterday, _ = _select_candidates_for_call_a((news_yesterday or {}).get("candidates", []))
@@ -381,8 +414,8 @@ def _build_call_a_user_content(daily_data: dict, news_today: dict, news_yesterda
         "target_date_jst": daily_data.get("target_date_jst", ""),
         "weekday_jp": daily_data.get("weekday_jp", ""),
         "daily_data": daily_data,
-        "news_candidates_today": selected_today,
-        "news_candidates_yesterday": selected_yesterday,
+        "news_candidates_today": _label_eligibility(selected_today),
+        "news_candidates_yesterday": _label_eligibility(selected_yesterday),
     }
     return json.dumps(payload, ensure_ascii=False, indent=2), stats
 
