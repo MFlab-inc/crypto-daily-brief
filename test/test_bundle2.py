@@ -182,6 +182,33 @@ c = FakeClient(fenced)
 out = generate_post.call_b(c, DAILY_DATA, CALL_A_DATA)
 check("callB コードフェンス除去", out.ok and out.attempts == 1, str(out.error))
 
+print("=== generate_post._strip_code_fence: フェンス前プリアンブルの吸収（v1.29） ===")
+# 実データで確認された実際の失敗パターン: フェンスの前に説明文（プリアンブル）が
+# 付き、旧実装（位置0のフェンスのみ剥がす）はこれを剥がせずJSONDecodeErrorに
+# なっていた（DESIGN_CHANGES.md参照）。
+_json_body = json.dumps({"a": 1, "b": "値"}, ensure_ascii=False)
+check("フェンスが位置0（プリアンブルなし）は従来どおり剥がせる",
+      generate_post._strip_code_fence(f"```json\n{_json_body}\n```") == _json_body)
+check("フェンス前にプリアンブルがあっても中身を取り出せる",
+      generate_post._strip_code_fence(f"候補を確認しました。理由の説明。\n\n```json\n{_json_body}\n```") == _json_body)
+check("複数行にわたる長いプリアンブルにも対応する",
+      generate_post._strip_code_fence(
+          f"1行目の検討。\n2行目の検討。\n3行目、結論として以下を出力します。\n```json\n{_json_body}\n```"
+      ) == _json_body)
+check("フェンスもプリアンブルも無ければ従来どおりそのまま",
+      generate_post._strip_code_fence(_json_body) == _json_body)
+check("フェンス無し・プリアンブルありでも最初の{から最後の}までを抽出する",
+      generate_post._strip_code_fence(f"説明文です。\n{_json_body}") == _json_body)
+
+# プリアンブル付きフェンスがcall_A経由でも正しくJSON解析されることを確認
+# （_strip_code_fence単体だけでなく実際の呼び出し経路で回帰しないことの確認）
+def preambled(kw, n):
+    body = json.dumps(CALL_A_DATA, ensure_ascii=False)
+    return FakeResponse([FakeTextBlock(f"候補を確認しました。tier1は少ないため慎重に判断します。\n\n```json\n{body}\n```")])
+c = FakeClient(preambled)
+out = generate_post.call_a(c, DAILY_DATA, {"candidates": []}, None)
+check("callA: プリアンブル付きフェンスでも1回試行で成功する", out.ok and out.attempts == 1, str(out.error))
+
 # 5) refusal → 失敗
 def refused(kw, n):
     return FakeResponse([], stop_reason="refusal", stop_details=FakeStopDetails(category="frontier_llm"))

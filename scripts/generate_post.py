@@ -286,13 +286,32 @@ def _extract_text(response: Any) -> str:
     return "".join(b.text for b in response.content if getattr(b, "type", None) == "text").strip()
 
 
+_CODE_FENCE_RE = re.compile(r"```[A-Za-z]*\n(.*?)\n?```", re.DOTALL)
+
+
 def _strip_code_fence(text: str) -> str:
-    """出力形式でコードフェンス禁止を指示済みだが、万一付与された場合のみ剥がす。"""
+    """出力形式でコードフェンス禁止を指示済みだが、万一付与された場合のみ剥がす。
+
+    v1.29: 位置0のフェンスしか想定していなかった旧実装は、モデルが
+    フェンスの前に説明文（プリアンブル）を付けた場合に何もせず、生テキストが
+    そのままjson.loads()へ渡り"char 0"のJSONDecodeErrorで失敗する事象が
+    実データで確認された（DESIGN_CHANGES.md参照。情報源規律の優先順位付けの
+    ようなより踏み込んだ判断を求める指示を追加した後に顕在化した）。
+    テキスト中のどこにあってもフェンスを検出して中身のみを取り出す。
+    フェンスが無い場合も、プリアンブル付き・無しいずれにも対応するため
+    最初の '{' から対応する最後の '}' までを抽出するフォールバックを試みる。
+    """
     t = text.strip()
-    if t.startswith("```"):
-        t = re.sub(r"^```[A-Za-z]*\n?", "", t)
-        t = re.sub(r"\n?```$", "", t)
-    return t.strip()
+    fence_match = _CODE_FENCE_RE.search(t)
+    if fence_match:
+        return fence_match.group(1).strip()
+    if t.startswith("{"):
+        return t
+    first_brace = t.find("{")
+    last_brace = t.rfind("}")
+    if first_brace != -1 and last_brace > first_brace:
+        return t[first_brace:last_brace + 1].strip()
+    return t
 
 
 def _extract_usage(response: Any) -> dict[str, int]:
