@@ -1,0 +1,119 @@
+{
+  "target_date_jst": "2026-08-23",
+  "level": "L0",
+  "sections": {
+    "part0_target_date": "2026年8月23日（日）",
+    "part1_headline": "直近24時間に暗号通貨市場との関係を確認できる主要なマクロ材料は確認できない。",
+    "part1_points": "・補足できる検証済み材料は確認できない。",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.634兆（¥418.5兆）｜24時間取引高 $903.8億（¥14.36兆）\n・ #BTC：$77,654（約1,233.8万円）｜24時間比 +0.79%\n・ #ETH：$2,459（約39.1万円）｜24時間比 +1.81%\n・ #BNB：$703（約11.2万円）｜24時間比 +1.26%\n・市場心理：Fear & Greed 78（Greed、CoinMarketCap API）\n・ドミナンス：BTC 59.14%｜ETH 11.26%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年8月24日07:47 JST、USD/JPY ¥158.88",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $10.56M vs Base上ETH/USDC $137.70M｜参考：Base上DEX全体 $12.754億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $54.76億（¥8,701億）｜24時間比 -0.42%｜USDCドミナンス 86.3%\n・ ETH/USDC（Base）参考APR：0.05% 50.79%（TVL $8.22M／24h出来高 $22.88M）｜0.3% 113.04%（TVL $111.23M／24h出来高 $114.82M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年8月24日07:47 JST",
+    "part2_flow": "・市場心理はFear&Greed指数がGreed（強欲）圏を示しており、投資家心理が強気に傾いている状態が続いていることが示唆される。この心理状況のもとでBTC・ETH・BNBはいずれも24時間比で上昇しており、リスク選好姿勢が強まっている可能性がある。ただし指数と個別の値動きを機械的に結びつけることはできない。\n・DEX（分散型取引所）のTVL（預かり資産残高）がやや低下する一方でLPプール（流動性提供者向けプール）のAPR（年率換算利回り）も低下傾向にあり、流動性提供者の資金効率がやや落ち着いた可能性が考えられる。ただし出来高減少とAPR低下の因果関係は本データのみでは断定できない。",
+    "lp_comment": "参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは58.98%→50.79%へ低下しました（24時間出来高 -12.58%、TVL +1.48%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは120.10%→113.04%へ低下しました（24時間出来高 -4.47%、TVL +1.50%）。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+1.81%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "本日は暗号通貨市場との関係を確認できる主要なマクロ材料は確認されず、値動きは総じて堅調ながら材料難の中での推移とみられる。市場心理はGreed圏にあり過熱感への警戒も一部で意識される状況だが、方向感を裏付ける確定的な材料は乏しい。なお、BitMart社の破産手続き関連報道は続報が待たれる段階であり、今後の情報更新が注目される。週明けにかけて、マクロ指標や規制動向、DEX出来高の変化など複数の観点から状況を注視する必要がある。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "BTC・ETH・BNBともに上昇基調",
+  "audit_ledger": [
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/08/23/crypto-s-next-billion-users-might-be-ai-agents-and-they-re-paying-with-stablecoins",
+      "title": "Crypto’s next billion users might be AI agents, and they’re paying with stablecoins",
+      "published_at": "Sun, 23 Aug 2026 13:00:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 暗号通貨関連の話題だが、tier3単独ソースであり一次情報の裏付けや独立2ソースの条件を満たさないため主要ポイントとして採用しない。継続監視材料としてreusable_for_summaryに記載。"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/08/22/crypto-exchange-bitmart-weighs-partial-restart-and-creditor-payouts-weeks-after-announcing-shutdown",
+      "title": "Crypto exchange BitMart weighs partial restart and creditor payouts weeks after announcing shutdown",
+      "published_at": "Sat, 22 Aug 2026 15:16:41 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 取引所の経営動向に関する内容だが、tier3単独ソースであり一次情報（tier1）の裏付けおよび独立2ソース規定の条件（2つ以上の独立したtier3媒体による同一事実報道）を満たさないため不採用。継続監視材料としてreusable_for_summaryに記載。"
+    }
+  ],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 0
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 0
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 0
+    },
+    "米財務省": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "USTR": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "ホワイトハウス": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 0
+    },
+    "ホワイトハウス（大統領令等）": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 0
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 2
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 0
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 0,
+      "kept_count": 0
+    }
+  },
+  "news_candidate_count": 2,
+  "part1_md": "【対象日】2026年8月23日（日）\n\n【ヘッドライン】\n直近24時間に暗号通貨市場との関係を確認できる主要なマクロ材料は確認できない。\n\n【主要なポイント】\n・補足できる検証済み材料は確認できない。\n\n【主要指標】\n・市場全体：時価総額 $2.634兆（¥418.5兆）｜24時間取引高 $903.8億（¥14.36兆）\n・ #BTC：$77,654（約1,233.8万円）｜24時間比 +0.79%\n・ #ETH：$2,459（約39.1万円）｜24時間比 +1.81%\n・ #BNB：$703（約11.2万円）｜24時間比 +1.26%\n・市場心理：Fear & Greed 78（Greed、CoinMarketCap API）\n・ドミナンス：BTC 59.14%｜ETH 11.26%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年8月24日07:47 JST、USD/JPY ¥158.88\n",
+  "part2_md": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $10.56M vs Base上ETH/USDC $137.70M｜参考：Base上DEX全体 $12.754億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $54.76億（¥8,701億）｜24時間比 -0.42%｜USDCドミナンス 86.3%\n・ ETH/USDC（Base）参考APR：0.05% 50.79%（TVL $8.22M／24h出来高 $22.88M）｜0.3% 113.04%（TVL $111.23M／24h出来高 $114.82M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年8月24日07:47 JST\n\n【市場のフロー】\n・市場心理はFear&Greed指数がGreed（強欲）圏を示しており、投資家心理が強気に傾いている状態が続いていることが示唆される。この心理状況のもとでBTC・ETH・BNBはいずれも24時間比で上昇しており、リスク選好姿勢が強まっている可能性がある。ただし指数と個別の値動きを機械的に結びつけることはできない。\n・DEX（分散型取引所）のTVL（預かり資産残高）がやや低下する一方でLPプール（流動性提供者向けプール）のAPR（年率換算利回り）も低下傾向にあり、流動性提供者の資金効率がやや落ち着いた可能性が考えられる。ただし出来高減少とAPR低下の因果関係は本データのみでは断定できない。\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは58.98%→50.79%へ低下しました（24時間出来高 -12.58%、TVL +1.48%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは120.10%→113.04%へ低下しました（24時間出来高 -4.47%、TVL +1.50%）。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+1.81%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\n本日は暗号通貨市場との関係を確認できる主要なマクロ材料は確認されず、値動きは総じて堅調ながら材料難の中での推移とみられる。市場心理はGreed圏にあり過熱感への警戒も一部で意識される状況だが、方向感を裏付ける確定的な材料は乏しい。なお、BitMart社の破産手続き関連報道は続報が待たれる段階であり、今後の情報更新が注目される。週明けにかけて、マクロ指標や規制動向、DEX出来高の変化など複数の観点から状況を注視する必要がある。\n"
+}
