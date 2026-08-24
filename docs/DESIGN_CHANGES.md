@@ -7,6 +7,110 @@
 
 ---
 
+## v1.36 — 2026-08-24（オーナー指示・ETFフロー情報源の調査。Farsideは403でbot対策により不可、SoSoValueは公式APIが実在するが要オーナー対応。週末表記規定は現状ETFデータが皆無で適用対象なし）
+
+**経緯**：8/23の本番実行（A/B/C分類導入後初の本番成功、L0・11チェック
+PASS）で、実際には米国現物ETFの5営業日連続純流入という需給材料が
+存在したにもかかわらず「材料なし」と判定された。現在の情報源（政府機関
+RSS＋CoinDesk・Cointelegraph）ではETFフローを構造的に拾えないため、
+Farside Investors（farside.co.uk）・SoSoValueがRSSまたは機械可読な
+フィードを提供しているかの調査と、既存の週末ETF表記規定
+（`docs/recovered/project_prompt.txt`「土曜・日曜版はETFフローの具体的
+金額を掲載せず『直近営業日（YYYY年M月D日）までの確定値として確認され
+た』と表記する」）の実装状況確認を指示された。
+
+### 調査方法
+
+WebSearchによる並行研究（Workflow・2エージェント）でFarside・
+SoSoValueそれぞれの機械可読アクセス手段を洗い出し、GitHub Actions
+ランナー上で実URLへの到達性・応答内容を実測して補強した（一時
+`scripts/_diag_etf_source_verify.py`・`.github/workflows/
+_diag_etf_source_verify.yml`、調査完了後に削除済み）。
+
+### 判明した事実
+
+**Farside Investors**：公式RSS・JSON API・CSVエクスポートは存在しない。
+GitHub横断検索で確認された独立した10以上のOSSプロジェクト（fintwit-bot・
+btc-etf-monitor・crypto_etf_tracker等）は例外なく`farside.co.uk/btc/`
+等のHTMLページを`pandas.read_html()`・Selenium・`cloudscraper`で
+スクレイピングしており、公式APIが無いことの状況証拠として一致している。
+実測でも`farside.co.uk/btc/`・`/eth/`・`/bitcoin-etf-flow-all-data/`の
+いずれも**HTTP 403**（通常のUser-Agentを付けたrequestsでも拒否・
+Cloudflare等のbot対策とみられる）。単純なHTTPクライアントでは到達
+できず、既存のRSSベースの構造とは異質な実装（ヘッドレスブラウザや
+Cloudflare回避ツール）を新規に持ち込まない限り利用できない。
+
+**SoSoValue**：2025年4月に「API Open Platform」を公式に開始しており、
+開発者ポータル（`sosovalue.com/developer`）・APIドキュメント
+（`sosovalue.gitbook.io/soso-value-api-doc`）とも実測でHTTP 200・
+到達可能かつ実ページであることを確認した。ETFフローを含むデータを
+API経由で提供している旨は複数の第三者報道（PANews・ChainCatcher等）
+でも裏付けられる。ただし以下の制約がある。
+- APIキーが必要（`x-soso-api-key`ヘッダー・要サインアップ）。無料の
+  Demo枠と20回/分制限のBeta枠があるとみられるが、アカウント作成は
+  オーナー側の対応が必要でこちらでは代行できない。
+  （料金体系や必須手続きの詳細は、サインアップ後にご自身でご確認
+  いただく必要がある旨、申し添える。）
+- 具体的なETFフロー取得エンドポイントのパスは未確定。ドキュメント
+  ページはJavaScriptで描画されるため、実測（`requests.get()`での
+  生HTML取得）では`/api/...`形式のパスを1件も抽出できなかった。
+  WebSearchのスニペットには「ETF historical inflow chart」等の
+  エンドポイント名の断片が見つかったが、実ページで確認できておらず
+  未確定として扱う。
+- RSSではなくJSON REST APIのため、`collect_news.fetch_rss()`とは別の
+  取得経路（新規モジュールまたは関数）が必要になる。既存のtier1/tier3
+  情報源とは統合方法が根本的に異なる。
+
+### 週末ETF表記規定（`project_prompt.txt`）の実装状況
+
+`daily_data.json`・`scripts/`全体を検索したが、ETFに関するフィールド・
+処理は`generate_post.py`のA分類の例示（「ETF」という語）以外に1件も
+存在しない。**ETFフローデータそのものが現状パイプラインに一切
+取り込まれていない**ため、週末表記規定を適用する対象が無い。オーナー
+のご指摘どおり、この規定は【3】でETF情報源を追加する場合にセットで
+実装する必要がある——現状では実装不要ではなく「実装する土台がまだ
+無い」状態である。
+
+### 結論・オーナーへの申し送り事項
+
+- **Farside**：既知の限界に追加することを提案する（v1.34と同じ位置
+  づけ——構造的にRSS/APIが無く、単純なHTTPアクセスも拒否される）。
+- **SoSoValue**：公式APIは実在するため、Bloomberg・日経・Farsideとは
+  異なり「見送り」ではなく「オーナー側のAPIキー取得を待って着手可能」
+  という位置づけで報告する。着手する場合、(a) オーナーによるアカウント
+  作成・APIキー取得、(b) GitHub Actions secretsへのキー登録、
+  (c) 新規フェッチモジュールの実装、(d) 週末表記規定を同時実装、
+  の順になる見込み。
+- 現時点ではAPIキーが無くコードは書けないため、`config/news_sources.json`
+  ・`scripts/`の変更は無し。
+
+---
+
+## v1.35 — 2026-08-23（オーナー指示・8/23本番投稿の手直しを踏まえた呼び出しBの文体統一と総括の言及範囲制限）
+
+**経緯**：8/23の本番投稿（A/B/C分類導入後初の本番成功）で、投稿前に
+オーナーが2点を手直しした。(1)【市場のフロー】【総括】が「である調」
+になっており前編・LP一言の「です・ます調」と不揃いだった。(2)【総括】
+に本文（主要なポイント）へ掲載していないBitMart社の破産手続きの件が
+新規に言及されており、読者が文脈を追えなかった。両者を呼び出しBの
+プロンプト課題として記録し修正するよう指示された。
+
+### 対応（`scripts/generate_post.py`）
+
+`CALL_B_INSTRUCTIONS`に新設セクション「文体」を追加し、「です・ます調」
+で統一し「である調」を使わない旨、前編と文体を揃える旨を明記した。
+`part2_summary`の記述にも、総括で言及してよい固有名詞・材料は
+part1_pointsに掲載済みのもの、またはreusable_for_summaryに渡された
+継続材料に限る旨、本文で扱っていない新規の固有名詞・材料を総括で
+初めて持ち出さない旨を追記した。
+
+### テスト
+
+`test/test_bundle2.py`に新規テスト6件を追加。既存168件と合わせ全174件
+PASS。
+
+---
+
 ## v1.34 — 2026-08-23（オーナー指示・情報源拡張の打ち切りを決定し既知の限界として記録。フェーズ2一区切り。コード変更なし）
 
 **経緯**：v1.31（米財務省・USTR・ホワイトハウス追加、対象材料は未捕捉）・
