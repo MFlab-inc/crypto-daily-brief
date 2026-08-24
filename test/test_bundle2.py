@@ -322,6 +322,26 @@ check("WRITES_Aのpart1_pointsがB分類材料に因果未確認の限定表現�
       "重要性判定と因果表現の分離" in generate_post.WRITES_A
       and "暗号通貨価格への直接因果は未確認" in generate_post.WRITES_A)
 
+print("=== generate_post.py: 呼び出しBの文体統一・総括の言及範囲制限（v1.35・オーナー指示） ===")
+check("CALL_B_INSTRUCTIONSに「です・ます調」で統一する旨が明記されている",
+      "です・ます調" in generate_post.CALL_B_INSTRUCTIONS
+      and "で統一する" in generate_post.CALL_B_INSTRUCTIONS)
+check("CALL_B_INSTRUCTIONSに「である調」を使わない旨が明記されている",
+      "である調" in generate_post.CALL_B_INSTRUCTIONS
+      and "は使わない" in generate_post.CALL_B_INSTRUCTIONS)
+check("CALL_B_INSTRUCTIONSに前編と文体を揃える旨が明記されている",
+      "前編（part1_headline・" in generate_post.CALL_B_INSTRUCTIONS
+      and "文体を揃える" in generate_post.CALL_B_INSTRUCTIONS)
+check("CALL_B_INSTRUCTIONSに総括で言及してよい範囲がpart1_points掲載済み・"
+      "reusable_for_summaryの継続材料に限る旨が明記されている",
+      "part1_points に掲載済みのもの" in generate_post.CALL_B_INSTRUCTIONS
+      and "reusable_for_summary に渡された継続材料に限る" in generate_post.CALL_B_INSTRUCTIONS)
+check("CALL_B_INSTRUCTIONSに本文で扱っていない新規の固有名詞を総括で持ち出さない旨が明記されている",
+      "本文（part1_points）で扱っていない新規の固有名詞・" in generate_post.CALL_B_INSTRUCTIONS
+      and "材料を総括で初めて持ち出さない" in generate_post.CALL_B_INSTRUCTIONS)
+check("SYSTEM_BがCALL_B_INSTRUCTIONSの更新内容を含む",
+      "です・ます調" in generate_post.SYSTEM_B)
+
 print("=== generate_post.py: 候補ごとの掲載可否ラベル（v1.29・オーナー指示・修正2） ===")
 _elig_candidates = [
     {"tier": 1, "source": "SEC", "title": "t1", "url": "https://example.com/1",
