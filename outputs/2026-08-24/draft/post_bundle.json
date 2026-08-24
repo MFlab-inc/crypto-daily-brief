@@ -1,0 +1,218 @@
+{
+  "target_date_jst": "2026-08-24",
+  "level": "L0",
+  "sections": {
+    "part0_target_date": "2026年8月24日（月）",
+    "part1_headline": "直近24時間に暗号通貨市場との関係を確認できる主要なマクロ材料は確認できない。",
+    "part1_points": "・米Strategy社が新株発行で約20億ドルを調達し、新たな現金プール（約15.9億ドル）を設立したと複数の暗号通貨専門メディアが報じた。同社はビットコイン保有量（84万447BTC）を据え置き、新規買い増しを見送ったとされる。暗号通貨価格への直接因果は未確認（Cointelegraph、CoinDesk、2026年8月24日）",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.655兆（¥421.9兆）｜24時間取引高 $1301.4億（¥20.68兆）\n・ #BTC：$78,788（約1,252.0万円）｜24時間比 +1.46%\n・ #ETH：$2,479（約39.4万円）｜24時間比 +0.79%\n・ #BNB：$702（約11.2万円）｜24時間比 -0.26%\n・市場心理：Fear & Greed 81（Extreme greed、CoinMarketCap API）\n・ドミナンス：BTC 59.57%｜ETH 11.27%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年8月25日07:53 JST、USD/JPY ¥158.91",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $15.93M vs Base上ETH/USDC $179.35M｜参考：Base上DEX全体 $11.732億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $55.10億（¥8,756億）｜24時間比 +1.34%｜USDCドミナンス 86.3%\n・ ETH/USDC（Base）参考APR：0.05% 58.71%（TVL $8.21M／24h出来高 $26.40M）｜0.3% 148.11%（TVL $113.07M／24h出来高 $152.95M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年8月25日07:53 JST",
+    "part2_flow": "・米Strategy社が新株発行で資金調達を行い新たな現金プールを設立したと複数の暗号通貨専門メディアが報じましたが、同社はビットコイン保有量を据え置き新規買い増しは見送ったとされています。この報道と暗号通貨価格との直接的な因果関係は確認できておらず、BTCは24時間比で上昇して推移しましたが、これが同ニュースによるものかは断定できません。\n・国内取引所（bitFlyer・Coincheck）のETH取引動向とDEX（分散型取引所、中央管理者を介さずに取引が行われる仕組み）のETH/USDCプールの出来高はいずれも一定の水準を維持しており、ETHが24時間比で上昇したこととあわせて、市場参加者の関心が資金の巡りとして意識された可能性がありますが、明確な因果関係は未確認です。",
+    "lp_comment": "参考APRは両プールとも前日から上昇しました。\nBase 0.05%プールの参考APRは50.79%→58.71%へ上昇しました（24時間出来高 +15.39%、TVL -0.16%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは113.04%→148.11%へ上昇しました（24時間出来高 +33.21%、TVL +1.66%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+0.79%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "本日の暗号通貨市場は、恐怖・強欲指数（投資家心理を数値化した指標）がExtreme greed（極度の強欲）圏に位置しており、市場全体が強気に傾いた地合いであることがうかがえます。一方で、直近24時間に価格変動と明確に結び付けられるマクロ材料は確認できておらず、Strategy社の資金調達報道についても暗号通貨価格への直接因果は未確認です。Bitmine社によるETH購入報道は継続監視されている材料であり、今後の動向を注視する必要があります。週明け以降も、BTC・ETH・BNBの値動きに加え、DEXの出来高やLP（流動性提供、取引所に資金を預けて手数料収入を得る仕組み）プールのAPR（年率換算利回り）の変化を確認していくことが重要です。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "BTC・ETHともに上昇基調",
+  "audit_ledger": [
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/statistics/boj/other/mei/release/2026/mei260820.xlsx",
+      "title": "日本銀行が保有する国債の銘柄別残高",
+      "published_at": "Mon, 24 Aug 2026 17:00:00 +0900",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 日銀の定型統計データであり波及経路は理論上説明できるが、summaryが空欄で具体的内容が確認できず、参考材料としても記述できる内容が無い"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/statistics/boj/other/acmai/release/2026/ac260820.htm",
+      "title": "営業毎旬報告（8月20日現在）",
+      "published_at": "Mon, 24 Aug 2026 10:00:00 +0900",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 日銀のバランスシート定型報告であり波及経路は理論上説明できるが、summaryが空欄で具体的内容が確認できず、記述できる内容が無い"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/statistics/bis/repo/index.htm",
+      "title": "FSBレポ統計の日本分集計結果",
+      "published_at": "Mon, 24 Aug 2026 08:50:00 +0900",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: レポ市場統計であり流動性への波及経路は理論上説明できるが、summaryが空欄で具体的内容が確認できず、記述できる内容が無い"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/zondacrypto-ceo-seeks-leniency-testimony-report?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Zondacrypto boss seeks leniency for testimony on political ties: Report",
+      "published_at": "Mon, 24 Aug 2026 14:00:51 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 個別取引所CEOの司法対応に関する報道だが、tier3単独ソースであり独立2ソース規定の条件を満たさないため不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/magazine/bitget-ceo-isnt-buying-the-bitcoin-rally-waiting-for-50k?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bitget CEO isn’t buying the Bitcoin rally — She’s waiting for $50K",
+      "published_at": "Mon, 24 Aug 2026 13:30:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個人の見解・予想に基づく内容であり、意見・分析であって事実報道ではないため独立2ソース規定にも該当せず、tier3単独のため不採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/08/24/tom-lee-s-bitmine-buys-usd81-million-of-eth-in-largest-weekly-haul-since-early-july",
+      "title": "Tom Lee's Bitmine buys $81 million of ETH in largest weekly haul since early July",
+      "published_at": "Mon, 24 Aug 2026 12:59:55 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 財務会社によるETH購入という直接材料だが、tier3単独ソースであり同一事実を報じる独立した別媒体が確認できず、独立2ソース規定を満たさないため不採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/tech/2026/08/24/new-solana-vote-could-ramp-daily-sol-burns-to-usd800-000-and-slow-new-token-creation",
+      "title": "New Solana vote could ramp daily SOL burns to $800,000 and slow new token creation",
+      "published_at": "Mon, 24 Aug 2026 12:52:30 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: プロトコル仕様変更の投票という直接材料だが、tier3単独ソースであり独立2ソース規定を満たさないため不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/strategy-2-billion-raise-strc-136-million-bitcoin-pause?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Strategy launches $1.6B cash pool after $2B common shares raise, maintains hold on BTC buys",
+      "published_at": "Mon, 24 Aug 2026 12:45:00 +0000",
+      "verified_by": "CoinDesk（同一事実を報じる独立記事）",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: Strategy社の資金調達・現金プール設立・BTC買い増し停止という同一の事実をCointelegraphとCoinDeskが独立して報じており、意見ではなく事実報道であるため独立2ソース規定の条件を満たす"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/08/24/strategy-raises-usd2-billion-through-mstr-sales-and-creates-new-usd-cash-pool",
+      "title": "Strategy raises $2 billion through MSTR sales and creates new USD Cash pool",
+      "published_at": "Mon, 24 Aug 2026 12:24:58 +0000",
+      "verified_by": "Cointelegraph（同一事実を報じる独立記事）",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: 上記Cointelegraph記事と同一の事実（$2B調達、USD Cash pool創設）を独立して報じており、事実報道であるため独立2ソース規定の条件を満たす"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/08/24/standard-chartered-first-bank-to-distribute-anchorpoint-s-hong-kong-dollar-stablecoin",
+      "title": "Standard Chartered becomes first bank to distribute Hong Kong dollar stablecoin",
+      "published_at": "Mon, 24 Aug 2026 11:36:55 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 大手銀行によるステーブルコイン取扱いという直接材料だが、tier3単独ソースであり独立2ソース規定を満たさないため不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/sbi-fasset-round-1b-valuation?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Japan’s SBI leads $68M Fasset round at $1B valuation",
+      "published_at": "Mon, 24 Aug 2026 11:25:26 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 資金調達という直接材料だが、tier3単独ソースであり独立2ソース規定を満たさないため不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/markets/first-bear-market-trend-line-reclaim-since-2025-five-things-to-know-in-bitcoin-this-week?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "First bear-market trend line reclaim since 2025: Five things to know in Bitcoin this week",
+      "published_at": "Mon, 24 Aug 2026 11:23:58 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 市場動向のまとめ・分析記事であり、意見・分析に該当するため独立2ソース規定の条件(b)を満たさず、tier3単独のため不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/ecb-digital-euro-privacy-cbdcs-global-scrutiny?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "ECB defends digital euro privacy as CBDCs face global scrutiny",
+      "published_at": "Mon, 24 Aug 2026 11:21:19 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 中銀デジタル通貨のプライバシーに関する当局者発言であり、規制動向として波及経路は説明できる余地があるが、tier3単独ソースであり独立2ソース規定を満たさないため不採用"
+    }
+  ],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 0
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 0
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 3
+    },
+    "米財務省": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "USTR": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "ホワイトハウス": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 0
+    },
+    "ホワイトハウス（大統領令等）": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 0
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 21
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 13
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 0,
+      "kept_count": 0
+    }
+  },
+  "news_candidate_count": 13,
+  "part1_md": "【対象日】2026年8月24日（月）\n\n【ヘッドライン】\n直近24時間に暗号通貨市場との関係を確認できる主要なマクロ材料は確認できない。\n\n【主要なポイント】\n・米Strategy社が新株発行で約20億ドルを調達し、新たな現金プール（約15.9億ドル）を設立したと複数の暗号通貨専門メディアが報じた。同社はビットコイン保有量（84万447BTC）を据え置き、新規買い増しを見送ったとされる。暗号通貨価格への直接因果は未確認（Cointelegraph、CoinDesk、2026年8月24日）\n\n【主要指標】\n・市場全体：時価総額 $2.655兆（¥421.9兆）｜24時間取引高 $1301.4億（¥20.68兆）\n・ #BTC：$78,788（約1,252.0万円）｜24時間比 +1.46%\n・ #ETH：$2,479（約39.4万円）｜24時間比 +0.79%\n・ #BNB：$702（約11.2万円）｜24時間比 -0.26%\n・市場心理：Fear & Greed 81（Extreme greed、CoinMarketCap API）\n・ドミナンス：BTC 59.57%｜ETH 11.27%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年8月25日07:53 JST、USD/JPY ¥158.91\n",
+  "part2_md": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $15.93M vs Base上ETH/USDC $179.35M｜参考：Base上DEX全体 $11.732億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $55.10億（¥8,756億）｜24時間比 +1.34%｜USDCドミナンス 86.3%\n・ ETH/USDC（Base）参考APR：0.05% 58.71%（TVL $8.21M／24h出来高 $26.40M）｜0.3% 148.11%（TVL $113.07M／24h出来高 $152.95M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年8月25日07:53 JST\n\n【市場のフロー】\n・米Strategy社が新株発行で資金調達を行い新たな現金プールを設立したと複数の暗号通貨専門メディアが報じましたが、同社はビットコイン保有量を据え置き新規買い増しは見送ったとされています。この報道と暗号通貨価格との直接的な因果関係は確認できておらず、BTCは24時間比で上昇して推移しましたが、これが同ニュースによるものかは断定できません。\n・国内取引所（bitFlyer・Coincheck）のETH取引動向とDEX（分散型取引所、中央管理者を介さずに取引が行われる仕組み）のETH/USDCプールの出来高はいずれも一定の水準を維持しており、ETHが24時間比で上昇したこととあわせて、市場参加者の関心が資金の巡りとして意識された可能性がありますが、明確な因果関係は未確認です。\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から上昇しました。\nBase 0.05%プールの参考APRは50.79%→58.71%へ上昇しました（24時間出来高 +15.39%、TVL -0.16%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは113.04%→148.11%へ上昇しました（24時間出来高 +33.21%、TVL +1.66%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+0.79%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\n本日の暗号通貨市場は、恐怖・強欲指数（投資家心理を数値化した指標）がExtreme greed（極度の強欲）圏に位置しており、市場全体が強気に傾いた地合いであることがうかがえます。一方で、直近24時間に価格変動と明確に結び付けられるマクロ材料は確認できておらず、Strategy社の資金調達報道についても暗号通貨価格への直接因果は未確認です。Bitmine社によるETH購入報道は継続監視されている材料であり、今後の動向を注視する必要があります。週明け以降も、BTC・ETH・BNBの値動きに加え、DEXの出来高やLP（流動性提供、取引所に資金を預けて手数料収入を得る仕組み）プールのAPR（年率換算利回り）の変化を確認していくことが重要です。\n"
+}
