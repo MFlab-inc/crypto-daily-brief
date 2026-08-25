@@ -9,8 +9,16 @@ RSSが最も確実かつ一次情報として価値が高いと判断し、Crypt
 
 `config/news_sources.json` に列挙されたRSSを1件ずつ独立して取得する
 （fetch_cmc の3エンドポイント分離と同じ思想 — 1件の失敗が他を巻き添えにしない）。
-取得した各項目は対象日（target_date_jst）のJST 00:00〜23:59に公開された
-ものだけを候補として残す。1件も候補が無い日があっても正常（停止しない）。
+
+【v1.38: 材料収集ウィンドウをJST暦日からNY 17:00基準へ変更（オーナー指示）】
+取得した各項目は、対象日のAmerica/New_York 17:00で終わる24時間
+（`collection_window_ny()`参照）に公開されたものだけを候補として残す。
+市場の1日はJST暦日ではなくNY 17:00区切りであり、米国当局・政府機関の
+発表は現地日中（＝JST未明）が大半のため、旧来のJST暦日基準では
+構造的にほぼ全ての米国発材料が翌日のJST暦日へ流れていた
+（DESIGN_CHANGES.md v1.38参照。対象日ラベルの決定＝実行時JSTの前日、
+は統合運用基準§1のとおり変更していない——変更したのは材料収集の
+範囲のみ）。1件も候補が無い日があっても正常（停止しない）。
 
 v1.20: 優先度2（Reuters・Bloomberg）は公開RSSが無いため正式に断念し
 （DESIGN_CHANGES.md v1.19の独立レビュー指摘・v1.20参照）、優先度3として
@@ -35,10 +43,15 @@ from email.utils import parsedate_to_datetime
 from pathlib import Path
 from typing import Any
 from xml.etree import ElementTree as ET
+from zoneinfo import ZoneInfo
 
 import requests
 
 JST = timezone(timedelta(hours=9))
+# v1.38（オーナー指示）: 材料収集ウィンドウの基準タイムゾーン。市場の1日の
+# 区切りであるNY 17:00を、夏時間・冬時間を自動判定するzoneinfoで扱う
+# （固定オフセットのdatetime.timezoneでは自前でDST判定が必要になり誤りやすい）。
+NY_TZ = ZoneInfo("America/New_York")
 REQUEST_TIMEOUT_SEC = 15
 RAW_ITEM_LIMIT = 50  # 1フィードあたりの取得上限（日付フィルタ前）。暴走防止のガード値。
 SUMMARY_MAX_LEN = 500  # 1候補あたりのsummary長の上限（プロンプト肥大化防止・v1.15）。
@@ -72,8 +85,18 @@ def _load_sources() -> list[dict[str, Any]]:
 
 def parse_pubdate_jst(raw: str) -> datetime | None:
     """RSSのpubDate（RFC 822想定）をJST awareなdatetimeへ変換する。
-    解釈できない・空の場合はNone（呼び出し側で対象日フィルタから除外する）。
-    公開関数（v1.21よりgenerate_post.pyがtier3候補の新しい順ソートで再利用）。
+    解釈できない・空の場合、およびタイムゾーン情報を持たない場合はNone
+    （呼び出し側で収集ウィンドウ・対象日フィルタから除外する）。
+    公開関数（v1.21よりgenerate_post.pyがtier3候補の新しい順ソートで再利用。
+    v1.38より_collect_from_feed()の収集ウィンドウ判定にも使う——表示上は
+    JSTへ変換するが、tz-aware datetimeとしての瞬時は変わらないため、
+    NY基準のウィンドウ（collection_window_ny()）との比較にもそのまま使える）。
+
+    v1.38（オーナー指示）: タイムゾーン情報が無いpubDateは、以前は
+    「RFC822の慣例としてUTC扱い」としていたが、実際のタイムゾーンが
+    不明である以上、それを推測で補うと窓の内外を誤って判定しうる。
+    フェイルクローズ（不明なものは除外）へ変更し、解析失敗と同様にNoneを
+    返す。
     """
     if not raw:
         return None
@@ -81,11 +104,44 @@ def parse_pubdate_jst(raw: str) -> datetime | None:
         dt = parsedate_to_datetime(raw)
     except (TypeError, ValueError, IndexError):
         return None
-    if dt is None:
+    if dt is None or dt.tzinfo is None:
         return None
-    if dt.tzinfo is None:
-        dt = dt.replace(tzinfo=timezone.utc)  # RFC822でタイムゾーン欠落時はUTC扱いが慣例
     return dt.astimezone(JST)
+
+
+def collection_window_ny(target: "date") -> tuple[datetime, datetime]:
+    """対象日の材料収集ウィンドウを返す（v1.38・オーナー指示）。
+
+    (window_start, window_end) はいずれもtz-aware。半開区間
+    [window_start, window_end) として扱う（window_end自体は含まない）。
+    window_end = 対象日のAmerica/New_York 17:00（ローカル時刻）。
+    window_start = window_end の1日前（同じくローカル17:00）。
+    【境界の扱い・オーナー指示で明示】NY 17:00ちょうどのpubDateは
+    「翌日側」の候補として扱う（当日側には含めない）。タイムゾーン情報を
+    持たないpubDateは`parse_pubdate_jst()`がNoneを返しフェイルクローズ
+    （窓の内外を問わず除外）される——詳細は同関数のdocstring参照。
+
+    datetimeの引き算はtimedeltaぶんの暦日を進めたうえで同じtzinfo
+    （ZoneInfo）を再付与するため、window_start・window_endのそれぞれが
+    「その暦日のNY 17:00」として夏時間・冬時間を自動的に正しく解決する
+    （例: 冬時間はUTC-5、夏時間はUTC-4）。時刻をハードコードしていない。
+
+    【注意・Pythonのdatetime減算の落とし穴】本関数が返す2つのdatetimeは
+    同一のtzinfoオブジェクト（NY_TZ）を共有しているため、呼び出し側で
+    `window_end - window_start` のように両者を直接引き算すると、Pythonは
+    「tzinfoが同一なら実時刻への正規化をせず素の日時フィールドのまま
+    引き算する」という仕様上、DST切替を跨ぐ日（3月・11月の切替日）でも
+    常に24時間ちょうどを返してしまう（実際には23時間・25時間になり得る）。
+    真の経過時間が必要な場合は両者を`.astimezone(timezone.utc)`してから
+    引き算すること。本モジュールの実際のフィルタ処理
+    （`_collect_from_feed`のwindow_start <= pub_dt < window_end）は
+    pub_dt側がJST固定オフセット（NY_TZとは別のtzinfoオブジェクト）である
+    ため、この落とし穴の影響を受けない（実測で確認済み。DESIGN_CHANGES.md
+    v1.38参照）。
+    """
+    window_end = datetime(target.year, target.month, target.day, 17, 0, tzinfo=NY_TZ)
+    window_start = window_end - timedelta(days=1)
+    return window_start, window_end
 
 
 def _clean_summary(raw: str) -> str:
@@ -126,7 +182,8 @@ def fetch_rss(url: str, timeout: int = REQUEST_TIMEOUT_SEC) -> tuple[str, list[d
         return "failed", [], f"XML解析失敗: {e}"
 
 
-def _collect_from_feed(name: str, url: str, target: "date", *, tier: int, kind: str) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+def _collect_from_feed(name: str, url: str, window_start: datetime, window_end: datetime,
+                        *, tier: int, kind: str) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     status, items, detail = fetch_rss(url)
     if status != "ok":
         print(f"WARN: {name} 取得失敗: {detail} (url={url})", file=sys.stderr)
@@ -134,8 +191,12 @@ def _collect_from_feed(name: str, url: str, target: "date", *, tier: int, kind: 
 
     candidates = []
     for it in items:
-        pub_jst = parse_pubdate_jst(it["published_at"])
-        if pub_jst is None or pub_jst.date() != target:
+        # v1.38: JST暦日の一致判定ではなく、NY 17:00基準ウィンドウへの
+        # 瞬時（instant）比較。aware datetime同士の比較はPythonが内部で
+        # 実際の時刻差として正しく評価するため、pub_dt側の表示タイムゾーン
+        # （JST）とwindow側（NY）が異なっていても問題ない。
+        pub_dt = parse_pubdate_jst(it["published_at"])
+        if pub_dt is None or not (window_start <= pub_dt < window_end):
             continue
         candidates.append({
             "title": it["title"],
@@ -155,6 +216,7 @@ _TIER_KIND = {1: "official", 3: "supplementary"}
 
 def collect_news(target_date: str) -> dict[str, Any]:
     target = date.fromisoformat(target_date)
+    window_start, window_end = collection_window_ny(target)
     source_status: dict[str, Any] = {}
     all_candidates: list[dict[str, Any]] = []
 
@@ -164,12 +226,12 @@ def collect_news(target_date: str) -> dict[str, Any]:
         # 廃止済み・DESIGN_CHANGES.md v1.19参照）を補う「補完・裏取り」として追加。
         tier = src.get("tier", 1)
         kind = _TIER_KIND.get(tier, "official")
-        st, cands = _collect_from_feed(src["name"], src["url"], target, tier=tier, kind=kind)
+        st, cands = _collect_from_feed(src["name"], src["url"], window_start, window_end, tier=tier, kind=kind)
         source_status[src["name"]] = st
         all_candidates.extend(cands)
 
     # 優先度4: Google News RSS（候補発見のみ・任意）。失敗しても縮退。
-    g_st, g_cands = _collect_from_feed(GOOGLE_NEWS_NAME, GOOGLE_NEWS_URL, target,
+    g_st, g_cands = _collect_from_feed(GOOGLE_NEWS_NAME, GOOGLE_NEWS_URL, window_start, window_end,
                                         tier=4, kind="candidate_discovery")
     source_status[GOOGLE_NEWS_NAME] = g_st
     all_candidates.extend(g_cands)

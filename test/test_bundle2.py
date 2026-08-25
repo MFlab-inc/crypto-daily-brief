@@ -9,7 +9,7 @@ import json
 import os
 import sys
 import tempfile
-from datetime import date as _date
+from datetime import date as _date, datetime as _datetime, timedelta as _timedelta, timezone as _timezone
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
@@ -901,11 +901,22 @@ check("C22: tier1採用が無いヘッドラインはFAIL（既知の限界：�
 
 print("=== collect_news.py（RSS方式・CryptoPanic撤去後） ===")
 
+# v1.38: 対象日=2026-08-17のウィンドウは [2026-08-16T21:00:00Z, 2026-08-17T21:00:00Z)
+# （8月は夏時間・NY 17:00=UTC-4）。
+#   item a: ウィンドウ内（旧JST暦日基準でも対象日=8/17・挙動不変の基準ケース）
+#   item b: ウィンドウ内（新規に含まれるようになったケース——旧JST暦日基準では
+#           JST換算が8/18 05:00になり翌日扱いで除外されていた。米国日中の
+#           発表が翌JST暦日へ流れる問題そのものの再現）
+#   item c: ウィンドウ外・start未満（新たに除外されるようになったケース——
+#           旧JST暦日基準ではJST換算が8/17 01:00で対象日扱いされていたが、
+#           実際にはNY時間で見ると前日の日中であり、正しくは前日分の材料）
+#   item d: ウィンドウ外・明確に前日以前
 RSS_TODAY_ONLY = """<?xml version="1.0"?>
 <rss version="2.0"><channel>
-<item><title>Today item (GMT same-day)</title><link>https://example.gov/a</link><pubDate>Mon, 17 Aug 2026 10:00:00 GMT</pubDate></item>
-<item><title>Yesterday item</title><link>https://example.gov/b</link><pubDate>Sun, 16 Aug 2026 10:00:00 GMT</pubDate></item>
-<item><title>JST boundary item (UTC prev-day, JST today 00:30)</title><link>https://example.gov/c</link><pubDate>Sun, 16 Aug 2026 15:30:00 GMT</pubDate></item>
+<item><title>a: well within window</title><link>https://example.gov/a</link><pubDate>Mon, 17 Aug 2026 10:00:00 GMT</pubDate></item>
+<item><title>b: newly included (late US hours, used to roll to next JST day)</title><link>https://example.gov/b</link><pubDate>Mon, 17 Aug 2026 20:00:00 GMT</pubDate></item>
+<item><title>c: newly excluded (early JST morning, actually prior NY day)</title><link>https://example.gov/c</link><pubDate>Sun, 16 Aug 2026 16:00:00 GMT</pubDate></item>
+<item><title>d: clearly before window</title><link>https://example.gov/d</link><pubDate>Sat, 15 Aug 2026 10:00:00 GMT</pubDate></item>
 </channel></rss>"""
 
 RSS_WITH_SUMMARY = """<?xml version="1.0"?>
@@ -926,19 +937,83 @@ def _patch_requests_get(fn):
     return orig
 
 
-# 1) 正常フィード: 対象日フィルタが機能する（JST変換後の日付で比較する境界ケース込み）
+print("=== collect_news.py: collection_window_ny（v1.38・オーナー指示） ===")
+_ws_summer, _we_summer = collect_news.collection_window_ny(_date(2026, 8, 17))
+check("collection_window_ny: 夏時間はNY 17:00=UTC-4",
+      _we_summer.utcoffset() == _timedelta(hours=-4) and _ws_summer.utcoffset() == _timedelta(hours=-4),
+      f"we_off={_we_summer.utcoffset()} ws_off={_ws_summer.utcoffset()}")
+check("collection_window_ny: window_endは対象日のNY 17:00",
+      (_we_summer.year, _we_summer.month, _we_summer.day, _we_summer.hour, _we_summer.minute) == (2026, 8, 17, 17, 0))
+check("collection_window_ny: window_startは対象日前日のNY 17:00",
+      (_ws_summer.year, _ws_summer.month, _ws_summer.day, _ws_summer.hour, _ws_summer.minute) == (2026, 8, 16, 17, 0))
+
+_ws_winter, _we_winter = collect_news.collection_window_ny(_date(2026, 1, 17))
+check("collection_window_ny: 冬時間はNY 17:00=UTC-5（時刻をハードコードせずzoneinfoで自動判定）",
+      _we_winter.utcoffset() == _timedelta(hours=-5) and _ws_winter.utcoffset() == _timedelta(hours=-5),
+      f"we_off={_we_winter.utcoffset()} ws_off={_ws_winter.utcoffset()}")
+
+# DST切替日の真の経過時間はwindow_end - window_startを直接引き算すると求まらない
+# （同一tzinfoオブジェクト同士の引き算はPythonが素の日時フィールドで計算し、
+# 常に24時間ちょうどを返す落とし穴——collection_window_ny()のdocstring参照）。
+# UTCへ変換してから引き算することで真の経過時間を確認する。
+_ws_spring, _we_spring = collect_news.collection_window_ny(_date(2026, 3, 8))  # 2026年の夏時間開始日
+_span_spring_h = (_we_spring.astimezone(_timezone.utc) - _ws_spring.astimezone(_timezone.utc)).total_seconds() / 3600
+check("collection_window_ny: 夏時間切替日（3/8）はUTC変換後の真の経過時間が23時間",
+      _span_spring_h == 23.0, f"span={_span_spring_h}")
+check("collection_window_ny: 夏時間切替日でも同一tzinfo同士の直接引き算は24時間を返す（Pythonの仕様・落とし穴の実演）",
+      (_we_spring - _ws_spring).total_seconds() / 3600 == 24.0)
+
+_ws_fall, _we_fall = collect_news.collection_window_ny(_date(2026, 11, 1))  # 2026年の冬時間開始日
+_span_fall_h = (_we_fall.astimezone(_timezone.utc) - _ws_fall.astimezone(_timezone.utc)).total_seconds() / 3600
+check("collection_window_ny: 冬時間切替日（11/1）はUTC変換後の真の経過時間が25時間",
+      _span_fall_h == 25.0, f"span={_span_fall_h}")
+
+# 実際のフィルタ処理（_collect_from_feed）で使うpub_dtはJST固定オフセット
+# （collection_window_nyのNY_TZとは別のtzinfoオブジェクト）のため、上記の
+# 「同一tzinfo引き算」の落とし穴の影響を受けず、DST切替日でも境界判定が
+# 正しく機能することを実データに近い形で確認する。
+_JST = _timezone(_timedelta(hours=9))
+_edge_included = _datetime(2026, 3, 9, 5, 59, 59, tzinfo=_JST)   # window_endの1秒前
+_edge_excluded = _datetime(2026, 3, 9, 6, 0, 0, tzinfo=_JST)     # window_endちょうど（半開区間なので含まない）
+check("collection_window_ny: DST切替日でもwindow_end直前は正しく含まれる（同一tzinfoの落とし穴が実フィルタに波及しないことの確認）",
+      _ws_spring <= _edge_included < _we_spring)
+check("collection_window_ny: DST切替日でもwindow_endちょうどは正しく除外される（半開区間）",
+      not (_ws_spring <= _edge_excluded < _we_spring))
+
+check("parse_pubdate_jst: タイムゾーン情報を持たないpubDateはNone（フェイルクローズ・v1.38オーナー指示）",
+      collect_news.parse_pubdate_jst("Mon, 17 Aug 2026 10:00:00") is None)
+check("parse_pubdate_jst: タイムゾーン付きは従来どおり解析できる（回帰確認）",
+      collect_news.parse_pubdate_jst("Mon, 17 Aug 2026 10:00:00 GMT") is not None)
+
+RSS_NO_TZ = """<?xml version="1.0"?>
+<rss version="2.0"><channel>
+<item><title>e: no timezone info (fail-closed, excluded)</title><link>https://example.gov/e</link><pubDate>Mon, 17 Aug 2026 10:00:00</pubDate></item>
+</channel></rss>"""
+orig_get_notz = _patch_requests_get(lambda url, **kw: _FakeRssResp(200, RSS_NO_TZ.encode("utf-8")))
+st_notz, kept_notz = collect_news._collect_from_feed("TESTNOTZ", "https://example.gov/notz.rss",
+                                                       *collect_news.collection_window_ny(_date(2026, 8, 17)),
+                                                       tier=1, kind="official")
+collect_news.requests.get = orig_get_notz
+check("_collect_from_feed: タイムゾーン不明なpubDateは窓の内外を問わず除外される（フェイルクローズ）",
+      st_notz["status"] == "ok" and st_notz["raw_count"] == 1 and st_notz["kept_count"] == 0 and kept_notz == [],
+      f"{st_notz} kept={kept_notz}")
+
+# 1) 正常フィード: 対象日フィルタが機能する（NY 17:00基準ウィンドウでの境界ケース込み）
 orig_get = _patch_requests_get(lambda url, **kw: _FakeRssResp(200, RSS_TODAY_ONLY.encode("utf-8")))
 status, cands, detail = collect_news.fetch_rss("https://example.gov/feed.rss")
 collect_news.requests.get = orig_get
-check("fetch_rss: 正常時はok・3件取得", status == "ok" and len(cands) == 3, f"{status} {len(cands)}")
+check("fetch_rss: 正常時はok・4件取得", status == "ok" and len(cands) == 4, f"{status} {len(cands)}")
 
+_window_1707 = collect_news.collection_window_ny(_date(2026, 8, 17))
 orig_get2 = _patch_requests_get(lambda url, **kw: _FakeRssResp(200, RSS_TODAY_ONLY.encode("utf-8")))
 st, kept = collect_news._collect_from_feed("TESTGOV", "https://example.gov/feed.rss",
-                                            _date(2026, 8, 17), tier=1, kind="official")
+                                            *_window_1707, tier=1, kind="official")
 collect_news.requests.get = orig_get2
-check("_collect_from_feed: 対象日(JST)の2件のみ残る（UTC境界含む）",
-      st["status"] == "ok" and st["raw_count"] == 3 and st["kept_count"] == 2 and len(kept) == 2,
+check("_collect_from_feed: NY 17:00基準ウィンドウで2件（a・b）のみ残る（cは新たに除外・dは変わらず除外）",
+      st["status"] == "ok" and st["raw_count"] == 4 and st["kept_count"] == 2 and len(kept) == 2,
       f"{st} kept={kept}")
+check("_collect_from_feed: 新たに含まれるようになった項目bを含む（旧JST暦日基準では翌日扱いで除外されていた）",
+      any(c["url"] == "https://example.gov/b" for c in kept), str(kept))
 check("_collect_from_feed: tier/kindが付与される", all(c["tier"] == 1 and c["kind"] == "official" for c in kept))
 
 # 2) 404フィード: 単体はfailedだが例外にならない
@@ -1003,7 +1078,7 @@ check("fetch_rss: descriptionからsummaryを抽出しHTMLタグを除去する"
 
 orig_get4 = _patch_requests_get(lambda url, **kw: _FakeRssResp(200, RSS_WITH_SUMMARY.encode("utf-8")))
 st2, kept2 = collect_news._collect_from_feed("TESTGOV2", "https://example.gov/summary.rss",
-                                              _date(2026, 8, 17), tier=1, kind="official")
+                                              *_window_1707, tier=1, kind="official")
 collect_news.requests.get = orig_get4
 check("_collect_from_feed: candidateにsummaryが含まれる（呼び出しAの根拠として渡る）",
       len(kept2) == 1 and kept2[0]["summary"] == "Some detail text.", str(kept2))
