@@ -1,0 +1,91 @@
+{
+  "target_date_jst": "2026-08-25",
+  "weekday_jp": "火",
+  "date_title": "2026年8月25日（火）暗号通貨・DEX市場概況",
+  "summary": "（シャドー運用中：ヘッドラインはフェーズ2で生成）",
+  "assets": [
+    {
+      "asset": "BTC",
+      "usd": "$78,895",
+      "jpy": "約1,255.4万円",
+      "change_24h": "+0.13%",
+      "direction": "up"
+    },
+    {
+      "asset": "ETH",
+      "usd": "$2,454",
+      "jpy": "約39.1万円",
+      "change_24h": "-1.01%",
+      "direction": "down"
+    },
+    {
+      "asset": "BNB",
+      "usd": "$697",
+      "jpy": "約11.1万円",
+      "change_24h": "-0.75%",
+      "direction": "down"
+    }
+  ],
+  "market": {
+    "fear_greed": {
+      "value": 80,
+      "label": "Extreme greed"
+    },
+    "market_cap": "$2.648兆",
+    "market_cap_jpy": "¥421.3兆",
+    "volume_24h": "$1095.4億",
+    "volume_24h_jpy": "¥17.43兆",
+    "btc_dominance": "59.82%",
+    "eth_dominance": "11.19%"
+  },
+  "base": {
+    "tvl": "$54.60億",
+    "tvl_jpy": "¥8,689億",
+    "tvl_change": "-0.36%",
+    "tvl_direction": "down",
+    "dex_volume": "$13.915億",
+    "dex_volume_jpy": "¥2,214億",
+    "dex_volume_eth_usdc": "$127.33M",
+    "dex_volume_eth_usdc_jpy": "¥203億",
+    "usdc_dominance": "86.4%"
+  },
+  "lp": {
+    "pools": [
+      {
+        "name": "Base 0.05%プール",
+        "apr": "51.19%",
+        "tvl": "$8.15M",
+        "volume_24h": "$22.87M",
+        "change_vs_prev": {
+          "apr_change": "-12.80%",
+          "volume_24h_change": "-13.37%",
+          "tvl_change": "-0.69%"
+        }
+      },
+      {
+        "name": "Base 0.3%プール",
+        "apr": "99.37%",
+        "tvl": "$115.10M",
+        "volume_24h": "$104.46M",
+        "change_vs_prev": {
+          "apr_change": "-32.91%",
+          "volume_24h_change": "-31.71%",
+          "tvl_change": "+1.80%"
+        }
+      }
+    ],
+    "check_message": "#ETHが下落中。#ETH偏り・下限側レンジ外・下落耐性を確認"
+  },
+  "domestic": {
+    "bitflyer_eth_24h": "3,930.63 ETH",
+    "coincheck_eth_24h": "1,022.98 ETH",
+    "combined_eth": "4,953.60 ETH",
+    "combined_usd": "$12.16M",
+    "retrieved_at": "2026-08-26 07:56 JST"
+  },
+  "footer": {
+    "retrieved_at": "2026-08-26 07:56 JST",
+    "usd_jpy": "¥159.13",
+    "sources": "CoinMarketCap API / GeckoTerminal / DefiLlama / ExchangeRate-API / bitFlyer公式API / Coincheck公式API"
+  }
+}
