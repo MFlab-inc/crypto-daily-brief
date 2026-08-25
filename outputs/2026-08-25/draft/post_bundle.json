@@ -1,0 +1,254 @@
+{
+  "target_date_jst": "2026-08-25",
+  "level": "L0",
+  "sections": {
+    "part0_target_date": "2026年8月25日（火）",
+    "part1_headline": "直近24時間に暗号通貨市場との関係を確認できる主要なマクロ材料は確認できない。",
+    "part1_points": "・補足できる検証済み材料は確認できない。",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.648兆（¥421.3兆）｜24時間取引高 $1095.4億（¥17.43兆）\n・ #BTC：$78,895（約1,255.4万円）｜24時間比 +0.13%\n・ #ETH：$2,454（約39.1万円）｜24時間比 -1.01%\n・ #BNB：$697（約11.1万円）｜24時間比 -0.75%\n・市場心理：Fear & Greed 80（Extreme greed、CoinMarketCap API）\n・ドミナンス：BTC 59.82%｜ETH 11.19%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年8月26日07:56 JST、USD/JPY ¥159.13",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $12.16M vs Base上ETH/USDC $127.33M｜参考：Base上DEX全体 $13.915億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $54.60億（¥8,689億）｜24時間比 -0.36%｜USDCドミナンス 86.4%\n・ ETH/USDC（Base）参考APR：0.05% 51.19%（TVL $8.15M／24h出来高 $22.87M）｜0.3% 99.37%（TVL $115.10M／24h出来高 $104.46M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年8月26日07:56 JST",
+    "part2_flow": "・本日はニュース由来の確認済み材料が乏しく、市場データからの読み取りにとどめます。ETHとBNBが24時間比で下落する一方、BTCはわずかに上昇しており、資金がBTCに相対的に向きやすい地合いが意識された可能性がありますが、明確な要因は確認できません。\n・Fear&Greed指数はExtreme greed（強い強欲）に位置しており、市場心理は楽観に傾いています。この心理の強さが、ETHやBNBの下落にもかかわらずBTCドミナンスの高さを支えている可能性がありますが、断定はできません。",
+    "lp_comment": "参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは58.71%→51.19%へ低下しました（24時間出来高 -13.37%、TVL -0.69%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは148.11%→99.37%へ低下しました（24時間出来高 -31.71%、TVL +1.80%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比-1.01%と下落中のため、ETH偏り・下限側レンジ外・下落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "本日は確認できるマクロ・ニュース材料が限られており、BTCが底堅く推移する一方でETH・BNBはやや軟調という、資産間でのばらつきが見られる一日でした。市場心理は強気に傾いているものの、この過熱感が持続するかは不確実です。なお、CryptoQuantの分析でBTCが新たな上昇局面の初期段階にあるとの指摘も一部で見られており、8万3千ドル水準への到達有無が今後の確認事項として注目されます。ETH偏りやレンジ外リスクを含め、DEX流動性の動向についても引き続き注視が必要です。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "BTCは上昇、ETH・BNBは小幅下落",
+  "audit_ledger": [
+    {
+      "source": "FRB",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260825a.htm",
+      "title": "Minutes of the Board's discount rate meetings on July 20 and July 29, 2026",
+      "published_at": "Tue, 25 Aug 2026 18:00:00 GMT",
+      "verified_by": "tier1公式RSS",
+      "decision": "不採用",
+      "reason": "B: 割引率会議の議事録であり金融政策に関する波及経路は説明できるが、summaryに具体的な政策内容・数値の記載がなく、本文に書ける実質的な内容を持たない"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/about/release_2026/rel260825a.htm",
+      "title": "（金研ニュースレター）情報セキュリティ・セミナー「生体認証技術の現在地」",
+      "published_at": "Tue, 25 Aug 2026 16:00:00 +0900",
+      "verified_by": "tier1公式RSS",
+      "decision": "不採用",
+      "reason": "C: 生体認証技術に関するセミナー案内で、金利・為替・流動性等の暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/research/research_data/cpi/index.htm",
+      "title": "消費者物価のコア指標",
+      "published_at": "Tue, 25 Aug 2026 14:00:00 +0900",
+      "verified_by": "tier1公式RSS",
+      "decision": "不採用",
+      "reason": "B: 物価統計であり金融政策・金利を通じた波及経路は説明できるが、summaryに具体的な数値・内容の記載がなく本文に書ける実質的な内容を持たない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/08/honoring-the-memory-of-dolly-parton/",
+      "title": "Honoring the Memory of Dolly Parton",
+      "published_at": "Tue, 25 Aug 2026 20:42:03 +0000",
+      "verified_by": "tier1公式RSS",
+      "decision": "不採用",
+      "reason": "C: 故人への追悼に関する布告であり、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/releases/2026/08/president-trump-is-finally-ending-canadas-free-ride/",
+      "title": "President Trump Is Finally Ending Canada's Free Ride",
+      "published_at": "Tue, 25 Aug 2026 18:19:31 +0000",
+      "verified_by": "tier1公式RSS",
+      "decision": "不採用",
+      "reason": "B: カナダとの通商政策・関税に関する内容で波及経路は説明できるが、具体的な措置内容や数値がsummaryに記載されておらず、本文に書ける実質的な内容を持たない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/briefings-statements/2026/08/presidential-message-on-overdose-and-drug-poisoning-awareness-week/",
+      "title": "Presidential Message on Overdose and Drug Poisoning Awareness Week",
+      "published_at": "Tue, 25 Aug 2026 02:00:00 +0000",
+      "verified_by": "tier1公式RSS",
+      "decision": "不採用",
+      "reason": "C: 薬物過剰�取取に関する啓発週間の声明であり、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス（大統領令等）",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/08/honoring-the-memory-of-dolly-parton/",
+      "title": "Honoring the Memory of Dolly Parton",
+      "published_at": "Tue, 25 Aug 2026 20:42:03 +0000",
+      "verified_by": "tier1公式RSS",
+      "decision": "不採用",
+      "reason": "C: 上記と同一内容の重複掲載であり、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/world-liberty-financial-launches-usd1-natively-on-canton-network?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "World Liberty Financial launches USD1 natively on Canton Network",
+      "published_at": "Tue, 25 Aug 2026 20:35:10 +0000",
+      "verified_by": "tier3単独",
+      "decision": "不採用",
+      "reason": "A: ステーブルコインのネットワーク展開に関する内容だが、tier1の裏付けがなく、独立2ソース規定を満たす他媒体の同一報道も確認できないため単独では採用不可"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/08/25/south-korea-trade-giant-posco-brings-trade-receivables-to-avalanche-in-latest-tokenization-move",
+      "title": "South Korea trade giant POSCO brings trade receivables to Avalanche in latest tokenization move",
+      "published_at": "Tue, 25 Aug 2026 19:40:00 +0000",
+      "verified_by": "tier3単独",
+      "decision": "不採用",
+      "reason": "A: トークン化事例に関する内容だが、tier1の裏付けがなく、独立2ソース規定を満たす他媒体の同一報道も確認できないため単独では採用不可"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/what-happened-in-crypto-today?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Here's what happened in crypto today",
+      "published_at": "Tue, 25 Aug 2026 18:34:20 +0000",
+      "verified_by": "tier3単独",
+      "decision": "不採用",
+      "reason": "C: 個別の具体的事実を報じるものではなく総括的なまとめ記事であり、単独の根拠にできない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/markets/bitcoin-enters-initial-phase-of-new-bull-market-but-83k-remains-key-cryptoquant?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bitcoin enters 'initial phase' of new bull market, but $83K remains key: CryptoQuant",
+      "published_at": "Tue, 25 Aug 2026 18:13:11 +0000",
+      "verified_by": "tier3単独",
+      "decision": "不採用",
+      "reason": "A: 分析会社の見解報道であり事実報道ではなく意見・分析に該当するため独立2ソース規定の条件(b)を満たさず、tier1裏付けも無いため不採用。継続監視材料としてreusable_for_summaryに記載"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/solana-record-transactions-rwa-sol-price?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Solana transactions hit record 4.2B as SOL rallies 40%",
+      "published_at": "Tue, 25 Aug 2026 18:08:58 +0000",
+      "verified_by": "tier3単独",
+      "decision": "不採用",
+      "reason": "A: ネットワーク活動に関する内容だが、tier1の裏付けがなく、独立2ソース規定を満たす他媒体の同一報道も確認できないため単独では採用不可。継続監視材料としてreusable_for_summaryに記載"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/strategy-financing-risk-not-bitcoin-sales?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Strategy's $66B Bitcoin machine hinges on capital markets, not BTC price: Report",
+      "published_at": "Tue, 25 Aug 2026 16:47:40 +0000",
+      "verified_by": "tier3単独",
+      "decision": "不採用",
+      "reason": "A: 企業の資金調達リスクに関する分析報道であり事実報道ではなく分析に該当するため独立2ソース規定の条件(b)を満たさず、tier1裏付けも無いため不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/bitwise-launches-self-custodied-tokenized-stock-portfolios-with-coinbase?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bitwise launches self-custodied tokenized stock portfolios with Coinbase",
+      "published_at": "Tue, 25 Aug 2026 16:32:00 +0000",
+      "verified_by": "tier3単独",
+      "decision": "不採用",
+      "reason": "A: 新サービス発表に関する内容だが、tier1の裏付けがなく、独立2ソース規定を満たす他媒体の同一報道も確認できないため単独では採用不可"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/08/25/layerzero-unveils-trading-infrastructure-for-crypto-and-tokenized-markets-zro-surges",
+      "title": "LayerZero unveils trading infrastructure for crypto and tokenized markets, ZRO surges",
+      "published_at": "Tue, 25 Aug 2026 16:22:47 +0000",
+      "verified_by": "tier3単独",
+      "decision": "不採用",
+      "reason": "A: 新インフラ発表に関する内容だが、tier1の裏付けがなく、独立2ソース規定を満たす他媒体の同一報道も確認できないため単独では採用不可"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/dgrid-ai-token-jumps-96-after-launch-as-decentralized-ai-network-goes-live?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "DGrid AI token jumps 93% after launch as decentralized AI network goes live",
+      "published_at": "Tue, 25 Aug 2026 15:53:05 +0000",
+      "verified_by": "tier3単独",
+      "decision": "不採用",
+      "reason": "A: 個別トークンのローンチに関する内容だが、tier1の裏付けがなく、独立2ソース規定を満たす他媒体の同一報道も確認できないため単独では採用不可"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/markets/bitcoin-slips-from-80k-as-gold-cools-with-falling-us-bond-yields?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bitcoin slips from $80K as gold cools with falling US bond yields",
+      "published_at": "Tue, 25 Aug 2026 15:15:35 +0000",
+      "verified_by": "tier3単独",
+      "decision": "不採用",
+      "reason": "B: 米国債利回りの低下と金・BTC価格の関係を論じる市況記事で波及経路は説明できるが、tier1の裏付けがなく、独立2ソース規定を満たす他媒体の同一報道も確認できないため単独では採用不可"
+    }
+  ],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 0
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 1
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 2
+    },
+    "米財務省": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "USTR": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "ホワイトハウス": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 3
+    },
+    "ホワイトハウス（大統領令等）": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 1
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 21
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 23
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 0,
+      "kept_count": 0
+    }
+  },
+  "news_candidate_count": 17,
+  "part1_md": "【対象日】2026年8月25日（火）\n\n【ヘッドライン】\n直近24時間に暗号通貨市場との関係を確認できる主要なマクロ材料は確認できない。\n\n【主要なポイント】\n・補足できる検証済み材料は確認できない。\n\n【主要指標】\n・市場全体：時価総額 $2.648兆（¥421.3兆）｜24時間取引高 $1095.4億（¥17.43兆）\n・ #BTC：$78,895（約1,255.4万円）｜24時間比 +0.13%\n・ #ETH：$2,454（約39.1万円）｜24時間比 -1.01%\n・ #BNB：$697（約11.1万円）｜24時間比 -0.75%\n・市場心理：Fear & Greed 80（Extreme greed、CoinMarketCap API）\n・ドミナンス：BTC 59.82%｜ETH 11.19%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年8月26日07:56 JST、USD/JPY ¥159.13\n",
+  "part2_md": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $12.16M vs Base上ETH/USDC $127.33M｜参考：Base上DEX全体 $13.915億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $54.60億（¥8,689億）｜24時間比 -0.36%｜USDCドミナンス 86.4%\n・ ETH/USDC（Base）参考APR：0.05% 51.19%（TVL $8.15M／24h出来高 $22.87M）｜0.3% 99.37%（TVL $115.10M／24h出来高 $104.46M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年8月26日07:56 JST\n\n【市場のフロー】\n・本日はニュース由来の確認済み材料が乏しく、市場データからの読み取りにとどめます。ETHとBNBが24時間比で下落する一方、BTCはわずかに上昇しており、資金がBTCに相対的に向きやすい地合いが意識された可能性がありますが、明確な要因は確認できません。\n・Fear&Greed指数はExtreme greed（強い強欲）に位置しており、市場心理は楽観に傾いています。この心理の強さが、ETHやBNBの下落にもかかわらずBTCドミナンスの高さを支えている可能性がありますが、断定はできません。\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは58.71%→51.19%へ低下しました（24時間出来高 -13.37%、TVL -0.69%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは148.11%→99.37%へ低下しました（24時間出来高 -31.71%、TVL +1.80%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比-1.01%と下落中のため、ETH偏り・下限側レンジ外・下落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\n本日は確認できるマクロ・ニュース材料が限られており、BTCが底堅く推移する一方でETH・BNBはやや軟調という、資産間でのばらつきが見られる一日でした。市場心理は強気に傾いているものの、この過熱感が持続するかは不確実です。なお、CryptoQuantの分析でBTCが新たな上昇局面の初期段階にあるとの指摘も一部で見られており、8万3千ドル水準への到達有無が今後の確認事項として注目されます。ETH偏りやレンジ外リスクを含め、DEX流動性の動向についても引き続き注視が必要です。\n"
+}
