@@ -7,6 +7,101 @@
 
 ---
 
+## v1.41 — 2026-08-26（オーナー承認・日中高値・安値をCoinbase Exchange主/Bitstamp副で取得しdaily_data.jsonへ保存。実データ検証済み）
+
+### 経緯
+
+v1.40でCMC Basicプランでは日中OHLCV（高値・安値）が取得不可能と判明した
+のを受け、オーナーはCMC有料プランへのアップグレードを費用対効果の観点
+から見送り、無料・認証不要の代替情報源の調査を指示した。実測の結果
+（本ファイル前セクション参照）、Binanceは米国IP（GitHub Actionsランナー）
+からHTTP 451でジオブロックされるため除外、CoinGeckoは統合運用基準の
+「CoinGeckoはCMCの代替として使用しない」の趣旨（価格系数値のCMCへの
+一本化）から外れるため不採用とし、Coinbase Exchange・Bitstamp・Krakenの
+3つの取引所直接系APIが候補として残った。オーナーはCoinbase Exchangeを
+主・Bitstampを副とする構成を承認した。
+
+### 実装（`scripts/fetch_data.py`）
+
+`fetch_intraday_range(symbol, coinbase_product, bitstamp_pair, window_start,
+window_end)` を新設。オーナー指定の設計に従う。
+
+- Coinbase Exchange `/products/{id}/candles?granularity=3600`（1時間足・
+  認証不要）を主とする。フィールド順は`[time, low, high, open, close,
+  volume]`（実測で確認済み・通例のOHLCV順ではない点に注意）。
+- 失敗時、または窓内に1本も足が無い場合は、Bitstamp
+  `/api/v2/ohlc/{pair}/?step=3600`（認証不要）へフォールバックする。
+- 集計窓は`collect_news.collection_window_ny()`をそのまま再利用し、
+  ニュース収集と同じ対象日・同じNY 17:00区切りの半開区間
+  `[window_start, window_end)` で1時間足をフィルタし、high最大値・low
+  最小値を自前で集計する（時間足の境界がNY 17:00＝UTC正時に一致する
+  ため端数のない集計になる）。
+- 両方失敗した場合はUNCONFIRMED（「未確認」）とし、BTC/JPY等の代替値は
+  用いない（統合運用基準の「推測しない」方針を維持）。
+
+`INTRADAY_SYMBOLS`（BTC・ETH・BNB）で対象銘柄を定義し、`main()`で
+`daily_data.json`へ`intraday_range`セクションとして追加した
+（銘柄ごとに`high`/`low`/`source`(`coinbase`|`bitstamp`|UNCONFIRMED)
+/`retrieved_at`/`representative`）。
+
+**BNBの扱い（オーナー指示）**: Coinbase・Bitstampいずれも出来高が薄く、
+代表性のある高値・安値にならない可能性があるため`representative:
+false`を付す（BTC・ETHは`true`）。データ自体は3銘柄とも常に取得・保存
+するが、本文の数値テンプレートで「一時◯◯まで上昇」等に反映するのは
+`representative: true`の銘柄のみとする（本文への反映方法自体は今回未実装
+——下記「今回のスコープ」参照）。
+
+`raw_data.json`には集計に使った実際の窓（`intraday_window`）も記録した
+（デバッグ用）。
+
+### テスト
+
+`test/test_bundle2.py`へ`fetch_data`を新たにテスト対象へ追加（従来
+`fetch_data.py`は本テストスイートの対象外だった）。フィールド順の解釈・
+半開区間の境界（境界を含む/含まない）・Coinbase成功時にBitstampを呼ばない
+こと・Coinbase失敗（HTTPエラー）時のフォールバック・Coinbaseが200でも
+窓内0件の場合のフォールバック・両方失敗時のUNCONFIRMEDを検証。全221件
+PASS。
+
+### 実データ検証（オーナー指定4項目・8/25データ）
+
+`collect_news.collection_window_ny(date(2026, 8, 25))`と同じ窓で、
+Coinbase・Bitstampそれぞれを独立に取得し比較した（診断は
+`scripts/_diag_intraday_range_verify.py`・調査後削除）。
+
+1. **NY 17:00区切りの窓**: `window_start (JST) = 2026-08-25T06:00:00+09:00`
+   `window_end (JST) = 2026-08-26T06:00:00+09:00`——ご指摘の
+   「8/25 06:00 JST〜8/26 06:00 JST」と完全に一致することを確認した。
+
+2. **BTCのhighが$81,255前後になるか**: Coinbase単独 high=**$81,265**
+   （生値81265.3）／Bitstamp単独 high=**$81,255**（生値81255.06、
+   ご引用の実測値と一致）。取引所間の差はhigh差$10.24・low差$10.51と
+   僅少（スポット価格の取引所間の自然な差の範囲内）。
+   `fetch_intraday_range()`の実際の返り値（daily_data.jsonへ入る値）は
+   Coinbase成功のためCoinbase側の値：high=$81,265、low=$78,100、
+   source=coinbase。
+
+3. **ETH・BNBも取得できるか**: 両方とも両取引所で正常に取得できた。
+   ETH: Coinbase $2,533/$2,433、Bitstamp $2,533/$2,434（差は僅少）。
+   BNB: Coinbase $719/$691、Bitstamp $718/$692（差は僅少）。
+   `representative`はBTC/ETHが`true`、BNBが`false`で正しく設定された。
+
+4. **レート制限**: 検証中に3銘柄×2取引所の独立取得＋
+   `fetch_intraday_range()`3回（Coinbase成功のためBitstamp未使用）＋
+   ヘッダー確認2回、計11回のAPI呼び出しを数秒内に行い、全て
+   `HTTP 200`で完了した（429等のレート制限応答は皆無）。実運用では
+   1日あたり最大3回（Coinbase失敗時のみBitstampが追加で最大3回）で
+   あり、この規模のアクセス頻度でレート制限に抵触するリスクは無いと
+   判断する。
+
+### 今回のスコープ（オーナー指示）
+
+本文（前編【主要指標】等の数値テンプレート）への反映可否は別途判断する。
+今回は`daily_data.json`への取得・保存までを実装し、上記実データ検証結果
+を報告するに留める。
+
+---
+
 ## v1.40 — 2026-08-26（オーナー承認・対策1: tier3選定への独立2媒体ペア救済。対策2: CMC OHLCV実装前調査を報告、Basicプランでは利用不可と判明）
 
 ### 経緯
