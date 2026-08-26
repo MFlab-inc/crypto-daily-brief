@@ -46,17 +46,17 @@
     {
       "id": "C19_audit_ledger",
       "result": "PASS",
-      "detail": "17件・全フィールド充足・渡した候補数と一致"
+      "detail": "22件・全フィールド充足・渡した候補数と一致"
     },
     {
       "id": "C20_image_headline",
       "result": "PASS",
-      "detail": "全角換算14.5字・#なし"
+      "detail": "全角換算13.5字・#なし"
     },
     {
       "id": "C21_decision_tier_consistency",
       "result": "PASS",
-      "detail": "17件・整合性OK"
+      "detail": "22件・整合性OK"
     },
     {
       "id": "C22_headline_tier1_basis",

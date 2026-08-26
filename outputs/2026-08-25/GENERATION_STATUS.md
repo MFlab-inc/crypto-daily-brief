@@ -1,7 +1,7 @@
 level: L0
 call_A: OK（1回試行）
 call_B: OK（1回試行）
-token_usage（実消費量）: input=14587, output=5001 (call_A: in=11366 out=4534 / call_B: in=3221 out=467)
+token_usage（実消費量）: input=19076, output=6226 (call_A: in=15853 out=5712 / call_B: in=3223 out=514)
 news_sources:
   - SEC: ok（対象日0件／取得25件）
   - FRB: ok（対象日1件／取得20件）
@@ -18,8 +18,8 @@ news_sources:
   - Cointelegraph: ok（対象日23件／取得30件）
   - Cointelegraph Japan: failed（HTTP 410）
   - Google News (Reuters検索): ok（対象日0件／取得0件）
-news_candidates_today: 17件 / audit_ledger: 17件（候補があるのにaudit_ledgerが0件の場合はC19がFAILする想定。要目視確認）
-tier3候補 44件中 10件を選定（34件を件数上限により除外）
+news_candidates_today: 22件 / audit_ledger: 22件（候補があるのにaudit_ledgerが0件の場合はC19がFAILする想定。要目視確認）
+tier3候補 44件中 15件を選定（29件を件数上限により除外）
 
 手当が必要な箇所:
   （なし）
@@ -29,5 +29,3 @@ tier3候補 44件中 10件を選定（34件を件数上限により除外）
   - 数値全項目（前編・後編）
   - 後編【LP運用者向けに一言】
   - 後編【市場のフロー】【総括】
-
-月次累計（2026-08）: input=98355, output=41491（outputs/token_usage_log.csv集計・同日複数回実行分を含む）
