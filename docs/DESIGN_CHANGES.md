@@ -7,6 +7,104 @@
 
 ---
 
+## v1.40 — 2026-08-26（オーナー承認・対策1: tier3選定への独立2媒体ペア救済。対策2: CMC OHLCV実装前調査を報告、Basicプランでは利用不可と判明）
+
+### 経緯
+
+v1.39訂正（前エントリ末尾参照）により、8/25にBTCが一時$81,000台（3か月
+ぶり高値）をつけた事実報道が実在したにもかかわらず、「公開日時の新しい順
+で上位N件」という選定方式が窓序盤の記事を窓終盤の記事群に押しやる時間帯
+バイアスにより、`TIER3_CANDIDATE_LIMIT=15`後も候補集合から漏れていたこと
+が判明した。オーナーはこれを受け、2つの対策を承認・指示した。
+
+【対策1・承認】独立2媒体が同一事実を報じるペアを、順位に関わらず優先的に
+候補集合へ残す「ペアリング優先選定」の実装（保留中のプロトタイプを実装）。
+【対策2・新規】CoinMarketCap APIで日中高値・安値が取得可能か、実装前に
+調査・報告すること（クレジット消費への懸念のため）。
+
+### 対策1: ペアリング優先選定の実装（`scripts/generate_post.py`）
+
+オーナー指定の選定順序で実装した——①tier1は全件 ②独立2媒体のペアを
+構成する記事は上限を超えても両方残す（救済） ③残りはTIER3_CANDIDATE_LIMIT
+（=15）件の公開日時の新しい順選定（従来どおり）。救済はLIMIT=15の上限外で
+加算する。
+
+- `_tokenize_title`/`_overlap_coefficient`/`_find_independent_pairs`:
+  タイトルをlowercase＋正規表現でトークン化し、トークン集合の重なり係数
+  （overlap coefficient、`len(a∩b)/min(len(a),len(b))`）が
+  `PAIR_OVERLAP_THRESHOLD=0.4`以上、かつsourceが異なる組み合わせを
+  独立2媒体ペアとみなす貪欲法。この閾値・手法は8/25調査時の診断
+  スクリプト（v1.39エントリ参照、投機的分析後に削除済み）で検証した
+  プロトタイプをそのまま実装へ移した。
+- `_select_candidates_for_call_a`: 上位15件確定後、tier3全件を対象に
+  ペアを検出し、上位15件に入っていないペアの相手を救済する。
+  `PAIR_RESCUE_MAX_PAIRS=5`組（最大10件）を上限とする（オーナー指示・
+  無制限だとトークン予算を超過するリスクがあるため）。
+- `truncation_stats`に`tier3_pairs_rescued`・`tier3_pair_rescued_articles`
+  を追加。`compose_post.py`の`render_generation_status`へ「独立2媒体
+  ペア救済: N組（M件を上限外で追加）」の目視確認行を追加し、救済発生日を
+  可視化する。
+
+### 対策1のテスト
+
+`test/test_bundle2.py`へ新規テストを追加: overlap係数の境界値（完全一致・
+重なり無し・非対称長・空集合）、同一source同士はペア扱いしないこと、
+単一ペアの救済（上限外の相手が正しく追加される）、5組上限での打ち切り
+（6組目は救済されない）を検証。全210件PASS。
+
+### 対策1の実データ検証
+
+`post_draft.yml`を`force_redispatch=true`で8/25へ再dispatchした結果：
+
+- トークン消費量: input=19,060／output=6,173（call_A: in=15,861
+  out=5,647）。対策1適用前（v1.39実データ検証時点）のinput=19,076／
+  output=6,226とほぼ同水準で、有意な増加は無かった。
+- `news_candidates_today`は22件のまま変化なし。`tier3_pairs_rescued`は
+  0組——8/25のデータでは、LIMIT=15内に片方だけが入るペアが存在しな
+  かった（Bitwise/Coinbaseトークン化株式ペアは両方とも元々上位15件内
+  だったため救済不要。BTC $80,000到達の材料はCoinDeskの同一媒体内2記事
+  であり異なる2媒体の報道ではなかったため、そもそもペアの定義上対象外
+  ——v1.39訂正エントリ参照）。したがって8/25データでは対策1の効果は
+  実地未確認のまま——ロジックが正しく「何もしない」ことは確認できたが、
+  実際に救済が発動する実例の確認は今後の運用日を待つ。
+- `post_audit_20260825.json`は`overall: PASS`。C19（audit_ledger
+  完全性）・C21（decision/tier整合性）とも22件でPASS。既存挙動への
+  回帰は無い。
+
+### 対策2: CMC OHLCV（日中高値・安値）実装前調査の報告
+
+オーナーの実装前報告指示に従い、コードを追加する前に実際のCMC_API_KEY
+（現行Basicプラン）で以下のエンドポイントへ実アクセスして確認した
+（診断は`scripts/_diag_cmc_ohlcv.py`・調査後削除）。
+
+- `/v1/cryptocurrency/quotes/latest`（現行使用中）: 200 OK。aux
+  パラメータで補助フィールドを追加指定してもhigh/low相当のフィールドは
+  含まれないことを再確認した。
+- `/v1/cryptocurrency/ohlcv/latest`（当日OHLCV）: **HTTP 403、
+  error_code 1006「Your API Key subscription plan doesn't support this
+  endpoint.」**。credit_count は 0（拒否時は課金されない）。
+- `/v2/cryptocurrency/ohlcv/historical`（日次OHLCV）: 同じく**HTTP 403、
+  error_code 1006**で拒否。
+- `/v1/key/info`（現行プラン確認）: `credit_limit_monthly: 15000`、
+  当月使用量 156クレジット（オーナー報告の「使用量は月100程度」と概ね
+  整合）。
+
+**結論**：OHLCV系エンドポイント（open/high/low/closeを含む）は、現行の
+Basicプラン（無料）では**プランそのものがアクセスを許可していない**。
+これはクレジット消費量の問題ではない——拒否レスポンスはクレジットを
+消費せず、Basicプランでは残高に関わらずアクセス不可能である。外部の
+価格情報（CoinMarketCap公式ドキュメント・複数の第三者情報源を突き合わせ）
+によれば、当日OHLCV（`ohlcv/latest`）はGrowthプラン以上、日次OHLCV
+（`ohlcv/historical`）はStartupプラン（$79/月〜）以上が必要とされて
+おり、今回の実アクセス結果（403・error_code 1006）と整合する。
+
+対策2を実現するには、CoinMarketCapの有料プラン（最低でもStartup、
+「本日の」高値を確定前にリアルタイムで得るにはGrowthが必要）への
+アップグレードが前提となる。これは月額課金の発生を伴う判断であり、
+オーナーの決定を要する。実装は保留し、この調査結果を報告する。
+
+---
+
 ## v1.39 — 2026-08-26（オーナー指示・tier1本文取得によるsummary補強＋TIER3_CANDIDATE_LIMIT 10→15。実データ合算検証を実施）
 
 ### 経緯
