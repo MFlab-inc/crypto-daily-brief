@@ -12,13 +12,12 @@ collect_news.collect_news() を実行して2026-08-25の生のtier3候補
 """
 import re
 import sys
-from datetime import date
 
 sys.path.insert(0, "scripts")
 import collect_news  # noqa: E402
 import generate_post  # noqa: E402
 
-TARGET = date(2026, 8, 25)
+TARGET = "2026-08-25"
 
 print("=== collect_news.collect_news(2026-08-25) を実行 ===")
 result = collect_news.collect_news(TARGET)
