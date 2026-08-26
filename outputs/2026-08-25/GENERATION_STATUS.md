@@ -1,7 +1,7 @@
 level: L0
 call_A: OK（1回試行）
 call_B: OK（1回試行）
-token_usage（実消費量）: input=19076, output=6226 (call_A: in=15853 out=5712 / call_B: in=3223 out=514)
+token_usage（実消費量）: input=19060, output=6173 (call_A: in=15861 out=5647 / call_B: in=3199 out=526)
 news_sources:
   - SEC: ok（対象日0件／取得25件）
   - FRB: ok（対象日1件／取得20件）
