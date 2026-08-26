@@ -7,6 +7,103 @@
 
 ---
 
+## v1.42 — 2026-08-26（オーナー承認・日中レンジの本文反映＋notable_move。実データ検証で挙動上の課題を発見）
+
+### 実装
+
+前セクション（v1.41）で保存のみだった`intraday_range`を、本文と呼び出しA
+プロンプトへ反映した。
+
+- `scripts/compose_numeric.py`: `compose_part1_numeric()`で、BTC・ETH
+  （representative:true）の行の直下に「　（日中レンジ low〜high）」を
+  追加。BNBの行には追加しない。`intraday_range`が未確認の日は行自体を
+  省略する（「未確認」と書かない）。数値はdaily_data.json由来の
+  テンプレート差し込みのみでLLMには通さない。
+- `scripts/fetch_data.py`: `compute_notable_move(high_raw, close_price,
+  threshold)`を新設。日中高値が当日価格（CMC）からthreshold以上乖離
+  している場合にtrueを返す（BTC・ETHのみで判定、BNBは判定しない）。
+  high_raw・close_priceのいずれかが取得不能ならNoneを返し、
+  `notable_move`キー自体を省略する（falseで固定せず、「判定した結果
+  notable moveでない」と「判定できなかった」を区別する）。閾値は
+  `config/intraday_range.json`の`notable_move_threshold`（既定0.03）から
+  読み、コードにハードコードしない（オーナー指示・数日運用後の調整用）。
+- `scripts/generate_post.py`: SYSTEM_Aへ`INTRADAY_MOVE_GUIDANCE`（オーナー
+  指定の文言を逐語で追加）。「notable_move:trueの銘柄がある場合、値動きの
+  形状のみを記述し数値は書かない」という指示。
+
+C16（テンプレート数値の再実行比較）・C16b（散文中の数値転記検知、
+`_collect_numeric_strings`が`daily_data`全体を汎用的に走査する既存実装）
+はいずれもコード変更不要で自動的に`intraday_range`を対象に含めた。
+
+### テスト
+
+`test/test_bundle2.py`へ`compose_numeric`を新たにテスト対象へ追加。
+`compute_notable_move`（実例値での判定・None化条件）・
+`load_notable_move_threshold`（デフォルト値・config読み込み）・
+`_intraday_range_line`（representative別の出力可否）・
+`compose_part1_numeric`への日中レンジ行の追加/省略・SYSTEM_Aへの文言
+追加・C16bの汎用スキャンが`intraday_range`の数値を検知対象に含むことを
+検証。全236件PASS。
+
+### 実データ検証（オーナー指定4項目・8/25データ・実Anthropic API使用）
+
+既存の`outputs/2026-08-25/daily_data.json`（コミット済み・実データ）に
+`intraday_range`を注入し、実際の`generate_post.run()`・
+`compose_post.compose()`・`verify_post.run_all()`を実行して検証した
+（診断は`scripts/_diag_notable_move_verify.py`。コミットは一切行わず
+——ジョブのローカルディスク上でのみdaily_data.jsonを上書き——
+調査後スクリプトごと削除）。
+
+1. **前編【主要指標】にBTC・ETHの日中レンジ行が出るか**: 出た。
+   ```
+   ・ #BTC：$78,895（約1,255.4万円）｜24時間比 +0.13%
+   　（日中レンジ $78,100〜$81,265）
+   ・ #ETH：$2,454（約39.1万円）｜24時間比 -1.01%
+   　（日中レンジ $2,433〜$2,533）
+   ```
+2. **BNBの行が出ないか**: 出なかった（`・ #BNB：$697（約11.1万円）｜24時間比 -0.75%`のみ）。
+3. **notable_moveがBTCでtrueになるか**: **true**（高値$81,265・当日価格
+   $78,895・乖離率3.00%）。付随して**ETHも乖離率3.22%でtrue**になった
+   （高値$2,533・当日価格$2,454）——オーナーの確認対象はBTCのみだったが、
+   同日ETHも閾値を超えていたため付記する。
+4. **C16b（散文中の数値転記）が引き続きPASSするか**: **PASS**
+   （`C16b_transcription_scan PASS - 転記検知なし`）。全12項目の監査は
+   `failed=0`。
+
+### 発見された課題：notable_moveが実際の本文に反映されなかった
+
+上記4項目はすべて期待どおりだったが、実際に生成されたpart1_headline・
+part1_pointsは次のとおりで、**notable_move:trueにもかかわらず値動きの
+記述が一切無く、従来の「候補が無い場合の扱い」の定型文がそのまま
+使われた**。
+
+- part1_headline:「直近24時間に暗号通貨市場との関係を確認できる主要な
+  マクロ材料は確認できない。」
+- part1_points:「・補足できる検証済み材料は確認できない。」
+
+原因は、NO_CANDIDATES_FALLBACK（「候補が無い場合の扱い」）の指示が
+「指定文言をそのまま使う（言い換えない）」という絶対的な指示であり、
+今回追加したINTRADAY_MOVE_GUIDANCEはこれを上書きする例外として書かれて
+いないため、モデルがより具体的・強い指示（定型文の厳守）を優先したと
+考えられる。
+
+なお、この検証はニュース候補0件（`news_candidates.json`はpost_draft.yml
+のコミット対象に含まれず、このジョブでは`collect_news.py`を再実行して
+いないため）の状態で行われた。ただし、v1.39〜v1.40の調査で8/25の実際の
+tier1・tier3候補22件はいずれも独立2ソース規定・tier1裏付けの実質判定で
+不採用となることが既に確認済み（DESIGN_CHANGES.md v1.39訂正・v1.40参照）
+であり、実際の8/25運用でも同じNO_CANDIDATES_FALLBACK経路に到達していた
+可能性が高い。
+
+**結論**：日中レンジの本文反映・notable_moveのデータ生成・C16b整合性は
+いずれも設計どおり機能しているが、notable_moveをpart1_headline・
+part1_pointsへ実際に反映させるには、NO_CANDIDATES_FALLBACKの指示へ
+「notable_move:trueの場合はこの限りでない」旨の明示的な例外を追加する
+必要があると考えられる。これは今回のオーナー指示の範囲外の追加変更に
+あたるため実装せず、発見事実として報告するに留める。
+
+---
+
 ## v1.41 — 2026-08-26（オーナー承認・日中高値・安値をCoinbase Exchange主/Bitstamp副で取得しdaily_data.jsonへ保存。実データ検証済み）
 
 ### 経緯
