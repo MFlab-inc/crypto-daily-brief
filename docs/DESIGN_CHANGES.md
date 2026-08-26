@@ -79,7 +79,40 @@ tier1由来の採用がある場合はnotable_moveの有無に関わらずPASS�
 
 ### 実データ検証（8/25データ・実Anthropic API使用）
 
-（この節はv1.43実装完了後、実データ検証を実施したうえで追記する。）
+診断スクリプト（`scripts/_diag_v143_verify.py`・検証後削除）で、コミット
+済みの`outputs/2026-08-25/daily_data.json`に`intraday_range`
+（notable_move含む）を注入したうえで、実際の`generate_post.run()`
+（実Anthropic API呼び出し）・`compose_post.compose()`・
+`verify_post.run_all()`を実行した。
+
+結果:
+
+- `part1_headline`:「BTCは日中に一時上昇し約3か月ぶりの水準まで値を
+  伸ばす場面があったものの、その後は上げ幅を縮小する展開となった。
+  ETHは日中に上下双方向へ振れる値動きとなり、24時間比では下落した。」
+  ——具体的な数値を一切含まない、値動きの形状のみの記述であり、
+  INTRADAY_MOVE_GUIDANCEの指示どおりの出力だった。
+- `part1_points`:「・本日確認できる範囲では、BTC・ETHの値動きを直接
+  説明する新規のニュース材料は確認できなかった。」
+  ——分岐Cで要求される「ニュース材料が確認できなかった旨」の項目が
+  正しく含まれていた。
+- `headline_for_image`:「BTC一時急伸も上げ幅縮小、ETHは下落基調」
+  （全角19字・`#`なし）。分岐D用の定性的表現に限定した指示だったが、
+  分岐Cのこのケースでは値動きの内容を反映した見出しになった——
+  headline_for_imageの記述をDに限定したことの自然な帰結であり、
+  意図しない副作用ではない。
+- 監査（`verify_post.run_all()`）: C12〜C20はPASS。C21はSKIP（この
+  診断ジョブでは`collect_news.py`を再実行しておらず`news_candidates.json`
+  が存在しないため、audit_ledgerが空——v1.42検証と同じ既知の制約）。
+  **C22_headline_tier1_basisはSKIP**（detail:「tier1由来の採用は無いが
+  notable_move（日中の値動き）が存在するためSKIP（値動きは情報源階層の
+  対象外）」）——意図した修正どおりの挙動。**failed=0**。
+
+この検証はaudit_ledgerが空（ニュース材料0件）の状態で実行されたため、
+分岐C（notable_moveのみ）の経路を実証したものである。分岐A（ニュース・
+notable_move両方あり）の経路は、`news_candidates.json`がコミット対象外
+であるため今回の非破壊検証手法では再現できておらず、未検証のまま残る
+（v1.42検証と同じ制約であり、新たな限界ではない）。
 
 ---
 
