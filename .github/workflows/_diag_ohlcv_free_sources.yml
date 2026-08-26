@@ -1,0 +1,29 @@
+name: _diag-ohlcv-free-sources
+
+# 対策2フォローアップ（無料・認証不要の日中高値・安値取得手段調査）専用の
+# 一時ワークフロー。恒久機能ではない。調査完了後、スクリプトとあわせて削除する。
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 依存関係
+        run: |
+          pip install -q -r requirements.txt
+
+      - name: 診断スクリプト実行
+        run: |
+          python scripts/_diag_ohlcv_free_sources.py
