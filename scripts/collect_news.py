@@ -40,6 +40,7 @@ import re
 import sys
 from datetime import date, datetime, timezone, timedelta
 from email.utils import parsedate_to_datetime
+from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any
 from xml.etree import ElementTree as ET
@@ -66,6 +67,17 @@ _HTML_TAG_RE = re.compile(r"<[^>]+>")
 # （DESIGN_CHANGES.md参照）。
 USER_AGENT = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
               "(KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36")
+
+# v1.39（オーナー指示）: tier1候補はsummaryが空/薄い場合が多く（政府機関RSSは
+# タイトルとリンクのみという構成が多い）、波及経路は説明できても本文に書ける
+# 実質的な内容が無いまま不採用になる事象が実データで確認された。tier1候補
+# （日次0〜7件程度・取得コストは小さい）に限り、リンク先の<main>/<article>
+# 本文を取得して要約を補う。
+ARTICLE_BODY_CHAR_LIMIT = 2000
+ARTICLE_FETCH_TIMEOUT_SEC = 20
+_MAIN_ARTICLE_MIN_CHARS = 200
+_BODY_SKIP_TAGS = {"script", "style", "nav", "header", "footer"}
+_BODY_MAIN_TAGS = {"main", "article"}
 
 
 def _now_jst_iso() -> str:
@@ -182,6 +194,76 @@ def fetch_rss(url: str, timeout: int = REQUEST_TIMEOUT_SEC) -> tuple[str, list[d
         return "failed", [], f"XML解析失敗: {e}"
 
 
+class _MainArticleExtractor(HTMLParser):
+    """<main>/<article>要素直下のテキストのみを抽出する（v1.39）。
+
+    <script>/<style>/<nav>/<header>/<footer>の内側は無視する。regexによる
+    タグ検出は入れ子構造で正しく対応できないため、標準ライブラリの
+    html.parser.HTMLParserでDOMを正しく辿る（新規の重い依存を追加しない）。
+    <main>/<article>が無いページ（実測でFRBが該当。DESIGN_CHANGES.md
+    v1.39参照）ではtextが空のままになる——呼び出し側はこの場合、
+    ナビゲーション文言等が中心のページ全体へフォールバックせず、
+    元のRSS summaryをそのまま使う（無内容なsummaryより、無関係な文言を
+    本文と誤認させるほうが有害と判断したため）。
+    """
+
+    def __init__(self) -> None:
+        super().__init__()
+        self._skip_depth = 0
+        self._main_depth = 0
+        self._chunks: list[str] = []
+
+    def handle_starttag(self, tag: str, attrs) -> None:
+        if tag in _BODY_SKIP_TAGS:
+            self._skip_depth += 1
+        if tag in _BODY_MAIN_TAGS:
+            self._main_depth += 1
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag in _BODY_SKIP_TAGS and self._skip_depth > 0:
+            self._skip_depth -= 1
+        if tag in _BODY_MAIN_TAGS and self._main_depth > 0:
+            self._main_depth -= 1
+
+    def handle_data(self, data: str) -> None:
+        if self._skip_depth > 0 or self._main_depth <= 0:
+            return
+        text = data.strip()
+        if text:
+            self._chunks.append(text)
+
+    @property
+    def text(self) -> str:
+        return re.sub(r"\s+", " ", " ".join(self._chunks)).strip()
+
+
+def fetch_article_body(url: str, timeout: int = ARTICLE_FETCH_TIMEOUT_SEC) -> str | None:
+    """tier1候補のリンク先本文を取得する（v1.39・オーナー指示）。
+
+    <main>/<article>要素が見つかり、かつ抽出後の文字数が
+    _MAIN_ARTICLE_MIN_CHARSを超える場合のみ本文を返す（先頭
+    ARTICLE_BODY_CHAR_LIMIT字で切り詰める）。見つからない・取得失敗・
+    文字数不足のいずれの場合もNoneを返す——呼び出し側はNoneの場合、
+    元のRSS summaryをそのまま使う（フェイルクローズ不要。あくまで
+    summaryの補強であり、本関数の失敗が候補自体を落とすことはない）。
+    """
+    try:
+        resp = requests.get(url, timeout=timeout, headers={"User-Agent": USER_AGENT})
+        if resp.status_code != 200:
+            return None
+        parser = _MainArticleExtractor()
+        parser.feed(resp.text)
+        text = parser.text
+        if len(text) <= _MAIN_ARTICLE_MIN_CHARS:
+            return None
+        return text[:ARTICLE_BODY_CHAR_LIMIT]
+    except requests.RequestException:
+        return None
+    except Exception:  # noqa: BLE001 — summaryの補強に過ぎず、本文取得の
+        # 不調で候補収集全体を巻き添えにしない（fetch_rss・§4.1と同じ思想）。
+        return None
+
+
 def _collect_from_feed(name: str, url: str, window_start: datetime, window_end: datetime,
                         *, tier: int, kind: str) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     status, items, detail = fetch_rss(url)
@@ -198,12 +280,20 @@ def _collect_from_feed(name: str, url: str, window_start: datetime, window_end: 
         pub_dt = parse_pubdate_jst(it["published_at"])
         if pub_dt is None or not (window_start <= pub_dt < window_end):
             continue
+        summary = it.get("summary", "")
+        if tier == 1 and it["url"]:
+            # v1.39（オーナー指示）: tier1候補のみリンク先本文で補強する
+            # （日次0〜7件程度・取得コストは小さい）。<main>/<article>が
+            # 見つからない場合はNoneが返り、元のRSS summaryをそのまま使う。
+            body = fetch_article_body(it["url"])
+            if body:
+                summary = body
         candidates.append({
             "title": it["title"],
             "url": it["url"],
             "source": name,
             "published_at": it["published_at"],
-            "summary": it.get("summary", ""),
+            "summary": summary,
             "kind": kind,
             "tier": tier,
         })

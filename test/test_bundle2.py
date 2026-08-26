@@ -372,22 +372,22 @@ check("NEWS_SELECTIONがeligibilityフィールドの存在と、それに従う
       "eligibility" in generate_post.NEWS_SELECTION
       and "判定に従うこと" in generate_post.NEWS_SELECTION)
 
-print("=== generate_post.py: tier3候補数上限の確認（v1.21） ===")
+print("=== generate_post.py: tier3候補数上限の確認（v1.21・v1.39でLIMIT=15に変更） ===")
 _tier1_fixed = [{"tier": 1, "source": "SEC", "published_at": "Mon, 17 Aug 2026 10:00:00 GMT"} for _ in range(3)]
-_tier3_15 = [{"tier": 3, "source": "CoinDesk", "title": f"item{i}",
-              "published_at": f"Mon, 17 Aug 2026 {i:02d}:00:00 GMT"} for i in range(15)]
-_selected, _stats = generate_post._select_candidates_for_call_a(_tier1_fixed + _tier3_15)
+_tier3_20 = [{"tier": 3, "source": "CoinDesk", "title": f"item{i}",
+              "published_at": f"Mon, 17 Aug 2026 {i:02d}:00:00 GMT"} for i in range(20)]
+_selected, _stats = generate_post._select_candidates_for_call_a(_tier1_fixed + _tier3_20)
 check("tier1は全件（上限なし）で選定される",
       sum(1 for c in _selected if c.get("tier") == 1) == 3, str(_stats))
 check(f"tier3は上限{generate_post.TIER3_CANDIDATE_LIMIT}件に絞られる",
       sum(1 for c in _selected if c.get("tier") == 3) == generate_post.TIER3_CANDIDATE_LIMIT, str(_stats))
-check("tier3は公開日時の新しい順で選定される（最新のitem14が先頭）",
-      [c["title"] for c in _selected if c.get("tier") == 3][0] == "item14",
+check("tier3は公開日時の新しい順で選定される（最新のitem19が先頭）",
+      [c["title"] for c in _selected if c.get("tier") == 3][0] == "item19",
       [c["title"] for c in _selected if c.get("tier") == 3])
-check("truncation_statsが正しく報告される（15件中10件選定・5件除外）",
-      _stats == {"tier3_total": 15, "tier3_selected": 10, "tier3_dropped": 5}, str(_stats))
+check("truncation_statsが正しく報告される（20件中15件選定・5件除外）",
+      _stats == {"tier3_total": 20, "tier3_selected": 15, "tier3_dropped": 5}, str(_stats))
 
-_selected_few, _stats_few = generate_post._select_candidates_for_call_a(_tier1_fixed + _tier3_15[:5])
+_selected_few, _stats_few = generate_post._select_candidates_for_call_a(_tier1_fixed + _tier3_20[:5])
 check("tier3が上限未満なら全件選定され除外0件",
       _stats_few == {"tier3_total": 5, "tier3_selected": 5, "tier3_dropped": 0}, str(_stats_few))
 
@@ -401,7 +401,7 @@ _gen_truncated = {"level": "L0", "call_a": {"ok": True, "attempts": 1, "error": 
                    "total_usage": {"input_tokens": 0, "output_tokens": 0}}
 status_text = compose_post.render_generation_status(_gen_truncated)
 check("GENERATION_STATUS.md: tier3除外があれば目視確認行が表示される",
-      "tier3候補 15件中 10件を選定" in status_text and "5件を件数上限により除外" in status_text,
+      "tier3候補 20件中 15件を選定" in status_text and "5件を件数上限により除外" in status_text,
       status_text)
 
 _gen_not_truncated = json.loads(json.dumps(_gen_truncated))
@@ -416,7 +416,7 @@ os.makedirs("outputs/2026-08-21", exist_ok=True)
 Path("outputs/2026-08-21/daily_data.json").write_text(
     json.dumps({**DAILY_DATA, "target_date_jst": "2026-08-21"}, ensure_ascii=False), encoding="utf-8")
 _news_many = {"collected_at": "2026-08-21T09:00:00+09:00", "target_date_jst": "2026-08-21",
-              "source_status": {}, "candidates": _tier1_fixed + _tier3_15}
+              "source_status": {}, "candidates": _tier1_fixed + _tier3_20}
 Path("outputs/2026-08-21/news_candidates.json").write_text(json.dumps(_news_many, ensure_ascii=False), encoding="utf-8")
 
 
@@ -431,11 +431,11 @@ def _make_run_client_tolerant(a_ok, b_ok):
 
 _c = _make_run_client_tolerant(True, True)
 _result21 = generate_post.run("2026-08-21", client=_c)
-# 生の取得総数は 3(tier1) + 15(tier3) = 18件だが、実際に渡すのは 3 + 10(上限) = 13件。
-check("run(): news_candidate_countは取得総数(18)ではなく渡した件数(13)を反映する",
-      _result21["news_candidate_count"] == 13, str(_result21["news_candidate_count"]))
+# 生の取得総数は 3(tier1) + 20(tier3) = 23件だが、実際に渡すのは 3 + 15(上限) = 18件。
+check("run(): news_candidate_countは取得総数(23)ではなく渡した件数(18)を反映する",
+      _result21["news_candidate_count"] == 18, str(_result21["news_candidate_count"]))
 check("run(): call_a.truncation_statsにtier3の除外情報が記録される",
-      _result21["call_a"]["truncation_stats"] == {"tier3_total": 15, "tier3_selected": 10, "tier3_dropped": 5},
+      _result21["call_a"]["truncation_stats"] == {"tier3_total": 20, "tier3_selected": 15, "tier3_dropped": 5},
       str(_result21["call_a"]["truncation_stats"]))
 
 print("=== generate_post.run() レベル判定 ===")
@@ -930,6 +930,10 @@ class _FakeRssResp:
         self.status_code = status_code
         self.content = content
 
+    @property
+    def text(self) -> str:
+        return self.content.decode("utf-8")
+
 
 def _patch_requests_get(fn):
     orig = collect_news.requests.get
@@ -1082,6 +1086,137 @@ st2, kept2 = collect_news._collect_from_feed("TESTGOV2", "https://example.gov/su
 collect_news.requests.get = orig_get4
 check("_collect_from_feed: candidateにsummaryが含まれる（呼び出しAの根拠として渡る）",
       len(kept2) == 1 and kept2[0]["summary"] == "Some detail text.", str(kept2))
+
+print("=== collect_news.py: fetch_article_body（v1.39・オーナー指示） ===")
+
+_LONG_PARA = "This is a real press release paragraph with substantial content. " * 5  # >200字
+
+HTML_WITH_MAIN = f"""<html><head><script>var x = 1;</script></head>
+<body><nav>Home | About | Contact</nav><header>Site Header Banner</header>
+<main><h1>Press Release Title</h1><p>{_LONG_PARA}</p></main>
+<footer>Copyright 2026. All rights reserved.</footer></body></html>"""
+
+HTML_WITH_ARTICLE = f"""<html><body><nav>NavNavNav</nav>
+<article><p>{_LONG_PARA}</p></article>
+<footer>FooterFooterFooter</footer></body></html>"""
+
+HTML_NO_MAIN = """<html><body><nav>Skip to main content</nav>
+<header>An official website of the United States Government</header>
+<div class="content">Some text that is not wrapped in main or article tags at all,
+simulating a government site like FRB that lacks this structure.</div>
+<footer>Stay Connected. Federal Reserve Facebook Page. Federal Reserve X Page.</footer>
+</body></html>"""
+
+HTML_MAIN_TOO_SHORT = "<html><body><nav>nav</nav><main>short</main></body></html>"
+
+
+def _patch_get_by_url(url_to_resp):
+    def fn(url, **kw):
+        return url_to_resp[url]
+    return _patch_requests_get(fn)
+
+
+orig_a1 = _patch_get_by_url({"https://example.gov/main-test": _FakeRssResp(200, HTML_WITH_MAIN.encode("utf-8"))})
+body1 = collect_news.fetch_article_body("https://example.gov/main-test")
+collect_news.requests.get = orig_a1
+check("fetch_article_body: <main>要素から本文を抽出する",
+      body1 is not None and "Press Release Title" in body1 and "This is a real press release" in body1, body1)
+check("fetch_article_body: <nav>/<header>/<footer>の内容は含まれない",
+      body1 is not None and "Home | About | Contact" not in body1 and "Copyright 2026" not in body1, body1)
+
+orig_a2 = _patch_get_by_url({"https://example.gov/article-test": _FakeRssResp(200, HTML_WITH_ARTICLE.encode("utf-8"))})
+body2 = collect_news.fetch_article_body("https://example.gov/article-test")
+collect_news.requests.get = orig_a2
+check("fetch_article_body: <article>要素からも本文を抽出する",
+      body2 is not None and "This is a real press release" in body2 and "NavNavNav" not in body2, body2)
+
+orig_a3 = _patch_get_by_url({"https://example.gov/no-main-test": _FakeRssResp(200, HTML_NO_MAIN.encode("utf-8"))})
+body3 = collect_news.fetch_article_body("https://example.gov/no-main-test")
+collect_news.requests.get = orig_a3
+check("fetch_article_body: <main>/<article>が無いページ（FRB相当）はNone（全文フォールバックしない）",
+      body3 is None, body3)
+
+orig_a4 = _patch_get_by_url({"https://example.gov/short-main": _FakeRssResp(200, HTML_MAIN_TOO_SHORT.encode("utf-8"))})
+body4 = collect_news.fetch_article_body("https://example.gov/short-main")
+collect_news.requests.get = orig_a4
+check("fetch_article_body: <main>があっても200字以下ならNone", body4 is None, body4)
+
+orig_a5 = _patch_get_by_url({"https://example.gov/404-test": _FakeRssResp(404, b"")})
+body5 = collect_news.fetch_article_body("https://example.gov/404-test")
+collect_news.requests.get = orig_a5
+check("fetch_article_body: HTTP非200はNone", body5 is None, body5)
+
+
+def _raise_get(url, **kw):
+    raise collect_news.requests.exceptions.ConnectionError("boom")
+
+
+orig_a6 = _patch_requests_get(_raise_get)
+body6 = collect_news.fetch_article_body("https://example.gov/error-test")
+collect_news.requests.get = orig_a6
+check("fetch_article_body: 例外発生時もクラッシュせずNoneを返す（フェイルクローズ不要・summary補強に過ぎない）",
+      body6 is None, body6)
+
+_over_limit = "<main><p>" + ("x" * 3000) + "</p></main>"
+orig_a7 = _patch_get_by_url({"https://example.gov/long-test": _FakeRssResp(200, ("<html><body>" + _over_limit + "</body></html>").encode("utf-8"))})
+body7 = collect_news.fetch_article_body("https://example.gov/long-test")
+collect_news.requests.get = orig_a7
+check(f"fetch_article_body: {collect_news.ARTICLE_BODY_CHAR_LIMIT}字で切り詰める",
+      body7 is not None and len(body7) == collect_news.ARTICLE_BODY_CHAR_LIMIT, len(body7) if body7 else body7)
+
+print("=== collect_news.py: _collect_from_feedのtier1本文補強・tier3は対象外（v1.39） ===")
+
+RSS_TIER1_ONE_ITEM = """<?xml version="1.0"?>
+<rss version="2.0"><channel>
+<item><title>Tier1 item</title><link>https://example.gov/t1-main</link><pubDate>Mon, 17 Aug 2026 10:00:00 GMT</pubDate><description>thin summary</description></item>
+</channel></rss>"""
+
+
+def _multi_url_get(rss_body, article_url, article_body_resp):
+    def fn(url, **kw):
+        if url == article_url:
+            return article_body_resp
+        return _FakeRssResp(200, rss_body.encode("utf-8"))
+    return fn
+
+
+orig_b1 = _patch_requests_get(_multi_url_get(
+    RSS_TIER1_ONE_ITEM, "https://example.gov/t1-main", _FakeRssResp(200, HTML_WITH_MAIN.encode("utf-8"))))
+st_t1, kept_t1 = collect_news._collect_from_feed("TESTTIER1", "https://example.gov/t1feed.rss",
+                                                   *_window_1707, tier=1, kind="official")
+collect_news.requests.get = orig_b1
+check("_collect_from_feed: tier1候補はsummaryが本文取得結果に置き換わる",
+      len(kept_t1) == 1 and "This is a real press release" in kept_t1[0]["summary"]
+      and kept_t1[0]["summary"] != "thin summary", str(kept_t1))
+
+orig_b2 = _patch_requests_get(_multi_url_get(
+    RSS_TIER1_ONE_ITEM, "https://example.gov/t1-main", _FakeRssResp(200, HTML_NO_MAIN.encode("utf-8"))))
+st_t1b, kept_t1b = collect_news._collect_from_feed("TESTTIER1B", "https://example.gov/t1feed2.rss",
+                                                     *_window_1707, tier=1, kind="official")
+collect_news.requests.get = orig_b2
+check("_collect_from_feed: tier1候補で本文取得がNoneの場合は元のRSS summaryのまま",
+      len(kept_t1b) == 1 and kept_t1b[0]["summary"] == "thin summary", str(kept_t1b))
+
+_tier3_calls = []
+
+
+def _tracking_get(url, **kw):
+    _tier3_calls.append(url)
+    return _FakeRssResp(200, RSS_TIER1_ONE_ITEM.replace("https://example.gov/t1-main",
+                                                         "https://example.gov/t3-main").encode("utf-8"))
+
+
+orig_b3 = _patch_requests_get(_tracking_get)
+st_t3, kept_t3 = collect_news._collect_from_feed("TESTTIER3B", "https://example.com/t3feed.rss",
+                                                   *_window_1707, tier=3, kind="supplementary")
+collect_news.requests.get = orig_b3
+check("_collect_from_feed: tier3候補は本文取得を行わない（RSSフィード取得の1回のみ）",
+      len(kept_t3) == 1 and kept_t3[0]["summary"] == "thin summary" and len(_tier3_calls) == 1,
+      f"calls={_tier3_calls}")
+
+print("=== generate_post.py: TIER3_CANDIDATE_LIMIT引き上げ（v1.39・オーナー指示） ===")
+check("TIER3_CANDIDATE_LIMITが15である（8/25実データでのペア分断・トークン予算の実測に基づく）",
+      generate_post.TIER3_CANDIDATE_LIMIT == 15, generate_post.TIER3_CANDIDATE_LIMIT)
 
 print("=== collect_news.py: tier 3情報源の追加確認（v1.20） ===")
 
