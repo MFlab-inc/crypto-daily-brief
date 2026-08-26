@@ -58,6 +58,21 @@ def _asset(daily_data: dict, symbol: str) -> dict:
     return {"usd": UNCONFIRMED, "jpy": "", "change_24h": UNCONFIRMED}
 
 
+def _intraday_range_line(daily_data: dict, symbol: str) -> str | None:
+    """（日中レンジ low〜high）行（v1.41・オーナー承認）。representative
+    （BTC・ETH）の銘柄のみ出力し、BNBは出力しない。intraday_rangeが
+    未確認（高値・安値のいずれか取得不能）の日は「未確認」と書かず、
+    行自体を省略する。
+    """
+    d = daily_data.get("intraday_range", {}).get(symbol, {})
+    if not d.get("representative"):
+        return None
+    high, low = d.get("high"), d.get("low")
+    if not high or not low or high == UNCONFIRMED or low == UNCONFIRMED:
+        return None
+    return f"　（日中レンジ {low}〜{high}）"
+
+
 def compose_part0_target_date(daily_data: dict[str, Any]) -> str:
     """【対象日】。date_titleは図版見出し用の文言を含むため使わず、
     target_date_jst/weekday_jpから素の日付行を組む。
@@ -89,10 +104,20 @@ def compose_part1_numeric(daily_data: dict[str, Any]) -> str:
         f"｜24時間取引高 {m.get('volume_24h', UNCONFIRMED)}{_paren(m.get('volume_24h_jpy', ''))}",
         f"・ #BTC：{btc.get('usd', UNCONFIRMED)}{_paren(btc.get('jpy', ''))}"
         f"｜24時間比 {btc.get('change_24h', UNCONFIRMED)}",
+    ]
+    btc_range = _intraday_range_line(daily_data, "BTC")
+    if btc_range:
+        lines.append(btc_range)
+    lines.append(
         f"・ #ETH：{eth.get('usd', UNCONFIRMED)}{_paren(eth.get('jpy', ''))}"
-        f"｜24時間比 {eth.get('change_24h', UNCONFIRMED)}",
+        f"｜24時間比 {eth.get('change_24h', UNCONFIRMED)}")
+    eth_range = _intraday_range_line(daily_data, "ETH")
+    if eth_range:
+        lines.append(eth_range)
+    lines.append(
         f"・ #BNB：{bnb.get('usd', UNCONFIRMED)}{_paren(bnb.get('jpy', ''))}"
-        f"｜24時間比 {bnb.get('change_24h', UNCONFIRMED)}",
+        f"｜24時間比 {bnb.get('change_24h', UNCONFIRMED)}")
+    lines += [
         fg_line,
         f"・ドミナンス：BTC {m.get('btc_dominance', UNCONFIRMED)}｜ETH {m.get('eth_dominance', UNCONFIRMED)}",
         f"・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、"

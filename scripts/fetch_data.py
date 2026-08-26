@@ -263,6 +263,38 @@ INTRADAY_SYMBOLS = {
     "BNB": ("BNB-USD", "bnbusd", False),
 }
 
+INTRADAY_RANGE_CONFIG_PATH = Path(__file__).parent.parent / "config" / "intraday_range.json"
+NOTABLE_MOVE_THRESHOLD_DEFAULT = 0.03
+
+
+def load_notable_move_threshold() -> float:
+    """notable_move判定の閾値をconfig/intraday_range.jsonから読む（v1.41
+    フォローアップ・オーナー指示）。「3%は仮置き。数日運用して調整する」
+    ためコードにハードコードせず、設定ファイル側の値のみ変更すれば
+    調整できるようにする。ファイル欠損・不正な場合はデフォルト値
+    （0.03）にフェイルクローズする（他のconfig読み込み関数と同じ方針）。
+    """
+    if not INTRADAY_RANGE_CONFIG_PATH.exists():
+        return NOTABLE_MOVE_THRESHOLD_DEFAULT
+    try:
+        data = json.loads(INTRADAY_RANGE_CONFIG_PATH.read_text(encoding="utf-8"))
+    except (ValueError, OSError):
+        return NOTABLE_MOVE_THRESHOLD_DEFAULT
+    v = data.get("notable_move_threshold")
+    return float(v) if isinstance(v, (int, float)) and not isinstance(v, bool) else NOTABLE_MOVE_THRESHOLD_DEFAULT
+
+
+def compute_notable_move(high_raw: float | None, close_price: float | None, threshold: float) -> bool | None:
+    """日中高値が当日価格（CMC）からthreshold以上乖離しているかを判定する
+    （v1.41フォローアップ・オーナー承認）。high_raw・close_priceのいずれかが
+    取得不能（None・0・False相当）な場合は判定不能としてNoneを返す
+    （呼び出し側でnotable_moveキー自体を省略し、falseで固定しない——
+    「判定した結果notable moveでない」と「判定できなかった」を区別する）。
+    """
+    if high_raw is None or not close_price:
+        return None
+    return (high_raw - close_price) / close_price >= threshold
+
 
 def _parse_coinbase_candles(raw: list) -> list[dict]:
     # Coinbase Exchange candlesのフィールド順は [time, low, high, open, close, volume]
@@ -305,6 +337,11 @@ def fetch_intraday_range(symbol: str, coinbase_product: str, bitstamp_pair: str,
     （collection_window_ny()と同じ半開区間 [start, end) で判定）。
     両方失敗した場合はUNCONFIRMEDとし、BTC/JPY等の代替値は用いない
     （統合運用基準の「推測しない」方針に従う）。
+
+    返り値は表示用の整形済み文字列（high/low）に加え、notable_move判定用
+    の生の数値（high_raw/low_raw、両方失敗時はNone）も含む——daily_data.json
+    へ書き出す際はhigh/low/source/retrieved_atのみを使う（呼び出し側で
+    high_raw/low_rawを除いて整形する）。
     """
     retrieved_at = datetime.now(JST).isoformat()
     try:
@@ -317,6 +354,7 @@ def fetch_intraday_range(symbol: str, coinbase_product: str, bitstamp_pair: str,
         if rng:
             high, low = rng
             return {"high": fmt_usd_int(high), "low": fmt_usd_int(low),
+                    "high_raw": high, "low_raw": low,
                     "source": "coinbase", "retrieved_at": retrieved_at}
         print(f"[warn] coinbase candles({symbol}): 窓内の1時間足が0件", file=sys.stderr)
     except Exception as e:  # noqa: BLE001
@@ -331,12 +369,14 @@ def fetch_intraday_range(symbol: str, coinbase_product: str, bitstamp_pair: str,
         if rng:
             high, low = rng
             return {"high": fmt_usd_int(high), "low": fmt_usd_int(low),
+                    "high_raw": high, "low_raw": low,
                     "source": "bitstamp", "retrieved_at": retrieved_at}
         print(f"[warn] bitstamp ohlc({symbol}): 窓内の1時間足が0件", file=sys.stderr)
     except Exception as e:  # noqa: BLE001
         print(f"[warn] bitstamp ohlc({symbol}): {e}", file=sys.stderr)
 
-    return {"high": UNCONFIRMED, "low": UNCONFIRMED, "source": UNCONFIRMED, "retrieved_at": retrieved_at}
+    return {"high": UNCONFIRMED, "low": UNCONFIRMED, "high_raw": None, "low_raw": None,
+            "source": UNCONFIRMED, "retrieved_at": retrieved_at}
 
 
 def _parse_prev_apr(s: str) -> float | None:
@@ -434,11 +474,23 @@ def main() -> int:
     # collection_window_ny()はcollect_news.pyのニュース収集と同じ対象日・
     # 同じ窓定義を再利用する（半開区間 [window_start, window_end)）。
     window_start, window_end = collect_news.collection_window_ny(target)
+    notable_move_threshold = load_notable_move_threshold()
     intraday_range = {}
     for sym, (cb_product, bs_pair, representative) in INTRADAY_SYMBOLS.items():
         r = fetch_intraday_range(sym, cb_product, bs_pair, window_start, window_end)
-        r["representative"] = representative
-        intraday_range[sym] = r
+        entry = {"high": r["high"], "low": r["low"], "source": r["source"],
+                 "retrieved_at": r["retrieved_at"], "representative": representative}
+        # v1.41フォローアップ（オーナー承認）: notable_moveはBTC・ETH
+        # （representative=trueの銘柄）のみ判定する。高値・当日価格（CMC）
+        # のいずれかが未確認の場合は判定できないため、キー自体を付与しない
+        # （false固定にすると「判定した結果notable moveでない」と区別が
+        # つかなくなり、推測しない方針に反する）。
+        if representative:
+            close_price = (cmc or {}).get(sym, {}).get("price")
+            nm = compute_notable_move(r["high_raw"], close_price, notable_move_threshold)
+            if nm is not None:
+                entry["notable_move"] = nm
+        intraday_range[sym] = entry
 
     t_end = datetime.now(JST)
 

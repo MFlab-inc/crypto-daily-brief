@@ -22,6 +22,7 @@ import compose_post  # noqa: E402
 import verify_post  # noqa: E402
 import collect_news  # noqa: E402
 import fetch_data  # noqa: E402
+import compose_numeric  # noqa: E402
 
 PASS = []
 FAIL = []
@@ -1456,6 +1457,76 @@ check("INTRADAY_SYMBOLS: BTC・ETHはrepresentative=True、BNBはFalse",
       and fetch_data.INTRADAY_SYMBOLS["ETH"][2] is True
       and fetch_data.INTRADAY_SYMBOLS["BNB"][2] is False,
       str(fetch_data.INTRADAY_SYMBOLS))
+
+print("=== fetch_data.py: notable_move判定・閾値のconfig化（v1.41フォローアップ・オーナー承認） ===")
+check("compute_notable_move: 8/25のBTC実例（高値$81,265／当日価格$78,895）は閾値3%以上でTrue",
+      fetch_data.compute_notable_move(81265.0, 78895.0, 0.03) is True)
+check("compute_notable_move: 乖離が閾値未満ならFalse",
+      fetch_data.compute_notable_move(80000.0, 78895.0, 0.03) is False)
+check("compute_notable_move: high_rawがNoneなら判定不能（None、Falseで固定しない）",
+      fetch_data.compute_notable_move(None, 78895.0, 0.03) is None)
+check("compute_notable_move: close_priceがNone/0なら判定不能（None）",
+      fetch_data.compute_notable_move(81265.0, None, 0.03) is None
+      and fetch_data.compute_notable_move(81265.0, 0, 0.03) is None)
+
+check("load_notable_move_threshold: config/intraday_range.jsonが存在しキーがあればその値を読む",
+      fetch_data.load_notable_move_threshold() == 0.03, fetch_data.load_notable_move_threshold())
+
+_orig_intraday_config_path = fetch_data.INTRADAY_RANGE_CONFIG_PATH
+_missing_config = Path("no_such_intraday_range.json")
+fetch_data.INTRADAY_RANGE_CONFIG_PATH = _missing_config
+check("load_notable_move_threshold: 設定ファイルが存在しない場合はデフォルト0.03へフェイルクローズ",
+      fetch_data.load_notable_move_threshold() == fetch_data.NOTABLE_MOVE_THRESHOLD_DEFAULT)
+
+_custom_config = Path("custom_intraday_range.json")
+_custom_config.write_text(json.dumps({"notable_move_threshold": 0.05}), encoding="utf-8")
+fetch_data.INTRADAY_RANGE_CONFIG_PATH = _custom_config
+check("load_notable_move_threshold: 設定ファイルのnotable_move_thresholdを読む（コードのハードコード値ではない）",
+      fetch_data.load_notable_move_threshold() == 0.05)
+fetch_data.INTRADAY_RANGE_CONFIG_PATH = _orig_intraday_config_path
+
+print("=== compose_numeric.py: 前編【主要指標】への日中レンジ行の追加（v1.41フォローアップ・オーナー承認） ===")
+_dd_with_range = json.loads(json.dumps(DAILY_DATA))
+_dd_with_range["intraday_range"] = {
+    "BTC": {"high": "$81,265", "low": "$78,100", "source": "coinbase",
+            "retrieved_at": "2026-08-26T10:20:24+09:00", "representative": True, "notable_move": True},
+    "ETH": {"high": "$2,533", "low": "$2,433", "source": "coinbase",
+            "retrieved_at": "2026-08-26T10:20:25+09:00", "representative": True},
+    "BNB": {"high": "$719", "low": "$691", "source": "coinbase",
+            "retrieved_at": "2026-08-26T10:20:26+09:00", "representative": False},
+}
+_p1_range = compose_numeric.compose_part1_numeric(_dd_with_range)
+check("compose_part1_numeric: BTCの日中レンジ行が出る",
+      "　（日中レンジ $78,100〜$81,265）" in _p1_range, _p1_range)
+check("compose_part1_numeric: ETHの日中レンジ行が出る",
+      "　（日中レンジ $2,433〜$2,533）" in _p1_range, _p1_range)
+check("compose_part1_numeric: BNBの日中レンジ行は出ない（representative=falseのため）",
+      "$691〜$719" not in _p1_range and "$719〜$691" not in _p1_range, _p1_range)
+check("_intraday_range_line: representative=falseの銘柄は常にNone",
+      compose_numeric._intraday_range_line(_dd_with_range, "BNB") is None)
+
+_intraday_hits = verify_post._find_transcriptions(
+    _dd_with_range, "BTCは一時$81,265まで上昇した。", set())
+check("C16b: intraday_rangeの数値（高値・安値）も既存の汎用スキャンで転記検知の対象になる（コード変更不要）",
+      "$81,265" in _intraday_hits, str(_intraday_hits))
+
+_dd_unconfirmed_range = json.loads(json.dumps(DAILY_DATA))
+_dd_unconfirmed_range["intraday_range"] = {
+    "BTC": {"high": compose_numeric.UNCONFIRMED, "low": compose_numeric.UNCONFIRMED,
+            "source": compose_numeric.UNCONFIRMED, "retrieved_at": "...", "representative": True},
+}
+_p1_unconf = compose_numeric.compose_part1_numeric(_dd_unconfirmed_range)
+check("compose_part1_numeric: intraday_rangeが未確認の日は行自体を省略する（「未確認」とは書かない）",
+      "日中レンジ" not in _p1_unconf, _p1_unconf)
+
+check("compose_part1_numeric: intraday_range自体が無い日（従来のdaily_data.json）でも日中レンジ行は出ない・既存行に影響しない",
+      compose_numeric.compose_part1_numeric(DAILY_DATA).count("日中レンジ") == 0)
+
+print("=== generate_post.py: notable_moveのプロンプト指示（v1.41フォローアップ・オーナー承認） ===")
+check("SYSTEM_AにINTRADAY_MOVE_GUIDANCE（オーナー指定の文言）が含まれる",
+      "その日中の値動きは記述に値する材料である" in generate_post.SYSTEM_A
+      and "あなたは数値を書かないこと" in generate_post.SYSTEM_A
+      and "値動きの" in generate_post.SYSTEM_A and "形状のみを記述する" in generate_post.SYSTEM_A)
 
 print()
 print(f"PASS: {len(PASS)}  FAIL: {len(FAIL)}")

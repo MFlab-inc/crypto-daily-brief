@@ -170,6 +170,14 @@ RULES_HASHTAG = """## ハッシュタグ規則（X投稿本文のみ）
 - `ETH/USDC` のようなペア表記にはタグを使わず平文で書く。
 - `headline_for_image` には `#` を一切使わない。"""
 
+INTRADAY_MOVE_GUIDANCE = """## 日中の値動き（notable_move）
+
+入力の intraday_range に notable_move: true の銘柄がある場合、
+その日中の値動きは記述に値する材料である。ただし具体的な数値は
+後段のテンプレートが差し込むため、あなたは数値を書かないこと。
+「一時的に上昇したのち上げ幅を縮小した」のような、値動きの
+形状のみを記述する。"""
+
 RULES_CAUSAL = """## 因果表現
 
 - 事実の記述と価格変動の因果を混同しない。
@@ -362,7 +370,7 @@ OUTPUT_FORMAT_A = """## 出力形式
 
 SYSTEM_A = "\n\n".join([
     ROLE_INTRO, RULES_ABSOLUTE, RULES_HASHTAG, NEWS_SELECTION, NO_CANDIDATES_FALLBACK,
-    RULES_CAUSAL, WRITES_A, OUTPUT_FORMAT_A,
+    INTRADAY_MOVE_GUIDANCE, RULES_CAUSAL, WRITES_A, OUTPUT_FORMAT_A,
 ])
 
 CALL_B_INSTRUCTIONS = """入力として、当日の市場データ（daily_data.json）と、呼び出しAの出力
