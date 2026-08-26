@@ -21,6 +21,7 @@ import generate_post  # noqa: E402
 import compose_post  # noqa: E402
 import verify_post  # noqa: E402
 import collect_news  # noqa: E402
+import fetch_data  # noqa: E402
 
 PASS = []
 FAIL = []
@@ -1331,6 +1332,130 @@ check("post_draft.yml: continue-on-errorが除去されている（フェイル�
 check("post_draft.yml: force_redispatch入力がある", "force_redispatch" in post_draft_yml)
 check("post_draft.yml: 冪等性ガードのステップがある",
       "冪等性ガード" in post_draft_yml and "steps.guard.outputs.skip" in post_draft_yml)
+
+print("=== fetch_data.py: 日中高値・安値（v1.41・オーナー承認・Coinbase主/Bitstamp副） ===")
+
+
+class _FakeJsonResp:
+    def __init__(self, status_code, payload):
+        self.status_code = status_code
+        self._payload = payload
+
+    def raise_for_status(self):
+        if self.status_code >= 400:
+            raise fetch_data.requests.exceptions.HTTPError(f"HTTP {self.status_code}")
+
+    def json(self):
+        return self._payload
+
+
+check("_parse_coinbase_candles: フィールド順[time,low,high,open,close,volume]を正しく解釈する",
+      fetch_data._parse_coinbase_candles([[1000, 10.0, 20.0, 15.0, 18.0, 100.0]]) ==
+      [{"time": 1000, "low": 10.0, "high": 20.0, "open": 15.0, "close": 18.0, "volume": 100.0}])
+
+check("_parse_bitstamp_candles: 文字列の数値をfloatへ変換する",
+      fetch_data._parse_bitstamp_candles(
+          {"data": {"ohlc": [{"timestamp": "1000", "open": "15", "high": "20",
+                               "low": "10", "close": "18", "volume": "100"}]}}) ==
+      [{"time": 1000, "low": 10.0, "high": 20.0, "open": 15.0, "close": 18.0, "volume": 100.0}])
+
+_ws = _datetime(2026, 8, 25, 21, 0, tzinfo=_timezone.utc)   # NY 17:00 EDT = UTC 21:00
+_we = _datetime(2026, 8, 26, 21, 0, tzinfo=_timezone.utc)
+_candles_in_out = [
+    {"time": int(_ws.timestamp()) - 3600, "high": 999.0, "low": 1.0},        # 窓の外（前）
+    {"time": int(_ws.timestamp()), "high": 100.0, "low": 90.0},              # 窓の境界（含む）
+    {"time": int(_ws.timestamp()) + 3600, "high": 120.0, "low": 80.0},       # 窓内・最高値/最安値
+    {"time": int(_we.timestamp()) - 3600, "high": 110.0, "low": 85.0},       # 窓内
+    {"time": int(_we.timestamp()), "high": 999.0, "low": 1.0},               # 窓の境界（含まない・半開区間）
+]
+check("_range_from_candles: 半開区間[window_start, window_end)でhigh最大・low最小を集計する",
+      fetch_data._range_from_candles(_candles_in_out, _ws, _we) == (120.0, 80.0))
+check("_range_from_candles: 窓内に1本も無ければNone",
+      fetch_data._range_from_candles([], _ws, _we) is None)
+
+_orig_fd_get = fetch_data.requests.get
+_fd_calls = []
+
+
+def _cb_payload(offset_high_low):
+    return [[int(_ws.timestamp()) + off, lo, hi, (hi + lo) / 2, (hi + lo) / 2, 1.0]
+            for off, hi, lo in offset_high_low]
+
+
+_bs_ok_payload = {"data": {"ohlc": [
+    {"timestamp": str(int(_ws.timestamp()) + 3600), "open": "80000", "high": "81255.06",
+     "low": "78720.41", "close": "80500", "volume": "1"},
+]}}
+
+
+def _fd_get_coinbase_ok(url, headers=None, params=None, timeout=None):
+    _fd_calls.append(url)
+    if "api.exchange.coinbase.com" in url:
+        return _FakeJsonResp(200, _cb_payload([(3600, 81255.06, 78720.41)]))
+    raise AssertionError(f"Bitstampが呼ばれてはいけない: {url}")
+
+
+fetch_data.requests.get = _fd_get_coinbase_ok
+_fd_calls.clear()
+_r1 = fetch_data.fetch_intraday_range("BTC", "BTC-USD", "btcusd", _ws, _we)
+fetch_data.requests.get = _orig_fd_get
+check("fetch_intraday_range: Coinbase成功時はcoinbaseのhigh/lowを返す",
+      _r1["high"] == "$81,255" and _r1["low"] == "$78,720" and _r1["source"] == "coinbase", str(_r1))
+check("fetch_intraday_range: Coinbase成功時はBitstampを呼ばない",
+      all("bitstamp" not in c for c in _fd_calls), _fd_calls)
+check("fetch_intraday_range: representativeキーは呼び出し元(main)が付与するためここには含まれない",
+      "representative" not in _r1)
+
+
+def _fd_get_fallback_to_bitstamp(url, headers=None, params=None, timeout=None):
+    _fd_calls.append(url)
+    if "api.exchange.coinbase.com" in url:
+        return _FakeJsonResp(500, None)
+    if "bitstamp.net" in url:
+        return _FakeJsonResp(200, _bs_ok_payload)
+    raise AssertionError(f"想定外のURL: {url}")
+
+
+fetch_data.requests.get = _fd_get_fallback_to_bitstamp
+_fd_calls.clear()
+_r2 = fetch_data.fetch_intraday_range("BTC", "BTC-USD", "btcusd", _ws, _we)
+fetch_data.requests.get = _orig_fd_get
+check("fetch_intraday_range: Coinbase失敗（HTTPエラー）時はBitstampへフォールバックする",
+      _r2["high"] == "$81,255" and _r2["low"] == "$78,720" and _r2["source"] == "bitstamp", str(_r2))
+
+
+def _fd_get_coinbase_out_of_window(url, headers=None, params=None, timeout=None):
+    _fd_calls.append(url)
+    if "api.exchange.coinbase.com" in url:
+        return _FakeJsonResp(200, _cb_payload([(-7200, 999.0, 1.0)]))  # 窓の2時間前のみ＝窓内0件
+    if "bitstamp.net" in url:
+        return _FakeJsonResp(200, _bs_ok_payload)
+    raise AssertionError(f"想定外のURL: {url}")
+
+
+fetch_data.requests.get = _fd_get_coinbase_out_of_window
+_r3 = fetch_data.fetch_intraday_range("BTC", "BTC-USD", "btcusd", _ws, _we)
+fetch_data.requests.get = _orig_fd_get
+check("fetch_intraday_range: Coinbaseが200でも窓内の足が0件ならBitstampへフォールバックする",
+      _r3["source"] == "bitstamp", str(_r3))
+
+
+def _fd_get_both_fail(url, headers=None, params=None, timeout=None):
+    return _FakeJsonResp(503, None)
+
+
+fetch_data.requests.get = _fd_get_both_fail
+_r4 = fetch_data.fetch_intraday_range("BTC", "BTC-USD", "btcusd", _ws, _we)
+fetch_data.requests.get = _orig_fd_get
+check("fetch_intraday_range: 両方失敗した場合はUNCONFIRMED（BTC/JPY等の代替はしない）",
+      _r4["high"] == fetch_data.UNCONFIRMED and _r4["low"] == fetch_data.UNCONFIRMED
+      and _r4["source"] == fetch_data.UNCONFIRMED and bool(_r4.get("retrieved_at")), str(_r4))
+
+check("INTRADAY_SYMBOLS: BTC・ETHはrepresentative=True、BNBはFalse",
+      fetch_data.INTRADAY_SYMBOLS["BTC"][2] is True
+      and fetch_data.INTRADAY_SYMBOLS["ETH"][2] is True
+      and fetch_data.INTRADAY_SYMBOLS["BNB"][2] is False,
+      str(fetch_data.INTRADAY_SYMBOLS))
 
 print()
 print(f"PASS: {len(PASS)}  FAIL: {len(FAIL)}")

@@ -38,6 +38,8 @@ from pathlib import Path
 
 import requests
 
+import collect_news
+
 JST = timezone(timedelta(hours=9))
 UA = {"User-Agent": "crypto-daily-brief/1.0"}
 TIMEOUT = 20
@@ -251,6 +253,92 @@ def fetch_bitflyer_eth_volume() -> dict | None:
     return None
 
 
+INTRADAY_SYMBOLS = {
+    # v1.41（オーナー承認）: symbol -> (Coinbase Exchange product_id, Bitstampペア, representative)
+    # representativeは本文の「一時◯◯まで上昇」等への反映可否のフラグ（データ自体は
+    # 3銘柄とも常に取得・保存する）。BNBはCoinbase・Bitstampいずれも出来高が薄く、
+    # 代表性のある高値・安値にならない可能性があるため false（オーナー指示）。
+    "BTC": ("BTC-USD", "btcusd", True),
+    "ETH": ("ETH-USD", "ethusd", True),
+    "BNB": ("BNB-USD", "bnbusd", False),
+}
+
+
+def _parse_coinbase_candles(raw: list) -> list[dict]:
+    # Coinbase Exchange candlesのフィールド順は [time, low, high, open, close, volume]
+    # （open/high/low/closeの通例順ではない点に注意 — 実測で確認済み）。
+    out = []
+    for c in raw:
+        t, low, high, open_, close, volume = c
+        out.append({"time": int(t), "low": float(low), "high": float(high),
+                     "open": float(open_), "close": float(close), "volume": float(volume)})
+    return out
+
+
+def _parse_bitstamp_candles(raw: dict) -> list[dict]:
+    items = (raw.get("data") or {}).get("ohlc") or []
+    out = []
+    for c in items:
+        out.append({"time": int(c["timestamp"]), "low": float(c["low"]), "high": float(c["high"]),
+                     "open": float(c["open"]), "close": float(c["close"]), "volume": float(c["volume"])})
+    return out
+
+
+def _range_from_candles(candles: list[dict], window_start: datetime, window_end: datetime
+                         ) -> tuple[float, float] | None:
+    """1時間足のリストから、窓 [window_start, window_end) 内のhigh最大値・
+    low最小値を返す。窓内に1本も無ければNone（呼び出し側でフォールバックへ）。
+    """
+    ws, we = window_start.timestamp(), window_end.timestamp()
+    in_window = [c for c in candles if ws <= c["time"] < we]
+    if not in_window:
+        return None
+    return max(c["high"] for c in in_window), min(c["low"] for c in in_window)
+
+
+def fetch_intraday_range(symbol: str, coinbase_product: str, bitstamp_pair: str,
+                          window_start: datetime, window_end: datetime) -> dict:
+    """対象銘柄の日中高値・安値をNY 17:00区切りの窓で取得する（v1.41・
+    オーナー承認）。Coinbase Exchange公開API（認証不要）を主、Bitstamp
+    公開API（認証不要）を副とする。1時間足を明示的なstart/end（窓の境界）
+    で取得し、窓内の足からhigh最大値・low最小値を自前で集計する
+    （collection_window_ny()と同じ半開区間 [start, end) で判定）。
+    両方失敗した場合はUNCONFIRMEDとし、BTC/JPY等の代替値は用いない
+    （統合運用基準の「推測しない」方針に従う）。
+    """
+    retrieved_at = datetime.now(JST).isoformat()
+    try:
+        raw = get_json(
+            f"https://api.exchange.coinbase.com/products/{coinbase_product}/candles",
+            params={"granularity": 3600,
+                    "start": window_start.astimezone(timezone.utc).isoformat(),
+                    "end": window_end.astimezone(timezone.utc).isoformat()})
+        rng = _range_from_candles(_parse_coinbase_candles(raw), window_start, window_end)
+        if rng:
+            high, low = rng
+            return {"high": fmt_usd_int(high), "low": fmt_usd_int(low),
+                    "source": "coinbase", "retrieved_at": retrieved_at}
+        print(f"[warn] coinbase candles({symbol}): 窓内の1時間足が0件", file=sys.stderr)
+    except Exception as e:  # noqa: BLE001
+        print(f"[warn] coinbase candles({symbol}): {e}", file=sys.stderr)
+
+    try:
+        raw = get_json(
+            f"https://www.bitstamp.net/api/v2/ohlc/{bitstamp_pair}/",
+            params={"step": 3600, "limit": 200,
+                    "start": int(window_start.timestamp()), "end": int(window_end.timestamp())})
+        rng = _range_from_candles(_parse_bitstamp_candles(raw), window_start, window_end)
+        if rng:
+            high, low = rng
+            return {"high": fmt_usd_int(high), "low": fmt_usd_int(low),
+                    "source": "bitstamp", "retrieved_at": retrieved_at}
+        print(f"[warn] bitstamp ohlc({symbol}): 窓内の1時間足が0件", file=sys.stderr)
+    except Exception as e:  # noqa: BLE001
+        print(f"[warn] bitstamp ohlc({symbol}): {e}", file=sys.stderr)
+
+    return {"high": UNCONFIRMED, "low": UNCONFIRMED, "source": UNCONFIRMED, "retrieved_at": retrieved_at}
+
+
 def _parse_prev_apr(s: str) -> float | None:
     """前日 daily_data.json の pool.apr（例 "12.26%"）を float へ（v1.5）。"""
     if not s or s == UNCONFIRMED:
@@ -341,6 +429,17 @@ def main() -> int:
     bf_dom = fetch_bitflyer_eth_volume()   # 失敗時 None（内部でフォールバック処理）
     cc_dom = fetch_coincheck_eth_volume()
     dom_t = datetime.now(JST)
+
+    # v1.41（オーナー承認）: 日中高値・安値（NY 17:00区切りの窓）。
+    # collection_window_ny()はcollect_news.pyのニュース収集と同じ対象日・
+    # 同じ窓定義を再利用する（半開区間 [window_start, window_end)）。
+    window_start, window_end = collect_news.collection_window_ny(target)
+    intraday_range = {}
+    for sym, (cb_product, bs_pair, representative) in INTRADAY_SYMBOLS.items():
+        r = fetch_intraday_range(sym, cb_product, bs_pair, window_start, window_end)
+        r["representative"] = representative
+        intraday_range[sym] = r
+
     t_end = datetime.now(JST)
 
     # v1.2 承認3: cmc は区画ごとに欠損しうるため、区画単位で参照する。
@@ -478,6 +577,10 @@ def main() -> int:
             "（シャドー運用中：ヘッドラインはフェーズ2で生成）"),
         # 画像内の通貨表記は # を付けない（v1.1 B-3）。X投稿本文の # 付与は維持。
         "assets": [asset("BTC", "BTC"), asset("ETH", "ETH"), asset("BNB", "BNB")],
+        # v1.41: NY 17:00区切りの窓における日中高値・安値。representative=falseの
+        # 銘柄（BNB）はデータとして保持するが、本文への反映可否は別途判断する
+        # （オーナー指示）。
+        "intraday_range": intraday_range,
         "market": {
             "fear_greed": (fg if fg else {"value": 0, "label": UNCONFIRMED}),
             "market_cap": fmt_cap_usd(g["mcap"]) if g else UNCONFIRMED,
@@ -521,7 +624,10 @@ def main() -> int:
            "usdc_dominance": usdc_d,
            # v1.4: 取得フィールド・取得時刻(JST ISO)を含む個別記録（基準 §3.2 の
            # 「取得フィールド・時間窓」を後編で記載するための正本）
-           "bitflyer": bf_dom, "coincheck": cc_dom}
+           "bitflyer": bf_dom, "coincheck": cc_dom,
+           # v1.41: 集計に使ったNY 17:00区切りの窓を記録（デバッグ用）。
+           "intraday_range": intraday_range,
+           "intraday_window": {"start": window_start.isoformat(), "end": window_end.isoformat()}}
     (out_dir / "raw_data.json").write_text(
         json.dumps(raw, ensure_ascii=False, indent=2), encoding="utf-8")
     (out_dir / "run_context.env").write_text(
