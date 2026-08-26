@@ -384,12 +384,67 @@ check(f"tier3は上限{generate_post.TIER3_CANDIDATE_LIMIT}件に絞られる",
 check("tier3は公開日時の新しい順で選定される（最新のitem19が先頭）",
       [c["title"] for c in _selected if c.get("tier") == 3][0] == "item19",
       [c["title"] for c in _selected if c.get("tier") == 3])
-check("truncation_statsが正しく報告される（20件中15件選定・5件除外）",
-      _stats == {"tier3_total": 20, "tier3_selected": 15, "tier3_dropped": 5}, str(_stats))
+check("truncation_statsが正しく報告される（20件中15件選定・5件除外・ペア救済なし）",
+      _stats == {"tier3_total": 20, "tier3_selected": 15, "tier3_dropped": 5,
+                 "tier3_pairs_rescued": 0, "tier3_pair_rescued_articles": 0}, str(_stats))
 
 _selected_few, _stats_few = generate_post._select_candidates_for_call_a(_tier1_fixed + _tier3_20[:5])
 check("tier3が上限未満なら全件選定され除外0件",
-      _stats_few == {"tier3_total": 5, "tier3_selected": 5, "tier3_dropped": 0}, str(_stats_few))
+      _stats_few == {"tier3_total": 5, "tier3_selected": 5, "tier3_dropped": 0,
+                     "tier3_pairs_rescued": 0, "tier3_pair_rescued_articles": 0}, str(_stats_few))
+
+print("=== generate_post.py: 独立2媒体ペア救済（v1.39フォローアップ・オーナー承認） ===")
+check("_overlap_coefficient: 完全一致は1.0",
+      generate_post._overlap_coefficient({"a", "b"}, {"a", "b"}) == 1.0)
+check("_overlap_coefficient: 重なり無しは0.0",
+      generate_post._overlap_coefficient({"a", "b"}, {"c", "d"}) == 0.0)
+check("_overlap_coefficient: 小さい方の集合を分母にする（非対称長でも閾値判定できる）",
+      generate_post._overlap_coefficient({"a", "b", "c", "d"}, {"a", "b"}) == 1.0)
+check("_overlap_coefficient: 空集合は0.0（ゼロ除算しない）",
+      generate_post._overlap_coefficient(set(), {"a"}) == 0.0)
+
+_pair_newer = {"tier": 3, "source": "Cointelegraph", "title": "alpha beta gamma delta zeta",
+               "published_at": "Mon, 17 Aug 2026 12:20:00 GMT"}  # rank1（最新）
+_pair_older = {"tier": 3, "source": "CoinDesk", "title": "alpha beta gamma delta epsilon",
+               "published_at": "Mon, 17 Aug 2026 12:00:00 GMT"}  # rank16（上限外）
+_rescue_fillers = [{"tier": 3, "source": "CoinDesk", "title": f"filler{i}",
+                     "published_at": f"Mon, 17 Aug 2026 12:{1 + i:02d}:00 GMT"} for i in range(14)]
+_rescue_pool = [_pair_newer] + _rescue_fillers + [_pair_older]  # 計16件
+_rescue_selected, _rescue_stats = generate_post._select_candidates_for_call_a(_rescue_pool)
+_rescue_tier3_selected = [c for c in _rescue_selected if c.get("tier") == 3]
+check("ペア救済: 上限16位のolder記事が、上限15件に加えて追加選定される",
+      any(c is _pair_older for c in _rescue_tier3_selected), [c["title"] for c in _rescue_tier3_selected])
+check("ペア救済: newer記事は元々上限内なので二重計上されない（tier3_selected=16件）",
+      _rescue_stats["tier3_selected"] == 16, str(_rescue_stats))
+check("ペア救済: stats.tier3_pairs_rescued=1・tier3_pair_rescued_articles=1",
+      _rescue_stats["tier3_pairs_rescued"] == 1 and _rescue_stats["tier3_pair_rescued_articles"] == 1,
+      str(_rescue_stats))
+
+check("_find_independent_pairs: 同一source同士はタイトルが酷似していてもペア扱いしない",
+      generate_post._find_independent_pairs([
+          {"source": "CoinDesk", "title": "alpha beta gamma delta zeta",
+           "published_at": "Mon, 17 Aug 2026 12:20:00 GMT"},
+          {"source": "CoinDesk", "title": "alpha beta gamma delta epsilon",
+           "published_at": "Mon, 17 Aug 2026 12:00:00 GMT"},
+      ]) == [])
+
+_cap_pairs = []
+for k in range(1, 7):  # 6組作り、PAIR_RESCUE_MAX_PAIRS=5組の上限を確認する
+    _cap_pairs.append({"tier": 3, "source": "Cointelegraph", "title": f"p{k}a p{k}b p{k}c p{k}d p{k}e",
+                        "published_at": f"Mon, 17 Aug 2026 12:{21 - k:02d}:00 GMT"})  # rank1..6（上限内）
+    _cap_pairs.append({"tier": 3, "source": "CoinDesk", "title": f"p{k}a p{k}b p{k}c p{k}d p{k}f",
+                        "published_at": f"Mon, 17 Aug 2026 12:{6 - k:02d}:00 GMT"})  # rank16..21（上限外）
+_cap_fillers = [{"tier": 3, "source": "CoinDesk", "title": f"capfiller{i}",
+                 "published_at": f"Mon, 17 Aug 2026 12:{6 + i:02d}:00 GMT"} for i in range(9)]  # rank7..15
+_cap_selected, _cap_stats = generate_post._select_candidates_for_call_a(_cap_pairs + _cap_fillers)
+check("ペア救済の上限（PAIR_RESCUE_MAX_PAIRS=5組）: 6組中5組のみ救済される",
+      _cap_stats["tier3_pairs_rescued"] == generate_post.PAIR_RESCUE_MAX_PAIRS, str(_cap_stats))
+check("ペア救済の上限: 6組目のolder記事（p6a p6b p6c p6d p6f）は救済されず除外されたまま",
+      not any(c.get("title") == "p6a p6b p6c p6d p6f" for c in _cap_selected if c.get("tier") == 3),
+      [c["title"] for c in _cap_selected if c.get("tier") == 3])
+check("ペア救済の上限: tier3_total=21・tier3_selected=20（15+5救済）・tier3_dropped=1",
+      _cap_stats == {"tier3_total": 21, "tier3_selected": 20, "tier3_dropped": 1,
+                     "tier3_pairs_rescued": 5, "tier3_pair_rescued_articles": 5}, str(_cap_stats))
 
 # render_generation_status(): 除外があった場合のみ目視確認行を表示する
 _gen_truncated = {"level": "L0", "call_a": {"ok": True, "attempts": 1, "error": None,
@@ -435,7 +490,8 @@ _result21 = generate_post.run("2026-08-21", client=_c)
 check("run(): news_candidate_countは取得総数(23)ではなく渡した件数(18)を反映する",
       _result21["news_candidate_count"] == 18, str(_result21["news_candidate_count"]))
 check("run(): call_a.truncation_statsにtier3の除外情報が記録される",
-      _result21["call_a"]["truncation_stats"] == {"tier3_total": 20, "tier3_selected": 15, "tier3_dropped": 5},
+      _result21["call_a"]["truncation_stats"] == {"tier3_total": 20, "tier3_selected": 15, "tier3_dropped": 5,
+                                                    "tier3_pairs_rescued": 0, "tier3_pair_rescued_articles": 0},
       str(_result21["call_a"]["truncation_stats"]))
 
 print("=== generate_post.run() レベル判定 ===")

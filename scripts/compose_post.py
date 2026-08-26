@@ -222,6 +222,13 @@ def render_generation_status(gen: dict[str, Any]) -> str:
             f"tier3候補 {ts['tier3_total']}件中 {ts['tier3_selected']}件を選定"
             f"（{ts['tier3_dropped']}件を件数上限により除外）"
         )
+    if ts.get("tier3_pairs_rescued", 0) > 0:
+        # v1.39フォローアップ: 独立2媒体ペアの救済（上限外での追加）が
+        # 発生した日を可視化する（オーナー指示・トークン影響の観測用）。
+        lines.append(
+            f"独立2媒体ペア救済: {ts['tier3_pairs_rescued']}組"
+            f"（{ts['tier3_pair_rescued_articles']}件を上限外で追加）"
+        )
     lines += [
         "",
         "手当が必要な箇所:",

@@ -67,6 +67,61 @@ RETRY_DELAYS_SEC = (2, 4)
 # 安全マージンを加えた15とした（DESIGN_CHANGES.md v1.39参照）。
 TIER3_CANDIDATE_LIMIT = 15
 
+# v1.39フォローアップ（オーナー承認）: 「公開日時の新しい順で上位N件」という
+# 選定方式は、収集ウィンドウ序盤に出た記事を窓終盤の記事群に押しやる構造的な
+# 時間帯バイアスを持つ（実データ: 8/25のBTC $80,000到達＝3か月ぶり高値を
+# 報じたCoinDesk記事2本が、公開時刻が早いという理由だけで44件中24位・43位
+# となりLIMIT=15後も候補集合から漏れていた）。件数上限の引き上げでは
+# 解決しないため、独立2媒体が同一事実を報じているペアは、順位に関わらず
+# 両方を候補集合へ残す（ペア救済）。救済はTIER3_CANDIDATE_LIMIT件の
+# 上限外で加算する（当初オーナー案の「上限を超えても両方残す」を反映）。
+PAIR_OVERLAP_THRESHOLD = 0.4  # タイトルのトークン重なり係数（overlap coefficient）の閾値。
+# 8/24のCoinbase/Baseトークン化株式ペア（既知の独立2ソース成功例）で0.45と
+# 実測し較正した値（DESIGN_CHANGES.md v1.39参照。較正基盤は1件のみで薄い）。
+PAIR_RESCUE_MAX_PAIRS = 5  # ペア救済は最大5組（最大10件）まで。無制限だと
+# トークン予算を超えるリスクがあるため上限を設ける（オーナー指示）。
+
+_TOKEN_RE = re.compile(r"[a-z0-9]+")
+
+
+def _tokenize_title(title: str) -> set[str]:
+    return set(_TOKEN_RE.findall(str(title).lower()))
+
+
+def _overlap_coefficient(a: set[str], b: set[str]) -> float:
+    if not a or not b:
+        return 0.0
+    return len(a & b) / min(len(a), len(b))
+
+
+def _find_independent_pairs(tier3_sorted: list[dict]) -> list[tuple[dict, dict]]:
+    """独立2媒体が同一事実を報じているとみられるペアを検出する（v1.39
+    フォローアップ）。タイトルのトークン重なり係数がPAIR_OVERLAP_THRESHOLD
+    以上、かつsourceが異なる組み合わせをペアとみなす。1記事が複数ペアへ
+    重複計上されないよう、ペアが確定した記事は以降の走査から除外する
+    （貪欲法）。tier3_sortedは公開日時の新しい順を前提とし、より新しい
+    記事同士の組み合わせが優先的にペア判定される。
+    """
+    pairs: list[tuple[dict, dict]] = []
+    used: set[int] = set()
+    n = len(tier3_sorted)
+    for i in range(n):
+        a = tier3_sorted[i]
+        if id(a) in used:
+            continue
+        a_tokens = _tokenize_title(a.get("title", ""))
+        for j in range(i + 1, n):
+            b = tier3_sorted[j]
+            if id(b) in used or a.get("source") == b.get("source"):
+                continue
+            sim = _overlap_coefficient(a_tokens, _tokenize_title(b.get("title", "")))
+            if sim >= PAIR_OVERLAP_THRESHOLD:
+                pairs.append((a, b))
+                used.add(id(a))
+                used.add(id(b))
+                break
+    return pairs
+
 REQUIRED_KEYS_A = [
     "headline_for_image", "part1_headline", "part1_points",
     "reusable_for_summary", "audit_ledger",
@@ -457,12 +512,19 @@ def _call_json(
 
 
 def _select_candidates_for_call_a(candidates: list[dict]) -> tuple[list[dict], dict[str, int]]:
-    """呼び出しAへ渡す候補を選ぶ（v1.21）。tier 1（公式発表）は全件、
-    tier 3（CoinDesk・Cointelegraph等）は公開日時の新しい順で上位
-    TIER3_CANDIDATE_LIMIT件までに絞る。候補急増日（実測30件・うち
-    tier3が28件）でaudit_ledgerの全候補記録がCALL_A_MAX_TOKENSを
+    """呼び出しAへ渡す候補を選ぶ（v1.21・v1.39フォローアップでペア救済を追加）。
+    tier 1（公式発表）は全件、tier 3（CoinDesk・Cointelegraph等）は公開日時の
+    新しい順で上位TIER3_CANDIDATE_LIMIT件までに絞る。候補急増日（実測30件・
+    うちtier3が28件）でaudit_ledgerの全候補記録がCALL_A_MAX_TOKENSを
     超過した事象への対処（DESIGN_CHANGES.md v1.21参照）。tier 4等は
     実測で毎回0件のため現状据え置き。
+
+    v1.39フォローアップ（オーナー承認）: 「新しい順で上位N件」だけでは、
+    独立2媒体が同一事実を報じているペアの一方が、単に公開時刻が早いという
+    理由でTIER3_CANDIDATE_LIMIT外へ落ちる（窓序盤の記事が窓終盤の記事群に
+    押しやられる時間帯バイアス）。上位N件確定後、tier3全件を対象にペアを
+    検出し、上位N件に入っていないペアの相手を上限外で救済する
+    （PAIR_RESCUE_MAX_PAIRS組まで）。
     """
     tier1 = [c for c in candidates if c.get("tier") == 1]
     tier3 = [c for c in candidates if c.get("tier") == 3]
@@ -473,11 +535,30 @@ def _select_candidates_for_call_a(candidates: list[dict]) -> tuple[list[dict], d
             tzinfo=collect_news.JST)
 
     tier3_sorted = sorted(tier3, key=pub_dt, reverse=True)
-    tier3_selected = tier3_sorted[:TIER3_CANDIDATE_LIMIT]
+    tier3_top = tier3_sorted[:TIER3_CANDIDATE_LIMIT]
+    top_ids = {id(c) for c in tier3_top}
+
+    rescued: list[dict] = []
+    rescued_ids: set[int] = set()
+    pairs_rescued = 0
+    for a, b in _find_independent_pairs(tier3_sorted):
+        if pairs_rescued >= PAIR_RESCUE_MAX_PAIRS:
+            break
+        missing = [c for c in (a, b) if id(c) not in top_ids and id(c) not in rescued_ids]
+        if not missing:
+            continue  # 両方既に上位N件内、または既に救済済み → 救済不要
+        for c in missing:
+            rescued.append(c)
+            rescued_ids.add(id(c))
+        pairs_rescued += 1
+
+    tier3_selected = tier3_top + rescued
     stats = {
         "tier3_total": len(tier3),
         "tier3_selected": len(tier3_selected),
         "tier3_dropped": len(tier3) - len(tier3_selected),
+        "tier3_pairs_rescued": pairs_rescued,
+        "tier3_pair_rescued_articles": len(rescued),
     }
     return tier1 + tier3_selected + others, stats
 
