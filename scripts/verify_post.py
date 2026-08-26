@@ -427,7 +427,8 @@ def check_c21(au: Audit, level: str, audit_ledger, candidate_count: int,
 
 # --- C22 図版でなく本文ヘッドラインのtier1裏付け ---
 
-def check_c22(au: Audit, part1_headline, audit_ledger, tier_map: dict[str, int]) -> None:
+def check_c22(au: Audit, part1_headline, audit_ledger, tier_map: dict[str, int],
+              intraday_range: dict | None = None) -> None:
     if not isinstance(part1_headline, str) or part1_headline == generate_post.FIXED_HEADLINE:
         au.add("C22_headline_tier1_basis", None, "材料なし（定型文ヘッドライン）のためSKIP")
         return
@@ -438,9 +439,24 @@ def check_c22(au: Audit, part1_headline, audit_ledger, tier_map: dict[str, int])
         isinstance(e, dict) and e.get("decision") == "採用" and tier_map.get(e.get("source")) == 1
         for e in audit_ledger
     )
-    au.add("C22_headline_tier1_basis", has_tier1_adopted,
-           "tier1由来の採用が存在" if has_tier1_adopted
-           else "ヘッドラインが定型文でないにもかかわらずtier1由来の採用が存在しない")
+    if has_tier1_adopted:
+        au.add("C22_headline_tier1_basis", True, "tier1由来の採用が存在")
+        return
+    # v1.42（オーナー指示）: notable_move（日中の値動き）はニュースの
+    # 情報源階層（tier1/tier3等）の対象外の市場データであり、tier1裏付けが
+    # 無くても値動きを根拠とする実文言ヘッドラインは正当でありうる
+    # （「候補が無い場合の扱い」分岐C）。この場合、C22はtier1由来かどうかを
+    # 判定できないためSKIPとし、FAILにしない。
+    has_notable_move = isinstance(intraday_range, dict) and any(
+        isinstance(v, dict) and v.get("notable_move") is True for v in intraday_range.values()
+    )
+    if has_notable_move:
+        au.add("C22_headline_tier1_basis", None,
+               "tier1由来の採用は無いがnotable_move（日中の値動き）が存在するためSKIP"
+               "（値動きは情報源階層の対象外）")
+        return
+    au.add("C22_headline_tier1_basis", False,
+           "ヘッドラインが定型文でないにもかかわらずtier1由来の採用もnotable_moveも存在しない")
 
 
 def run_all(bundle: dict, daily_data: dict) -> Audit:
@@ -471,7 +487,8 @@ def run_all(bundle: dict, daily_data: dict) -> Audit:
     check_c20(au, headline_for_image)
     tier_map = _load_source_tier_map()
     check_c21(au, bundle["level"], bundle.get("audit_ledger"), bundle.get("news_candidate_count", -1), tier_map)
-    check_c22(au, sections.get("part1_headline"), bundle.get("audit_ledger"), tier_map)
+    check_c22(au, sections.get("part1_headline"), bundle.get("audit_ledger"), tier_map,
+              daily_data.get("intraday_range"))
     return au
 
 

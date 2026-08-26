@@ -268,9 +268,11 @@ check("独立2ソース規定はヘッドラインへの昇格を認めない",
 check("独立2ソース規定採用時のdecision値がOUTPUT_FORMAT_Aの例に含まれる",
       "採用（独立2ソース）" in generate_post.OUTPUT_FORMAT_A
       and "採用（独立2ソース）" in generate_post.NEWS_SELECTION)
-check("NO_CANDIDATES_FALLBACKが独立2ソース規定該当時にpart1_pointsの定型文を使わない旨を記述",
+check("NO_CANDIDATES_FALLBACKが独立2ソース規定該当時にpart1_pointsへその材料を記載する旨を記述"
+      "（v1.42で(i)の判定基準として再構成・文言変更）",
       "独立2ソース規定" in generate_post.NO_CANDIDATES_FALLBACK
-      and "part1_pointsの定型文フォールバックを使わず" in generate_post.NO_CANDIDATES_FALLBACK)
+      and "part1_pointsにはその材料を" in generate_post.NO_CANDIDATES_FALLBACK
+      and "記載してよいが" in generate_post.NO_CANDIDATES_FALLBACK)
 
 print("=== generate_post.py: 情報源規律と項目数の優先順位（v1.29・オーナー指示・修正1） ===")
 check("NEWS_SELECTIONに情報源規律が項目数より優先する旨が明記されている",
@@ -323,6 +325,28 @@ check("NO_CANDIDATES_FALLBACKに直接因果未確認のみを理由にした不
 check("WRITES_Aのpart1_pointsがB分類材料に因果未確認の限定表現を含める旨を参照している",
       "重要性判定と因果表現の分離" in generate_post.WRITES_A
       and "暗号通貨価格への直接因果は未確認" in generate_post.WRITES_A)
+
+print("=== generate_post.py: part1_headline・part1_pointsの4分岐決定（v1.42・オーナー指示） ===")
+check("NO_CANDIDATES_FALLBACKに(i)ニュース材料・(ii)notable_moveの2軸が明記されている",
+      "(i) 採用に足るニュース材料があるか" in generate_post.NO_CANDIDATES_FALLBACK
+      and "(ii) 入力の intraday_range に notable_move: true の銘柄があるか"
+      in generate_post.NO_CANDIDATES_FALLBACK)
+check("NO_CANDIDATES_FALLBACKにA〜Dの4分岐すべてが記述されている",
+      all(s in generate_post.NO_CANDIDATES_FALLBACK for s in (
+          "A. (i)あり・(ii)あり", "B. (i)あり・(ii)なし",
+          "C. (i)なし・(ii)あり", "D. (i)なし・(ii)なし")))
+check("NO_CANDIDATES_FALLBACKに「CとDを取り違えないこと」の明示がある",
+      "CとDを取り違えないこと" in generate_post.NO_CANDIDATES_FALLBACK
+      and "定型文を使うのはDの場合のみである" in generate_post.NO_CANDIDATES_FALLBACK)
+check("NO_CANDIDATES_FALLBACKのA〜Dが、audit_ledgerのA/B/C（重要性判定）とは別分類である旨を明記（混同防止）",
+      "とは別の分類である。混同しないこと" in generate_post.NO_CANDIDATES_FALLBACK)
+check("分岐Cは定型文を使わず値動きを記述し、part1_pointsにニュース未確認を1項目明記する",
+      "C（(i)なし・(ii)あり）の詳細" in generate_post.NO_CANDIDATES_FALLBACK
+      and "値動きの形状のみを" in generate_post.NO_CANDIDATES_FALLBACK
+      and "「ニュース材料は確認できなかった」" in generate_post.NO_CANDIDATES_FALLBACK)
+check("headline_for_imageの指示がDの場合のみに明示的に限定されている（Cとの混同防止）",
+      "headline_for_image: Dの場合（ニュース・値動きいずれの材料も無い場合）は、"
+      in generate_post.NO_CANDIDATES_FALLBACK)
 
 print("=== generate_post.py: 呼び出しBの文体統一・総括の言及範囲制限（v1.35・オーナー指示） ===")
 check("CALL_B_INSTRUCTIONSに「です・ます調」で統一する旨が明記されている",
@@ -956,6 +980,52 @@ _, c22 = _c21([
 ], headline="BTCが上昇し、A社のライセンス取得報道も material となった一日。")
 check("C22: tier1採用が無いヘッドラインはFAIL（既知の限界：簡易版のため対応関係は見ない）",
       c22["result"] == "FAIL", str(c22))
+
+print("=== verify_post: C22 notable_move由来ヘッドラインの扱い（v1.42・オーナー指示） ===")
+
+_au_c22a = verify_post.Audit()
+verify_post.check_c22(_au_c22a, "BTCは一時上昇したのち上げ幅を縮小した。", [], {},
+                       {"BTC": {"notable_move": True}})
+check("check_c22: tier1採用は無くてもnotable_move:trueがあればSKIP（値動きは情報源階層の対象外）",
+      _au_c22a.checks[0]["result"] == "SKIP", str(_au_c22a.checks[0]))
+
+_au_c22b = verify_post.Audit()
+verify_post.check_c22(_au_c22b, "BTCは一時上昇したのち上げ幅を縮小した。", [], {},
+                       {"BTC": {"notable_move": False}, "ETH": {"notable_move": False}})
+check("check_c22: notable_moveキーはあってもすべてFalseならFAIL（trueが無い）",
+      _au_c22b.checks[0]["result"] == "FAIL", str(_au_c22b.checks[0]))
+
+_au_c22c = verify_post.Audit()
+verify_post.check_c22(_au_c22c, "BTCは一時上昇したのち上げ幅を縮小した。", [], {}, None)
+check("check_c22: intraday_range自体が無い（従来のdaily_data.json）場合もFAIL（回帰確認）",
+      _au_c22c.checks[0]["result"] == "FAIL", str(_au_c22c.checks[0]))
+
+_au_c22d = verify_post.Audit()
+verify_post.check_c22(
+    _au_c22d, "BTCが上昇し、FRBの発表も重なった一日となった。",
+    [{"source": "FRB", "url": "https://example.com/h", "title": "...", "published_at": "2026-08-17",
+      "verified_by": "v", "decision": "採用", "reason": "一次情報"}],
+    {"FRB": 1}, {"BTC": {"notable_move": True}})
+check("check_c22: tier1採用がある場合はnotable_moveの有無に関わらずPASS（tier1が優先）",
+      _au_c22d.checks[0]["result"] == "PASS", str(_au_c22d.checks[0]))
+
+# run_all()経由でもintraday_rangeが正しく伝播することを確認
+_dd_notable = json.loads(json.dumps(DAILY_DATA))
+_dd_notable["intraday_range"] = {
+    "BTC": {"high": "$81,265", "low": "$78,100", "source": "coinbase",
+            "retrieved_at": "2026-08-26T10:20:24+09:00", "representative": True, "notable_move": True},
+}
+_b_notable = json.loads(json.dumps(b_ok))
+_b_notable["audit_ledger"] = [
+    {"source": "Cointelegraph", "url": "https://example.com/j1", "title": "...", "published_at": "2026-08-17",
+     "verified_by": "v", "decision": "採用（独立2ソース）", "reason": "2媒体一致"},
+]
+_b_notable["news_candidate_count"] = 1
+_b_notable["sections"]["part1_headline"] = "BTCは一時上昇したのち上げ幅を縮小した。"
+au_notable = verify_post.run_all(_b_notable, _dd_notable)
+c22_notable = next(x for x in au_notable.checks if x["id"] == "C22_headline_tier1_basis")
+check("run_all(): daily_data.intraday_rangeがcheck_c22へ正しく伝播しSKIPになる",
+      c22_notable["result"] == "SKIP", str(c22_notable))
 
 print("=== collect_news.py（RSS方式・CryptoPanic撤去後） ===")
 
