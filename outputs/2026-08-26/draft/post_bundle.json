@@ -1,0 +1,335 @@
+{
+  "target_date_jst": "2026-08-26",
+  "level": "L0",
+  "sections": {
+    "part0_target_date": "2026年8月26日（水）",
+    "part1_headline": "直近24時間に暗号通貨市場との関係を確認できる主要なマクロ材料は確認できない。",
+    "part1_points": "・米州法銀行協会がステーブルコインやトークン化預金の基盤整備を目的とした全米規模のブロックチェーン網「BankChain Alliance」を2027年開始目標で計画していると、CoinDeskとCointelegraphが報じた。一次情報での裏付けは未確認（CoinDesk、Cointelegraph、2026年8月25日・26日）。",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.652兆（¥422.3兆）｜24時間取引高 $795.7億（¥12.67兆）\n・ #BTC：$78,770（約1,254.3万円）｜24時間比 -0.16%\n　（日中レンジ $77,601〜$79,239）\n・ #ETH：$2,492（約39.7万円）｜24時間比 +1.44%\n　（日中レンジ $2,415〜$2,484）\n・ #BNB：$704（約11.2万円）｜24時間比 +1.30%\n・市場心理：Fear & Greed 80（Extreme greed、CoinMarketCap API）\n・ドミナンス：BTC 59.62%｜ETH 11.34%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年8月27日10:07 JST、USD/JPY ¥159.23",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $10.23M vs Base上ETH/USDC $82.48M｜参考：Base上DEX全体 $8.798億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $54.90億（¥8,742億）｜24時間比 -0.55%｜USDCドミナンス 86.4%\n・ ETH/USDC（Base）参考APR：0.05% 33.34%（TVL $8.30M／24h出来高 $15.16M）｜0.3% 63.66%（TVL $115.80M／24h出来高 $67.32M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年8月27日10:07 JST",
+    "part2_flow": "・米州法銀行協会がステーブルコインやトークン化預金の基盤整備を目的とした全米規模のブロックチェーン網「BankChain Alliance」を計画していると報じられ、金融機関側の暗号通貨インフラ整備への関心が意識された可能性がありますが、一次情報での裏付けは未確認であり、この報道と市場全体の値動きとの関係は断定できません。ETHは24時間比で上昇し、BTCはわずかに下落する場面が見られました。\n・国内ではbitFlyerとCoincheckを合わせたETH取引が一定の水準で推移しており、Base上のDEX出来高やTVLも大きな崩れのない値動きとなりました。Fear&Greed指数はExtreme greed（強い強欲）の水準を示しており、市場心理はやや強気に傾いていると考えられます。",
+    "lp_comment": "参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは51.19%→33.34%へ低下しました（24時間出来高 -33.71%、TVL +1.83%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは99.37%→63.66%へ低下しました（24時間出来高 -35.55%、TVL +0.61%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+1.44%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "全体として、ETHやBNBが底堅く推移する一方でBTCはやや軟調という、資産間でやや方向感の分かれる一日となりました。Fear&Greed指数がExtreme greed（市場参加者の心理が強気に大きく傾いた状態を示す指標）を示しており、過熱感には留意が必要な局面です。また、米PCEインフレ指標の内容やSECの暗号資産カストディ規則見直しに関する報道も伝えられていますが、いずれもtier1（一次情報）での裏付けは確認できておらず、今後の続報の有無や市場への影響が注目されます。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "BTC下落・ETH BNB上昇",
+  "audit_ledger": [
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/statistics/pi/cspi_release/sppi2607.pdf",
+      "title": "企業向けサービス価格指数（7月）",
+      "published_at": "2026-08-26T08:50:00+09:00",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 企業向けサービス価格指数は波及経路を説明できる可能性はあるが、summaryが空欄で内容が確認できず、参考材料としても記述できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/fact-sheets/2026/08/fact-sheet-president-donald-j-trump-declares-a-national-emergency-to-secure-americas-bulk-power-system/",
+      "title": "Fact Sheet: President Donald J. Trump Declares a National Emergency to Secure America’s Bulk-Power System",
+      "published_at": "2026-08-26T19:59:27+00:00",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 電力網に関する国家安全保障措置で、金利・為替・流動性等の暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/08/declaring-a-national-emergency-to-secure-the-united-states-bulk-power-system/",
+      "title": "Declaring a National Emergency to Secure the United States Bulk-Power System",
+      "published_at": "2026-08-26T19:59:10+00:00",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 上記大統領令の本文であり、同様に暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/08/fifth-anniversary-of-the-attack-at-abbey-gate/",
+      "title": "Fifth Anniversary of the Attack at Abbey Gate",
+      "published_at": "2026-08-26T19:29:53+00:00",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 追悼に関する声明で、暗号通貨・マクロ市場への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/releases/2026/08/trump-delivers-14-wins-you-may-have-missed/",
+      "title": "Trump Delivers: 14 Recent Wins You May Have Missed",
+      "published_at": "2026-08-26T18:29:53+00:00",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 政策実績のまとめ記事で、金利・為替・流動性等への具体的な波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス（大統領令等）",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/08/declaring-a-national-emergency-to-secure-the-united-states-bulk-power-system/",
+      "title": "Declaring a National Emergency to Secure the United States Bulk-Power System",
+      "published_at": "2026-08-26T19:59:10+00:00",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 上記と同一材料の重複掲載であり、波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス（大統領令等）",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/08/fifth-anniversary-of-the-attack-at-abbey-gate/",
+      "title": "Fifth Anniversary of the Attack at Abbey Gate",
+      "published_at": "2026-08-26T19:29:53+00:00",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 上記と同一材料の重複掲載であり、波及経路を説明できない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/08/26/nvidia-tops-earnings-estimates-guides-to-usd108-billion-in-revenue-next-quarter",
+      "title": "Nvidia shares rise after earnings top estimates, guides to $108 billion in revenue next quarter",
+      "published_at": "2026-08-26T20:24:31+00:00",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 半導体企業の決算はリスク選好への波及経路を説明できる可能性があるが、tier1裏付けが無くtier3単独のため不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/better-launches-bitcoin-backed-mortgages-powered-by-coinbase?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Better launches Bitcoin-backed mortgages powered by Coinbase",
+      "published_at": "2026-08-26T20:09:23+00:00",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 暗号通貨関連の直接材料だが、tier1裏付けが無くtier3単独ソースのため不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/what-happened-in-crypto-today?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Here’s what happened in crypto today",
+      "published_at": "2026-08-26T19:14:06+00:00",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: まとめ記事であり個別の事実報道としての具体性が無い"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/chainalysis-estimates-457b-in-potentially-taxable-crypto-activity-says-carf-misses-most-onchain-flows?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Chainalysis estimates $457B in taxable crypto activity, says CARF misses most",
+      "published_at": "2026-08-26T17:48:34+00:00",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 暗号通貨税務に関する直接材料だが、tier1裏付けが無くtier3単独ソースのため不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/sec-crypto-custody-rules-investment-firms-white-house?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "SEC sends crypto custody rule overhaul to White House for review",
+      "published_at": "2026-08-26T16:19:09+00:00",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: SEC規制動向で重要性は高いが、tier1裏付けが無くtier3単独ソースのため不採用。継続監視対象とする"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/77-of-americans-see-crypto-in-retirement-plans-as-risky-survey?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "77% of Americans see crypto in retirement plans as risky: Survey",
+      "published_at": "2026-08-26T16:10:56+00:00",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 意見調査であり事実報道ではなく、tier3単独ソースのため不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/markets/bitcoin-dips-below-78k-as-stocks-gold-fall-on-higher-us-pce-data?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bitcoin dips below $78K as stocks, gold fall on higher US PCE Inflation data",
+      "published_at": "2026-08-26T15:58:55+00:00",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 米PCEインフレ指標という波及経路のある材料だが、tier1裏付けが無くtier3単独ソースのため不採用。継続監視対象とする"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/08/26/south-korea-s-shinhan-financial-joins-visa-to-build-stablecoin-infrastructure",
+      "title": "South Korea’s top financial conglomerate team up with Visa to test stablecoin issuance and B2B settlements",
+      "published_at": "2026-08-26T15:15:13+00:00",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: ステーブルコイン関連の直接材料だが、tier1裏付けが無くtier3単独ソースのため不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/ecosystem/protocol-upgrade-decouples-consensus-from-execution-to-solve-scaling-bottlenecks?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Protocol upgrade decouples consensus from execution to solve scaling bottlenecks",
+      "published_at": "2026-08-26T15:04:32+00:00",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: プロトコル技術動向だが、tier1裏付けが無くtier3単独ソースのため不採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/coindesk-indices/2026/08/26/crypto-long-and-short-tokenized-equities-the-model-underneath-the-trade",
+      "title": "Crypto Long & Short: Tokenized equities: the model underneath the trade",
+      "published_at": "2026-08-26T15:00:09+00:00",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 分析・意見記事であり事実報道ではないため不採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/tech/2026/08/26/ethereum-developers-propose-first-step-to-protect-eth-staking-from-quantum-attacks",
+      "title": "Ethereum developers propose first step to protect ETH staking from quantum attacks",
+      "published_at": "2026-08-26T13:30:00+00:00",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: ETH技術動向の直接材料だが、tier1裏付けが無くtier3単独ソースのため不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/magazine/the-sec-wants-to-bring-back-icos-theres-a-catch?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "SEC’s proposed crypto rules probably won’t spark new ICO boom",
+      "published_at": "2026-08-26T13:30:00+00:00",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 分析記事であり事実報道ではないため不採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/opinion/2026/08/25/the-evidence-doesn-t-support-the-banks-case-against-stablecoin-rewards",
+      "title": "The evidence doesn't support the banks' case against stablecoin rewards",
+      "published_at": "2026-08-26T13:00:00+00:00",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: opinion（意見）記事であり事実報道ではないため不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/students-crypto-classes-learn-social-media-okx?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Students want crypto classes but learn on social media: OKX survey",
+      "published_at": "2026-08-26T13:00:00+00:00",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 意見調査であり事実報道ではなく、市場への波及経路も説明できないため不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/markets/bernstein-predicts-bitcoin-reclaim-125000-year-end?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bernstein forecasts Bitcoin to reclaim $125K by late 2026 ahead of cycle peak",
+      "published_at": "2026-08-26T12:32:36+00:00",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 価格予想（分析）記事であり事実報道ではないため不採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/08/26/euro-stablecoins-get-a-mainstream-push-as-revolut-begins-rolling-out-eurr-in-europe",
+      "title": "Euro stablecoins get a mainstream push as Revolut begins rolling out EURR in Europe",
+      "published_at": "2026-08-26T10:03:43+00:00",
+      "verified_by": "",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: RevolutによるユーロステーブルコインEURRの欧州展開について、CoinDeskとCointelegraphの2媒体が同一事実を報じており独立2ソース規定を満たす。ただし一次情報の裏付けは未確認"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/revolut-eurr-euro-stablecoin-europe-rollout?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Revolut rolls out euro stablecoin in 3 European markets",
+      "published_at": "2026-08-26T08:45:41+00:00",
+      "verified_by": "",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: 上記CoinDesk記事と同一事実を報じており、独立2ソース規定の一方として採用。一次情報の裏付けは未確認"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/us-banking-groups-nationwide-blockchain-network-2027?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "US state banking groups plan nationwide blockchain network for 2027",
+      "published_at": "2026-08-26T04:19:00+00:00",
+      "verified_by": "",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: 米州法銀行協会によるBankChain Allianceの計画について、CointelegraphとCoinDeskの2媒体が同一事実を報じており独立2ソース規定を満たす。一次情報の裏付けは未確認"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/08/25/u-s-state-banking-associations-plan-to-launch-their-own-nationwide-blockchain-network",
+      "title": "U.S. state banking associations plan to launch their own nationwide blockchain network",
+      "published_at": "2026-08-25T21:56:57+00:00",
+      "verified_by": "",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: 上記Cointelegraph記事と同一事実を報じており、独立2ソース規定のもう一方として採用。一次情報の裏付けは未確認"
+    }
+  ],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 0
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 0
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 1
+    },
+    "米財務省": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "USTR": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "ホワイトハウス": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 4
+    },
+    "ホワイトハウス（大統領令等）": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 2
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 20
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 18
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 0,
+      "kept_count": 0
+    }
+  },
+  "news_candidate_count": 26,
+  "part1_md": "【対象日】2026年8月26日（水）\n\n【ヘッドライン】\n直近24時間に暗号通貨市場との関係を確認できる主要なマクロ材料は確認できない。\n\n【主要なポイント】\n・米州法銀行協会がステーブルコインやトークン化預金の基盤整備を目的とした全米規模のブロックチェーン網「BankChain Alliance」を2027年開始目標で計画していると、CoinDeskとCointelegraphが報じた。一次情報での裏付けは未確認（CoinDesk、Cointelegraph、2026年8月25日・26日）。\n\n【主要指標】\n・市場全体：時価総額 $2.652兆（¥422.3兆）｜24時間取引高 $795.7億（¥12.67兆）\n・ #BTC：$78,770（約1,254.3万円）｜24時間比 -0.16%\n　（日中レンジ $77,601〜$79,239）\n・ #ETH：$2,492（約39.7万円）｜24時間比 +1.44%\n　（日中レンジ $2,415〜$2,484）\n・ #BNB：$704（約11.2万円）｜24時間比 +1.30%\n・市場心理：Fear & Greed 80（Extreme greed、CoinMarketCap API）\n・ドミナンス：BTC 59.62%｜ETH 11.34%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年8月27日10:07 JST、USD/JPY ¥159.23\n",
+  "part2_md": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $10.23M vs Base上ETH/USDC $82.48M｜参考：Base上DEX全体 $8.798億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $54.90億（¥8,742億）｜24時間比 -0.55%｜USDCドミナンス 86.4%\n・ ETH/USDC（Base）参考APR：0.05% 33.34%（TVL $8.30M／24h出来高 $15.16M）｜0.3% 63.66%（TVL $115.80M／24h出来高 $67.32M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年8月27日10:07 JST\n\n【市場のフロー】\n・米州法銀行協会がステーブルコインやトークン化預金の基盤整備を目的とした全米規模のブロックチェーン網「BankChain Alliance」を計画していると報じられ、金融機関側の暗号通貨インフラ整備への関心が意識された可能性がありますが、一次情報での裏付けは未確認であり、この報道と市場全体の値動きとの関係は断定できません。ETHは24時間比で上昇し、BTCはわずかに下落する場面が見られました。\n・国内ではbitFlyerとCoincheckを合わせたETH取引が一定の水準で推移しており、Base上のDEX出来高やTVLも大きな崩れのない値動きとなりました。Fear&Greed指数はExtreme greed（強い強欲）の水準を示しており、市場心理はやや強気に傾いていると考えられます。\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは51.19%→33.34%へ低下しました（24時間出来高 -33.71%、TVL +1.83%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは99.37%→63.66%へ低下しました（24時間出来高 -35.55%、TVL +0.61%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+1.44%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\n全体として、ETHやBNBが底堅く推移する一方でBTCはやや軟調という、資産間でやや方向感の分かれる一日となりました。Fear&Greed指数がExtreme greed（市場参加者の心理が強気に大きく傾いた状態を示す指標）を示しており、過熱感には留意が必要な局面です。また、米PCEインフレ指標の内容やSECの暗号資産カストディ規則見直しに関する報道も伝えられていますが、いずれもtier1（一次情報）での裏付けは確認できておらず、今後の続報の有無や市場への影響が注目されます。\n"
+}
