@@ -1092,6 +1092,16 @@ verify_post.check_c23(_au_c23c, "BTC・ETHともに軟調。USDドミナンス�
 check("check_c23: allowlist内の一般語彙（BTC・ETH・USD）はPASS（固有名詞候補として扱わない）",
       _au_c23c.checks[0]["result"] == "PASS", str(_au_c23c.checks[0]))
 
+# 8/26実データの実チェックで発見した誤検知（Fear & Greed指数の分類ラベルは
+# daily_data.json由来の固定語彙であり本文材料ではないが、初期実装では
+# 「Fear&Greed」「Extreme」が固有名詞候補として誤検知された）。
+_au_c23g = verify_post.Audit()
+verify_post.check_c23(
+    _au_c23g, "Fear&Greed指数がExtreme greedを示しており、過熱感には留意が必要です。",
+    "・材料A", [])
+check("check_c23: Fear&Greed指数の分類ラベル（Fear&Greed・Extreme）は誤検知しない（8/26実データで発見・回帰確認）",
+      _au_c23g.checks[0]["result"] == "PASS", str(_au_c23g.checks[0]))
+
 # 8/26実データの実例（米PCEインフレ指標が本文未確認のまま総括に持ち出された事象）。
 # 「PCE」は片仮名・漢字に前後を挟まれた埋め込み形だが、findallは文字クラスの
 # 連続部分だけを抽出するため単語境界に依存せず正しく抽出できる。

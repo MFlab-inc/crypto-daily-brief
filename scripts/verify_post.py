@@ -519,6 +519,11 @@ _PROPER_NOUN_RE = re.compile(r"[A-Z][A-Za-z0-9&.\-]{1,}")
 _PROPER_NOUN_ALLOWLIST = {
     "BTC", "ETH", "BNB", "USDC", "USD", "JPY", "JST", "NY",
     "TVL", "APR", "DEX", "LP", "IL", "ETF", "API", "V3",
+    # Fear & Greed指数の分類ラベル（daily_data.jsonのmarket.fear_greed.label由来の
+    # 固定語彙・CoinMarketCap APIの定型区分名であり、本文材料ではない）。
+    # 8/26実データの実チェックで「Fear&Greed」「Extreme」が誤検知したため追加
+    # （「Fear&Greed指数がExtreme greedを示しており」のような記述）。
+    "FEAR", "GREED", "EXTREME", "NEUTRAL", "FEAR&GREED",
 }
 
 
