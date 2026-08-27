@@ -296,6 +296,23 @@ def compute_notable_move(high_raw: float | None, close_price: float | None, thre
     return (high_raw - close_price) / close_price >= threshold
 
 
+def compute_inconsistent(high_raw: float | None, low_raw: float | None,
+                          close_price: float | None) -> bool | None:
+    """当日価格（CMC）が [low_raw, high_raw]（Coinbase/Bitstamp）の範囲外に
+    あるかを判定する（v1.44・オーナー指示）。価格（CMC）とレンジ（Coinbase/
+    Bitstamp）は取得元が異なるため、取得タイミング・取引所間の価格差により
+    終値が窓内レンジの外に出ることがある（8/26実データ・ETHで実測）。原因の
+    切り分け（取引所間の価格差か、窓の境界後の値動きか）は数日の実データを
+    見てから判断するため、ここでは矛盾の有無のみを機械的に判定する。
+    high_raw・low_raw・close_priceのいずれかが取得不能な場合は判定不能として
+    Noneを返す（notable_moveと同じ方針。呼び出し側でinconsistentキー自体を
+    省略する）。
+    """
+    if high_raw is None or low_raw is None or not close_price:
+        return None
+    return not (low_raw <= close_price <= high_raw)
+
+
 def _parse_coinbase_candles(raw: list) -> list[dict]:
     # Coinbase Exchange candlesのフィールド順は [time, low, high, open, close, volume]
     # （open/high/low/closeの通例順ではない点に注意 — 実測で確認済み）。
@@ -480,13 +497,20 @@ def main() -> int:
         r = fetch_intraday_range(sym, cb_product, bs_pair, window_start, window_end)
         entry = {"high": r["high"], "low": r["low"], "source": r["source"],
                  "retrieved_at": r["retrieved_at"], "representative": representative}
+        close_price = (cmc or {}).get(sym, {}).get("price")
+        # v1.44（オーナー指示）: 当日価格（CMC）とレンジ（Coinbase/Bitstamp）は
+        # 取得元が異なるため矛盾しうる（8/26実データ・ETHで実測: 終値が窓内
+        # レンジの外側だった）。3銘柄とも判定し、矛盾がある銘柄には
+        # inconsistent を付す（本文への反映可否はcompose_numeric.py側で判定）。
+        inconsistent = compute_inconsistent(r["high_raw"], r["low_raw"], close_price)
+        if inconsistent is not None:
+            entry["inconsistent"] = inconsistent
         # v1.41フォローアップ（オーナー承認）: notable_moveはBTC・ETH
         # （representative=trueの銘柄）のみ判定する。高値・当日価格（CMC）
         # のいずれかが未確認の場合は判定できないため、キー自体を付与しない
         # （false固定にすると「判定した結果notable moveでない」と区別が
         # つかなくなり、推測しない方針に反する）。
         if representative:
-            close_price = (cmc or {}).get(sym, {}).get("price")
             nm = compute_notable_move(r["high_raw"], close_price, notable_move_threshold)
             if nm is not None:
                 entry["notable_move"] = nm

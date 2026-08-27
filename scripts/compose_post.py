@@ -152,6 +152,10 @@ def compose(daily_data: dict, gen: dict[str, Any]) -> dict[str, Any]:
         "llm_section_keys": llm_section_keys,
         "headline_for_image": headline_for_image,
         "audit_ledger": call_a["data"].get("audit_ledger") if a_ok else None,
+        # v1.44: C23（総括の固有名詞バックリファレンス検査）がpart1_points・
+        # reusable_for_summaryを参照する必要があるため追加（従来はbundleに
+        # 含まれておらずverify_post.py側から参照できなかった）。
+        "reusable_for_summary": call_a["data"].get("reusable_for_summary", []) if a_ok else [],
         "news_source_status": gen.get("news_source_status", {}),
         # C19（v1.17改定）: 空配列の許容判定にverify_post.py側で使う
         # （当日の候補自体が0件なら許容、候補はあったのに空配列はFAIL —
@@ -192,7 +196,12 @@ def _render_news_source_lines(news_status: dict[str, Any]) -> list[str]:
     return lines
 
 
-def render_generation_status(gen: dict[str, Any]) -> str:
+def _inconsistent_symbols(daily_data: dict) -> list[str]:
+    return [sym for sym, d in daily_data.get("intraday_range", {}).items()
+            if isinstance(d, dict) and d.get("inconsistent")]
+
+
+def render_generation_status(gen: dict[str, Any], daily_data: dict | None = None) -> str:
     a, b = gen["call_a"], gen["call_b"]
     news_status = gen.get("news_source_status", {})
     attention, auto = _attention_and_auto_lists(gen)
@@ -229,6 +238,17 @@ def render_generation_status(gen: dict[str, Any]) -> str:
             f"独立2媒体ペア救済: {ts['tier3_pairs_rescued']}組"
             f"（{ts['tier3_pair_rescued_articles']}件を上限外で追加）"
         )
+    if daily_data is not None:
+        inconsistent = _inconsistent_symbols(daily_data)
+        if inconsistent:
+            # v1.44（オーナー指示）: 終値（CMC）が日中レンジ（Coinbase/Bitstamp）の
+            # 範囲外だった銘柄を記録する（本文への反映はcompose_numeric.py側で
+            # 抑制済み。原因の切り分けは数日の実データを見てから判断するため
+            # ここでは検出事実のみを記す）。
+            lines.append(
+                f"日中レンジ不整合検出: {'・'.join(inconsistent)}"
+                "（終値が取得したレンジの範囲外のため、本文の日中レンジ行を省略）"
+            )
     lines += [
         "",
         "手当が必要な箇所:",
@@ -283,7 +303,7 @@ def main() -> int:
         json.dumps(bundle, ensure_ascii=False, indent=2), encoding="utf-8")
 
     status_path = Path(f"outputs/{target_date}/GENERATION_STATUS.md")
-    status_text = render_generation_status(gen)
+    status_text = render_generation_status(gen, daily_data)
     status_path.write_text(status_text, encoding="utf-8")
 
     print(f"OK: level={gen['level']} → {draft_dir}/part1.md, part2.md, post_bundle.json, {status_path}")

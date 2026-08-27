@@ -429,34 +429,119 @@ def check_c21(au: Audit, level: str, audit_ledger, candidate_count: int,
 
 def check_c22(au: Audit, part1_headline, audit_ledger, tier_map: dict[str, int],
               intraday_range: dict | None = None) -> None:
-    if not isinstance(part1_headline, str) or part1_headline == generate_post.FIXED_HEADLINE:
-        au.add("C22_headline_tier1_basis", None, "材料なし（定型文ヘッドライン）のためSKIP")
+    """part1_headlineが定型文かどうかと、根拠（tier1採用・独立2ソース採用・
+    notable_move）の有無との整合を検査する（v1.44改定）。
+
+    呼び出しA失敗等でpart1_headlineが文字列でない場合は、この検査自体が
+    無意味なためSKIP（縮退時の話であり、本検査が対象とする「モデルが
+    定型文を選んだ/実文言を書いた」という判断の話ではない）。
+    """
+    if not isinstance(part1_headline, str):
+        au.add("C22_headline_tier1_basis", None, "part1_headlineが文字列でない（呼び出しA失敗等）のためSKIP")
         return
-    # 簡易版（オーナー承認）: part1_headlineの記述内容とaudit_ledgerの
-    # 個別項目との対応関係までは検証せず、「その日にtier1由来の"採用"が
-    # 1件以上存在するか」で判定する。
+
     has_tier1_adopted = isinstance(audit_ledger, list) and any(
         isinstance(e, dict) and e.get("decision") == "採用" and tier_map.get(e.get("source")) == 1
         for e in audit_ledger
     )
-    if has_tier1_adopted:
-        au.add("C22_headline_tier1_basis", True, "tier1由来の採用が存在")
-        return
+    # v1.44（オーナー指示）: 独立2ソース材料単独（tier1裏付けなし）も
+    # part1_headlineの正当な根拠になりうる（NO_CANDIDATES_FALLBACKの②）。
+    has_pair_adopted = isinstance(audit_ledger, list) and any(
+        isinstance(e, dict) and e.get("decision") == "採用（独立2ソース）"
+        for e in audit_ledger
+    )
     # v1.42（オーナー指示）: notable_move（日中の値動き）はニュースの
-    # 情報源階層（tier1/tier3等）の対象外の市場データであり、tier1裏付けが
-    # 無くても値動きを根拠とする実文言ヘッドラインは正当でありうる
-    # （「候補が無い場合の扱い」分岐C）。この場合、C22はtier1由来かどうかを
-    # 判定できないためSKIPとし、FAILにしない。
+    # 情報源階層（tier1/tier3等）の対象外の市場データ。
     has_notable_move = isinstance(intraday_range, dict) and any(
         isinstance(v, dict) and v.get("notable_move") is True for v in intraday_range.values()
     )
+
+    is_fixed = part1_headline == generate_post.FIXED_HEADLINE
+    if is_fixed:
+        # v1.44（オーナー指示）: 根拠（tier1採用・独立2ソース採用・
+        # notable_move）が存在するにもかかわらず定型文のままになっている
+        # 状態は、8/23（BitMart）・8/24（Bitmine）・8/26（BankChain
+        # Alliance）で繰り返し実測された「ヘッドラインと本文の矛盾」の
+        # パターンであり、本来FAILとして検出すべき（従来は定型文なら
+        # 無条件SKIPだった）。
+        basis = []
+        if has_tier1_adopted:
+            basis.append("tier1由来の採用")
+        if has_pair_adopted:
+            basis.append("独立2ソース採用")
+        if has_notable_move:
+            basis.append("notable_move")
+        if basis:
+            au.add("C22_headline_tier1_basis", False,
+                   f"定型文ヘッドラインだが{'/'.join(basis)}が存在（本文に未反映の可能性）")
+            return
+        au.add("C22_headline_tier1_basis", None, "材料なし（定型文ヘッドライン）のためSKIP")
+        return
+
+    if has_tier1_adopted:
+        au.add("C22_headline_tier1_basis", True, "tier1由来の採用が存在")
+        return
+    if has_pair_adopted:
+        au.add("C22_headline_tier1_basis", True, "独立2ソース採用が存在（v1.44・ヘッドラインの根拠として有効）")
+        return
     if has_notable_move:
         au.add("C22_headline_tier1_basis", None,
-               "tier1由来の採用は無いがnotable_move（日中の値動き）が存在するためSKIP"
+               "tier1由来の採用・独立2ソース採用は無いがnotable_move（日中の値動き）が存在するためSKIP"
                "（値動きは情報源階層の対象外）")
         return
     au.add("C22_headline_tier1_basis", False,
-           "ヘッドラインが定型文でないにもかかわらずtier1由来の採用もnotable_moveも存在しない")
+           "ヘッドラインが定型文でないにもかかわらずtier1由来の採用・独立2ソース採用・notable_moveのいずれも存在しない")
+
+
+# --- C23 総括の固有名詞バックリファレンス ---
+
+# v1.44（オーナー指示）: 総括（part2_summary）が本文（part1_points）で
+# 確認されていない固有名詞を持ち出す事象が8/23（BitMart）・8/24
+# （Bitmine）・8/26（米PCEインフレ指標・SEC）と3回実データで再現し、
+# プロンプトへの抑止指示（v1.35「総括で言及してよい固有名詞・材料は
+# part1_pointsに掲載済みのもの、またはreusable_for_summaryに渡された
+# 継続材料に限る」）では防げないことが確認されたため、機械ゲートで
+# 対処する。
+#
+# 実装方針（固有名詞の完全な抽出＝日本語NERは行わない）: 英字大文字で
+# 始まるASCII表記のトークン（組織名・企業名・指標略称。例: SEC・PCE・
+# BitMart・Bitmine・BankChain）のみを機械的に抽出し、part1_points・
+# reusable_for_summaryに同じ文字列が存在するかを照合する。判定対象を
+# ASCII表記に絞るのは、(1) 実際に確認された3件の違反事例がいずれも
+# ASCII表記だったため対象を絞っても既知の事例は捕捉できる、(2) 片仮名・
+# 漢字表記の一般語彙（「インフレ」「規則」等）とASCII表記でない固有名詞
+# （日本銀行・金融庁等）を区別する簡便な機械的手段がなく、無差別に
+# 抽出すると確実な偽陽性を招くため（C16b・C18・C21と同じ判断——機械的に
+# 確実な側で吸収する）。既知の限界: 片仮名・漢字表記の固有名詞は検知
+# 対象外。BTC・ETH等の基軸銘柄名・単位・略称は「材料」ではなく常時
+# 参照される一般語彙とみなしallowlistで除外する。
+_PROPER_NOUN_RE = re.compile(r"[A-Z][A-Za-z0-9&.\-]{1,}")
+_PROPER_NOUN_ALLOWLIST = {
+    "BTC", "ETH", "BNB", "USDC", "USD", "JPY", "JST", "NY",
+    "TVL", "APR", "DEX", "LP", "IL", "ETF", "API", "V3",
+}
+
+
+def check_c23(au: Audit, part2_summary, part1_points, reusable_for_summary) -> None:
+    if not isinstance(part2_summary, str) or not part2_summary.strip():
+        au.add("C23_summary_no_new_entities", None, "part2_summaryが空のためSKIP")
+        return
+    candidates = {m for m in _PROPER_NOUN_RE.findall(part2_summary)
+                  if m.upper() not in _PROPER_NOUN_ALLOWLIST}
+    if not candidates:
+        au.add("C23_summary_no_new_entities", True, "総括に固有名詞候補（ASCII表記）なし")
+        return
+    backing = str(part1_points or "")
+    if isinstance(reusable_for_summary, list):
+        backing += "\n" + "\n".join(str(x) for x in reusable_for_summary)
+    missing = sorted(c for c in candidates if c not in backing)
+    if missing:
+        au.add("C23_summary_no_new_entities", False,
+               "総括に本文未確認の固有名詞候補（限界あり・ASCII表記のみ検知。"
+               f"誤検知時は要目視確認）: {missing}")
+        return
+    au.add("C23_summary_no_new_entities", True,
+           f"固有名詞候補{len(candidates)}件・すべてpart1_points/reusable_for_summaryに存在")
 
 
 def run_all(bundle: dict, daily_data: dict) -> Audit:
@@ -489,6 +574,8 @@ def run_all(bundle: dict, daily_data: dict) -> Audit:
     check_c21(au, bundle["level"], bundle.get("audit_ledger"), bundle.get("news_candidate_count", -1), tier_map)
     check_c22(au, sections.get("part1_headline"), bundle.get("audit_ledger"), tier_map,
               daily_data.get("intraday_range"))
+    check_c23(au, sections.get("part2_summary"), sections.get("part1_points"),
+              bundle.get("reusable_for_summary"))
     return au
 
 

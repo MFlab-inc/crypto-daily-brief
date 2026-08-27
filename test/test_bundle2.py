@@ -263,16 +263,17 @@ check("NEWS_SELECTIONに独立2ソース規定の3条件が記述されている
       all(s in generate_post.NEWS_SELECTION for s in (
           "独立2ソース規定", "2つ以上の独立したtier3媒体", "意見・予想・分析ではなく",
           "媒体名を複数列挙")))
-check("独立2ソース規定はヘッドラインへの昇格を認めない",
-      "【ヘッドライン】への昇格は引き続きtier1の裏付けを必要とする" in generate_post.NEWS_SELECTION)
+check("独立2ソース規定はpart1_headlineでの扱いをpart1_headline・part1_pointsの決定へ委譲する"
+      "（v1.44・旧来のtier1限定の絶対文言は撤去）",
+      "part1_headlineでの扱いは下記「part1_headline・part1_pointsの決定」を" in generate_post.NEWS_SELECTION
+      and "【ヘッドライン】への昇格は引き続きtier1の裏付けを必要とする" not in generate_post.NEWS_SELECTION)
 check("独立2ソース規定採用時のdecision値がOUTPUT_FORMAT_Aの例に含まれる",
       "採用（独立2ソース）" in generate_post.OUTPUT_FORMAT_A
       and "採用（独立2ソース）" in generate_post.NEWS_SELECTION)
-check("NO_CANDIDATES_FALLBACKが独立2ソース規定該当時にpart1_pointsへその材料を記載する旨を記述"
-      "（v1.42で(i)の判定基準として再構成・文言変更）",
-      "独立2ソース規定" in generate_post.NO_CANDIDATES_FALLBACK
-      and "part1_pointsにはその材料を" in generate_post.NO_CANDIDATES_FALLBACK
-      and "記載してよいが" in generate_post.NO_CANDIDATES_FALLBACK)
+check("NO_CANDIDATES_FALLBACKに独立2ソース材料単独でもpart1_headlineの根拠になる旨が明記されている"
+      "（v1.44・②の詳細）",
+      "②（(i)なし・(ii)あり）の詳細" in generate_post.NO_CANDIDATES_FALLBACK
+      and "独立2ソース材料の内容に基づき、part1_headlineに実文言を書く" in generate_post.NO_CANDIDATES_FALLBACK)
 
 print("=== generate_post.py: 情報源規律と項目数の優先順位（v1.29・オーナー指示・修正1） ===")
 check("NEWS_SELECTIONに情報源規律が項目数より優先する旨が明記されている",
@@ -286,18 +287,15 @@ check("WRITES_Aの項目数が情報源の規律に従う旨・tier3単独ソー
       "項目数は目標ではなく" in generate_post.WRITES_A
       and "項目数を埋めるためにtier3単独ソースを採用しない" in generate_post.WRITES_A)
 
-print("=== generate_post.py: ヘッドラインの判定手順（v1.30・オーナー指示） ===")
-check("NEWS_SELECTIONにヘッドラインの判定手順が明示的な分岐として記述されている",
-      all(s in generate_post.NEWS_SELECTION for s in (
-          "ヘッドラインの判定手順", "tier1の裏付けがある採用材料",
-          "その材料に基づく実文言のヘッドラインを書く")))
-check("ヘッドラインの判定手順は独立2ソース材料単独では昇格しない旨を明記",
+print("=== generate_post.py: ヘッドラインの判定手順（v1.44改定・単一箇所への集約） ===")
+check("NEWS_SELECTIONのヘッドラインの判定手順がpart1_headline・part1_pointsの決定へ委譲されている",
+      "part1_headline・headline_for_imageの決定手順は下記" in generate_post.NEWS_SELECTION
+      and "①〜④を参照" in generate_post.NEWS_SELECTION)
+check("旧来のtier1限定の絶対文言（独立2ソース材料単独では昇格しない）がNEWS_SELECTIONから撤去されている",
       "独立2ソース材料は【主要なポイント】には掲載できるが、【ヘッドライン】の"
-      in generate_post.NEWS_SELECTION
-      and "根拠にはできない" in generate_post.NEWS_SELECTION)
-check("WRITES_Aのheadline_for_imageもヘッドラインの判定手順に従う旨を記述",
-      "ヘッドラインの判定手順" in generate_post.WRITES_A
-      and generate_post.WRITES_A.count("ヘッドラインの判定手順") >= 2)
+      not in generate_post.NEWS_SELECTION)
+check("WRITES_Aのheadline_for_image・part1_headlineがpart1_headline・part1_pointsの決定へ従う旨を記述",
+      generate_post.WRITES_A.count("part1_headline・part1_pointsの決定") >= 2)
 
 print("=== generate_post.py: 重要性判定と因果表現の分離（v1.33・オーナー指示） ===")
 check("NEWS_SELECTIONに重要性（関連性）と因果関係を分けて判定する旨が明記されている",
@@ -326,26 +324,32 @@ check("WRITES_Aのpart1_pointsがB分類材料に因果未確認の限定表現�
       "重要性判定と因果表現の分離" in generate_post.WRITES_A
       and "暗号通貨価格への直接因果は未確認" in generate_post.WRITES_A)
 
-print("=== generate_post.py: part1_headline・part1_pointsの4分岐決定（v1.42・オーナー指示） ===")
-check("NO_CANDIDATES_FALLBACKに(i)ニュース材料・(ii)notable_moveの2軸が明記されている",
-      "(i) 採用に足るニュース材料があるか" in generate_post.NO_CANDIDATES_FALLBACK
-      and "(ii) 入力の intraday_range に notable_move: true の銘柄があるか"
+print("=== generate_post.py: part1_headline・part1_pointsの3軸決定（v1.44・オーナー指示） ===")
+check("NO_CANDIDATES_FALLBACKに(i)tier1・(ii)独立2ソース・(iii)notable_moveの3軸が明記されている",
+      "(i)   tier1の裏付けがある採用材料" in generate_post.NO_CANDIDATES_FALLBACK
+      and "(ii)  独立2ソース材料" in generate_post.NO_CANDIDATES_FALLBACK
+      and "(iii) 入力の intraday_range に notable_move: true の銘柄があるか"
       in generate_post.NO_CANDIDATES_FALLBACK)
-check("NO_CANDIDATES_FALLBACKにA〜Dの4分岐すべてが記述されている",
+check("NO_CANDIDATES_FALLBACKに①〜④の優先順位すべてが記述されている",
       all(s in generate_post.NO_CANDIDATES_FALLBACK for s in (
-          "A. (i)あり・(ii)あり", "B. (i)あり・(ii)なし",
-          "C. (i)なし・(ii)あり", "D. (i)なし・(ii)なし")))
-check("NO_CANDIDATES_FALLBACKに「CとDを取り違えないこと」の明示がある",
-      "CとDを取り違えないこと" in generate_post.NO_CANDIDATES_FALLBACK
-      and "定型文を使うのはDの場合のみである" in generate_post.NO_CANDIDATES_FALLBACK)
-check("NO_CANDIDATES_FALLBACKのA〜Dが、audit_ledgerのA/B/C（重要性判定）とは別分類である旨を明記（混同防止）",
+          "① (i)あり", "② (i)なし・(ii)あり", "③ (i)なし・(ii)なし・(iii)あり",
+          "④ (i)なし・(ii)なし・(iii)なし")))
+check("NO_CANDIDATES_FALLBACKに定型文を使うのは3軸すべて「なし」の場合のみという明示がある",
+      "定型文を使うのは、(i)(ii)(iii)のすべてが「なし」の場合に限る" in generate_post.NO_CANDIDATES_FALLBACK
+      and "③と④を取り違えないこと" in generate_post.NO_CANDIDATES_FALLBACK
+      and "定型文を使うのは④の場合のみである" in generate_post.NO_CANDIDATES_FALLBACK)
+check("NO_CANDIDATES_FALLBACKの①〜④が、audit_ledgerのA/B/C（重要性判定）とは別分類である旨を明記（混同防止）",
       "とは別の分類である。混同しないこと" in generate_post.NO_CANDIDATES_FALLBACK)
-check("分岐Cは定型文を使わず値動きを記述し、part1_pointsにニュース未確認を1項目明記する",
-      "C（(i)なし・(ii)あり）の詳細" in generate_post.NO_CANDIDATES_FALLBACK
+check("②は独立2ソース材料単独でpart1_headlineの根拠になり、一次情報未確認の旨を明記する（v1.44新設）",
+      "②（(i)なし・(ii)あり）の詳細" in generate_post.NO_CANDIDATES_FALLBACK
+      and "独立2ソース材料の内容に基づき、part1_headlineに実文言を書く" in generate_post.NO_CANDIDATES_FALLBACK
+      and "一次情報での確認ができていない旨を明記する" in generate_post.NO_CANDIDATES_FALLBACK)
+check("③は定型文を使わず値動きを記述し、part1_pointsにニュース未確認を1項目明記する",
+      "③（(i)なし・(ii)なし・(iii)あり）の詳細" in generate_post.NO_CANDIDATES_FALLBACK
       and "値動きの形状のみを" in generate_post.NO_CANDIDATES_FALLBACK
       and "「ニュース材料は確認できなかった」" in generate_post.NO_CANDIDATES_FALLBACK)
-check("headline_for_imageの指示がDの場合のみに明示的に限定されている（Cとの混同防止）",
-      "headline_for_image: Dの場合（ニュース・値動きいずれの材料も無い場合）は、"
+check("headline_for_imageの指示が④の場合のみに明示的に限定されている（③との混同防止）",
+      "headline_for_image: ④の場合（tier1材料・独立2ソース材料・値動きの"
       in generate_post.NO_CANDIDATES_FALLBACK)
 
 print("=== generate_post.py: 呼び出しBの文体統一・総括の言及範囲制限（v1.35・オーナー指示） ===")
@@ -970,15 +974,41 @@ _, c22 = _c21([
 ], headline="BTCが上昇し、FRBの発表も重なった一日となった。")
 check("C22: tier1採用がある実文言ヘッドラインはPASS", c22["result"] == "PASS", str(c22))
 
-# 実文言ヘッドライン＋tier1採用なし（独立2ソースのみ）はFAIL
-# （実データ8/21で実際に発生した形：ヘッドラインがtier3単独材料を根拠にしていた）
+# 実文言ヘッドライン＋tier1採用なし・独立2ソース採用のみはPASS（v1.44）
+# 従来（v1.29〜v1.43）は独立2ソース単独をFAILとしていたが、8/26実データ
+# （BankChain Alliance）で独立2ソース材料単独でも正当な本文材料であることが
+# 確認され、NO_CANDIDATES_FALLBACKの②で独立2ソース材料単独をpart1_headline
+# の正当な根拠として認めるよう改定された（旧「簡易版のため対応関係は見ない」
+# という限界は、この改定によりtier1・独立2ソースいずれの根拠であっても
+# 妥当と判定できるようになったことで解消）。
 _, c22 = _c21([
     {"source": "Cointelegraph", "url": "https://example.com/i1", "title": "...", "published_at": "2026-08-17",
      "verified_by": "v", "decision": "採用（独立2ソース）", "reason": "2媒体一致"},
     {"source": "CoinDesk", "url": "https://example.com/i2", "title": "...", "published_at": "2026-08-17",
      "verified_by": "v", "decision": "採用（独立2ソース）", "reason": "2媒体一致"},
 ], headline="BTCが上昇し、A社のライセンス取得報道も material となった一日。")
-check("C22: tier1採用が無いヘッドラインはFAIL（既知の限界：簡易版のため対応関係は見ない）",
+check("C22: tier1採用が無く独立2ソース採用のみの実文言ヘッドラインはPASS（v1.44）",
+      c22["result"] == "PASS", str(c22))
+
+# 実文言ヘッドラインなのに根拠（tier1採用・独立2ソース採用・notable_move）が
+# 皆無ならFAIL（従来どおり・根拠皆無のケース）
+_, c22 = _c21([
+    {"source": "Cointelegraph", "url": "https://example.com/i3", "title": "...", "published_at": "2026-08-17",
+     "verified_by": "v", "decision": "不採用", "reason": "C: 波及経路を説明できない一般ニュース"},
+], headline="BTCが上昇し、A社のライセンス取得報道も material となった一日。")
+check("C22: 実文言ヘッドラインなのに根拠が皆無ならFAIL（従来どおり）",
+      c22["result"] == "FAIL", str(c22))
+
+# 定型文ヘッドラインなのに独立2ソース採用が存在する場合はFAIL（v1.44新設）
+# ヘッドラインと本文（part1_points）の矛盾＝8/23（BitMart）・8/24（Bitmine）・
+# 8/26（BankChain Alliance）で実測された事象そのものを検出する。
+_, c22 = _c21([
+    {"source": "Cointelegraph", "url": "https://example.com/i4", "title": "...", "published_at": "2026-08-17",
+     "verified_by": "v", "decision": "採用（独立2ソース）", "reason": "2媒体一致"},
+    {"source": "CoinDesk", "url": "https://example.com/i5", "title": "...", "published_at": "2026-08-17",
+     "verified_by": "v", "decision": "採用（独立2ソース）", "reason": "2媒体一致"},
+], headline=generate_post.FIXED_HEADLINE)
+check("C22: 定型文ヘッドラインなのに独立2ソース採用が存在するとFAIL（v1.44・ヘッドラインと本文の矛盾を検出）",
       c22["result"] == "FAIL", str(c22))
 
 print("=== verify_post: C22 notable_move由来ヘッドラインの扱い（v1.42・オーナー指示） ===")
@@ -1010,6 +1040,7 @@ check("check_c22: tier1採用がある場合はnotable_moveの有無に関わら
       _au_c22d.checks[0]["result"] == "PASS", str(_au_c22d.checks[0]))
 
 # run_all()経由でもintraday_rangeが正しく伝播することを確認
+# （audit_ledgerに独立2ソース採用を含めない・純粋にnotable_moveのみの経路を見る）
 _dd_notable = json.loads(json.dumps(DAILY_DATA))
 _dd_notable["intraday_range"] = {
     "BTC": {"high": "$81,265", "low": "$78,100", "source": "coinbase",
@@ -1018,14 +1049,84 @@ _dd_notable["intraday_range"] = {
 _b_notable = json.loads(json.dumps(b_ok))
 _b_notable["audit_ledger"] = [
     {"source": "Cointelegraph", "url": "https://example.com/j1", "title": "...", "published_at": "2026-08-17",
-     "verified_by": "v", "decision": "採用（独立2ソース）", "reason": "2媒体一致"},
+     "verified_by": "v", "decision": "不採用", "reason": "C: 波及経路を説明できない一般ニュース"},
 ]
+_b_notable["reusable_for_summary"] = []
 _b_notable["news_candidate_count"] = 1
 _b_notable["sections"]["part1_headline"] = "BTCは一時上昇したのち上げ幅を縮小した。"
 au_notable = verify_post.run_all(_b_notable, _dd_notable)
 c22_notable = next(x for x in au_notable.checks if x["id"] == "C22_headline_tier1_basis")
 check("run_all(): daily_data.intraday_rangeがcheck_c22へ正しく伝播しSKIPになる",
       c22_notable["result"] == "SKIP", str(c22_notable))
+
+# run_all()経由で独立2ソース採用がcheck_c22へ正しく伝播しPASSになることも確認（v1.44）
+_b_pair = json.loads(json.dumps(b_ok))
+_b_pair["audit_ledger"] = [
+    {"source": "Cointelegraph", "url": "https://example.com/k1", "title": "...", "published_at": "2026-08-17",
+     "verified_by": "v", "decision": "採用（独立2ソース）", "reason": "2媒体一致"},
+    {"source": "CoinDesk", "url": "https://example.com/k2", "title": "...", "published_at": "2026-08-17",
+     "verified_by": "v", "decision": "採用（独立2ソース）", "reason": "2媒体一致"},
+]
+_b_pair["reusable_for_summary"] = []
+_b_pair["news_candidate_count"] = 2
+_b_pair["sections"]["part1_headline"] = "A社が提携を発表し、BTCが反応した一日。"
+au_pair = verify_post.run_all(_b_pair, DAILY_DATA)
+c22_pair = next(x for x in au_pair.checks if x["id"] == "C22_headline_tier1_basis")
+check("run_all(): 独立2ソース採用がcheck_c22へ正しく伝播しPASSになる（v1.44）",
+      c22_pair["result"] == "PASS", str(c22_pair))
+
+print("=== verify_post: C23 総括の固有名詞バックリファレンス（v1.44・オーナー指示） ===")
+
+_au_c23a = verify_post.Audit()
+verify_post.check_c23(_au_c23a, "", "・材料A", [])
+check("check_c23: part2_summaryが空文字ならSKIP",
+      _au_c23a.checks[0]["result"] == "SKIP", str(_au_c23a.checks[0]))
+
+_au_c23b = verify_post.Audit()
+verify_post.check_c23(_au_c23b, "地合いは総じて改善。継続的な確認が必要。", "・材料A", [])
+check("check_c23: ASCII固有名詞候補が無ければPASS",
+      _au_c23b.checks[0]["result"] == "PASS", str(_au_c23b.checks[0]))
+
+_au_c23c = verify_post.Audit()
+verify_post.check_c23(_au_c23c, "BTC・ETHともに軟調。USDドミナンスは横ばい。", "・材料A", [])
+check("check_c23: allowlist内の一般語彙（BTC・ETH・USD）はPASS（固有名詞候補として扱わない）",
+      _au_c23c.checks[0]["result"] == "PASS", str(_au_c23c.checks[0]))
+
+# 8/26実データの実例（米PCEインフレ指標が本文未確認のまま総括に持ち出された事象）。
+# 「PCE」は片仮名・漢字に前後を挟まれた埋め込み形だが、findallは文字クラスの
+# 連続部分だけを抽出するため単語境界に依存せず正しく抽出できる。
+_au_c23d = verify_post.Audit()
+verify_post.check_c23(
+    _au_c23d, "米PCEインフレ指標への警戒感が続いています。",
+    "・BTCが上昇（CoinDesk、2026-08-26）", [])
+check("check_c23: part1_pointsに無いASCII固有名詞（PCE。片仮名・漢字に埋め込まれた形でも抽出）はFAIL",
+      _au_c23d.checks[0]["result"] == "FAIL", str(_au_c23d.checks[0]))
+check("check_c23: FAIL detailにPCEが列挙される",
+      "PCE" in _au_c23d.checks[0]["detail"], _au_c23d.checks[0]["detail"])
+
+_au_c23e = verify_post.Audit()
+verify_post.check_c23(
+    _au_c23e, "SECの規則見直しが意識されています。",
+    "・SECが規則見直しを提案（Reuters、2026-08-26）", [])
+check("check_c23: part1_pointsに同一文字列があればPASS",
+      _au_c23e.checks[0]["result"] == "PASS", str(_au_c23e.checks[0]))
+
+_au_c23f = verify_post.Audit()
+verify_post.check_c23(
+    _au_c23f, "Bitmineの動向は今後も継続監視の対象です。",
+    "・材料A", ["Bitmineの株式取得は継続審議中、新展開なし"])
+check("check_c23: reusable_for_summaryに同一文字列があればPASS（part1_pointsに無くてもよい）",
+      _au_c23f.checks[0]["result"] == "PASS", str(_au_c23f.checks[0]))
+
+# run_all()経由での配線確認（8/26実データの実例＝BankChain Allianceが総括に
+# 持ち出されたがpart1_points・reusable_for_summaryのいずれにも無い形を再現）
+_b_c23 = json.loads(json.dumps(b_ok))
+_b_c23["sections"]["part2_summary"] = "BankChainの動向が注目されています。"
+_b_c23["reusable_for_summary"] = []
+au_c23 = verify_post.run_all(_b_c23, DAILY_DATA)
+c23_check = next(x for x in au_c23.checks if x["id"] == "C23_summary_no_new_entities")
+check("run_all(): C23がpart1_points/reusable_for_summaryを参照して正しくFAILになる",
+      c23_check["result"] == "FAIL", str(c23_check))
 
 print("=== collect_news.py（RSS方式・CryptoPanic撤去後） ===")
 
@@ -1555,6 +1656,21 @@ check("load_notable_move_threshold: 設定ファイルのnotable_move_threshold�
       fetch_data.load_notable_move_threshold() == 0.05)
 fetch_data.INTRADAY_RANGE_CONFIG_PATH = _orig_intraday_config_path
 
+print("=== fetch_data.py: 終値とレンジの矛盾検出（v1.44・オーナー指示） ===")
+check("compute_inconsistent: 8/26のETH実例（終値$2,492がレンジ$2,415〜$2,484の外）はTrue",
+      fetch_data.compute_inconsistent(2484.0, 2415.0, 2492.0) is True)
+check("compute_inconsistent: 終値がレンジ内ならFalse",
+      fetch_data.compute_inconsistent(81265.0, 78100.0, 78895.0) is False)
+check("compute_inconsistent: 終値がレンジの境界値（high・low）ちょうどならFalse（[low, high]は閉区間）",
+      fetch_data.compute_inconsistent(100.0, 90.0, 100.0) is False
+      and fetch_data.compute_inconsistent(100.0, 90.0, 90.0) is False)
+check("compute_inconsistent: high_raw/low_rawのいずれかがNoneなら判定不能（None）",
+      fetch_data.compute_inconsistent(None, 78100.0, 78895.0) is None
+      and fetch_data.compute_inconsistent(81265.0, None, 78895.0) is None)
+check("compute_inconsistent: close_priceがNone/0なら判定不能（None）",
+      fetch_data.compute_inconsistent(81265.0, 78100.0, None) is None
+      and fetch_data.compute_inconsistent(81265.0, 78100.0, 0) is None)
+
 print("=== compose_numeric.py: 前編【主要指標】への日中レンジ行の追加（v1.41フォローアップ・オーナー承認） ===")
 _dd_with_range = json.loads(json.dumps(DAILY_DATA))
 _dd_with_range["intraday_range"] = {
@@ -1591,6 +1707,43 @@ check("compose_part1_numeric: intraday_rangeが未確認の日は行自体を省
 
 check("compose_part1_numeric: intraday_range自体が無い日（従来のdaily_data.json）でも日中レンジ行は出ない・既存行に影響しない",
       compose_numeric.compose_part1_numeric(DAILY_DATA).count("日中レンジ") == 0)
+
+print("=== compose_numeric.py: inconsistent:trueの銘柄は日中レンジ行を省略（v1.44・オーナー指示） ===")
+_dd_inconsistent = json.loads(json.dumps(DAILY_DATA))
+_dd_inconsistent["intraday_range"] = {
+    "BTC": {"high": "$81,265", "low": "$78,100", "source": "coinbase",
+            "retrieved_at": "2026-08-26T10:20:24+09:00", "representative": True},
+    "ETH": {"high": "$2,484", "low": "$2,415", "source": "coinbase",
+            "retrieved_at": "2026-08-26T10:20:25+09:00", "representative": True, "inconsistent": True},
+}
+_p1_inconsistent = compose_numeric.compose_part1_numeric(_dd_inconsistent)
+check("compose_part1_numeric: inconsistent:trueの銘柄（ETH）は日中レンジ行を省略する（「未確認」とも書かない）",
+      "日中レンジ" not in _p1_inconsistent.split("#ETH")[1].split("#BNB")[0], _p1_inconsistent)
+check("compose_part1_numeric: inconsistent:falseの銘柄（BTC）は従来どおり日中レンジ行が出る",
+      "　（日中レンジ $78,100〜$81,265）" in _p1_inconsistent, _p1_inconsistent)
+check("_intraday_range_line: inconsistent:trueならNone（representative:trueでも）",
+      compose_numeric._intraday_range_line(_dd_inconsistent, "ETH") is None)
+
+print("=== compose_post.py: 日中レンジ不整合をGENERATION_STATUS.mdへ記録（v1.44・オーナー指示） ===")
+_gen_for_status = json.loads(json.dumps(_gen_not_truncated))
+_gen_status_inconsistent = compose_post.render_generation_status(_gen_for_status, _dd_inconsistent)
+check("render_generation_status: inconsistentな銘柄（ETH）を検出した旨が記録される",
+      "日中レンジ不整合検出: ETH" in _gen_status_inconsistent, _gen_status_inconsistent)
+_gen_status_no_daily_data = compose_post.render_generation_status(_gen_for_status)
+check("render_generation_status: daily_data省略時（後方互換）は不整合検出行を出さない",
+      "日中レンジ不整合検出" not in _gen_status_no_daily_data)
+_gen_status_consistent = compose_post.render_generation_status(_gen_for_status, DAILY_DATA)
+check("render_generation_status: 不整合な銘柄が無い日は不整合検出行を出さない",
+      "日中レンジ不整合検出" not in _gen_status_consistent)
+
+print("=== compose_post.py: reusable_for_summaryのbundleへの伝播（v1.44・C23が参照するため追加） ===")
+_b_reusable = compose_post.compose(DAILY_DATA, gen_l0)
+check("compose(): reusable_for_summaryがbundleに含まれる（L0・呼び出しA成功）",
+      _b_reusable["reusable_for_summary"] == CALL_A_DATA["reusable_for_summary"],
+      str(_b_reusable.get("reusable_for_summary")))
+_b_a_failed = compose_post.compose(DAILY_DATA, gen_l1a)
+check("compose(): 呼び出しA失敗時のreusable_for_summaryは空配列（Noneではない・C23側でjoinしやすくするため）",
+      _b_a_failed["reusable_for_summary"] == [])
 
 print("=== generate_post.py: notable_moveのプロンプト指示（v1.41フォローアップ・オーナー承認） ===")
 check("SYSTEM_AにINTRADAY_MOVE_GUIDANCE（オーナー指定の文言）が含まれる",
