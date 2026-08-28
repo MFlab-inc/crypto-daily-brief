@@ -320,6 +320,10 @@ check("NO_CANDIDATES_FALLBACKにaudit_ledgerのreason冒頭でA/B/C段階を明�
 check("NO_CANDIDATES_FALLBACKに直接因果未確認のみを理由にした不採用を禁じる文言がある",
       "「暗号通貨価格への直接因果が未確認」であること" in generate_post.NO_CANDIDATES_FALLBACK
       and "のみを理由に不採用としてはならない" in generate_post.NO_CANDIDATES_FALLBACK)
+check("NO_CANDIDATES_FALLBACKに不採用reasonの全角60字上限、採用系reasonは対象外という指示がある（v1.47・オーナー指示）",
+      "decision:\"不採用\" のreasonは全角60字以内に収める" in generate_post.NO_CANDIDATES_FALLBACK
+      and "decision:\"採用\"・\"採用（独立2ソース）\"の\nreasonにはこの字数制限を適用しない"
+      in generate_post.NO_CANDIDATES_FALLBACK)
 check("WRITES_Aのpart1_pointsがB分類材料に因果未確認の限定表現を含める旨を参照している",
       "重要性判定と因果表現の分離" in generate_post.WRITES_A
       and "暗号通貨価格への直接因果は未確認" in generate_post.WRITES_A)
@@ -1362,6 +1366,8 @@ check("fetch_article_body: <main>要素から本文を抽出する",
       body1 is not None and "Press Release Title" in body1 and "This is a real press release" in body1, body1)
 check("fetch_article_body: <nav>/<header>/<footer>の内容は含まれない",
       body1 is not None and "Home | About | Contact" not in body1 and "Copyright 2026" not in body1, body1)
+check("fetch_article_body: 上限未満の本文には切り詰めマーカーを付さない（v1.47）",
+      body1 is not None and not body1.endswith(collect_news.ARTICLE_BODY_TRUNCATION_MARKER), body1)
 
 orig_a2 = _patch_get_by_url({"https://example.gov/article-test": _FakeRssResp(200, HTML_WITH_ARTICLE.encode("utf-8"))})
 body2 = collect_news.fetch_article_body("https://example.gov/article-test")
@@ -1396,12 +1402,20 @@ collect_news.requests.get = orig_a6
 check("fetch_article_body: 例外発生時もクラッシュせずNoneを返す（フェイルクローズ不要・summary補強に過ぎない）",
       body6 is None, body6)
 
+check("collect_news.py: ARTICLE_BODY_CHAR_LIMITは1500（v1.47・8/27の入力トークン膨張を受け2000から引き下げ）",
+      collect_news.ARTICLE_BODY_CHAR_LIMIT == 1500)
+
 _over_limit = "<main><p>" + ("x" * 3000) + "</p></main>"
 orig_a7 = _patch_get_by_url({"https://example.gov/long-test": _FakeRssResp(200, ("<html><body>" + _over_limit + "</body></html>").encode("utf-8"))})
 body7 = collect_news.fetch_article_body("https://example.gov/long-test")
 collect_news.requests.get = orig_a7
-check(f"fetch_article_body: {collect_news.ARTICLE_BODY_CHAR_LIMIT}字で切り詰める",
-      body7 is not None and len(body7) == collect_news.ARTICLE_BODY_CHAR_LIMIT, len(body7) if body7 else body7)
+_expected_len = collect_news.ARTICLE_BODY_CHAR_LIMIT + len(collect_news.ARTICLE_BODY_TRUNCATION_MARKER)
+check(f"fetch_article_body: {collect_news.ARTICLE_BODY_CHAR_LIMIT}字＋切り詰めマーカー長で切り詰める（v1.47）",
+      body7 is not None and len(body7) == _expected_len, len(body7) if body7 else body7)
+check("fetch_article_body: 切り詰め時は本文が指定字数ちょうどで切られ、末尾にマーカーが付く（v1.47）",
+      body7 is not None
+      and body7 == ("x" * collect_news.ARTICLE_BODY_CHAR_LIMIT) + collect_news.ARTICLE_BODY_TRUNCATION_MARKER,
+      body7[-30:] if body7 else body7)
 
 print("=== collect_news.py: _collect_from_feedのtier1本文補強・tier3は対象外（v1.39） ===")
 

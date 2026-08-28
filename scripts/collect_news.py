@@ -73,7 +73,13 @@ USER_AGENT = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
 # 実質的な内容が無いまま不採用になる事象が実データで確認された。tier1候補
 # （日次0〜7件程度・取得コストは小さい）に限り、リンク先の<main>/<article>
 # 本文を取得して要約を補う。
-ARTICLE_BODY_CHAR_LIMIT = 2000
+# v1.47（オーナー指示）: 8/27実データでcall_A入力トークンが前日の3倍
+# （18,699→58,905）に膨らみ3試行とも出力上限で切断される事象が発生。
+# tier1候補が11件（通常より多い）だった日で、本文取得量が入力膨張の
+# 一因と推測されたため2000→1500へ引き下げ。切り詰めた場合はモデルが
+# 「本文の全量」と誤認しないよう末尾に明示のマーカーを付す。
+ARTICLE_BODY_CHAR_LIMIT = 1500
+ARTICLE_BODY_TRUNCATION_MARKER = "…（以下略）"
 ARTICLE_FETCH_TIMEOUT_SEC = 20
 _MAIN_ARTICLE_MIN_CHARS = 200
 _BODY_SKIP_TAGS = {"script", "style", "nav", "header", "footer"}
@@ -246,6 +252,10 @@ def fetch_article_body(url: str, timeout: int = ARTICLE_FETCH_TIMEOUT_SEC) -> st
     文字数不足のいずれの場合もNoneを返す——呼び出し側はNoneの場合、
     元のRSS summaryをそのまま使う（フェイルクローズ不要。あくまで
     summaryの補強であり、本関数の失敗が候補自体を落とすことはない）。
+
+    v1.47（オーナー指示）: 切り詰めが発生した場合、文の途中で切れても
+    構わないが、末尾にARTICLE_BODY_TRUNCATION_MARKERを付し、モデルが
+    「これが本文の全量」と誤認しないようにする。
     """
     try:
         resp = requests.get(url, timeout=timeout, headers={"User-Agent": USER_AGENT})
@@ -256,7 +266,9 @@ def fetch_article_body(url: str, timeout: int = ARTICLE_FETCH_TIMEOUT_SEC) -> st
         text = parser.text
         if len(text) <= _MAIN_ARTICLE_MIN_CHARS:
             return None
-        return text[:ARTICLE_BODY_CHAR_LIMIT]
+        if len(text) > ARTICLE_BODY_CHAR_LIMIT:
+            return text[:ARTICLE_BODY_CHAR_LIMIT] + ARTICLE_BODY_TRUNCATION_MARKER
+        return text
     except requests.RequestException:
         return None
     except Exception:  # noqa: BLE001 — summaryの補強に過ぎず、本文取得の
