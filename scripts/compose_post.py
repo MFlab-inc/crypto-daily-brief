@@ -201,6 +201,23 @@ def _inconsistent_symbols(daily_data: dict) -> list[str]:
             if isinstance(d, dict) and d.get("inconsistent")]
 
 
+def _render_attempt_errors(label: str, call_result: dict[str, Any]) -> list[str]:
+    """v1.48（オーナー指示）: リトライが発生した場合（最終的に成功した場合を
+    含む）、各試行の失敗理由をGENERATION_STATUS.mdへ記録する。従来は成功時に
+    それ以前の試行の失敗理由が失われており、リトライの常態化＝劣化の兆候に
+    気づけなかった。1試行目で成功した場合（attempt_errorsが空）は何も出さない。
+    """
+    errors = call_result.get("attempt_errors") or []
+    if not errors:
+        return []
+    lines = [f"  {label}試行履歴（リトライ発生・劣化の兆候として記録）:"]
+    for i, err in enumerate(errors, start=1):
+        lines.append(f"    {i}試行目: {err}")
+    if call_result.get("ok"):
+        lines.append(f"    {call_result['attempts']}試行目: 成功")
+    return lines
+
+
 def render_generation_status(gen: dict[str, Any], daily_data: dict | None = None) -> str:
     a, b = gen["call_a"], gen["call_b"]
     news_status = gen.get("news_source_status", {})
@@ -210,8 +227,14 @@ def render_generation_status(gen: dict[str, Any], daily_data: dict | None = None
         f"level: {gen['level']}",
         f"call_A: {'OK' if a['ok'] else 'FAILED'}"
         + (f" ({a['error']} / {a['attempts']}回試行)" if not a["ok"] else f"（{a['attempts']}回試行）"),
+    ]
+    lines += _render_attempt_errors("call_A", a)
+    lines.append(
         f"call_B: {'OK' if b['ok'] else 'FAILED'}"
-        + (f" ({b['error']} / {b['attempts']}回試行)" if not b["ok"] else f"（{b['attempts']}回試行）"),
+        + (f" ({b['error']} / {b['attempts']}回試行)" if not b["ok"] else f"（{b['attempts']}回試行）")
+    )
+    lines += _render_attempt_errors("call_B", b)
+    lines += [
         "token_usage（実消費量）: "
         f"input={gen['total_usage']['input_tokens']}, output={gen['total_usage']['output_tokens']} "
         f"(call_A: in={a['usage']['input_tokens']} out={a['usage']['output_tokens']} / "

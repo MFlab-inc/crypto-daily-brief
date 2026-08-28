@@ -148,10 +148,34 @@ def json_response(obj):
     return FakeResponse([FakeTextBlock(json.dumps(obj, ensure_ascii=False))])
 
 
+def _mock_audit_ledger_from_request(kw: dict) -> list:
+    """v1.48: FakeClientのfn(kw, n)へ渡された実際のリクエストから
+    news_candidates_todayのcandidate_idを読み取り、全件一律decision:"採用"
+    としたaudit_ledgerを動的に構成する。固定フィクスチャが候補数・IDに
+    依存してしまう問題を避け、どんな候補セット（0件を含む）でも整合する
+    モック応答を作れるようにする。監査内容の妥当性（tier整合等）を検証
+    する目的のテストではないため、一律"採用"で十分。
+    """
+    try:
+        content = json.loads(kw["messages"][0]["content"])
+        candidates = content.get("news_candidates_today", [])
+    except (KeyError, ValueError, TypeError):
+        return []
+    return [{"candidate_id": c["candidate_id"], "decision": "採用",
+             "verified_by": "RSS summary", "reason": "一次情報で確認"}
+            for c in candidates if "candidate_id" in c]
+
+
+def _call_a_response(kw: dict) -> dict:
+    """v1.48: CALL_A_DATAのheadline_for_image等はそのまま使い、audit_ledger
+    だけをリクエストの実際の候補セットへ整合する形へ差し替えたモック応答。"""
+    return {**CALL_A_DATA, "audit_ledger": _mock_audit_ledger_from_request(kw)}
+
+
 print("=== generate_post._call_json ===")
 
 # 1) 成功（1回目でJSON妥当）・toolsパラメータを一切渡さないことも確認（v1.15）
-c = FakeClient(lambda kw, n: json_response(CALL_A_DATA))
+c = FakeClient(lambda kw, n: json_response(_call_a_response(kw)))
 out = generate_post.call_a(c, DAILY_DATA, NEWS_TODAY, None)
 check("callA success 1発", out.ok and out.attempts == 1, str(out.error))
 check("callA: toolsパラメータを渡さない（v1.15・ツール無し呼び出し）",
@@ -163,10 +187,31 @@ check("callA: thinkingを明示的に無効化する（v1.28）",
 def flaky_json(kw, n):
     if n == 1:
         return FakeResponse([FakeTextBlock("not json{{{")])
-    return json_response(CALL_A_DATA)
+    return json_response(_call_a_response(kw))
 c = FakeClient(flaky_json)
 out = generate_post.call_a(c, DAILY_DATA, {"candidates": []}, None)
 check("callA JSON不正→リトライ成功", out.ok and out.attempts == 2, str(out.error))
+check("callA JSON不正→リトライ成功: attempt_errorsに1試行目の失敗が残る（v1.48・成功時も保持）",
+      len(out.attempt_errors) == 1 and "not json" not in out.attempt_errors[0]
+      and ("JSONDecodeError" in out.attempt_errors[0] or "ValueError" in out.attempt_errors[0]),
+      str(out.attempt_errors))
+
+# 2b) audit_ledgerが存在しない候補IDを参照 → post_process内で例外→リトライ→成功（v1.48）
+def bad_candidate_id_then_ok(kw, n):
+    if n == 1:
+        bad = {**CALL_A_DATA, "audit_ledger": [{"candidate_id": 999, "decision": "採用",
+                                                  "verified_by": "x", "reason": "y"}]}
+        return json_response(bad)
+    return json_response(_call_a_response(kw))
+c = FakeClient(bad_candidate_id_then_ok)
+out = generate_post.call_a(c, DAILY_DATA, NEWS_TODAY, None)
+check("callA: 存在しない候補IDを参照したaudit_ledgerはリトライされ、2回目で成功する（v1.48）",
+      out.ok and out.attempts == 2, f"ok={out.ok} attempts={out.attempts} error={out.error}")
+check("callA: 存在しない候補IDのリトライ理由がattempt_errorsに記録される（v1.48）",
+      len(out.attempt_errors) == 1 and "AuditLedgerReconstructionError" in out.attempt_errors[0],
+      str(out.attempt_errors))
+check("callA: リトライ後に成功した最終audit_ledgerは候補データで正しく再構成されている（v1.48）",
+      out.data["audit_ledger"][0]["url"] == NEWS_TODAY["candidates"][0]["url"], str(out.data["audit_ledger"]))
 
 # 3) 必須キー欠落 → 最大試行後に失敗
 def missing_key(kw, n):
@@ -205,7 +250,7 @@ check("フェンス無し・プリアンブルありでも最初の{から最後
 # プリアンブル付きフェンスがcall_A経由でも正しくJSON解析されることを確認
 # （_strip_code_fence単体だけでなく実際の呼び出し経路で回帰しないことの確認）
 def preambled(kw, n):
-    body = json.dumps(CALL_A_DATA, ensure_ascii=False)
+    body = json.dumps(_call_a_response(kw), ensure_ascii=False)
     return FakeResponse([FakeTextBlock(f"候補を確認しました。tier1は少ないため慎重に判断します。\n\n```json\n{body}\n```")])
 c = FakeClient(preambled)
 out = generate_post.call_a(c, DAILY_DATA, {"candidates": []}, None)
@@ -222,7 +267,7 @@ check("callA refusal→FAILED", not out.ok and "refusal" in (out.error or ""), s
 captured = {}
 def capture_fn(kw, n):
     captured["kw"] = kw
-    return json_response(CALL_A_DATA)
+    return json_response(_call_a_response(kw))
 c = FakeClient(capture_fn)
 generate_post.call_a(c, DAILY_DATA, NEWS_TODAY, None)
 sent = json.loads(captured["kw"]["messages"][0]["content"])
@@ -398,13 +443,93 @@ _news_today_elig = {"candidates": [
     {"tier": 1, "source": "SEC", "title": "u1", "url": "https://example.com/u1",
      "published_at": "Mon, 17 Aug 2026 10:00:00 GMT"},
 ]}
-_uc, _ = generate_post._build_call_a_user_content(DAILY_DATA, _news_today_elig, None)
+_uc, _, _id_map = generate_post._build_call_a_user_content(DAILY_DATA, _news_today_elig, None)
 _uc_parsed = json.loads(_uc)
 check("_build_call_a_user_content: news_candidates_todayの各項目にeligibilityが付与される",
       all("eligibility" in c for c in _uc_parsed["news_candidates_today"]))
+check("_build_call_a_user_content: news_candidates_todayの各項目にcandidate_idが付与される（v1.48）",
+      all("candidate_id" in c for c in _uc_parsed["news_candidates_today"])
+      and _uc_parsed["news_candidates_today"][0]["candidate_id"] == 1,
+      json.dumps(_uc_parsed.get("news_candidates_today"), ensure_ascii=False))
+check("_build_call_a_user_content: id_to_candidateはcandidate_id→候補データの対応を返す（v1.48）",
+      _id_map[1]["url"] == "https://example.com/u1" and _id_map[1]["title"] == "u1", str(_id_map))
 check("NEWS_SELECTIONがeligibilityフィールドの存在と、それに従う旨を候補に明記している",
       "eligibility" in generate_post.NEWS_SELECTION
       and "判定に従うこと" in generate_post.NEWS_SELECTION)
+
+print("=== generate_post.py: audit_ledgerのcandidate_id方式による再構成（v1.48・オーナー指示） ===")
+
+check("_assign_candidate_ids: 1始まりの連番を付与する",
+      [c["candidate_id"] for c in generate_post._assign_candidate_ids(
+          [{"title": "a"}, {"title": "b"}, {"title": "c"}])] == [1, 2, 3])
+
+_id_candidates = {
+    1: {"source": "SEC", "url": "https://example.gov/real-a", "title": "Real title A",
+        "published_at": "Mon, 17 Aug 2026 10:00:00 GMT", "candidate_id": 1},
+    2: {"source": "CoinDesk", "url": "https://example.com/real-b", "title": "Real title B",
+        "published_at": "Mon, 17 Aug 2026 09:00:00 GMT", "candidate_id": 2},
+}
+_llm_out = [
+    {"candidate_id": 1, "decision": "採用", "verified_by": "RSS summary", "reason": "一次情報で確認"},
+    {"candidate_id": 2, "decision": "不採用", "reason": "C: 波及経路を説明できない"},
+]
+_rebuilt = generate_post._reconstruct_audit_ledger(_llm_out, _id_candidates)
+check("_reconstruct_audit_ledger: source/url/title/published_atは候補データからそのまま補完される"
+      "（LLMは転記しない）",
+      _rebuilt[0]["source"] == "SEC" and _rebuilt[0]["url"] == "https://example.gov/real-a"
+      and _rebuilt[0]["title"] == "Real title A"
+      and _rebuilt[0]["published_at"] == "Mon, 17 Aug 2026 10:00:00 GMT", str(_rebuilt[0]))
+check("_reconstruct_audit_ledger: decision/reason/verified_byはLLM出力をそのまま使う",
+      _rebuilt[0]["decision"] == "採用" and _rebuilt[0]["reason"] == "一次情報で確認"
+      and _rebuilt[0]["verified_by"] == "RSS summary"
+      and _rebuilt[1]["decision"] == "不採用" and _rebuilt[1]["reason"] == "C: 波及経路を説明できない",
+      str(_rebuilt))
+check("_reconstruct_audit_ledger: verified_byを省略した不採用エントリは空文字になる",
+      _rebuilt[1]["verified_by"] == "", str(_rebuilt[1]))
+check("_reconstruct_audit_ledger: 出力件数は候補数と一致する", len(_rebuilt) == 2, str(_rebuilt))
+
+
+def _raises_reconstruction_error(entries, candidates):
+    try:
+        generate_post._reconstruct_audit_ledger(entries, candidates)
+        return False
+    except generate_post.AuditLedgerReconstructionError:
+        return True
+
+
+check("_reconstruct_audit_ledger: 存在しない候補IDは例外（_call_json()のリトライへ委ねる）",
+      _raises_reconstruction_error([{"candidate_id": 99, "decision": "採用", "reason": "x"}], _id_candidates))
+check("_reconstruct_audit_ledger: candidate_idの重複は例外",
+      _raises_reconstruction_error(
+          [{"candidate_id": 1, "decision": "採用", "reason": "x"},
+           {"candidate_id": 1, "decision": "不採用", "reason": "y"}], _id_candidates))
+check("_reconstruct_audit_ledger: 候補の一部が記録されていない（欠落）場合は例外",
+      _raises_reconstruction_error(
+          [{"candidate_id": 1, "decision": "採用", "reason": "x"}], _id_candidates))  # id=2が欠落
+check("_reconstruct_audit_ledger: candidate_idが文字列（型不正）の場合も例外",
+      _raises_reconstruction_error(
+          [{"candidate_id": "1", "decision": "採用", "reason": "x"},
+           {"candidate_id": 2, "decision": "不採用", "reason": "y"}], _id_candidates))
+check("_reconstruct_audit_ledger: audit_ledger自体がリストでない場合も例外",
+      _raises_reconstruction_error({"not": "a list"}, _id_candidates))
+check("_reconstruct_audit_ledger: 候補0件・LLM出力も空配列なら空配列を返す（従来の「候補が無い日」の扱いを維持）",
+      generate_post._reconstruct_audit_ledger([], {}) == [])
+
+check("OUTPUT_FORMAT_Aのaudit_ledger例がcandidate_id方式になっている（source/url/title/published_atを含まない）",
+      '"candidate_id": 1' in generate_post.OUTPUT_FORMAT_A
+      and '"source"' not in generate_post.OUTPUT_FORMAT_A)
+check("WRITES_Aのaudit_ledger説明がcandidate_id方式を明記している",
+      "candidate_id・decision・verified_by・reason のみを書く" in generate_post.WRITES_A)
+check("NO_CANDIDATES_FALLBACKのaudit_ledger節がcandidate_id方式・転記させない旨を明記している",
+      "candidate_id（news_candidates_today内の該当候補のID）・" in generate_post.NO_CANDIDATES_FALLBACK
+      and "あなたが転記する必要は無い" in generate_post.NO_CANDIDATES_FALLBACK
+      and "candidate_idはちょうど1回のみ" in generate_post.NO_CANDIDATES_FALLBACK)
+check("NO_CANDIDATES_FALLBACKにverified_byは採用系decisionの場合のみ書く旨が明記されている",
+      "verified_byは採用系decision" in generate_post.NO_CANDIDATES_FALLBACK
+      and "不採用の場合は空文字でよい" in generate_post.NO_CANDIDATES_FALLBACK)
+check("NEWS_SELECTIONがcandidate_idの存在とaudit_ledgerでの参照用途を明記している",
+      "candidate_id・title・summary" in generate_post.NEWS_SELECTION
+      and "audit_ledgerで候補を参照する際に使う" in generate_post.NEWS_SELECTION)
 
 print("=== generate_post.py: tier3候補数上限の確認（v1.21・v1.39でLIMIT=15に変更） ===")
 _tier1_fixed = [{"tier": 1, "source": "SEC", "published_at": "Mon, 17 Aug 2026 10:00:00 GMT"} for _ in range(3)]
@@ -500,6 +625,33 @@ status_text2 = compose_post.render_generation_status(_gen_not_truncated)
 check("GENERATION_STATUS.md: tier3除外が無ければ目視確認行を表示しない",
       "件数上限により除外" not in status_text2, status_text2)
 
+print("=== compose_post.py: リトライ履歴（attempt_errors）のGENERATION_STATUS.mdへの記録（v1.48・オーナー指示） ===")
+check("GENERATION_STATUS.md: attempt_errorsが無い（1試行目で成功）場合は試行履歴行を出さない",
+      "試行履歴" not in status_text2, status_text2)
+
+_gen_with_retry = json.loads(json.dumps(_gen_truncated))
+_gen_with_retry["call_a"]["attempts"] = 2
+_gen_with_retry["call_a"]["attempt_errors"] = ["JSONDecodeError: Expecting ',' delimiter: line 255 column 6 (char 13551)"]
+status_text3 = compose_post.render_generation_status(_gen_with_retry)
+check("GENERATION_STATUS.md: リトライが発生した場合、call_Aの試行履歴が1試行目から記録される",
+      "call_A試行履歴" in status_text3
+      and "1試行目: JSONDecodeError: Expecting ',' delimiter: line 255 column 6 (char 13551)" in status_text3
+      and "2試行目: 成功" in status_text3,
+      status_text3)
+
+_gen_b_retry = json.loads(json.dumps(_gen_truncated))
+_gen_b_retry["call_b"]["attempts"] = 3
+_gen_b_retry["call_b"]["ok"] = False
+_gen_b_retry["call_b"]["error"] = "ValueError: 必須キー欠落: ['part2_summary']"
+_gen_b_retry["call_b"]["attempt_errors"] = ["ValueError: x", "ValueError: y", "ValueError: 必須キー欠落: ['part2_summary']"]
+status_text4 = compose_post.render_generation_status(_gen_b_retry)
+check("GENERATION_STATUS.md: call_Bが全試行失敗した場合も全試行の履歴が記録される（成功行は付かない）",
+      "call_B試行履歴" in status_text4 and "1試行目: ValueError: x" in status_text4
+      and "2試行目: ValueError: y" in status_text4
+      and "3試行目: ValueError: 必須キー欠落" in status_text4
+      and "試行目: 成功" not in status_text4.split("call_B試行履歴")[1],
+      status_text4)
+
 print("=== generate_post.run(): news_candidate_countは渡した件数基準（v1.21） ===")
 os.makedirs("outputs/2026-08-21", exist_ok=True)
 Path("outputs/2026-08-21/daily_data.json").write_text(
@@ -513,7 +665,7 @@ def _make_run_client_tolerant(a_ok, b_ok):
     def fn(kw, n):
         is_call_a = kw.get("system") == generate_post.SYSTEM_A
         if is_call_a:
-            return json_response(CALL_A_DATA) if a_ok else FakeResponse([FakeTextBlock("bad")])
+            return json_response(_call_a_response(kw)) if a_ok else FakeResponse([FakeTextBlock("bad")])
         return json_response(CALL_B_DATA) if b_ok else FakeResponse([FakeTextBlock("bad")])
     return FakeClient(fn)
 
@@ -537,7 +689,7 @@ def make_run_client(a_ok, b_ok):
     def fn(kw, n):
         is_call_a = kw.get("system") == generate_post.SYSTEM_A
         if is_call_a:
-            return json_response(CALL_A_DATA) if a_ok else FakeResponse([FakeTextBlock("bad")])
+            return json_response(_call_a_response(kw)) if a_ok else FakeResponse([FakeTextBlock("bad")])
         return json_response(CALL_B_DATA) if b_ok else FakeResponse([FakeTextBlock("bad")])
     return FakeClient(fn)
 

@@ -39,7 +39,7 @@ import sys
 import time
 from datetime import date, datetime, timedelta
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 import anthropic
 
@@ -193,11 +193,12 @@ RULES_CAUSAL = """## 因果表現
 NEWS_SELECTION = """## ニュース候補の扱いと選定根拠
 
 news_candidates_today に、collect_news.py が公式発表RSS等から収集した候補が
-title・summary・published_at・source・tier・eligibility 付きで渡される。
-eligibilityはtierに基づき機械的に付与した掲載可否の判定であり、この
-判定に従うこと（tier番号から自分で可否を導く必要はない）。web_searchは
-使わない — 独自に調べたり、候補一覧に無い情報を付け加えたりしない。
-本文はこの候補一覧のみを根拠にする。
+candidate_id・title・summary・published_at・source・tier・eligibility
+付きで渡される（candidate_idはaudit_ledgerで候補を参照する際に使う。
+下記「audit_ledger」参照）。eligibilityはtierに基づき機械的に付与した
+掲載可否の判定であり、この判定に従うこと（tier番号から自分で可否を
+導く必要はない）。web_searchは使わない — 独自に調べたり、候補一覧に
+無い情報を付け加えたりしない。本文はこの候補一覧のみを根拠にする。
 
 ### 重要性判定と因果表現の分離（v1.33・オーナー指示）
 
@@ -364,6 +365,14 @@ audit_ledgerは「採否を判断した全候補の記録」であり、本文�
 主要なポイント）に採用したかどうかとは無関係に、news_candidates_today に
 渡された候補（tier 1・3・4のすべて）を1件残らず記録する。ヘッドライン・
 主要なポイントに使わなかった候補も decision:"不採用" とその理由を記録する。
+
+各要素は candidate_id（news_candidates_today内の該当候補のID）・
+decision・verified_by・reason のみを書く（v1.48・オーナー指示）。
+source・url・title・published_atは書かない——candidate_idからシステム側が
+候補一覧の該当データをそのまま補完するため、あなたが転記する必要は無い
+（転記ミスの防止のため）。1件の候補につきcandidate_idはちょうど1回のみ
+使う（重複・欠落は不可）。
+
 decision:"不採用" の場合、reasonの冒頭に上記A/B/Cのどの段階と判定したかを
 明記する（例:「C: 自動車産業の国内回帰に関する内容で、金利・為替・流動性等
 への波及経路を説明できない」「B: 波及経路は説明できるが、内容が薄く参考
@@ -372,12 +381,11 @@ decision:"不採用" の場合、reasonの冒頭に上記A/B/Cのどの段階と
 decision:"不採用" のreasonは全角60字以内に収める（判定段階＋簡潔な理由の
 みでよく、詳細な論述は不要）。decision:"採用"・"採用（独立2ソース）"の
 reasonにはこの字数制限を適用しない。
+verified_byは採用系decision（"採用"・"採用（独立2ソース）"）の場合のみ
+書く（判断に属する情報のため）。不採用の場合は空文字でよい。
 audit_ledgerを空配列 [] にしてよいのは、news_candidates_today が
 空配列で渡された（候補が1件も無かった）場合のみである。
-候補が1件でも渡されている場合、audit_ledgerを空配列で返してはならない。
-埋めるための架空のsource・url・published_atを作ることは
-禁止のままだが（絶対規則2と同じ理由で捏造にあたる）、渡された候補自体は
-実在するため、その候補について採否と理由を記録することは捏造ではない。"""
+候補が1件でも渡されている場合、audit_ledgerを空配列で返してはならない。"""
 
 WRITES_A = """## あなたが書くもの
 
@@ -395,6 +403,9 @@ WRITES_A = """## あなたが書くもの
   表現を項目文に含める——因果が未確認であることは不採用の理由にせず、
   掲載したうえで明記する。
 - audit_ledger: 候補一覧（tier 1・3・4のすべて）の採否を判断した記録。
+  各要素は candidate_id・decision・verified_by・reason のみを書く
+  （source・url・title・published_atは書かない。詳細は上記
+  「part1_headline・part1_pointsの決定」内のaudit_ledgerの節を参照）。
 - reusable_for_summary: 継続材料で本文に載せなかったものの1行要約（0〜2件）。"""
 
 OUTPUT_FORMAT_A = """## 出力形式
@@ -407,8 +418,8 @@ OUTPUT_FORMAT_A = """## 出力形式
   "part1_points": ["...", "..."],
   "reusable_for_summary": ["..."],
   "audit_ledger": [
-    { "source": "", "url": "", "title": "", "published_at": "",
-      "verified_by": "", "decision": "採用/採用（独立2ソース）/不採用", "reason": "" }
+    { "candidate_id": 1, "decision": "採用/採用（独立2ソース）/不採用",
+      "verified_by": "", "reason": "" }
   ]
 }"""
 
@@ -451,17 +462,24 @@ SYSTEM_B = "\n\n".join([
 
 class CallOutcome:
     def __init__(self, ok: bool, data: dict | None, attempts: int, error: str | None,
-                 usage: dict[str, int] | None = None, truncation_stats: dict[str, int] | None = None):
+                 usage: dict[str, int] | None = None, truncation_stats: dict[str, int] | None = None,
+                 attempt_errors: list[str] | None = None):
         self.ok = ok
         self.data = data
         self.attempts = attempts
         self.error = error
         self.usage = usage or {"input_tokens": 0, "output_tokens": 0}
         self.truncation_stats = truncation_stats or {}
+        # v1.48（オーナー指示）: 最終的に成功した場合でも、それ以前の試行が
+        # 何を理由に失敗したかを保持する（従来はlast_errが最後の1件のみを
+        # 保持し、成功時はCallOutcomeへ一切渡らず失われていた）。リトライが
+        # 常態化する劣化の兆候をGENERATION_STATUS.mdで早期に検知するため。
+        self.attempt_errors = attempt_errors or []
 
     def to_dict(self) -> dict:
         return {"ok": self.ok, "attempts": self.attempts, "error": self.error,
-                "usage": self.usage, "data": self.data, "truncation_stats": self.truncation_stats}
+                "usage": self.usage, "data": self.data, "truncation_stats": self.truncation_stats,
+                "attempt_errors": self.attempt_errors}
 
 
 def _extract_text(response: Any) -> str:
@@ -511,7 +529,7 @@ def _add_usage(a: dict[str, int], b: dict[str, int]) -> dict[str, int]:
 
 def _call_json(
     client: "anthropic.Anthropic", *, system: str, user_content: str, max_tokens: int,
-    required_keys: list[str],
+    required_keys: list[str], post_process: Callable[[dict], dict] | None = None,
 ) -> CallOutcome:
     """system/userプロンプトでJSON応答を取得し、必須キーの充足まで検証する。
     ツールは一切使わない通常のメッセージ呼び出し（v1.15。呼び出しA・B共通）。
@@ -521,8 +539,13 @@ def _call_json(
     最終的に CallOutcome(ok=False) を返す。呼び出し元はこれを個別呼び出しの失敗として
     縮退ラダーへ渡す設計（§5.3）のため、ここでの except は意図的に広く取っている
     （個別の例外型ごとに扱いを変えると、想定外の失敗モードが縮退せずクラッシュしうる）。
+
+    post_process（v1.48）: 必須キー充足後・成功として返す前に呼ぶ任意のフック。
+    呼び出し元固有の後処理（call_aのaudit_ledger再構成など）をここに差し込む。
+    例外を送出した場合もこのtryブロック内で捕捉され、他の失敗と同様に
+    リトライされる——post_process内の検証エラーもJSON不正等と同列に扱う。
     """
-    last_err: str | None = None
+    attempt_errors: list[str] = []
     total_usage = {"input_tokens": 0, "output_tokens": 0}
     for attempt in range(1, MAX_ATTEMPTS + 1):
         try:
@@ -555,12 +578,15 @@ def _call_json(
             missing = [k for k in required_keys if k not in data]
             if missing:
                 raise ValueError(f"必須キー欠落: {missing}")
-            return CallOutcome(True, data, attempt, None, total_usage)
+            if post_process is not None:
+                data = post_process(data)
+            return CallOutcome(True, data, attempt, None, total_usage, attempt_errors=list(attempt_errors))
         except Exception as e:  # noqa: BLE001 — 上記docstring参照
-            last_err = f"{type(e).__name__}: {e}"
+            attempt_errors.append(f"{type(e).__name__}: {e}")
             if attempt < MAX_ATTEMPTS:
                 time.sleep(RETRY_DELAYS_SEC[attempt - 1])
-    return CallOutcome(False, None, MAX_ATTEMPTS, last_err, total_usage)
+    return CallOutcome(False, None, MAX_ATTEMPTS, attempt_errors[-1], total_usage,
+                        attempt_errors=list(attempt_errors))
 
 
 def _select_candidates_for_call_a(candidates: list[dict]) -> tuple[list[dict], dict[str, int]]:
@@ -634,8 +660,64 @@ def _label_eligibility(candidates: list[dict]) -> list[dict]:
     ]
 
 
-def _build_call_a_user_content(daily_data: dict, news_today: dict, news_yesterday: dict | None) -> tuple[str, dict]:
+def _assign_candidate_ids(candidates: list[dict]) -> list[dict]:
+    """news_candidates_todayの各候補へ1始まりの連番candidate_idを振る
+    （v1.48・オーナー指示）。audit_ledgerでLLMがsource/url/title/
+    published_atを転記せず、このIDだけで候補を参照できるようにするため。
+    """
+    return [{**c, "candidate_id": i} for i, c in enumerate(candidates, start=1)]
+
+
+_AUDIT_LEDGER_STATIC_FIELDS = ("source", "url", "title", "published_at")
+
+
+class AuditLedgerReconstructionError(ValueError):
+    """LLMのaudit_ledger出力が候補一覧と整合しない場合に送出する（v1.48）。
+    _call_json()の広いexceptで捕捉され、他の解析失敗と同様にリトライされる。
+    """
+
+
+def _reconstruct_audit_ledger(llm_entries: Any, id_to_candidate: dict[int, dict]) -> list[dict]:
+    """LLMが出力した candidate_id・decision・verified_by・reason のみの
+    audit_ledgerを、候補データのsource/url/title/published_atで補完した
+    完全な形へ復元する（v1.48・オーナー指示）。これらのフィールドをLLMに
+    書かせないことで、URLの書き間違い等の転記ミスの経路自体を無くす。
+
+    候補ID参照が候補一覧と過不足なく一致することを要求する——不明なID・
+    重複・欠落のいずれも例外を送出し、呼び出し元の_call_json()のリトライへ
+    委ねる（架空のIDを容認しない・「候補が1件も渡されていない場合を除き
+    全件記録する」という既存要求を機械的に強制する）。
+    """
+    if not isinstance(llm_entries, list):
+        raise AuditLedgerReconstructionError("audit_ledgerがリストでない")
+    seen_ids: set[int] = set()
+    reconstructed = []
+    for e in llm_entries:
+        if not isinstance(e, dict):
+            raise AuditLedgerReconstructionError(f"audit_ledgerの要素がオブジェクトでない: {e!r}")
+        cid = e.get("candidate_id")
+        if not isinstance(cid, int) or isinstance(cid, bool) or cid not in id_to_candidate:
+            raise AuditLedgerReconstructionError(f"audit_ledgerに存在しない候補ID: {cid!r}")
+        if cid in seen_ids:
+            raise AuditLedgerReconstructionError(f"audit_ledgerで候補IDが重複: {cid}")
+        seen_ids.add(cid)
+        candidate = id_to_candidate[cid]
+        entry = {field: candidate.get(field, "") for field in _AUDIT_LEDGER_STATIC_FIELDS}
+        entry["verified_by"] = e.get("verified_by", "")
+        entry["decision"] = e.get("decision", "")
+        entry["reason"] = e.get("reason", "")
+        reconstructed.append(entry)
+    missing = set(id_to_candidate) - seen_ids
+    if missing:
+        raise AuditLedgerReconstructionError(f"audit_ledgerに記録されていない候補ID: {sorted(missing)}")
+    return reconstructed
+
+
+def _build_call_a_user_content(daily_data: dict, news_today: dict, news_yesterday: dict | None
+                                ) -> tuple[str, dict, dict[int, dict]]:
     selected_today, stats = _select_candidates_for_call_a(news_today.get("candidates", []))
+    selected_today = _assign_candidate_ids(selected_today)
+    id_to_candidate = {c["candidate_id"]: c for c in selected_today}
     selected_yesterday, _ = _select_candidates_for_call_a((news_yesterday or {}).get("candidates", []))
     payload = {
         "target_date_jst": daily_data.get("target_date_jst", ""),
@@ -644,7 +726,7 @@ def _build_call_a_user_content(daily_data: dict, news_today: dict, news_yesterda
         "news_candidates_today": _label_eligibility(selected_today),
         "news_candidates_yesterday": _label_eligibility(selected_yesterday),
     }
-    return json.dumps(payload, ensure_ascii=False, indent=2), stats
+    return json.dumps(payload, ensure_ascii=False, indent=2), stats, id_to_candidate
 
 
 def _build_call_b_user_content(daily_data: dict, call_a_data: dict | None) -> str:
@@ -667,10 +749,17 @@ def _build_call_b_user_content(daily_data: dict, call_a_data: dict | None) -> st
 
 def call_a(client: "anthropic.Anthropic", daily_data: dict, news_today: dict,
            news_yesterday: dict | None) -> CallOutcome:
-    user_content, truncation_stats = _build_call_a_user_content(daily_data, news_today, news_yesterday)
+    user_content, truncation_stats, id_to_candidate = _build_call_a_user_content(
+        daily_data, news_today, news_yesterday)
+
+    def _rebuild_audit_ledger(data: dict) -> dict:
+        data["audit_ledger"] = _reconstruct_audit_ledger(data.get("audit_ledger"), id_to_candidate)
+        return data
+
     outcome = _call_json(
         client, system=SYSTEM_A, user_content=user_content,
         max_tokens=CALL_A_MAX_TOKENS, required_keys=REQUIRED_KEYS_A,
+        post_process=_rebuild_audit_ledger,
     )
     outcome.truncation_stats = truncation_stats
     return outcome
