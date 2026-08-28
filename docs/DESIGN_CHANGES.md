@@ -7,6 +7,147 @@
 
 ---
 
+## v1.48 — 2026-08-28（オーナー指示・audit_ledgerのcandidate_idベース再構成。LLM出力からsource/url/title/published_atを排除しコード側で機械的に補完。call_A試行履歴のGENERATION_STATUS.md記録）
+
+### 経緯
+
+v1.47の実測（36.7%減）を報告したところ、オーナーは「2試行目での成功は
+1試行目が依然失敗していることを意味する」と指摘し、`CALL_A_MAX_TOKENS`の
+引き上げ（8,000→12,000）を明確に却下した。理由は「4度目の対症療法
+（8/18・8/20・8/27・今回）であり、候補数が増えればまた破綻する」。
+そのうえで構造変更を明示指示した。
+
+### 対応1（`scripts/generate_post.py`）: audit_ledgerのcandidate_idベース再構成
+
+変更前：LLMがaudit_ledger全件（8/27は30件）を
+`source`/`url`/`title`/`published_at`/`verified_by`/`decision`/`reason`の
+全フィールドで出力していた。不採用エントリ（8/27は22件）についても
+URLやタイトルをLLMが書き起こす必要があり、出力トークンの主要因かつ
+転記ミス（URLの書き間違い等）の発生源になっていた。
+
+変更後：
+- `_assign_candidate_ids()`：`news_candidates_today`の各候補へ1始まりの
+  連番`candidate_id`を付与（`_build_call_a_user_content()`内、候補選定後）。
+- LLMがaudit_ledgerとして出力するのは`candidate_id`・`decision`・
+  `verified_by`・`reason`のみ（`OUTPUT_FORMAT_A`のaudit_ledger例を変更）。
+- `_reconstruct_audit_ledger()`：LLM出力の`candidate_id`を`id_to_candidate`
+  （`_build_call_a_user_content()`が返す）で引き、`source`/`url`/`title`/
+  `published_at`を候補データから機械的に補完してエントリを再構成する。
+  未知のID・重複ID・非list・非dict要素・非int/bool型ID・候補IDの
+  カバレッジ不足（全候補が過不足なく記録されていない）はいずれも
+  `AuditLedgerReconstructionError`（`ValueError`のサブクラス）を送出する。
+- `verified_by`は採用系decision（"採用"／"採用（独立2ソース）"）のみ
+  LLMが書く（「判断に属する情報」であるため）。不採用エントリの
+  `verified_by`はLLMに書かせず空文字とする——`_reconstruct_audit_ledger()`
+  はLLMが返した値をそのまま`entry["verified_by"]`へ入れるため、この区別は
+  プロンプト指示（`WRITES_A`）でLLMに徹底させる設計とした。
+- `_call_json()`へ`post_process`フック（`Callable[[dict], dict] | None`）を
+  追加。必須キー充足チェック後・成功として返す前に呼ばれ、
+  `call_a()`は`_rebuild_audit_ledger()`をこのフックとして渡す。
+  `post_process`内で送出された例外は既存の広い`except Exception`で
+  捕捉され、JSON解析失敗等と同列にリトライされる——再構成専用の
+  リトライ経路を新設せず、既存のリトライ基盤にそのまま乗せた。
+- `WRITES_A`のaudit_ledgerの説明、`NEWS_SELECTION`の冒頭、
+  `NO_CANDIDATES_FALLBACK`のaudit_ledger節を、candidate_id方式の説明に
+  更新（「source/urlを捏造しないこと」という旧注意書きは、LLMがそもそも
+  これらを出力しなくなったため削除）。
+
+### 対応2（`scripts/generate_post.py`）: call_A試行履歴の記録
+
+`CallOutcome`へ`attempt_errors: list[str]`を追加。`_call_json()`は
+試行のたびに`f"{type(e).__name__}: {e}"`を`attempt_errors`へ積み増す
+（変更前は最終試行のエラーのみ`last_err`として保持し、しかも全試行が
+失敗した場合に限られていた——成功時は履歴が完全に破棄されていた）。
+成功・失敗いずれの`CallOutcome`にも`attempt_errors`のコピーを持たせ、
+`to_dict()`にも含めた。
+
+### 対応3（`scripts/compose_post.py`）: 試行履歴のGENERATION_STATUS.md反映
+
+`_render_attempt_errors(label, call_result)`を新設。`attempt_errors`が
+空でなければ「call_A試行履歴（リトライ発生・劣化の兆候として記録）」の
+見出しの下に各試行のエラーを列挙し、成功していれば最終試行を
+「◯試行目: 成功」と記す。`render_generation_status()`から
+call_A・call_Bそれぞれの状態行の後に呼ぶよう配線した。リトライが
+一度も発生しなければ何も出力しない。
+
+### テスト
+
+`test/test_bundle2.py`へ追加、全302件PASS（v1.47時点277件から+25件）。
+主な追加：
+- `_assign_candidate_ids`／`_reconstruct_audit_ledger`の成功ケースと
+  5種の異常系（非list・非dict要素・未知ID・重複ID・カバレッジ不足）を
+  個別に検証する`_raises_reconstruction_error`ヘルパー。
+- 実`call_a()`を通す既存テストのモック応答を、実際のリクエストJSON
+  （`kw["messages"][0]["content"]`）を解析して候補IDに整合する
+  audit_ledgerを動的生成する`_mock_audit_ledger_from_request`／
+  `_call_a_response`ヘルパーへ置き換え（固定フィクスチャでは
+  candidate_idごとに異なる候補セットに追随できないため）。
+- `bad_candidate_id_then_ok`：1試行目に存在しないcandidate_idを含む
+  応答を返し、実`call_a()`経由でリトライ→2試行目成功に至ることを
+  確認するFakeClientシナリオ。
+- 既存の「callA JSON不正→リトライ成功」テストへ`attempt_errors`の
+  内容確認を追加。
+- `render_generation_status()`の試行履歴描画（リトライなし／
+  call_A側リトライ成功／call_B側全滅）を検証する専用テスト。
+- プロンプト文言（candidate_id方式の説明・verified_by区別）の
+  存在確認。
+
+### 実データ検証（8/27相当データ・実RSS再取得＋実Anthropic API使用）
+
+診断スクリプト（`scripts/_diag_v148_verify.py`・検証後削除、
+`.github/workflows/_diag_v148_verify.yml`経由でGH Actions上で実行、
+run 33144144050 / job 98761382890、コミット43b7915）で、
+v1.47検証と同じ手法（`collect_news.collect_news("2026-08-27")`を
+実行時点で再取得し、実際の`generate_post.call_a()`を実API呼び出しで
+実行）により検証した。
+
+**再取得結果**：tier1=11件（8/27実測と完全一致）。tier3=41件
+（8/27実測44件・v1.47検証時44件に対し、今回は41件——RSSフィードの
+保持期間経過による自然なドリフトと判断する。候補データそのものが
+再取得のたびに微妙に変動しうる点は既知の制約であり、今回の3件減は
+コード側の不具合ではなく情報源側の変化と考えられる。ただし完全一致では
+なかった点は正直に記録する）。
+
+**トークン使用量**（8/27実際の失敗時58,905／24,000 → v1.47検証時
+37,300／14,658 → 今回）：
+- 入力: **19,275**（8/27失敗時比 **-67.3%**／v1.47検証比 -48.3%）。
+- 出力: **3,308**（8/27失敗時比 **-86.2%**／v1.47検証比 -77.4%）。
+  candidate_id方式により不採用エントリからsource/url/title/
+  published_atが消えたことが出力削減の主因と考えられる。
+
+**call_Aの成否**：**成功（attempts=1）**——v1.47検証で残っていた
+「1回試行での成功ではなかった」というギャップが解消された。
+`attempt_errors=[]`（1試行目から成功したためリトライ履歴なし）。
+
+**owner指定の4項目の検証結果**：
+1. 出力トークン削減量：14,658→3,308（-77.4%）。
+2. call_Aの1回試行成功：**達成**（attempts=1）。
+3. C19・C21・C23（および全チェック）のPASS：**全PASS**
+   （`failed=0`、C12〜C23すべて確認）。
+4. 不採用エントリのurl・titleが候補データと完全一致：**確認**
+   （audit_ledger 30件全件について、コード側再構成のurl/titleを
+   候補データと突合し、不一致0件。構造上LLMがこれらを一切出力しないため
+   転記ミスの発生経路自体が存在しない）。
+
+**副次的確認（verified_by区別の遵守）**：不採用26件のうち、
+`verified_by`が空文字でなかった件数は**0件**——「判断に属する情報のみ
+LLMに書かせる」という区別がプロンプト指示どおり機能した
+（採用側4件は`verified_by`が正しく記入されていることも確認）。
+
+### 総括
+
+8/18・8/20・8/27と3度にわたり再発した「audit_ledgerを1回のLLM出力で
+全件生成する設計」起因のトークン予算破綻に対し、対症療法（上限引き上げ・
+候補数調整）ではなく、不採用エントリの定型フィールドをコード側で
+機械的に補完する構造変更で対応した。結果は8/27失敗時比で入力67.3%減・
+出力86.2%減、かつ1回試行成功・全監査PASS・転記ミス0件と、
+オーナーが提示した4つの検証観点すべてで良好な結果となった。
+tier3件数がv1.47検証時と完全一致しなかった点（41件 vs 44件）は
+RSSフィード側の自然なドリフトと考えられるが、断定はできないため
+今後も注視する。
+
+---
+
 ## v1.47 — 2026-08-28（オーナー指示・8/27のcall_A出力トークン上限切断への対応。tier1本文上限1500字＋切り詰めマーカー、不採用reason全角60字上限）
 
 ### 経緯
