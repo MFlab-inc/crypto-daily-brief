@@ -2,7 +2,16 @@ name: daily-crypto-brief
 
 on:
   schedule:
-    - cron: "30 22 * * *"   # 22:30 UTC = 07:30 JST（変更はこの1行）
+    # v1.46（オーナー指示）: 8/26・8/27と2日連続でscheduledイベント自体が
+    # 記録に残らない事象が発生（daily.ymlの設定・concurrency・デフォルト
+    # ブランチはすべて正常と確認済み。DESIGN_CHANGES.md v1.46参照）。
+    # GitHubは「schedule イベントは優先度が低く、高負荷時に遅延・破棄
+    # されうる」と公式に説明しており、many-repos-at-:30のような区切りの
+    # 良い分は競合しやすいという既知の緩和策（EA-Risk-Monitorでの先例）
+    # として、実行分を30→37へ変更する。対象日の窓（NY 17:00＝冬時間
+    # 07:00 JST）との間隔は30分→37分へ広がる方向のみで縮まらない
+    # （夏時間はさらに余裕がある）ため安全側の変更。
+    - cron: "37 22 * * *"   # 22:37 UTC = 07:37 JST（変更はこの1行）
   workflow_dispatch: {}
 
 permissions:
