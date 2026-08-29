@@ -7,6 +7,74 @@
 
 ---
 
+## v1.51 — 2026-08-29（オーナー指示・Google News RSSのsite:演算子修正、tier4候補数上限を追加）
+
+### 経緯
+
+「マクロ経済・地政学・要人発言の取りこぼしが続いている」というオーナー指摘への
+調査項目【2】。Google News RSS（`GOOGLE_NEWS_URL`）が8/26以降「対象日0件／
+取得0件」を継続していた。調査（実GH Actions診断）の結果、`allinurl:`演算子が
+Google News RSS側で機能しなくなっており（`when:24h`の有無を問わず0件）、
+`site:`演算子＋ロケールパラメータ（hl/gl/ceid）への置き換えで実データ50件
+（すべて実際のReuters記事）が確認できたため、オーナーが実装を承認した。
+
+あわせてオーナーは「Google News経由の候補が既存のCoinDesk・Cointelegraphを
+押し出さないよう、必要なら情報源ごとの上限を設けてください（例：Google News
+経由は上位10件まで）」と指示した。
+
+### 対応（`scripts/collect_news.py`）
+
+`GOOGLE_NEWS_URL`を`q=when:24h+allinurl:reuters.com`から
+`q=when:24h+site:reuters.com&hl=en-US&gl=US&ceid=US:en`へ変更。
+
+### 対応（`scripts/generate_post.py`）
+
+`_select_candidates_for_call_a()`で、tier4（Google News等・候補発見専用。
+`tier not in (1, 3)`）に対しても、tier3と同じ「公開日時の新しい順で上位N件」
+方式の上限を追加した。新規定数`TIER4_CANDIDATE_LIMIT = 10`（オーナー指定の
+目安）。tier4は単独では事実の根拠にしない候補発見専用の位置づけのため、
+tier3のようなペア救済ロジックは適用しない。`stats`辞書へ`tier4_total`・
+`tier4_selected`・`tier4_dropped`を追加。
+
+`scripts/compose_post.py`の`render_generation_status()`へ、tier3の除外可視化
+（`tier3候補 N件中 M件を選定...`）と同じ形式でtier4版の行を追加
+（`tier4_dropped > 0`の場合のみ表示）。
+
+### テスト
+
+`test/test_bundle2.py`へ10件追加（tier4上限の選定確認・GENERATION_STATUS.md
+表示確認・GOOGLE_NEWS_URLのsite:演算子確認）。既存のtier3系exact-dict比較
+テスト4か所（`_stats`・`_stats_few`・`_cap_stats`・`run()`のtruncation_stats）
+は`stats`辞書へのtier4キー追加に伴いdict形状が変わるため、期待値へtier4の
+3キー（すべて0）を追加して更新した。全316件PASS（v1.50時点306件から+10件）。
+
+### 実データ検証（2026-08-28・実RSS取得＋実Anthropic API使用）
+
+診断スクリプト（`scripts/_diag_v151_verify.py`・検証後削除）で、
+`collect_news.collect_news("2026-08-28")`を実行時点で実行し、実際の
+`generate_post.call_a()`〜`verify_post.run_all()`まで一連の流れを検証した。
+
+**Google News RSSの復旧を確認**：50件取得・対象日36件
+（`site:reuters.com`。修正前は0件が継続していた）。tier=4として36件。
+
+**tier4上限の実データ動作を確認**：`stats={"tier4_total": 36,
+"tier4_selected": 10, "tier4_dropped": 26, ...}`——実データで上限を
+超過するケースが実際に発生し、`TIER4_CANDIDATE_LIMIT=10`に正しく
+絞られていることを確認した（想定どおり最も新しい10件が選定された）。
+
+**GENERATION_STATUS.md表示を確認**：
+`tier4候補 36件中 10件を選定（26件を件数上限により除外）`——
+tier3の表示（`tier3候補 36件中 20件を選定（16件を件数上限により除外）`・
+`独立2媒体ペア救済: 4組（5件を上限外で追加）`）と並んで正しく記録された。
+
+**call_A〜監査の一連の流れに影響が無いことを確認**：call_A ok=True
+attempts=1（input=23,072 output=4,073）・call_B ok=True attempts=1。
+C12〜C23**全PASS**（failed=0）。C19は「38件・全フィールド充足・渡した
+候補数と一致」——tier1(8)+tier3選定(20)+tier4選定(10)=38で内訳と完全に
+一致することを確認した。
+
+---
+
 ## v1.50 — 2026-08-29（オーナー指示・「日中レンジ」表記を「24時間レンジ」へ変更。FRB speechesフィード調査）
 
 ### 経緯（表記修正）
