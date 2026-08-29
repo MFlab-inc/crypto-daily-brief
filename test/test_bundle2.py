@@ -582,6 +582,14 @@ check("NO_CANDIDATES_FALLBACKにpairs_with_candidate_idの妥当性確認条件�
       "（v1.53フォローアップ・オーナー指示）",
       "相互に指し合う必要はなく" in generate_post.NO_CANDIDATES_FALLBACK
       and "妥当性が確認できない" in generate_post.NO_CANDIDATES_FALLBACK)
+check("NO_CANDIDATES_FALLBACKに「tier1裏取りで言及したtier3はuse:falseのまま」の"
+      "区別が明記されている（v1.53フォローアップ・実データ検証で判明した"
+      "「言及＝use:trueと誤解する」事故への対応）",
+      "本文で言及・参照した」\n  ことと「useをtrueにする」ことは別であり" in generate_post.NO_CANDIDATES_FALLBACK)
+check("NEWS_SELECTIONのtier3節に「本文中で言及した」ことだけでuse:trueにしない旨が明記されている"
+      "（v1.53フォローアップ）",
+      "「本文中でこの記事の内容に言及・参照した」" in generate_post.NEWS_SELECTION
+      and "だけを\n        理由にuse:trueにしないこと" in generate_post.NEWS_SELECTION)
 
 print("=== generate_post.py: decisionのtier・use・pairs_with_candidate_idからの導出"
       "（v1.53フォローアップ・オーナー指示・C21の構造的解消） ===")

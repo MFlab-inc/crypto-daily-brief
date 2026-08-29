@@ -293,6 +293,14 @@ tier 3: CoinDesk・Cointelegraph等の暗号通貨特化メディアRSS。統合
         暗号通貨特有の細部を補う用途に限る。tier 3の候補のみを根拠に
         【ヘッドライン】の新規項目を立てない。【主要なポイント】については
         下記「独立2ソース規定」の例外を除き、同様に単独では根拠にしない。
+        【重要・v1.53フォローアップ】tier1の事実をtier3が裏取り・補強する
+        上記の用途は、audit_ledgerでは該当tier3候補をuse:falseのまま
+        記録する（媒体名を（媒体名、日付）へ追加で列挙する形で本文へ反映
+        してよいが、tier3側の use を true にはしない）。tier3のuse:trueは
+        「独立2ソース規定」に該当し pairs_with_candidate_id で相手を
+        申告できる場合に限る。「本文中でこの記事の内容に言及・参照した」
+        ことと「audit_ledgerでuse:trueにする」ことは別であり、前者だけを
+        理由にuse:trueにしないこと（下記「audit_ledger」参照）。
 tier 4: Google News経由の候補発見のみの結果（見出し・URLのみで、内容の
         裏取りをしていない）。単独では事実の根拠にしない。継続監視の
         対象として reusable_for_summary に記すにとどめ、【ヘッドライン】
@@ -436,10 +444,18 @@ pairs_with_candidate_id・verified_by・reason のみを書く（v1.48・v1.53
 "採用"／"採用（独立2ソース）"／"不採用"という記録文言自体もあなたは
 書かない（下記参照）。
 
-- use（true/false）: この候補を本文（ヘッドライン・主要なポイント）の
-  根拠として使ったかどうか。tier4の候補は候補発見専用の位置づけのため、
-  useの値に関わらずaudit_ledger上は常に不採用として扱われる
-  （継続監視の言及はaudit_ledgerではなくreusable_for_summaryに記す）。
+- use（true/false）: この候補を、本文（ヘッドライン・主要なポイント）で
+  ある事実の**単独で独立した根拠**として使ったかどうか。
+  tier1はその事実の直接の根拠として使えばtrue。tier3がtrueになるのは
+  「独立2ソース規定」に該当し、下記pairs_with_candidate_idで相手を
+  申告できる場合に限る。tier1の事実をtier3が裏取り・補強するために
+  本文中で言及した場合（媒体名を（媒体名、日付）へ追加で列挙する等）は、
+  そのtier3候補のuse自体はfalseのままにする——「本文で言及・参照した」
+  ことと「useをtrueにする」ことは別であり、混同しないこと（v1.53
+  フォローアップ・オーナー指示。上記NEWS_SELECTIONのtier3の節も参照）。
+  tier4の候補は候補発見専用の位置づけのため、useの値に関わらず
+  audit_ledger上は常に不採用として扱われる（継続監視の言及は
+  audit_ledgerではなくreusable_for_summaryに記す）。
 - pairs_with_candidate_id: tier3でuse:trueの候補のうち、上記
   「独立2ソース規定」に該当すると判断したものにのみ、同一事実を
   報じている相手（別sourceのtier3候補）のcandidate_idを記す
