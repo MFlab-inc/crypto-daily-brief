@@ -59,12 +59,14 @@ def _asset(daily_data: dict, symbol: str) -> dict:
 
 
 def _intraday_range_line(daily_data: dict, symbol: str) -> str | None:
-    """（日中レンジ low〜high）行（v1.41・オーナー承認）。representative
-    （BTC・ETH）の銘柄のみ出力し、BNBは出力しない。intraday_rangeが
-    未確認（高値・安値のいずれか取得不能）の日は「未確認」と書かず、
-    行自体を省略する。inconsistent:true（終値がレンジ外・v1.44）の日も
-    同様に行自体を省略する——矛盾した表示を出さないことを優先し
-    （オーナー指示）、「未確認」とも書かない。
+    """（24時間レンジ low〜high）行（v1.41・オーナー承認。表記は
+    v1.49・オーナー指示で「日中レンジ」から変更——データはNY 17:00区切りの
+    24時間窓で集計しており、暦日の「日中」という表現は定義と一致しない
+    ため）。representative（BTC・ETH）の銘柄のみ出力し、BNBは出力しない。
+    intraday_rangeが未確認（高値・安値のいずれか取得不能）の日は
+    「未確認」と書かず、行自体を省略する。inconsistent:true（終値が
+    レンジ外・v1.44）の日も同様に行自体を省略する——矛盾した表示を
+    出さないことを優先し（オーナー指示）、「未確認」とも書かない。
     """
     d = daily_data.get("intraday_range", {}).get(symbol, {})
     if not d.get("representative") or d.get("inconsistent"):
@@ -72,7 +74,7 @@ def _intraday_range_line(daily_data: dict, symbol: str) -> str | None:
     high, low = d.get("high"), d.get("low")
     if not high or not low or high == UNCONFIRMED or low == UNCONFIRMED:
         return None
-    return f"　（日中レンジ {low}〜{high}）"
+    return f"　（24時間レンジ {low}〜{high}）"
 
 
 def compose_part0_target_date(daily_data: dict[str, Any]) -> str:

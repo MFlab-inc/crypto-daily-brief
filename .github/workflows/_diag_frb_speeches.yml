@@ -1,0 +1,30 @@
+name: _diag-frb-speeches
+
+# FRB speechesフィード調査専用の一時ワークフロー。恒久機能ではない。
+# 実際のfederalreserve.govへ到達性・件数確認のリクエストを送るが、
+# コミットは一切行わない。調査完了後、スクリプトとあわせて削除する。
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 依存関係
+        run: |
+          pip install -q -r requirements.txt
+
+      - name: 診断スクリプト実行（federalreserve.govへの実リクエスト・コミットしない）
+        run: |
+          python scripts/_diag_frb_speeches.py

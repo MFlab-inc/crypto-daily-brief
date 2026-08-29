@@ -1857,7 +1857,7 @@ check("compute_inconsistent: close_priceがNone/0なら判定不能（None）",
       fetch_data.compute_inconsistent(81265.0, 78100.0, None) is None
       and fetch_data.compute_inconsistent(81265.0, 78100.0, 0) is None)
 
-print("=== compose_numeric.py: 前編【主要指標】への日中レンジ行の追加（v1.41フォローアップ・オーナー承認） ===")
+print("=== compose_numeric.py: 前編【主要指標】への24時間レンジ行の追加（v1.41フォローアップ・オーナー承認） ===")
 _dd_with_range = json.loads(json.dumps(DAILY_DATA))
 _dd_with_range["intraday_range"] = {
     "BTC": {"high": "$81,265", "low": "$78,100", "source": "coinbase",
@@ -1868,11 +1868,11 @@ _dd_with_range["intraday_range"] = {
             "retrieved_at": "2026-08-26T10:20:26+09:00", "representative": False},
 }
 _p1_range = compose_numeric.compose_part1_numeric(_dd_with_range)
-check("compose_part1_numeric: BTCの日中レンジ行が出る",
-      "　（日中レンジ $78,100〜$81,265）" in _p1_range, _p1_range)
-check("compose_part1_numeric: ETHの日中レンジ行が出る",
-      "　（日中レンジ $2,433〜$2,533）" in _p1_range, _p1_range)
-check("compose_part1_numeric: BNBの日中レンジ行は出ない（representative=falseのため）",
+check("compose_part1_numeric: BTCの24時間レンジ行が出る",
+      "　（24時間レンジ $78,100〜$81,265）" in _p1_range, _p1_range)
+check("compose_part1_numeric: ETHの24時間レンジ行が出る",
+      "　（24時間レンジ $2,433〜$2,533）" in _p1_range, _p1_range)
+check("compose_part1_numeric: BNBの24時間レンジ行は出ない（representative=falseのため）",
       "$691〜$719" not in _p1_range and "$719〜$691" not in _p1_range, _p1_range)
 check("_intraday_range_line: representative=falseの銘柄は常にNone",
       compose_numeric._intraday_range_line(_dd_with_range, "BNB") is None)
@@ -1889,12 +1889,12 @@ _dd_unconfirmed_range["intraday_range"] = {
 }
 _p1_unconf = compose_numeric.compose_part1_numeric(_dd_unconfirmed_range)
 check("compose_part1_numeric: intraday_rangeが未確認の日は行自体を省略する（「未確認」とは書かない）",
-      "日中レンジ" not in _p1_unconf, _p1_unconf)
+      "24時間レンジ" not in _p1_unconf, _p1_unconf)
 
-check("compose_part1_numeric: intraday_range自体が無い日（従来のdaily_data.json）でも日中レンジ行は出ない・既存行に影響しない",
-      compose_numeric.compose_part1_numeric(DAILY_DATA).count("日中レンジ") == 0)
+check("compose_part1_numeric: intraday_range自体が無い日（従来のdaily_data.json）でも24時間レンジ行は出ない・既存行に影響しない",
+      compose_numeric.compose_part1_numeric(DAILY_DATA).count("24時間レンジ") == 0)
 
-print("=== compose_numeric.py: inconsistent:trueの銘柄は日中レンジ行を省略（v1.44・オーナー指示） ===")
+print("=== compose_numeric.py: inconsistent:trueの銘柄は24時間レンジ行を省略（v1.44・オーナー指示） ===")
 _dd_inconsistent = json.loads(json.dumps(DAILY_DATA))
 _dd_inconsistent["intraday_range"] = {
     "BTC": {"high": "$81,265", "low": "$78,100", "source": "coinbase",
@@ -1903,24 +1903,24 @@ _dd_inconsistent["intraday_range"] = {
             "retrieved_at": "2026-08-26T10:20:25+09:00", "representative": True, "inconsistent": True},
 }
 _p1_inconsistent = compose_numeric.compose_part1_numeric(_dd_inconsistent)
-check("compose_part1_numeric: inconsistent:trueの銘柄（ETH）は日中レンジ行を省略する（「未確認」とも書かない）",
-      "日中レンジ" not in _p1_inconsistent.split("#ETH")[1].split("#BNB")[0], _p1_inconsistent)
-check("compose_part1_numeric: inconsistent:falseの銘柄（BTC）は従来どおり日中レンジ行が出る",
-      "　（日中レンジ $78,100〜$81,265）" in _p1_inconsistent, _p1_inconsistent)
+check("compose_part1_numeric: inconsistent:trueの銘柄（ETH）は24時間レンジ行を省略する（「未確認」とも書かない）",
+      "24時間レンジ" not in _p1_inconsistent.split("#ETH")[1].split("#BNB")[0], _p1_inconsistent)
+check("compose_part1_numeric: inconsistent:falseの銘柄（BTC）は従来どおり24時間レンジ行が出る",
+      "　（24時間レンジ $78,100〜$81,265）" in _p1_inconsistent, _p1_inconsistent)
 check("_intraday_range_line: inconsistent:trueならNone（representative:trueでも）",
       compose_numeric._intraday_range_line(_dd_inconsistent, "ETH") is None)
 
-print("=== compose_post.py: 日中レンジ不整合をGENERATION_STATUS.mdへ記録（v1.44・オーナー指示） ===")
+print("=== compose_post.py: 24時間レンジ不整合をGENERATION_STATUS.mdへ記録（v1.44・オーナー指示） ===")
 _gen_for_status = json.loads(json.dumps(_gen_not_truncated))
 _gen_status_inconsistent = compose_post.render_generation_status(_gen_for_status, _dd_inconsistent)
 check("render_generation_status: inconsistentな銘柄（ETH）を検出した旨が記録される",
-      "日中レンジ不整合検出: ETH" in _gen_status_inconsistent, _gen_status_inconsistent)
+      "24時間レンジ不整合検出: ETH" in _gen_status_inconsistent, _gen_status_inconsistent)
 _gen_status_no_daily_data = compose_post.render_generation_status(_gen_for_status)
 check("render_generation_status: daily_data省略時（後方互換）は不整合検出行を出さない",
-      "日中レンジ不整合検出" not in _gen_status_no_daily_data)
+      "24時間レンジ不整合検出" not in _gen_status_no_daily_data)
 _gen_status_consistent = compose_post.render_generation_status(_gen_for_status, DAILY_DATA)
 check("render_generation_status: 不整合な銘柄が無い日は不整合検出行を出さない",
-      "日中レンジ不整合検出" not in _gen_status_consistent)
+      "24時間レンジ不整合検出" not in _gen_status_consistent)
 
 print("=== compose_post.py: reusable_for_summaryのbundleへの伝播（v1.44・C23が参照するため追加） ===")
 _b_reusable = compose_post.compose(DAILY_DATA, gen_l0)
@@ -1933,7 +1933,7 @@ check("compose(): 呼び出しA失敗時のreusable_for_summaryは空配列（No
 
 print("=== generate_post.py: notable_moveのプロンプト指示（v1.41フォローアップ・オーナー承認） ===")
 check("SYSTEM_AにINTRADAY_MOVE_GUIDANCE（オーナー指定の文言）が含まれる",
-      "その日中の値動きは記述に値する材料である" in generate_post.SYSTEM_A
+      "その24時間の値動きは記述に値する材料である" in generate_post.SYSTEM_A
       and "あなたは数値を書かないこと" in generate_post.SYSTEM_A
       and "値動きの" in generate_post.SYSTEM_A and "形状のみを記述する" in generate_post.SYSTEM_A)
 

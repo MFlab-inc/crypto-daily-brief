@@ -450,7 +450,7 @@ def check_c22(au: Audit, part1_headline, audit_ledger, tier_map: dict[str, int],
         isinstance(e, dict) and e.get("decision") == "採用（独立2ソース）"
         for e in audit_ledger
     )
-    # v1.42（オーナー指示）: notable_move（日中の値動き）はニュースの
+    # v1.42（オーナー指示）: notable_move（24時間の値動き）はニュースの
     # 情報源階層（tier1/tier3等）の対象外の市場データ。
     has_notable_move = isinstance(intraday_range, dict) and any(
         isinstance(v, dict) and v.get("notable_move") is True for v in intraday_range.values()
@@ -486,7 +486,7 @@ def check_c22(au: Audit, part1_headline, audit_ledger, tier_map: dict[str, int],
         return
     if has_notable_move:
         au.add("C22_headline_tier1_basis", None,
-               "tier1由来の採用・独立2ソース採用は無いがnotable_move（日中の値動き）が存在するためSKIP"
+               "tier1由来の採用・独立2ソース採用は無いがnotable_move（24時間の値動き）が存在するためSKIP"
                "（値動きは情報源階層の対象外）")
         return
     au.add("C22_headline_tier1_basis", False,

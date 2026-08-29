@@ -264,13 +264,14 @@ def render_generation_status(gen: dict[str, Any], daily_data: dict | None = None
     if daily_data is not None:
         inconsistent = _inconsistent_symbols(daily_data)
         if inconsistent:
-            # v1.44（オーナー指示）: 終値（CMC）が日中レンジ（Coinbase/Bitstamp）の
+            # v1.44（オーナー指示）: 終値（CMC）が24時間レンジ（Coinbase/Bitstamp）の
             # 範囲外だった銘柄を記録する（本文への反映はcompose_numeric.py側で
             # 抑制済み。原因の切り分けは数日の実データを見てから判断するため
-            # ここでは検出事実のみを記す）。
+            # ここでは検出事実のみを記す。表記は v1.49・オーナー指示で
+            # 「日中レンジ」から変更）。
             lines.append(
-                f"日中レンジ不整合検出: {'・'.join(inconsistent)}"
-                "（終値が取得したレンジの範囲外のため、本文の日中レンジ行を省略）"
+                f"24時間レンジ不整合検出: {'・'.join(inconsistent)}"
+                "（終値が取得したレンジの範囲外のため、本文の24時間レンジ行を省略）"
             )
     lines += [
         "",
