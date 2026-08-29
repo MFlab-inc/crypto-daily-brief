@@ -7,6 +7,72 @@
 
 ---
 
+## v1.52 — 2026-08-29（オーナー指示・FRB speeches.xml・testimony.xmlをtier1として追加）
+
+### 経緯
+
+「マクロ経済・地政学・要人発言の取りこぼしが続いている」というオーナー指摘への
+調査項目【3】（既に別途調査依頼済みの案件）。既存のFRBフィード
+（`press_all.xml`）は講演・議会証言を含まず、8/28のウォーシュFRB議長
+ジャクソンホール講演を取りこぼした。調査（実GH Actions診断）の結果、
+`https://www.federalreserve.gov/feeds/speeches.xml`が到達可能で、
+その先頭エントリがまさに該当講演（"Warsh, In Our Time"・Fri 28 Aug 2026
+14:00 GMT＝8/28 23:00 JST）だったことを確認し、オーナーが
+`speeches.xml`・`testimony.xml`（議会証言・別内容）両方の追加を承認した。
+`press_monetary/bcreg/enforcement/orders/other.xml`はpress_all.xmlの
+下位カテゴリで重複候補を生む懸念があるため追加しない（オーナー判断）。
+
+### 対応（`config/news_sources.json`）
+
+tier1へ2件追加：
+- `FRB（speeches）`: `https://www.federalreserve.gov/feeds/speeches.xml`
+- `FRB（testimony）`: `https://www.federalreserve.gov/feeds/testimony.xml`
+
+既存の「ホワイトハウス」／「ホワイトハウス（大統領令等）」の命名規則
+（同一組織の複数フィードを括弧書きで区別）を踏襲した。
+
+### テスト
+
+`test/test_bundle2.py`へ3件追加（新規2件がtier=1で登録されている
+確認・URL一致確認・`verify_post._load_source_tier_map()`がtier=1として
+認識する確認）。既存の米財務省/USTR/ホワイトハウス確認テスト（v1.31）は
+`.issubset()`による部分集合チェックのため、新規追加による影響はなし。
+全319件PASS（v1.51時点316件から+3件）。
+
+### 実データ検証（2026-08-28・実RSS取得＋実Anthropic API使用）
+
+診断スクリプト（`scripts/_diag_v152_verify.py`・検証後削除）で、
+`collect_news.collect_news("2026-08-28")`——取りこぼしが実際に発生した
+対象日そのもの——を実行時点で実行し、実際の`generate_post.call_a()`〜
+`verify_post.run_all()`まで一連の流れを検証した。
+
+**ウォーシュ講演の直接捕捉を確認**：`FRB（speeches）`が対象日1件を取得し、
+その内容は「Warsh, In Our Time」（Fri 28 Aug 2026 14:00 GMT）——
+取りこぼしの発端そのものであることを確認した。`FRB（testimony）`は
+対象日0件（この日は該当する議会証言が無かった。フィード自体は
+15件取得できており到達性は確認済み）。
+
+**独立3媒体による裏付けも確認**：ウォーシュ講演関連の候補は
+FRB（speeches・tier1）1件に加え、CoinDesk（tier3）3件・Cointelegraph
+（tier3）1件・Google News（tier4）2件の計9件がヒットし、単一情報源では
+なく複数媒体で裏取りされていることを確認した。
+
+**生成された本文への反映を確認**：part1_headline・part1_points・
+part2_flowのすべてにウォーシュ講演への言及があり、限定表現
+（「意識されたとみられる」「可能性がある」「未確認」「断定できません」）
+を伴った適切な書き方になっていることを目視確認した。C22の判定根拠も
+「独立2ソース採用が存在」（v1.51検証時・tier1裏付けなし）から
+「tier1由来の採用が存在」（本検証・①分岐）へ変化しており、v1.44の
+3軸決定ロジックがtier1追加を正しく反映していることも確認できた。
+
+**call_A〜監査の一連の流れに影響が無いことを確認**：call_A ok=True
+attempts=1（input=23,302 output=3,375）・call_B ok=True attempts=1。
+C12〜C23**全PASS**（failed=0）。C19は「39件・全フィールド充足・渡した
+候補数と一致」——tier1(9)+tier3選定(20)+tier4選定(10)=39で内訳と完全に
+一致することを確認した。
+
+---
+
 ## v1.51 — 2026-08-29（オーナー指示・Google News RSSのsite:演算子修正、tier4候補数上限を追加）
 
 ### 経緯
