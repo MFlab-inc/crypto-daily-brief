@@ -1735,6 +1735,20 @@ check("verify_post._load_source_tier_map()が新規4件をtier=1として認識�
           ("米財務省", "USTR", "ホワイトハウス", "ホワイトハウス（大統領令等）")),
       str(_tier_map_check))
 
+print("=== config/news_sources.json: FRB speeches/testimonyの追加確認（v1.52・オーナー指示） ===")
+check("FRB（speeches）・FRB（testimony）がtier=1で登録されている",
+      {"FRB（speeches）", "FRB（testimony）"}.issubset(tier1_names), str(tier1_names))
+_frb_new_urls = {s["name"]: s["url"] for s in real_sources
+                 if s["name"] in ("FRB（speeches）", "FRB（testimony）")}
+check("追加した2件のURLが実測で確認済みのものと一致する",
+      _frb_new_urls == {
+          "FRB（speeches）": "https://www.federalreserve.gov/feeds/speeches.xml",
+          "FRB（testimony）": "https://www.federalreserve.gov/feeds/testimony.xml",
+      }, str(_frb_new_urls))
+check("verify_post._load_source_tier_map()がFRB新規2件をtier=1として認識する（C21/C22で使う経路）",
+      all(_tier_map_check.get(n) == 1 for n in ("FRB（speeches）", "FRB（testimony）")),
+      str(_tier_map_check))
+
 print("=== post_draft.yml: フェイルクローズ・冪等性ガードの確認（v1.20） ===")
 post_draft_yml = (REPO / ".github" / "workflows" / "post_draft.yml").read_text(encoding="utf-8")
 check("post_draft.yml: continue-on-errorが除去されている（フェイルクローズ化）",
