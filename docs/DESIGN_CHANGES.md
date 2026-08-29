@@ -7,6 +7,146 @@
 
 ---
 
+## v1.54 — 2026-08-29（オーナー指示・C21根本対応：decisionをLLM自己申告からコード導出へ）
+
+### 経緯
+
+v1.53実データ検証で見つかったC21（decision/tier整合性監査）FAILの追加調査で、
+2回の独立実行のうち2回ともC21がFAILし、原因が毎回異なることが判明した
+（1回目: CoinDesk単独ソースを独立2ソースと誤判定、2回目: tier3が
+tier1限定のはずの"採用"を名乗る）。この構造（v1.29から存在）に対し、
+オーナーへ「LLMにdecisionラベルを付けさせるのをやめ、候補ごとの
+use:true/falseとreasonのみを出力させ、decisionはコード側で導出する」
+という根本対応を提案し、承認された。承認時、オーナーから3点の設計修正
+（①「相方なし」はC21のFAILではなく既存のリトライ機構に乗せる、
+②独立2ソースを構成できるのはtier3同士のみ・tier4は対象外、
+③verified_byは廃止せずuse/reasonと併せて出力させる）と、
+pairs_with_candidate_id（tier3のuse:trueエントリがペアの相手を自己申告し、
+コードが妥当性を確認する方式）の追加提案があり、これも承認された。
+
+### 対応（`scripts/generate_post.py`）
+
+- `_derive_decisions()`を新設。tier1のuse:true→"採用"、tier3のuse:trueで
+  `pairs_with_candidate_id`の申告が妥当性確認（相手の実在・tier3・
+  use:true・source違い・タイトルのトークン重なり係数が閾値以上）を通れば
+  双方"採用（独立2ソース）"、tier3のuse:trueで相方が成立しなければ
+  `AuditLedgerReconstructionError`を送出し`_call_json()`の既存リトライへ
+  委ねる（C21自体は最終防衛線として維持）。tier4等（tier not in (1,3)）は
+  useの値によらず常に"不採用"。
+- `_reconstruct_audit_ledger()`を改修し、LLM出力の必須フィールドを
+  `candidate_id`・`decision`・`verified_by`・`reason`から
+  `candidate_id`・`use`・`pairs_with_candidate_id`・`verified_by`・
+  `reason`へ変更。source/url/title/published_atの機械補完（v1.48）は不変。
+- `PAIR_OVERLAP_THRESHOLD`（ハードコード定数）を廃止し、
+  `config/pair_overlap.json`から読む`load_pair_overlap_threshold()`を新設
+  （デフォルト0.4）。ペア救済（`_find_independent_pairs()`・pre-selection・
+  v1.39）とpairs_with_candidate_idの妥当性確認（post-selection・本改定）の
+  両方で同一の設定値を共用する。
+- `run()`内でnews_candidate_count集計用に`_select_candidates_for_call_a()`を
+  再呼び出ししている箇所が、閾値のデフォルト値のみを使っておりcall_A内部の
+  選定と食い違う可能性があるバグを実装中に発見し、同一の
+  `pair_overlap_threshold`を明示的に渡す形へ修正した（config値を
+  デフォルトから変更した際に初めて顕在化する潜在バグだったため、
+  実運用に影響が出る前に修正）。
+- プロンプト（NEWS_SELECTION・NO_CANDIDATES_FALLBACK・WRITES_A・
+  OUTPUT_FORMAT_A）をすべて新スキーマに合わせて改定。
+
+### 対応（`config/pair_overlap.json`・新設）
+
+overlap閾値（デフォルト0.4）を格納。
+
+### テスト
+
+`test/test_bundle2.py`を352件へ拡張（v1.53時点332件から+20件）。
+`_derive_decisions()`の全パターン（tier1/tier3ペア成立/tier3ペア不成立/
+tier4/片方向申告で成立/4条件それぞれの妥当性確認失敗）、閾値のconfig化
+（0.4/0.6の閾値差で成立・不成立が変わること）、`call_a()`への
+`pair_overlap_threshold`引数のend-to-end確認を新規追加。
+
+### 実データ検証（2026-08-28・実RSS取得＋実Anthropic API使用・**1回目は失敗、原因調査後に修正して2回目で成功**）
+
+**1回目の検証（正直な失敗の記録）**：8/28データでcall_A〜監査を2回独立
+実行したところ、**両方ともcall_A自体がMAX_ATTEMPTS（3回）リトライ後に
+FAILEDとなった**（1回目: 最終的に候補ID `[11, 14, 15, 18]` が未解決、
+2回目: `[15, 16, 18]` が未解決）。これは投稿全体が生成されない、
+修正前より悪化した結果であり、修正なしでは出荷できないと判断した。
+
+**原因調査**：`_call_json()`のpost_processを経由しない生のLLM応答を
+直接検査する専用診断（`_diag_c21_raw_inspect.py`・削除済み）で、
+未解決だったtier3候補（id=15, 16, 18）の`reason`を確認したところ、
+いずれも「tier1で確認された講演実施の事実を補強する裏取りとして
+使用した」「当日の値動き文脈の補強として使用した」という、
+**tier1の事実を補強するために本文で言及した**という趣旨だった。
+これはNEWS_SELECTIONが元々許容している「tier3でtier1を補強する」用途
+（独立2ソース規定とは別の、単独tier3の正当な使い方）だが、
+プロンプトが「本文で言及・参照した」ことと「useをtrueにする」ことを
+明確に区別しておらず、LLMが両者を混同して`pairs_with_candidate_id`を
+申告しないままuse:trueにしていたことが根本原因と判明した。
+
+**修正**：NEWS_SELECTIONのtier3節とaudit_ledgerのuse説明の両方に、
+「tier1裏取り目的でtier3に言及した場合、その媒体名は該当tier1項目の
+（媒体名、日付）へ追加列挙してよいが、tier3側のuseはfalseのまま」と
+明記し、tier3のuse:trueを独立2ソース規定該当時（pairs_with_candidate_id
+で相手を申告できる場合）に限定する記述を強化した。
+
+**2回目の検証（成功）**：同じ8/28データで再度2回独立実行。
+
+| 回 | call_A | C21 | failed |
+|---|---|---|---:|
+| 1回目 | ok=True・1回試行（in=24,774 out=4,604） | PASS（39件・整合性OK） | 0 |
+| 2回目 | ok=True・**2回試行**（累計in=49,548 out=8,604） | PASS（39件・整合性OK） | 0 |
+
+2回目実行では1回目の試行で`AuditLedgerReconstructionError: tier3のuse:
+trueだが独立2ソースの相方が成立しない候補ID: [11, 14]`が発生したが、
+**2回目の試行でLLMが自己修正し成功した**——設計どおり、C21がFAILとして
+検知する前にリトライで回復する経路が実際に機能することを確認した。
+`GENERATION_STATUS.md`にはリトライ履歴が
+「1試行目: AuditLedgerReconstructionError:...」「2試行目: 成功」の形で
+記録されることも確認した（オーナー確認事項）。
+
+**トークン消費について、正直な訂正**：「decisionをコード導出にすれば
+出力トークンが減る」という当初の予想は**外れた**。1回で成功した1回目の
+実測（in=24,774 out=4,604）は、本改定前のv1.53検証時点の実測
+（in=23,773 out=3,761・同じ39件）と比較して**入力+4.2%・出力+22.4%と
+むしろ増加した**。原因は、プロンプトへ追加した説明文（NEWS_SELECTION・
+audit_ledger節の拡充）による入力増と、`pairs_with_candidate_id`
+フィールドの追加、およびLLMの`reason`記述がやや詳細になったことに
+よるものと考えられる（確証はない）。トークン削減は本改定の主目的では
+ないため実装自体は継続するが、期待した副次効果ではなかった点を
+訂正して報告する。
+
+**overlap閾値0.4 vs 0.3の比較**：オーナー指示の8/24・8/26・8/28で比較を
+試みたが、**8/24・8/26は現時点でtier3候補0件**（CoinDesk・
+Cointelegraph等のRSSフィードがローリングウィンドウ式で、対象日から
+数日経つと該当記事がフィード上から失われるため、いずれの閾値でも
+比較不能——実データに基づく検証の限界として正直に記録する）。
+8/28（tier3候補36件）でのみ比較できた：
+
+| 閾値 | 検出ペア数 |
+|---|---:|
+| 0.4 | 4組 |
+| 0.3 | 6組（0.4の4組を含む。0.3のみで追加検出: 2組） |
+
+0.3のみで追加検出された2組のうち1組は、まさに今回の一連の調査の
+発端だったウォーシュFRB議長ジャクソンホール講演の関連ペア
+（CoinDesk・Cointelegraph、overlap係数0.31）だった。ただし現在の
+パイプラインではこの講演はtier1（`FRB（speeches）`）由来の"採用"として
+既に採用されており、tier3ペアの成否に関わらず本文へ反映されている
+（実データ検証のC22結果「tier1由来の採用が存在」で確認済み）。
+このため今回のケースでは閾値の選択が実際の結果を左右しなかったが、
+tier1裏付けの無いtier3限定の材料では閾値がそのまま採否を左右しうる。
+`config/pair_overlap.json`はデフォルト0.4のまま据え置き、閾値の調整が
+必要かはこのデータを踏まえてオーナーの判断を仰ぐ。
+
+### 未解決・要フォローアップ
+
+- 2回目検証のRun 2で発生したリトライ（1/2回・50%）は、新プロンプト
+  構造に対するLLMの初期の不慣れによる可能性がある。リトライ自体は
+  設計どおり機能し最終的に成功しているが、運用観察でリトライ頻度が
+  高止まりするようであれば、プロンプトのさらなる明確化を検討する。
+
+---
+
 ## v1.53 — 2026-08-29（オーナー指示・経済カレンダーscheduled_eventsをヒントとして追加）
 
 ### 経緯
