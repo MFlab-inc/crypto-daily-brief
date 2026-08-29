@@ -81,6 +81,14 @@ PAIR_OVERLAP_THRESHOLD = 0.4  # タイトルのトークン重なり係数（ove
 PAIR_RESCUE_MAX_PAIRS = 5  # ペア救済は最大5組（最大10件）まで。無制限だと
 # トークン予算を超えるリスクがあるため上限を設ける（オーナー指示）。
 
+# v1.51（オーナー指示）: tier4（Google News・候補発見専用）は、
+# GOOGLE_NEWS_URLのクエリ演算子修正（allinurl:→site:）まで実測が常に
+# 0件だったため無制限で渡していたが、修正後は実データで50件
+# （RAW_ITEM_LIMIT上限）に達することを確認した。tier3と同じ構造の
+# 予算超過リスクを避けるため、公開日時の新しい順で上位この件数までに
+# 絞る（オーナー指定の目安「上位10件まで」）。
+TIER4_CANDIDATE_LIMIT = 10
+
 _TOKEN_RE = re.compile(r"[a-z0-9]+")
 
 
@@ -595,12 +603,12 @@ def _call_json(
 
 
 def _select_candidates_for_call_a(candidates: list[dict]) -> tuple[list[dict], dict[str, int]]:
-    """呼び出しAへ渡す候補を選ぶ（v1.21・v1.39フォローアップでペア救済を追加）。
+    """呼び出しAへ渡す候補を選ぶ（v1.21・v1.39フォローアップでペア救済を追加・
+    v1.51でtier4上限を追加）。
     tier 1（公式発表）は全件、tier 3（CoinDesk・Cointelegraph等）は公開日時の
     新しい順で上位TIER3_CANDIDATE_LIMIT件までに絞る。候補急増日（実測30件・
     うちtier3が28件）でaudit_ledgerの全候補記録がCALL_A_MAX_TOKENSを
-    超過した事象への対処（DESIGN_CHANGES.md v1.21参照）。tier 4等は
-    実測で毎回0件のため現状据え置き。
+    超過した事象への対処（DESIGN_CHANGES.md v1.21参照）。
 
     v1.39フォローアップ（オーナー承認）: 「新しい順で上位N件」だけでは、
     独立2媒体が同一事実を報じているペアの一方が、単に公開時刻が早いという
@@ -608,6 +616,11 @@ def _select_candidates_for_call_a(candidates: list[dict]) -> tuple[list[dict], d
     押しやられる時間帯バイアス）。上位N件確定後、tier3全件を対象にペアを
     検出し、上位N件に入っていないペアの相手を上限外で救済する
     （PAIR_RESCUE_MAX_PAIRS組まで）。
+
+    v1.51（オーナー指示）: tier4（Google News等・候補発見専用）も、公開日時の
+    新しい順で上位TIER4_CANDIDATE_LIMIT件までに絞る。tier4は単独では事実の
+    根拠にしない候補発見専用の位置づけ（tier1裏付け・独立2ソースいずれも
+    対象外）のため、tier3のようなペア救済は行わない。
     """
     tier1 = [c for c in candidates if c.get("tier") == 1]
     tier3 = [c for c in candidates if c.get("tier") == 3]
@@ -636,14 +649,21 @@ def _select_candidates_for_call_a(candidates: list[dict]) -> tuple[list[dict], d
         pairs_rescued += 1
 
     tier3_selected = tier3_top + rescued
+
+    others_sorted = sorted(others, key=pub_dt, reverse=True)
+    others_selected = others_sorted[:TIER4_CANDIDATE_LIMIT]
+
     stats = {
         "tier3_total": len(tier3),
         "tier3_selected": len(tier3_selected),
         "tier3_dropped": len(tier3) - len(tier3_selected),
         "tier3_pairs_rescued": pairs_rescued,
         "tier3_pair_rescued_articles": len(rescued),
+        "tier4_total": len(others),
+        "tier4_selected": len(others_selected),
+        "tier4_dropped": len(others) - len(others_selected),
     }
-    return tier1 + tier3_selected + others, stats
+    return tier1 + tier3_selected + others_selected, stats
 
 
 # v1.29（オーナー指示・修正2）: tier1が薄い日にpart1_pointsの項目数を

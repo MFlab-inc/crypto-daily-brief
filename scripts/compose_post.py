@@ -261,6 +261,13 @@ def render_generation_status(gen: dict[str, Any], daily_data: dict | None = None
             f"独立2媒体ペア救済: {ts['tier3_pairs_rescued']}組"
             f"（{ts['tier3_pair_rescued_articles']}件を上限外で追加）"
         )
+    if ts.get("tier4_dropped", 0) > 0:
+        # v1.51（オーナー指示）: Google News RSS復旧（site:演算子への修正）に
+        # 伴いtier4が上限に達する日が生じうるため、tier3と同様に可視化する。
+        lines.append(
+            f"tier4候補 {ts['tier4_total']}件中 {ts['tier4_selected']}件を選定"
+            f"（{ts['tier4_dropped']}件を件数上限により除外）"
+        )
     if daily_data is not None:
         inconsistent = _inconsistent_symbols(daily_data)
         if inconsistent:

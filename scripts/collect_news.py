@@ -58,7 +58,11 @@ RAW_ITEM_LIMIT = 50  # 1フィードあたりの取得上限（日付フィル�
 SUMMARY_MAX_LEN = 500  # 1候補あたりのsummary長の上限（プロンプト肥大化防止・v1.15）。
 SOURCES_CONFIG_PATH = Path(__file__).parent.parent / "config" / "news_sources.json"
 GOOGLE_NEWS_NAME = "Google News (Reuters検索)"
-GOOGLE_NEWS_URL = "https://news.google.com/rss/search?q=when:24h+allinurl:reuters.com"
+# v1.51（オーナー指示）: allinurl:演算子がGoogle News RSS側で機能しなくなり
+# （when:24hの有無を問わず0件）、8/26以降「対象日0件」が継続していた。
+# 実測でsite:演算子への置き換えとロケールパラメータ付与により復旧を確認
+# （site:reuters.com＋hl/gl/ceidで50件・すべて実際のReuters記事）。
+GOOGLE_NEWS_URL = "https://news.google.com/rss/search?q=when:24h+site:reuters.com&hl=en-US&gl=US&ceid=US:en"
 _HTML_TAG_RE = re.compile(r"<[^>]+>")
 # 一般的なブラウザのUser-Agent文字列（v1.13）。BLSがHTTP 403を返した際、
 # 独自UA（旧: "crypto-daily-brief/1.0 (+https://github.com/...)"）が

@@ -543,14 +543,44 @@ check(f"tier3は上限{generate_post.TIER3_CANDIDATE_LIMIT}件に絞られる",
 check("tier3は公開日時の新しい順で選定される（最新のitem19が先頭）",
       [c["title"] for c in _selected if c.get("tier") == 3][0] == "item19",
       [c["title"] for c in _selected if c.get("tier") == 3])
-check("truncation_statsが正しく報告される（20件中15件選定・5件除外・ペア救済なし）",
+check("truncation_statsが正しく報告される（20件中15件選定・5件除外・ペア救済なし・tier4無し）",
       _stats == {"tier3_total": 20, "tier3_selected": 15, "tier3_dropped": 5,
-                 "tier3_pairs_rescued": 0, "tier3_pair_rescued_articles": 0}, str(_stats))
+                 "tier3_pairs_rescued": 0, "tier3_pair_rescued_articles": 0,
+                 "tier4_total": 0, "tier4_selected": 0, "tier4_dropped": 0}, str(_stats))
 
 _selected_few, _stats_few = generate_post._select_candidates_for_call_a(_tier1_fixed + _tier3_20[:5])
 check("tier3が上限未満なら全件選定され除外0件",
       _stats_few == {"tier3_total": 5, "tier3_selected": 5, "tier3_dropped": 0,
-                     "tier3_pairs_rescued": 0, "tier3_pair_rescued_articles": 0}, str(_stats_few))
+                     "tier3_pairs_rescued": 0, "tier3_pair_rescued_articles": 0,
+                     "tier4_total": 0, "tier4_selected": 0, "tier4_dropped": 0}, str(_stats_few))
+
+print("=== generate_post.py: tier4候補数上限の確認（v1.51・オーナー指示） ===")
+check("TIER4_CANDIDATE_LIMITが10である", generate_post.TIER4_CANDIDATE_LIMIT == 10)
+_tier4_15 = [{"tier": 4, "source": "Google News (Reuters検索)", "title": f"gnews{i}",
+              "published_at": f"Mon, 17 Aug 2026 {i:02d}:00:00 GMT"} for i in range(15)]
+_selected_t4, _stats_t4 = generate_post._select_candidates_for_call_a(_tier1_fixed + _tier4_15)
+check(f"tier4は上限{generate_post.TIER4_CANDIDATE_LIMIT}件に絞られる",
+      sum(1 for c in _selected_t4 if c.get("tier") == 4) == generate_post.TIER4_CANDIDATE_LIMIT, str(_stats_t4))
+check("tier4は公開日時の新しい順で選定される（最新のgnews14が先頭）",
+      [c["title"] for c in _selected_t4 if c.get("tier") == 4][0] == "gnews14",
+      [c["title"] for c in _selected_t4 if c.get("tier") == 4])
+check("tier4のtruncation_statsが正しく報告される（15件中10件選定・5件除外）",
+      _stats_t4 == {"tier3_total": 0, "tier3_selected": 0, "tier3_dropped": 0,
+                    "tier3_pairs_rescued": 0, "tier3_pair_rescued_articles": 0,
+                    "tier4_total": 15, "tier4_selected": 10, "tier4_dropped": 5}, str(_stats_t4))
+_selected_t4_few, _stats_t4_few = generate_post._select_candidates_for_call_a(
+    _tier1_fixed + _tier4_15[:3])
+check("tier4が上限未満なら全件選定され除外0件",
+      _stats_t4_few["tier4_total"] == 3 and _stats_t4_few["tier4_selected"] == 3
+      and _stats_t4_few["tier4_dropped"] == 0, str(_stats_t4_few))
+
+print("=== collect_news.py: GOOGLE_NEWS_URLのallinurl:→site:演算子修正（v1.51・オーナー指示） ===")
+check("GOOGLE_NEWS_URLがsite:演算子を使う", "site:reuters.com" in collect_news.GOOGLE_NEWS_URL)
+check("GOOGLE_NEWS_URLがallinurl:を使わない（実測で機能しなくなったため）",
+      "allinurl:" not in collect_news.GOOGLE_NEWS_URL)
+check("GOOGLE_NEWS_URLがロケールパラメータ（hl/gl/ceid）を付与している",
+      "hl=en-US" in collect_news.GOOGLE_NEWS_URL and "gl=US" in collect_news.GOOGLE_NEWS_URL
+      and "ceid=US:en" in collect_news.GOOGLE_NEWS_URL)
 
 print("=== generate_post.py: 独立2媒体ペア救済（v1.39フォローアップ・オーナー承認） ===")
 check("_overlap_coefficient: 完全一致は1.0",
@@ -603,7 +633,8 @@ check("ペア救済の上限: 6組目のolder記事（p6a p6b p6c p6d p6f）は�
       [c["title"] for c in _cap_selected if c.get("tier") == 3])
 check("ペア救済の上限: tier3_total=21・tier3_selected=20（15+5救済）・tier3_dropped=1",
       _cap_stats == {"tier3_total": 21, "tier3_selected": 20, "tier3_dropped": 1,
-                     "tier3_pairs_rescued": 5, "tier3_pair_rescued_articles": 5}, str(_cap_stats))
+                     "tier3_pairs_rescued": 5, "tier3_pair_rescued_articles": 5,
+                     "tier4_total": 0, "tier4_selected": 0, "tier4_dropped": 0}, str(_cap_stats))
 
 # render_generation_status(): 除外があった場合のみ目視確認行を表示する
 _gen_truncated = {"level": "L0", "call_a": {"ok": True, "attempts": 1, "error": None,
@@ -624,6 +655,25 @@ _gen_not_truncated["call_a"]["data"] = CALL_A_DATA
 status_text2 = compose_post.render_generation_status(_gen_not_truncated)
 check("GENERATION_STATUS.md: tier3除外が無ければ目視確認行を表示しない",
       "件数上限により除外" not in status_text2, status_text2)
+
+print("=== compose_post.py: tier4除外のGENERATION_STATUS.md記録（v1.51・オーナー指示） ===")
+_gen_t4 = json.loads(json.dumps(_gen_not_truncated))
+_gen_t4["call_a"]["truncation_stats"] = {
+    "tier3_total": 0, "tier3_selected": 0, "tier3_dropped": 0,
+    "tier3_pairs_rescued": 0, "tier3_pair_rescued_articles": 0,
+    "tier4_total": 15, "tier4_selected": 10, "tier4_dropped": 5,
+}
+_gen_t4_status = compose_post.render_generation_status(_gen_t4)
+check("render_generation_status: tier4除外が発生した日は記録される",
+      "tier4候補 15件中 10件を選定（5件を件数上限により除外）" in _gen_t4_status, _gen_t4_status)
+_gen_t4_none = json.loads(json.dumps(_gen_not_truncated))
+_gen_t4_none["call_a"]["truncation_stats"] = {
+    "tier3_total": 0, "tier3_selected": 0, "tier3_dropped": 0,
+    "tier3_pairs_rescued": 0, "tier3_pair_rescued_articles": 0,
+    "tier4_total": 3, "tier4_selected": 3, "tier4_dropped": 0,
+}
+check("render_generation_status: tier4除外が無い日は記録されない",
+      "tier4候補" not in compose_post.render_generation_status(_gen_t4_none))
 
 print("=== compose_post.py: リトライ履歴（attempt_errors）のGENERATION_STATUS.mdへの記録（v1.48・オーナー指示） ===")
 check("GENERATION_STATUS.md: attempt_errorsが無い（1試行目で成功）場合は試行履歴行を出さない",
@@ -676,8 +726,10 @@ _result21 = generate_post.run("2026-08-21", client=_c)
 check("run(): news_candidate_countは取得総数(23)ではなく渡した件数(18)を反映する",
       _result21["news_candidate_count"] == 18, str(_result21["news_candidate_count"]))
 check("run(): call_a.truncation_statsにtier3の除外情報が記録される",
-      _result21["call_a"]["truncation_stats"] == {"tier3_total": 20, "tier3_selected": 15, "tier3_dropped": 5,
-                                                    "tier3_pairs_rescued": 0, "tier3_pair_rescued_articles": 0},
+      _result21["call_a"]["truncation_stats"] == {
+          "tier3_total": 20, "tier3_selected": 15, "tier3_dropped": 5,
+          "tier3_pairs_rescued": 0, "tier3_pair_rescued_articles": 0,
+          "tier4_total": 0, "tier4_selected": 0, "tier4_dropped": 0},
       str(_result21["call_a"]["truncation_stats"]))
 
 print("=== generate_post.run() レベル判定 ===")
