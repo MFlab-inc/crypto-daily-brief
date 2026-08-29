@@ -1,7 +1,7 @@
 {
   "overall": "PASS",
   "failed": 0,
-  "checked_at_jst": "2026-08-29T11:39:22.411042+09:00",
+  "checked_at_jst": "2026-08-29T22:34:23.696401+09:00",
   "checks": [
     {
       "id": "C1_schema",
