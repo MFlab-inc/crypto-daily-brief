@@ -1,0 +1,340 @@
+{
+  "target_date_jst": "2026-08-29",
+  "level": "L0",
+  "sections": {
+    "part0_target_date": "2026年8月29日（土）",
+    "part1_headline": "直近24時間に暗号通貨市場との関係を確認できる主要なマクロ材料は確認できない。",
+    "part1_points": "・補足できる検証済み材料は確認できない。",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.636兆（¥421.5兆）｜24時間取引高 $437.6億（¥7.00兆）\n・ #BTC：$78,145（約1,249.7万円）｜24時間比 +0.66%\n　（24時間レンジ $77,244〜$78,334）\n・ #ETH：$2,451（約39.2万円）｜24時間比 +0.62%\n　（24時間レンジ $2,422〜$2,459）\n・ #BNB：$693（約11.1万円）｜24時間比 +0.48%\n・市場心理：Fear & Greed 77（Greed、CoinMarketCap API）\n・ドミナンス：BTC 59.52%｜ETH 11.22%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年8月30日07:37 JST、USD/JPY ¥159.92",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $2.20M vs Base上ETH/USDC $13.54M｜参考：Base上DEX全体 $11.211億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $55.13億（¥8,816億）｜24時間比 -0.43%｜USDCドミナンス 86.1%\n・ ETH/USDC（Base）参考APR：0.05% 9.66%（TVL $8.83M／24h出来高 $4.67M）｜0.3% 8.38%（TVL $115.83M／24h出来高 $8.86M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年8月30日07:37 JST",
+    "part2_flow": "・ビットコインETFが9日連続の資金流入を終えて純流出に転じたとの報道が伝わっており、市場参加者の一部で資金フローの転換が意識された可能性がありますが、BTCは24時間比で上昇して推移しており、直接的な下落圧力として確認できる値動きはありません。\n・Polygonが修正済みハードフォークにおいてDoSなど複数の脆弱性を開示したとの報道があり、セキュリティ面の懸念が一部で意識されたとみられますが、ETHは24時間比で上昇しており、市場全体への波及は限定的だったと考えられます。\n・Fear & Greed指数はGreed（強気）圏で推移しており、BTC・ETH・BNBがそろって24時間比プラス圏で推移するなど、リスク選好的な地合いが継続している状況がうかがえます。",
+    "lp_comment": "参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは40.90%→9.66%へ低下しました（24時間出来高 -76.36%、TVL +0.15%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは98.81%→8.38%へ低下しました（24時間出来高 -91.55%、TVL -0.31%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+0.62%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "本日の暗号通貨市場は、主要3銘柄がそろって24時間比プラス圏で推移し、市場心理もGreed（強気）寄りとなるなど、総じて落ち着いた地合いが続いています。一方で、ビットコインETFの資金フローが流出に転じたとの報道があり、今後の資金動向には注意が必要です。DEXやオンチェーンのTVL・出来高については明確な方向感が乏しく、週明け以降の値動きや資金フローの継続性を確認していく必要があります。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "BTC・ETHともに上昇基調",
+  "audit_ledger": [
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/releases/2026/08/president-trump-was-right-america-controls-the-strait-of-hormuz/",
+      "title": "President Trump Was Right: America Controls the Strait of Hormuz",
+      "published_at": "Sat, 29 Aug 2026 00:00:05 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ホルムズ海峡の航行状況に関する政府発表。原油・地政学経由の波及経路は説明しうるが、市場環境への具体的示唆に乏しく参考材料としても不十分"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/polygon-discloses-security-flaws-fixed-in-recent-hard-forks?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Polygon discloses security flaws fixed in recent hard forks",
+      "published_at": "Sat, 29 Aug 2026 20:28:51 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: Polygonの脆弱性開示だが単独tier3ソースで一次情報の裏付けなし"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/markets/stellar-tokenized-rwa-market-nears-4b-after-fourfold-2026-growth?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Stellar tokenized RWA market more than quadruples to nearly $4B",
+      "published_at": "Sat, 29 Aug 2026 19:12:42 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: Stellar RWA拡大の報道だが単独tier3ソースで裏付けなし"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/markets/tokenized-stock-transfer-volume-jumps-416-in-30-days-to-295b?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Tokenized stock transfer volume jumps 415% in 30 days to $29.5B",
+      "published_at": "Sat, 29 Aug 2026 16:27:28 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: トークン化株式の出来高急増の報道だが単独tier3ソースで裏付けなし"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/08/28/ditch-digital-gold-bpi-study-suggests-everyday-americans-prefer-control-and-micro-investing",
+      "title": "Ditching 'digital gold': BPI study suggests everyday Americans prefer control and micro-investing",
+      "published_at": "Sat, 29 Aug 2026 15:00:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 消費者調査に関する内容で、意見・分析記事に近く単独ソース"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/08/29/swift-s-usd1-5-quadrillion-network-faces-a-blockchain-test",
+      "title": "Swift’s $1.5 quadrillion network faces a blockchain test",
+      "published_at": "Sat, 29 Aug 2026 15:00:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: Swiftとブロックチェーンに関する分析記事で単独ソース、意見色が強い"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/08/29/the-next-trillion-dollar-currency-may-not-be-a-stablecoin-it-might-not-even-have-a-name-yet",
+      "title": "The next trillion-dollar currency may not be a stablecoin — it might not even have a name yet",
+      "published_at": "Sat, 29 Aug 2026 15:00:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: AIエージェント決済に関する意見記事で単独ソース、事実報道ではない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/opinion/2026/08/29/tokenized-assets-are-busier-than-the-data-shows",
+      "title": "Tokenized assets are busier than the data shows",
+      "published_at": "Sat, 29 Aug 2026 13:00:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: トークン化資産の利用率に関するオピニオン記事で単独ソース"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/what-happened-in-crypto-today?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Here’s what happened in crypto today",
+      "published_at": "Sat, 29 Aug 2026 12:39:59 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 総括記事で具体的事実の特定なく単独ソース、根拠として不十分"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/trump-linked-account-list-gold-token-crash?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Trump-promoted brand touts GOLD before token collapse",
+      "published_at": "Sat, 29 Aug 2026 10:53:41 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 個別ミームトークンの暴落報道で単独ソース、裏付けなし"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/stablecoins-not-credible-payments-scale-bis-chief?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Stablecoins not credible for payments at scale, BIS chief says",
+      "published_at": "Sat, 29 Aug 2026 08:01:04 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: BIS高官のステーブルコイン発言で単独ソース、一次発表の裏付けなし"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/markets/bitcoin-etf-end-9-day-inflow-streak-btc-below-78k?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bitcoin ETFs end 9-day inflow streak as BTC dips below $78K",
+      "published_at": "Sat, 29 Aug 2026 06:47:12 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: BTC ETF資金流出転換の報道で単独ソース、一次データの裏付けなし"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/08/28/bitcoin-wallets-untouched-for-10-years-moved-usd40-million-most-avoided-exchanges",
+      "title": "Bitcoin wallets untouched for 10 years moved $40 million. Most avoided exchanges",
+      "published_at": "Sat, 29 Aug 2026 04:30:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 休眠ウォレット移動の報道で単独ソース、裏付けなし"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/tech/2026/08/28/ripple-is-preparing-xrp-ledger-for-quantum-computers-before-q-day-arrives",
+      "title": "Ripple is preparing XRP Ledger for quantum computers before ‘Q-Day’ arrives",
+      "published_at": "Sat, 29 Aug 2026 02:30:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 量子コンピュータ対策の報道で単独ソース、裏付けなし"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/08/28/kalshi-takes-legal-blow-in-court-ruling-confirming-state-powers-over-prediction-markets",
+      "title": "Kalshi takes legal blow in court ruling confirming state powers over prediction markets",
+      "published_at": "Fri, 28 Aug 2026 21:28:12 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 予測市場に関する司法判断で暗号通貨価格への波及経路が薄く単独ソース"
+    },
+    {
+      "source": "Google News (Reuters検索)",
+      "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxNYVU5RThXeTlES29neUxHbVNtejN5ZTQzaFZoOUZpYThtaGFvNHEybXMzUE5vSEVWX01DVU9Ma05YS3BzU2NsQnFMQ1o4WGVxTkY1aDBURVV6TkJ4VEcwWFMzYzdYS1dCQkg1YU05Zjh6OGJKSVdOMTBORHhmTF9PcF9oSE5iYVhIVVpjYVlkQUhSRkNtbGZkRUlVbVJ1Wk9uUmc1YVl3?oc=5",
+      "title": "Tadej Pogacar forced to abandon the Vuelta after crash in stage eight, Enric Mas takes overall lead - Reuters",
+      "published_at": "Sat, 29 Aug 2026 19:15:54 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: スポーツニュースで波及経路を説明できずtier4のため不採用"
+    },
+    {
+      "source": "Google News (Reuters検索)",
+      "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxNcEtEeDkxNXc0Zks1OENiT3RZTl9oLWpXNjZfZndzdk9RbHo5RVczY2xvSXB2MHJvVkRPV0dob2ZMamFld00ydUt4VEdqVnQ3QkVxMjBGYWZrSThscjJvOXpjdlBmekUtSzRCRXdGNWpqNnJDaTR0VHFzZ213eVZjZWxkR0lwbFN5TlNlUlZGb0xOUXcxYVdpSGpMY2pMZUdpa0pB?oc=5",
+      "title": "Norway's King Haakon honours 'dear father' Harald in first speech as sovereign - Reuters",
+      "published_at": "Sat, 29 Aug 2026 18:51:43 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 王室ニュースで波及経路を説明できずtier4のため不採用"
+    },
+    {
+      "source": "Google News (Reuters検索)",
+      "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE5CTWtvT2owQVlPWlVXU0prLXJOMl9jVEpzUlVHM2JrWjRkTUhtUUNYQlpHTTFPRGI3NGJ0QWdyT1U1VmRFa1ZMamZ5UEhOa3M1bExvVFd6ZHdvcV9DRWR4bTFTVQ?oc=5",
+      "title": "(TSEU.N) | Stock Price & Latest News - Reuters",
+      "published_at": "Sat, 29 Aug 2026 18:21:34 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別株価情報のみでtier4のため不採用"
+    },
+    {
+      "source": "Google News (Reuters検索)",
+      "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE5MamFDTHZfVXdwSVZRNEJYbzMxMWYwRG5Ca2tjT3k1bFU1YzN5UzdJamV5VnpRd1Y1bzNJYnNtY0JRMGNxdExKek40SE9TQnZZRmU3QV9yYjBKYUY2TjNyR29sZw?oc=5",
+      "title": "(ARKE.N) | Stock Price & Latest News - Reuters",
+      "published_at": "Sat, 29 Aug 2026 18:18:11 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別株価情報のみでtier4のため不採用"
+    },
+    {
+      "source": "Google News (Reuters検索)",
+      "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxObURVMERBQWV0QWJua3FzNktCUjV4dE1POXg4MTBpQi1CTFJzSlpaMnpZZHNnR3VHUXpCeDdmQVdTQXU4UlFFLUtRd3JCejdiUERFNzZHTnpmTHFLM2JxMENIY0xrSUN4NjZXbU9JeFpmVnppMmlWY1F2SkdOY0NORElUN3lIX1FwVGc0RkIwSkNHM3VBbE5pYm1QNng?oc=5",
+      "title": "Far-right commentator Milo Yiannopoulos deported to UK - Reuters",
+      "published_at": "Sat, 29 Aug 2026 18:16:34 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 人物の入国関連ニュースで波及経路なくtier4のため不採用"
+    },
+    {
+      "source": "Google News (Reuters検索)",
+      "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxNaDJ3eXpHdUxRbndBaEJmblBpeC13Vk5sMF9lSGJOb3EwSzhDYXBWZnBjYWxqRWgyaGpKNDNsZWxacjRMWF8tQjNvQmNORXNEeVI0TG9nOVBSa2hhY2FFdklhVmVSNGxTalM0bWdtczdPWnd0d0FEeGNTRXdhN0I0eXBVRUFFRHpTX21wQUtJU1FqVmYyRTN2ZmZiNHEzV19OOWVmN3NPcE9SVjZzT29CY2U2bjRXdTAwVXIwcHU3Qjg?oc=5",
+      "title": "Israeli settlers stage new attack on home in West Bank's Qusra, witnesses say - Reuters",
+      "published_at": "Sat, 29 Aug 2026 17:58:32 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 地域紛争関連の個別事件でtier4のため不採用"
+    },
+    {
+      "source": "Google News (Reuters検索)",
+      "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE1XOUF3VW5vYmktQUxqeXA2SEZfVjFpYVdHZHRVMk5Cb0NvWnNLUkpFY2pWOTJKaVpsUk5idElTVktnOGlsZEN1aGdlaEdvQlRSdnJOVnFJdlFMZTY1SDJwbE02QQ?oc=5",
+      "title": "(SHUS.N) | Stock Price & Latest News - Reuters",
+      "published_at": "Sat, 29 Aug 2026 17:57:39 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別株価情報のみでtier4のため不採用"
+    },
+    {
+      "source": "Google News (Reuters検索)",
+      "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxNWjJneWlPWFZzVUZpdk00MkpmZmZUb0J5b1pEaXdPdzMydEMzc1BPVk8wT0VvcGN6eGRDZmw2NGFXQldtblRnNzU1WGhBVzhOUUR4Y01kOG9qX1JEZ0FLWWRDVzZfeUdtNlpMU2JCdDYxU2dVUFRqVmp0QjlTY1JaWWRPMWVQNkN0OUhGVU9OSlozM0NCOVVENEoxRmZaQQ?oc=5",
+      "title": "Storm leaves one dead, two injured in Cyprus - Reuters",
+      "published_at": "Sat, 29 Aug 2026 17:48:18 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 気象災害ニュースで波及経路を説明できずtier4のため不採用"
+    },
+    {
+      "source": "Google News (Reuters検索)",
+      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxOVk4yckpUNGlpM2tzUUNmVWxQV2hBZk1WZWpaVV9HYkU0a2tWLXdVZGFhUnNPVnNSSldVaEhaOFdBWmJqN1ZvRHNma0owUVBwcmJsa1BxejBmeTJqMjdubmRRMXZSaUxtOVN6bFRKQzE1VlJXZkVvZ0NOSi11ZERaYzBvRlRKQ3Y2THNWZjN5YTRoWFV6MDhNajNVQmtVb25JQzFnU0dGcXlwYkQ0RFNFRg?oc=5",
+      "title": "Bear encounters are on the rise. Here's what to do if you meet one - Reuters",
+      "published_at": "Sat, 29 Aug 2026 17:48:01 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 野生動物ニュースで波及経路を説明できずtier4のため不採用"
+    },
+    {
+      "source": "Google News (Reuters検索)",
+      "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxOeDJQcWNyWUpzdFFaeHV3R1dNWU9mMXN4RkNIX2NQbWgxODZ6ZXllbElVOFZGY0wtMnd0QWluUGVWQUZvTkU5VzNPOXZmZmRzZllHSFR4WnQzREtsNVB4V3p6TEFRWUtaaWZUWXhMNzJieHBpcGtxWFhydXFDY2gxb0N3M3NJXzNJU0F2enVXZ3lLVGdMd0VPb19DX0w4WnJDUmRzcDRwaC16eEdUWmJTTnFhN1ZrQQ?oc=5",
+      "title": "Alcaraz says uncertainty over comeback fuelled 'intrusive thoughts' - Reuters",
+      "published_at": "Sat, 29 Aug 2026 17:36:33 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: スポーツ選手のコメントで波及経路を説明できずtier4のため不採用"
+    }
+  ],
+  "reusable_for_summary": [
+    "ビットコインETFが9日連続の資金流入を終え、純流出に転じたとの報道（Cointelegraph、2026-08-29）",
+    "PolygonがDoS等の脆弱性を修正済みハードフォークで開示したとの報道（Cointelegraph、2026-08-29）"
+  ],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 0
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 0
+    },
+    "FRB（speeches）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "FRB（testimony）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 0
+    },
+    "米財務省": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "USTR": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "ホワイトハウス": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 1
+    },
+    "ホワイトハウス（大統領令等）": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 0
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 7
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 7
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 48
+    }
+  },
+  "news_candidate_count": 25,
+  "part1_md": "【対象日】2026年8月29日（土）\n\n【ヘッドライン】\n直近24時間に暗号通貨市場との関係を確認できる主要なマクロ材料は確認できない。\n\n【主要なポイント】\n・補足できる検証済み材料は確認できない。\n\n【主要指標】\n・市場全体：時価総額 $2.636兆（¥421.5兆）｜24時間取引高 $437.6億（¥7.00兆）\n・ #BTC：$78,145（約1,249.7万円）｜24時間比 +0.66%\n　（24時間レンジ $77,244〜$78,334）\n・ #ETH：$2,451（約39.2万円）｜24時間比 +0.62%\n　（24時間レンジ $2,422〜$2,459）\n・ #BNB：$693（約11.1万円）｜24時間比 +0.48%\n・市場心理：Fear & Greed 77（Greed、CoinMarketCap API）\n・ドミナンス：BTC 59.52%｜ETH 11.22%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年8月30日07:37 JST、USD/JPY ¥159.92\n",
+  "part2_md": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $2.20M vs Base上ETH/USDC $13.54M｜参考：Base上DEX全体 $11.211億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $55.13億（¥8,816億）｜24時間比 -0.43%｜USDCドミナンス 86.1%\n・ ETH/USDC（Base）参考APR：0.05% 9.66%（TVL $8.83M／24h出来高 $4.67M）｜0.3% 8.38%（TVL $115.83M／24h出来高 $8.86M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年8月30日07:37 JST\n\n【市場のフロー】\n・ビットコインETFが9日連続の資金流入を終えて純流出に転じたとの報道が伝わっており、市場参加者の一部で資金フローの転換が意識された可能性がありますが、BTCは24時間比で上昇して推移しており、直接的な下落圧力として確認できる値動きはありません。\n・Polygonが修正済みハードフォークにおいてDoSなど複数の脆弱性を開示したとの報道があり、セキュリティ面の懸念が一部で意識されたとみられますが、ETHは24時間比で上昇しており、市場全体への波及は限定的だったと考えられます。\n・Fear & Greed指数はGreed（強気）圏で推移しており、BTC・ETH・BNBがそろって24時間比プラス圏で推移するなど、リスク選好的な地合いが継続している状況がうかがえます。\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは40.90%→9.66%へ低下しました（24時間出来高 -76.36%、TVL +0.15%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは98.81%→8.38%へ低下しました（24時間出来高 -91.55%、TVL -0.31%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+0.62%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\n本日の暗号通貨市場は、主要3銘柄がそろって24時間比プラス圏で推移し、市場心理もGreed（強気）寄りとなるなど、総じて落ち着いた地合いが続いています。一方で、ビットコインETFの資金フローが流出に転じたとの報道があり、今後の資金動向には注意が必要です。DEXやオンチェーンのTVL・出来高については明確な方向感が乏しく、週明け以降の値動きや資金フローの継続性を確認していく必要があります。\n"
+}
