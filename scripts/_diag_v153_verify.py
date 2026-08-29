@@ -17,6 +17,7 @@ collect_news.collect_news() を今このジョブ上で実行して行う。
 調査後、本スクリプトとワークフローは削除する。
 """
 import json
+import re
 import sys
 from datetime import date
 from pathlib import Path
@@ -93,3 +94,62 @@ au = verify_post.run_all(bundle, daily_data)
 for c in au.checks:
     print(f"{c['id']} {c['result']} - {(c.get('detail') or '')[:200]}")
 print(f"failed={au.failed}")
+
+# --- 以下、C18/C19/C21のFAIL原因調査用の追加ダンプ（v1.53検証・2回目） ---
+audit_ledger = bundle.get("audit_ledger") or []
+candidates_by_url = {c.get("url"): c for c in news.get("candidates", [])}
+
+print()
+print("=== [C19調査] audit_ledger[0], [1], [2] の生JSON ===")
+required_fields = ("source", "url", "published_at", "decision", "reason")
+for i in (0, 1, 2):
+    if i >= len(audit_ledger):
+        print(f"  [{i}] インデックス範囲外（audit_ledger長={len(audit_ledger)}）")
+        continue
+    entry = audit_ledger[i]
+    print(f"  [{i}] {json.dumps(entry, ensure_ascii=False, indent=2)}")
+    if isinstance(entry, dict):
+        missing = [f for f in required_fields
+                   if entry.get(f) is None or str(entry.get(f)).strip() == ""]
+        print(f"      -> 空/欠落フィールド: {missing}")
+    print()
+
+print("=== [C18調査] 因果マーカー・価格変動語がヒットした文の一覧 ===")
+llm_keys = bundle["llm_section_keys"]
+sections_for_c18 = bundle["sections"]
+llm_text = "\n".join(sections_for_c18.get(k, "") for k in llm_keys)
+for sentence in re.split(r"[。\n]", llm_text):
+    if not sentence.strip():
+        continue
+    hit_markers = [m for m in verify_post.CAUSAL_MARKERS if m in sentence]
+    hit_words = [w for w in verify_post.PRICE_MOVEMENT_WORDS if w in sentence]
+    hit_standalone = [p for p in verify_post.CAUSAL_STANDALONE_PHRASES if p in sentence]
+    if not ((hit_markers and hit_words) or hit_standalone):
+        continue
+    hit_limiting = [le for le in verify_post.LIMITING_EXPRESSIONS if le in sentence]
+    print(f"  文: {sentence.strip()!r}")
+    print(f"    markers={hit_markers} words={hit_words} standalone={hit_standalone} limiting={hit_limiting}")
+    print(f"    -> {'PASS（限定表現あり）' if hit_limiting else 'FAIL相当（限定表現なし）'}")
+    print()
+
+print("=== [C21調査] audit_ledgerのdecision別source内訳 ===")
+by_decision: dict[str, set] = {}
+for e in audit_ledger:
+    if isinstance(e, dict):
+        by_decision.setdefault(e.get("decision"), set()).add(e.get("source"))
+for decision, sources in by_decision.items():
+    print(f"  decision={decision!r}: distinct sources={sorted(s for s in sources if s)}")
+
+print()
+print("=== [C21調査] audit_ledger[25] の生JSON・対応候補 ===")
+if len(audit_ledger) > 25:
+    entry25 = audit_ledger[25]
+    print(f"  audit_ledger[25] = {json.dumps(entry25, ensure_ascii=False, indent=2)}")
+    if isinstance(entry25, dict):
+        cand = candidates_by_url.get(entry25.get("url"))
+        if cand:
+            print(f"  対応候補（url一致） = {json.dumps(cand, ensure_ascii=False, indent=2)}")
+        else:
+            print(f"  対応候補（url一致） = 見つからず（url={entry25.get('url')!r}）")
+else:
+    print(f"  インデックス範囲外（audit_ledger長={len(audit_ledger)}）")
