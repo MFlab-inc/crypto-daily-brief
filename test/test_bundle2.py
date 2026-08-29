@@ -960,6 +960,16 @@ for sentence, label in [
     hits = verify_post._causal_violations_in_sentence(sentence)
     check(f"C18再設計: 回避パターン「{label}」は検知される", len(hits) > 0, str(hits))
 
+print("=== generate_post.py: RULES_CAUSALの帰結明記強化（v1.49・オーナー指示） ===")
+check("RULES_CAUSAL: コミット拒否の帰結が明記されている",
+      "コミットされない" in generate_post.RULES_CAUSAL)
+check("RULES_CAUSAL: notable_moveへの言及がある",
+      "notable_move" in generate_post.RULES_CAUSAL)
+check("SYSTEM_A: RULES_CAUSALが含まれる（call Aにも因果表現規則が渡る）",
+      "コミットされない" in generate_post.SYSTEM_A)
+check("SYSTEM_B: RULES_CAUSALが含まれる（call Bにも因果表現規則が渡る）",
+      "コミットされない" in generate_post.SYSTEM_B)
+
 # C19: L0でaudit_ledger不備
 bad = json.loads(json.dumps(b_ok))
 bad["audit_ledger"] = [{"source": "Reuters"}]  # url等欠落
