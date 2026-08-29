@@ -684,6 +684,77 @@ check("_derive_decisions: overlap0.5の申告は閾値0.6なら不成立（例�
       _raises_for_unresolved_pair(_thresh_llm_out, _thresh_candidates, 0.6))
 check("load_pair_overlap_threshold: config/pair_overlap.jsonが存在しデフォルト0.4を返す",
       generate_post.load_pair_overlap_threshold() == 0.4)
+
+print("=== generate_post.py: audit_ledgerのdecision/reason空欄自動補完（v1.54フォローアップ・オーナー指示） ===")
+
+_fill_candidates = {
+    1: {"source": "SEC", "title": "Regulator announces new rule", "candidate_id": 1, "tier": 1},
+    2: {"source": "SEC", "title": "Another regulator announcement", "candidate_id": 2, "tier": 1},
+}
+_fill_stats: dict = {}
+_fill_rebuilt = generate_post._reconstruct_audit_ledger(
+    [
+        {"candidate_id": 1, "use": True, "reason": ""},
+        {"candidate_id": 2, "use": True, "reason": "一次情報で確認"},
+    ],
+    _fill_candidates, generate_post.PAIR_OVERLAP_THRESHOLD_DEFAULT, _fill_stats,
+)
+check("_reconstruct_audit_ledger: reasonが空文字の場合は定型文で自動補完される",
+      _fill_rebuilt[0]["reason"] == "理由が記載されませんでした（自動補完）", str(_fill_rebuilt[0]))
+check("_reconstruct_audit_ledger: reasonが記載されている場合は自動補完しない",
+      _fill_rebuilt[1]["reason"] == "一次情報で確認", str(_fill_rebuilt[1]))
+check("_reconstruct_audit_ledger: reason空欄1件の自動補完件数がstatsへ記録される",
+      _fill_stats.get("audit_ledger_auto_filled_count") == 1, str(_fill_stats))
+
+_fill_stats2: dict = {}
+_fill_rebuilt2 = generate_post._reconstruct_audit_ledger(
+    [
+        {"candidate_id": 1, "use": True, "reason": "  "},
+        {"candidate_id": 2, "use": True},  # reasonキー自体が無い場合も空扱い
+    ],
+    _fill_candidates, generate_post.PAIR_OVERLAP_THRESHOLD_DEFAULT, _fill_stats2,
+)
+check("_reconstruct_audit_ledger: reasonが空白のみ・キー欠落の両方とも自動補完される（2件）",
+      _fill_rebuilt2[0]["reason"] == "理由が記載されませんでした（自動補完）"
+      and _fill_rebuilt2[1]["reason"] == "理由が記載されませんでした（自動補完）"
+      and _fill_stats2.get("audit_ledger_auto_filled_count") == 2,
+      f"{_fill_rebuilt2} / {_fill_stats2}")
+
+check("_reconstruct_audit_ledger: stats引数を省略しても例外なく動作する（後方互換）",
+      generate_post._reconstruct_audit_ledger(
+          [{"candidate_id": 1, "use": True, "reason": ""},
+           {"candidate_id": 2, "use": True, "reason": "y"}],
+          _fill_candidates,
+      )[0]["reason"] == "理由が記載されませんでした（自動補完）")
+
+# decisionの空文字補完は、v1.53フォローアップ以降_derive_decisions()が常に
+# 非空文字列を返すため通常経路では到達しない防御的コード（コメント参照）。
+# _derive_decisions自体を一時的に差し替え、フォールバックが実際に機能する
+# ことを確認する（ホワイトボックス・将来のリグレッション検知用）。
+_orig_derive_decisions = generate_post._derive_decisions
+generate_post._derive_decisions = lambda entries, id_map, threshold: {1: "", 2: "採用"}
+try:
+    _fill_stats3: dict = {}
+    _fill_rebuilt3 = generate_post._reconstruct_audit_ledger(
+        [
+            {"candidate_id": 1, "use": True, "reason": "x"},
+            {"candidate_id": 2, "use": True, "reason": "y"},
+        ],
+        _fill_candidates, generate_post.PAIR_OVERLAP_THRESHOLD_DEFAULT, _fill_stats3,
+    )
+finally:
+    generate_post._derive_decisions = _orig_derive_decisions
+check("_reconstruct_audit_ledger: decisionが空文字の場合は安全側の「不採用」で自動補完される"
+      "（現行設計では到達しない想定の防御的フォールバック。オーナー指示）",
+      _fill_rebuilt3[0]["decision"] == "不採用" and _fill_rebuilt3[1]["decision"] == "採用"
+      and _fill_stats3.get("audit_ledger_auto_filled_count") == 1,
+      f"{_fill_rebuilt3} / {_fill_stats3}")
+
+check("CallOutcome.to_dict(): audit_ledger_auto_filled_countが既定で0",
+      generate_post.CallOutcome(True, {}, 1, None).to_dict()["audit_ledger_auto_filled_count"] == 0)
+check("CallOutcome.to_dict(): audit_ledger_auto_filled_countを明示指定できる",
+      generate_post.CallOutcome(True, {}, 1, None, audit_ledger_auto_filled_count=3)
+      .to_dict()["audit_ledger_auto_filled_count"] == 3)
 check("NEWS_SELECTIONがcandidate_idの存在とaudit_ledgerでの参照用途を明記している",
       "candidate_id・title・summary" in generate_post.NEWS_SELECTION
       and "audit_ledgerで候補を参照する際に使う" in generate_post.NEWS_SELECTION)
@@ -842,6 +913,19 @@ _gen_t4_none["call_a"]["truncation_stats"] = {
 }
 check("render_generation_status: tier4除外が無い日は記録されない",
       "tier4候補" not in compose_post.render_generation_status(_gen_t4_none))
+
+print("=== compose_post.py: audit_ledger自動補完のGENERATION_STATUS.md記録（v1.54フォローアップ・オーナー指示） ===")
+_gen_fill = json.loads(json.dumps(_gen_not_truncated))
+_gen_fill["call_a"]["audit_ledger_auto_filled_count"] = 2
+_gen_fill_status = compose_post.render_generation_status(_gen_fill)
+check("render_generation_status: audit_ledger自動補完が発生した日は件数が記録される",
+      "audit_ledger自動補完: 2件" in _gen_fill_status, _gen_fill_status)
+_gen_fill_none = json.loads(json.dumps(_gen_not_truncated))
+_gen_fill_none["call_a"]["audit_ledger_auto_filled_count"] = 0
+check("render_generation_status: audit_ledger自動補完が無い日は記録されない",
+      "audit_ledger自動補完" not in compose_post.render_generation_status(_gen_fill_none))
+check("render_generation_status: audit_ledger_auto_filled_countキー自体が無くても既定0として扱われエラーにならない",
+      "audit_ledger自動補完" not in compose_post.render_generation_status(_gen_not_truncated))
 
 print("=== compose_post.py: リトライ履歴（attempt_errors）のGENERATION_STATUS.mdへの記録（v1.48・オーナー指示） ===")
 check("GENERATION_STATUS.md: attempt_errorsが無い（1試行目で成功）場合は試行履歴行を出さない",

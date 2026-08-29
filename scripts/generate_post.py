@@ -556,7 +556,7 @@ SYSTEM_B = "\n\n".join([
 class CallOutcome:
     def __init__(self, ok: bool, data: dict | None, attempts: int, error: str | None,
                  usage: dict[str, int] | None = None, truncation_stats: dict[str, int] | None = None,
-                 attempt_errors: list[str] | None = None):
+                 attempt_errors: list[str] | None = None, audit_ledger_auto_filled_count: int = 0):
         self.ok = ok
         self.data = data
         self.attempts = attempts
@@ -568,11 +568,16 @@ class CallOutcome:
         # 保持し、成功時はCallOutcomeへ一切渡らず失われていた）。リトライが
         # 常態化する劣化の兆候をGENERATION_STATUS.mdで早期に検知するため。
         self.attempt_errors = attempt_errors or []
+        # v1.54フォローアップ（オーナー指示）: audit_ledgerのdecision/reason
+        # 空欄自動補完（_reconstruct_audit_ledger参照）が発生した件数。
+        # GENERATION_STATUS.mdへ記録し、非決定的な発生頻度を追跡する。
+        self.audit_ledger_auto_filled_count = audit_ledger_auto_filled_count
 
     def to_dict(self) -> dict:
         return {"ok": self.ok, "attempts": self.attempts, "error": self.error,
                 "usage": self.usage, "data": self.data, "truncation_stats": self.truncation_stats,
-                "attempt_errors": self.attempt_errors}
+                "attempt_errors": self.attempt_errors,
+                "audit_ledger_auto_filled_count": self.audit_ledger_auto_filled_count}
 
 
 def _extract_text(response: Any) -> str:
@@ -874,7 +879,8 @@ def _derive_decisions(llm_entries: list[dict], id_to_candidate: dict[int, dict],
 
 
 def _reconstruct_audit_ledger(llm_entries: Any, id_to_candidate: dict[int, dict],
-                               pair_overlap_threshold: float = PAIR_OVERLAP_THRESHOLD_DEFAULT) -> list[dict]:
+                               pair_overlap_threshold: float = PAIR_OVERLAP_THRESHOLD_DEFAULT,
+                               stats: dict[str, int] | None = None) -> list[dict]:
     """LLMが出力した candidate_id・use・pairs_with_candidate_id・
     verified_by・reason のみのaudit_ledgerを、候補データのsource/url/
     title/published_atで補完し、decisionをコード側で導出した完全な形へ
@@ -888,6 +894,19 @@ def _reconstruct_audit_ledger(llm_entries: Any, id_to_candidate: dict[int, dict]
     全件記録する」という既存要求を機械的に強制する）。tier3のuse:trueで
     独立2ソースの相方が成立しない場合も同様に例外化する（_derive_decisions
     参照）。
+
+    v1.54フォローアップ（8/28実データ・オーナー指示）: reason（LLM自由
+    記述）が空文字で返る事象が非決定的に複数回観測された（v1.49・v1.53×2・
+    本件で計4例目）。C19が検査するのは「フィールドが揃っていること」で
+    あり理由の質そのものではないため、空欄で生成物全体を止めるより、
+    欠落を明示した定型文で補完して通す方が実害が小さいというオーナー
+    判断により、reasonが空の場合は「理由が記載されませんでした（自動
+    補完）」で埋める。decisionはv1.53フォローアップ以降コード側で
+    tier・use・ペア申告の妥当性から導出するため空文字になる経路は
+    通常ないが（_derive_decisions参照）、オーナー指示により安全側の
+    フォールバックとして"不採用"で補完する処理を残す（防御的コード。
+    現状の設計では原理的に到達しない想定）。補完件数はstatsへ記録し、
+    呼び出し元がGENERATION_STATUS.mdへ記録する。
     """
     if not isinstance(llm_entries, list):
         raise AuditLedgerReconstructionError("audit_ledgerがリストでない")
@@ -910,14 +929,25 @@ def _reconstruct_audit_ledger(llm_entries: Any, id_to_candidate: dict[int, dict]
     decisions = _derive_decisions(parsed, id_to_candidate, pair_overlap_threshold)
 
     reconstructed = []
+    auto_filled = 0
     for e in parsed:
         cid = e["candidate_id"]
         candidate = id_to_candidate[cid]
         entry = {field: candidate.get(field, "") for field in _AUDIT_LEDGER_STATIC_FIELDS}
         entry["verified_by"] = e.get("verified_by", "")
-        entry["decision"] = decisions[cid]
-        entry["reason"] = e.get("reason", "")
+        decision = decisions[cid]
+        if not str(decision).strip():
+            decision = "不採用"
+            auto_filled += 1
+        reason = e.get("reason", "")
+        if not str(reason).strip():
+            reason = "理由が記載されませんでした（自動補完）"
+            auto_filled += 1
+        entry["decision"] = decision
+        entry["reason"] = reason
         reconstructed.append(entry)
+    if stats is not None:
+        stats["audit_ledger_auto_filled_count"] = auto_filled
     return reconstructed
 
 
@@ -969,9 +999,11 @@ def call_a(client: "anthropic.Anthropic", daily_data: dict, news_today: dict,
     user_content, truncation_stats, id_to_candidate = _build_call_a_user_content(
         daily_data, news_today, news_yesterday, pair_overlap_threshold)
 
+    audit_ledger_stats: dict[str, int] = {}
+
     def _rebuild_audit_ledger(data: dict) -> dict:
         data["audit_ledger"] = _reconstruct_audit_ledger(
-            data.get("audit_ledger"), id_to_candidate, pair_overlap_threshold)
+            data.get("audit_ledger"), id_to_candidate, pair_overlap_threshold, audit_ledger_stats)
         return data
 
     outcome = _call_json(
@@ -980,6 +1012,10 @@ def call_a(client: "anthropic.Anthropic", daily_data: dict, news_today: dict,
         post_process=_rebuild_audit_ledger,
     )
     outcome.truncation_stats = truncation_stats
+    # v1.54フォローアップ: post_processは_call_json()内で試行ごとに呼ばれるため、
+    # audit_ledger_statsは最終的に成功した（＝outcomeを生んだ）試行の値で
+    # 上書きされている。失敗した試行分の値が混入することはない。
+    outcome.audit_ledger_auto_filled_count = audit_ledger_stats.get("audit_ledger_auto_filled_count", 0)
     return outcome
 
 

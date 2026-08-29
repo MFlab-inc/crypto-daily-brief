@@ -268,6 +268,17 @@ def render_generation_status(gen: dict[str, Any], daily_data: dict | None = None
             f"tier4候補 {ts['tier4_total']}件中 {ts['tier4_selected']}件を選定"
             f"（{ts['tier4_dropped']}件を件数上限により除外）"
         )
+    auto_filled = a.get("audit_ledger_auto_filled_count", 0)
+    if auto_filled > 0:
+        # v1.54フォローアップ（オーナー指示）: audit_ledgerのdecision/reasonが
+        # 空文字で返る事象（非決定的・複数回観測）を、生成物全体を止めずに
+        # 定型文で補完して通した件数を記録する。頻度の追跡が目的であり、
+        # 補完自体は_reconstruct_audit_ledger()側で完結している。
+        lines.append(
+            f"audit_ledger自動補完: {auto_filled}件"
+            "（decision/reasonが空だったため定型文で補完。C19は空欄検知のため"
+            "PASSする——理由の質は監査対象外）"
+        )
     if daily_data is not None:
         inconsistent = _inconsistent_symbols(daily_data)
         if inconsistent:
