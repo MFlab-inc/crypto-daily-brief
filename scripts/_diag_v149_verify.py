@@ -86,9 +86,10 @@ bundle = compose_post.compose(daily_data, {
 
 print()
 print("=== LLM生成セクションの実文言（値動き記述が残っているか目視確認用） ===")
+sections = bundle.get("sections", {})
 for key in ("headline_for_image", "part1_headline", "part1_points", "part2_flow", "part2_summary"):
     print(f"--- {key} ---")
-    print(bundle.get(key))
+    print(bundle.get(key) if key == "headline_for_image" else sections.get(key))
     print()
 
 print("=== verify_post.run_all() 監査結果 ===")
@@ -96,3 +97,28 @@ au = verify_post.run_all(bundle, daily_data)
 for c in au.checks:
     print(f"{c['id']} {c['result']} - {(c.get('detail') or '')[:300]}")
 print(f"failed={au.failed}")
+
+print()
+print("=== C19調査用: audit_ledgerの全件フィールド充足状況 ===")
+required_fields = ("source", "url", "published_at", "decision", "reason")
+ledger = bundle.get("audit_ledger") or []
+by_url = {c.get("url"): c for c in selected if c.get("url")}
+by_title = {c.get("title"): c for c in selected if c.get("title")}
+for i, e in enumerate(ledger):
+    missing = [f for f in required_fields if not verify_post._field_present(e, f)]
+    if missing:
+        print(f"  [{i}] 欠落フィールド={missing} entry={json.dumps(e, ensure_ascii=False)}")
+        cand = by_url.get(e.get("url")) or by_title.get(e.get("title"))
+        if cand:
+            print(f"      対応候補（url/title一致）: {json.dumps(cand, ensure_ascii=False)}")
+        else:
+            print(f"      対応候補: url/titleどちらでも一致する候補が見つからない")
+print(f"audit_ledger総数={len(ledger)} / 渡した候補数={len(selected)}")
+
+print()
+print("=== 参考: 候補一覧のうちsource/url/title/published_atが空の候補（原因調査） ===")
+for c in selected:
+    empties = [f for f in ("source", "url", "title", "published_at") if not c.get(f)]
+    if empties:
+        print(f"  candidate_id={c.get('candidate_id')} 空フィールド={empties} tier={c.get('tier')} "
+              f"title={c.get('title')!r} url={c.get('url')!r}")
