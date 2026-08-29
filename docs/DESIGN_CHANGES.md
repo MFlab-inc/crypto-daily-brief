@@ -7,6 +7,130 @@
 
 ---
 
+## v1.53 — 2026-08-29（オーナー指示・経済カレンダーscheduled_eventsをヒントとして追加）
+
+### 経緯
+
+「マクロ経済・地政学・要人発言の取りこぼしが続いている」というオーナー指摘への
+調査項目【1・最優先】。8/22カナダ関税・8/26米PCE・8/28ジャクソンホール講演と、
+いずれも当日最大の材料をRSS収集だけでは拾えなかった。オーナー保有の別リポジトリ
+`MFlab-inc/EA-Risk-Monitor`（`scripts/lib/calendar.js`・Forex Factoryカレンダーを
+取得・分類する実装）の移植可否を調査し、オーナーが実装を承認した。承認時、
+参照実装から以下4点を意図的に変更することも承認済み：
+
+1. `ff_calendar_nextweek.json`は使用しない（本システムは前日分のみを扱うため不要）
+2. `country:"All"`のイベントは除外しない（Jackson Hole Symposiumのような通貨非依存
+   イベントを拾うため）
+3. `impact`が`High`のイベントのみを対象とする（Medium以下は件数が多くヒントとして
+   ノイズになるため。実データで件数を確認しsparsityを報告する条件付き）
+4. `EVENT_RULES`による正規表現ベースの種別分類は移植しない（LLMへの「探すべき材料」
+   ヒントとして渡すだけであり、自動売買のような機械的分類は不要なため）
+
+### 対応（`scripts/collect_news.py`）
+
+`fetch_economic_calendar(window_start, window_end)`を新設。データソースは
+`https://nfs.faireconomy.media/ff_calendar_thisweek.json`（Forex Factoryの
+非公式だが広く使われているJSON配信・認証不要）。既存の`collection_window_ny()`
+が返す24時間窓でフィルタし、`impact == "High"`かつ`country`が主要通貨コード
+または`"All"`のイベントのみを`title`/`country`/`impact`/`time_jst`の形で返す。
+取得失敗（HTTPエラー・JSON不正）時は空リストへ縮退し例外を伝播しない
+（既存のRSS取得系と同じフェイルクローズ思想）。
+
+### 対応（`scripts/fetch_data.py`）
+
+`main()`内、`intraday_range`計算で既に用意されている`window_start`/`window_end`を
+再利用して`fetch_economic_calendar()`を呼び出し、結果を`daily_data.json`へ
+`scheduled_events`として追加。
+
+### 対応（`scripts/generate_post.py`）
+
+`SCHEDULED_EVENTS_GUIDANCE`を新設し`SYSTEM_A`へ組み込み。要旨：
+「`scheduled_events`は『探すべき材料』のヒントであり、それ自体を材料として
+本文に書いてはいけない。対応するRSS候補が存在する場合に限り、通常の採否判定
+（tier1の裏付け、または独立2ソース）を経て本文へ反映する。予定はあったが
+候補が無い場合は、その旨を書かず単に掲載しない」。`daily_data`全体が
+呼び出しAのペイロードへ渡る既存構造のため、`_build_call_a_user_content()`
+自体への変更は不要（`intraday_range`/`notable_move`と同じ扱い）。
+
+`scheduled_events`自体を検査する新規の機械監査（verify_post.py側）は
+追加していない。C16b/C18/C21/C22/C23がいずれも実インシデント後に追加された
+という既存の方針（予防的に先回りしてゲートを増やさない）を踏襲し、
+実際の捏造インシデントが観測されるまで見送る判断とした。
+
+### テスト
+
+`test/test_bundle2.py`へ13件追加（v1.52時点319件→332件）。主な追加内容：
+`_FakeRssResp`ヘルパーへ`.json()`メソッドを追加（既存互換）、
+`fetch_economic_calendar()`の窓境界（半開区間）・`CAL_CURRENCIES`
+フィルタ（`"All"`包含含む）・High/Medium/Low impactフィルタ・3種の
+縮退ケース（HTTPエラー・JSON不正・例外）、`SCHEDULED_EVENTS_GUIDANCE`の
+文言存在確認。全332件PASS。
+
+### 実データ検証（2026-08-28・実RSS取得＋実Forex Factory JSON＋実Anthropic API使用、2回実施）
+
+診断スクリプト（`scripts/_diag_v153_verify.py`・検証後削除）で、取りこぼしが
+実際に発生した対象日そのもの（2026-08-28）に対し、`fetch_economic_calendar()`
+から`generate_post.call_a()`〜`verify_post.run_all()`までの一連の流れを
+**独立に2回**実行した（1回目: commit `be208a5`、2回目: 診断強化後の
+commit `7186924`。プロンプト・設定は同一で、Anthropic APIのサンプリングのみ
+異なる）。
+
+**`fetch_economic_calendar()`は両回とも一致**：対象週72件中、対象日Highインパクト
+4件——`CAD GDP m/m`・`USD Fed Chairman Warsh Speaks`・
+`USD Prelim Benchmark Payrolls Revision`・`All Jackson Hole Symposium`。
+取りこぼしの発端だったウォーシュ講演とPCE関連指標をいずれも直接捕捉しており、
+オーナー指定のsparsity確認に対する回答は「4件・過不足なし」（Medium追加は不要
+と判断）。
+
+**scheduled_eventsのヒント限定運用も両回で確認**：生成された本文
+（part1_headline/part1_points/part2_flow/part2_summary）に4件のイベント
+タイトルが完全一致で出現しないことを機械的に確認（言い換え済みか、対応する
+実RSS候補経由でのみ言及）。目視でも、ウォーシュ講演への言及はFRB
+（speeches・tier1）およびCoinDesk/Cointelegraphでの裏取りを伴ってのみ書かれており、
+scheduled_events単独を根拠にした記述は確認されなかった。
+
+**C12〜C23監査結果は2回で異なり、内訳を以下に正直に記録する**：
+
+| 回 | call_A/B | failed | 内訳 |
+|---|---|---:|---|
+| 1回目（`be208a5`） | 両方ok=True・1回試行 | 3 | C18 FAIL・C19 FAIL（`[0,1,2]`フィールド欠落）・C21 FAIL（`[25]` CoinDesk単独ソースを独立2ソースと誤判定） |
+| 2回目（`7186924`） | 両方ok=True・1回試行（input=23,773 output=3,761） | 1 | C21 FAILのみ（`[14]``[17]` Cointelegraph/CoinDeskがtier3のまま plain「採用」——tier1限定のはずの決定） |
+
+追加調査のため2回目実行時に診断スクリプトを強化し、`audit_ledger[0,1,2]`の
+生JSON・C18検知文一覧・C21の`decision`別source内訳・`audit_ledger[25]`の
+生JSONを直接ダンプした。判明した点：
+
+- **C18・C19は再現しなかった**：2回目は`audit_ledger[0,1,2]`とも
+  `source`/`url`/`title`/`published_at`/`verified_by`/`decision`/`reason`が
+  すべて充足しており（空/欠落フィールド: `[]`）、C18検知文一覧も0件
+  （限定表現が必要な文自体が生成されなかった）。同一コード・同一プロンプトの
+  即時再実行でFAILが再現しないことから、v1.53由来の構造的な不具合ではなく、
+  呼び出しAの出力ゆらぎ（サンプリング差）だと判断する。C19については
+  v1.49時点で報告した「同じ低インデックス`[0,1,2]`で発生した未確認の副次発見」
+  と同型の現象であり、今回も原因を追加で特定するには至らなかったが、
+  `_reconstruct_audit_ledger()`の機械的フィールド（source/url/title/
+  published_at）は毎回確実に埋まる設計のため、揺れているとすれば
+  LLM側自由記述の`decision`/`reason`であると推定される（確証はない）。
+- **C21は2回とも発生したが、原因は毎回異なる**：1回目は「独立2ソース」の
+  誤判定、2回目は「tier1限定のはずの`採用`をtier3が名乗った」という別種の
+  違反であり、いずれもCoinDesk・Cointelegraph（tier3）に対する呼び出しAの
+  `decision`付与が、C21の機械判定基準（v1.29採用・オーナー承認案1）と
+  ずれている。この基準・チェック自体はv1.53以前から存在し、
+  `scheduled_events`とは無関係の既存リスクである。2回中2回で
+  （形は違えど）発生した点は軽視すべきでないため正直に記録するが、
+  本タスクの承認範囲（経済カレンダーの追加）を超えるため今回は修正せず、
+  別件として追跡する。
+
+### 未解決・要フォローアップ
+
+- C21（decision/tier整合性）のtier3誤判定は、v1.53とは独立に発生頻度が
+  高い可能性がある。今後の運用観察で頻度を確認し、必要であれば呼び出しA
+  プロンプトへtier3の`採用`可否をより明示的に指示する対応を検討する
+  （C18と同型の「プロンプト強化はゆらぎを減らせても保証はできない」
+  限界を踏まえ、機械監査での検知自体は維持する）。
+
+---
+
 ## v1.52 — 2026-08-29（オーナー指示・FRB speeches.xml・testimony.xmlをtier1として追加）
 
 ### 経緯
