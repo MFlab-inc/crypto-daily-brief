@@ -1391,6 +1391,11 @@ class _FakeRssResp:
     def text(self) -> str:
         return self.content.decode("utf-8")
 
+    def json(self):
+        # v1.53: fetch_economic_calendar()のJSONレスポンス検証用に追加
+        # （既存のRSS/XML用途には影響しない・呼ばれなければ使われないだけ）。
+        return json.loads(self.content.decode("utf-8"))
+
 
 def _patch_requests_get(fn):
     orig = collect_news.requests.get
@@ -1440,6 +1445,82 @@ check("collection_window_ny: DST切替日でもwindow_end直前は正しく含�
       _ws_spring <= _edge_included < _we_spring)
 check("collection_window_ny: DST切替日でもwindow_endちょうどは正しく除外される（半開区間）",
       not (_ws_spring <= _edge_excluded < _we_spring))
+
+print("=== collect_news.py: fetch_economic_calendar（v1.53・オーナー指示） ===")
+_ff_ws, _ff_we = collect_news.collection_window_ny(_date(2026, 8, 28))
+
+
+def _ff_event(title, country, impact, dt_iso):
+    return {"title": title, "country": country, "impact": impact, "date": dt_iso,
+            "forecast": "", "previous": ""}
+
+
+_FF_EVENTS = [
+    _ff_event("Fed Chairman Warsh Speaks", "USD", "High", "2026-08-28T10:00:00-04:00"),  # 窓内・High・採用
+    _ff_event("Jackson Hole Symposium", "All", "High", "2026-08-28T12:15:00-04:00"),  # 窓内・High・All国・採用
+    _ff_event("Core PCE Price Index m/m", "USD", "Medium", "2026-08-28T08:30:00-04:00"),  # 窓内だがMedium・除外
+    _ff_event("Some Low Impact Data", "USD", "Low", "2026-08-28T09:00:00-04:00"),  # 窓内だがLow・除外
+    _ff_event("SEK-only High Event", "SEK", "High", "2026-08-28T09:00:00-04:00"),  # 窓内・Highだが対象通貨外・除外
+    _ff_event("Outside Window Before", "USD", "High", "2026-08-26T10:00:00-04:00"),  # 窓外（前）・除外
+    _ff_event("Outside Window After", "USD", "High", "2026-08-29T10:00:00-04:00"),  # 窓外（後）・除外
+]
+orig_get_ff = _patch_requests_get(
+    lambda url, **kw: _FakeRssResp(200, json.dumps(_FF_EVENTS).encode("utf-8")))
+_ff_result = collect_news.fetch_economic_calendar(_ff_ws, _ff_we)
+collect_news.requests.get = orig_get_ff
+check("fetch_economic_calendar: 窓内・High・対象通貨のイベントのみ採用される（2件）",
+      len(_ff_result) == 2, str(_ff_result))
+check("fetch_economic_calendar: country=='All'のイベントも採用される（EA-Risk-Monitor元実装との差分・オーナー承認）",
+      any(e["title"] == "Jackson Hole Symposium" for e in _ff_result), str(_ff_result))
+check("fetch_economic_calendar: Medium/Lowインパクトは除外される",
+      not any(e["title"] in ("Core PCE Price Index m/m", "Some Low Impact Data") for e in _ff_result),
+      str(_ff_result))
+check("fetch_economic_calendar: 対象通貨外（SEK）は除外される",
+      not any(e["title"] == "SEK-only High Event" for e in _ff_result), str(_ff_result))
+check("fetch_economic_calendar: 窓外（前後とも）のイベントは除外される",
+      not any(e["title"] in ("Outside Window Before", "Outside Window After") for e in _ff_result),
+      str(_ff_result))
+check("fetch_economic_calendar: 時刻順（昇順）で返される",
+      [e["title"] for e in _ff_result] == ["Fed Chairman Warsh Speaks", "Jackson Hole Symposium"],
+      [e["title"] for e in _ff_result])
+check("fetch_economic_calendar: time_jstがJSTへ変換されている（14:00 EDT=23:00 JST）",
+      "23:00:00" in _ff_result[0]["time_jst"], _ff_result[0]["time_jst"])
+
+# 境界値: window_endちょうど（半開区間なので除外）・window_startちょうど（含む）
+_ff_boundary_events = [
+    _ff_event("At window_end exactly", "USD", "High", _ff_we.isoformat()),
+    _ff_event("At window_start exactly", "USD", "High", _ff_ws.isoformat()),
+]
+orig_get_ffb = _patch_requests_get(
+    lambda url, **kw: _FakeRssResp(200, json.dumps(_ff_boundary_events).encode("utf-8")))
+_ff_boundary_result = collect_news.fetch_economic_calendar(_ff_ws, _ff_we)
+collect_news.requests.get = orig_get_ffb
+check("fetch_economic_calendar: window_endちょうどは除外・window_startちょうどは含む（半開区間、他の窓判定と同じ扱い）",
+      [e["title"] for e in _ff_boundary_result] == ["At window_start exactly"], str(_ff_boundary_result))
+
+# フェイルオープン確認: 非200・JSON不正・空リストのいずれも例外を送出せず空リストを返す
+orig_get_ff404 = _patch_requests_get(lambda url, **kw: _FakeRssResp(404, b""))
+check("fetch_economic_calendar: HTTP非200は例外を送出せず空リストを返す（フェイルオープン）",
+      collect_news.fetch_economic_calendar(_ff_ws, _ff_we) == [])
+collect_news.requests.get = orig_get_ff404
+
+orig_get_ffbad = _patch_requests_get(lambda url, **kw: _FakeRssResp(200, b"not valid json {{{"))
+check("fetch_economic_calendar: JSON不正は例外を送出せず空リストを返す（フェイルオープン）",
+      collect_news.fetch_economic_calendar(_ff_ws, _ff_we) == [])
+collect_news.requests.get = orig_get_ffbad
+
+orig_get_ffempty = _patch_requests_get(lambda url, **kw: _FakeRssResp(200, b"[]"))
+check("fetch_economic_calendar: 空配列レスポンスは空リストを返す（0件は正常系・停止しない）",
+      collect_news.fetch_economic_calendar(_ff_ws, _ff_we) == [])
+collect_news.requests.get = orig_get_ffempty
+
+print("=== generate_post.py: SCHEDULED_EVENTS_GUIDANCE（v1.53・オーナー指示） ===")
+check("SCHEDULED_EVENTS_GUIDANCEがオーナー指定の文言を含む",
+      "「探すべき材料」のヒントであり" in generate_post.SCHEDULED_EVENTS_GUIDANCE
+      and "それ自体を材料として本文に" in generate_post.SCHEDULED_EVENTS_GUIDANCE
+      and "予定はあったが候補が無い場合は、その旨を書かず" in generate_post.SCHEDULED_EVENTS_GUIDANCE)
+check("SYSTEM_AにSCHEDULED_EVENTS_GUIDANCEが含まれる",
+      "daily_data.scheduled_events" in generate_post.SYSTEM_A)
 
 check("parse_pubdate_jst: タイムゾーン情報を持たないpubDateはNone（フェイルクローズ・v1.38オーナー指示）",
       collect_news.parse_pubdate_jst("Mon, 17 Aug 2026 10:00:00") is None)

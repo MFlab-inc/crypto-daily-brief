@@ -516,6 +516,13 @@ def main() -> int:
                 entry["notable_move"] = nm
         intraday_range[sym] = entry
 
+    # v1.53（オーナー指示）: 経済カレンダー（CPI・PCE・FOMC・要人講演等）。
+    # 予定日は事前に確定しているため報道を待つ必要がなく、呼び出しAへ
+    # 「この材料を探すべき」というヒントとして渡す（scheduled_events自体は
+    # 本文の根拠にしない。詳細はcollect_news.fetch_economic_calendar()参照）。
+    # 失敗しても停止しない（ヒント用途であり本文生成の必須要素ではない）。
+    scheduled_events = safe(collect_news.fetch_economic_calendar, window_start, window_end) or []
+
     t_end = datetime.now(JST)
 
     # v1.2 承認3: cmc は区画ごとに欠損しうるため、区画単位で参照する。
@@ -657,6 +664,9 @@ def main() -> int:
         # 銘柄（BNB）はデータとして保持するが、本文への反映可否は別途判断する
         # （オーナー指示）。
         "intraday_range": intraday_range,
+        # v1.53: 対象日に予定されていた高インパクト経済イベント。呼び出しA
+        # への「探すべき材料」ヒント（本文の直接の根拠にはしない）。
+        "scheduled_events": scheduled_events,
         "market": {
             "fear_greed": (fg if fg else {"value": 0, "label": UNCONFIRMED}),
             "market_cap": fmt_cap_usd(g["mcap"]) if g else UNCONFIRMED,

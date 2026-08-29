@@ -317,6 +317,76 @@ def _collect_from_feed(name: str, url: str, window_start: datetime, window_end: 
     return {"status": "ok", "raw_count": len(items), "kept_count": len(candidates)}, candidates
 
 
+# v1.53（オーナー指示）: 経済カレンダー（CPI・PCE・FOMC・雇用統計・要人講演等）
+# の予定を取得する。8/22カナダ関税・8/26 PCE・8/28ジャクソンホール講演など
+# 「その日最大の材料」を繰り返し取りこぼした事象への対応——CPI・PCE・FOMC
+# 等の予定日は事前に確定しており報道を待つ必要がない。scheduled_events自体は
+# 呼び出しAへ「この材料を探すべき」というヒントとして渡すのみで、本文の
+# 直接の根拠にはしない（対応するRSS候補が無ければ何も書かない。プロンプト
+# 側の指示で担保する）。
+#
+# データソースはnfs.faireconomy.media（Forex Factoryの経済カレンダーを
+# JSON形式で配信する非公式だが広く使われているエンドポイント）。
+# MFlab-inc/EA-Risk-Monitorのscripts/lib/calendar.js（リアルタイムFX
+# リスク監視向け・48時間先読み）を参考にしたが、用途が異なるため
+# 以下を変更した（オーナー承認）：
+# ・thisweekフィードのみ使用する。nextweekは本システムが前日分のみを
+#   扱う（48時間先読みの必要が無い）ため不要と判断——実測でnextweekは
+#   HTTP 404だったこともこの判断の裏付けとなった。
+# ・country=="All"（Jackson Hole Symposiumのような通貨非依存イベント）を
+#   除外しない。元実装はFXペア向けの通貨フィルタで除外していたが、
+#   暗号市場のマクロ心理を扱う本用途では拾う対象とする。
+# ・impact=="High"のみを対象とする（Medium以下はヒントとしてノイズに
+#   なりやすいというオーナー判断）。
+# ・イベント種別分類（EVENT_RULES的なregex分類）は移植しない——LLMへの
+#   ヒントとして渡すだけで自動判定には使わないため不要。
+FF_CALENDAR_URL = "https://nfs.faireconomy.media/ff_calendar_thisweek.json"
+CAL_CURRENCIES = {"USD", "JPY", "EUR", "GBP", "AUD", "CAD", "CHF", "CNY", "NZD", "All"}
+
+
+def fetch_economic_calendar(window_start: datetime, window_end: datetime) -> list[dict[str, Any]]:
+    """対象日の収集ウィンドウ（collection_window_ny()と同じ半開区間
+    [window_start, window_end)）に該当する高インパクト経済イベントを返す。
+
+    取得・解析に失敗した場合（非200・JSON不正等）は空リストを返す
+    （collect_news.pyの他の取得関数と同じフェイルオープンの思想——
+    経済カレンダーは本文生成の必須要素ではなく、あくまでヒントであるため
+    失敗を理由にパイプライン全体を止めない）。
+    """
+    try:
+        resp = requests.get(FF_CALENDAR_URL, timeout=REQUEST_TIMEOUT_SEC,
+                             headers={"User-Agent": USER_AGENT})
+        if resp.status_code != 200:
+            print(f"WARN: 経済カレンダー取得失敗: HTTP {resp.status_code} (url={FF_CALENDAR_URL})",
+                  file=sys.stderr)
+            return []
+        raw_events = resp.json()
+    except (requests.RequestException, ValueError) as e:
+        print(f"WARN: 経済カレンダー取得失敗: {type(e).__name__}: {e} (url={FF_CALENDAR_URL})",
+              file=sys.stderr)
+        return []
+
+    events = []
+    for e in raw_events:
+        if not isinstance(e, dict) or e.get("impact") != "High" or e.get("country") not in CAL_CURRENCIES:
+            continue
+        try:
+            event_dt = datetime.fromisoformat(str(e.get("date", "")))
+        except ValueError:
+            continue
+        if event_dt.tzinfo is None or not (window_start <= event_dt < window_end):
+            continue
+        events.append({
+            "title": e.get("title", ""),
+            "country": e.get("country", ""),
+            "impact": e.get("impact", ""),
+            "time_jst": event_dt.astimezone(JST).isoformat(),
+        })
+    events.sort(key=lambda ev: ev["time_jst"])
+    print(f"OK: 経済カレンダー {len(raw_events)}件取得・対象日High{len(events)}件（url={FF_CALENDAR_URL}）")
+    return events
+
+
 _TIER_KIND = {1: "official", 3: "supplementary"}
 
 

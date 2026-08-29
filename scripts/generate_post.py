@@ -187,6 +187,19 @@ INTRADAY_MOVE_GUIDANCE = """## 24時間の値動き（notable_move）
 あなたは数値を書かないこと。「一時的に上昇したのち上げ幅を縮小した」の
 ような、値動きの形状のみを記述する。"""
 
+# v1.53（オーナー指示）: CPI・PCE・FOMC・要人講演等、その日最大の材料を
+# 繰り返し取りこぼした事象（8/22カナダ関税・8/26 PCE・8/28ジャクソンホール
+# 講演）への対応。scheduled_eventsは「探すべき材料」のヒントに過ぎず、
+# それ自体を本文の根拠にしてはならない——対応するRSS候補が無ければ何も
+# 書かない（未確認の事項を推測で補わないという絶対規則5と同じ考え方）。
+SCHEDULED_EVENTS_GUIDANCE = """## 経済カレンダー（scheduled_events）
+
+入力の daily_data.scheduled_events は対象日に予定されていた経済イベント
+です。これらは「探すべき材料」のヒントであり、それ自体を材料として本文に
+書いてはいけません。対応するRSS候補が存在する場合に限り、通常の採否判定
+（tier1の裏付け、または独立2ソース）を経て本文へ反映してください。
+予定はあったが候補が無い場合は、その旨を書かず、単に掲載しないでください。"""
+
 RULES_CAUSAL = """## 因果表現
 
 - 事実の記述と価格変動の因果を混同しない。
@@ -438,7 +451,7 @@ OUTPUT_FORMAT_A = """## 出力形式
 
 SYSTEM_A = "\n\n".join([
     ROLE_INTRO, RULES_ABSOLUTE, RULES_HASHTAG, NEWS_SELECTION, NO_CANDIDATES_FALLBACK,
-    INTRADAY_MOVE_GUIDANCE, RULES_CAUSAL, WRITES_A, OUTPUT_FORMAT_A,
+    INTRADAY_MOVE_GUIDANCE, SCHEDULED_EVENTS_GUIDANCE, RULES_CAUSAL, WRITES_A, OUTPUT_FORMAT_A,
 ])
 
 CALL_B_INSTRUCTIONS = """入力として、当日の市場データ（daily_data.json）と、呼び出しAの出力
