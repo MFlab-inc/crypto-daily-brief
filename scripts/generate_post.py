@@ -75,9 +75,14 @@ TIER3_CANDIDATE_LIMIT = 15
 # 解決しないため、独立2媒体が同一事実を報じているペアは、順位に関わらず
 # 両方を候補集合へ残す（ペア救済）。救済はTIER3_CANDIDATE_LIMIT件の
 # 上限外で加算する（当初オーナー案の「上限を超えても両方残す」を反映）。
-PAIR_OVERLAP_THRESHOLD = 0.4  # タイトルのトークン重なり係数（overlap coefficient）の閾値。
-# 8/24のCoinbase/Baseトークン化株式ペア（既知の独立2ソース成功例）で0.45と
-# 実測し較正した値（DESIGN_CHANGES.md v1.39参照。較正基盤は1件のみで薄い）。
+PAIR_OVERLAP_THRESHOLD_DEFAULT = 0.4  # タイトルのトークン重なり係数（overlap coefficient）の
+# 閾値のデフォルト値。8/24のCoinbase/Baseトークン化株式ペア（既知の独立2ソース
+# 成功例）で0.45と実測し較正した値（DESIGN_CHANGES.md v1.39参照。較正基盤は
+# 1件のみで薄い）。v1.53フォローアップ（オーナー指示）: ペア救済（pre-selection）
+# と独立2ソース自己申告の妥当性確認（post-selection）の両方で共用し、
+# config/pair_overlap.json（load_pair_overlap_threshold()）で調整可能にした。
+# ファイル欠損・不正時のフェイルクローズ値としてこの定数を維持する。
+PAIR_OVERLAP_CONFIG_PATH = Path(__file__).parent.parent / "config" / "pair_overlap.json"
 PAIR_RESCUE_MAX_PAIRS = 5  # ペア救済は最大5組（最大10件）まで。無制限だと
 # トークン予算を超えるリスクがあるため上限を設ける（オーナー指示）。
 
@@ -92,6 +97,25 @@ TIER4_CANDIDATE_LIMIT = 10
 _TOKEN_RE = re.compile(r"[a-z0-9]+")
 
 
+def load_pair_overlap_threshold() -> float:
+    """タイトルのトークン重なり係数の閾値をconfig/pair_overlap.jsonから読む
+    （v1.53フォローアップ・オーナー指示）。ペア救済（pre-selection）と
+    独立2ソース自己申告pairs_with_candidate_idの妥当性確認（post-selection）
+    の両方で共用する。ファイル欠損・不正時はデフォルト値
+    （PAIR_OVERLAP_THRESHOLD_DEFAULT）にフェイルクローズする
+    （他のconfig読み込み関数・fetch_data.load_notable_move_thresholdと
+    同じ方針）。
+    """
+    if not PAIR_OVERLAP_CONFIG_PATH.exists():
+        return PAIR_OVERLAP_THRESHOLD_DEFAULT
+    try:
+        data = json.loads(PAIR_OVERLAP_CONFIG_PATH.read_text(encoding="utf-8"))
+    except (ValueError, OSError):
+        return PAIR_OVERLAP_THRESHOLD_DEFAULT
+    v = data.get("pair_overlap_threshold")
+    return float(v) if isinstance(v, (int, float)) and not isinstance(v, bool) else PAIR_OVERLAP_THRESHOLD_DEFAULT
+
+
 def _tokenize_title(title: str) -> set[str]:
     return set(_TOKEN_RE.findall(str(title).lower()))
 
@@ -102,10 +126,11 @@ def _overlap_coefficient(a: set[str], b: set[str]) -> float:
     return len(a & b) / min(len(a), len(b))
 
 
-def _find_independent_pairs(tier3_sorted: list[dict]) -> list[tuple[dict, dict]]:
+def _find_independent_pairs(tier3_sorted: list[dict],
+                             threshold: float = PAIR_OVERLAP_THRESHOLD_DEFAULT) -> list[tuple[dict, dict]]:
     """独立2媒体が同一事実を報じているとみられるペアを検出する（v1.39
-    フォローアップ）。タイトルのトークン重なり係数がPAIR_OVERLAP_THRESHOLD
-    以上、かつsourceが異なる組み合わせをペアとみなす。1記事が複数ペアへ
+    フォローアップ）。タイトルのトークン重なり係数がthreshold以上、
+    かつsourceが異なる組み合わせをペアとみなす。1記事が複数ペアへ
     重複計上されないよう、ペアが確定した記事は以降の走査から除外する
     （貪欲法）。tier3_sortedは公開日時の新しい順を前提とし、より新しい
     記事同士の組み合わせが優先的にペア判定される。
@@ -123,7 +148,7 @@ def _find_independent_pairs(tier3_sorted: list[dict]) -> list[tuple[dict, dict]]
             if id(b) in used or a.get("source") == b.get("source"):
                 continue
             sim = _overlap_coefficient(a_tokens, _tokenize_title(b.get("title", "")))
-            if sim >= PAIR_OVERLAP_THRESHOLD:
+            if sim >= threshold:
                 pairs.append((a, b))
                 used.add(id(a))
                 used.add(id(b))
@@ -287,7 +312,8 @@ tier 4: Google News経由の候補発見のみの結果（見出し・URLのみ�
   原則としてtier 1の事実を補強する裏取りとしてのみ併記してよく、
   tier 3単独を新規項目の根拠にしない。
 
-### 独立2ソース規定（v1.28・統合運用基準の既定を実装へ反映）
+### 独立2ソース規定（v1.28・統合運用基準の既定を実装へ反映。v1.53
+フォローアップでaudit_ledgerへの記録方法を改定・オーナー指示）
 
 tier3のみで報じられた材料であっても、次の3条件をすべて満たす場合は
 【主要なポイント】への掲載を許可する。
@@ -297,8 +323,14 @@ tier3のみで報じられた材料であっても、次の3条件をすべて�
  (c) 掲載時に媒体名を複数列挙し、一次情報での裏付けが未確認である旨を
      明記する
 上記に該当しない場合は従来どおりtier1の裏付けを必要とする。
-この規定で採用した候補は、audit_ledgerのdecisionを
-"採用（独立2ソース）" と記録する（"採用"や"不採用"と区別する）。
+
+この規定に該当すると判断したtier3候補は、audit_ledgerでuse:trueとし、
+相手候補（同一事実を報じている別sourceのtier3候補）のcandidate_idを
+pairs_with_candidate_idに記す（下記「audit_ledger」参照）。
+"採用"／"採用（独立2ソース）"／"不採用"という記録文言自体はあなたが
+書かず、tier・use・pairs_with_candidate_idの妥当性からシステム側が
+機械的に確定する（v1.53フォローアップ・オーナー指示。単独ソースを
+独立2ソースと誤って記録する等の事故が繰り返し発生したため）。
 part1_headlineでの扱いは下記「part1_headline・part1_pointsの決定」を
 参照。
 
@@ -329,12 +361,15 @@ part1_headline・headline_for_imageの決定手順は下記
 # 今回の再発は分散した記述の一部（本セクション）だけを更新し他を据え置いた
 # ことが一因（v1.42→v1.43改定時）。今回は全箇所を本セクションへの参照へ
 # 統一し、単一の記述箇所以外では判定基準を繰り返さない構成へ変更した。
-NO_CANDIDATES_FALLBACK = f"""## part1_headline・part1_pointsの決定（v1.44・オーナー指示）
+NO_CANDIDATES_FALLBACK = f"""## part1_headline・part1_pointsの決定（v1.44・オーナー指示。
+(i)(ii)の判定方法はv1.53フォローアップで改定・オーナー指示）
 
 part1_headline および part1_points は、次の3つを独立に確認して
 決定する。
-(i)   tier1の裏付けがある採用材料（decision:"採用"）があるか
-(ii)  独立2ソース材料（decision:"採用（独立2ソース）"）があるか
+(i)   tier1の候補でuse:trueと判断したものがあるか
+(ii)  tier3の候補で、独立2ソース規定に該当すると判断し、
+      pairs_with_candidate_idで関連付けてuse:trueとしたものが
+      2件以上あるか
 (iii) 入力の intraday_range に notable_move: true の銘柄があるか
 
 定型文を使うのは、(i)(ii)(iii)のすべてが「なし」の場合に限る。
@@ -390,25 +425,40 @@ part1_pointsには、値動きの記述に加え「ニュース材料は確認�
 audit_ledgerは「採否を判断した全候補の記録」であり、本文（ヘッドライン・
 主要なポイント）に採用したかどうかとは無関係に、news_candidates_today に
 渡された候補（tier 1・3・4のすべて）を1件残らず記録する。ヘッドライン・
-主要なポイントに使わなかった候補も decision:"不採用" とその理由を記録する。
+主要なポイントに使わなかった候補も use:false とその理由を記録する。
 
-各要素は candidate_id（news_candidates_today内の該当候補のID）・
-decision・verified_by・reason のみを書く（v1.48・オーナー指示）。
-source・url・title・published_atは書かない——candidate_idからシステム側が
-候補一覧の該当データをそのまま補完するため、あなたが転記する必要は無い
-（転記ミスの防止のため）。1件の候補につきcandidate_idはちょうど1回のみ
-使う（重複・欠落は不可）。
+各要素は candidate_id（news_candidates_today内の該当候補のID）・use・
+pairs_with_candidate_id・verified_by・reason のみを書く（v1.48・v1.53
+フォローアップ・オーナー指示）。source・url・title・published_atは
+書かない——candidate_idからシステム側が候補一覧の該当データをそのまま
+補完するため、あなたが転記する必要は無い（転記ミスの防止のため）。
+1件の候補につきcandidate_idはちょうど1回のみ使う（重複・欠落は不可）。
+"採用"／"採用（独立2ソース）"／"不採用"という記録文言自体もあなたは
+書かない（下記参照）。
 
-decision:"不採用" の場合、reasonの冒頭に上記A/B/Cのどの段階と判定したかを
+- use（true/false）: この候補を本文（ヘッドライン・主要なポイント）の
+  根拠として使ったかどうか。tier4の候補は候補発見専用の位置づけのため、
+  useの値に関わらずaudit_ledger上は常に不採用として扱われる
+  （継続監視の言及はaudit_ledgerではなくreusable_for_summaryに記す）。
+- pairs_with_candidate_id: tier3でuse:trueの候補のうち、上記
+  「独立2ソース規定」に該当すると判断したものにのみ、同一事実を
+  報じている相手（別sourceのtier3候補）のcandidate_idを記す
+  （該当しなければ省略、またはnull）。相互に指し合う必要はなく、
+  片方が指せば成立する。この申告はシステム側が機械的に妥当性を
+  確認したうえで"採用（独立2ソース）"の記録に反映される（相手が
+  実在しtier3・use:trueであること、sourceが異なること、タイトルの
+  内容が実際に重なっていることを確認する）。妥当性が確認できない
+  場合はこの呼び出し自体がリトライされる。
+
+use:false の場合、reasonの冒頭に上記A/B/Cのどの段階と判定したかを
 明記する（例:「C: 自動車産業の国内回帰に関する内容で、金利・為替・流動性等
 への波及経路を説明できない」「B: 波及経路は説明できるが、内容が薄く参考
 材料としても不十分」等）。「暗号通貨価格への直接因果が未確認」であること
-のみを理由に不採用としてはならない（上記【厳守】参照）。
-decision:"不採用" のreasonは全角60字以内に収める（判定段階＋簡潔な理由の
-みでよく、詳細な論述は不要）。decision:"採用"・"採用（独立2ソース）"の
-reasonにはこの字数制限を適用しない。
-verified_byは採用系decision（"採用"・"採用（独立2ソース）"）の場合のみ
-書く（判断に属する情報のため）。不採用の場合は空文字でよい。
+のみを理由にuse:falseとしてはならない（上記【厳守】参照）。
+use:false のreasonは全角60字以内に収める（判定段階＋簡潔な理由のみでよく、
+詳細な論述は不要）。use:trueのreasonにはこの字数制限を適用しない。
+verified_byはuse:trueの場合のみ書く（判断に属する情報のため）。
+use:falseの場合は空文字でよい。
 audit_ledgerを空配列 [] にしてよいのは、news_candidates_today が
 空配列で渡された（候補が1件も無かった）場合のみである。
 候補が1件でも渡されている場合、audit_ledgerを空配列で返してはならない。"""
@@ -429,9 +479,10 @@ WRITES_A = """## あなたが書くもの
   表現を項目文に含める——因果が未確認であることは不採用の理由にせず、
   掲載したうえで明記する。
 - audit_ledger: 候補一覧（tier 1・3・4のすべて）の採否を判断した記録。
-  各要素は candidate_id・decision・verified_by・reason のみを書く
-  （source・url・title・published_atは書かない。詳細は上記
-  「part1_headline・part1_pointsの決定」内のaudit_ledgerの節を参照）。
+  各要素は candidate_id・use・pairs_with_candidate_id（tier3で
+  use:trueかつ独立2ソース規定該当時のみ）・verified_by・reason のみを
+  書く（source・url・title・published_at・decisionは書かない。詳細は
+  上記「part1_headline・part1_pointsの決定」内のaudit_ledgerの節を参照）。
 - reusable_for_summary: 継続材料で本文に載せなかったものの1行要約（0〜2件）。"""
 
 OUTPUT_FORMAT_A = """## 出力形式
@@ -444,7 +495,7 @@ OUTPUT_FORMAT_A = """## 出力形式
   "part1_points": ["...", "..."],
   "reusable_for_summary": ["..."],
   "audit_ledger": [
-    { "candidate_id": 1, "decision": "採用/採用（独立2ソース）/不採用",
+    { "candidate_id": 1, "use": true, "pairs_with_candidate_id": null,
       "verified_by": "", "reason": "" }
   ]
 }"""
@@ -615,7 +666,9 @@ def _call_json(
                         attempt_errors=list(attempt_errors))
 
 
-def _select_candidates_for_call_a(candidates: list[dict]) -> tuple[list[dict], dict[str, int]]:
+def _select_candidates_for_call_a(
+        candidates: list[dict],
+        pair_overlap_threshold: float = PAIR_OVERLAP_THRESHOLD_DEFAULT) -> tuple[list[dict], dict[str, int]]:
     """呼び出しAへ渡す候補を選ぶ（v1.21・v1.39フォローアップでペア救済を追加・
     v1.51でtier4上限を追加）。
     tier 1（公式発表）は全件、tier 3（CoinDesk・Cointelegraph等）は公開日時の
@@ -650,7 +703,7 @@ def _select_candidates_for_call_a(candidates: list[dict]) -> tuple[list[dict], d
     rescued: list[dict] = []
     rescued_ids: set[int] = set()
     pairs_rescued = 0
-    for a, b in _find_independent_pairs(tier3_sorted):
+    for a, b in _find_independent_pairs(tier3_sorted, pair_overlap_threshold):
         if pairs_rescued >= PAIR_RESCUE_MAX_PAIRS:
             break
         missing = [c for c in (a, b) if id(c) not in top_ids and id(c) not in rescued_ids]
@@ -710,26 +763,120 @@ _AUDIT_LEDGER_STATIC_FIELDS = ("source", "url", "title", "published_at")
 
 
 class AuditLedgerReconstructionError(ValueError):
-    """LLMのaudit_ledger出力が候補一覧と整合しない場合に送出する（v1.48）。
-    _call_json()の広いexceptで捕捉され、他の解析失敗と同様にリトライされる。
+    """LLMのaudit_ledger出力が候補一覧と整合しない場合に送出する（v1.48・
+    v1.53フォローアップで対象を拡張）。_call_json()の広いexceptで捕捉され、
+    他の解析失敗と同様にリトライされる。
     """
 
 
-def _reconstruct_audit_ledger(llm_entries: Any, id_to_candidate: dict[int, dict]) -> list[dict]:
-    """LLMが出力した candidate_id・decision・verified_by・reason のみの
-    audit_ledgerを、候補データのsource/url/title/published_atで補完した
-    完全な形へ復元する（v1.48・オーナー指示）。これらのフィールドをLLMに
-    書かせないことで、URLの書き間違い等の転記ミスの経路自体を無くす。
+def _validate_pair_claim(claimant_id: int, target_id: int, id_to_candidate: dict[int, dict],
+                          use_by_id: dict[int, bool], threshold: float) -> bool:
+    """tier3のuse:trueエントリがpairs_with_candidate_idで自己申告した相手が
+    独立2ソースの相方として妥当かを確認する（v1.53フォローアップ・
+    オーナー指示）。以下4条件をすべて満たす場合のみ有効。
+      - target_idが実在し、claimant_id自身でない
+      - 相手もtier3であること
+      - 相手もuse:trueであること
+      - sourceが異なること（同一媒体の2記事は不可）
+      - タイトルのトークン重なり係数がthreshold以上であること
+    相互申告（双方が互いを指す）は要求しない——片方向の申告が上記条件を
+    満たせば成立する（オーナー指示）。
+    """
+    if target_id not in id_to_candidate or target_id == claimant_id:
+        return False
+    target = id_to_candidate[target_id]
+    if target.get("tier") != 3 or not use_by_id.get(target_id):
+        return False
+    claimant = id_to_candidate[claimant_id]
+    if target.get("source") == claimant.get("source"):
+        return False
+    sim = _overlap_coefficient(_tokenize_title(claimant.get("title", "")), _tokenize_title(target.get("title", "")))
+    return sim >= threshold
+
+
+def _derive_decisions(llm_entries: list[dict], id_to_candidate: dict[int, dict],
+                       pair_overlap_threshold: float) -> dict[int, str]:
+    """candidate_idごとのdecision（"採用"/"採用（独立2ソース）"/"不採用"）を
+    コード側で機械的に導出する（v1.53フォローアップ・オーナー指示）。
+
+    C21（decision/tier整合性監査）が、tier3候補に対する呼び出しAの誤った
+    decisionラベル付け（単独ソースを独立2ソースと誤判定・tier1限定のはずの
+    "採用"をtier3が名乗る等）を繰り返し検出していた事象への対応。LLMには
+    "採用"のような記録文言を直接書かせず、候補ごとのuse:true/falseと
+    （tier3のuse:trueに限り）pairs_with_candidate_idの自己申告のみを
+    書かせ、tierと申告の妥当性からdecisionを構成的に確定する——誤った
+    文言が生じる経路自体を無くす（C19のsource/url/title/published_at
+    再構成＝v1.48と同じ設計思想）。
+
+    tier1: use:true→"採用"、use:false→"不採用"。
+    tier3: use:trueかつ_validate_pair_claim()を満たすペアが（自己申告
+      またはpairs_with_candidate_idで自分を指す他候補からの申告いずれかで）
+      成立→双方"採用（独立2ソース）"。use:trueだがどの方向からもペアが
+      成立しない場合はAuditLedgerReconstructionErrorを送出し、
+      _call_json()のリトライへ委ねる（C21で検知させる設計だと1回のFAILが
+      即座に生成物全体を不採用にするため、まずリトライでLLMに自己修正の
+      機会を与える。オーナー指示）。use:false→"不採用"。
+    tier1・tier3以外（tier4等・候補発見専用）: useの値によらず常に
+    "不採用"（NEWS_SELECTIONの「単独では事実の根拠にしない」規定と整合。
+    tier4はペアの対象に含めない——オーナー指示）。
+    """
+    use_by_id = {e["candidate_id"]: bool(e.get("use")) for e in llm_entries}
+    claim_by_id: dict[int, int | None] = {}
+    for e in llm_entries:
+        pc = e.get("pairs_with_candidate_id")
+        claim_by_id[e["candidate_id"]] = pc if isinstance(pc, int) and not isinstance(pc, bool) else None
+
+    paired: set[int] = set()
+    for cid, target_id in claim_by_id.items():
+        if id_to_candidate[cid].get("tier") != 3 or not use_by_id.get(cid) or target_id is None:
+            continue
+        if _validate_pair_claim(cid, target_id, id_to_candidate, use_by_id, pair_overlap_threshold):
+            paired.add(cid)
+            paired.add(target_id)
+
+    decisions: dict[int, str] = {}
+    unresolved: list[int] = []
+    for cid, candidate in id_to_candidate.items():
+        use = use_by_id.get(cid, False)
+        tier = candidate.get("tier")
+        if not use:
+            decisions[cid] = "不採用"
+        elif tier == 1:
+            decisions[cid] = "採用"
+        elif tier == 3:
+            if cid in paired:
+                decisions[cid] = "採用（独立2ソース）"
+            else:
+                unresolved.append(cid)
+        else:
+            decisions[cid] = "不採用"
+
+    if unresolved:
+        raise AuditLedgerReconstructionError(
+            f"tier3のuse:trueだが独立2ソースの相方が成立しない候補ID: {sorted(unresolved)}")
+    return decisions
+
+
+def _reconstruct_audit_ledger(llm_entries: Any, id_to_candidate: dict[int, dict],
+                               pair_overlap_threshold: float = PAIR_OVERLAP_THRESHOLD_DEFAULT) -> list[dict]:
+    """LLMが出力した candidate_id・use・pairs_with_candidate_id・
+    verified_by・reason のみのaudit_ledgerを、候補データのsource/url/
+    title/published_atで補完し、decisionをコード側で導出した完全な形へ
+    復元する（v1.48・オーナー指示。decision導出はv1.53フォローアップで
+    追加）。source等をLLMに書かせないことで転記ミスの経路を無くし、
+    decisionもLLMに書かせないことで誤ラベリングの経路を無くす。
 
     候補ID参照が候補一覧と過不足なく一致することを要求する——不明なID・
     重複・欠落のいずれも例外を送出し、呼び出し元の_call_json()のリトライへ
     委ねる（架空のIDを容認しない・「候補が1件も渡されていない場合を除き
-    全件記録する」という既存要求を機械的に強制する）。
+    全件記録する」という既存要求を機械的に強制する）。tier3のuse:trueで
+    独立2ソースの相方が成立しない場合も同様に例外化する（_derive_decisions
+    参照）。
     """
     if not isinstance(llm_entries, list):
         raise AuditLedgerReconstructionError("audit_ledgerがリストでない")
     seen_ids: set[int] = set()
-    reconstructed = []
+    parsed: list[dict] = []
     for e in llm_entries:
         if not isinstance(e, dict):
             raise AuditLedgerReconstructionError(f"audit_ledgerの要素がオブジェクトでない: {e!r}")
@@ -739,24 +886,33 @@ def _reconstruct_audit_ledger(llm_entries: Any, id_to_candidate: dict[int, dict]
         if cid in seen_ids:
             raise AuditLedgerReconstructionError(f"audit_ledgerで候補IDが重複: {cid}")
         seen_ids.add(cid)
-        candidate = id_to_candidate[cid]
-        entry = {field: candidate.get(field, "") for field in _AUDIT_LEDGER_STATIC_FIELDS}
-        entry["verified_by"] = e.get("verified_by", "")
-        entry["decision"] = e.get("decision", "")
-        entry["reason"] = e.get("reason", "")
-        reconstructed.append(entry)
+        parsed.append(e)
     missing = set(id_to_candidate) - seen_ids
     if missing:
         raise AuditLedgerReconstructionError(f"audit_ledgerに記録されていない候補ID: {sorted(missing)}")
+
+    decisions = _derive_decisions(parsed, id_to_candidate, pair_overlap_threshold)
+
+    reconstructed = []
+    for e in parsed:
+        cid = e["candidate_id"]
+        candidate = id_to_candidate[cid]
+        entry = {field: candidate.get(field, "") for field in _AUDIT_LEDGER_STATIC_FIELDS}
+        entry["verified_by"] = e.get("verified_by", "")
+        entry["decision"] = decisions[cid]
+        entry["reason"] = e.get("reason", "")
+        reconstructed.append(entry)
     return reconstructed
 
 
-def _build_call_a_user_content(daily_data: dict, news_today: dict, news_yesterday: dict | None
+def _build_call_a_user_content(daily_data: dict, news_today: dict, news_yesterday: dict | None,
+                                pair_overlap_threshold: float = PAIR_OVERLAP_THRESHOLD_DEFAULT
                                 ) -> tuple[str, dict, dict[int, dict]]:
-    selected_today, stats = _select_candidates_for_call_a(news_today.get("candidates", []))
+    selected_today, stats = _select_candidates_for_call_a(news_today.get("candidates", []), pair_overlap_threshold)
     selected_today = _assign_candidate_ids(selected_today)
     id_to_candidate = {c["candidate_id"]: c for c in selected_today}
-    selected_yesterday, _ = _select_candidates_for_call_a((news_yesterday or {}).get("candidates", []))
+    selected_yesterday, _ = _select_candidates_for_call_a(
+        (news_yesterday or {}).get("candidates", []), pair_overlap_threshold)
     payload = {
         "target_date_jst": daily_data.get("target_date_jst", ""),
         "weekday_jp": daily_data.get("weekday_jp", ""),
@@ -786,12 +942,20 @@ def _build_call_b_user_content(daily_data: dict, call_a_data: dict | None) -> st
 
 
 def call_a(client: "anthropic.Anthropic", daily_data: dict, news_today: dict,
-           news_yesterday: dict | None) -> CallOutcome:
+           news_yesterday: dict | None, pair_overlap_threshold: float | None = None) -> CallOutcome:
+    """pair_overlap_threshold省略時はconfig/pair_overlap.jsonから読む。run()は
+    news_candidate_count集計用の候補選定（下記）とここで同一の値を使う必要が
+    あるため、run()側で読み込んだ値を明示的に渡す（v1.53フォローアップ・
+    二重読み込みによる値のズレを防ぐ）。
+    """
+    if pair_overlap_threshold is None:
+        pair_overlap_threshold = load_pair_overlap_threshold()
     user_content, truncation_stats, id_to_candidate = _build_call_a_user_content(
-        daily_data, news_today, news_yesterday)
+        daily_data, news_today, news_yesterday, pair_overlap_threshold)
 
     def _rebuild_audit_ledger(data: dict) -> dict:
-        data["audit_ledger"] = _reconstruct_audit_ledger(data.get("audit_ledger"), id_to_candidate)
+        data["audit_ledger"] = _reconstruct_audit_ledger(
+            data.get("audit_ledger"), id_to_candidate, pair_overlap_threshold)
         return data
 
     outcome = _call_json(
@@ -836,7 +1000,8 @@ def run(target_date: str, *, client: "anthropic.Anthropic | None" = None) -> dic
     prev_date = (date.fromisoformat(target_date) - timedelta(days=1)).isoformat()
     news_yesterday = _load_json_or(Path(f"outputs/{prev_date}/news_candidates.json"), default=None)
 
-    a = call_a(client, daily_data, news_today, news_yesterday)
+    pair_overlap_threshold = load_pair_overlap_threshold()
+    a = call_a(client, daily_data, news_today, news_yesterday, pair_overlap_threshold)
     b = call_b(client, daily_data, a.data if a.ok else None)
 
     failed_count = (0 if a.ok else 1) + (0 if b.ok else 1)
@@ -845,8 +1010,12 @@ def run(target_date: str, *, client: "anthropic.Anthropic | None" = None) -> dic
     # C19（v1.21改定）: 「渡した候補数」を基準にする（取得総数ではない）。
     # tier3を件数上限で絞るため、取得総数のままだと絞り込み後にAが実際に
     # 見た候補数とaudit_ledgerの記録件数が原理的に一致しなくなる
-    # （オーナー指示・DESIGN_CHANGES.md v1.21参照）。
-    selected_today, _ = _select_candidates_for_call_a(news_today.get("candidates", []))
+    # （オーナー指示・DESIGN_CHANGES.md v1.21参照）。call_a()内部の選定と
+    # 同じpair_overlap_thresholdを使うこと（v1.53フォローアップ）——
+    # 閾値をconfigで変更した際、ここだけデフォルト値のままだとペア救済の
+    # 件数がcall_a()の実際の選定とズレ、news_candidate_countがaudit_ledger
+    # の実件数と一致しなくなりC19が誤って発火しうる。
+    selected_today, _ = _select_candidates_for_call_a(news_today.get("candidates", []), pair_overlap_threshold)
 
     return {
         "target_date_jst": target_date,

@@ -150,19 +150,25 @@ def json_response(obj):
 
 def _mock_audit_ledger_from_request(kw: dict) -> list:
     """v1.48: FakeClientのfn(kw, n)へ渡された実際のリクエストから
-    news_candidates_todayのcandidate_idを読み取り、全件一律decision:"採用"
-    としたaudit_ledgerを動的に構成する。固定フィクスチャが候補数・IDに
-    依存してしまう問題を避け、どんな候補セット（0件を含む）でも整合する
-    モック応答を作れるようにする。監査内容の妥当性（tier整合等）を検証
-    する目的のテストではないため、一律"採用"で十分。
+    news_candidates_todayのcandidate_idを読み取り、audit_ledgerを動的に
+    構成する。固定フィクスチャが候補数・IDに依存してしまう問題を避け、
+    どんな候補セット（0件を含む）でも整合するモック応答を作れるように
+    する。監査内容の妥当性（tier整合等）を検証する目的のテストではない
+    ため、tier1はuse:true（decisionは"採用"に導出される）、tier3/4は
+    use:false（"不採用"）で一律とする（v1.53フォローアップ）。tier3/4を
+    一律use:trueにすると、pairs_with_candidate_idの申告なし・相方も
+    存在しないため_reconstruct_audit_ledger()が例外を送出してしまう
+    ——このヘルパーはそもそも決定内容を検証しないテスト群が使うため、
+    構造的に必ず成功する組み合わせを選ぶ。
     """
     try:
         content = json.loads(kw["messages"][0]["content"])
         candidates = content.get("news_candidates_today", [])
     except (KeyError, ValueError, TypeError):
         return []
-    return [{"candidate_id": c["candidate_id"], "decision": "採用",
-             "verified_by": "RSS summary", "reason": "一次情報で確認"}
+    return [{"candidate_id": c["candidate_id"], "use": c.get("tier") == 1,
+             "verified_by": "RSS summary" if c.get("tier") == 1 else "",
+             "reason": "一次情報で確認" if c.get("tier") == 1 else "C: 対象外"}
             for c in candidates if "candidate_id" in c]
 
 
@@ -199,7 +205,7 @@ check("callA JSON不正→リトライ成功: attempt_errorsに1試行目の失�
 # 2b) audit_ledgerが存在しない候補IDを参照 → post_process内で例外→リトライ→成功（v1.48）
 def bad_candidate_id_then_ok(kw, n):
     if n == 1:
-        bad = {**CALL_A_DATA, "audit_ledger": [{"candidate_id": 999, "decision": "採用",
+        bad = {**CALL_A_DATA, "audit_ledger": [{"candidate_id": 999, "use": True,
                                                   "verified_by": "x", "reason": "y"}]}
         return json_response(bad)
     return json_response(_call_a_response(kw))
@@ -212,6 +218,44 @@ check("callA: 存在しない候補IDのリトライ理由がattempt_errorsに�
       str(out.attempt_errors))
 check("callA: リトライ後に成功した最終audit_ledgerは候補データで正しく再構成されている（v1.48）",
       out.data["audit_ledger"][0]["url"] == NEWS_TODAY["candidates"][0]["url"], str(out.data["audit_ledger"]))
+
+# 2c) call_a()のpair_overlap_threshold引数がend-to-endで効くことの確認（v1.53フォローアップ・オーナー指示）
+NEWS_PAIR_CANDIDATES = {
+    "collected_at": "2026-08-17T09:00:00+09:00", "target_date_jst": "2026-08-17", "source_status": {},
+    "candidates": [
+        {"title": "Company A files BTC ETF approval", "url": "https://example.com/pa", "source": "CoinDesk",
+         "published_at": "Mon, 17 Aug 2026 10:00:00 GMT", "summary": "...", "kind": "supplementary", "tier": 3},
+        {"title": "Company A discusses BTC outlook today", "url": "https://example.com/pb",
+         "source": "Cointelegraph", "published_at": "Mon, 17 Aug 2026 09:30:00 GMT", "summary": "...",
+         "kind": "supplementary", "tier": 3},
+    ],
+}  # overlap係数0.5（company/a/btcの3語が共通）
+
+
+def _pair_claim_response(kw: dict) -> dict:
+    content = json.loads(kw["messages"][0]["content"])
+    ids = sorted(c["candidate_id"] for c in content.get("news_candidates_today", []))
+    entries = [{"candidate_id": ids[0], "use": True, "pairs_with_candidate_id": ids[1], "reason": "同一事実"},
+               {"candidate_id": ids[1], "use": True, "reason": "同一事実"}]
+    return {**CALL_A_DATA, "audit_ledger": entries}
+
+
+c_loose = FakeClient(lambda kw, n: json_response(_pair_claim_response(kw)))
+out_loose = generate_post.call_a(c_loose, DAILY_DATA, NEWS_PAIR_CANDIDATES, None, 0.4)
+check("callA: pair_overlap_threshold=0.4（overlap0.5のペア成立）を明示指定すると1回目に成功する"
+      "（v1.53フォローアップ・パラメータの実効性確認）",
+      out_loose.ok and out_loose.attempts == 1, f"ok={out_loose.ok} attempts={out_loose.attempts} error={out_loose.error}")
+
+c_strict = FakeClient(lambda kw, n: json_response(_pair_claim_response(kw)))
+out_strict = generate_post.call_a(c_strict, DAILY_DATA, NEWS_PAIR_CANDIDATES, None, 0.6)
+check("callA: pair_overlap_threshold=0.6（overlap0.5のペア不成立）を明示指定するとMAX_ATTEMPTS回"
+      "リトライ後に失敗する（config/pair_overlap.jsonで調整可能なことをend-to-endで確認）",
+      not out_strict.ok and out_strict.attempts == generate_post.MAX_ATTEMPTS,
+      f"ok={out_strict.ok} attempts={out_strict.attempts}")
+check("callA: 閾値超過による失敗のattempt_errorsに「独立2ソースの相方が成立しない」が記録される"
+      "（GENERATION_STATUS.mdへの記録経路の確認・オーナー指示の確認事項）",
+      all("独立2ソースの相方が成立しない" in e for e in out_strict.attempt_errors),
+      str(out_strict.attempt_errors))
 
 # 3) 必須キー欠落 → 最大試行後に失敗
 def missing_key(kw, n):
@@ -312,8 +356,10 @@ check("独立2ソース規定はpart1_headlineでの扱いをpart1_headline・pa
       "（v1.44・旧来のtier1限定の絶対文言は撤去）",
       "part1_headlineでの扱いは下記「part1_headline・part1_pointsの決定」を" in generate_post.NEWS_SELECTION
       and "【ヘッドライン】への昇格は引き続きtier1の裏付けを必要とする" not in generate_post.NEWS_SELECTION)
-check("独立2ソース規定採用時のdecision値がOUTPUT_FORMAT_Aの例に含まれる",
-      "採用（独立2ソース）" in generate_post.OUTPUT_FORMAT_A
+check("独立2ソース規定の自己申告（pairs_with_candidate_id）がOUTPUT_FORMAT_Aの例に含まれる"
+      "（v1.53フォローアップ・オーナー指示・decision値はコード側導出のためLLMは書かない）",
+      "pairs_with_candidate_id" in generate_post.OUTPUT_FORMAT_A
+      and "採用（独立2ソース）" not in generate_post.OUTPUT_FORMAT_A
       and "採用（独立2ソース）" in generate_post.NEWS_SELECTION)
 check("NO_CANDIDATES_FALLBACKに独立2ソース材料単独でもpart1_headlineの根拠になる旨が明記されている"
       "（v1.44・②の詳細）",
@@ -362,21 +408,23 @@ check("NEWS_SELECTIONにA/B/C分類がtierとは別軸である旨が明記さ�
       "下記tier（情報源の信頼性）とは別の軸である" in generate_post.NEWS_SELECTION)
 check("NO_CANDIDATES_FALLBACKにaudit_ledgerのreason冒頭でA/B/C段階を明記する指示がある",
       "reasonの冒頭に上記A/B/Cのどの段階と判定したか" in generate_post.NO_CANDIDATES_FALLBACK)
-check("NO_CANDIDATES_FALLBACKに直接因果未確認のみを理由にした不採用を禁じる文言がある",
+check("NO_CANDIDATES_FALLBACKに直接因果未確認のみを理由にしたuse:falseを禁じる文言がある"
+      "（v1.53フォローアップでdecision:\"不採用\"からuse:falseへ改定）",
       "「暗号通貨価格への直接因果が未確認」であること" in generate_post.NO_CANDIDATES_FALLBACK
-      and "のみを理由に不採用としてはならない" in generate_post.NO_CANDIDATES_FALLBACK)
-check("NO_CANDIDATES_FALLBACKに不採用reasonの全角60字上限、採用系reasonは対象外という指示がある（v1.47・オーナー指示）",
-      "decision:\"不採用\" のreasonは全角60字以内に収める" in generate_post.NO_CANDIDATES_FALLBACK
-      and "decision:\"採用\"・\"採用（独立2ソース）\"の\nreasonにはこの字数制限を適用しない"
-      in generate_post.NO_CANDIDATES_FALLBACK)
+      and "のみを理由にuse:falseとしてはならない" in generate_post.NO_CANDIDATES_FALLBACK)
+check("NO_CANDIDATES_FALLBACKにuse:falseのreason全角60字上限、use:trueは対象外という指示がある"
+      "（v1.47・v1.53フォローアップでdecision文言からuse文言へ改定・オーナー指示）",
+      "use:false のreasonは全角60字以内に収める" in generate_post.NO_CANDIDATES_FALLBACK
+      and "use:trueのreasonにはこの字数制限を適用しない" in generate_post.NO_CANDIDATES_FALLBACK)
 check("WRITES_Aのpart1_pointsがB分類材料に因果未確認の限定表現を含める旨を参照している",
       "重要性判定と因果表現の分離" in generate_post.WRITES_A
       and "暗号通貨価格への直接因果は未確認" in generate_post.WRITES_A)
 
 print("=== generate_post.py: part1_headline・part1_pointsの3軸決定（v1.44・オーナー指示） ===")
-check("NO_CANDIDATES_FALLBACKに(i)tier1・(ii)独立2ソース・(iii)notable_moveの3軸が明記されている",
-      "(i)   tier1の裏付けがある採用材料" in generate_post.NO_CANDIDATES_FALLBACK
-      and "(ii)  独立2ソース材料" in generate_post.NO_CANDIDATES_FALLBACK
+check("NO_CANDIDATES_FALLBACKに(i)tier1・(ii)独立2ソース・(iii)notable_moveの3軸が明記されている"
+      "（v1.53フォローアップ・LLM自身のuse:true/pairs_with_candidate_id判断ベースへ改定）",
+      "(i)   tier1の候補でuse:trueと判断したものがあるか" in generate_post.NO_CANDIDATES_FALLBACK
+      and "(ii)  tier3の候補で、独立2ソース規定に該当すると判断し" in generate_post.NO_CANDIDATES_FALLBACK
       and "(iii) 入力の intraday_range に notable_move: true の銘柄があるか"
       in generate_post.NO_CANDIDATES_FALLBACK)
 check("NO_CANDIDATES_FALLBACKに①〜④の優先順位すべてが記述されている",
@@ -465,13 +513,13 @@ check("_assign_candidate_ids: 1始まりの連番を付与する",
 
 _id_candidates = {
     1: {"source": "SEC", "url": "https://example.gov/real-a", "title": "Real title A",
-        "published_at": "Mon, 17 Aug 2026 10:00:00 GMT", "candidate_id": 1},
+        "published_at": "Mon, 17 Aug 2026 10:00:00 GMT", "candidate_id": 1, "tier": 1},
     2: {"source": "CoinDesk", "url": "https://example.com/real-b", "title": "Real title B",
-        "published_at": "Mon, 17 Aug 2026 09:00:00 GMT", "candidate_id": 2},
+        "published_at": "Mon, 17 Aug 2026 09:00:00 GMT", "candidate_id": 2, "tier": 3},
 }
 _llm_out = [
-    {"candidate_id": 1, "decision": "採用", "verified_by": "RSS summary", "reason": "一次情報で確認"},
-    {"candidate_id": 2, "decision": "不採用", "reason": "C: 波及経路を説明できない"},
+    {"candidate_id": 1, "use": True, "verified_by": "RSS summary", "reason": "一次情報で確認"},
+    {"candidate_id": 2, "use": False, "reason": "C: 波及経路を説明できない"},
 ]
 _rebuilt = generate_post._reconstruct_audit_ledger(_llm_out, _id_candidates)
 check("_reconstruct_audit_ledger: source/url/title/published_atは候補データからそのまま補完される"
@@ -479,12 +527,13 @@ check("_reconstruct_audit_ledger: source/url/title/published_atは候補デー�
       _rebuilt[0]["source"] == "SEC" and _rebuilt[0]["url"] == "https://example.gov/real-a"
       and _rebuilt[0]["title"] == "Real title A"
       and _rebuilt[0]["published_at"] == "Mon, 17 Aug 2026 10:00:00 GMT", str(_rebuilt[0]))
-check("_reconstruct_audit_ledger: decision/reason/verified_byはLLM出力をそのまま使う",
+check("_reconstruct_audit_ledger: decisionはtier・useからコード側で導出される（v1.53フォローアップ・"
+      "オーナー指示。tier1のuse:true→採用、use:false→不採用。reason/verified_byはLLM出力をそのまま使う）",
       _rebuilt[0]["decision"] == "採用" and _rebuilt[0]["reason"] == "一次情報で確認"
       and _rebuilt[0]["verified_by"] == "RSS summary"
       and _rebuilt[1]["decision"] == "不採用" and _rebuilt[1]["reason"] == "C: 波及経路を説明できない",
       str(_rebuilt))
-check("_reconstruct_audit_ledger: verified_byを省略した不採用エントリは空文字になる",
+check("_reconstruct_audit_ledger: verified_byを省略したuse:falseエントリは空文字になる",
       _rebuilt[1]["verified_by"] == "", str(_rebuilt[1]))
 check("_reconstruct_audit_ledger: 出力件数は候補数と一致する", len(_rebuilt) == 2, str(_rebuilt))
 
@@ -498,18 +547,18 @@ def _raises_reconstruction_error(entries, candidates):
 
 
 check("_reconstruct_audit_ledger: 存在しない候補IDは例外（_call_json()のリトライへ委ねる）",
-      _raises_reconstruction_error([{"candidate_id": 99, "decision": "採用", "reason": "x"}], _id_candidates))
+      _raises_reconstruction_error([{"candidate_id": 99, "use": True, "reason": "x"}], _id_candidates))
 check("_reconstruct_audit_ledger: candidate_idの重複は例外",
       _raises_reconstruction_error(
-          [{"candidate_id": 1, "decision": "採用", "reason": "x"},
-           {"candidate_id": 1, "decision": "不採用", "reason": "y"}], _id_candidates))
+          [{"candidate_id": 1, "use": True, "reason": "x"},
+           {"candidate_id": 1, "use": False, "reason": "y"}], _id_candidates))
 check("_reconstruct_audit_ledger: 候補の一部が記録されていない（欠落）場合は例外",
       _raises_reconstruction_error(
-          [{"candidate_id": 1, "decision": "採用", "reason": "x"}], _id_candidates))  # id=2が欠落
+          [{"candidate_id": 1, "use": True, "reason": "x"}], _id_candidates))  # id=2が欠落
 check("_reconstruct_audit_ledger: candidate_idが文字列（型不正）の場合も例外",
       _raises_reconstruction_error(
-          [{"candidate_id": "1", "decision": "採用", "reason": "x"},
-           {"candidate_id": 2, "decision": "不採用", "reason": "y"}], _id_candidates))
+          [{"candidate_id": "1", "use": True, "reason": "x"},
+           {"candidate_id": 2, "use": False, "reason": "y"}], _id_candidates))
 check("_reconstruct_audit_ledger: audit_ledger自体がリストでない場合も例外",
       _raises_reconstruction_error({"not": "a list"}, _id_candidates))
 check("_reconstruct_audit_ledger: 候補0件・LLM出力も空配列なら空配列を返す（従来の「候補が無い日」の扱いを維持）",
@@ -518,15 +567,115 @@ check("_reconstruct_audit_ledger: 候補0件・LLM出力も空配列なら空配
 check("OUTPUT_FORMAT_Aのaudit_ledger例がcandidate_id方式になっている（source/url/title/published_atを含まない）",
       '"candidate_id": 1' in generate_post.OUTPUT_FORMAT_A
       and '"source"' not in generate_post.OUTPUT_FORMAT_A)
-check("WRITES_Aのaudit_ledger説明がcandidate_id方式を明記している",
-      "candidate_id・decision・verified_by・reason のみを書く" in generate_post.WRITES_A)
+check("WRITES_Aのaudit_ledger説明がcandidate_id方式を明記している（v1.53フォローアップでdecisionを除去）",
+      "candidate_id・use・pairs_with_candidate_id" in generate_post.WRITES_A
+      and "source・url・title・published_at・decisionは書かない" in generate_post.WRITES_A)
 check("NO_CANDIDATES_FALLBACKのaudit_ledger節がcandidate_id方式・転記させない旨を明記している",
       "candidate_id（news_candidates_today内の該当候補のID）・" in generate_post.NO_CANDIDATES_FALLBACK
       and "あなたが転記する必要は無い" in generate_post.NO_CANDIDATES_FALLBACK
       and "candidate_idはちょうど1回のみ" in generate_post.NO_CANDIDATES_FALLBACK)
-check("NO_CANDIDATES_FALLBACKにverified_byは採用系decisionの場合のみ書く旨が明記されている",
-      "verified_byは採用系decision" in generate_post.NO_CANDIDATES_FALLBACK
-      and "不採用の場合は空文字でよい" in generate_post.NO_CANDIDATES_FALLBACK)
+check("NO_CANDIDATES_FALLBACKにverified_byはuse:trueの場合のみ書く旨が明記されている"
+      "（v1.53フォローアップでdecision文言からuse文言へ改定）",
+      "verified_byはuse:trueの場合のみ書く" in generate_post.NO_CANDIDATES_FALLBACK
+      and "use:falseの場合は空文字でよい" in generate_post.NO_CANDIDATES_FALLBACK)
+check("NO_CANDIDATES_FALLBACKにpairs_with_candidate_idの妥当性確認条件が明記されている"
+      "（v1.53フォローアップ・オーナー指示）",
+      "相互に指し合う必要はなく" in generate_post.NO_CANDIDATES_FALLBACK
+      and "妥当性が確認できない" in generate_post.NO_CANDIDATES_FALLBACK)
+
+print("=== generate_post.py: decisionのtier・use・pairs_with_candidate_idからの導出"
+      "（v1.53フォローアップ・オーナー指示・C21の構造的解消） ===")
+
+_pair_candidates = {
+    1: {"source": "SEC", "title": "Regulator announces new rule", "candidate_id": 1, "tier": 1},
+    2: {"source": "CoinDesk", "title": "Company A files BTC ETF approval", "candidate_id": 2, "tier": 3},
+    3: {"source": "Cointelegraph", "title": "Company A files BTC ETF approval application",
+        "candidate_id": 3, "tier": 3},
+    4: {"source": "CoinDesk", "title": "Unrelated topic entirely", "candidate_id": 4, "tier": 3},
+    5: {"source": "Google News", "title": "Company A files BTC ETF approval", "candidate_id": 5, "tier": 4},
+}
+_pair_llm_out = [
+    {"candidate_id": 1, "use": True, "reason": "一次情報"},
+    {"candidate_id": 2, "use": True, "pairs_with_candidate_id": 3, "reason": "独立2媒体一致"},
+    {"candidate_id": 3, "use": True, "reason": "独立2媒体一致"},  # 3は2を指さない（片方向の申告で成立）
+    {"candidate_id": 4, "use": False, "reason": "C: 無関係"},
+    {"candidate_id": 5, "use": True, "reason": "候補発見のみ"},
+]
+_pair_rebuilt = generate_post._reconstruct_audit_ledger(_pair_llm_out, _pair_candidates, 0.4)
+check("_derive_decisions: tier1はuse:true→採用", _pair_rebuilt[0]["decision"] == "採用", str(_pair_rebuilt[0]))
+check("_derive_decisions: tier3のuse:trueが片方向のpairs_with_candidate_id申告で双方"
+      "「採用（独立2ソース）」になる（相互申告は不要・オーナー指示）",
+      _pair_rebuilt[1]["decision"] == "採用（独立2ソース）" and _pair_rebuilt[2]["decision"] == "採用（独立2ソース）",
+      f"{_pair_rebuilt[1]} / {_pair_rebuilt[2]}")
+check("_derive_decisions: tier3のuse:falseは不採用", _pair_rebuilt[3]["decision"] == "不採用", str(_pair_rebuilt[3]))
+check("_derive_decisions: tier4はuse:trueでも常に不採用（tier3と同一タイトルでもペア対象外・オーナー指示）",
+      _pair_rebuilt[4]["decision"] == "不採用", str(_pair_rebuilt[4]))
+
+
+def _raises_for_unresolved_pair(entries, candidates, threshold=0.4):
+    try:
+        generate_post._reconstruct_audit_ledger(entries, candidates, threshold)
+        return False
+    except generate_post.AuditLedgerReconstructionError as e:
+        return "独立2ソースの相方が成立しない" in str(e)
+
+
+check("_derive_decisions: tier3のuse:trueでpairs_with_candidate_id未申告・相方も無しは例外（リトライ対象）",
+      _raises_for_unresolved_pair(
+          [{"candidate_id": 1, "use": True, "reason": "x"}],
+          {1: {"source": "CoinDesk", "title": "Solo story", "candidate_id": 1, "tier": 3}}))
+check("_derive_decisions: pairs_with_candidate_idが存在しないIDを指す場合は妥当性確認に落ちて例外",
+      _raises_for_unresolved_pair(
+          [{"candidate_id": 1, "use": True, "pairs_with_candidate_id": 99, "reason": "x"}],
+          {1: {"source": "CoinDesk", "title": "Solo story", "candidate_id": 1, "tier": 3}}))
+check("_derive_decisions: 申告した相方がuse:falseの場合は妥当性確認に落ちて例外",
+      _raises_for_unresolved_pair(
+          [{"candidate_id": 1, "use": True, "pairs_with_candidate_id": 2, "reason": "x"},
+           {"candidate_id": 2, "use": False, "reason": "y"}],
+          {1: {"source": "CoinDesk", "title": "Company A files BTC ETF approval", "candidate_id": 1, "tier": 3},
+           2: {"source": "Cointelegraph", "title": "Company A files BTC ETF approval application",
+               "candidate_id": 2, "tier": 3}}))
+check("_derive_decisions: 申告した相方が同一sourceの場合は妥当性確認に落ちて例外（同一媒体の2記事は不可）",
+      _raises_for_unresolved_pair(
+          [{"candidate_id": 1, "use": True, "pairs_with_candidate_id": 2, "reason": "x"},
+           {"candidate_id": 2, "use": True, "reason": "y"}],
+          {1: {"source": "CoinDesk", "title": "Company A files BTC ETF approval", "candidate_id": 1, "tier": 3},
+           2: {"source": "CoinDesk", "title": "Company A files BTC ETF approval application",
+               "candidate_id": 2, "tier": 3}}))
+check("_derive_decisions: 申告した相方のタイトル重なりが閾値未満の場合は妥当性確認に落ちて例外",
+      _raises_for_unresolved_pair(
+          [{"candidate_id": 1, "use": True, "pairs_with_candidate_id": 2, "reason": "x"},
+           {"candidate_id": 2, "use": True, "reason": "y"}],
+          {1: {"source": "CoinDesk", "title": "Company A files BTC ETF approval", "candidate_id": 1, "tier": 3},
+           2: {"source": "Cointelegraph", "title": "Totally different unrelated story here",
+               "candidate_id": 2, "tier": 3}}))
+check("_derive_decisions: 申告した相方がtier1の場合は妥当性確認に落ちて例外（独立2ソースはtier3同士のみ・オーナー指示）",
+      _raises_for_unresolved_pair(
+          [{"candidate_id": 1, "use": True, "pairs_with_candidate_id": 2, "reason": "x"},
+           {"candidate_id": 2, "use": True, "reason": "y"}],
+          {1: {"source": "CoinDesk", "title": "Company A files BTC ETF approval", "candidate_id": 1, "tier": 3},
+           2: {"source": "SEC", "title": "Company A files BTC ETF approval application",
+               "candidate_id": 2, "tier": 1}}))
+
+print("=== generate_post.py: overlap閾値のconfig化（v1.53フォローアップ・オーナー指示） ===")
+
+_thresh_candidates = {
+    1: {"source": "CoinDesk", "title": "Company A files BTC ETF approval", "candidate_id": 1, "tier": 3},
+    2: {"source": "Cointelegraph", "title": "Company A discusses BTC outlook today",
+        "candidate_id": 2, "tier": 3},
+}
+_thresh_llm_out = [
+    {"candidate_id": 1, "use": True, "pairs_with_candidate_id": 2, "reason": "x"},
+    {"candidate_id": 2, "use": True, "reason": "y"},
+]
+# overlap係数は3/6=0.5（company/a/btcの3語が共通）。閾値0.4なら成立、0.6なら不成立。
+check("_derive_decisions: overlap0.5の申告は閾値0.4なら成立する",
+      generate_post._reconstruct_audit_ledger(_thresh_llm_out, _thresh_candidates, 0.4)[0]["decision"]
+      == "採用（独立2ソース）")
+check("_derive_decisions: overlap0.5の申告は閾値0.6なら不成立（例外）・configで調整可能なことの確認",
+      _raises_for_unresolved_pair(_thresh_llm_out, _thresh_candidates, 0.6))
+check("load_pair_overlap_threshold: config/pair_overlap.jsonが存在しデフォルト0.4を返す",
+      generate_post.load_pair_overlap_threshold() == 0.4)
 check("NEWS_SELECTIONがcandidate_idの存在とaudit_ledgerでの参照用途を明記している",
       "candidate_id・title・summary" in generate_post.NEWS_SELECTION
       and "audit_ledgerで候補を参照する際に使う" in generate_post.NEWS_SELECTION)
@@ -616,6 +765,17 @@ check("_find_independent_pairs: 同一source同士はタイトルが酷似して
           {"source": "CoinDesk", "title": "alpha beta gamma delta epsilon",
            "published_at": "Mon, 17 Aug 2026 12:00:00 GMT"},
       ]) == [])
+
+_thresh_pair_pool = [
+    {"source": "Cointelegraph", "title": "alpha beta gamma delta zeta",
+     "published_at": "Mon, 17 Aug 2026 12:20:00 GMT"},
+    {"source": "CoinDesk", "title": "alpha beta gamma delta epsilon",
+     "published_at": "Mon, 17 Aug 2026 12:00:00 GMT"},
+]  # overlap = {alpha,beta,gamma,delta}/5 = 0.8
+check("_find_independent_pairs: threshold引数がPAIR_OVERLAP_THRESHOLD_DEFAULT以外でも機能する"
+      "（v1.53フォローアップ・config化に伴うシグネチャ変更の確認）",
+      len(generate_post._find_independent_pairs(_thresh_pair_pool, 0.7)) == 1
+      and len(generate_post._find_independent_pairs(_thresh_pair_pool, 0.9)) == 0)
 
 _cap_pairs = []
 for k in range(1, 7):  # 6組作り、PAIR_RESCUE_MAX_PAIRS=5組の上限を確認する

@@ -1,0 +1,4 @@
+{
+  "_comment": "タイトルのトークン重なり係数（overlap coefficient）の閾値。tier3ペア救済（generate_post._find_independent_pairs、pre-selection）と、独立2ソース自己申告（pairs_with_candidate_id）の妥当性確認（post-selection、v1.53フォローアップ）の両方で共用する。8/24のCoinbase/Baseペア1事例のみで較正した暫定値（DESIGN_CHANGES.md v1.39参照）。自己申告の妥当性確認という用途では、LLMが要約全文を読んだ意味的判断が一次情報でコード側は明らかな誤りを弾く役割になるため、閾値を下げる余地がある（オーナー指示）。運用実測を踏まえて調整する場合はこの値のみ変更する（コード変更不要）。",
+  "pair_overlap_threshold": 0.4
+}
