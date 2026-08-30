@@ -469,6 +469,26 @@ check("CALL_B_INSTRUCTIONSに本文で扱っていない新規の固有名詞を
 check("SYSTEM_BがCALL_B_INSTRUCTIONSの更新内容を含む",
       "です・ます調" in generate_post.SYSTEM_B)
 
+print("=== generate_post.py: part2_flowの材料をpart1_points採用済みに限定（v1.56・オーナー指示） ===")
+
+check("CALL_B_INSTRUCTIONSにpart2_flowの材料をpart1_points掲載済みに限る旨が明記されている",
+      "ここで扱う材料は、呼び出しAのpart1_pointsに既に掲載されている材料に" in generate_post.CALL_B_INSTRUCTIONS)
+check("CALL_B_INSTRUCTIONSにreusable_for_summaryをpart2_flowで使わない旨が明記されている"
+      "（reusable_for_summaryはpart2_summaryの1行言及にのみ使う）",
+      "や、part1_pointsに書かれていない新規の材料をpart2_flowで" in generate_post.CALL_B_INSTRUCTIONS
+      and "持ち出さない（v1.56・オーナー指示）" in generate_post.CALL_B_INSTRUCTIONS)
+
+print("=== generate_post.py: ETF資金フローの土日表記（v1.56・オーナー指示） ===")
+
+check("ETF_WEEKEND_GUIDANCEに土日は具体的な金額を記載してはならない旨が明記されている",
+      "weekday_jp が「土」または「日」の場合" in generate_post.ETF_WEEKEND_GUIDANCE
+      and "具体的な金額を本文に記載してはならない" in generate_post.ETF_WEEKEND_GUIDANCE)
+check("ETF_WEEKEND_GUIDANCEに直近営業日の確定値表記が明記されている",
+      "直近営業日までの確定値として確認された」旨を明記すること" in generate_post.ETF_WEEKEND_GUIDANCE)
+check("SYSTEM_A・SYSTEM_BともにETF_WEEKEND_GUIDANCEを含む",
+      "weekday_jp が「土」または「日」の場合" in generate_post.SYSTEM_A
+      and "weekday_jp が「土」または「日」の場合" in generate_post.SYSTEM_B)
+
 print("=== generate_post.py: 候補ごとの掲載可否ラベル（v1.29・オーナー指示・修正2） ===")
 _elig_candidates = [
     {"tier": 1, "source": "SEC", "title": "t1", "url": "https://example.com/1",
@@ -1607,6 +1627,74 @@ au_c23 = verify_post.run_all(_b_c23, DAILY_DATA)
 c23_check = next(x for x in au_c23.checks if x["id"] == "C23_summary_no_new_entities")
 check("run_all(): C23がpart1_points/reusable_for_summaryを参照して正しくFAILになる",
       c23_check["result"] == "FAIL", str(c23_check))
+
+print("=== verify_post: C24 市場のフローの固有名詞バックリファレンス（v1.56・オーナー指示） ===")
+
+_au_c24a = verify_post.Audit()
+verify_post.check_c24(_au_c24a, "", "・材料A")
+check("check_c24: part2_flowが空文字ならSKIP",
+      _au_c24a.checks[0]["result"] == "SKIP", str(_au_c24a.checks[0]))
+
+_au_c24b = verify_post.Audit()
+verify_post.check_c24(_au_c24b, "BTC・ETHともに軟調な値動きとなりました。", "・材料A")
+check("check_c24: ASCII固有名詞候補が無ければPASS",
+      _au_c24b.checks[0]["result"] == "PASS", str(_au_c24b.checks[0]))
+
+# 2026-08-29実データ（土曜）の実例。呼び出しAがtier1裏付け・独立2ソースいずれも
+# 無く不採用としreusable_for_summaryへ回した材料（ETF資金流出・Polygon脆弱性）を、
+# 呼び出しBがpart2_flowで因果連鎖の材料として使ってしまった実際の事象を再現する。
+_au_c24c = verify_post.Audit()
+verify_post.check_c24(
+    _au_c24c,
+    "ビットコインETFが9日連続の資金流入を終えて純流出に転じたとの報道が伝わっており、"
+    "Polygonが修正済みハードフォークにおいてDoSなど複数の脆弱性を開示したとの報道があります。",
+    "・補足できる検証済み材料は確認できない。")
+check("check_c24: part1_pointsに無いASCII固有名詞（2026-08-29実データ再現・Polygon/DoS）はFAIL",
+      _au_c24c.checks[0]["result"] == "FAIL", str(_au_c24c.checks[0]))
+check("check_c24: FAIL detailにPolygon・DoSが列挙される",
+      "Polygon" in _au_c24c.checks[0]["detail"] and "DoS" in _au_c24c.checks[0]["detail"],
+      _au_c24c.checks[0]["detail"])
+
+# C23との最重要の違い: reusable_for_summaryに材料があってもC24はpart1_pointsのみを
+# 見るため、reusable_for_summary一致では救済されない（引数自体を受け取らない）。
+_au_c24d = verify_post.Audit()
+verify_post.check_c24(
+    _au_c24d, "Bitmineの動向を受けて市場心理が改善したとみられます。", "・材料A")
+check("check_c24: part1_pointsに無いASCII固有名詞（Bitmine）はFAIL"
+      "（C23と異なりreusable_for_summaryでは救済されない設計）",
+      _au_c24d.checks[0]["result"] == "FAIL", str(_au_c24d.checks[0]))
+
+_au_c24e = verify_post.Audit()
+verify_post.check_c24(
+    _au_c24e, "SECの規則見直しを受けて規制明確化への期待が意識された可能性があります。",
+    "・SECが規則見直しを提案（Reuters、2026-08-26）")
+check("check_c24: part1_pointsに同一文字列があればPASS",
+      _au_c24e.checks[0]["result"] == "PASS", str(_au_c24e.checks[0]))
+
+# 2026-08-26実データの実例（ニュースが無い日のpart2_flow第2文の定型パターン。
+# CALL_B_INSTRUCTIONSが明示的に許容する「国内取引所とDEXの出来高動向」の言及で、
+# bitFlyer・Coincheck・Baseが誤検知したため専用allowlistへ追加した）。
+_au_c24f = verify_post.Audit()
+verify_post.check_c24(
+    _au_c24f,
+    "国内ではbitFlyerとCoincheckを合わせたETH取引が一定の水準で推移しており、"
+    "Base上のDEX出来高やTVLも大きな崩れのない値動きとなりました。",
+    "・材料A")
+check("check_c24: 国内取引所・L2の一般語彙（bitFlyer→Flyer・Coincheck・Base）は誤検知しない"
+      "（2026-08-26実データで発見・回帰確認）",
+      _au_c24f.checks[0]["result"] == "PASS", str(_au_c24f.checks[0]))
+
+# run_all()経由の配線確認（2026-08-29実データそのままの形を再現）
+_b_c24 = json.loads(json.dumps(b_ok))
+_b_c24["sections"]["part1_points"] = generate_post.FIXED_POINTS
+_b_c24["sections"]["part2_flow"] = (
+    "・Polygonが修正済みハードフォークにおいて複数の脆弱性を開示したとの報道が伝わっています。")
+_b_c24["reusable_for_summary"] = ["Polygonが脆弱性を修正済みハードフォークで開示したとの報道"]
+au_c24 = verify_post.run_all(_b_c24, DAILY_DATA)
+c24_check = next(x for x in au_c24.checks if x["id"] == "C24_flow_no_unadopted_material")
+check("run_all(): C24はreusable_for_summaryに材料があってもpart1_points未確認ならFAILになる"
+      "（2026-08-29実データの実例を再現）",
+      c24_check["result"] == "FAIL", str(c24_check))
 
 print("=== collect_news.py（RSS方式・CryptoPanic撤去後） ===")
 

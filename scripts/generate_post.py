@@ -241,6 +241,25 @@ RULES_CAUSAL = """## 因果表現
   生成物全体がコミットされない（1文の断定表現がレポート全体の不採用に
   つながる。v1.49・オーナー指示）。"""
 
+# v1.56（オーナー指示）: 統合運用基準の週末表記規定（土日はETFフローの
+# 具体的金額を掲載しない）は、これまでこのパイプラインがETFフローの
+# 数値データ（Farside/SoSoValue）を一度も保有しなかったため適用対象が
+# 無かった（v1.36・v1.37）。2026-08-29（土曜）の実データで、ニュース経由
+# （tier1裏付けまたは独立2ソース採用）でETF資金フローの方向がpart1_points
+# へ採用されうることが実証されたため、適用対象が生じた。weekday_jpは
+# fetch_data.pyのWEEKDAYS_JPにより「月」「火」「水」「木」「金」「土」
+# 「日」の1文字で渡される。
+ETF_WEEKEND_GUIDANCE = """## ETF資金フローの土日表記（統合運用基準・v1.56・オーナー指示）
+
+入力の weekday_jp が「土」または「日」の場合（対象日target_date_jstが
+土曜または日曜の場合）、ビットコイン/イーサリアムETFの資金流入・流出に
+ついて具体的な金額を本文に記載してはならない。方向（流入・流出）のみを
+記載し、「直近営業日までの確定値として確認された」旨を明記すること。
+平日（月〜金）は通常どおり金額を記載してよい。この規定は書き方のみに
+関するものであり、ETF資金フローに関する事実の採否（tier1裏付けまたは
+独立2ソースが必要）は別途の規律に従う——採否規律を満たさない材料を
+この規定を理由に掲載してよいわけではない。"""
+
 NEWS_SELECTION = """## ニュース候補の扱いと選定根拠
 
 news_candidates_today に、collect_news.py が公式発表RSS等から収集した候補が
@@ -518,7 +537,8 @@ OUTPUT_FORMAT_A = """## 出力形式
 
 SYSTEM_A = "\n\n".join([
     ROLE_INTRO, RULES_ABSOLUTE, RULES_HASHTAG, NEWS_SELECTION, NO_CANDIDATES_FALLBACK,
-    INTRADAY_MOVE_GUIDANCE, SCHEDULED_EVENTS_GUIDANCE, RULES_CAUSAL, WRITES_A, OUTPUT_FORMAT_A,
+    INTRADAY_MOVE_GUIDANCE, SCHEDULED_EVENTS_GUIDANCE, RULES_CAUSAL, ETF_WEEKEND_GUIDANCE,
+    WRITES_A, OUTPUT_FORMAT_A,
 ])
 
 CALL_B_INSTRUCTIONS = """入力として、当日の市場データ（daily_data.json）と、呼び出しAの出力
@@ -535,8 +555,16 @@ part1_points）と文体を揃えること。
 - part2_flow: 2〜3本の条件付き連鎖。各連鎖は「材料 → 意識された可能性 →
   同時期に確認された値動き」の形にし、末尾を因果の限定で締める。
   地政学・マクロ、制度・政策、企業財務・市場構造のうち根拠のある系統から選ぶ。
-  ニュースが無い日は、市場データ内の事実（出来高の増減、市場心理の変化、
-  国内取引所とDEXの出来高動向）のみで1〜2本にとどめる。
+  ここで扱う材料は、呼び出しAのpart1_pointsに既に掲載されている材料に
+  限る。reusable_for_summary（継続監視材料。part2_summaryでの1行言及
+  にのみ使う）や、part1_pointsに書かれていない新規の材料をpart2_flowで
+  持ち出さない（v1.56・オーナー指示）。part2_flowは「意識された可能性」
+  という因果連鎖を組む分、part2_summaryの1行言及より踏み込んだ主張に
+  なるため、根拠の基準もpart1_points採用済み材料に厳格化する——tier1裏付け
+  または独立2ソースの採否規律を経ていない材料（単独tier3ソース等）を
+  因果連鎖の起点にしない。ニュースが無い日（part1_pointsが定型文のみの日）
+  は、市場データ内の事実（出来高の増減、市場心理の変化、国内取引所とDEXの
+  出来高動向）のみで1〜2本にとどめる。
 - part2_summary: 総括。地合い・不確実性・今後の確認事項のみ。ニュースの
   再説明をしない。reusable_for_summary があれば1行だけ言及する。
   対象日の翌日が土日の場合は「翌日」ではなく「今後」「週明け」と書く。
@@ -549,7 +577,8 @@ part1_points）と文体を揃えること。
 { "part2_flow": ["...", "..."], "part2_summary": "..." }"""
 
 SYSTEM_B = "\n\n".join([
-    ROLE_INTRO, RULES_ABSOLUTE, RULES_HASHTAG, RULES_CAUSAL, CALL_B_INSTRUCTIONS,
+    ROLE_INTRO, RULES_ABSOLUTE, RULES_HASHTAG, RULES_CAUSAL, ETF_WEEKEND_GUIDANCE,
+    CALL_B_INSTRUCTIONS,
 ])
 
 

@@ -549,6 +549,58 @@ def check_c23(au: Audit, part2_summary, part1_points, reusable_for_summary) -> N
            f"固有名詞候補{len(candidates)}件・すべてpart1_points/reusable_for_summaryに存在")
 
 
+# --- C24 市場のフローの固有名詞バックリファレンス（part1_points限定） ---
+
+# v1.56（オーナー指示）: 2026-08-29（土曜）の実データで、part1_headlineが
+# 定型文「主要なマクロ材料は確認できない」（tier1裏付け・独立2ソース・
+# notable_moveいずれも無し）にもかかわらず、part2_flowにETF資金流出・
+# Polygon脆弱性開示という具体的な材料が書かれ、読者から見て矛盾する
+# 事象が発生した（8/24・8/26に続き3回目）。原因は、呼び出しAが不採用と
+# 判断しreusable_for_summary（継続監視材料）へ回した材料を、呼び出しBが
+# part2_flowで本格的な因果連鎖（「材料→意識された可能性→値動き」）の
+# 材料として使ってしまうこと。CALL_B_INSTRUCTIONSでpart2_flowの材料を
+# part1_points採用済みのものに限定したが、C18・C23と同じ理由（指示が
+# あってもLLMが常に遵守するとは限らない）で機械ゲートを追加する。
+#
+# C23（part2_summary用）とは独立したゲートとする（オーナー指示）。
+# 最も重要な違い: バックリファレンス先をpart1_pointsのみに限定し、
+# reusable_for_summaryを含めない——part2_summaryは継続材料の1行言及を
+# 許容する（v1.35）が、part2_flowは因果連鎖を組む分より踏み込んだ主張に
+# なるため、根拠の基準を厳しくする（v1.56・オーナー指示）。C23の
+# allowlist（_PROPER_NOUN_ALLOWLIST）とは別に_PROPER_NOUN_ALLOWLIST_C24を
+# 持ち、part2_flow特有の誤検知をpart2_summary側の判定に影響させず
+# 独立して育てられるようにする（オーナー指示）。共通の一般語彙
+# （BTC・ETH・Fear&Greed等）は基底として継承する。
+_PROPER_NOUN_ALLOWLIST_C24 = set(_PROPER_NOUN_ALLOWLIST) | {
+    # 2026-08-26実データ（ニュース材料が無い日のpart2_flow第2文、
+    # CALL_B_INSTRUCTIONSが明示的に許容する「国内取引所とDEXの出来高動向」
+    # の定型的な言及）で誤検知したため追加。「bitFlyer」は正規表現が
+    # 小文字始まりの"bit"を含めず"Flyer"のみを抽出するため、登録も
+    # "FLYER"（マッチ単位）で行う——"BITFLYER"では一致しない。
+    "FLYER", "COINCHECK", "BASE",
+}
+
+
+def check_c24(au: Audit, part2_flow, part1_points) -> None:
+    if not isinstance(part2_flow, str) or not part2_flow.strip():
+        au.add("C24_flow_no_unadopted_material", None, "part2_flowが空のためSKIP")
+        return
+    candidates = {m for m in _PROPER_NOUN_RE.findall(part2_flow)
+                  if m.upper() not in _PROPER_NOUN_ALLOWLIST_C24}
+    if not candidates:
+        au.add("C24_flow_no_unadopted_material", True, "市場のフローに固有名詞候補（ASCII表記）なし")
+        return
+    backing = str(part1_points or "")
+    missing = sorted(c for c in candidates if c not in backing)
+    if missing:
+        au.add("C24_flow_no_unadopted_material", False,
+               "市場のフローにpart1_points未確認の固有名詞候補（限界あり・ASCII表記のみ検知。"
+               f"誤検知時は要目視確認）: {missing}")
+        return
+    au.add("C24_flow_no_unadopted_material", True,
+           f"固有名詞候補{len(candidates)}件・すべてpart1_pointsに存在")
+
+
 def run_all(bundle: dict, daily_data: dict) -> Audit:
     au = Audit()
     sections = bundle["sections"]
@@ -581,6 +633,7 @@ def run_all(bundle: dict, daily_data: dict) -> Audit:
               daily_data.get("intraday_range"))
     check_c23(au, sections.get("part2_summary"), sections.get("part1_points"),
               bundle.get("reusable_for_summary"))
+    check_c24(au, sections.get("part2_flow"), sections.get("part1_points"))
     return au
 
 

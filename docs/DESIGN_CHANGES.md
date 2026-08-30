@@ -7,7 +7,114 @@
 
 ---
 
-## v1.55 — 2026-08-29（オーナー指示・cron-job.org恒久化＋C19空欄自動補完）
+## v1.56 — 2026-08-29（オーナー指示・part2_flowの採否規律徹底＋C24新設＋ETF土日表記）
+
+### 経緯
+
+cron-job.orgによる初の完全自動生成（2026-08-29・土曜）で、L0・13ゲート
+全PASSだったにもかかわらず、part1_headlineが定型文「主要なマクロ材料は
+確認できない」（tier1裏付け・独立2ソース・notable_moveいずれも無し）
+なのに、part2_flowにはETF資金流出・Polygon脆弱性開示という具体的な
+材料が書かれ、読者から見て矛盾する事象が報告された（8/24・8/26に続き
+3回目）。オーナーの初期仮説は「呼び出しBが未採用候補（tier3単独等）に
+言及できてしまう」だったが、実装前の調査でより具体的な機構を特定した。
+
+### 調査結果（実装前に報告・承認）
+
+実際のaudit_ledgerを確認したところ、ETF・Polygonとも呼び出しAは
+正しく`不採用`（単独tier3ソース・一次情報の裏付けなし）と判定し、
+`reusable_for_summary`（継続監視材料）へ格納していた。ここまでは
+設計どおり。問題は`CALL_B_INSTRUCTIONS`の非対称性だった：
+part2_summaryはv1.35の規律（part1_points掲載済み、または
+reusable_for_summaryの継続材料に限り1行だけ言及）を持つが、
+**part2_flowには対応する制約が一切無かった**。その結果、呼び出しBは
+reusable_for_summaryの2件をそのまま「材料」として扱い、3本中2本の
+本格的な因果連鎖（「材料→意識された可能性→値動き」）を組み立てていた。
+
+オーナー提案の対処案（(a)プロンプト制約／(b)C23の検査対象拡大／
+(c)両方）について、(b)を文字どおり実装しても今回の事例は捕捉できない
+ことを実装前に指摘した——C23の現行バックリファレンス先は
+「part1_points **または** reusable_for_summary」であり、今回の
+"Polygon"はreusable_for_summaryに文字列として存在するため、この基準の
+ままではPASSしてしまう。
+
+またオーナーから確認依頼のあったETFフロー二本立て突合規定
+（Farside×SoSoValue）は、プロンプトのどこにも存在しないことを確認した。
+理由はv1.36・v1.37の既存決定どおり——Farsideは公式API/RSSが無くHTTP 403、
+SoSoValueは公式APIはあるがAPIキー未取得のため2026-08-24に見送り済みで、
+このパイプラインはFarside/SoSoValueの数値データを一度も保有していない。
+存在しないソースへの参照を指示するとかえって誤解を招くため追加しない
+方針とし、代わりに一般的な採否規律（part2_flowの穴を塞ぐこと）で
+同種の事故を防ぐ方針で報告し、オーナーの承認を得た。
+
+### 対応（`scripts/generate_post.py`）
+
+- `CALL_B_INSTRUCTIONS`のpart2_flow節に、材料をpart1_points掲載済みの
+  ものに限定する記述を追加。reusable_for_summaryや新規の材料を
+  part2_flowで持ち出さないことを明記した。part2_flowはpart2_summaryの
+  1行言及より踏み込んだ因果連鎖を組むため、reusable_for_summaryは
+  対象外とし、part1_pointsのみを根拠とする（part2_summary側の
+  reusable_for_summary許容・v1.35は不変）。
+- `ETF_WEEKEND_GUIDANCE`を新設し`SYSTEM_A`・`SYSTEM_B`双方へ追加。
+  統合運用基準の週末表記規定（「土曜・日曜版：ETFフローの具体的な金額を
+  本文から削除し、『直近営業日（YYYY年M月D日）までの確定値として
+  確認された』と表記する」）を、ニュース経由でETFフローが採用されうる
+  ことが実証されたことを受けて適用する。weekday_jp（fetch_data.pyの
+  WEEKDAYS_JPにより「月」〜「日」の1文字で渡される）が「土」または
+  「日」の場合に金額を記載しない旨を明記した。書き方のみの規定であり
+  採否規律とは別である旨も明記し、規定を理由に採否規律を満たさない
+  材料を掲載しないよう注意書きを添えた。
+
+### 対応（`scripts/verify_post.py`）——C24新設
+
+part2_flowが、part1_points採用済みでない材料を持ち出していないかを
+検査する新規ゲート`check_c24`を追加した。既存のC23（part2_summary用）は
+一切変更していない（オーナー指示）。実装方式（ASCII表記の固有名詞候補を
+機械的に抽出しバックリファレンスを照合する）はC23と同一だが、
+バックリファレンス先を**part1_pointsのみ**に限定し、reusable_for_summary
+を含めない点がC23との本質的な違い。allowlist
+（`_PROPER_NOUN_ALLOWLIST_C24`）もC23の`_PROPER_NOUN_ALLOWLIST`とは
+独立させ、part2_flow特有の誤検知がpart2_summary側の判定に影響しない
+ようにした。
+
+### テスト
+
+`test/test_bundle2.py`を376件へ拡張（v1.55時点363件から+13件）。
+C24の基本動作（SKIP・PASS・FAIL・reusable_for_summaryでは救済されない
+こと・allowlist内語彙のPASS）、run_all()配線、CALL_B_INSTRUCTIONS・
+ETF_WEEKEND_GUIDANCEのプロンプト文言確認を追加。
+
+### 実データ検証（既存の実運用コミット済みデータに対する決定論的検証。LLM呼び出し不要）
+
+**2026-08-29（実際の事故当日）の実際にコミット済みのbundleにC24を直接
+適用したところ、`['DoS', 'Polygon']`を検出しFAILした**——実際の事故を
+新設ゲートが確実に捕捉することを、LLMサンプリングに依存しない形で
+直接確認した。
+
+**2026-08-26（平日・材料あり）の実際にコミット済みのbundleでC24を実行
+したところ、初回は`['Base', 'Coincheck', 'Flyer']`で誤検知した**。
+内容を確認したところ、これはCALL_B_INSTRUCTIONSが明示的に許容する
+「ニュースが無い日の市場データ内の事実（国内取引所とDEXの出来高動向）」
+の定型的な言及であり（"bitFlyerとCoincheckを合わせたETH取引"・
+"Base上のDEX出来高"）、正規表現が"bitFlyer"の小文字部分"bit"を含めず
+"Flyer"のみを抽出する仕様上の挙動だった。`_PROPER_NOUN_ALLOWLIST_C24`へ
+`FLYER`・`COINCHECK`・`BASE`を追加し、再実行してPASSすることを確認した。
+
+**追加の実データスイープ**（オーナー指定の8/26に加え、コミット済みの
+全L0 bundleへ実施）で、2026-08-19のbundleがC24で
+`['Assets', 'Crypto', 'Regulation']`によりFAILすることを発見した。
+内容を確認したところ、part1_pointsが日本語で説明したSECの新規則案を、
+part2_flowが英語の通称「Regulation Crypto Assets」で言及したための
+文字列不一致であり、C21・C23が既に許容している「意味的な照合はしない
+（既知の限界）」と同種の限界だった。個別の単語（Regulation/Crypto/
+Assets）は今後別の文脈で本当に未採用の材料を指す可能性もあるため、
+allowlistへは追加せず、known limitationとして記録するにとどめる
+（過去の投稿であり再生成もされないため実害はない）。C18・C16bで
+実装済みの日付限定allowlist（`config/c18_allowlist.json`等と同じ形式）
+をC24にも用意するかは、実運用でこの種の誤検知が発生した場合に判断する
+（先回りしてインフラを増やさない、という既存方針を踏襲）。
+
+**プロンプト修正（part2_flowの材料制限）の実際の効果**：別途報告する。
 
 ### 経緯（cron-job.org恒久化）
 
