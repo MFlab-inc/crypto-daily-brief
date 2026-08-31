@@ -63,16 +63,16 @@ with zipfile.ZipFile(zip_path) as zf:
         print(f"  {name}")
     zf.extractall(extract_dir)
 
-gen_path = extract_dir / "draft" / "post_generation.json"
-if not gen_path.exists():
-    print(f"post_generation.jsonが見つかりません: {gen_path}")
+bundle_path = extract_dir / "draft" / "post_bundle.json"
+if not bundle_path.exists():
+    print(f"post_bundle.jsonが見つかりません: {bundle_path}")
     print("extract_dir配下:")
     for p in extract_dir.rglob("*"):
         print(f"  {p}")
     sys.exit(1)
 
-gen = json.loads(gen_path.read_text(encoding="utf-8"))
-audit_ledger = gen.get("call_a", {}).get("data", {}).get("audit_ledger", [])
+bundle = json.loads(bundle_path.read_text(encoding="utf-8"))
+audit_ledger = bundle.get("audit_ledger") or []
 print(f"\naudit_ledger件数: {len(audit_ledger)}")
 
 # 注意: _reconstruct_audit_ledger()が書き出す最終エントリは
@@ -119,8 +119,12 @@ else:
     print(f"\nCronos関連候補が{len(cronos_entries)}件のみ検出（2件必要）。"
           "タイトルに'cronos'が含まれない表記の可能性あり。上記tier3全件の目視確認結果を参照。")
 
+sections = bundle.get("sections", {})
 print("\n=== part1_points（実際にpart1_pointsへ採用された内容） ===")
-print(gen.get("call_a", {}).get("data", {}).get("part1_points"))
+print(sections.get("part1_points"))
 
 print("\n=== part1_headline ===")
-print(gen.get("call_a", {}).get("data", {}).get("part1_headline"))
+print(sections.get("part1_headline"))
+
+print("\n=== reusable_for_summary ===")
+print(json.dumps(bundle.get("reusable_for_summary"), ensure_ascii=False, indent=2))
