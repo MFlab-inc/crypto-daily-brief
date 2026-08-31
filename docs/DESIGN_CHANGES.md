@@ -7,6 +7,99 @@
 
 ---
 
+## v1.57 — 2026-08-30（オーナー指示・C22 FAIL原因調査。コード変更なし・記録のみ）
+
+### 経緯
+
+運用観察期間中の2026-08-30実行（cron-job.org起動・target_date=2026-08-30）で
+C22のみFAIL（他13項目PASS、level=L0）。detail:「ヘッドラインが定型文で
+ないにもかかわらずtier1由来の採用・独立2ソース採用・notable_moveの
+いずれも存在しない」。オーナーはCronosのネットワーク停止（Tectonic
+エクスプロイトに起因）をCoinDesk・Cointelegraph両方が独立に報じていた
+はずと確認しており、これが独立2ソースとして採用されなかった原因の調査
+を依頼された。あわせて、overlap係数0.4が厳しすぎる可能性の検証（0.3での
+再確認）と、プロジェクト公式X（Cronos・Tectonic・Fogo各公式）が情報源に
+含まれていないという構造的限界の記録を依頼された。
+
+### 調査方法
+
+実失敗回（daily.yml run_id=33339632874、workflow_dispatch起動）が
+GitHub Actionsへ残したデバッグ用アーティファクト（post-draft-2026-08-30、
+draft/post_bundle.json含む）を、別の一時診断ワークフロー上（GitHub Actions
+ランナー・ネットワーク制限なし）からGitHub REST API経由で直接ダウンロード
+し、実際のaudit_ledger・part1_points・reusable_for_summaryを確認した。
+
+（当初はcollect_news.pyの再実行によるtier3候補の直接確認を試みたが、
+CoinDesk・CointelegraphのRSSは高頻度更新のローリングウィンドウであり、
+約1日〜1時間半の経過で対象日時点の記事が既に入れ替わっていた——実測で
+Cronos関連記事が1件も残っていなかった。既存の8/24〜8/29の実データ比較で
+確認済みの「RSSは時間限定的な検証材料」という限界（v1.56参照）と同じ
+現象であり、この方式では再現できないと判断し、アーティファクト直接取得
+方式へ切り替えた。）
+
+### 調査結果（オーナーの仮説とは異なる原因と判明）
+
+**実際にaudit_ledgerへ記録された当日のtier3候補（CoinDesk・Cointelegraph
+計8件）は以下のとおりで、Cronos・Tectonic・Fogoに関する記事は1件も
+含まれていなかった**——overlap係数の閾値以前に、そもそも候補集合へ
+入っていなかった。
+
+1. Cointelegraph「Saylor signals Strategy is 'Back' to Bitcoin buying」
+2. CoinDesk「Michael Saylor hints at first bitcoin purchase in two months...」
+3. CoinDesk「From Hawala to Swift: Inside the 1,000-year battle...」
+4. Cointelegraph「Here's what happened in crypto today」（日次まとめ）
+5. CoinDesk「Crypto market makers are cashing in on bitcoin's rally...」
+6. Cointelegraph「Russia's Sber eyes USDT loans...」
+7. Cointelegraph「Real Trump Coins denies launching GOLD token...」
+8. CoinDesk「A $1.1 million crypto card hack crashed a neobank's token 49%」
+
+tier3候補数は8件（TIER3_CANDIDATE_LIMIT=15を大きく下回る）であり、
+**件数上限による除外ではないことも確認済み**。
+
+**overlap係数0.4での再検証（オーナー依頼）は実施不能と判明**——比較対象の
+候補自体が存在しないため、0.3での閾値緩和を検証しても意味を持たない
+（分母となる実データが無い）。
+
+**副次的な発見**：唯一の実在ペア候補である「Saylor/Strategyのビットコイン
+購入再開示唆」はCoinDesk・Cointelegraph双方が報じていたが、Cointelegraph側
+のreasonに「candidate_id2と事実内容が完全一致とまでは言えず独立2ソースの
+要件を厳密には満たさないため不採用」とあり、LLM自身が両記事を比較検討した
+うえで独立2ソース成立を見送ったことが読み取れる。これはoverlap係数の
+機械的判定（コード側）以前の、LLM自身の判断段階での慎重さであり、
+今回のCronos事案とは別種の観察（同一事実でもLLMが厳格に運用している例）
+として記録する。
+
+なお、この「Strategy購入再開示唆」および「Sber USDT担保計画」は
+reusable_for_summaryへ継続監視材料として記録されていた
+（両方「tier1裏付け未確認のため継続監視」）。
+
+### 原因の推定（確定はできない）
+
+collect_news.pyのCoinDesk（1回のフェッチで25件）・Cointelegraph（同30件）
+は、フィードの直近N件のみを返す。対象日の間に他の記事が多数公開されると、
+Cronos関連記事のようなより早い時刻の記事が取得時点で既にフィードの
+可視範囲外へ押し出されていた可能性が高い（v1.39で導入したペア救済機構は
+「取得できた候補内でのtier3上限による除外」を救済するものであり、
+「そもそも取得できなかった候補」には無力）。オーナーが独立に確認した
+Cronos報道の実在自体は疑っていないが、collect_news.py実行時点の
+RSSスナップショットには含まれていなかったと考えられる。
+
+### 対応
+
+オーナー判断により、overlap係数0.4を0.3へ緩和する変更は保留
+（検証不能だったため）。コード変更は行わない。
+
+### 既知の限界として記録（オーナー指示・対処不要）
+
+プロジェクト公式X（Twitter）アカウント（Cronos公式・Tectonic公式・Fogo
+公式等）は現在の情報源（`config/news_sources.json`）に含まれていない。
+今回、これら公式Xでは一次情報として確認できたとオーナーが報告している。
+対処は現実的でないとオーナー自身が判断済み（無数のプロジェクトの公式
+アカウントを個別に追跡することは非現実的なため）。既知の限界として
+ここに記録するのみとし、実装は行わない。
+
+---
+
 ## v1.56 — 2026-08-29（オーナー指示・part2_flowの採否規律徹底＋C24新設＋ETF土日表記）
 
 ### 経緯
