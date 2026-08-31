@@ -1,0 +1,31 @@
+name: _diag-c22-0830-investigate
+
+# 2026-08-30のC22 FAIL原因調査専用の一時ワークフロー（オーナー指示）。
+# LLMは呼ばない（collect_news.pyの実RSS取得のみ）。コミットは一切行わない。
+# 調査完了後、スクリプトとあわせて削除する。
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 依存関係
+        run: |
+          pip install -q -r requirements.txt
+
+      - name: 診断スクリプト実行(実RSSを使用・LLM呼び出しなし・コミットしない)
+        run: |
+          python scripts/_diag_c22_0830_investigate.py
