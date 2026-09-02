@@ -1,0 +1,35 @@
+name: _diag-tier2-live-verify
+
+# tier2/Reuters実装（v1.59・オーナー承認）のライブ検証専用の一時ワークフロー。
+# オーナーの5点チェックリストのうち1〜4を実LLM呼び出しで検証する
+# （5番目の8/26・8/28退行確認は、ローカル既存データの確認のみで
+# 完結しネットワーク不要のため、本ワークフローの対象外）。
+# コミットは一切行わない。調査完了後、スクリプトとあわせて削除する。
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 依存関係
+        run: |
+          pip install -q -r requirements.txt
+
+      - name: 診断スクリプト実行（実LLM呼び出しあり・コミットしない）
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          python scripts/_diag_tier2_live_verify.py
