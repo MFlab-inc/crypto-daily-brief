@@ -7,6 +7,129 @@
 
 ---
 
+## v1.59 — 2026-09-02（オーナー承認・tier4のうちReuters実体確認済み記事をtier2として単独採用可能に）
+
+### 経緯
+
+v1.58の調査結果報告を受け、オーナーは(a)案（Google News経由でも実体が
+Reutersの記事はtier2として単独採用可能にする）を承認。あわせて以下を
+指示された。
+
+- tier2の上限は15件（tier3と同格。統合運用基準ではReutersが優先度2で
+  tier3〈優先度3〉より上位であり件数を下回らせる理由がない）
+- 無関係記事への対処は上限ではなくクエリで行う。金融・マクロキーワード
+  のOR条件を加えた場合の効果を実測し、絞り込みで9/1の記事が落ちるなら
+  絞り込みは見送って上限15件のまま運用するという明示の判定ルールを指定
+- 実装内容（v1.58報告の提案どおり）: `<source>`要素パース追加、
+  `config/news_sources.json`へReuters追加、5箇所の修正、
+  `TIER2_CANDIDATE_LIMIT`をconfig（named constant）で定義
+- NEWS_SELECTIONへ追記するtier2節の文言を指定
+- 検証項目（5点）: ①イラン・原油記事がtier2として採用されるか
+  ②part1_headlineが実文言になるか ③C21・C22の正しい判定
+  ④トークン消費と上限8,000への余裕 ⑤8/26・8/28での退行の有無
+
+### クエリ絞り込みの実測結果（オーナー指示の判定ルールを適用）
+
+診断ワークフローで、現行クエリ（`site:reuters.com`のみ）と、オーナー
+指定の金融・マクロキーワードOR条件を加えたクエリを実測比較した。
+
+- **件数**: 現行100件・絞り込み後100件（削減率0%）——ただしこれは
+  Google News RSSが1クエリあたり最大100件で頭打ちになるためで
+  （絞り込みの有無に関わらず同じ上限に達する）、絞り込みの効果を
+  件数では測れないことが判明。効果は内容の関連度としてのみ確認できる。
+- **内容の関連度**: 現行クエリの先頭15件は人事・地名変更・地政学等の
+  一般ニュースが大半（Navy長官人事・Apple Mapsの地名変更・Putin発言等）。
+  絞り込み後は金利・インフレ・原油・stablecoin等の金融関連が明確に多数を
+  占めた（例: 先頭が「Goldman Sachs, BofA and others plan to issue
+  dollar stablecoin together」）。
+- **9/1相当記事の存否**（重要・オーナー指定の判定基準）: `when:24h`は
+  既に9/1時点の内容をロールオフしているため、固有フレーズ
+  （"Strait of Hormuz"）による存在確認で代替検証した。絞り込みなしで
+  該当記事群が存在することを確認したうえで、同条件に絞り込みキーワード
+  を追加しても同じ記事群（"US launches new strikes on Iran as Tehran
+  hits back in widening conflict - Reuters"等）が見つかることを確認した。
+  → **絞り込みで9/1相当の記事は落ちない**ことを実測で確認。
+
+オーナーの判定ルール（落ちるなら見送り・落ちないなら適用可）に従い、
+**クエリ絞り込みを適用した**。
+
+### 実装内容
+
+- `scripts/collect_news.py`
+  - `fetch_rss()`: 各itemの`<source>`要素（text・url属性）を
+    `source_name`・`source_url`として追加抽出
+  - `_is_reuters_source()`を新設: `source_name`/`source_url`に
+    "reuters"/"reuters.com"を含むかで実体判定
+  - `_collect_from_feed()`: tier4のうち`_is_reuters_source()`が真の
+    itemは`source="Reuters"`・`tier=2`・`kind="independent_report"`へ
+    動的に上書き（他のtier4項目・tier1候補には影響しない）
+  - `GOOGLE_NEWS_URL`: `urllib.parse.urlencode()`による構築へ変更し、
+    金融・マクロキーワードのOR条件（オーナー指定の10語）を追加
+- `config/news_sources.json`: `{"name": "Reuters", "tier": 2}`を追加
+  （urlなし。`_load_sources()`の通常フェッチループでは除外され、
+  `_load_source_tier_map()`のtier参照にのみ使われる）
+- `scripts/generate_post.py`
+  - `TIER2_CANDIDATE_LIMIT = 15`を新設（named constant。tier3と同格）
+  - `_select_candidates_for_call_a()`: tier2を独立した区分として追加し、
+    公開日時の新しい順で上位15件に絞る（tier1のような無制限にはしない。
+    tier3のようなペア救済も行わない——tier2は単独採用可能なため不要）
+  - `_derive_decisions()`: `tier in (1, 2)`でuse:true→"採用"
+  - `_ELIGIBILITY_LABELS`: `2: "掲載可"`を追加
+  - NEWS_SELECTIONへtier2節を追加（オーナー指定文言を逐語反映）。
+    headline決定の(i)軸・audit_ledgerの記録範囲・「独立2ソース規定」の
+    フォールバック等、tier1のみを参照していた箇所をtier1・tier2の
+    両方を参照するよう横断的に更新
+- `scripts/verify_post.py`
+  - `check_c21()`: `tier != 1` → `tier not in (1, 2)`
+  - `check_c22()`: `tier_map.get(source) == 1` → `in (1, 2)`
+- `test/test_bundle2.py`: 上記すべてにオフラインテストを追加
+  （`_is_reuters_source()`・`<source>`パース・tier4→tier2昇格・
+  tier2候補選定の上限とtruncation_stats・decision導出・C21/C22・
+  NEWS_SELECTIONの逐語文言・config登録の5箇所を含む）。既存の
+  tier3/tier4テストの一部はtier2_\*キー追加に伴い期待値を更新。
+  全406件PASS。
+
+### 実データ検証（オーナー指定の5点チェックリスト）
+
+**⑤ 8/26・8/28の退行確認**（ローカル既存データの直接確認・ネットワーク
+不要）: `outputs/2026-08-26/draft/post_bundle.json`の実audit_ledger
+（25件）を確認したところ、"Google News (Reuters検索)"をsourceとする
+候補は1件も無かった——tier2昇格ロジックが作用する対象がそもそも存在
+せず、この日の生成結果はtier2実装の有無に関わらず不変（退行の可能性が
+無いことを確認）。8/28はdraft自体が生成されていない日（監査FAILにより
+コミット未到達）のため、そもそも比較対象が存在しない（v1.56で既に
+記録済みの既知の限界と同じ）。
+
+**①〜④**（診断ワークフロー・実LLM呼び出し）: `outputs/2026-09-01/
+draft/post_bundle.json`の実audit_ledger全件（tier1・tier3・Reuters
+記事を含む）から実タイトル・実URL・実published_atを抽出し、Reuters
+記事は実際の`collect_news._collect_from_feed()`（`<source>`要素解析
+によるtier4→tier2昇格ロジックを含む）に実際に通して生成した
+（summaryのみ、永続化されていないため代替——filler記事はタイトルで
+代用、Reuters記事はオーナー報告済みの実数値〈Brent +4.60%・
+WTI +5.20%〉に基づき構成）。daily_data.jsonは9/1の実コミット済み
+ファイルをそのまま使用。1回目の試行で成功（attempts=1）。
+
+- **①tier2採用**: OK。`decision: "採用"`、
+  `verified_by: "Reutersによる報道（tier2）"`、
+  `reason: "米イラン軍事衝突再燃と原油急騰を報じるReuters報道であり、
+  地政学リスクを通じたリスク資産への波及経路が明確なため採用"`。
+- **②part1_headline反映**: OK。実文言:
+  「Reutersによると、米国がイラン国内の標的へ新たな空爆を実施し、
+  ホルムズ海峡周辺での軍事衝突が再燃したと報じられた。これを受けて
+  原油価格が急伸し、地政学リスクの高まりからリスク資産全般に売り圧力が
+  強まった可能性があり、BTC・ETH・BNBはそろって24時間比で下落した。」
+  ——tier2節で指示した「Reutersによると」の明示的な帰属表現も正しく
+  反映されている。headline_for_imageも同様に材料を反映。
+- **③C21・C22**: 両方PASS
+  （C21: 「31件・整合性OK」／C22: 「tier1・tier2由来の採用が存在」）。
+- **④トークン消費**: call_A input_tokens=18095・output_tokens=3956
+  （CALL_A_MAX_TOKENS=8000に対し49.5%。安全余裕あり）。
+
+5点すべてで想定どおりの挙動を実データ・実LLMで確認した。
+
+---
+
 ## v1.58 — 2026-09-02（オーナー指示・tier4/Reuters分類見直しの調査。コード変更なし・方針報告のみ）
 
 ### 経緯
