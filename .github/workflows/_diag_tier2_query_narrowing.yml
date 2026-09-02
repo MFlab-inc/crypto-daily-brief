@@ -1,0 +1,32 @@
+name: _diag-tier2-query-narrowing
+
+# tier2/Reuters実装（オーナー承認）に伴う、Google Newsクエリ絞り込み効果の
+# 調査専用の一時ワークフロー。現行クエリと金融キーワード絞り込みクエリを
+# 実測比較する。LLMは呼ばない。コミットは一切行わない。
+# 調査完了後、スクリプトとあわせて削除する。
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 依存関係
+        run: |
+          pip install -q -r requirements.txt
+
+      - name: 診断スクリプト実行(実RSS取得・LLM呼び出しなし・コミットしない)
+        run: |
+          python scripts/_diag_tier2_query_narrowing.py
