@@ -339,13 +339,21 @@ check("NO_CANDIDATES_FALLBACKで空配列許容が「候補0件」の場合の�
       "audit_ledgerを空配列 [] にしてよいのは、" in generate_post.NO_CANDIDATES_FALLBACK
       and "候補が1件でも渡されている場合、audit_ledgerを空配列で返して" in generate_post.NO_CANDIDATES_FALLBACK)
 
+print("=== generate_post.py: tier 2プロンプトの確認（v1.59・オーナー承認・指定文言の逐語反映） ===")
+check("NEWS_SELECTIONにtier2の説明がオーナー指定文言のとおり逐語で含まれる",
+      "tier 2: 優先度2：Reuters等の独立報道。単独で採用可能だが、tier1の公式発表と\n"
+      "        異なり報道であることを明示すること（『Reutersによると』等）。"
+      in generate_post.NEWS_SELECTION)
+check("_ELIGIBILITY_LABELSでtier2が「掲載可」になっている（tier1と同格）",
+      generate_post._ELIGIBILITY_LABELS[2] == "掲載可")
+
 print("=== generate_post.py: tier 3プロンプトの確認（v1.20） ===")
 check("NEWS_SELECTIONにtier 3の「補完・裏取り」記述がある",
       "tier 3" in generate_post.NEWS_SELECTION and "補完・裏取り" in generate_post.NEWS_SELECTION)
 check("NEWS_SELECTIONにtier 3単独を主根拠にしない旨の記述がある",
       "tier 3の候補のみを根拠に" in generate_post.NEWS_SELECTION)
-check("WRITES_Aがtier 1・3・4すべてを記録対象としている",
-      "tier 1・3・4のすべて" in generate_post.WRITES_A)
+check("WRITES_Aがtier 1・2・3・4すべてを記録対象としている（v1.59でtier2を追加）",
+      "tier 1・2・3・4のすべて" in generate_post.WRITES_A)
 
 print("=== generate_post.py: 独立2ソース規定の確認（v1.28・統合運用基準の既定を実装へ反映） ===")
 check("NEWS_SELECTIONに独立2ソース規定の3条件が記述されている",
@@ -421,9 +429,10 @@ check("WRITES_Aのpart1_pointsがB分類材料に因果未確認の限定表現�
       and "暗号通貨価格への直接因果は未確認" in generate_post.WRITES_A)
 
 print("=== generate_post.py: part1_headline・part1_pointsの3軸決定（v1.44・オーナー指示） ===")
-check("NO_CANDIDATES_FALLBACKに(i)tier1・(ii)独立2ソース・(iii)notable_moveの3軸が明記されている"
-      "（v1.53フォローアップ・LLM自身のuse:true/pairs_with_candidate_id判断ベースへ改定）",
-      "(i)   tier1の候補でuse:trueと判断したものがあるか" in generate_post.NO_CANDIDATES_FALLBACK
+check("NO_CANDIDATES_FALLBACKに(i)tier1・tier2・(ii)独立2ソース・(iii)notable_moveの3軸が明記されている"
+      "（v1.53フォローアップ・LLM自身のuse:true/pairs_with_candidate_id判断ベースへ改定・"
+      "v1.59で(i)へtier2を追加）",
+      "(i)   tier1またはtier2の候補でuse:trueと判断したものがあるか" in generate_post.NO_CANDIDATES_FALLBACK
       and "(ii)  tier3の候補で、独立2ソース規定に該当すると判断し" in generate_post.NO_CANDIDATES_FALLBACK
       and "(iii) 入力の intraday_range に notable_move: true の銘柄があるか"
       in generate_post.NO_CANDIDATES_FALLBACK)
@@ -446,7 +455,7 @@ check("③は定型文を使わず値動きを記述し、part1_pointsにニュ�
       and "値動きの形状のみを" in generate_post.NO_CANDIDATES_FALLBACK
       and "「ニュース材料は確認できなかった」" in generate_post.NO_CANDIDATES_FALLBACK)
 check("headline_for_imageの指示が④の場合のみに明示的に限定されている（③との混同防止）",
-      "headline_for_image: ④の場合（tier1材料・独立2ソース材料・値動きの"
+      "headline_for_image: ④の場合（tier1・tier2材料・独立2ソース材料・値動きの"
       in generate_post.NO_CANDIDATES_FALLBACK)
 
 print("=== generate_post.py: 呼び出しBの文体統一・総括の言及範囲制限（v1.35・オーナー指示） ===")
@@ -621,6 +630,8 @@ _pair_candidates = {
         "candidate_id": 3, "tier": 3},
     4: {"source": "CoinDesk", "title": "Unrelated topic entirely", "candidate_id": 4, "tier": 3},
     5: {"source": "Google News", "title": "Company A files BTC ETF approval", "candidate_id": 5, "tier": 4},
+    6: {"source": "Reuters", "title": "US launches new strikes on Iran", "candidate_id": 6, "tier": 2},
+    7: {"source": "Reuters", "title": "Unrelated Reuters wire story", "candidate_id": 7, "tier": 2},
 }
 _pair_llm_out = [
     {"candidate_id": 1, "use": True, "reason": "一次情報"},
@@ -628,6 +639,8 @@ _pair_llm_out = [
     {"candidate_id": 3, "use": True, "reason": "独立2媒体一致"},  # 3は2を指さない（片方向の申告で成立）
     {"candidate_id": 4, "use": False, "reason": "C: 無関係"},
     {"candidate_id": 5, "use": True, "reason": "候補発見のみ"},
+    {"candidate_id": 6, "use": True, "reason": "Reutersによる独立報道"},
+    {"candidate_id": 7, "use": False, "reason": "C: 無関係"},
 ]
 _pair_rebuilt = generate_post._reconstruct_audit_ledger(_pair_llm_out, _pair_candidates, 0.4)
 check("_derive_decisions: tier1はuse:true→採用", _pair_rebuilt[0]["decision"] == "採用", str(_pair_rebuilt[0]))
@@ -638,6 +651,11 @@ check("_derive_decisions: tier3のuse:trueが片方向のpairs_with_candidate_id
 check("_derive_decisions: tier3のuse:falseは不採用", _pair_rebuilt[3]["decision"] == "不採用", str(_pair_rebuilt[3]))
 check("_derive_decisions: tier4はuse:trueでも常に不採用（tier3と同一タイトルでもペア対象外・オーナー指示）",
       _pair_rebuilt[4]["decision"] == "不採用", str(_pair_rebuilt[4]))
+check("_derive_decisions: tier2はuse:true→採用（v1.59・オーナー承認・tier1と同じ扱い。"
+      "ペア判定を経ずに単独で採用される）",
+      _pair_rebuilt[5]["decision"] == "採用", str(_pair_rebuilt[5]))
+check("_derive_decisions: tier2はuse:false→不採用",
+      _pair_rebuilt[6]["decision"] == "不採用", str(_pair_rebuilt[6]))
 
 
 def _raises_for_unresolved_pair(entries, candidates, threshold=0.4):
@@ -792,15 +810,41 @@ check("tier3は公開日時の新しい順で選定される（最新のitem19�
       [c["title"] for c in _selected if c.get("tier") == 3][0] == "item19",
       [c["title"] for c in _selected if c.get("tier") == 3])
 check("truncation_statsが正しく報告される（20件中15件選定・5件除外・ペア救済なし・tier4無し）",
-      _stats == {"tier3_total": 20, "tier3_selected": 15, "tier3_dropped": 5,
+      _stats == {"tier2_total": 0, "tier2_selected": 0, "tier2_dropped": 0,
+                 "tier3_total": 20, "tier3_selected": 15, "tier3_dropped": 5,
                  "tier3_pairs_rescued": 0, "tier3_pair_rescued_articles": 0,
                  "tier4_total": 0, "tier4_selected": 0, "tier4_dropped": 0}, str(_stats))
 
 _selected_few, _stats_few = generate_post._select_candidates_for_call_a(_tier1_fixed + _tier3_20[:5])
 check("tier3が上限未満なら全件選定され除外0件",
-      _stats_few == {"tier3_total": 5, "tier3_selected": 5, "tier3_dropped": 0,
+      _stats_few == {"tier2_total": 0, "tier2_selected": 0, "tier2_dropped": 0,
+                     "tier3_total": 5, "tier3_selected": 5, "tier3_dropped": 0,
                      "tier3_pairs_rescued": 0, "tier3_pair_rescued_articles": 0,
                      "tier4_total": 0, "tier4_selected": 0, "tier4_dropped": 0}, str(_stats_few))
+
+print("=== generate_post.py: tier2候補数上限の確認（v1.59・オーナー承認・Reuters実体確認済み） ===")
+check("TIER2_CANDIDATE_LIMITが15である（tier3と同格・オーナー指定）",
+      generate_post.TIER2_CANDIDATE_LIMIT == 15)
+_tier2_20 = [{"tier": 2, "source": "Reuters", "title": f"reuters{i}",
+              "published_at": f"Mon, 17 Aug 2026 {i:02d}:00:00 GMT"} for i in range(20)]
+_selected_t2, _stats_t2 = generate_post._select_candidates_for_call_a(_tier1_fixed + _tier2_20)
+check("tier1は全件（上限なし）で選定される（tier2混在時も不変）",
+      sum(1 for c in _selected_t2 if c.get("tier") == 1) == 3, str(_stats_t2))
+check(f"tier2は上限{generate_post.TIER2_CANDIDATE_LIMIT}件に絞られる（tier1のような無制限にはしない）",
+      sum(1 for c in _selected_t2 if c.get("tier") == 2) == generate_post.TIER2_CANDIDATE_LIMIT, str(_stats_t2))
+check("tier2は公開日時の新しい順で選定される（最新のreuters19が先頭）",
+      [c["title"] for c in _selected_t2 if c.get("tier") == 2][0] == "reuters19",
+      [c["title"] for c in _selected_t2 if c.get("tier") == 2])
+check("tier2のtruncation_statsが正しく報告される（20件中15件選定・5件除外）",
+      _stats_t2 == {"tier2_total": 20, "tier2_selected": 15, "tier2_dropped": 5,
+                    "tier3_total": 0, "tier3_selected": 0, "tier3_dropped": 0,
+                    "tier3_pairs_rescued": 0, "tier3_pair_rescued_articles": 0,
+                    "tier4_total": 0, "tier4_selected": 0, "tier4_dropped": 0}, str(_stats_t2))
+_selected_t2_few, _stats_t2_few = generate_post._select_candidates_for_call_a(
+    _tier1_fixed + _tier2_20[:5])
+check("tier2が上限未満なら全件選定され除外0件",
+      _stats_t2_few["tier2_total"] == 5 and _stats_t2_few["tier2_selected"] == 5
+      and _stats_t2_few["tier2_dropped"] == 0, str(_stats_t2_few))
 
 print("=== generate_post.py: tier4候補数上限の確認（v1.51・オーナー指示） ===")
 check("TIER4_CANDIDATE_LIMITが10である", generate_post.TIER4_CANDIDATE_LIMIT == 10)
@@ -813,7 +857,8 @@ check("tier4は公開日時の新しい順で選定される（最新のgnews14�
       [c["title"] for c in _selected_t4 if c.get("tier") == 4][0] == "gnews14",
       [c["title"] for c in _selected_t4 if c.get("tier") == 4])
 check("tier4のtruncation_statsが正しく報告される（15件中10件選定・5件除外）",
-      _stats_t4 == {"tier3_total": 0, "tier3_selected": 0, "tier3_dropped": 0,
+      _stats_t4 == {"tier2_total": 0, "tier2_selected": 0, "tier2_dropped": 0,
+                    "tier3_total": 0, "tier3_selected": 0, "tier3_dropped": 0,
                     "tier3_pairs_rescued": 0, "tier3_pair_rescued_articles": 0,
                     "tier4_total": 15, "tier4_selected": 10, "tier4_dropped": 5}, str(_stats_t4))
 _selected_t4_few, _stats_t4_few = generate_post._select_candidates_for_call_a(
@@ -822,13 +867,37 @@ check("tier4が上限未満なら全件選定され除外0件",
       _stats_t4_few["tier4_total"] == 3 and _stats_t4_few["tier4_selected"] == 3
       and _stats_t4_few["tier4_dropped"] == 0, str(_stats_t4_few))
 
+_selected_all, _stats_all = generate_post._select_candidates_for_call_a(
+    _tier1_fixed + _tier2_20 + _tier3_20 + _tier4_15)
+check("tier1・tier2・tier3・tier4すべて混在時も各tierが独立して選定される（相互に影響しない）",
+      _stats_all == {"tier2_total": 20, "tier2_selected": 15, "tier2_dropped": 5,
+                     "tier3_total": 20, "tier3_selected": 15, "tier3_dropped": 5,
+                     "tier3_pairs_rescued": 0, "tier3_pair_rescued_articles": 0,
+                     "tier4_total": 15, "tier4_selected": 10, "tier4_dropped": 5}, str(_stats_all))
+check("混在時: 選定結果の内訳件数も一致する（tier1:3 tier2:15 tier3:15 tier4:10=計43件）",
+      len(_selected_all) == 43
+      and sum(1 for c in _selected_all if c.get("tier") == 1) == 3
+      and sum(1 for c in _selected_all if c.get("tier") == 2) == 15
+      and sum(1 for c in _selected_all if c.get("tier") == 3) == 15
+      and sum(1 for c in _selected_all if c.get("tier") == 4) == 10,
+      f"len={len(_selected_all)}")
+
 print("=== collect_news.py: GOOGLE_NEWS_URLのallinurl:→site:演算子修正（v1.51・オーナー指示） ===")
-check("GOOGLE_NEWS_URLがsite:演算子を使う", "site:reuters.com" in collect_news.GOOGLE_NEWS_URL)
+check("GOOGLE_NEWS_URLがsite:演算子を使う（v1.59でurlencode化・コロンは%3Aへ）",
+      "site%3Areuters.com" in collect_news.GOOGLE_NEWS_URL)
 check("GOOGLE_NEWS_URLがallinurl:を使わない（実測で機能しなくなったため）",
-      "allinurl:" not in collect_news.GOOGLE_NEWS_URL)
+      "allinurl" not in collect_news.GOOGLE_NEWS_URL)
 check("GOOGLE_NEWS_URLがロケールパラメータ（hl/gl/ceid）を付与している",
       "hl=en-US" in collect_news.GOOGLE_NEWS_URL and "gl=US" in collect_news.GOOGLE_NEWS_URL
-      and "ceid=US:en" in collect_news.GOOGLE_NEWS_URL)
+      and "ceid=US%3Aen" in collect_news.GOOGLE_NEWS_URL)
+
+print("=== collect_news.py: GOOGLE_NEWS_URLの金融キーワード絞り込み（v1.59・オーナー指示・実測のうえ適用） ===")
+check("GOOGLE_NEWS_URLが金融・マクロキーワードのOR条件を含む（オーナー指定のキーワード）",
+      all(kw in collect_news.GOOGLE_NEWS_QUERY_KEYWORDS
+          for kw in ("crypto", "bitcoin", "ethereum", "federal reserve", "inflation",
+                     "tariff", "oil", "interest rate", "SEC", "stablecoin")))
+check("GOOGLE_NEWS_URLがwhen:24hのローリングウィンドウを維持している",
+      "when%3A24h" in collect_news.GOOGLE_NEWS_URL)
 
 print("=== generate_post.py: 独立2媒体ペア救済（v1.39フォローアップ・オーナー承認） ===")
 check("_overlap_coefficient: 完全一致は1.0",
@@ -891,7 +960,8 @@ check("ペア救済の上限: 6組目のolder記事（p6a p6b p6c p6d p6f）は�
       not any(c.get("title") == "p6a p6b p6c p6d p6f" for c in _cap_selected if c.get("tier") == 3),
       [c["title"] for c in _cap_selected if c.get("tier") == 3])
 check("ペア救済の上限: tier3_total=21・tier3_selected=20（15+5救済）・tier3_dropped=1",
-      _cap_stats == {"tier3_total": 21, "tier3_selected": 20, "tier3_dropped": 1,
+      _cap_stats == {"tier2_total": 0, "tier2_selected": 0, "tier2_dropped": 0,
+                     "tier3_total": 21, "tier3_selected": 20, "tier3_dropped": 1,
                      "tier3_pairs_rescued": 5, "tier3_pair_rescued_articles": 5,
                      "tier4_total": 0, "tier4_selected": 0, "tier4_dropped": 0}, str(_cap_stats))
 
@@ -999,6 +1069,7 @@ check("run(): news_candidate_countは取得総数(23)ではなく渡した件数
       _result21["news_candidate_count"] == 18, str(_result21["news_candidate_count"]))
 check("run(): call_a.truncation_statsにtier3の除外情報が記録される",
       _result21["call_a"]["truncation_stats"] == {
+          "tier2_total": 0, "tier2_selected": 0, "tier2_dropped": 0,
           "tier3_total": 20, "tier3_selected": 15, "tier3_dropped": 5,
           "tier3_pairs_rescued": 0, "tier3_pair_rescued_articles": 0,
           "tier4_total": 0, "tier4_selected": 0, "tier4_dropped": 0},
@@ -1393,6 +1464,14 @@ c21, _ = _c21([
 ])
 check("C21: tier1の採用はPASS", c21["result"] == "PASS", str(c21))
 
+# tier2（Reuters・v1.59オーナー承認）の"採用"もPASS（tier1と同じ扱い）
+c21, _ = _c21([
+    {"source": "Reuters", "url": "https://news.google.com/rss/articles/FAKE",
+     "title": "US launches new strikes on Iran", "published_at": "2026-08-17",
+     "verified_by": "v", "decision": "採用", "reason": "Reutersによる独立報道"},
+])
+check("C21: tier2（Reuters）の採用はPASS（v1.59・オーナー承認）", c21["result"] == "PASS", str(c21))
+
 # tier3単独の"採用"はFAIL（プロンプトでは防げなかった実際の混入パターン）
 c21, _ = _c21([
     {"source": "CoinDesk", "url": "https://example.com/b", "title": "...", "published_at": "2026-08-17",
@@ -1463,6 +1542,17 @@ _, c22 = _c21([
      "verified_by": "v", "decision": "採用", "reason": "一次情報"},
 ], headline="BTCが上昇し、FRBの発表も重なった一日となった。")
 check("C22: tier1採用がある実文言ヘッドラインはPASS", c22["result"] == "PASS", str(c22))
+
+# 実文言ヘッドライン＋tier2（Reuters）採用ありはPASS（v1.59・オーナー承認）
+# 9/1に実際に取りこぼした「米イラン交戦再開による原油急騰」のような材料が
+# tier2として採用された場合、part1_headlineの正当な根拠になることを確認する。
+_, c22 = _c21([
+    {"source": "Reuters", "url": "https://news.google.com/rss/articles/FAKE",
+     "title": "US launches new strikes on Iran", "published_at": "2026-08-17",
+     "verified_by": "v", "decision": "採用", "reason": "Reutersによる独立報道"},
+], headline="米イラン間の軍事衝突再開を受け、原油価格が急騰した一日となった。")
+check("C22: tier2（Reuters）採用がある実文言ヘッドラインはPASS（v1.59・オーナー承認）",
+      c22["result"] == "PASS", str(c22))
 
 # 実文言ヘッドライン＋tier1採用なし・独立2ソース採用のみはPASS（v1.44）
 # 従来（v1.29〜v1.43）は独立2ソース単独をFAILとしていたが、8/26実データ
@@ -1965,6 +2055,66 @@ collect_news.requests.get = orig_get4
 check("_collect_from_feed: candidateにsummaryが含まれる（呼び出しAの根拠として渡る）",
       len(kept2) == 1 and kept2[0]["summary"] == "Some detail text.", str(kept2))
 
+print("=== collect_news.py: <source>要素のパース・tier4→tier2昇格（v1.59・オーナー承認） ===")
+
+RSS_WITH_SOURCE_TAG = """<?xml version="1.0"?>
+<rss version="2.0"><channel>
+<item><title>Reuters item via Google News</title>
+<link>https://news.google.com/rss/articles/FAKE123</link>
+<pubDate>Mon, 17 Aug 2026 10:00:00 GMT</pubDate>
+<source url="https://www.reuters.com">Reuters</source></item>
+</channel></rss>"""
+
+orig_get_src = _patch_requests_get(lambda url, **kw: _FakeRssResp(200, RSS_WITH_SOURCE_TAG.encode("utf-8")))
+status_src, cands_src, detail_src = collect_news.fetch_rss("https://news.google.com/fake")
+collect_news.requests.get = orig_get_src
+check("fetch_rss: <source>要素のtext・url属性をsource_name/source_urlとして抽出する",
+      status_src == "ok" and cands_src[0]["source_name"] == "Reuters"
+      and cands_src[0]["source_url"] == "https://www.reuters.com", f"{status_src} {cands_src}")
+
+orig_get_nosrc = _patch_requests_get(lambda url, **kw: _FakeRssResp(200, RSS_TODAY_ONLY.encode("utf-8")))
+status_nosrc, cands_nosrc, detail_nosrc = collect_news.fetch_rss("https://example.gov/feed.rss")
+collect_news.requests.get = orig_get_nosrc
+check("fetch_rss: <source>要素が無いフィード（通常のtier1等）はsource_name/source_urlが空文字になる（実害なし）",
+      all(c["source_name"] == "" and c["source_url"] == "" for c in cands_nosrc), str(cands_nosrc))
+
+check("_is_reuters_source: source_name='Reuters'を実体Reutersと判定する",
+      collect_news._is_reuters_source({"source_name": "Reuters", "source_url": "https://www.reuters.com"}))
+check("_is_reuters_source: source_urlのみでもreuters.comを含めば実体Reutersと判定する",
+      collect_news._is_reuters_source({"source_name": "", "source_url": "https://www.reuters.com/world"}))
+check("_is_reuters_source: Reuters以外のsourceは実体Reutersと判定しない（site:reuters.com検索への混入への防御）",
+      not collect_news._is_reuters_source({"source_name": "Bloomberg", "source_url": "https://www.bloomberg.com"}))
+check("_is_reuters_source: <source>要素が無い（空文字）場合はReutersと判定しない",
+      not collect_news._is_reuters_source({"source_name": "", "source_url": ""}))
+
+RSS_GOOGLE_NEWS_MIXED = """<?xml version="1.0"?>
+<rss version="2.0"><channel>
+<item><title>Reuters story - Reuters</title>
+<link>https://news.google.com/rss/articles/REUTERSFAKE</link>
+<pubDate>Mon, 17 Aug 2026 10:00:00 GMT</pubDate>
+<source url="https://www.reuters.com">Reuters</source></item>
+<item><title>Non-Reuters story slipped through</title>
+<link>https://news.google.com/rss/articles/OTHERFAKE</link>
+<pubDate>Mon, 17 Aug 2026 11:00:00 GMT</pubDate>
+<source url="https://www.example.com">Example News</source></item>
+</channel></rss>"""
+
+orig_get_mixed = _patch_requests_get(lambda url, **kw: _FakeRssResp(200, RSS_GOOGLE_NEWS_MIXED.encode("utf-8")))
+st_mixed, kept_mixed = collect_news._collect_from_feed(
+    collect_news.GOOGLE_NEWS_NAME, "https://news.google.com/fake", *_window_1707,
+    tier=4, kind="candidate_discovery")
+collect_news.requests.get = orig_get_mixed
+_reuters_item = next(c for c in kept_mixed if "Reuters story" in c["title"])
+_other_item = next(c for c in kept_mixed if "Non-Reuters" in c["title"])
+check("_collect_from_feed: 実体Reutersの記事はsource='Reuters'・tier=2へ昇格する",
+      _reuters_item["source"] == "Reuters" and _reuters_item["tier"] == 2, str(_reuters_item))
+check("_collect_from_feed: 実体Reutersの記事はkindがindependent_reportになる",
+      _reuters_item["kind"] == "independent_report", str(_reuters_item))
+check("_collect_from_feed: Reuters以外の記事はtier4・Google News名のまま据え置かれる（誤って昇格させない）",
+      _other_item["source"] == collect_news.GOOGLE_NEWS_NAME and _other_item["tier"] == 4, str(_other_item))
+check("_collect_from_feed: tier1候補にはtier2昇格ロジックが適用されない（tier==4限定の確認）",
+      all(c.get("tier") != 2 for c in kept2))
+
 print("=== collect_news.py: fetch_article_body（v1.39・オーナー指示） ===")
 
 _LONG_PARA = "This is a real press release paragraph with substantial content. " * 5  # >200字
@@ -2155,6 +2305,20 @@ check("verify_post._load_source_tier_map()が新規4件をtier=1として認識�
       all(_tier_map_check.get(n) == 1 for n in
           ("米財務省", "USTR", "ホワイトハウス", "ホワイトハウス（大統領令等）")),
       str(_tier_map_check))
+
+print("=== config/news_sources.json: Reutersの追加確認（v1.59・オーナー承認） ===")
+_news_sources_raw = json.loads((REPO / "config" / "news_sources.json").read_text(encoding="utf-8"))
+_reuters_entry = next((s for s in _news_sources_raw["sources"] if s["name"] == "Reuters"), None)
+check("Reutersがtier=2で登録されている（config/news_sources.jsonの生データ）",
+      _reuters_entry is not None and _reuters_entry.get("tier") == 2, str(_reuters_entry))
+check("Reutersのエントリにurlが無い（公開RSSが無いため。collect_news._load_sources()の"
+      "通常フェッチループでは使われず、C21/C22のtier参照専用）",
+      _reuters_entry is not None and "url" not in _reuters_entry, str(_reuters_entry))
+check("collect_news._load_sources()はurlの無いReutersエントリを除外する（誤って空URLへの"
+      "フェッチを試みない・real_sourcesにReutersが含まれないことの確認）",
+      "Reuters" not in {s["name"] for s in real_sources})
+check("verify_post._load_source_tier_map()がReutersをtier=2として認識する（C21/C22で使う経路）",
+      verify_post._load_source_tier_map().get("Reuters") == 2)
 
 print("=== config/news_sources.json: FRB speeches/testimonyの追加確認（v1.52・オーナー指示） ===")
 check("FRB（speeches）・FRB（testimony）がtier=1で登録されている",

@@ -67,6 +67,16 @@ RETRY_DELAYS_SEC = (2, 4)
 # 安全マージンを加えた15とした（DESIGN_CHANGES.md v1.39参照）。
 TIER3_CANDIDATE_LIMIT = 15
 
+# v1.59（オーナー承認）: tier2（Reuters・Google News経由で実体確認済み）の
+# 選定上限。統合運用基準ではReutersが優先度2でtier3（優先度3）より上位
+# であり件数を下回らせる理由がないため、tier3と同格の15とする（オーナー
+# 指定）。tier1（無制限）とは異なり上限を設ける——Reuters検索クエリは
+# site:reuters.comのみで金融・暗号資産に絞られておらず、実データで
+# 上位に人事・地名変更等の無関係な一般ニュースが多数含まれることを
+# 確認済み（DESIGN_CHANGES.md v1.58参照）。tier1同様の無制限扱いは
+# 無関係記事の混入によるトークン消費・選定ノイズの増大を招く。
+TIER2_CANDIDATE_LIMIT = 15
+
 # v1.39フォローアップ（オーナー承認）: 「公開日時の新しい順で上位N件」という
 # 選定方式は、収集ウィンドウ序盤に出た記事を窓終盤の記事群に押しやる構造的な
 # 時間帯バイアスを持つ（実データ: 8/25のBTC $80,000到達＝3か月ぶり高値を
@@ -222,7 +232,7 @@ SCHEDULED_EVENTS_GUIDANCE = """## 経済カレンダー（scheduled_events）
 入力の daily_data.scheduled_events は対象日に予定されていた経済イベント
 です。これらは「探すべき材料」のヒントであり、それ自体を材料として本文に
 書いてはいけません。対応するRSS候補が存在する場合に限り、通常の採否判定
-（tier1の裏付け、または独立2ソース）を経て本文へ反映してください。
+（tier1・tier2の裏付け、または独立2ソース）を経て本文へ反映してください。
 予定はあったが候補が無い場合は、その旨を書かず、単に掲載しないでください。"""
 
 RULES_CAUSAL = """## 因果表現
@@ -305,14 +315,16 @@ C：波及経路を説明できない一般ニュース
 
 tier 1: 規制当局・政府機関の公式発表RSS（SEC・FRB・OCC・CFTC・金融庁・
         日本銀行等）。summaryの記載内容を一次情報として扱ってよい。
+tier 2: 優先度2：Reuters等の独立報道。単独で採用可能だが、tier1の公式発表と
+        異なり報道であることを明示すること（『Reutersによると』等）。
 tier 3: CoinDesk・Cointelegraph等の暗号通貨特化メディアRSS。統合運用基準の
         位置づけどおり「補完・裏取り」に用い、単独の主根拠にはしない。
-        tier 1のsummaryで確認できた事実を補強する（同一材料が独立して
-        報じられていることを示す）用途、またはtier 1のsummaryに無い
-        暗号通貨特有の細部を補う用途に限る。tier 3の候補のみを根拠に
+        tier 1・tier 2のsummaryで確認できた事実を補強する（同一材料が独立
+        して報じられていることを示す）用途、またはtier 1・tier 2のsummary
+        に無い暗号通貨特有の細部を補う用途に限る。tier 3の候補のみを根拠に
         【ヘッドライン】の新規項目を立てない。【主要なポイント】については
         下記「独立2ソース規定」の例外を除き、同様に単独では根拠にしない。
-        【重要・v1.53フォローアップ】tier1の事実をtier3が裏取り・補強する
+        【重要・v1.53フォローアップ】tier1・tier2の事実をtier3が裏取り・補強する
         上記の用途は、audit_ledgerでは該当tier3候補をuse:falseのまま
         記録する（媒体名を（媒体名、日付）へ追加で列挙する形で本文へ反映
         してよいが、tier3側の use を true にはしない）。tier3のuse:trueは
@@ -327,16 +339,16 @@ tier 4: Google News経由の候補発見のみの結果（見出し・URLのみ�
 
 ### 情報源規律と項目数の優先順位（v1.29・オーナー指示）
 
-情報源の規律は項目数より優先する。tier1（または下記「独立2ソース規定」に
-該当するtier3）の裏付けがある材料が1件しかなければpart1_pointsは1項目、
-0件なら0項目とし、下記「候補が無い場合の扱い」の定型文を使うこと。
+情報源の規律は項目数より優先する。tier1・tier2（または下記「独立2ソース
+規定」に該当するtier3）の裏付けがある材料が1件しかなければpart1_pointsは
+1項目、0件なら0項目とし、下記「候補が無い場合の扱い」の定型文を使うこと。
 項目数を満たすためにtier3単独ソースを採用してはならない。0項目
 （定型文のみ）は失敗ではなく、統合運用基準§3.1が定める正しい結果である
 （「根拠が少ない日は数を埋めず、確認できる材料と限界を明記する」）。
 
-- 掲載する事実はtier 1のsummaryに記載されている内容、または下記
+- 掲載する事実はtier 1・tier 2のsummaryに記載されている内容、または下記
   「独立2ソース規定」に該当するtier 3の事実報道に限る。tier 3は
-  原則としてtier 1の事実を補強する裏取りとしてのみ併記してよく、
+  原則としてtier 1・tier 2の事実を補強する裏取りとしてのみ併記してよく、
   tier 3単独を新規項目の根拠にしない。
 
 ### 独立2ソース規定（v1.28・統合運用基準の既定を実装へ反映。v1.53
@@ -349,7 +361,7 @@ tier3のみで報じられた材料であっても、次の3条件をすべて�
      （発表、認可、取得、提携、施行など）
  (c) 掲載時に媒体名を複数列挙し、一次情報での裏付けが未確認である旨を
      明記する
-上記に該当しない場合は従来どおりtier1の裏付けを必要とする。
+上記に該当しない場合は従来どおりtier1・tier2の裏付けを必要とする。
 
 この規定に該当すると判断したtier3候補は、audit_ledgerでuse:trueとし、
 相手候補（同一事実を報じている別sourceのtier3候補）のcandidate_idを
@@ -389,11 +401,12 @@ part1_headline・headline_for_imageの決定手順は下記
 # ことが一因（v1.42→v1.43改定時）。今回は全箇所を本セクションへの参照へ
 # 統一し、単一の記述箇所以外では判定基準を繰り返さない構成へ変更した。
 NO_CANDIDATES_FALLBACK = f"""## part1_headline・part1_pointsの決定（v1.44・オーナー指示。
-(i)(ii)の判定方法はv1.53フォローアップで改定・オーナー指示）
+(i)(ii)の判定方法はv1.53フォローアップで改定・オーナー指示。
+(i)にtier2を追加はv1.59・オーナー承認）
 
 part1_headline および part1_points は、次の3つを独立に確認して
 決定する。
-(i)   tier1の候補でuse:trueと判断したものがあるか
+(i)   tier1またはtier2の候補でuse:trueと判断したものがあるか
 (ii)  tier3の候補で、独立2ソース規定に該当すると判断し、
       pairs_with_candidate_idで関連付けてuse:trueとしたものが
       2件以上あるか
@@ -405,7 +418,7 @@ part1_headline および part1_points は、次の3つを独立に確認して
 
 優先順位（複数が「あり」の場合、ヘッドラインで何を主とするかを決める）：
 
-① (i)あり → tier1裏付けの材料をヘッドラインの主とする。(ii)・(iii)も
+① (i)あり → tier1・tier2裏付けの材料をヘッドラインの主とする。(ii)・(iii)も
    あれば、重要度の高い方を主、他方を従として併記してよい。
 ② (i)なし・(ii)あり → 独立2ソース材料をヘッドラインの主とする。
    (iii)もあれば値動きを従として併記してよい。
@@ -421,7 +434,7 @@ reasonで使うA/B/C——個々の候補材料の重要性判定（「重要性
 ### ②（(i)なし・(ii)あり）の詳細
 
 独立2ソース材料の内容に基づき、part1_headlineに実文言を書く。
-tier1裏付けが無いため、上記「独立2ソース規定」の(c)と同様に、
+tier1・tier2裏付けが無いため、上記「独立2ソース規定」の(c)と同様に、
 一次情報での確認ができていない旨を明記する。headline_for_imageも
 同様にこの材料の内容を反映してよい。
 
@@ -442,7 +455,7 @@ part1_pointsには、値動きの記述に加え「ニュース材料は確認�
 
 ### 共通
 
-- headline_for_image: ④の場合（tier1材料・独立2ソース材料・値動きの
+- headline_for_image: ④の場合（tier1・tier2材料・独立2ソース材料・値動きの
   いずれも無い場合）は、daily_data.json内のBTC・ETHのdirection
   （up/down）に基づく短い定性的な見出しにとどめる（例:「BTC・ETHとも
   に上昇基調」）。数値は書かない。`#`は使わず全角40字以内。
@@ -451,7 +464,7 @@ part1_pointsには、値動きの記述に加え「ニュース材料は確認�
 **audit_ledgerは上記と切り離して扱う（統合運用基準・台本の要求）。**
 audit_ledgerは「採否を判断した全候補の記録」であり、本文（ヘッドライン・
 主要なポイント）に採用したかどうかとは無関係に、news_candidates_today に
-渡された候補（tier 1・3・4のすべて）を1件残らず記録する。ヘッドライン・
+渡された候補（tier 1・2・3・4のすべて）を1件残らず記録する。ヘッドライン・
 主要なポイントに使わなかった候補も use:false とその理由を記録する。
 
 各要素は candidate_id（news_candidates_today内の該当候補のID）・use・
@@ -465,9 +478,10 @@ pairs_with_candidate_id・verified_by・reason のみを書く（v1.48・v1.53
 
 - use（true/false）: この候補を、本文（ヘッドライン・主要なポイント）で
   ある事実の**単独で独立した根拠**として使ったかどうか。
-  tier1はその事実の直接の根拠として使えばtrue。tier3がtrueになるのは
+  tier1・tier2はその事実の直接の根拠として使えばtrue（tier2はReutersに
+  よる報道である旨を明示すること）。tier3がtrueになるのは
   「独立2ソース規定」に該当し、下記pairs_with_candidate_idで相手を
-  申告できる場合に限る。tier1の事実をtier3が裏取り・補強するために
+  申告できる場合に限る。tier1・tier2の事実をtier3が裏取り・補強するために
   本文中で言及した場合（媒体名を（媒体名、日付）へ追加で列挙する等）は、
   そのtier3候補のuse自体はfalseのままにする——「本文で言及・参照した」
   ことと「useをtrueにする」ことは別であり、混同しないこと（v1.53
@@ -506,14 +520,14 @@ WRITES_A = """## あなたが書くもの
   上記「part1_headline・part1_pointsの決定」の①〜④に従う。
 - part1_points: 上限4項目。ヘッドラインと重複しない補足。各項目末尾に
   （媒体名、日付）を付す。項目数は目標ではなく情報源の規律に従った結果
-  である——tier1（または独立2ソース規定該当のtier3）の裏付けがある
+  である——tier1・tier2（または独立2ソース規定該当のtier3）の裏付けがある
   材料の件数がそのまま項目数になる（1件なら1項目、0件なら0項目で
   定型文）。項目数を埋めるためにtier3単独ソースを採用しない。
   上記「重要性判定と因果表現の分離」のB（波及経路のあるマクロ・地政学
   材料）を掲載する場合、「暗号通貨価格への直接因果は未確認」等の限定
   表現を項目文に含める——因果が未確認であることは不採用の理由にせず、
   掲載したうえで明記する。
-- audit_ledger: 候補一覧（tier 1・3・4のすべて）の採否を判断した記録。
+- audit_ledger: 候補一覧（tier 1・2・3・4のすべて）の採否を判断した記録。
   各要素は candidate_id・use・pairs_with_candidate_id（tier3で
   use:trueかつ独立2ソース規定該当時のみ）・verified_by・reason のみを
   書く（source・url・title・published_at・decisionは書かない。詳細は
@@ -560,8 +574,8 @@ part1_points）と文体を揃えること。
   にのみ使う）や、part1_pointsに書かれていない新規の材料をpart2_flowで
   持ち出さない（v1.56・オーナー指示）。part2_flowは「意識された可能性」
   という因果連鎖を組む分、part2_summaryの1行言及より踏み込んだ主張に
-  なるため、根拠の基準もpart1_points採用済み材料に厳格化する——tier1裏付け
-  または独立2ソースの採否規律を経ていない材料（単独tier3ソース等）を
+  なるため、根拠の基準もpart1_points採用済み材料に厳格化する——tier1・tier2
+  裏付けまたは独立2ソースの採否規律を経ていない材料（単独tier3ソース等）を
   因果連鎖の起点にしない。ニュースが無い日（part1_pointsが定型文のみの日）
   は、市場データ内の事実（出来高の増減、市場心理の変化、国内取引所とDEXの
   出来高動向）のみで1〜2本にとどめる。
@@ -720,7 +734,7 @@ def _select_candidates_for_call_a(
         candidates: list[dict],
         pair_overlap_threshold: float = PAIR_OVERLAP_THRESHOLD_DEFAULT) -> tuple[list[dict], dict[str, int]]:
     """呼び出しAへ渡す候補を選ぶ（v1.21・v1.39フォローアップでペア救済を追加・
-    v1.51でtier4上限を追加）。
+    v1.51でtier4上限を追加・v1.59でtier2上限を追加）。
     tier 1（公式発表）は全件、tier 3（CoinDesk・Cointelegraph等）は公開日時の
     新しい順で上位TIER3_CANDIDATE_LIMIT件までに絞る。候補急増日（実測30件・
     うちtier3が28件）でaudit_ledgerの全候補記録がCALL_A_MAX_TOKENSを
@@ -737,14 +751,25 @@ def _select_candidates_for_call_a(
     新しい順で上位TIER4_CANDIDATE_LIMIT件までに絞る。tier4は単独では事実の
     根拠にしない候補発見専用の位置づけ（tier1裏付け・独立2ソースいずれも
     対象外）のため、tier3のようなペア救済は行わない。
+
+    v1.59（オーナー承認）: tier2（Reuters・実体確認済みのGoogle News経由
+    記事）は、tier1と異なり無制限にはせず、公開日時の新しい順で上位
+    TIER2_CANDIDATE_LIMIT件までに絞る（tier3と同格の上限。オーナー指定。
+    Reuters検索クエリが金融・暗号資産に絞られておらず無関係な一般
+    ニュースを多く含むため）。tier2は単独採用可能（tier1と同じ位置づけ）
+    でありtier3のような独立2ソースのペア救済は不要のため行わない。
     """
     tier1 = [c for c in candidates if c.get("tier") == 1]
+    tier2 = [c for c in candidates if c.get("tier") == 2]
     tier3 = [c for c in candidates if c.get("tier") == 3]
-    others = [c for c in candidates if c.get("tier") not in (1, 3)]
+    others = [c for c in candidates if c.get("tier") not in (1, 2, 3)]
 
     def pub_dt(c: dict):
         return collect_news.parse_pubdate_jst(c.get("published_at", "")) or datetime.min.replace(
             tzinfo=collect_news.JST)
+
+    tier2_sorted = sorted(tier2, key=pub_dt, reverse=True)
+    tier2_selected = tier2_sorted[:TIER2_CANDIDATE_LIMIT]
 
     tier3_sorted = sorted(tier3, key=pub_dt, reverse=True)
     tier3_top = tier3_sorted[:TIER3_CANDIDATE_LIMIT]
@@ -770,6 +795,9 @@ def _select_candidates_for_call_a(
     others_selected = others_sorted[:TIER4_CANDIDATE_LIMIT]
 
     stats = {
+        "tier2_total": len(tier2),
+        "tier2_selected": len(tier2_selected),
+        "tier2_dropped": len(tier2) - len(tier2_selected),
         "tier3_total": len(tier3),
         "tier3_selected": len(tier3_selected),
         "tier3_dropped": len(tier3) - len(tier3_selected),
@@ -779,7 +807,7 @@ def _select_candidates_for_call_a(
         "tier4_selected": len(others_selected),
         "tier4_dropped": len(others) - len(others_selected),
     }
-    return tier1 + tier3_selected + others_selected, stats
+    return tier1 + tier2_selected + tier3_selected + others_selected, stats
 
 
 # v1.29（オーナー指示・修正2）: tier1が薄い日にpart1_pointsの項目数を
@@ -788,7 +816,8 @@ def _select_candidates_for_call_a(
 # 記憶に委ねるのではなく、候補ごとに掲載可否を機械的に付与して渡す。
 _ELIGIBILITY_LABELS = {
     1: "掲載可",
-    3: "単独では掲載不可（tier1の裏取り、または独立2ソース規定に該当する場合のみ可）",
+    2: "掲載可",
+    3: "単独では掲載不可（tier1・tier2の裏取り、または独立2ソース規定に該当する場合のみ可）",
     4: "掲載不可（候補発見専用。単独では事実の根拠にしない）",
 }
 _ELIGIBILITY_UNKNOWN = "掲載不可（tier不明）"
@@ -858,7 +887,10 @@ def _derive_decisions(llm_entries: list[dict], id_to_candidate: dict[int, dict],
     文言が生じる経路自体を無くす（C19のsource/url/title/published_at
     再構成＝v1.48と同じ設計思想）。
 
-    tier1: use:true→"採用"、use:false→"不採用"。
+    tier1・tier2: use:true→"採用"、use:false→"不採用"（v1.59・オーナー
+      承認。tier2はReuters・実体確認済みのGoogle News経由記事であり、
+      統合運用基準§2の優先度2〈独立報道〉としてtier1と同様に単独採用
+      可能）。
     tier3: use:trueかつ_validate_pair_claim()を満たすペアが（自己申告
       またはpairs_with_candidate_idで自分を指す他候補からの申告いずれかで）
       成立→双方"採用（独立2ソース）"。use:trueだがどの方向からもペアが
@@ -866,7 +898,7 @@ def _derive_decisions(llm_entries: list[dict], id_to_candidate: dict[int, dict],
       _call_json()のリトライへ委ねる（C21で検知させる設計だと1回のFAILが
       即座に生成物全体を不採用にするため、まずリトライでLLMに自己修正の
       機会を与える。オーナー指示）。use:false→"不採用"。
-    tier1・tier3以外（tier4等・候補発見専用）: useの値によらず常に
+    tier1・tier2・tier3以外（tier4等・候補発見専用）: useの値によらず常に
     "不採用"（NEWS_SELECTIONの「単独では事実の根拠にしない」規定と整合。
     tier4はペアの対象に含めない——オーナー指示）。
     """
@@ -891,7 +923,7 @@ def _derive_decisions(llm_entries: list[dict], id_to_candidate: dict[int, dict],
         tier = candidate.get("tier")
         if not use:
             decisions[cid] = "不採用"
-        elif tier == 1:
+        elif tier in (1, 2):
             decisions[cid] = "採用"
         elif tier == 3:
             if cid in paired:

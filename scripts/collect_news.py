@@ -32,12 +32,33 @@ CoinDesk・Cointelegraph（英語・日本語版）を追加した。tierはnews
 〈RSSのdescription由来〉のみを根拠に選別・執筆する。tier 4はsummaryが
 無い/薄いため、単独では事実の根拠にできない設計になっている）。
 到達性が不安定でも本スクリプトは失敗しない。
+
+【v1.59: tier4のうち実体がReutersのものをtier2へ昇格（オーナー承認）】
+9/1に「米イラン交戦再開による原油急騰」をGoogle News経由で取得済み
+だったにもかかわらずtier4分類のみを理由に不採用となった事象を受け、
+「取得経路（Google News）」と「情報源の信頼度（Reuters）」の混同を
+解消する。統合運用基準§2はReutersを「優先度2（独立報道）」と位置づけて
+おり、Google News経由でも実体がReutersと確認できた記事はtier2として
+扱う（tier1と同様、単独で採用可能）。実体確認はGoogle News RSSの
+<source url="https://www.reuters.com">Reuters</source>要素で行う——
+<link>は全件がGoogle Newsのリダイレクトであり実URLのドメイン照合は
+機能しないが、<source>要素は実データで100/100件が正しくReutersの実体を
+示すことを確認済み（リダイレクトを辿る必要が無い。DESIGN_CHANGES.md
+v1.58参照）。判定は`_is_reuters_source()`で行う。
+
+あわせてGOOGLE_NEWS_URLのクエリへ金融・マクロキーワードのOR条件を追加した
+（オーナー指示・実測で効果を確認済み）。site:reuters.comのみのクエリは
+Reuters全体の一般ニュース（人事・地名変更等）が大半を占め、tier2の
+候補プールが暗号資産・金融と無関係な記事で埋まる問題があったため。
+絞り込み後も9/1のイラン・原油記事は取得できることを実測済み
+（DESIGN_CHANGES.md v1.59参照）。
 """
 from __future__ import annotations
 
 import json
 import re
 import sys
+import urllib.parse
 from datetime import date, datetime, timezone, timedelta
 from email.utils import parsedate_to_datetime
 from html.parser import HTMLParser
@@ -62,7 +83,28 @@ GOOGLE_NEWS_NAME = "Google News (Reuters検索)"
 # （when:24hの有無を問わず0件）、8/26以降「対象日0件」が継続していた。
 # 実測でsite:演算子への置き換えとロケールパラメータ付与により復旧を確認
 # （site:reuters.com＋hl/gl/ceidで50件・すべて実際のReuters記事）。
-GOOGLE_NEWS_URL = "https://news.google.com/rss/search?q=when:24h+site:reuters.com&hl=en-US&gl=US&ceid=US:en"
+#
+# v1.59（オーナー指示・実測のうえ適用）: site:reuters.comのみでは
+# Reuters全体の一般ニュース（人事・地名変更・スポーツ等）が上位を占め、
+# tier2候補プールが暗号資産・金融と無関係な記事で埋まることを実測で確認
+# （9/1相当の実データで先頭15件中10件超が無関係）。金融・マクロキーワード
+# のOR条件を追加。診断の結果、(1) 絞り込み後も9/1のイラン・原油記事
+# （"Strait of Hormuz"関連）は取得できることを実測で確認、
+# (2) 絞り込み後の候補は金利・インフレ・原油・stablecoin等
+# 金融関連が明確に多数を占めることを確認——「絞り込みで重要材料を
+# 落とすなら見送る」というオーナーの判定基準を満たしたため適用する
+# （DESIGN_CHANGES.md v1.59参照）。キーワード一覧はオーナー指定。
+# なお、Google News RSSは1クエリあたり最大100件で頭打ちになるため
+# （絞り込み前後で件数自体は変化しなかった・実測済み）、件数上限としての
+# 効果は無い——効果は内容の関連度向上であり、件数削減ではない。
+GOOGLE_NEWS_QUERY_KEYWORDS = (
+    'crypto OR bitcoin OR ethereum OR "federal reserve" OR inflation OR '
+    'tariff OR oil OR "interest rate" OR SEC OR stablecoin'
+)
+GOOGLE_NEWS_URL = "https://news.google.com/rss/search?" + urllib.parse.urlencode({
+    "q": f"when:24h site:reuters.com ({GOOGLE_NEWS_QUERY_KEYWORDS})",
+    "hl": "en-US", "gl": "US", "ceid": "US:en",
+})
 _HTML_TAG_RE = re.compile(r"<[^>]+>")
 # 一般的なブラウザのUser-Agent文字列（v1.13）。BLSがHTTP 403を返した際、
 # 独自UA（旧: "crypto-daily-brief/1.0 (+https://github.com/...)"）が
@@ -183,6 +225,12 @@ def fetch_rss(url: str, timeout: int = REQUEST_TIMEOUT_SEC) -> tuple[str, list[d
     戻り値: (status: "ok"|"failed", items, detail)。ネットワーク障害・非200・
     XML不正のいずれでも例外を送出せず"failed"を返す — 1フィードの不調が
     他のフィード・パイプライン全体を巻き添えにしないため（§4.1の要件と同じ思想）。
+
+    v1.59（オーナー承認）: 各itemの<source>要素（text・url属性）も
+    source_name・source_urlとして返す。多くのフィードには存在しないが
+    （空文字になるだけで害はない）、Google Newsのような集約フィードでは
+    元の発行元（実体）を示す——tier4のうちReutersの実体判定に使う
+    （`_is_reuters_source()`参照）。
     """
     try:
         resp = requests.get(url, timeout=timeout, headers={"User-Agent": USER_AGENT})
@@ -195,8 +243,14 @@ def fetch_rss(url: str, timeout: int = REQUEST_TIMEOUT_SEC) -> tuple[str, list[d
             link = (item.findtext("link") or "").strip()
             pub_date = (item.findtext("pubDate") or "").strip()
             summary = _clean_summary(item.findtext("description") or "")
+            source_el = item.find("source")
+            source_name = (source_el.text or "").strip() if source_el is not None else ""
+            source_url = source_el.attrib.get("url", "") if source_el is not None else ""
             if title or link:
-                items.append({"title": title, "url": link, "published_at": pub_date, "summary": summary})
+                items.append({
+                    "title": title, "url": link, "published_at": pub_date, "summary": summary,
+                    "source_name": source_name, "source_url": source_url,
+                })
         return "ok", items, ""
     except requests.RequestException as e:
         return "failed", [], f"{type(e).__name__}: {e}"
@@ -280,6 +334,19 @@ def fetch_article_body(url: str, timeout: int = ARTICLE_FETCH_TIMEOUT_SEC) -> st
         return None
 
 
+def _is_reuters_source(item: dict[str, str]) -> bool:
+    """Google News経由の記事の実体がReutersかを、RSSの<source>要素で判定する
+    （v1.59・オーナー承認）。<source url="https://www.reuters.com">Reuters
+    </source>という構造を実データで確認済み（取得100件中100件・
+    site:reuters.com検索にもかかわらずReuters以外の<source>の混入は0件。
+    DESIGN_CHANGES.md v1.58参照）。<link>はGoogle Newsのリダイレクトの
+    ためドメイン照合はできないが、本関数はリダイレクトを辿らずに判定できる。
+    """
+    name = item.get("source_name", "").lower()
+    src_url = item.get("source_url", "").lower()
+    return "reuters" in name or "reuters.com" in src_url
+
+
 def _collect_from_feed(name: str, url: str, window_start: datetime, window_end: datetime,
                         *, tier: int, kind: str) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     status, items, detail = fetch_rss(url)
@@ -304,14 +371,24 @@ def _collect_from_feed(name: str, url: str, window_start: datetime, window_end: 
             body = fetch_article_body(it["url"])
             if body:
                 summary = body
+
+        cand_source, cand_tier, cand_kind = name, tier, kind
+        # v1.59（オーナー承認）: tier4（Google News・候補発見専用）のうち
+        # 実体がReutersと確認できたものはtier2（統合運用基準§2の優先度2・
+        # 独立報道）へ昇格し、単独採用を可能にする。取得経路（Google News）
+        # と情報源の信頼度（Reuters）を混同しないための措置（DESIGN_CHANGES.md
+        # v1.58・v1.59参照）。
+        if tier == 4 and _is_reuters_source(it):
+            cand_source, cand_tier, cand_kind = "Reuters", 2, _TIER_KIND[2]
+
         candidates.append({
             "title": it["title"],
             "url": it["url"],
-            "source": name,
+            "source": cand_source,
             "published_at": it["published_at"],
             "summary": summary,
-            "kind": kind,
-            "tier": tier,
+            "kind": cand_kind,
+            "tier": cand_tier,
         })
     print(f"OK: {name} {len(items)}件取得・対象日{len(candidates)}件（url={url}）")
     return {"status": "ok", "raw_count": len(items), "kept_count": len(candidates)}, candidates
@@ -387,7 +464,7 @@ def fetch_economic_calendar(window_start: datetime, window_end: datetime) -> lis
     return events
 
 
-_TIER_KIND = {1: "official", 3: "supplementary"}
+_TIER_KIND = {1: "official", 2: "independent_report", 3: "supplementary"}
 
 
 def collect_news(target_date: str) -> dict[str, Any]:

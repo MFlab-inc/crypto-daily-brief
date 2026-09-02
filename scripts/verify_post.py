@@ -412,8 +412,11 @@ def check_c21(au: Audit, level: str, audit_ledger, candidate_count: int,
             continue
         if decision == "採用":
             tier = tier_map.get(source)
-            if tier != 1:
-                violations.append(f"[{i}] source={source!r}（tier={tier!r}）が採用だがtier1でない")
+            if tier not in (1, 2):
+                # v1.59（オーナー承認）: tier2（Reuters・Google News経由で
+                # 実体確認済み）はtier1と同様に単独採用可能（統合運用基準§2の
+                # 優先度2・独立報道）。DESIGN_CHANGES.md v1.58・v1.59参照。
+                violations.append(f"[{i}] source={source!r}（tier={tier!r}）が採用だがtier1・tier2でない")
         elif decision == "採用（独立2ソース）":
             if len(dual_sources) < 2:
                 violations.append(
@@ -425,12 +428,13 @@ def check_c21(au: Audit, level: str, audit_ledger, candidate_count: int,
     au.add("C21_decision_tier_consistency", not violations, detail)
 
 
-# --- C22 図版でなく本文ヘッドラインのtier1裏付け ---
+# --- C22 図版でなく本文ヘッドラインのtier1・tier2裏付け ---
 
 def check_c22(au: Audit, part1_headline, audit_ledger, tier_map: dict[str, int],
               intraday_range: dict | None = None) -> None:
-    """part1_headlineが定型文かどうかと、根拠（tier1採用・独立2ソース採用・
-    notable_move）の有無との整合を検査する（v1.44改定）。
+    """part1_headlineが定型文かどうかと、根拠（tier1・tier2採用・独立2ソース
+    採用・notable_move）の有無との整合を検査する（v1.44改定・v1.59でtier2を
+    追加・オーナー承認）。
 
     呼び出しA失敗等でpart1_headlineが文字列でない場合は、この検査自体が
     無意味なためSKIP（縮退時の話であり、本検査が対象とする「モデルが
@@ -440,11 +444,13 @@ def check_c22(au: Audit, part1_headline, audit_ledger, tier_map: dict[str, int],
         au.add("C22_headline_tier1_basis", None, "part1_headlineが文字列でない（呼び出しA失敗等）のためSKIP")
         return
 
+    # v1.59（オーナー承認）: tier2（Reuters・実体確認済み）もtier1と同様に
+    # part1_headlineの正当な根拠になる（DESIGN_CHANGES.md v1.58・v1.59参照）。
     has_tier1_adopted = isinstance(audit_ledger, list) and any(
-        isinstance(e, dict) and e.get("decision") == "採用" and tier_map.get(e.get("source")) == 1
+        isinstance(e, dict) and e.get("decision") == "採用" and tier_map.get(e.get("source")) in (1, 2)
         for e in audit_ledger
     )
-    # v1.44（オーナー指示）: 独立2ソース材料単独（tier1裏付けなし）も
+    # v1.44（オーナー指示）: 独立2ソース材料単独（tier1・tier2裏付けなし）も
     # part1_headlineの正当な根拠になりうる（NO_CANDIDATES_FALLBACKの②）。
     has_pair_adopted = isinstance(audit_ledger, list) and any(
         isinstance(e, dict) and e.get("decision") == "採用（独立2ソース）"
@@ -466,7 +472,7 @@ def check_c22(au: Audit, part1_headline, audit_ledger, tier_map: dict[str, int],
         # 無条件SKIPだった）。
         basis = []
         if has_tier1_adopted:
-            basis.append("tier1由来の採用")
+            basis.append("tier1・tier2由来の採用")
         if has_pair_adopted:
             basis.append("独立2ソース採用")
         if has_notable_move:
@@ -479,18 +485,18 @@ def check_c22(au: Audit, part1_headline, audit_ledger, tier_map: dict[str, int],
         return
 
     if has_tier1_adopted:
-        au.add("C22_headline_tier1_basis", True, "tier1由来の採用が存在")
+        au.add("C22_headline_tier1_basis", True, "tier1・tier2由来の採用が存在")
         return
     if has_pair_adopted:
         au.add("C22_headline_tier1_basis", True, "独立2ソース採用が存在（v1.44・ヘッドラインの根拠として有効）")
         return
     if has_notable_move:
         au.add("C22_headline_tier1_basis", None,
-               "tier1由来の採用・独立2ソース採用は無いがnotable_move（24時間の値動き）が存在するためSKIP"
+               "tier1・tier2由来の採用・独立2ソース採用は無いがnotable_move（24時間の値動き）が存在するためSKIP"
                "（値動きは情報源階層の対象外）")
         return
     au.add("C22_headline_tier1_basis", False,
-           "ヘッドラインが定型文でないにもかかわらずtier1由来の採用・独立2ソース採用・notable_moveのいずれも存在しない")
+           "ヘッドラインが定型文でないにもかかわらずtier1・tier2由来の採用・独立2ソース採用・notable_moveのいずれも存在しない")
 
 
 # --- C23 総括の固有名詞バックリファレンス ---
