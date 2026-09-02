@@ -1,0 +1,169 @@
+{
+  "target_date_jst": "2026-09-02",
+  "weekday_jp": "水",
+  "date_title": "2026年9月2日（水）暗号通貨・DEX市場概況",
+  "summary": "（シャドー運用中：ヘッドラインはフェーズ2で生成）",
+  "assets": [
+    {
+      "asset": "BTC",
+      "usd": "$77,072",
+      "jpy": "約1,234.0万円",
+      "change_24h": "-0.08%",
+      "direction": "down"
+    },
+    {
+      "asset": "ETH",
+      "usd": "$2,380",
+      "jpy": "約38.1万円",
+      "change_24h": "-1.07%",
+      "direction": "down"
+    },
+    {
+      "asset": "BNB",
+      "usd": "$686",
+      "jpy": "約11.0万円",
+      "change_24h": "+0.95%",
+      "direction": "up"
+    }
+  ],
+  "intraday_range": {
+    "BTC": {
+      "high": "$77,750",
+      "low": "$76,219",
+      "source": "coinbase",
+      "retrieved_at": "2026-09-03T07:37:45.665344+09:00",
+      "representative": true,
+      "inconsistent": false,
+      "notable_move": false
+    },
+    "ETH": {
+      "high": "$2,428",
+      "low": "$2,355",
+      "source": "coinbase",
+      "retrieved_at": "2026-09-03T07:37:45.792525+09:00",
+      "representative": true,
+      "inconsistent": false,
+      "notable_move": false
+    },
+    "BNB": {
+      "high": "$689",
+      "low": "$677",
+      "source": "coinbase",
+      "retrieved_at": "2026-09-03T07:37:45.968482+09:00",
+      "representative": false,
+      "inconsistent": false
+    }
+  },
+  "scheduled_events": [
+    {
+      "title": "GDP q/q",
+      "country": "AUD",
+      "impact": "High",
+      "time_jst": "2026-09-02T10:30:00+09:00"
+    },
+    {
+      "title": "Official Cash Rate",
+      "country": "NZD",
+      "impact": "High",
+      "time_jst": "2026-09-02T11:00:00+09:00"
+    },
+    {
+      "title": "RBNZ Monetary Policy Statement",
+      "country": "NZD",
+      "impact": "High",
+      "time_jst": "2026-09-02T11:00:00+09:00"
+    },
+    {
+      "title": "RBNZ Rate Statement",
+      "country": "NZD",
+      "impact": "High",
+      "time_jst": "2026-09-02T11:00:00+09:00"
+    },
+    {
+      "title": "RBNZ Press Conference",
+      "country": "NZD",
+      "impact": "High",
+      "time_jst": "2026-09-02T12:00:00+09:00"
+    },
+    {
+      "title": "BOC Rate Statement",
+      "country": "CAD",
+      "impact": "High",
+      "time_jst": "2026-09-02T22:45:00+09:00"
+    },
+    {
+      "title": "Overnight Rate",
+      "country": "CAD",
+      "impact": "High",
+      "time_jst": "2026-09-02T22:45:00+09:00"
+    },
+    {
+      "title": "BOC Press Conference",
+      "country": "CAD",
+      "impact": "High",
+      "time_jst": "2026-09-02T23:30:00+09:00"
+    }
+  ],
+  "market": {
+    "fear_greed": {
+      "value": 71,
+      "label": "Greed"
+    },
+    "market_cap": "$2.597兆",
+    "market_cap_jpy": "¥415.8兆",
+    "volume_24h": "$744.9億",
+    "volume_24h_jpy": "¥11.93兆",
+    "btc_dominance": "59.58%",
+    "eth_dominance": "11.18%"
+  },
+  "base": {
+    "tvl": "$54.70億",
+    "tvl_jpy": "¥8,759億",
+    "tvl_change": "-1.53%",
+    "tvl_direction": "down",
+    "dex_volume": "$8.383億",
+    "dex_volume_jpy": "¥1,342億",
+    "dex_volume_eth_usdc": "$90.82M",
+    "dex_volume_eth_usdc_jpy": "¥145億",
+    "usdc_dominance": "86.0%"
+  },
+  "lp": {
+    "pools": [
+      {
+        "name": "Base 0.05%プール",
+        "apr": "27.89%",
+        "tvl": "$8.64M",
+        "volume_24h": "$13.21M",
+        "change_vs_prev": {
+          "apr_change": "-10.48%",
+          "volume_24h_change": "-10.88%",
+          "tvl_change": "-0.45%"
+        }
+      },
+      {
+        "name": "Base 0.3%プール",
+        "apr": "73.81%",
+        "tvl": "$115.15M",
+        "volume_24h": "$77.62M",
+        "change_vs_prev": {
+          "apr_change": "+13.75%",
+          "volume_24h_change": "+14.26%",
+          "tvl_change": "+0.46%"
+        }
+      }
+    ],
+    "check_message": "#ETHが下落中。#ETH偏り・下限側レンジ外・下落耐性を確認"
+  },
+  "domestic": {
+    "bitflyer_eth_24h": "2,866.08 ETH",
+    "coincheck_eth_24h": "1,013.63 ETH",
+    "combined_eth": "3,879.71 ETH",
+    "combined_usd": "$9.24M",
+    "retrieved_at": "2026-09-03 07:37 JST"
+  },
+  "footer": {
+    "retrieved_at": "2026-09-03 07:37 JST",
+    "usd_jpy": "¥160.11",
+    "sources": "CoinMarketCap API / GeckoTerminal / DefiLlama / ExchangeRate-API / bitFlyer公式API / Coincheck公式API"
+  }
+}
