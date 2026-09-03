@@ -2320,6 +2320,18 @@ check("collect_news._load_sources()はurlの無いReutersエントリを除外�
 check("verify_post._load_source_tier_map()がReutersをtier=2として認識する（C21/C22で使う経路）",
       verify_post._load_source_tier_map().get("Reuters") == 2)
 
+print("=== config/news_sources.json: ADPの追加確認（v1.61・オーナー承認） ===")
+check("ADPがtier=1で登録されている", "ADP" in tier1_names, str(tier1_names))
+_adp_entry = next((s for s in _news_sources_raw["sources"] if s["name"] == "ADP"), None)
+check("ADPのURLが実測確認済みのものと一致する（mediacenter.adp.comの投資家向けRSS）",
+      _adp_entry is not None
+      and _adp_entry.get("url") == "https://mediacenter.adp.com/press-releases?pagetemplate=rss",
+      str(_adp_entry))
+check("ADPがcollect_news._load_sources()経由で通常フェッチ対象に含まれる（urlありのtier1）",
+      "ADP" in {s["name"] for s in real_sources})
+check("verify_post._load_source_tier_map()がADPをtier=1として認識する（C21/C22で使う経路）",
+      verify_post._load_source_tier_map().get("ADP") == 1)
+
 print("=== config/news_sources.json: FRB speeches/testimonyの追加確認（v1.52・オーナー指示） ===")
 check("FRB（speeches）・FRB（testimony）がtier=1で登録されている",
       {"FRB（speeches）", "FRB（testimony）"}.issubset(tier1_names), str(tier1_names))
