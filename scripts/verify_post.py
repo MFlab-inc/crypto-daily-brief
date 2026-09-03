@@ -522,6 +522,52 @@ def check_c22(au: Audit, part1_headline, audit_ledger, tier_map: dict[str, int],
 # 対象外。BTC・ETH等の基軸銘柄名・単位・略称は「材料」ではなく常時
 # 参照される一般語彙とみなしallowlistで除外する。
 _PROPER_NOUN_RE = re.compile(r"[A-Z][A-Za-z0-9&.\-]{1,}")
+
+# v1.62（オーナー指示）: v1.53のscheduled_events（経済カレンダー）導入以降、
+# 本文に通貨コード（CAD・NZD等）が出現する頻度が上がり、C23・C24の
+# 「ASCII大文字始まりの一般語彙」誤検知パターンが3回再発した（v1.56の
+# Base/Coincheck/Flyer、v1.57のBase/DeFi、9/2の['CAD','NZD']）。個別の
+# allowlist追加を繰り返すのではなく、ISO 4217（通貨コード）が有限・確定の
+# リストであることを利用し、全コードを基底allowlistへ一括登録することで
+# 将来の再発を構造的に防ぐ。scheduled_eventsには主要通貨に限らず想定外の
+# 国の指標も現れ得るため、主要通貨だけでなくISO 4217の現行アクティブ
+# コード全体（ISO 4217 Table A.1、資金の代替単位・貴金属コード含む）を
+# 対象とする。ISO標準の通貨コードは自明に「本文で新規に持ち出された材料」
+# ではないため、これらをallowlistに含めても検知精度は損なわれない。
+_ISO4217_CURRENCY_CODES = {
+    "AED", "AFN", "ALL", "AMD", "ANG", "AOA", "ARS", "AUD", "AWG", "AZN",
+    "BAM", "BBD", "BDT", "BGN", "BHD", "BIF", "BMD", "BND", "BOB", "BOV",
+    "BRL", "BSD", "BTN", "BWP", "BYN", "BZD",
+    "CAD", "CDF", "CHE", "CHF", "CHW", "CLF", "CLP", "CNY", "COP", "COU",
+    "CRC", "CUC", "CUP", "CVE", "CZK",
+    "DJF", "DKK", "DOP", "DZD",
+    "EGP", "ERN", "ETB", "EUR",
+    "FJD", "FKP",
+    "GBP", "GEL", "GHS", "GIP", "GMD", "GNF", "GTQ", "GYD",
+    "HKD", "HNL", "HTG", "HUF",
+    "IDR", "ILS", "INR", "IQD", "IRR", "ISK",
+    "JMD", "JOD", "JPY",
+    "KES", "KGS", "KHR", "KMF", "KPW", "KRW", "KWD", "KYD", "KZT",
+    "LAK", "LBP", "LKR", "LRD", "LSL", "LYD",
+    "MAD", "MDL", "MGA", "MKD", "MMK", "MNT", "MOP", "MRU", "MUR", "MVR",
+    "MWK", "MXN", "MXV", "MYR", "MZN",
+    "NAD", "NGN", "NIO", "NOK", "NPR", "NZD",
+    "OMR",
+    "PAB", "PEN", "PGK", "PHP", "PKR", "PLN", "PYG",
+    "QAR",
+    "RON", "RSD", "RUB", "RWF",
+    "SAR", "SBD", "SCR", "SDG", "SEK", "SGD", "SHP", "SLE", "SOS", "SRD",
+    "SSP", "STN", "SVC", "SYP", "SZL",
+    "THB", "TJS", "TMT", "TND", "TOP", "TRY", "TTD", "TWD", "TZS",
+    "UAH", "UGX", "USD", "USN", "UYI", "UYU", "UYW", "UZS",
+    "VED", "VES", "VND", "VUV",
+    "WST",
+    "XAF", "XAG", "XAU", "XBA", "XBB", "XBC", "XBD", "XCD", "XDR", "XOF",
+    "XPD", "XPF", "XPT", "XSU", "XTS", "XUA", "XXX",
+    "YER",
+    "ZAR", "ZMW", "ZWG",
+}
+
 _PROPER_NOUN_ALLOWLIST = {
     "BTC", "ETH", "BNB", "USDC", "USD", "JPY", "JST", "NY",
     "TVL", "APR", "DEX", "LP", "IL", "ETF", "API", "V3",
@@ -530,7 +576,7 @@ _PROPER_NOUN_ALLOWLIST = {
     # 8/26実データの実チェックで「Fear&Greed」「Extreme」が誤検知したため追加
     # （「Fear&Greed指数がExtreme greedを示しており」のような記述）。
     "FEAR", "GREED", "EXTREME", "NEUTRAL", "FEAR&GREED",
-}
+} | _ISO4217_CURRENCY_CODES
 
 
 def check_c23(au: Audit, part2_summary, part1_points, reusable_for_summary) -> None:

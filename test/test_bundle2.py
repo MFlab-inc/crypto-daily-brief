@@ -1786,6 +1786,49 @@ check("run_all(): C24はreusable_for_summaryに材料があってもpart1_points
       "（2026-08-29実データの実例を再現）",
       c24_check["result"] == "FAIL", str(c24_check))
 
+print("=== verify_post: C23/C24 ISO4217通貨コードのallowlist追加（v1.62・オーナー指示） ===")
+
+# 9/2実データの実例（['CAD', 'NZD']誤検知の再現・回帰確認）。v1.53の
+# scheduled_events導入以降、経済カレンダー由来で通貨コードが本文に出やすく
+# なり、v1.56（Base/Coincheck/Flyer）・v1.57（Base/DeFi）に続く3回目の
+# 同種誤検知だった。個別追加ではなくISO4217全体を基底allowlistへ登録する
+# 構造対応で解消することを確認する。
+_au_c23_iso = verify_post.Audit()
+verify_post.check_c23(
+    _au_c23_iso, "対ドルでCADとNZDがともに下落し、コモディティ通貨全般が弱含みました。",
+    "・材料A", [])
+check("check_c23: ISO4217通貨コード（CAD・NZD）は誤検知しない（9/2実データで発見・回帰確認）",
+      _au_c23_iso.checks[0]["result"] == "PASS", str(_au_c23_iso.checks[0]))
+
+_au_c24_iso = verify_post.Audit()
+verify_post.check_c24(
+    _au_c24_iso, "為替市場ではCADとNZDが対ドルで軟調に推移しています。", "・材料A")
+check("check_c24: ISO4217通貨コード（CAD・NZD）は誤検知しない（C24側でも回帰確認）",
+      _au_c24_iso.checks[0]["result"] == "PASS", str(_au_c24_iso.checks[0]))
+
+# 主要通貨に限らず、マイナー通貨コードも含めてISO4217全体が対象であることを
+# 確認する（オーナー指示：scheduled_eventsには想定外の国が現れ得るため）。
+check("_ISO4217_CURRENCY_CODES: 主要通貨（USD/EUR/JPY/GBP/AUD/CAD/CHF/NZD）を含む",
+      {"USD", "EUR", "JPY", "GBP", "AUD", "CAD", "CHF", "NZD"} <= verify_post._ISO4217_CURRENCY_CODES,
+      str(sorted(verify_post._ISO4217_CURRENCY_CODES)[:10]))
+check("_ISO4217_CURRENCY_CODES: マイナー通貨コード（例: ZAR南ア・THB タイ・MXN メキシコ）も含む",
+      {"ZAR", "THB", "MXN"} <= verify_post._ISO4217_CURRENCY_CODES,
+      str(sorted(verify_post._ISO4217_CURRENCY_CODES)))
+check("_PROPER_NOUN_ALLOWLIST: ISO4217コード全体を包含する（C23基底）",
+      verify_post._ISO4217_CURRENCY_CODES <= verify_post._PROPER_NOUN_ALLOWLIST,
+      "ISO4217コードが基底allowlistに欠けている")
+check("_PROPER_NOUN_ALLOWLIST_C24: ISO4217コード全体を包含する（C24もC23基底を継承）",
+      verify_post._ISO4217_CURRENCY_CODES <= verify_post._PROPER_NOUN_ALLOWLIST_C24,
+      "ISO4217コードがC24側allowlistに欠けている")
+
+# ISO4217コードに実在しないASCII固有名詞は引き続きFAILとして検知されることを
+# 確認する（通貨コード追加によって検知精度そのものが損なわれていないか）。
+_au_c23_stillfail = verify_post.Audit()
+verify_post.check_c23(
+    _au_c23_stillfail, "Bitmineの動向が総括で新たに持ち出されています。", "・材料A", [])
+check("check_c23: ISO4217追加後もpart1_points未確認の非通貨固有名詞（Bitmine）は引き続きFAILする",
+      _au_c23_stillfail.checks[0]["result"] == "FAIL", str(_au_c23_stillfail.checks[0]))
+
 print("=== collect_news.py（RSS方式・CryptoPanic撤去後） ===")
 
 # v1.38: 対象日=2026-08-17のウィンドウは [2026-08-16T21:00:00Z, 2026-08-17T21:00:00Z)
