@@ -678,6 +678,7 @@ def _add_usage(a: dict[str, int], b: dict[str, int]) -> dict[str, int]:
 def _call_json(
     client: "anthropic.Anthropic", *, system: str, user_content: str, max_tokens: int,
     required_keys: list[str], post_process: Callable[[dict], dict] | None = None,
+    build_retry_note: Callable[[Exception], str | None] | None = None,
 ) -> CallOutcome:
     """system/userプロンプトでJSON応答を取得し、必須キーの充足まで検証する。
     ツールは一切使わない通常のメッセージ呼び出し（v1.15。呼び出しA・B共通）。
@@ -692,16 +693,28 @@ def _call_json(
     呼び出し元固有の後処理（call_aのaudit_ledger再構成など）をここに差し込む。
     例外を送出した場合もこのtryブロック内で捕捉され、他の失敗と同様に
     リトライされる——post_process内の検証エラーもJSON不正等と同列に扱う。
+
+    build_retry_note（v1.66・オーナー承認）: 従来、リトライは直前の試行と
+    完全に同一のuser_contentを無変更で再送しており、失敗理由（attempt_errors
+    へは記録される）が次の試行のプロンプトに一切反映されなかった。9/3実データ
+    でtier3の独立2ソースペア判定エラーが1・2試行目で同一の候補IDのまま
+    2回連続再現し、3試行目まで無駄なトークンを消費した事象（DESIGN_CHANGES.md
+    v1.64参照）への対処。build_retry_noteを渡すと、各失敗の直後に例外から
+    追記テキストを生成し、直前1回分の失敗のみを反映した形でuser_contentへ
+    追記して次の試行へ渡す（複数回分の失敗を蓄積しない——直前の状態だけを
+    示す方が明確なため）。Noneまたは空文字列を返せば追記しない。未指定
+    （デフォルトNone）の呼び出し元（call_b等）は従来どおり無変更で動作する。
     """
     attempt_errors: list[str] = []
     total_usage = {"input_tokens": 0, "output_tokens": 0}
+    effective_content = user_content
     for attempt in range(1, MAX_ATTEMPTS + 1):
         try:
             response = client.messages.create(
                 model=MODEL,
                 max_tokens=max_tokens,
                 system=system,
-                messages=[{"role": "user", "content": user_content}],
+                messages=[{"role": "user", "content": effective_content}],
                 # v1.28（オーナー承認）: claude-sonnet-5はthinking未指定時に
                 # 既定でadaptive thinkingが動作し、そのトークン消費は
                 # _extract_text（type=="text"のみ抽出）から完全に不可視になる。
@@ -732,6 +745,9 @@ def _call_json(
         except Exception as e:  # noqa: BLE001 — 上記docstring参照
             attempt_errors.append(f"{type(e).__name__}: {e}")
             if attempt < MAX_ATTEMPTS:
+                if build_retry_note is not None:
+                    note = build_retry_note(e)
+                    effective_content = f"{user_content}\n\n{note}" if note else user_content
                 time.sleep(RETRY_DELAYS_SEC[attempt - 1])
     return CallOutcome(False, None, MAX_ATTEMPTS, attempt_errors[-1], total_usage,
                         attempt_errors=list(attempt_errors))
@@ -1055,6 +1071,33 @@ def _build_call_b_user_content(daily_data: dict, call_a_data: dict | None) -> st
     return json.dumps(payload, ensure_ascii=False, indent=2)
 
 
+def _build_call_a_retry_note(exc: Exception) -> str | None:
+    """call_a()のbuild_retry_note（v1.66・オーナー承認）。
+    AuditLedgerReconstructionError（tier3の独立2ソースペア申告が
+    _validate_pair_claim()の条件を満たさない場合に送出。エラーメッセージ
+    自体が該当する候補IDを機械的に列挙している）に限り、次の試行への
+    修正指示を生成する。それ以外の例外（JSON不正・必須キー欠落・refusal等）
+    はcandidate_idに紐づく情報を持たず本文脈での修正指示を書けないため
+    Noneを返し、user_contentは無変更のまま再送する（既存の挙動を維持）。
+
+    文言は「名指しされた候補IDについてのみ」「名指しされていない他の候補は
+    変更しない」を明示し、「疑わしければ全て落とす」という広範な誤読を
+    防ぐことを狙う（オーナー指示。実装時の確認事項）。
+    """
+    if not isinstance(exc, AuditLedgerReconstructionError):
+        return None
+    return (
+        "### 直前の試行への修正指示（自動リトライ）\n\n"
+        f"直前の試行は次のエラーで失敗しました: {exc}\n\n"
+        "このエラーで名指しされた候補IDについてのみ、pairs_with_candidate_idが"
+        "「独立2ソース規定」の条件（相手もtier3・use:true・情報源が異なる・"
+        "タイトルの内容が十分類似）を満たすか再確認してください。満たす場合は"
+        "pairs_with_candidate_idを正しい相方の候補IDへ修正し、満たさない場合は"
+        "その候補のuseをfalseに変更してください。名指しされていない他の候補の"
+        "use・pairs_with_candidate_idは変更しないでください。"
+    )
+
+
 def call_a(client: "anthropic.Anthropic", daily_data: dict, news_today: dict,
            news_yesterday: dict | None, pair_overlap_threshold: float | None = None) -> CallOutcome:
     """pair_overlap_threshold省略時はconfig/pair_overlap.jsonから読む。run()は
@@ -1078,6 +1121,7 @@ def call_a(client: "anthropic.Anthropic", daily_data: dict, news_today: dict,
         client, system=SYSTEM_A, user_content=user_content,
         max_tokens=CALL_A_MAX_TOKENS, required_keys=REQUIRED_KEYS_A,
         post_process=_rebuild_audit_ledger,
+        build_retry_note=_build_call_a_retry_note,
     )
     outcome.truncation_stats = truncation_stats
     # v1.54フォローアップ: post_processは_call_json()内で試行ごとに呼ばれるため、

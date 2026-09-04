@@ -148,6 +148,15 @@ def json_response(obj):
     return FakeResponse([FakeTextBlock(json.dumps(obj, ensure_ascii=False))])
 
 
+def _parse_leading_json(text: str) -> dict:
+    """v1.66: user_contentの先頭に書かれたJSON部分だけを取り出す。
+    build_retry_note（v1.66）導入後、リトライ時のuser_contentはJSONの
+    後ろに修正指示の追記テキストが続く形になり得るため、json.loads()の
+    単純な全文パースでは失敗する。json.loads()ではなくraw_decode()を
+    使い、先頭のJSON値だけを読み取って後続のテキストは無視する。"""
+    return json.JSONDecoder().raw_decode(text)[0]
+
+
 def _mock_audit_ledger_from_request(kw: dict) -> list:
     """v1.48: FakeClientのfn(kw, n)へ渡された実際のリクエストから
     news_candidates_todayのcandidate_idを読み取り、audit_ledgerを動的に
@@ -162,7 +171,7 @@ def _mock_audit_ledger_from_request(kw: dict) -> list:
     構造的に必ず成功する組み合わせを選ぶ。
     """
     try:
-        content = json.loads(kw["messages"][0]["content"])
+        content = _parse_leading_json(kw["messages"][0]["content"])
         candidates = content.get("news_candidates_today", [])
     except (KeyError, ValueError, TypeError):
         return []
@@ -233,7 +242,7 @@ NEWS_PAIR_CANDIDATES = {
 
 
 def _pair_claim_response(kw: dict) -> dict:
-    content = json.loads(kw["messages"][0]["content"])
+    content = _parse_leading_json(kw["messages"][0]["content"])
     ids = sorted(c["candidate_id"] for c in content.get("news_candidates_today", []))
     entries = [{"candidate_id": ids[0], "use": True, "pairs_with_candidate_id": ids[1], "reason": "同一事実"},
                {"candidate_id": ids[1], "use": True, "reason": "同一事実"}]
@@ -256,6 +265,99 @@ check("callA: 閾値超過による失敗のattempt_errorsに「独立2ソース
       "（GENERATION_STATUS.mdへの記録経路の確認・オーナー指示の確認事項）",
       all("独立2ソースの相方が成立しない" in e for e in out_strict.attempt_errors),
       str(out_strict.attempt_errors))
+
+print("=== generate_post._call_json: build_retry_noteによる失敗フィードバック（v1.66・オーナー承認） ===")
+
+# 2d) _call_json汎用: build_retry_note指定時、直前の例外内容が次の試行のuser_content
+# へ追記されること・build_retry_note未指定時は従来どおり無変更で再送されること
+# （9/3実データで同一エラーが2回連続再現しトークンを4倍消費した事象への対処。
+# DESIGN_CHANGES.md v1.64参照）
+def _fail_once_then_ok(kw, n):
+    if n == 1:
+        raise ValueError("dummy failure: bad ids [7, 9]")
+    return json_response({"a": 1})
+
+
+c_note = FakeClient(_fail_once_then_ok)
+out_note = generate_post._call_json(
+    c_note, system="sys", user_content="BASE_CONTENT_MARKER", max_tokens=100,
+    required_keys=["a"], build_retry_note=lambda exc: f"NOTE_ABOUT:{exc}")
+check("_call_json: build_retry_note指定時、1回目はuser_content無変更で送られる（v1.66）",
+      c_note.messages.calls[0]["messages"][0]["content"] == "BASE_CONTENT_MARKER",
+      c_note.messages.calls[0]["messages"][0]["content"])
+check("_call_json: build_retry_note指定時、2回目には元のuser_content＋直前の例外内容の"
+      "注記が追記される（v1.66・オーナー承認・トークン浪費対策）",
+      out_note.ok and out_note.attempts == 2
+      and "BASE_CONTENT_MARKER" in c_note.messages.calls[1]["messages"][0]["content"]
+      and "NOTE_ABOUT:dummy failure: bad ids [7, 9]" in c_note.messages.calls[1]["messages"][0]["content"],
+      c_note.messages.calls[1]["messages"][0]["content"])
+
+c_nonote = FakeClient(_fail_once_then_ok)
+out_nonote = generate_post._call_json(
+    c_nonote, system="sys", user_content="BASE_CONTENT_MARKER", max_tokens=100,
+    required_keys=["a"])
+check("_call_json: build_retry_note未指定（デフォルトNone）時は従来どおり2回目もuser_content"
+      "無変更（後方互換・call_B等の既存呼び出しに影響しない）",
+      out_nonote.ok and out_nonote.attempts == 2
+      and c_nonote.messages.calls[1]["messages"][0]["content"] == "BASE_CONTENT_MARKER",
+      c_nonote.messages.calls[1]["messages"][0]["content"])
+
+
+def _fail_every_time(kw, n):
+    raise ValueError(f"fail-{n}")
+
+
+c_accum = FakeClient(_fail_every_time)
+out_accum = generate_post._call_json(
+    c_accum, system="sys", user_content="BASE", max_tokens=100,
+    required_keys=["a"], build_retry_note=lambda exc: f"NOTE:{exc}")
+check("_call_json: build_retry_noteは直前1回分の失敗のみを反映し、複数回分を蓄積しない（v1.66）",
+      not out_accum.ok and len(c_accum.messages.calls) == generate_post.MAX_ATTEMPTS
+      and "NOTE:fail-1" in c_accum.messages.calls[1]["messages"][0]["content"]
+      and "NOTE:fail-1" not in c_accum.messages.calls[2]["messages"][0]["content"]
+      and "NOTE:fail-2" in c_accum.messages.calls[2]["messages"][0]["content"],
+      str([call["messages"][0]["content"] for call in c_accum.messages.calls]))
+
+# 2e) call_a()固有: AuditLedgerReconstructionErrorに限り、失敗した候補IDを
+# 名指しした修正指示が2回目のuser_contentへ追記されること。「名指しされた
+# 候補IDについてのみ」「他の候補は変更しない」という限定的な文言により、
+# オーナーが懸念した「疑わしければ全て落とす」という過剰反応を防ぐ設計に
+# なっていることを確認する。
+c_pairnote = FakeClient(lambda kw, n: json_response(_pair_claim_response(kw)))
+out_pairnote = generate_post.call_a(c_pairnote, DAILY_DATA, NEWS_PAIR_CANDIDATES, None, 0.6)
+_attempt2_content = c_pairnote.messages.calls[1]["messages"][0]["content"]
+check("call_a: AuditLedgerReconstructionError発生時、2回目のuser_contentに元の候補データが"
+      "維持されたまま修正指示が追記される（v1.66）",
+      not out_pairnote.ok
+      and "news_candidates_today" in _attempt2_content
+      and "直前の試行への修正指示" in _attempt2_content,
+      _attempt2_content[-400:])
+check("call_a: 修正指示に「名指しされた候補IDについてのみ」という限定的な文言が含まれる"
+      "（オーナー指示・過剰反応防止の確認事項）",
+      "候補IDについてのみ" in _attempt2_content, _attempt2_content[-400:])
+check("call_a: 修正指示に「名指しされていない他の候補」は変更しない旨が明記される"
+      "（オーナー指示・「疑わしければ全て落とす」の防止）",
+      "名指しされていない他の候補" in _attempt2_content and "変更しないでください" in _attempt2_content,
+      _attempt2_content[-400:])
+check("call_a: 修正指示に直前の試行の実際のエラー内容（該当候補IDを含む）がそのまま含まれる",
+      "独立2ソースの相方が成立しない候補ID" in _attempt2_content,
+      _attempt2_content[-400:])
+
+# call_b()は_call_json()のbuild_retry_note未指定呼び出しのままであり、
+# 既存のリトライ挙動（無変更で再送）に影響しないことを確認する。
+def _callb_fail_then_ok(kw, n):
+    if n == 1:
+        return FakeResponse([FakeTextBlock("not json{{{")])
+    return json_response(CALL_B_DATA)
+
+
+c_b = FakeClient(_callb_fail_then_ok)
+out_b = generate_post.call_b(c_b, DAILY_DATA, CALL_A_DATA)
+check("call_b: build_retry_note未指定のためリトライ時もuser_contentは無変更のまま"
+      "（v1.66導入後もcall_bの既存挙動に影響がないことの回帰確認）",
+      out_b.ok and out_b.attempts == 2
+      and c_b.messages.calls[0]["messages"][0]["content"] == c_b.messages.calls[1]["messages"][0]["content"],
+      None)
 
 # 3) 必須キー欠落 → 最大試行後に失敗
 def missing_key(kw, n):
