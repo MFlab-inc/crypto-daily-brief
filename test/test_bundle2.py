@@ -465,6 +465,16 @@ check("headline_for_imageの指示が④の場合のみに明示的に限定さ�
       "headline_for_image: ④の場合（tier1・tier2材料・独立2ソース材料・値動きの"
       in generate_post.NO_CANDIDATES_FALLBACK)
 
+print("=== generate_post.py: 呼び出しAの文体統一（v1.64・オーナー指示。呼び出しAには"
+      "です・ます調の指示が一度も無かったことが9/1・9/3の常体混入の主因と判明） ===")
+check("WRITES_A（SYSTEM_Aに含まれる）に「です・ます調」で統一する旨が明記されている",
+      "です・ます調" in generate_post.WRITES_A
+      and "で統一する" in generate_post.WRITES_A
+      and "です・ます調" in generate_post.SYSTEM_A)
+check("WRITES_Aに「である調」を使わない旨が明記されている",
+      "である調" in generate_post.WRITES_A
+      and "は使わない" in generate_post.WRITES_A)
+
 print("=== generate_post.py: 呼び出しBの文体統一・総括の言及範囲制限（v1.35・オーナー指示） ===")
 check("CALL_B_INSTRUCTIONSに「です・ます調」で統一する旨が明記されている",
       "です・ます調" in generate_post.CALL_B_INSTRUCTIONS
