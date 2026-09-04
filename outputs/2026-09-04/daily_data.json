@@ -1,0 +1,157 @@
+{
+  "target_date_jst": "2026-09-04",
+  "weekday_jp": "金",
+  "date_title": "2026年9月4日（金）暗号通貨・DEX市場概況",
+  "summary": "（シャドー運用中：ヘッドラインはフェーズ2で生成）",
+  "assets": [
+    {
+      "asset": "BTC",
+      "usd": "$79,703",
+      "jpy": "約1,243.5万円",
+      "change_24h": "-1.63%",
+      "direction": "down"
+    },
+    {
+      "asset": "ETH",
+      "usd": "$2,453",
+      "jpy": "約38.3万円",
+      "change_24h": "-1.58%",
+      "direction": "down"
+    },
+    {
+      "asset": "BNB",
+      "usd": "$718",
+      "jpy": "約11.2万円",
+      "change_24h": "-0.44%",
+      "direction": "down"
+    }
+  ],
+  "intraday_range": {
+    "BTC": {
+      "high": "$82,283",
+      "low": "$78,626",
+      "source": "coinbase",
+      "retrieved_at": "2026-09-05T07:37:46.392111+09:00",
+      "representative": true,
+      "inconsistent": false,
+      "notable_move": true
+    },
+    "ETH": {
+      "high": "$2,547",
+      "low": "$2,431",
+      "source": "coinbase",
+      "retrieved_at": "2026-09-05T07:37:46.502194+09:00",
+      "representative": true,
+      "inconsistent": false,
+      "notable_move": true
+    },
+    "BNB": {
+      "high": "$730",
+      "low": "$709",
+      "source": "coinbase",
+      "retrieved_at": "2026-09-05T07:37:46.657171+09:00",
+      "representative": false,
+      "inconsistent": false
+    }
+  },
+  "scheduled_events": [
+    {
+      "title": "BOE Gov Bailey Speaks",
+      "country": "GBP",
+      "impact": "High",
+      "time_jst": "2026-09-04T17:50:00+09:00"
+    },
+    {
+      "title": "Employment Change",
+      "country": "CAD",
+      "impact": "High",
+      "time_jst": "2026-09-04T21:30:00+09:00"
+    },
+    {
+      "title": "Unemployment Rate",
+      "country": "CAD",
+      "impact": "High",
+      "time_jst": "2026-09-04T21:30:00+09:00"
+    },
+    {
+      "title": "Average Hourly Earnings m/m",
+      "country": "USD",
+      "impact": "High",
+      "time_jst": "2026-09-04T21:30:00+09:00"
+    },
+    {
+      "title": "Non-Farm Employment Change",
+      "country": "USD",
+      "impact": "High",
+      "time_jst": "2026-09-04T21:30:00+09:00"
+    },
+    {
+      "title": "Unemployment Rate",
+      "country": "USD",
+      "impact": "High",
+      "time_jst": "2026-09-04T21:30:00+09:00"
+    }
+  ],
+  "market": {
+    "fear_greed": {
+      "value": 75,
+      "label": "Greed"
+    },
+    "market_cap": "$2.681兆",
+    "market_cap_jpy": "¥418.3兆",
+    "volume_24h": "$1030.6億",
+    "volume_24h_jpy": "¥16.08兆",
+    "btc_dominance": "59.69%",
+    "eth_dominance": "11.17%"
+  },
+  "base": {
+    "tvl": "$56.24億",
+    "tvl_jpy": "¥8,774億",
+    "tvl_change": "+3.28%",
+    "tvl_direction": "up",
+    "dex_volume": "$9.212億",
+    "dex_volume_jpy": "¥1,437億",
+    "dex_volume_eth_usdc": "$86.83M",
+    "dex_volume_eth_usdc_jpy": "¥135億",
+    "usdc_dominance": "86.2%"
+  },
+  "lp": {
+    "pools": [
+      {
+        "name": "Base 0.05%プール",
+        "apr": "41.38%",
+        "tvl": "$8.78M",
+        "volume_24h": "$19.90M",
+        "change_vs_prev": {
+          "apr_change": "+13.29%",
+          "volume_24h_change": "+12.32%",
+          "tvl_change": "-0.83%"
+        }
+      },
+      {
+        "name": "Base 0.3%プール",
+        "apr": "62.44%",
+        "tvl": "$117.38M",
+        "volume_24h": "$66.93M",
+        "change_vs_prev": {
+          "apr_change": "-29.57%",
+          "volume_24h_change": "-30.34%",
+          "tvl_change": "-1.11%"
+        }
+      }
+    ],
+    "check_message": "#ETHが下落中。#ETH偏り・下限側レンジ外・下落耐性を確認"
+  },
+  "domestic": {
+    "bitflyer_eth_24h": "3,158.97 ETH",
+    "coincheck_eth_24h": "937.14 ETH",
+    "combined_eth": "4,096.11 ETH",
+    "combined_usd": "$10.05M",
+    "retrieved_at": "2026-09-05 07:37 JST"
+  },
+  "footer": {
+    "retrieved_at": "2026-09-05 07:37 JST",
+    "usd_jpy": "¥156.02",
+    "sources": "CoinMarketCap API / GeckoTerminal / DefiLlama / ExchangeRate-API / bitFlyer公式API / Coincheck公式API"
+  }
+}
