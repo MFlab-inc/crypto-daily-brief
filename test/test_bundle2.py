@@ -360,6 +360,10 @@ check("NEWS_SELECTIONに独立2ソース規定の3条件が記述されている
       all(s in generate_post.NEWS_SELECTION for s in (
           "独立2ソース規定", "2つ以上の独立したtier3媒体", "意見・予想・分析ではなく",
           "媒体名を複数列挙")))
+check("独立2ソース規定(c): 「一次情報」という内部用語ではなく読者向けの表現（公式発表）を使うよう指示する（v1.64・オーナー指示）",
+      "公式発表での確認が取れていない旨を" in generate_post.NEWS_SELECTION
+      and "内部用語は使わず、読者向けの平易な表現を" in generate_post.NEWS_SELECTION
+      and "一次情報での裏付けが未確認である旨を明記する" not in generate_post.NEWS_SELECTION)
 check("独立2ソース規定はpart1_headlineでの扱いをpart1_headline・part1_pointsの決定へ委譲する"
       "（v1.44・旧来のtier1限定の絶対文言は撤去）",
       "part1_headlineでの扱いは下記「part1_headline・part1_pointsの決定」を" in generate_post.NEWS_SELECTION
@@ -446,10 +450,13 @@ check("NO_CANDIDATES_FALLBACKに定型文を使うのは3軸すべて「なし�
       and "定型文を使うのは④の場合のみである" in generate_post.NO_CANDIDATES_FALLBACK)
 check("NO_CANDIDATES_FALLBACKの①〜④が、audit_ledgerのA/B/C（重要性判定）とは別分類である旨を明記（混同防止）",
       "とは別の分類である。混同しないこと" in generate_post.NO_CANDIDATES_FALLBACK)
-check("②は独立2ソース材料単独でpart1_headlineの根拠になり、一次情報未確認の旨を明記する（v1.44新設）",
+check("②は独立2ソース材料単独でpart1_headlineの根拠になり、公式発表未確認の旨を明記する（v1.44新設・v1.64で表現を読者向けに変更）",
       "②（(i)なし・(ii)あり）の詳細" in generate_post.NO_CANDIDATES_FALLBACK
       and "独立2ソース材料の内容に基づき、part1_headlineに実文言を書く" in generate_post.NO_CANDIDATES_FALLBACK
-      and "一次情報での確認ができていない旨を明記する" in generate_post.NO_CANDIDATES_FALLBACK)
+      and "公式発表での確認が取れていない旨を明記する" in generate_post.NO_CANDIDATES_FALLBACK)
+check("②: 「一次情報」を出力に書かせる指示ではなく、内部用語として使わないよう明記する側に変わっている（v1.64・オーナー指示）",
+      "一次情報での確認ができていない旨を明記する" not in generate_post.NO_CANDIDATES_FALLBACK
+      and "公式発表での確認が取れていない旨を明記する（「一次情報」等の内部用語は" in generate_post.NO_CANDIDATES_FALLBACK)
 check("③は定型文を使わず値動きを記述し、part1_pointsにニュース未確認を1項目明記する",
       "③（(i)なし・(ii)なし・(iii)あり）の詳細" in generate_post.NO_CANDIDATES_FALLBACK
       and "値動きの形状のみを" in generate_post.NO_CANDIDATES_FALLBACK
