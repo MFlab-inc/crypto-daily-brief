@@ -1,0 +1,507 @@
+{
+  "target_date_jst": "2026-09-04",
+  "level": "L0",
+  "sections": {
+    "part0_target_date": "2026年9月4日（金）",
+    "part1_headline": "米国の8月雇用統計が市場予想を大きく上回ったことを受け、利下げ観測が後退し、ドルが上昇する場面がありました（Reuters、9月4日）。この流れの中でBTC・ETHは24時間で一時上振れした後に上げ幅を縮小し、下落する展開となりました。株式・金など他資産でも同様の反応がみられ、暗号通貨市場にも同様の圧力が及んだ可能性が考えられます。",
+    "part1_points": "・米労働省発表の8月非農業部門雇用者数が事前予想を大幅に上回り、失業率は横ばいで推移したと報じられました。これを受けて9月のFRB利下げ観測が後退したとみられ、ドルが買われる場面がありました（Reuters、9月4日）。\n・同時間帯にゴールドも下落しており、堅調な雇用統計が利下げ観測の後退を通じて幅広いリスク資産・実物資産の価格に影響した可能性が考えられます（Reuters、9月4日）。暗号通貨市場についても、Cointelegraphが同様の雇用統計とビットコイン下落の関連を報じており（Cointelegraph、9月4日）、市場心理への波及が意識された可能性がありますが、暗号通貨価格への直接因果は未確認です。\n・IMFがエルサルバドルの2025年6月以降のビットコイン積み増しについて、公的資金ではなく民間からの寄付で賄われたことを確認したと、CoinDeskとCointelegraphの双方が報じています（公式発表での確認は取れていません）。暗号通貨と主権国家の関わりを巡る話題として市場の一部で注目された可能性があります（CoinDesk、Cointelegraph、9月4日）。",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.681兆（¥418.3兆）｜24時間取引高 $1030.6億（¥16.08兆）\n・ #BTC：$79,703（約1,243.5万円）｜24時間比 -1.63%\n　（24時間レンジ $78,626〜$82,283）\n・ #ETH：$2,453（約38.3万円）｜24時間比 -1.58%\n　（24時間レンジ $2,431〜$2,547）\n・ #BNB：$718（約11.2万円）｜24時間比 -0.44%\n・市場心理：Fear & Greed 75（Greed、CoinMarketCap API）\n・ドミナンス：BTC 59.69%｜ETH 11.17%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年9月5日07:37 JST、USD/JPY ¥156.02",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $10.05M vs Base上ETH/USDC $86.83M｜参考：Base上DEX全体 $9.212億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $56.24億（¥8,774億）｜24時間比 +3.28%｜USDCドミナンス 86.2%\n・ ETH/USDC（Base）参考APR：0.05% 41.38%（TVL $8.78M／24h出来高 $19.90M）｜0.3% 62.44%（TVL $117.38M／24h出来高 $66.93M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年9月5日07:37 JST",
+    "part2_flow": "・米国の8月雇用統計が事前予想を大幅に上回ったことが伝わり、9月のFRB利下げ観測が後退したとみられます。この流れの中でドルが買われる場面があり、同時間帯にBTC・ETHは24時間で一時上振れした後に上げ幅を縮小し下落する展開となったことが確認されており、雇用統計を受けた金利観測の変化が価格に影響した可能性が考えられます。\n・同時間帯にゴールドも下落したと報じられており、堅調な雇用統計を受けて株式・金・暗号通貨といった複数の資産クラスに共通する圧力が意識された可能性があります。Cointelegraphも同様の雇用統計とビットコイン下落の関連を報じていますが、暗号通貨価格への直接的な因果関係は断定できません。",
+    "lp_comment": "Base 0.05%プールの参考APRは36.53%→41.38%へ上昇しました（24時間出来高 +12.32%、TVL -0.83%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは88.65%→62.44%へ低下しました（24時間出来高 -30.34%、TVL -1.11%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比-1.58%と下落中のため、ETH偏り・下限側レンジ外・下落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "本日はBTC・ETHともに24時間比で下落し、日中のレンジも上下に振れる展開となりました。雇用統計を受けた米金利観測の変化が株式・金・暗号通貨に共通の圧力として意識された可能性がありますが、暗号通貨市場への直接的な影響は未確認の部分も残ります。市場心理は引き続き強気寄りの水準を保っており、過熱感の有無を含めて今後の値動きを注視する必要があります。なお、韓国のトークン化証券ロードマップなど制度面の動きも継続的な確認材料として挙げられます。週明けにかけては、米雇用統計後の金利観測や為替動向が暗号通貨市場に及ぼす影響を引き続き見極める局面になりそうです。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "米雇用統計を受けドル高警戒、BTC ETHは反落",
+  "audit_ledger": [
+    {
+      "source": "FRB",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260904a.htm",
+      "title": "Federal Reserve Board announces termination of enforcement actions with United Texas Bank, Quontic Bank Acquisition Corp., and Quontic Bank Holdings Corp.",
+      "published_at": "Fri, 4 Sep 2026 15:00:00 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 米銀行に対するFRBの執行措置終了で、暗号通貨や市場全体への波及経路を説明できない"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/about/press/kaiken_2026/kk260904a.pdf",
+      "title": "【記者会見】植田総裁（G20、9月1日分）",
+      "published_at": "Fri, 04 Sep 2026 16:00:00 +0900",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: summaryが空欄で内容を確認できず、記載内容が不明のため採否判断ができない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/09/supporting-americas-ranchers/",
+      "title": "Supporting America’s Ranchers",
+      "published_at": "Fri, 04 Sep 2026 19:28:18 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 米畜産業支援の大統領令で、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/09/promoting-fair-competition-in-livestock-markets-and-expanding-market-access-for-american-meat-producers/",
+      "title": "Promoting Fair Competition In Livestock Markets And Expanding Market Access for American Meat Producers",
+      "published_at": "Fri, 04 Sep 2026 19:23:49 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 食肉市場の競争促進に関する大統領令で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/fact-sheets/2026/09/fact-sheet-president-donald-j-trump-supports-americas-ranchers/",
+      "title": "Fact Sheet: President Donald J. Trump Supports America’s Ranchers",
+      "published_at": "Fri, 04 Sep 2026 19:15:35 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 畜産業支援ファクトシートで、金利・為替等への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/fact-sheets/2026/09/fact-sheet-president-donald-j-trump-promotes-fair-competition-in-livestock-markets-and-expands-market-access-for-american-meat-producers/",
+      "title": "Fact Sheet: President Donald J. Trump Promotes Fair Competition in Livestock Markets and Expands Market Access for American Meat Producers",
+      "published_at": "Fri, 04 Sep 2026 19:15:33 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 食肉市場競争促進ファクトシートで、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/releases/2026/09/made-in-america-manufacturing-private-hiring-power-explosive-august-jobs-report/",
+      "title": "Made in America: Manufacturing, Private Hiring Power Explosive August Jobs Report",
+      "published_at": "Fri, 04 Sep 2026 15:25:08 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 雇用統計に関する内容だが、政府発表側の広報であり、同事実は独立報道側(candidate_id 18)を主根拠として採用"
+    },
+    {
+      "source": "ホワイトハウス（大統領令等）",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/09/supporting-americas-ranchers/",
+      "title": "Supporting America’s Ranchers",
+      "published_at": "Fri, 04 Sep 2026 19:28:18 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: candidate_id 3と同一内容の重複掲載で、波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス（大統領令等）",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/09/promoting-fair-competition-in-livestock-markets-and-expanding-market-access-for-american-meat-producers/",
+      "title": "Promoting Fair Competition In Livestock Markets And Expanding Market Access for American Meat Producers",
+      "published_at": "Fri, 04 Sep 2026 19:23:49 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: candidate_id 4と同一内容の重複掲載で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxQb2lqMGN2QVdTSk00Tnh1ZDU5QTBLSlR1TWZPcHBXVl8tNFB5UVdTanZ3VVNBbHQtd3d5aUdtbXEwY0RqOXVPSk5yZUJ6MHFKSEx4N1l0TUxoU2tIeWVRRHF3RVFxMUFGYTY3bjBVZUppV1cxdW5iTTBlT2lCZjlhWERCQ0ltRzRYdHNkZzF0N0xlNXl5X3dwdWc3UnhOVmdF?oc=5",
+      "title": "TSX declines after US jobs data fuels rate-hike bets - reuters.com",
+      "published_at": "Fri, 04 Sep 2026 20:53:40 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: カナダ株の下落報道だが、内容が薄く暗号通貨市場への参考材料としても不十分"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxPV0RwVy01bkRiaG1mWDcwVURKRXhINUlmSTYxelU0M0RUSkptTFBwVF9TV20xZzZUVnhmQURYanp5QmY4d2pOUmZYdVAzQmlvR0JIVlZDWnE0ZTJEdENyYTVDdmxTZzFON2pDdjdMU1pDYWRTbTJaTXRXaVE1ZWJkbk9BRS1ET3lDeGpBd2dDV1VIcTdOcDM3ekNqMXdMeXptTE14SDczWUVQRm56VEYycjRJN0t3bGFJakE?oc=5",
+      "title": "Italy's Eni doubles down in Venezuela with rising hope of recovering debt - reuters.com",
+      "published_at": "Fri, 04 Sep 2026 20:45:45 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 伊エニのベネズエラ債権回収に関する内容で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxOQVZJdUE0TzFvS2xtSUJLOVUxZUVRZVRpMi1aUlNuSFZzX3h5TW4zSGJya0w3SjFlSno4QUlvdU90cHBBOS1xRllCZjR2aVRnUW16ZmQyN3M1SlRVSl9BYlk2Z2dvWGIzdEo3cXdTZjdWZkIzYXRNRzk3ZkM2cWMwN2ZWMVh1T09pNnRKVVAwRDhNSnJnSTFwVi1MZXdMNUNwOFJTU215REpkR1V0X1pVa09vNkVHeG9oX2lpVjdoTVl1ajI5MzU0dUN3?oc=5",
+      "title": "Oil ends week higher on renewed US-Iran strikes, diesel hits record - reuters.com",
+      "published_at": "Fri, 04 Sep 2026 20:30:21 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 原油価格上昇の報道だが、暗号市場への直接の関連材料としては採用せず今回は見送り"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxOY2c4bVpDbjdaOUhkNDFPX1dxZm5DSFoxS01TZF84NXNySlpDZkRLZFpidVMyaHB4QmlrNEpaaFo4dDFiQWIzLXptV1UtZnNVdzlQRW5kcFR2U1RoOV9tYWZUVHJWaFZqRXIwSUFabHdEMmZrSUpsNXpXOG1NUDJ0eFBQc0xUUGdqX2hTZWdXNm4wLVhGMEI2bXlpNDdVd3RTZU51eUZ4a2pQb3ZQZ21VZm1qY2E?oc=5",
+      "title": "EXCLUSIVE: Nigeria's SEC approves about $1.6bn Dangote Refinery IPO - reuters.com",
+      "published_at": "Fri, 04 Sep 2026 20:26:16 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ナイジェリア企業のIPO承認で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxObHFyWjB0QnNONEhxOUtDV3NaZW9vNmY3d3ZGSTVQQjdRWUM5Z2gtSDVtZzl0eFdoV19YSFExaC1oOWZSck1fR1JaUVRVWjRNOUtBUWd0d21yWk9KOUxOVmpORzBqbHhaUHRFTVZjMWFjSUlZc0UzMDJlRkx4Ym4xV2ZCTlZIWFlQN1hCU1owRkJCMm5CMUp6NHl3QnM3OHhwTkdLNnNQaTE?oc=5",
+      "title": "EXCLUSIVE: Trump's bid to shield chip supply chain could backfire in Tennessee - reuters.com",
+      "published_at": "Fri, 04 Sep 2026 20:12:12 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 半導体供給網を巡る個別記事で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxPdHpIMFFvNXpkb09RdC13ZlBDekcxY0dpUFUzLVE0a2M5aTNtb3ViQm1VcWoyWGp3dHZfRFlIWTZ1T2lXZVBtbEJWNVdTbHFUZzVhcXdvb0ZfR01TMF94dzVud0xiUjV1ZkJnWUVCUTN4SThQcXBiVi1mblAyTVhHTlNqUUpwMlNZYVd6a3Vhd1Uyb3NNZF9HMlQ5Y2sxRjAzUDVuWERRcWNDTk5La3cxajhSUGFRdHEtcHdLV0ZkQ0tYbEpz?oc=5",
+      "title": "Lasers down 11 cartel drones along southern border, US military says - reuters.com",
+      "published_at": "Fri, 04 Sep 2026 19:30:51 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 国境警備に関する軍事報道で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxPSUNQZU5RWWN5TXNDaU9CQkIyc1NPTE95RzBLc0lSMGQyRGRnT19DVldpRXF2TEVzYXdKUzRjR1RyNC1KZ3Rka2Z2ZS1HZUhyUkFYLTBYWE1JRXhXSDJBYWV5Tmpkc3psRy1TWHNlZUN1T1hrZnE5TVpkVTlObkdrZWRVSnA5MU41cWVhSEZSNVU2TlBjdG5SbDBSb3BTYTE3SmNGZU5wR3dDVlVDRXFMZkN0SllDUWVh?oc=5",
+      "title": "Dollar bounces on job gains, then pares ahead of CPI - reuters.com",
+      "published_at": "Fri, 04 Sep 2026 19:17:28 GMT",
+      "verified_by": "Reuters報道",
+      "decision": "採用",
+      "reason": "雇用統計を受けたドルの反応を報じた記事で、雇用統計材料の一部として本文に反映"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxQc2h1VDhJWW5hUDNWYTk0UmVoYy0zQWN0MDlxX29zVk1adk14Smc4bS05RmNFNFY3TkFxdnM5cnh0Zy1zYVdERUV1R3o3WDZWOVljS2ZtdDdvS09qU1ZOdkhueGZuY2lKRzRMQkNjaWtHNjdyZVA5WGluc3BfMTFjUGRnaFBkQmphN2czd2NDTHVZeGVubmtVTTlheXhJZ1lMdWx3N0NTNVBQQmtiMl9peE5wNVhYQ1NPLUREdlJJWQ?oc=5",
+      "title": "Colombia's Grupo Gilinski, Geopark sign deal to develop Venezuela oil field - reuters.com",
+      "published_at": "Fri, 04 Sep 2026 19:04:10 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 南米の原油開発提携に関する内容で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxPbUlhOGI2YkQzM0dqZll6Rm5VSDBReEZQMkZRODlvQkJBTGJfeDhVbjE1c2dXbEVBYmZieElLdEtLR1BZZlQ3NENYdUNSLUgyNnNCMHVJcEl3T2ZyUlVoYndDQ1pYOWhmRnlncUxZMUpjMTlvYTJET2kxMHpiSzN5WUJSMVc1VVkyVGxSRVVkQmRNQUJNVmRjX1lSdzdwbi1PUUhsRUthaUE?oc=5",
+      "title": "US nonfarm payrolls blow past expectations in August; unemployment rate steady at 4.1% - reuters.com",
+      "published_at": "Fri, 04 Sep 2026 18:49:58 GMT",
+      "verified_by": "Reuters報道",
+      "decision": "採用",
+      "reason": "米8月雇用統計の実数と失業率の確定値を報じており、本文の主要材料の直接根拠として採用"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxPSml5Y093OWVORkhPb29wMzl1QlYxcWtjWGYwUTNFSUh3bkNTU3NJZ0d3eG9UbUNxeXM4eGE3U2V5ejVqaThPemU1WDBoMndmY0NxOUhKamRhUExmMjBnMDY2RXQ1b2FBMFI4X1NOcjJZNDlaSDR1dGZSclJoM3FOOElibjhITXVjS1ZiVTBpeFNUVXZuaWlORUNENUw1YVJNcFRYUXNwRERJZTgxb1E?oc=5",
+      "title": "US sanctions Turkish bank, two subsidiaries in latest pressure on Iran - reuters.com",
+      "published_at": "Fri, 04 Sep 2026 18:22:57 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: トルコ銀行への制裁措置で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNa0hqb2VPQUFuRk45bGpFaXNxaHc4NTVtSTJhcVJWdDNRSjEzbTRXWkhVOHRMVDNBdFNTajFBWTI0Z2RBX09VdTBjbmp4aS1zQkhHaWJWVjFYZmU2Q0J4MnZ2SU1rWXJzSy1ZeFBkTjZPWEY1RTVGREhfbGpVbXV5TFRnNTNBYmhubXZjQzRoY1IyM2RWT29XMw?oc=5",
+      "title": "Gold slides after robust US payrolls boost rate hike bets - reuters.com",
+      "published_at": "Fri, 04 Sep 2026 18:06:37 GMT",
+      "verified_by": "Reuters報道",
+      "decision": "採用",
+      "reason": "雇用統計を受けた金価格下落を報じ、リスク資産全般への波及の裏付けとして採用"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxQN1EwREFlWDJ1U0ZYZXNKdlo0M29fSk14S3hfNDZBbUdWY0pDeDdva1hROVlkMzBlMDJ6MzFCY1RIZFFRS01mckhGM0RRQVBZYTZGYXptY3NkcS1TOE00SVJ0ZWQ0V2VJZWRldmV5T1o1S0J6ODlHcjFkUHRvZi1VU0VGN1hqSlpIMFU3N1NOYnh1RENxUGlXLUw0YU5NTEhxdE1lUVFBcjVjVFJQVmpFMjVmaTNmUVNhVlppTnBNZ0w?oc=5",
+      "title": "JPMorgan hires healthcare banker David Blais from Guggenheim, sources say - reuters.com",
+      "published_at": "Fri, 04 Sep 2026 17:43:04 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: JPモルガンの人事に関する内容で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxPbVBXemdDZWpXdmFOUEZUT1lRc2Z0SVVPcmxVaU9hMzRyaEtVdmYzQ0RnOUtudEtUeEtqQWJfT21aR1c3N0dxRlRSZlJGcjN5UDhoN0NIMm5OZmJGWG1lTTlIX2NYN1NIMVVJMnh1VldGN3phR292cldUN3RxMVNzSnhSYXJBLXZ1NWR6MnN3TC1fWUpSZVoxMF9YcTdDNnlZcV9jeDhFWkZZYW1BTWFDSVkwV3Nib1Y4QWRWbUF0ZnhjVFhLSEpVYmpSTk13dm5K?oc=5",
+      "title": "Hollywood summer box office passes $4.6 billion, best performance since the pandemic - reuters.com",
+      "published_at": "Fri, 04 Sep 2026 17:22:16 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ハリウッド興行成績に関する内容で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxOZnlFME1zSGhsaFFhNmZrMTdVMkFDaVV0RTZVSnBqdlhZOFQ2MXhpMGx0WWVFdkVOeG1KUkJJRHdLendoeVR4alo5ZHJzWVVOaGotUDl6MzBGTGplNXpaUDBjbEUxZWFuZk1ZUmVPdXAxZkpCX3NXYlMwbWZjQVZ0R0xsUWZrZTloUU1lV3NaTXYxYzVtd0hCNVJLaWVJT3ZtNUZ2UzZna3ZDSWhMWTNoRlhtRURFVE5DQWJCeGJpV2R5aF9HZ2ZpekM4aw?oc=5",
+      "title": "European shares log weekly losses on inflation worries; Volkswagen jumps - reuters.com",
+      "published_at": "Fri, 04 Sep 2026 17:10:37 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 欧州株のインフレ懸念による週間下落だが、雇用統計を主根拠として既に採用済みのため重複を避けて見送り"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPM3lWVXRya2k0ai00Y3FGZTVuQXdEM2hUbEVIUHlwTk5XVkhzbkhSTUtsWnpCcW14cGRLSkpLOFBqSTZBMTNsWkp1U0xqcTFHcl9WVVUzV05odDUyUTJoVDY0eGRsT0hoZkllQnpCdzRKdUNlV3RkMXdwc2ItZzktSkRRaEdTbGlOWGkwS2pOSS1jTlBudjktbFlKY1RRa3piTW1mVGZzUFJGNGc?oc=5",
+      "title": "London mid-caps set for weekly losses on bond jitters; Experian slides - reuters.com",
+      "published_at": "Fri, 04 Sep 2026 16:26:57 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ロンドン中型株個別銘柄の動向で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/markets/surprise-labor-market-print-sends-bitcoin-back-below-80k?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Surprise nonfarm payrolls print sends Bitcoin back below 80K",
+      "published_at": "Fri, 04 Sep 2026 20:30:47 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier1・tier2で確認済みの雇用統計とビットコイン下落の関連を補強する裏取りとして本文中で言及したが、tier3単独のためuseはfalseとする"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/pineapple-financial-puts-1b-in-mortgage-records-on-injective?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Pineapple Financial puts $1B in mortgage records on Injective",
+      "published_at": "Fri, 04 Sep 2026 19:31:38 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 内容自体は暗号通貨関連だが、単独tier3のため独立2ソース要件を満たさず不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/fincen-crypto-overseas-scam-centers-analysis?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "FinCEN ties $13B in crypto scams to non-US operations",
+      "published_at": "Fri, 04 Sep 2026 19:22:26 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 内容自体は暗号通貨関連だが、単独tier3のため独立2ソース要件を満たさず不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/what-happened-in-crypto-today?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Here’s what happened in crypto today",
+      "published_at": "Fri, 04 Sep 2026 18:31:34 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 総括記事で個別事実の特定が難しく、単独tier3のため不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/crypto-biz-bitcoin-miners-strategy-strive-bitmine-stablecoins?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Crypto Biz: AI took a back seat when Bitcoin started climbing",
+      "published_at": "Fri, 04 Sep 2026 17:22:58 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 内容自体は暗号通貨関連だが、単独tier3のため独立2ソース要件を満たさず不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/qufi-launches-post-quantum-verification-platform-with-bitcoin-testnet-proof?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "QuFi launches post-quantum verification platform with Bitcoin testnet proof",
+      "published_at": "Fri, 04 Sep 2026 17:09:25 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 内容自体は暗号通貨関連だが、単独tier3のため独立2ソース要件を満たさず不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/national-sheriffs-association-clarity-act-neutral?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "US law enforcement group moves to ‘neutral’ position on CLARITY Act",
+      "published_at": "Fri, 04 Sep 2026 17:05:34 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 内容は関連するがcandidate_id 34と同一事実であり主根拠はそちらで判断"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/09/04/amc-ceo-tells-robinhood-to-stop-issuing-stock-token-as-industry-executives-weigh-in",
+      "title": "Robinhood isn't backing down after AMC CEO demands halt to stock tokens",
+      "published_at": "Fri, 04 Sep 2026 14:56:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 内容自体は暗号通貨関連だが、単独tier3のため独立2ソース要件を満たさず不採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/09/04/from-warning-to-listing-uk-s-largest-wealth-platform-opens-access-to-crypto-etns",
+      "title": "From warning to listing: UK’s largest retail investment platform opens access to crypto ETNs",
+      "published_at": "Fri, 04 Sep 2026 14:23:11 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 内容自体は暗号通貨関連だが、単独tier3のため独立2ソース要件を満たさず不採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/09/04/u-s-sheriff-s-association-shifts-opposition-stance-to-clarity-act-to-neutral",
+      "title": "U.S. Sheriff’s association shifts opposition stance to Clarity Act to 'neutral'",
+      "published_at": "Fri, 04 Sep 2026 14:12:34 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: candidate_id31と同一事実だが、意見表明ではなく団体の立場変更という事実報道であるものの、今回は主要ポイントの項目数規律により見送り"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/revolut-openreserve-occ-approval-national-bank-crypto-plan?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Revolut, OpenReserve get preliminary US bank approval with crypto plans",
+      "published_at": "Fri, 04 Sep 2026 13:34:30 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 内容自体は暗号通貨関連だが、単独tier3のため独立2ソース要件を満たさず不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/magazine/token-buybacks-are-booming-but-are-they-good-for-crypto-projects?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Token buybacks are booming. But are they good for crypto projects?",
+      "published_at": "Fri, 04 Sep 2026 13:30:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: トークンバイバックの分析記事で、意見・分析寄りのため独立2ソース規定の対象外"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/09/04/u-s-added-stronger-than-expected-162-000-jobs-in-august-as-labor-market-bounced-back",
+      "title": "U.S. added stronger than expected 162,000 jobs in August as labor market bounced back",
+      "published_at": "Fri, 04 Sep 2026 12:31:47 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier1・tier2で確認済みの雇用統計材料を補強する裏取りとして本文中で言及可能だが、tier3単独のためuseはfalseとする"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/kalshi-traffic-soars-regulatory-pressure-mounts?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Kalshi US visits soar 1,500% as regulatory pressure mounts",
+      "published_at": "Fri, 04 Sep 2026 11:32:28 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: Kalshiのトラフィック急増に関する内容だが、単独tier3のため独立2ソース要件を満たさず不採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/daybook-us/2026/09/04/we-checked-6-years-of-bitcoin-data-the-nfp-report-isn-t-big-price-mover",
+      "title": "We checked 6 years of bitcoin data. The NFP report isn't big price mover",
+      "published_at": "Fri, 04 Sep 2026 11:29:05 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 分析記事であり事実報道ではないため独立2ソース規定の対象外"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/south-korean-regulators-tokenized-securities-roadmap?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "South Korean regulators introduce tokenized securities roadmap",
+      "published_at": "Fri, 04 Sep 2026 10:42:10 +0000",
+      "verified_by": "Cointelegraph・CoinDesk双方が同一事実（韓国のトークン化証券ロードマップ）を報道",
+      "decision": "採用（独立2ソース）",
+      "reason": "独立2ソース規定に該当。韓国金融当局のトークン化証券ロードマップ発表という事実をCointelegraphとCoinDeskの双方が報じている"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/09/04/south-korea-targets-february-2027-rollout-for-full-tokenized-securities-market",
+      "title": "South Korea targets February 2027 rollout for full tokenized securities market",
+      "published_at": "Fri, 04 Sep 2026 09:41:31 +0000",
+      "verified_by": "Cointelegraph・CoinDesk双方が同一事実（韓国のトークン化証券ロードマップ）を報道",
+      "decision": "採用（独立2ソース）",
+      "reason": "独立2ソース規定に該当。candidate_id40と同一事実をCoinDeskが独立に報じている"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/09/04/imf-confirms-el-salvador-s-bitcoin-growth-was-funded-by-private-donations-not-public-money",
+      "title": "IMF confirms El Salvador’s bitcoin growth was funded by private donations, not public money",
+      "published_at": "Fri, 04 Sep 2026 09:47:15 +0000",
+      "verified_by": "CoinDesk・Cointelegraph双方がIMFによるエルサルバドルのビットコイン資金源確認を報道",
+      "decision": "採用（独立2ソース）",
+      "reason": "独立2ソース規定に該当。IMFがエルサルバドルのビットコイン積み増しが民間寄付で賄われたと確認した事実をCoinDeskとCointelegraphが独立に報じている"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/el-salvador-bitcoin-private-donations-imf?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "El Salvador’s post-review Bitcoin accumulation used no public funds: IMF",
+      "published_at": "Fri, 04 Sep 2026 06:16:35 +0000",
+      "verified_by": "CoinDesk・Cointelegraph双方がIMFによるエルサルバドルのビットコイン資金源確認を報道",
+      "decision": "採用（独立2ソース）",
+      "reason": "独立2ソース規定に該当。candidate_id42と同一事実をCointelegraphが独立に報じている"
+    }
+  ],
+  "reusable_for_summary": [
+    "韓国金融当局がトークン化証券の3段階ロードマップを発表、2027年2月の本格運用を目指す動き（CoinDesk、Cointelegraph、9月4日）",
+    "Robinhoodの株式トークンを巡りAMC CEOが法的措置を示唆、業界内で議論が継続（CoinDesk、9月4日）"
+  ],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 0
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 1
+    },
+    "FRB（speeches）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "FRB（testimony）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 1
+    },
+    "米財務省": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "USTR": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "ホワイトハウス": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 5
+    },
+    "ホワイトハウス（大統領令等）": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 2
+    },
+    "ADP": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 15
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 18
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 44
+    }
+  },
+  "news_candidate_count": 43,
+  "part1_md": "【対象日】2026年9月4日（金）\n\n【ヘッドライン】\n米国の8月雇用統計が市場予想を大きく上回ったことを受け、利下げ観測が後退し、ドルが上昇する場面がありました（Reuters、9月4日）。この流れの中でBTC・ETHは24時間で一時上振れした後に上げ幅を縮小し、下落する展開となりました。株式・金など他資産でも同様の反応がみられ、暗号通貨市場にも同様の圧力が及んだ可能性が考えられます。\n\n【主要なポイント】\n・米労働省発表の8月非農業部門雇用者数が事前予想を大幅に上回り、失業率は横ばいで推移したと報じられました。これを受けて9月のFRB利下げ観測が後退したとみられ、ドルが買われる場面がありました（Reuters、9月4日）。\n・同時間帯にゴールドも下落しており、堅調な雇用統計が利下げ観測の後退を通じて幅広いリスク資産・実物資産の価格に影響した可能性が考えられます（Reuters、9月4日）。暗号通貨市場についても、Cointelegraphが同様の雇用統計とビットコイン下落の関連を報じており（Cointelegraph、9月4日）、市場心理への波及が意識された可能性がありますが、暗号通貨価格への直接因果は未確認です。\n・IMFがエルサルバドルの2025年6月以降のビットコイン積み増しについて、公的資金ではなく民間からの寄付で賄われたことを確認したと、CoinDeskとCointelegraphの双方が報じています（公式発表での確認は取れていません）。暗号通貨と主権国家の関わりを巡る話題として市場の一部で注目された可能性があります（CoinDesk、Cointelegraph、9月4日）。\n\n【主要指標】\n・市場全体：時価総額 $2.681兆（¥418.3兆）｜24時間取引高 $1030.6億（¥16.08兆）\n・ #BTC：$79,703（約1,243.5万円）｜24時間比 -1.63%\n　（24時間レンジ $78,626〜$82,283）\n・ #ETH：$2,453（約38.3万円）｜24時間比 -1.58%\n　（24時間レンジ $2,431〜$2,547）\n・ #BNB：$718（約11.2万円）｜24時間比 -0.44%\n・市場心理：Fear & Greed 75（Greed、CoinMarketCap API）\n・ドミナンス：BTC 59.69%｜ETH 11.17%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年9月5日07:37 JST、USD/JPY ¥156.02\n",
+  "part2_md": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $10.05M vs Base上ETH/USDC $86.83M｜参考：Base上DEX全体 $9.212億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $56.24億（¥8,774億）｜24時間比 +3.28%｜USDCドミナンス 86.2%\n・ ETH/USDC（Base）参考APR：0.05% 41.38%（TVL $8.78M／24h出来高 $19.90M）｜0.3% 62.44%（TVL $117.38M／24h出来高 $66.93M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年9月5日07:37 JST\n\n【市場のフロー】\n・米国の8月雇用統計が事前予想を大幅に上回ったことが伝わり、9月のFRB利下げ観測が後退したとみられます。この流れの中でドルが買われる場面があり、同時間帯にBTC・ETHは24時間で一時上振れした後に上げ幅を縮小し下落する展開となったことが確認されており、雇用統計を受けた金利観測の変化が価格に影響した可能性が考えられます。\n・同時間帯にゴールドも下落したと報じられており、堅調な雇用統計を受けて株式・金・暗号通貨といった複数の資産クラスに共通する圧力が意識された可能性があります。Cointelegraphも同様の雇用統計とビットコイン下落の関連を報じていますが、暗号通貨価格への直接的な因果関係は断定できません。\n\n【LP運用者向けに一言】\nBase 0.05%プールの参考APRは36.53%→41.38%へ上昇しました（24時間出来高 +12.32%、TVL -0.83%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは88.65%→62.44%へ低下しました（24時間出来高 -30.34%、TVL -1.11%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比-1.58%と下落中のため、ETH偏り・下限側レンジ外・下落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\n本日はBTC・ETHともに24時間比で下落し、日中のレンジも上下に振れる展開となりました。雇用統計を受けた米金利観測の変化が株式・金・暗号通貨に共通の圧力として意識された可能性がありますが、暗号通貨市場への直接的な影響は未確認の部分も残ります。市場心理は引き続き強気寄りの水準を保っており、過熱感の有無を含めて今後の値動きを注視する必要があります。なお、韓国のトークン化証券ロードマップなど制度面の動きも継続的な確認材料として挙げられます。週明けにかけては、米雇用統計後の金利観測や為替動向が暗号通貨市場に及ぼす影響を引き続き見極める局面になりそうです。\n"
+}
