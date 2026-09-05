@@ -1,0 +1,327 @@
+{
+  "target_date_jst": "2026-09-05",
+  "level": "L0",
+  "sections": {
+    "part0_target_date": "2026年9月5日（土）",
+    "part1_headline": "直近24時間に暗号通貨市場との関係を確認できる主要なマクロ材料は確認できない。",
+    "part1_points": "・補足できる検証済み材料は確認できない。",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.705兆（¥422.4兆）｜24時間取引高 $584.1億（¥9.12兆）\n・ #BTC：$79,812（約1,246.3万円）｜24時間比 +0.11%\n　（24時間レンジ $79,459〜$80,201）\n・ #ETH：$2,483（約38.8万円）｜24時間比 +1.20%\n　（24時間レンジ $2,445〜$2,486）\n・ #BNB：$770（約12.0万円）｜24時間比 +7.20%\n・市場心理：Fear & Greed 76（Greed、CoinMarketCap API）\n・ドミナンス：BTC 59.25%｜ETH 11.20%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年9月6日07:38 JST、USD/JPY ¥156.16",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $2.26M vs Base上ETH/USDC $17.86M｜参考：Base上DEX全体 $9.979億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $56.58億（¥8,836億）｜24時間比 -0.60%｜USDCドミナンス 86.1%\n・ ETH/USDC（Base）参考APR：0.05% 8.94%（TVL $8.85M／24h出来高 $4.33M）｜0.3% 12.73%（TVL $116.36M／24h出来高 $13.52M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年9月6日07:38 JST",
+    "part2_flow": "・本日はニュース面で市場との関係を確認できる主要なマクロ材料が確認されていません。BNBは他資産と比べて大きめの上昇を示しており、市場心理はFear&Greed指数がGreed（強気）圏にあることも踏まえると、個別材料というより投機的な資金流入が意識された可能性がありますが、具体的な要因は確認できません。\n・DEX関連では、Base上の主要プールのAPR（年率換算利回り、流動性提供者が得られる収益率の目安）や出来高が前回計測比で大きく低下しており、短期的な取引活発度の落ち着きが意識された可能性がありますが、これが特定の外部材料によるものかは断定できません。",
+    "lp_comment": "参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは41.38%→8.94%へ低下しました（24時間出来高 -78.23%、TVL +0.76%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは62.44%→12.73%へ低下しました（24時間出来高 -79.80%、TVL -0.87%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+1.20%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "本日は検証済みの主要ニュース材料が確認できず、市場データを中心とした地合いの確認にとどまります。Fear&Greed指数はGreed圏を維持しており、投資家心理はやや強気に傾いている状況がうかがえますが、BTC・ETHの変動幅は限定的で、方向感については引き続き不確実性が残ります。なお、米国スポットビットコインETFの資金流入については直近営業日までの確定値として流入方向が確認されていますが、今後の資金フローの持続性については週明け以降の続報を確認する必要があります。DEXの流動性動向やLPプールの利回り変化についても、今後の推移を注視していく必要があります。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "BTC・ETHともに上昇基調",
+  "audit_ledger": [
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxPM3NpSzg5T0lwZ2VwSkh6VjJtLUF5N0U2TWZoM2dhSW1sUDRsUk5nRWJpNkZPaXNhWkNQNFl3S25QVkRNcUxWRno0SU1uVU84NzczVzhWODl0UXZBWkoxNGlwbjU3eGxIV3R4MGhRS1d0ZVN1bDBFWTRDRmU5ZlZvQXM3a2gycDZ2cWoxR2ZtTUFkUWRBR1otODM1Z010SkY3NGMxRjVVakxINXdDT2VRLVdoN3NFSGxuUWowS1FaOA?oc=5",
+      "title": "Putin says US-Russia contacts beneficial as talks begin with Witkoff and Kushner - Reuters",
+      "published_at": "Sat, 05 Sep 2026 18:57:45 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 米露首脳間の接触に関する外交報道で、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxOaG1aeTdsTDc5NHp0U0J2UFV0eGtnY1k4TjBqT3FzS3hmM3o1Um1hRW1Xa0UtcmV3YlRFZTVROFVVRVBYY2t5MF9WekJzLXZMdWJLa1ZYeWpIZmpjcC1Vamt3bzJvd21WeWFnTjB2QWJqXzA5bWM5dHJhLTNwLXRDMnJ0SVNqUmo4cjBQYXNjWi15aURhVTE4NXhtVHJFcVJxeUlVZVRERUlXa1dZY01PVGpmclFnMkpldFZGQkdXdw?oc=5",
+      "title": "Chinese national rescued from Nepal tunnel 10 days after flash flood - Reuters",
+      "published_at": "Sat, 05 Sep 2026 18:56:16 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ネパールでの人命救助報道で、暗号通貨市場との波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNTXh6eWxQRGNtakxfbFFRRkVheHRiWmtFQlUwYWRtRHBBMDRFcGdFSllSUDZxeWtzclV6UFpuMHhNVWZ5YWRnVWx3V3NLQ0ZxSzlQQy15QWlrT3BvZy1KVEt5UnhlamY1cU9sTXpROUNzWjdKWmMtcTA3LXZzRGhENTN4MVMyVVhCYk5scXFuMXhvMENraG9xNlZtYTNwNjZuUFlSWW1vU1hMSm15d0R6U3hVZWVRQQ?oc=5",
+      "title": "Milei finds unity in pushback against Falkland Islands oil project - Reuters",
+      "published_at": "Sat, 05 Sep 2026 18:35:43 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: アルゼンチン国内政治とフォークランド石油案件の内容で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE9zd3NrYXUtYXk4S0VlQjlrTnNPWlZEYWFhNW0xaWk5YnU0OWNIckZSb01pOGJBeVh5bWpyaGN3ai1YUXZEa2Z5RzF6Z2ZBZTFRY1FDRW4tM1lSRXR0WENPUjhQa2piZw?oc=5",
+      "title": "Americans hit with record-high Labor Day Weekend gas prices - Reuters",
+      "published_at": "Sat, 05 Sep 2026 18:18:33 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ガソリン価格の話題だが具体的な原油需給・金融市場への波及説明が無く参考材料としても不十分"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxQc1hXR2o4Smo3UnZmTTJmM2V4bldFYkpPekNpM2NhUGozMnVKcWZWOHNyUDdmSm5YR2dWT3FRd0FHWnM1Nlc2c3pxSk1XNVdlM1VNb0VyOVRpRG9vMnMyenFVbFVNdERKVEpyeVAtQ0poemwzNTdkYkF4VENfUzhVd1pkQ2djaldJdUZFVThZVktLdXd3anlpZlBCVWpuMi1lTUw1TFA1anU1YWVEeEhIdTI1Q05zOVJqcUNnZkRTc1JxdU82RVRUSw?oc=5",
+      "title": "US strikes three Iranian oil tankers after IRGC attack on American naval ships, Central Command says - Reuters",
+      "published_at": "Sat, 05 Sep 2026 18:15:00 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 中東情勢・原油関連だが、市場への波及経路の具体的説明が薄く参考材料としても不十分"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxOTFRnN3lrWTZLMXNUSW1MWWwxemVSc1RuaDM1dnhkWlZpbDJZT2t5dGYxRWlMa1RiblhPN0ttUzRHUDcwUGRVVEsyb092RTAzR3lZeDN6dFpRVDN4SjhlYng0Y082RjJSVEVZWkg4SnZ2SGtaNW1DbExVTklPMXZHdnVWZTZqbUZ6QkRYMU1mLWhyeEF5VzQ2anpJaThuVmNxSF8xWTBDRkNJVzMybTV0Rlo5dlFiUFk?oc=5",
+      "title": "Americans hit with record-high Labor Day Weekend gasoline prices - Reuters",
+      "published_at": "Sat, 05 Sep 2026 17:44:34 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: candidate_id4と同内容の重複報道で、波及経路の具体的説明が無い"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE4wV0N6QWFMeHk4Q0ZrZHVUOHZoUnBibW9PRGg0TGlTTHlTemoxb1F5dHUzRmx3dGpTYWU3a3UzT1FoZ0dJMWRwNW9Odk9rUHZs?oc=5",
+      "title": "Trump says Canada depends on trade with the US - Reuters",
+      "published_at": "Sat, 05 Sep 2026 17:44:34 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 米加通商関係に関する発言報道で、暗号通貨市場との波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxPbEZ1aGtYY1FlV19VUDlHZHkxWUlmelVuenZQRDJqeF92YWM4c0YyYTZsNzNxQnVvcDE5SmFhaTgtdjBDZVZWRmxYLWY3QjFZdXBWYmhfbE5iRUxfY2FETWhkSldUNGVkR1JHTDh2d3FCQ0lUOGpLbGEtdll0Z1BwVGtCWXF1M3lUaVFqT0NfbUlPdFd4b3pma0FtcE0tTVRrc0M1YUJpcWZVOGQ5U0ZBMGI1ZTJPdng3?oc=5",
+      "title": "Spire Healthcare agrees £1.03 billion takeover by Toscafund and others - Reuters",
+      "published_at": "Sat, 05 Sep 2026 16:47:22 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 英国医療企業の買収案件で、暗号通貨市場との波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPMWpiamMtMTlEdUI0amU3Wjk2Rkt1SGdtVkFOZXRtVDY0ZXhXNTJFQVJBZnB0WEowZjFtM1luUUl5dnZnODFCTEV1ai1fR2dMZ1VmWl9BaUhOM2NNakhQWDVaV291ejU4YXpZcy1hMHVaZksydW90c25HOFp2UHlLbXU0SlVMcGJMTzF0VzBNZlZack40WjJUaGREY3g3TVBuZm5EWHFaNTRxdk0?oc=5",
+      "title": "Berlin launches crisis response after hackers publish stolen data - Reuters",
+      "published_at": "Sat, 05 Sep 2026 16:45:43 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ドイツ国内のハッキング被害対応に関する報道で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxPNXJwQ1BPMFoxZ1JOZjRpMmJhaDktQ01QbzhoMUZsTjY4VURwSjBLQnRXNUg2dzY1MDVrbFoyeTZmMTNhTmFhV1FOaThxbEQyVmJ5VzN4ZllJTnFGOXpaMHhKNWNIM3JhY3diNG9DM3hMcC1kNlc1TTFRSXhVenRPanpaWERNVmpDNE1GVUszWklKQm5STEhpUmYwVmFCR0hrcDI0RUhVeVZCa3pfdUNfUUdURDY0U005NkE?oc=5",
+      "title": "Brokered ceasefire takes effect for repairs at Zaporizhzhia nuclear plant - Reuters",
+      "published_at": "Sat, 05 Sep 2026 16:25:43 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ザポリージャ原発の停戦・修復に関する報道で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxORW1OZWlZUzItUmdsYlhnaXMzU2djTWZBVERaNG4zbzhvZTcxaWtPaGJWamowRDgwTTZRX3Ftekl0bDgxMkJEdTZJbmVzei1ya245RGdiUEx4cHltelZzVTdZVlVhVUEza0dNZ0hqbFR1cTNYMHllLTAwRGdxVVVOazdEb1poa3lyTld2V0ZxR0VHZUNONVJlWFlGaXhKU0ZkamxkZ1N4Vkt4N0YzVmhDM3RYWnlmeE9FbVZzeWFZT0pLaFlwalpnQUVrRDk?oc=5",
+      "title": "Fuel tanker explosion after traffic accident kills 10 in Western Iran, state media says - Reuters",
+      "published_at": "Sat, 05 Sep 2026 16:19:53 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: イラン国内の交通事故報道で、市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxONmp2OVoyb1pVeGE3MTBrbjBIbXlFMHJKNFNGWGVvcldOZGNjTmt4cEI2V1IxMmduNF9Fc29NVmlMbjBLV2ExY2g2VzlBenY5aGt6Ri1QdTEtaDVUZC1vN2Nvbk9vX29UR0Zka2I3T0ZKSVpKeVhJNTRScWFRVl9XZmhHelpwMmVoNnRzY1NOcTNCSlJwcDNrNDY1ekNYTlRQMC1Gendnd1luUVF2WEE?oc=5",
+      "title": "NATO will not tolerate hybrid actions against members, US envoy says - Reuters",
+      "published_at": "Sat, 05 Sep 2026 15:16:10 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: NATOの声明に関する外交報道で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxNSEp1UTRodERpdTkyUHB6b0FNV2M3SVRRQXZ6VXE0U19mNHY3TkFHZFFWMkJCWEpVeHp1RXYtYzVtY1Rmc01FeWdOQXFKUldTLU53eTNTLVJQYVBYc1VGNXpSRFJueEZxaEdkQjk1RE03UUlaQzdrZk1lSDhURndaUWR5bFB3X1FfUnQtaURxeWZWdXBoM3NLRWxyRWVueXRyMnUw?oc=5",
+      "title": "Italy's far-right Vannacci lashes EU in business summit address - Reuters",
+      "published_at": "Sat, 05 Sep 2026 14:41:43 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: イタリア国内政治に関する報道で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxObm5KVldFcHBRMVJuMnJVbEUyZVJSOFZOcS1GNEFqa2dKanBhaHp0WjNubUg5NmZ3WFUwVS1fZHQwVjhUVFZ3LTV3UmY3VS1qUjBNbi1Kbm5QeVF0Mk1EQjRlSzhoX1VVaGVhUDBjTDRJS3ZLcHF4ZC05T0FNc0wzV1BqeWlOMGNsWXhoclMzWnM0QzMxUnNXUlIxVnhzTkFZR1E5d1ktVXZiVmE5bVRZOUlHTURvSU41Q2dNZHA4NVdmY0Z0MWpPcA?oc=5",
+      "title": "Peru declares state of emergency in five high-security prisons to combat criminal gangs - Reuters",
+      "published_at": "Sat, 05 Sep 2026 14:32:36 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ペルー国内の治安対応に関する報道で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxOYnduS0xfeWF0NWZJUEpneWJOWTU3ZXNmUEZrVUY2a0U2b0FPejBkR21SMGxfRjVhWENDdUJOMTJKVm9MbjBBTkVTeHRGZmRfVkhKNnlyR1dySzBPUXBEUm1CVlVsQkhCTnlhMXBPMFM0NEJ5QTE0aDNxLU5SbzRVX09fZ3NpbnIycXVzZG9XM0dnb1JaS3pvbnI3UDUxNG1VUVhTWWFfbGQ5T2NQR0N6WnRzbzhINGlVRmRPUHhKT0xGVmhWc1E?oc=5",
+      "title": "US military strikes three Iranian crude oil carriers, Central Command says - Reuters",
+      "published_at": "Sat, 05 Sep 2026 14:16:10 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 中東での軍事行動・原油関連だがcandidate_id5と同内容で波及経路の具体説明が薄い"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/09/05/why-crypto-experts-say-buying-and-holding-bitcoin-easily-beats-trying-to-time-the-market",
+      "title": "Why crypto experts say buying and holding bitcoin easily beats trying to time the market",
+      "published_at": "Sat, 05 Sep 2026 18:05:11 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 長期投資戦略に関する分析記事で、tier3単独のため事実報道の根拠にできない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/09/05/dollar-backed-stablecoins-can-push-local-currencies-lower-bank-of-korea-study-finds",
+      "title": "Dollar-backed stablecoins can push local currencies lower, Bank of Korea study finds",
+      "published_at": "Sat, 05 Sep 2026 16:43:13 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 韓国銀行の研究報告に関する内容だがtier3単独で裏付けが無い"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/09/02/british-investor-thought-he-lost-usd2-000-in-bitcoin-in-2012-he-just-recovered-usd4-5-million",
+      "title": "British investor thought he lost $2,000 in bitcoin in 2012. He just recovered $4.5 million",
+      "published_at": "Sat, 05 Sep 2026 12:00:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別の資産回収エピソードでtier3単独のため事実根拠として不十分"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/what-happened-in-crypto-today?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Here’s what happened in crypto today",
+      "published_at": "Sat, 05 Sep 2026 11:16:19 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 総括記事で具体的な個別事実の一次情報になっておらずtier3単独"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/poland-upholds-crypto-bill-veto-zondacrypto-scandal-widens?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Poland upholds crypto bill veto as Zondacrypto scandal widens",
+      "published_at": "Sat, 05 Sep 2026 10:44:29 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ポーランドの法案拒否権維持の報道だがtier3単独で裏付け相手が無い"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/markets/bitcoin-etf-inflows-3-8-billion-strongest-three-week-run-2026?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bitcoin ETF inflows hit $3.8B in strongest three-week stretch of 2026",
+      "published_at": "Sat, 05 Sep 2026 08:03:06 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: ETF資金流入の話題だがtier3単独で裏付け相手が無く独立2ソース規定に該当しない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/09/05/xrp-ledger-has-fewer-active-accounts-but-bigger-trades-and-more-value",
+      "title": "XRP Ledger has fewer active accounts than last year, but bigger trades and more value",
+      "published_at": "Sat, 05 Sep 2026 05:30:45 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: XRPレジャーの利用動向分析でtier3単独のため事実根拠として不十分"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/09/05/southeast-asia-s-crypto-funding-rebounds-to-usd680-million-as-investors-focus-on-mature-firms",
+      "title": "Southeast Asia’s crypto funding rebounds to $680 million as investors focus on mature firms",
+      "published_at": "Sat, 05 Sep 2026 05:00:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 東南アジアの資金調達動向でtier3単独のため事実根拠として不十分"
+    }
+  ],
+  "reusable_for_summary": [
+    "米国スポットビットコインETFへの資金流入が2026年の週間ベースで強い水準との報道あり（Cointelegraph）。tier3単独のため継続監視。",
+    "ポーランドで暗号通貨関連法案への大統領拒否権が維持され、Zondacrypto取引所を巡る調査が拡大との報道あり（Cointelegraph）。tier3単独のため継続監視。"
+  ],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 0
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 0
+    },
+    "FRB（speeches）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "FRB（testimony）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 0
+    },
+    "米財務省": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "USTR": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "ホワイトハウス": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 0
+    },
+    "ホワイトハウス（大統領令等）": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 0
+    },
+    "ADP": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 5
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 3
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 44
+    }
+  },
+  "news_candidate_count": 23,
+  "part1_md": "【対象日】2026年9月5日（土）\n\n【ヘッドライン】\n直近24時間に暗号通貨市場との関係を確認できる主要なマクロ材料は確認できない。\n\n【主要なポイント】\n・補足できる検証済み材料は確認できない。\n\n【主要指標】\n・市場全体：時価総額 $2.705兆（¥422.4兆）｜24時間取引高 $584.1億（¥9.12兆）\n・ #BTC：$79,812（約1,246.3万円）｜24時間比 +0.11%\n　（24時間レンジ $79,459〜$80,201）\n・ #ETH：$2,483（約38.8万円）｜24時間比 +1.20%\n　（24時間レンジ $2,445〜$2,486）\n・ #BNB：$770（約12.0万円）｜24時間比 +7.20%\n・市場心理：Fear & Greed 76（Greed、CoinMarketCap API）\n・ドミナンス：BTC 59.25%｜ETH 11.20%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年9月6日07:38 JST、USD/JPY ¥156.16\n",
+  "part2_md": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $2.26M vs Base上ETH/USDC $17.86M｜参考：Base上DEX全体 $9.979億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $56.58億（¥8,836億）｜24時間比 -0.60%｜USDCドミナンス 86.1%\n・ ETH/USDC（Base）参考APR：0.05% 8.94%（TVL $8.85M／24h出来高 $4.33M）｜0.3% 12.73%（TVL $116.36M／24h出来高 $13.52M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年9月6日07:38 JST\n\n【市場のフロー】\n・本日はニュース面で市場との関係を確認できる主要なマクロ材料が確認されていません。BNBは他資産と比べて大きめの上昇を示しており、市場心理はFear&Greed指数がGreed（強気）圏にあることも踏まえると、個別材料というより投機的な資金流入が意識された可能性がありますが、具体的な要因は確認できません。\n・DEX関連では、Base上の主要プールのAPR（年率換算利回り、流動性提供者が得られる収益率の目安）や出来高が前回計測比で大きく低下しており、短期的な取引活発度の落ち着きが意識された可能性がありますが、これが特定の外部材料によるものかは断定できません。\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは41.38%→8.94%へ低下しました（24時間出来高 -78.23%、TVL +0.76%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは62.44%→12.73%へ低下しました（24時間出来高 -79.80%、TVL -0.87%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+1.20%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\n本日は検証済みの主要ニュース材料が確認できず、市場データを中心とした地合いの確認にとどまります。Fear&Greed指数はGreed圏を維持しており、投資家心理はやや強気に傾いている状況がうかがえますが、BTC・ETHの変動幅は限定的で、方向感については引き続き不確実性が残ります。なお、米国スポットビットコインETFの資金流入については直近営業日までの確定値として流入方向が確認されていますが、今後の資金フローの持続性については週明け以降の続報を確認する必要があります。DEXの流動性動向やLPプールの利回り変化についても、今後の推移を注視していく必要があります。\n"
+}
