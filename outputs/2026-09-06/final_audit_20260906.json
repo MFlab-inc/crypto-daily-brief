@@ -1,0 +1,68 @@
+{
+  "overall": "PASS",
+  "failed": 0,
+  "checked_at_jst": "2026-09-07T07:38:05.557200+09:00",
+  "checks": [
+    {
+      "id": "C1_schema",
+      "result": "PASS",
+      "detail": "全必須キーあり"
+    },
+    {
+      "id": "C2_date_internal",
+      "result": "PASS",
+      "detail": "weekday_ok=True title_ok=True"
+    },
+    {
+      "id": "C3_date_is_yesterday",
+      "result": "PASS",
+      "detail": "target=2026-09-06 expected=2026-09-06"
+    },
+    {
+      "id": "C4_change_format",
+      "result": "PASS",
+      "detail": "±N.NN% 形式・矢印整合"
+    },
+    {
+      "id": "C5_banned_terms",
+      "result": "PASS",
+      "detail": "禁止語・二重括弧なし"
+    },
+    {
+      "id": "C6_jpy_assets",
+      "result": "PASS",
+      "detail": "fx=156.17 で整合"
+    },
+    {
+      "id": "C7_jpy_macro",
+      "result": "PASS",
+      "detail": "整合"
+    },
+    {
+      "id": "C8_apr_recalc",
+      "result": "PASS",
+      "detail": "算式整合"
+    },
+    {
+      "id": "C9_fg_range",
+      "result": "PASS",
+      "detail": "value=74 label=Greed"
+    },
+    {
+      "id": "C10_image_size",
+      "result": "PASS",
+      "detail": "size=(2560, 1440)"
+    },
+    {
+      "id": "C11_domestic_recalc",
+      "result": "PASS",
+      "detail": "表示4,580,000 再計算4,583,198 ratio=0.9993"
+    }
+  ],
+  "sha256": {
+    "daily_data.json": "38dd424885175ca640adc92c84f651ab1e9e51c401d12e9253c279f7de78c385",
+    "infographic.png": "323ecfee7c16df757039b0b44bc18589a52a3564069d3425120470a006c3e6bc",
+    "raw_data.json": "b29bde0f3858bdf70332dff5cf446cbb7515434712b3cbffe01433300da091ab",
+    "apr_screenshot.jpg": "1b228ecfb35323616bb3e96ed90c317f678392c30c850eecbd6c554863bc6be1"
+  }
+}
