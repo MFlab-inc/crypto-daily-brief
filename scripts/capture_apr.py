@@ -40,6 +40,19 @@ verify_data.py（C25）がこれを拾って final_audit へ記録する。こ�
 無関係に正常納品する）——数値データそのものの正確性の問題ではなく、
 補助的なスクリーンショット1点が撮影できなかったという運用上の制約のため。
 
+v1.69（オーナー指示・9/6対象日で同一症状が疑われた件の対処）: 実際には
+9/6対象日の自動実行はv1.68適用前のコミットで動いており（v1.68の反映が
+実行後だった）、v1.68のロジック自体はまだ本番で一度も実行されていな
+かったことが調査で判明した。ただし調査の過程でv1.68の実装には別の構造
+的リスクが見つかった——判定（`body = page.inner_text("body")`）と撮影
+（`page.screenshot()`）が別呼び出しに分かれており、両者の間に分岐と
+print呼び出しが挟まる。この間隔自体は実測上ごく短いが、「判定に通った
+画面」と「実際に撮影した画面」が理論上別物になり得る余地を残していた。
+オーナー指示によりこれを解消する: 撮影を先に行い、撮影直後（間に待機・
+分岐を挟まない）のDOMを検査対象にする。これにより検査対象は常に
+「実際に撮影した画面」そのものになる。判定・撮影の呼び出し順が入れ替わる
+だけで、検知条件（`_judge_incomplete()`）自体は変更しない。
+
 使い方: python capture_apr.py <出力jpgパス>
 """
 from __future__ import annotations
@@ -105,17 +118,20 @@ def capture(full_path: str) -> tuple[bool, str]:
             print(f"  {wait_s}秒待機（GeckoTerminal/DefiLlamaロード待ち）...")
             time.sleep(wait_s)
 
+            # v1.69（オーナー承認）: 先に撮影し、撮影直後（間に待機・分岐を
+            # 挟まない）のDOMを検査対象にする。「判定に通った画面」ではなく
+            # 「実際に撮影した画面」を検査するため、撮影→検査の順に固定する。
+            page.screenshot(path=full_path)
             # v1.2 承認2: HTMLソースではなく描画済みテキストを判定対象にする。
             # ソースには JS のリテラル（noteEl.textContent = '⚠ GeckoTerminal取得失敗'）が
             # 常に含まれ、正常時も必ず誤検知して3回空振りしていた。
             body = page.inner_text("body")
             incomplete, last_detail = _judge_incomplete(body)
             if not incomplete:
-                print("  ✓ 完了を確認。撮影します。")
-                page.screenshot(path=full_path)
+                print("  ✓ 撮影画像の完了を確認。")
                 browser.close()
                 return True, ""
-            print(f"  ✗ 未完了検出（{last_detail}）。再試行...")
+            print(f"  ✗ 撮影画像が未完了（{last_detail}）。再試行...")
             if attempt < MAX_RETRY:
                 time.sleep(WAIT_BETWEEN)
 

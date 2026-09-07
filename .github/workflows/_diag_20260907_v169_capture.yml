@@ -1,0 +1,26 @@
+name: _diag_20260907_v169_capture
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 依存関係
+        run: |
+          pip install -q -r requirements.txt
+          python -m playwright install --with-deps firefox
+
+      - name: v1.69検証（撮影→検査の順序反転・実ダッシュボード）
+        run: python scripts/_diag_20260907_v169_capture.py
