@@ -54,6 +54,39 @@ def run_mode(mode: str, shrink: bool) -> None:
         print(f"[確認] status内容: {status_path.read_text(encoding='utf-8')}")
 
 
+def run_mode_zero(mode: str) -> None:
+    """B(1秒)でも実サイトが速すぎて未完了を作れなかったため、0秒まで縮めて
+    Refreshクリック直後（ネットワーク往復を待たず）に撮影・検査する。"""
+    workdir = Path(f"/tmp/diag_v169_{mode}")
+    workdir.mkdir(parents=True, exist_ok=True)
+    tmp = str(workdir / "candidate.full.png")
+    out = str(workdir / "apr_screenshot.jpg")
+
+    capture_apr.WAIT_INITIAL = 0
+    capture_apr.WAIT_AFTER_REFRESH_SCHEDULE = (0, 0, 0)
+    capture_apr.WAIT_BETWEEN = 0
+
+    print(f"\n===== パターン[{mode}] 待機ゼロ =====")
+    ok, detail = capture_apr.capture(tmp)
+    print(f"capture() 戻り値: ok={ok} detail={detail!r}")
+
+    if not ok:
+        Path(tmp).unlink(missing_ok=True)
+        capture_apr._write_incomplete_status(out, detail)
+        print("→ 画像なしで終了（フェイルクローズ・正常終了想定）")
+    else:
+        capture_apr.crop_apr_cards(tmp, out)
+        Path(tmp).unlink(missing_ok=True)
+        print(f"→ 完了: {out}")
+
+    status_path = Path(out).with_name("apr_capture_status.json")
+    print(f"[確認] {out} 存在: {Path(out).exists()}")
+    print(f"[確認] {status_path} 存在: {status_path.exists()}")
+    if status_path.exists():
+        print(f"[確認] status内容: {status_path.read_text(encoding='utf-8')}")
+
+
 if __name__ == "__main__":
     run_mode("A_normal", shrink=False)
     run_mode("B_forced_short", shrink=True)
+    run_mode_zero("C_zero_wait")
