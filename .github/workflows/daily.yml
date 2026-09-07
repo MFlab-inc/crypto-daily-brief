@@ -89,7 +89,7 @@ jobs:
             "outputs/${{ steps.target.outputs.date }}/daily_data.json" \
             "outputs/${{ steps.target.outputs.date }}/infographic.png"
 
-      - name: ③ APR実画面撮影（§6・最大27秒待機）
+      - name: ③ APR実画面撮影（§6・v1.68でRefresh後待機を段階的に延長）
         if: steps.need.outputs.phase1 == 'true'
         run: |
           python scripts/capture_apr.py \

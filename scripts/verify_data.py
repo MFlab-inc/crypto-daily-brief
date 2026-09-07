@@ -229,6 +229,30 @@ def main() -> int:
                 au.add("C11_domestic_recalc", abs(ratio - 1) <= 0.005,
                        f"表示{c_usd:,.0f} 再計算{calc:,.0f} ratio={ratio:.4f}")
 
+    # C25 APRダッシュボード撮影の完了状況（v1.68・オーナー指示）
+    # capture_apr.py が最大試行後も撮影を完了できなかった場合、
+    # apr_capture_status.json に記録して apr_screenshot.jpg を生成しない
+    # （フェイルクローズ方針(b)・オーナー承認）。ここではその記録を
+    # 拾って可視化するのみで、この欠落自体はフェーズ1全体をFAILさせない
+    # （SKIP扱い。数値データそのものの正確性の問題ではないため）。
+    apr_status_path = jp.parent / "apr_capture_status.json"
+    apr_screenshot_path = jp.parent / "apr_screenshot.jpg"
+    if apr_status_path.exists():
+        try:
+            st = json.loads(apr_status_path.read_text(encoding="utf-8"))
+        except (ValueError, OSError) as e:
+            st = {}
+            au.add("C25_apr_capture", None, f"apr_capture_status.json読み込み失敗: {e}")
+        else:
+            au.add("C25_apr_capture", None,
+                   f"APR画面の読み込みが最大試行後も完了せず、apr_screenshot.jpgを"
+                   f"欠落のまま記録した（オーナー承認・v1.68）。"
+                   f"attempts={st.get('attempts')} detail={st.get('detail')}")
+    elif apr_screenshot_path.exists():
+        au.add("C25_apr_capture", True, "apr_screenshot.jpg 撮影成功")
+    else:
+        au.add("C25_apr_capture", None, "apr_screenshot.jpgが無い（撮影ステップ自体が未実行の可能性）")
+
     # ハッシュ台帳（納品時原本固定: 基準 §7）
     hashes = {jp.name: sha256(jp)}
     if a.image and Path(a.image).exists():

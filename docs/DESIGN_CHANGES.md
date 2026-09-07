@@ -7,6 +7,78 @@
 
 ---
 
+## v1.68 — 2026-09-07（オーナー承認・APR画面ローディング中撮影の恒久対処）
+
+### 経緯
+
+9/5対象日のAPR画面キャプチャが、DefiLlama Yields APIの応答遅延と思われる
+理由で「Fetching ETH/USDC pool data...」というグローバルローディング表示の
+まま撮影されていた（オーナーが目視で発見・実害なし）。既存の`capture_apr.py`
+は「N/A%」「GeckoTerminal取得失敗」という**値が空欄で描画された**状態のみ
+検知でき、**プールカード自体が1件も描画されていない**グローバルローディング
+状態は検知対象外だった。
+
+### 調査（実装前にオーナーへ報告・承認済み）
+
+`dashboard/eth_usdc_apr.html`（撮影対象`https://ethusdc-apr.netlify.app/`の
+実際のソース）を直接確認し、以下を特定した。
+- グローバルローディング表示の実際の文言は`"Fetching ETH/USDC pool data..."`。
+- 各プールカードには`"TODAY"`ラベルが無条件に1回ずつ描画される
+  （`apr-label`クラス）。「% TODAY」という連続文字列は、既存のN/A検知が
+  一度直面したのと同じDOM分割の理由で一致しない
+  （`<div class="apr-value">…<span>%</span></div><span class="apr-label">TODAY</span>`）。
+- `THE_GRAPH_API_KEY`が未設定（プレースホルダのまま）の場合、Base系2プールの
+  スパークライン枠は`"Loading chart..."`を**恒常的に**表示し続ける設計
+  （`fetchGraphHistory()`がキー未設定時にスパークライン枠へ一切触れず
+  早期returnするため）。単純な`"Loading"`部分一致を判定に使うと、正常な
+  撮影でも常に誤検知しリトライを消費し続けるリスクがあると判明したため
+  採用しなかった。
+
+### 実装
+
+`scripts/capture_apr.py`:
+- `_judge_incomplete()`を新設し、以下のOR条件で未完了と判定する。
+  (1) 既存: `"N/A%"` または `"GeckoTerminal取得失敗"` を含む
+  (2) 新規: `"Fetching ETH/USDC pool data"`（グローバルローディングの
+      実際の文言）を含む
+  (3) 新規: `body.count("TODAY") < 6`（想定プール数=3チェーン×2手数料）
+- `WAIT_AFTER_REFRESH`（固定8秒）を`WAIT_AFTER_REFRESH_SCHEDULE = (8, 12, 16)`
+  へ変更し、DefiLlama応答遅延への耐性を上げた（オーナー承認）。
+- 最大試行後も未完了の場合、**画像を撮影・保存しない**（フェイルクローズ
+  方針(b)・オーナー承認）。`apr_capture_status.json`に未完了の旨・試行回数・
+  判定内訳を記録し、正常終了（exit 0）する——数値データ・インフォグラフィック
+  とは無関係な補助画像1点の欠落でフェーズ1全体をフェイルクローズさせない
+  ための設計。
+
+`scripts/verify_data.py`:
+- C25（統合運用基準の全体ゲート番号を継続。C1〜C11がverify_data.py、
+  C12〜C24がverify_post.py使用済みのため次番）を新設。
+  `apr_capture_status.json`があればSKIP（未完了を記録・FAILにはしない）、
+  `apr_screenshot.jpg`のみあればPASS、どちらも無ければSKIP
+  （撮影ステップ未実行の可能性）。SKIPは`Audit.failed`に加算されない
+  設計のため、この欠落単体でフェーズ1をFAILさせない。
+
+`.github/workflows/daily.yml`: ステップ名のコメントを実態に合わせて更新
+（「最大27秒待機」→「Refresh後待機を段階的に延長」）。git addで
+`apr_capture_status.json`も自然にコミット対象へ含まれる（既存の
+`git add outputs/`のまま、変更不要）。
+
+### 検証
+
+`_judge_incomplete()`の5シナリオ（グローバルローディング中・正常時6プール・
+既存N/A検知・部分描画5/6・The Graphキー未設定時の恒常的"Loading chart..."
+存在下での誤検知なし）をローカルで直接検証し全て想定どおり。C25の3パターン
+（撮影成功→PASS／未完了マーカーあり→SKIP・全体はFAILにならない／
+どちらも無し→SKIP）もサブプロセス経由で`verify_data.py`を実際に実行し確認。
+test_bundle2.py（phase2、無関係）は変更なく全430件PASS。
+
+このスクリプトは`test_bundle2.py`（phase2専用）に対応するphase1向けの
+正式なテストスイートが存在しないため、上記はいずれもアドホックなローカル
+検証であり、コミットはしていない。実DOM（Playwright実ブラウザ経由）での
+ライブ検証は別途実施し、結果を追記する。
+
+---
+
 ## v1.67 — 2026-09-04（v1.65・v1.66の9/3実データ再検証結果を記録、診断用ファイルを削除）
 
 ### 検証方法
