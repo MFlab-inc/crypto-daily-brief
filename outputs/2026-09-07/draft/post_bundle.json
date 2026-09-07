@@ -1,0 +1,498 @@
+{
+  "target_date_jst": "2026-09-07",
+  "level": "L0",
+  "sections": {
+    "part0_target_date": "2026年9月7日（月）",
+    "part1_headline": "9月7日は、Coldcard関連の盗難ビットコインの一部が新たに移動したとの報道が確認されました。CointelegraphとCoinDeskの2媒体が、分析会社Galaxy Researchの調査結果として、盗難されたビットコインのうち一部が第3波の攻撃で移動したと報じています。公式発表での確認は取れていません。BTC・ETH・BNBはいずれも24時間比で下落しました。",
+    "part1_points": "・Galaxy Researchの分析として、Coldcard（ハードウェアウォレットの一種）関連の盗難資金のうち約45%が第3波の攻撃で移動したと、CointelegraphとCoinDeskが伝えています。盗難全体の残りは元のアドレスに留まっているとされ、暗号通貨価格への直接因果は未確認です（Cointelegraph、CoinDesk、2026年9月7日）。\n・Reutersはイラン周辺での軍事的緊張の高まりや米国のエネルギー資産への警告を報じています。地政学リスクの高まりは原油価格やリスク選好を通じて暗号通貨市場の地合いに波及する可能性がありますが、暗号通貨価格への直接因果は未確認です（Reuters、2026年9月7日）。",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.687兆（¥419.7兆）｜24時間取引高 $752.1億（¥11.75兆）\n・ #BTC：$79,052（約1,234.6万円）｜24時間比 -1.12%\n　（24時間レンジ $78,666〜$80,564）\n・ #ETH：$2,483（約38.8万円）｜24時間比 -0.87%\n　（24時間レンジ $2,466〜$2,536）\n・ #BNB：$738（約11.5万円）｜24時間比 -1.53%\n・市場心理：Fear & Greed 73（Greed、CoinMarketCap API）\n・ドミナンス：BTC 59.07%｜ETH 11.27%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年9月8日07:37 JST、USD/JPY ¥156.18",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $6.72M vs Base上ETH/USDC $65.62M｜参考：Base上DEX全体 $8.066億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $56.40億（¥8,808億）｜24時間比 -0.46%｜USDCドミナンス 86.0%\n・ ETH/USDC（Base）参考APR：0.05% 20.54%（TVL $8.75M／24h出来高 $9.85M）｜0.3% 52.12%（TVL $117.18M／24h出来高 $55.77M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年9月8日07:37 JST",
+    "part2_flow": "・Galaxy Researchの分析としてColdcard関連の盗難資金の一部が第3波の攻撃で移動したとの報道がCointelegraphとCoinDeskの2媒体で確認されましたが、暗号通貨価格への直接因果は未確認であり、この材料単独で市場心理への影響を断定することはできません。BTC・ETH・BNBはいずれも24時間比で下落していますが、この値動きが同報道によるものかは確認できません。\n・Reutersが報じたイラン周辺での軍事的緊張の高まりや米国エネルギー資産への警告は、地政学リスクの高まりが意識された可能性があり、リスク選好の後退を通じて暗号通貨市場の地合いに波及した可能性がありますが、暗号通貨価格への直接因果は未確認です。市場心理を示すFear&Greed指数はGreed圏を維持しており、地政学リスクの高まりが直ちに強い警戒感につながっている状況ではないとみられます。",
+    "lp_comment": "参考APRは両プールとも前日から上昇しました。\nBase 0.05%プールの参考APRは19.88%→20.54%へ上昇しました（24時間出来高 +2.27%、TVL -1.01%）。\nBase 0.3%プールの参考APRは42.50%→52.12%へ上昇しました（24時間出来高 +22.79%、TVL +0.12%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比-0.87%と下落中のため、ETH偏り・下限側レンジ外・下落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "本日はBTC・ETH・BNBともに24時間比で軟調な値動きとなりましたが、Fear&Greed指数はGreed圏を維持しており、市場全体として強い悲観に傾いている様子は見られません。Coldcard関連の盗難資金移動やイラン周辺の地政学的緊張については、いずれも暗号通貨価格への直接因果は未確認であり、公式発表や続報を通じた事実確認が今後の焦点となります。なお、週末にビットコインが節目を維持できなかったとの報道もあり、9月16日のFOMCを控えた金利観測との関連が継続監視の対象とされています。DEX・国内取引所の出来高動向も含め、今後の値動きの背景を注視していく必要があります。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "盗難ビットコイン一部移動が判明",
+  "audit_ledger": [
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/statistics/market/short/call/call.xlsx",
+      "title": "コール市場残高（8月）",
+      "published_at": "Mon, 07 Sep 2026 15:00:00 +0900",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: コール市場残高の定例統計で、暗号通貨価格への波及経路を説明できない"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/research/research_data/cai/index.htm",
+      "title": "消費活動指数",
+      "published_at": "Mon, 07 Sep 2026 14:00:00 +0900",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 消費活動指数の定例公表で、個別の数値変化や波及経路の説明材料が無い"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/about/bcp/fso/fso260907a.pdf",
+      "title": "令和8年台風第24号及び前線による大雨に伴う災害等に対する金融上の措置について（鹿児島県）",
+      "published_at": "Mon, 07 Sep 2026 11:00:00 +0900",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 特定地域の災害対応に関する金融措置で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/statistics/boj/other/mbt/mbt2608.pdf",
+      "title": "マネタリーベースと日本銀行の取引（8月）",
+      "published_at": "Mon, 07 Sep 2026 08:50:00 +0900",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: マネタリーベース等の定例統計で、要旨に具体的変化の記載が無い"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/statistics/boj/other/tseifu/release/2026/seifu2608.pdf",
+      "title": "日本銀行の対政府取引（8月）",
+      "published_at": "Mon, 07 Sep 2026 08:50:00 +0900",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 対政府取引の定例統計で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/statistics/boj/fm/ope/m_release/2026/ope2608.xlsx",
+      "title": "オペレーション（8月）",
+      "published_at": "Mon, 07 Sep 2026 08:50:00 +0900",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: オペレーションの定例統計で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/09/labor-day-2026/",
+      "title": "Labor Day, 2026",
+      "published_at": "Mon, 07 Sep 2026 16:05:01 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 労働者の日の大統領布告で、金融・市場への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス（大統領令等）",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/09/labor-day-2026/",
+      "title": "Labor Day, 2026",
+      "published_at": "Mon, 07 Sep 2026 16:05:01 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 候補7と同一内容の重複配信で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxQeWJsUXZOOENYTkhSbjl1YkJ6ZVF5QXN3aXhmSGwyOHVqb3RQV3gzR0s1TWFGa05OeV9XZWhJemRRZktzRzZ0cldCY3Bycms1OUhFeWRhN0Y3UWk4WTFRVnFWa0gtbDRtUnhIS1BmYjRsNWs3UHVXWFpfd1JWMExpWVgwZHdHOUhjUkVDLXl1Q3ZOdXdQYXFIVExhdmxJVjU0R3VhOUJaT1Q0QjlZUWFJNGh2TDdoaGdfTWVOeURn?oc=5",
+      "title": "Cuba's foreign minister says no negotiations despite \"genocidal\" blockade - Reuters",
+      "published_at": "Mon, 07 Sep 2026 18:50:45 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: キューバ外相の発言報道で、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxQM292TDh2Uk9IeUlEeFNFY1UyeFM3OFZzd2w1S013bEtmVnhXYmdfT0ptV1ZfTlRTRXBLVzFZdmZ6T0d2cVdkZHAtbmhFTjlHUmJRQkRVZDhwMGJZZUM2MEpBS041SmhGcEhWZTlQemFBcjRaNkwyWkhhUlNFc1dNZEVyQ1R0YzFnRm5ZNHd3VU5NV01EeWZVZjJrUW5VWGF2X2R1U0xzSFEwbE9iY1E?oc=5",
+      "title": "Iran warns US energy assets in Gulf are vulnerable after latest clashes - Reuters",
+      "published_at": "Mon, 07 Sep 2026 18:48:25 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 中東情勢の緊張報道だが、内容が短く原油・リスク選好への影響を具体的に示す材料としては薄い"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxQRkVISjNZRzJIQ2xhRks4c21WN0ZvNE1LSHBjMDhldFdwN0ExVjcxem9JLVJkSUk1ODdYQ0RhT1hrMDctX19HSXFXUW40c1hINDh0VDh6cjdMNHMyWFFsYmFIU0NrRzFSNzBPekRGX3lHYkNKMDRCRHE2MkEyalBoekw1cXU3aWxuZTY3Q2dudWFKc0trTnJVOTFSd2hKZVFOLVZwWnRSOUFXRHlfaHRObExwN3Z6dDNyME9RekRnZFhYMFAyOTVveA?oc=5",
+      "title": "Tech explores Argentina's Patagonia for mega data centers - Reuters",
+      "published_at": "Mon, 07 Sep 2026 18:30:57 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: データセンター立地検討の報道で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxQREJDbDg4SElmSEppS19sS2FtQ0NsNUtzSktacnNfbnl0Y0dLRlBhSlpwQ1NJSV9JX1FFWkp0WXhFcEVTUnViV3RZR1A5OHAzZTRKbkhEMDQ4ak5xREVqMlNJMm02SmMtMGdTaXJqdjJLMmtOQjRuMkdKSVZWLVl3ckxnYjZCQUhLNGRuMndUcE9ZLVA3R3QxTjNvQ21FQnNHdE4wZXU3VWp6a0ljTERtbDZrbjV1b09VZEE?oc=5",
+      "title": "Nigeria's Dangote refinery plans $14 billion expansion as it signs IPO documents - Reuters",
+      "published_at": "Mon, 07 Sep 2026 17:21:03 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別企業の製油所拡張・IPO準備の報道で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxONEpxQ21SRTZJNlVaZFJxUk8wdHl2bktBZVNOTXJXVjRUOGNTUGxtc1BtN3FJMWI4LXVUUkM3MVlIb3J0bnppSUJLVnZqRExUdjR5UU1tWjVJMnJzVkg2U2J0SG8wR2lsWmE5d041WkpjVlpiWW5HTGRjWUwycmVtSVNaSGUwY2lQajZFTThkTlptdW8?oc=5",
+      "title": "Latvia plans 300% tariff on grain from Russia and Belarus - Reuters",
+      "published_at": "Mon, 07 Sep 2026 16:31:43 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 特定国間の穀物関税report。マクロ流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxPaTJWZEN6WkthU1B5a3RoMm4wOG45eGFZQlpwcTVIc01PUk1COHRCNDRhVEktblNDR2dKc3o0dHo0N3ZLODR4TDdlUFRjU0g1bXNBSTV5QjJma1JkVmNiamJPTmcwdjk3aWNsQ2tEVTNvai1iT2ZhakcwR19IUUZYWDJLamhNNEpUcnhndG4ySGw2VnRNUUZHTkh0cFF3dUJDWmx5V3dB?oc=5",
+      "title": "US imports more Congo copper as consumer acceptance grows - Reuters",
+      "published_at": "Mon, 07 Sep 2026 14:50:51 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 銅輸入動向の報道で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxOdmdIRU5UbW8yRmxOUXhfR0trOVEtdHVrMC1Nc2N0OXVqcVhUbWtHc2hTVFZHd1NZNjVDdnF0VldrcXUwOHVQb2xxMXRRTVdBRjRHU252Ty1iR09JQi1QakZkV1hFVnd3WXBKNllJaWRoOUxYTW14dGhpaEM1WVpaeko2dmZVM1U5RG1fTGE4TzBCdlN3blQ0Vm5ISF9HOGl2eXdiOFg4REtmTHd0RXB2Z1pLZV9aSjc1eVE?oc=5",
+      "title": "Gulf equities mixed amid US-Iran flare-ups - Reuters",
+      "published_at": "Mon, 07 Sep 2026 14:27:38 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 中東情勢絡みの株式市場動向だが、湾岸地域限定で内容が薄く参考材料として不十分"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxNRmpmbnE2TXNjc2Z4dXI0YjNuOUdjSktYaDM1V1ZSNzBOWkNaa0FvRFlsX0NXRUdjNkwwZGxVVzlnamJxM1VKbTRZSFhQNXhHR0pscS0wNHhKd21pa3doVkMybF9vQ2paWDRaWVNPaFF2YUdLcGhqUm5JNWZVa051OFlPek95OVQzeGdTcXJQWWl5TV9pYlcxZ0xvOW1jZV9HMEM4RjdSYTExSTlNT1NwTS1kZVl1V0RCVGdRdTNhYWZINlZaN2FZ?oc=5",
+      "title": "TotalEnergies to lower stake in Papua LNG, hand operatorship to Exxon - Reuters",
+      "published_at": "Mon, 07 Sep 2026 14:00:08 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別企業のLNG事業権益移管報道で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxOcENrMFRFQmxuUWNOUFJ2NDZaWTVCZ05wYmctRE1KMW0xSmxGTVdJcG8wZHlfNXNzY3VaLVE5U3pJaV9NTFFjdE9neGZ0Ry0yeFJzV3Z4TXNvNG9wVHZ3OHdRT3BmVVQzbkI4ckx3NmVYZWc2eFplQWIySXN0WHNocVBB?oc=5",
+      "title": "PODCAST: Labor gains - Reuters",
+      "published_at": "Mon, 07 Sep 2026 13:44:02 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ポッドキャスト予告で、具体的内容・波及経路が不明"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxNX2k1aEFKNWUzaXRzZXlkTVZNb3MyOTZoSjBoa2N5Zmtpd1Z2VVRWbV9JcnNHN0hkS1ZPRXEyb1UxdGMzN1pFNUFCUmpPVTNvQndsa3c1TzBwNEVvVXNLVXZjNGVnbzF6TUdGS2N5SVdLT2k2Nlk1TmREb0ZlTVp1cGlLRzJTMWJqLTN4VVRiY2s1emV6YldrQnJHQWRmZFBKRUdDalJjb1lFM1NxaHI2eDdWWFN1R0tydFJYOUh3Z0phb0paZUNRMw?oc=5",
+      "title": "UAE says its energy exports will not be 'held hostage' by Iran war - Reuters",
+      "published_at": "Mon, 07 Sep 2026 13:13:23 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 中東情勢絡みのエネルギー輸出発言だが、内容が短く参考材料として不十分"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxNNm1PWTFjWnNzbHdrMUhDVUFvX0VOaFNXZ08tN21vZkdGQno1dGhOUzBnT3k1c05Xc2dacm5JakNlNHpIUy1CRHRPSkM2MFpicERaUEJXX0hfdHd3UE5HdDBtcWhHN2hRb1NzY2s2OGVvQWlCd0lOZEN3RTNFMHNYS1NmYVRFOWg1Y2FOQzNFUU1yV1B5dU1rbGZBMmhsNmdfOHdIX0lBQzJGcjJ5NW9CaGtB?oc=5",
+      "title": "Europe's largest carbon capture facility opens in Netherlands - Reuters",
+      "published_at": "Mon, 07 Sep 2026 13:06:47 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 炭素回収施設の開所報道で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxNQUc5TGNMUjMtUXhmX1JIMVlNaVEwckp6TDFySlZCUGxuNWprT1NBWWc3ZTMyaGZBTldWQm1BWHFKVlFaTE5NYmhRaUF2NWgzQzI0SllvczJXNU9oU1BNcDFxRDNlOW9rSlgwMV9DMmNTejQyOXFnamlFdWtmcG5rSXAzQVBnekhWME8yLWhYanN0amFOc0tBbzg5MnBndk43b2lPeHBOVjVReUg0bGxLeGNn?oc=5",
+      "title": "France's EDF in talks to buy So Energy to expand British customer base - Reuters",
+      "published_at": "Mon, 07 Sep 2026 12:43:38 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別企業のM&A交渉報道で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxQdjJXQTZHMFRyNVlzb2tiOXV2eDRZcmdYZ1pJVFBtZFktYXFpTldMWVJaQUJmYUFDUmlVUEt6b191R3ZQYlZud2J6dTY5XzBsN1lyaTl1ZXhLckFXZ0RoSUdKTG12eWZibVZ5aW51V28wNktGWmtscFNCTDNMMjYzSXlzaUFEc0ZLYURLS3dXbmpiTE9tM0tqM3U5aDV4dUtYbnAw?oc=5",
+      "title": "EU announces €200 million partnership deal with Greenland - Reuters",
+      "published_at": "Mon, 07 Sep 2026 12:27:12 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: EUとグリーンランドの提携発表で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxQNkUwazJZZE4xSlNLRHJ5ZFMyOW9RM1NQUkdrOGxHZFNxN25DaGRMRjhlcmV6MmpQYmVBUURwME5vLVhGQUdRTjJDTk43YUEwcGRnSElubmR5RFZyakVpdjUyWE5DU2N5LVM2ckhRTy1mNFp2eHJiakZLSjY4Zk13b1ZtOUJoaUg5aTZlbU1BSnEzWWJVckJjamVNZENDWmdyQVBOMTR5bGsweVFkbWlHLWVvdXV1QTBGaXZFa2pQaU5UVnp2WExYSWoxSmJPaGs?oc=5",
+      "title": "Sweden to buy Lockheed Martin's Himars artillery rocket system in $729 mln deal - Reuters",
+      "published_at": "Mon, 07 Sep 2026 12:13:47 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別国の兵器調達報道で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxNQ0ZuMXVWcmtpdWdBQnBqMHN5bXNzMjU0TXJEZW1CUVRWQ19kMnRjRkMtNFFEXzJHdkhGWTNhcTVWcjFSbFNLbE9YM3pTRUgwcDVQSjBSdmtGQnRkSnJsMHk1Y0lLSFRSSWhvdXN3YlNvRlZsb05iM0dLbWpOQzlVWmt6VnQtSUpBMVBGVVFTWnZ0eHRjYTMyVlo0WWc1UmhKWERDR2gwVnNtSXMwQjhJ?oc=5",
+      "title": "Sterling steadies on dollar as traders digest Healey speech, tumbles on yen - Reuters",
+      "published_at": "Mon, 07 Sep 2026 12:06:37 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 為替市場の動向報道だが、英国国内要因中心で暗号通貨市場への参考材料としては薄い"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/uk-financial-watchdog-prediction-markets-ban?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "UK financial watchdog weighs lifting prediction markets ban: Report",
+      "published_at": "Mon, 07 Sep 2026 20:40:17 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3単独報道で、独立2ソース規定の相手候補が無い"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/ethereum-foundation-names-2-must-ship-eips-for-hegot-upgrade?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Ethereum Foundation names 2 ‘must ship’ EIPs for Hegotá upgrade",
+      "published_at": "Mon, 07 Sep 2026 20:21:31 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3単独報道で、独立2ソース規定の相手候補が無い（候補34と内容重複だが技術詳細が異なる）"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/hunter-biden-laptop-memecoin-reimburse-trump-holders?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Joe Biden’s son to launch memecoin, will send to TRUMP holders: WSJ",
+      "published_at": "Mon, 07 Sep 2026 18:53:47 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier1・tier2の裏付けなし。候補31と同一事実だが本文には不採用と判断"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/polish-prosecutors-charge-man-in-zondacrypto-probe-seek-pretrial-detention?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Polish prosecutors charge suspect in Zondacrypto probe, seek pretrial detention",
+      "published_at": "Mon, 07 Sep 2026 17:58:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier1・tier2裏付けなし。候補32と同一事実だが本文には不採用と判断"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/markets/crypto-fund-flows-show-investors-trading-fed-rate-path-not-exiting-market-coinshares?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bitcoin fund flows show investors trading Fed rate path, not exiting market: CoinShares",
+      "published_at": "Mon, 07 Sep 2026 17:29:27 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3単独の分析記事で、独立2ソース規定の相手候補が無い"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/capital-b-adds-376-bitcoin-in-29m-purchase-holdings-reach-3521-btc?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Capital B adds 376 Bitcoin in $29M purchase, boosting holdings to 3,521 BTC",
+      "published_at": "Mon, 07 Sep 2026 16:42:49 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3単独報道で、独立2ソース規定の相手候補が無い"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/markets/bitcoin-chips-away-at-weekend-upside-as-80k-hangs-in-the-balance?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bitcoin chips away at weekend upside as $80K hangs in the balance",
+      "published_at": "Mon, 07 Sep 2026 15:57:47 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3単独の市況記事で、独立2ソース規定の相手候補が無い"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/09/07/hunter-biden-is-launching-a-memecoin-named-after-his-laptop",
+      "title": "Hunter Biden debuts 'LAPTOP' memecoin targeting TRUMP holders",
+      "published_at": "Mon, 07 Sep 2026 15:44:30 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier1・tier2裏付けなし。候補26と同一事実だが本文には不採用と判断"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/09/07/polish-prosecutors-charge-fifth-suspect-in-a-massive-crypto-probe",
+      "title": "Polish prosecutors charge fifth suspect in a massive crypto probe",
+      "published_at": "Mon, 07 Sep 2026 15:28:43 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier1・tier2裏付けなし。候補27と同一事実だが本文には不採用と判断"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/09/07/stablecoin-wallets-challenge-traditional-bank-accounts-as-main-consumer-money-hub",
+      "title": "Stablecoin wallets challenge traditional bank accounts as main consumer money hub",
+      "published_at": "Mon, 07 Sep 2026 14:12:15 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3単独の業界動向記事で、独立2ソース規定の相手候補が無い"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/tech/2026/09/07/ethereum-commits-to-letting-users-pay-gas-fees-without-having-to-hold-eth",
+      "title": "Ethereum commits to letting users pay gas fees without having to hold ETH",
+      "published_at": "Mon, 07 Sep 2026 13:54:07 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3単独報道で、独立2ソース規定の相手候補が無い（候補25と関連するが観点が異なる）"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/markets/zcash-highest-price-market-cap-20-billion?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Zcash hits highest price since 2016 as market cap tops $20B",
+      "published_at": "Mon, 07 Sep 2026 12:31:23 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3単独の値動き記事で、独立2ソース規定の相手候補が無い"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/markets/markets-tilt-toward-september-rate-hikes-five-things-to-know-in-bitcoin-this-week?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Yen intervention meets US inflation data: Five things to know in Bitcoin this week",
+      "published_at": "Mon, 07 Sep 2026 12:10:22 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3単独の週間展望記事で、独立2ソース規定の相手候補が無い"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/tech/2026/09/07/solana-to-triple-transaction-size-as-apps-get-room-for-more-complex-trades",
+      "title": "Solana to triple transaction size as apps get room for more complex trades",
+      "published_at": "Mon, 07 Sep 2026 12:08:11 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3単独報道で、独立2ソース規定の相手候補が無い"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/09/07/dbs-and-citi-enable-instant-24-7-cross-border-tokenised-deposit-payments-on-the-swift-ledger",
+      "title": "DBS and Citi complete weekend USD payment via Swift’s Digital Ledger using tokenized deposits",
+      "published_at": "Mon, 07 Sep 2026 12:05:32 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3単独報道で、独立2ソース規定の相手候補が無い（候補40と関連するが別事実として扱った）"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/09/07/uk-regulator-weighs-easing-financial-prediction-market-ban-times",
+      "title": "UK regulator weighs easing financial prediction market ban: Times",
+      "published_at": "Mon, 07 Sep 2026 10:42:58 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3単独報道で、独立2ソース規定の相手候補が無い"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/dbs-citi-first-weekend-tokenized-deposit-swift?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Citi, DBS complete first weekend tokenized cross-border deposit on Swift",
+      "published_at": "Mon, 07 Sep 2026 10:34:47 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3単独報道で、独立2ソース規定の相手候補が無い（候補38と関連するが別事実として扱った）"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/coldcard-third-wave-attacker-moves-bitcoin-stolen?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Coldcard third-wave attacker moves 45% of stolen Bitcoin",
+      "published_at": "Mon, 07 Sep 2026 09:36:19 +0000",
+      "verified_by": "Cointelegraph・CoinDeskの独立2ソースがGalaxy Researchの分析を報じ、盗難ビットコインの一部移動という同一事実を確認",
+      "decision": "採用（独立2ソース）",
+      "reason": "独立2ソース規定に該当。CointelegraphとCoinDeskが同一の事実（Coldcard関連盗難資金の一部移動）を報じており、意見・予想ではなく事実報道であるため"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/09/07/coldcard-hacker-moves-45-of-bitcoin-stolen-in-third-attack-wave",
+      "title": "Coldcard hacker moves $7.7 million in BTC, 45% of bitcoin stolen in third attack wave",
+      "published_at": "Mon, 07 Sep 2026 09:32:05 +0000",
+      "verified_by": "CoinDesk・Cointelegraphの独立2ソースがGalaxy Researchの分析を報じ、盗難ビットコインの一部移動という同一事実を確認",
+      "decision": "採用（独立2ソース）",
+      "reason": "独立2ソース規定に該当。CoinDeskとCointelegraphが同一の事実（Coldcard関連盗難資金の一部移動）を報じており、意見・予想ではなく事実報道であるため"
+    }
+  ],
+  "reusable_for_summary": [
+    "Cointelegraphは、ビットコインが週末に80,000ドル台を維持できず伸び悩んだと報じており、9月16日のFOMCを控えた金利観測との関連が指摘されています（継続監視）。",
+    "Ethereum Foundationが次期アップグレード「Hegotá」に向けた必須EIPを選定したとの報道があり、開発動向として継続監視の対象です。"
+  ],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 0
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 0
+    },
+    "FRB（speeches）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "FRB（testimony）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 6
+    },
+    "米財務省": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "USTR": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "ホワイトハウス": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 1
+    },
+    "ホワイトハウス（大統領令等）": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 1
+    },
+    "ADP": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 19
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 16
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 49
+    }
+  },
+  "news_candidate_count": 42,
+  "part1_md": "【対象日】2026年9月7日（月）\n\n【ヘッドライン】\n9月7日は、Coldcard関連の盗難ビットコインの一部が新たに移動したとの報道が確認されました。CointelegraphとCoinDeskの2媒体が、分析会社Galaxy Researchの調査結果として、盗難されたビットコインのうち一部が第3波の攻撃で移動したと報じています。公式発表での確認は取れていません。BTC・ETH・BNBはいずれも24時間比で下落しました。\n\n【主要なポイント】\n・Galaxy Researchの分析として、Coldcard（ハードウェアウォレットの一種）関連の盗難資金のうち約45%が第3波の攻撃で移動したと、CointelegraphとCoinDeskが伝えています。盗難全体の残りは元のアドレスに留まっているとされ、暗号通貨価格への直接因果は未確認です（Cointelegraph、CoinDesk、2026年9月7日）。\n・Reutersはイラン周辺での軍事的緊張の高まりや米国のエネルギー資産への警告を報じています。地政学リスクの高まりは原油価格やリスク選好を通じて暗号通貨市場の地合いに波及する可能性がありますが、暗号通貨価格への直接因果は未確認です（Reuters、2026年9月7日）。\n\n【主要指標】\n・市場全体：時価総額 $2.687兆（¥419.7兆）｜24時間取引高 $752.1億（¥11.75兆）\n・ #BTC：$79,052（約1,234.6万円）｜24時間比 -1.12%\n　（24時間レンジ $78,666〜$80,564）\n・ #ETH：$2,483（約38.8万円）｜24時間比 -0.87%\n　（24時間レンジ $2,466〜$2,536）\n・ #BNB：$738（約11.5万円）｜24時間比 -1.53%\n・市場心理：Fear & Greed 73（Greed、CoinMarketCap API）\n・ドミナンス：BTC 59.07%｜ETH 11.27%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年9月8日07:37 JST、USD/JPY ¥156.18\n",
+  "part2_md": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $6.72M vs Base上ETH/USDC $65.62M｜参考：Base上DEX全体 $8.066億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $56.40億（¥8,808億）｜24時間比 -0.46%｜USDCドミナンス 86.0%\n・ ETH/USDC（Base）参考APR：0.05% 20.54%（TVL $8.75M／24h出来高 $9.85M）｜0.3% 52.12%（TVL $117.18M／24h出来高 $55.77M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年9月8日07:37 JST\n\n【市場のフロー】\n・Galaxy Researchの分析としてColdcard関連の盗難資金の一部が第3波の攻撃で移動したとの報道がCointelegraphとCoinDeskの2媒体で確認されましたが、暗号通貨価格への直接因果は未確認であり、この材料単独で市場心理への影響を断定することはできません。BTC・ETH・BNBはいずれも24時間比で下落していますが、この値動きが同報道によるものかは確認できません。\n・Reutersが報じたイラン周辺での軍事的緊張の高まりや米国エネルギー資産への警告は、地政学リスクの高まりが意識された可能性があり、リスク選好の後退を通じて暗号通貨市場の地合いに波及した可能性がありますが、暗号通貨価格への直接因果は未確認です。市場心理を示すFear&Greed指数はGreed圏を維持しており、地政学リスクの高まりが直ちに強い警戒感につながっている状況ではないとみられます。\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から上昇しました。\nBase 0.05%プールの参考APRは19.88%→20.54%へ上昇しました（24時間出来高 +2.27%、TVL -1.01%）。\nBase 0.3%プールの参考APRは42.50%→52.12%へ上昇しました（24時間出来高 +22.79%、TVL +0.12%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比-0.87%と下落中のため、ETH偏り・下限側レンジ外・下落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\n本日はBTC・ETH・BNBともに24時間比で軟調な値動きとなりましたが、Fear&Greed指数はGreed圏を維持しており、市場全体として強い悲観に傾いている様子は見られません。Coldcard関連の盗難資金移動やイラン周辺の地政学的緊張については、いずれも暗号通貨価格への直接因果は未確認であり、公式発表や続報を通じた事実確認が今後の焦点となります。なお、週末にビットコインが節目を維持できなかったとの報道もあり、9月16日のFOMCを控えた金利観測との関連が継続監視の対象とされています。DEX・国内取引所の出来高動向も含め、今後の値動きの背景を注視していく必要があります。\n"
+}
