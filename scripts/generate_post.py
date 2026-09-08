@@ -251,6 +251,20 @@ RULES_CAUSAL = """## 因果表現
   生成物全体がコミットされない（1文の断定表現がレポート全体の不採用に
   つながる。v1.49・オーナー指示）。"""
 
+# v1.70（オーナー指示・9/7実データ「Coldcard関連の盗難資金」の手直しへの
+# 対処）: 「Coldcard（ハードウェアウォレットの一種）関連の盗難資金」という
+# 記述が、Coldcard自体に不備があったかのように読めたが、その製品・企業が
+# 事案にどう関わったか（被害を受けた当事者なのか、単に事案の説明に付随して
+# 触れられただけなのか）はsummary・titleからは確認できなかった。
+ENTITY_INVOLVEMENT_GUIDANCE = """## 固有名詞の関与の描写（v1.70・オーナー指示）
+
+事故・不正・盗難等の事案を報じる候補に特定の製品名・企業名が含まれて
+いても、その名称を出してよいのは、事案とその製品・企業がどう関わったか
+（例:被害を受けた当事者であることが明確等）がsummary・titleの記載から
+明確に読み取れる場合に限る。関わり方が明確でない場合は、その製品・企業に
+問題があったかのように読める書き方をしない——名称を出さず種別のみを
+示す等、誤読を避ける一般的な表現に言い換えること。"""
+
 # v1.56（オーナー指示）: 統合運用基準の週末表記規定（土日はETFフローの
 # 具体的金額を掲載しない）は、これまでこのパイプラインがETFフローの
 # 数値データ（Farside/SoSoValue）を一度も保有しなかったため適用対象が
@@ -435,10 +449,11 @@ reasonで使うA/B/C——個々の候補材料の重要性判定（「重要性
 ### ②（(i)なし・(ii)あり）の詳細
 
 独立2ソース材料の内容に基づき、part1_headlineに実文言を書く。
-tier1・tier2裏付けが無いため、上記「独立2ソース規定」の(c)と同様に、
-公式発表での確認が取れていない旨を明記する（「一次情報」等の内部用語は
-使わず、読者向けの平易な表現を用いること）。headline_for_imageも
-同様にこの材料の内容を反映してよい。
+「公式発表での確認が取れていない」旨の但し書きはpart1_headlineに
+書かず、part1_pointsの該当項目に明記する（v1.70・オーナー指示。
+「一次情報」等の内部用語は使わず、読者向けの平易な表現を用いること）。
+headline_for_imageも同様にこの材料の内容を反映してよい（但し書きは
+含めない）。
 
 ### ③（(i)なし・(ii)なし・(iii)あり）の詳細
 
@@ -462,6 +477,16 @@ part1_pointsには、値動きの記述に加え「ニュース材料は確認�
   （up/down）に基づく短い定性的な見出しにとどめる（例:「BTC・ETHとも
   に上昇基調」）。数値は書かない。`#`は使わず全角40字以内。
 - reusable_for_summary: tier 4等の継続監視材料があれば記す。無ければ空配列。
+
+### ヘッドラインの構成要件（v1.70・オーナー指示）
+
+part1_headlineは次の3点を満たすこと。
+- 主要銘柄（BTC・ETH・BNB等）に言及する場合は `#BTC` `#ETH` のように
+  ハッシュタグを付す（表記は上記「ハッシュタグ規則」に従う）。
+- 「公式発表での確認が取れていない」旨の但し書きをpart1_headlineに
+  書かない（上記②の詳細を参照。part1_pointsの該当項目に明記する）。
+- 対象日の日付をヘッドライン冒頭に書かない（【対象日】欄で別途表示
+  されるため重複になる）。
 
 **audit_ledgerは上記と切り離して扱う（統合運用基準・台本の要求）。**
 audit_ledgerは「採否を判断した全候補の記録」であり、本文（ヘッドライン・
@@ -558,8 +583,8 @@ OUTPUT_FORMAT_A = """## 出力形式
 
 SYSTEM_A = "\n\n".join([
     ROLE_INTRO, RULES_ABSOLUTE, RULES_HASHTAG, NEWS_SELECTION, NO_CANDIDATES_FALLBACK,
-    INTRADAY_MOVE_GUIDANCE, SCHEDULED_EVENTS_GUIDANCE, RULES_CAUSAL, ETF_WEEKEND_GUIDANCE,
-    WRITES_A, OUTPUT_FORMAT_A,
+    INTRADAY_MOVE_GUIDANCE, SCHEDULED_EVENTS_GUIDANCE, RULES_CAUSAL, ENTITY_INVOLVEMENT_GUIDANCE,
+    ETF_WEEKEND_GUIDANCE, WRITES_A, OUTPUT_FORMAT_A,
 ])
 
 CALL_B_INSTRUCTIONS = """入力として、当日の市場データ（daily_data.json）と、呼び出しAの出力

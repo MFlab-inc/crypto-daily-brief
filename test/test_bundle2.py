@@ -552,13 +552,40 @@ check("NO_CANDIDATES_FALLBACKに定型文を使うのは3軸すべて「なし�
       and "定型文を使うのは④の場合のみである" in generate_post.NO_CANDIDATES_FALLBACK)
 check("NO_CANDIDATES_FALLBACKの①〜④が、audit_ledgerのA/B/C（重要性判定）とは別分類である旨を明記（混同防止）",
       "とは別の分類である。混同しないこと" in generate_post.NO_CANDIDATES_FALLBACK)
-check("②は独立2ソース材料単独でpart1_headlineの根拠になり、公式発表未確認の旨を明記する（v1.44新設・v1.64で表現を読者向けに変更）",
+check("②は独立2ソース材料単独でpart1_headlineの根拠になる（v1.44新設）。公式発表未確認の"
+      "旨はpart1_headlineではなくpart1_pointsに明記する（v1.70・オーナー指示・9/7手直しへの対処）",
       "②（(i)なし・(ii)あり）の詳細" in generate_post.NO_CANDIDATES_FALLBACK
       and "独立2ソース材料の内容に基づき、part1_headlineに実文言を書く" in generate_post.NO_CANDIDATES_FALLBACK
-      and "公式発表での確認が取れていない旨を明記する" in generate_post.NO_CANDIDATES_FALLBACK)
-check("②: 「一次情報」を出力に書かせる指示ではなく、内部用語として使わないよう明記する側に変わっている（v1.64・オーナー指示）",
+      and "「公式発表での確認が取れていない」旨の但し書きはpart1_headlineに" in generate_post.NO_CANDIDATES_FALLBACK
+      and "書かず、part1_pointsの該当項目に明記する" in generate_post.NO_CANDIDATES_FALLBACK)
+check("②: 「一次情報」を内部用語として使わせない指示は維持されている（v1.64・オーナー指示）",
       "一次情報での確認ができていない旨を明記する" not in generate_post.NO_CANDIDATES_FALLBACK
-      and "公式発表での確認が取れていない旨を明記する（「一次情報」等の内部用語は" in generate_post.NO_CANDIDATES_FALLBACK)
+      and "「一次情報」等の内部用語は使わず、読者向けの平易な表現を用いること" in generate_post.NO_CANDIDATES_FALLBACK)
+check("②: headline_for_imageにも但し書きを含めない旨が明記されている（v1.70・オーナー指示）",
+      "headline_for_imageも同様にこの材料の内容を反映してよい（但し書きは" in generate_post.NO_CANDIDATES_FALLBACK)
+
+print("=== generate_post.py: ヘッドラインの構成要件（v1.70・オーナー指示・9/7手直しへの対処） ===")
+check("NO_CANDIDATES_FALLBACKにヘッドラインの構成要件の見出しがある",
+      "### ヘッドラインの構成要件（v1.70・オーナー指示）" in generate_post.NO_CANDIDATES_FALLBACK)
+check("ヘッドラインの構成要件: 主要銘柄言及時のハッシュタグ付与を指示している",
+      "主要銘柄（BTC・ETH・BNB等）に言及する場合は `#BTC` `#ETH` のように"
+      in generate_post.NO_CANDIDATES_FALLBACK)
+check("ヘッドラインの構成要件: 公式発表未確認の但し書きをヘッドラインに書かない旨を指示している",
+      "「公式発表での確認が取れていない」旨の但し書きをpart1_headlineに"
+      in generate_post.NO_CANDIDATES_FALLBACK)
+check("ヘッドラインの構成要件: 対象日の日付をヘッドライン冒頭に書かない旨を指示している",
+      "対象日の日付をヘッドライン冒頭に書かない" in generate_post.NO_CANDIDATES_FALLBACK)
+check("ヘッドラインの構成要件がSYSTEM_Aに含まれる（NO_CANDIDATES_FALLBACK経由）",
+      "### ヘッドラインの構成要件（v1.70・オーナー指示）" in generate_post.SYSTEM_A)
+
+print("=== generate_post.py: 固有名詞の関与の描写（v1.70・オーナー指示・Coldcard事例への対処） ===")
+check("ENTITY_INVOLVEMENT_GUIDANCEが事故・不正・盗難等での固有名詞の扱いを規定している",
+      "事故・不正・盗難等の事案を報じる候補に特定の製品名・企業名が含まれて"
+      in generate_post.ENTITY_INVOLVEMENT_GUIDANCE)
+check("ENTITY_INVOLVEMENT_GUIDANCEが関わり方不明確時に誤読を避ける言い換えを指示している",
+      "問題があったかのように読める書き方をしない" in generate_post.ENTITY_INVOLVEMENT_GUIDANCE)
+check("ENTITY_INVOLVEMENT_GUIDANCEがSYSTEM_Aに含まれる",
+      "固有名詞の関与の描写（v1.70・オーナー指示）" in generate_post.SYSTEM_A)
 check("③は定型文を使わず値動きを記述し、part1_pointsにニュース未確認を1項目明記する",
       "③（(i)なし・(ii)なし・(iii)あり）の詳細" in generate_post.NO_CANDIDATES_FALLBACK
       and "値動きの形状のみを" in generate_post.NO_CANDIDATES_FALLBACK
