@@ -575,6 +575,10 @@ check("ヘッドラインの構成要件: 公式発表未確認の但し書き�
       in generate_post.NO_CANDIDATES_FALLBACK)
 check("ヘッドラインの構成要件: 対象日の日付をヘッドライン冒頭に書かない旨を指示している",
       "対象日の日付をヘッドライン冒頭に書かない" in generate_post.NO_CANDIDATES_FALLBACK)
+check("ヘッドラインの構成要件: 日付書き出しの禁止例と代替の書き出し例を具体的に示している"
+      "（v1.70フォローアップ・実データ検証で抽象的な指示では効かなかったため強化）",
+      "「9月7日は、」「9月7日、」のように日付から" in generate_post.NO_CANDIDATES_FALLBACK
+      and "値動きや材料の内容から書き始めること" in generate_post.NO_CANDIDATES_FALLBACK)
 check("ヘッドラインの構成要件がSYSTEM_Aに含まれる（NO_CANDIDATES_FALLBACK経由）",
       "### ヘッドラインの構成要件（v1.70・オーナー指示）" in generate_post.SYSTEM_A)
 
@@ -583,7 +587,12 @@ check("ENTITY_INVOLVEMENT_GUIDANCEが事故・不正・盗難等での固有名�
       "事故・不正・盗難等の事案を報じる候補に特定の製品名・企業名が含まれて"
       in generate_post.ENTITY_INVOLVEMENT_GUIDANCE)
 check("ENTITY_INVOLVEMENT_GUIDANCEが関わり方不明確時に誤読を避ける言い換えを指示している",
-      "問題があったかのように読める書き方をしない" in generate_post.ENTITY_INVOLVEMENT_GUIDANCE)
+      "その製品・企業に問題があったかのように読める書き方を" in generate_post.ENTITY_INVOLVEMENT_GUIDANCE
+      and "避ける一般的な表現に言い換えること" in generate_post.ENTITY_INVOLVEMENT_GUIDANCE)
+check("ENTITY_INVOLVEMENT_GUIDANCEが書き方の制約であり採否基準ではない旨を明記している"
+      "（v1.70フォローアップ・実データ検証で採否誤判定を誘発したため強化）",
+      "これは書き方（表現）の制約であり、採否（use）の判断基準ではない" in generate_post.ENTITY_INVOLVEMENT_GUIDANCE
+      and "材料をuse:falseにしてはならない" in generate_post.ENTITY_INVOLVEMENT_GUIDANCE)
 check("ENTITY_INVOLVEMENT_GUIDANCEがSYSTEM_Aに含まれる",
       "固有名詞の関与の描写（v1.70・オーナー指示）" in generate_post.SYSTEM_A)
 check("③は定型文を使わず値動きを記述し、part1_pointsにニュース未確認を1項目明記する",
