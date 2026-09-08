@@ -41,20 +41,21 @@ DAILY_DATA = {
 
 SCENARIO_1_CANDIDATES = [
     {
-        "title": "Stolen funds tied to hardware wallet brand resurface after quiet period, analysis finds",
-        "summary": ("Blockchain analytics firm ChainTrace says a portion of previously stolen bitcoin, "
-                    "some of which had been moved into wallets associated with a popular hardware wallet "
-                    "brand called 'VaultKey', was transferred again in a new wave of transactions. "
-                    "The firm did not say how the funds came to be associated with VaultKey-labeled "
-                    "addresses, and VaultKey has not commented."),
+        "title": "On-chain data confirms movement of historic bitcoin theft proceeds",
+        "summary": ("On-chain transaction data confirms that approximately 40% of proceeds from a "
+                    "well-documented historical bitcoin theft moved to new addresses this week, "
+                    "according to blockchain analytics firm ChainTrace. The destination addresses "
+                    "match the address format used by the VaultKey hardware wallet brand. ChainTrace "
+                    "did not say how the funds came to be held in VaultKey-associated wallets, and "
+                    "VaultKey has not issued a statement."),
         "published_at": "2026-09-07T10:00:00Z", "source": "CryptoWire", "tier": 3,
     },
     {
-        "title": "Portion of old bitcoin theft proceeds moves again, tied to hardware wallet addresses",
-        "summary": ("According to blockchain analytics firm ChainTrace, roughly 40% of a historical "
-                    "bitcoin theft has been moved in a new wave, with the funds passing through addresses "
-                    "associated with the VaultKey hardware wallet brand. It remains unclear whether "
-                    "VaultKey's security was involved in the original theft."),
+        "title": "Historic BTC theft proceeds move again, on-chain data shows",
+        "summary": ("Blockchain data independently reviewed confirms that roughly 40% of a previously "
+                    "stolen bitcoin cache changed hands this week, moving into addresses matching the "
+                    "VaultKey hardware wallet brand's address format. It is not known whether VaultKey's "
+                    "security played any role in the original theft."),
         "published_at": "2026-09-07T11:30:00Z", "source": "BlockDaily", "tier": 3,
     },
 ]

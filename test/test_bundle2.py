@@ -593,6 +593,10 @@ check("ENTITY_INVOLVEMENT_GUIDANCEが書き方の制約であり採否基準で�
       "（v1.70フォローアップ・実データ検証で採否誤判定を誘発したため強化）",
       "これは書き方（表現）の制約であり、採否（use）の判断基準ではない" in generate_post.ENTITY_INVOLVEMENT_GUIDANCE
       and "材料をuse:falseにしてはならない" in generate_post.ENTITY_INVOLVEMENT_GUIDANCE)
+check("ENTITY_INVOLVEMENT_GUIDANCEが言い換え例（名称を理由に事実ごと不採用にしない）を示している"
+      "（v1.70フォローアップ・実データ検証で抽象的な指示だけでは事実ごと不採用になったため強化）",
+      "製品名を関与の主語にせず" in generate_post.ENTITY_INVOLVEMENT_GUIDANCE
+      and "名称を理由に事実ごと不採用にしない" in generate_post.ENTITY_INVOLVEMENT_GUIDANCE)
 check("ENTITY_INVOLVEMENT_GUIDANCEがSYSTEM_Aに含まれる",
       "固有名詞の関与の描写（v1.70・オーナー指示）" in generate_post.SYSTEM_A)
 check("③は定型文を使わず値動きを記述し、part1_pointsにニュース未確認を1項目明記する",
