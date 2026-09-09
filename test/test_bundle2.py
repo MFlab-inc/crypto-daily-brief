@@ -582,6 +582,16 @@ check("ヘッドラインの構成要件: 日付書き出しの禁止例と代�
 check("ヘッドラインの構成要件がSYSTEM_Aに含まれる（NO_CANDIDATES_FALLBACK経由）",
       "### ヘッドラインの構成要件（v1.70・オーナー指示）" in generate_post.SYSTEM_A)
 
+print("=== generate_post.py: RULES_HASHTAG強化（v1.71・9/8実データのC13境界違反への対処） ===")
+check("RULES_HASHTAGがタグ名の直後に助詞・読点が続く書き方を明示的に禁止している"
+      "（実際にC13をFAILさせた「#BTCは下落し、#ETHは」というパターンを名指し）",
+      "#BTCは下落し、#ETHは" in generate_post.RULES_HASHTAG)
+check("RULES_HASHTAGが文中主語ではなく文末にまとめて置く代替パターンを具体例で示している",
+      "銘柄を文中の主語にする場合は" in generate_post.RULES_HASHTAG
+      and "BTC・ETHは24時間比でそれぞれ下落・" in generate_post.RULES_HASHTAG)
+check("RULES_HASHTAGが#の直前に日本語の句読点が来る位置を明示的に禁止している",
+      "日本語の句読点になる位置には置かない" in generate_post.RULES_HASHTAG)
+
 print("=== generate_post.py: 固有名詞の関与の描写（v1.70・オーナー指示・Coldcard事例への対処） ===")
 check("ENTITY_INVOLVEMENT_GUIDANCEが事故・不正・盗難等での固有名詞の扱いを規定している",
       "事故・不正・盗難等の事案を報じる候補に特定の製品名・企業名が含まれて"
