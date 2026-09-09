@@ -20,14 +20,11 @@ jobs:
 
       - name: draft内容とC23で検知された'Index'の文脈を確認
         run: |
-          echo "===== ファイル一覧 ====="
-          find draft-0908 -type f
-          echo ""
           echo "===== part2.md ====="
-          cat draft-0908/part2.md || true
+          cat draft-0908/draft/part2.md
           echo ""
           echo "===== post_audit（C23詳細） ====="
-          cat draft-0908/post_audit_20260908.json || true
+          cat draft-0908/draft/post_audit_20260908.json
           echo ""
           echo "===== 'Index'の出現箇所（post_bundle.json全体） ====="
-          grep -n "Index" draft-0908/post_bundle.json || echo "post_bundle.jsonに'Index'なし"
+          grep -n "Index" draft-0908/draft/post_bundle.json || echo "post_bundle.jsonに'Index'なし"
