@@ -100,6 +100,22 @@ for delta_min in (30, 60, 120, 180, 360):
     for gap, ta, tb in sorted(pairs)[:8]:
         print(f"  差{gap:.0f}分 | CD: {ta[:60]} | CT: {tb[:60]}")
 
+print("\n===== ④（追加検証）summary込みトークン重なりを閾値を下げて使った場合 =====")
+for threshold in (0.30, 0.20, 0.15, 0.10):
+    pairs = []
+    for a in cd_items:
+        a_text = f"{a['title']} {a.get('summary', '')}"
+        a_tokens = gp._tokenize_title(a_text)
+        for b in ct_items:
+            b_text = f"{b['title']} {b.get('summary', '')}"
+            b_tokens = gp._tokenize_title(b_text)
+            coef = gp._overlap_coefficient(a_tokens, b_tokens)
+            if coef >= threshold:
+                pairs.append((coef, a["title"], b["title"]))
+    print(f"\n閾値>={threshold}: {len(pairs)}組")
+    for coef, ta, tb in sorted(pairs, reverse=True)[:10]:
+        print(f"  係数{coef:.3f} | CD: {ta[:55]} | CT: {tb[:55]}")
+
 print("\n===== 9/7 Liquid Network関連（既知の実測値）に時刻近接ルールを適用した場合 =====")
 known = [
     ("CoinDesk", "Bitcoin network used by exchanges hit by $320 million exploit...", "2026-09-07T03:43:12+00:00"),
