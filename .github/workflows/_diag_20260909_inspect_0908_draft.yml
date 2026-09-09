@@ -1,0 +1,27 @@
+name: _diag_20260909_inspect_0908_draft
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: post-draft-2026-09-08
+          path: draft-0908
+          run-id: 34296069916
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: draft内容とC13ハッシュタグ境界FAILの文脈を確認
+        run: |
+          echo "===== part1.md ====="
+          cat draft-0908/draft/part1.md
+          echo ""
+          echo "===== post_audit（C13詳細） ====="
+          cat draft-0908/draft/post_audit_20260908.json
