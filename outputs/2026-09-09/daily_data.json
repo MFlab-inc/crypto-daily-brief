@@ -1,0 +1,120 @@
+{
+  "target_date_jst": "2026-09-09",
+  "weekday_jp": "水",
+  "date_title": "2026年9月9日（水）暗号通貨・DEX市場概況",
+  "summary": "（シャドー運用中：ヘッドラインはフェーズ2で生成）",
+  "assets": [
+    {
+      "asset": "BTC",
+      "usd": "$77,958",
+      "jpy": "約1,199.1万円",
+      "change_24h": "-0.66%",
+      "direction": "down"
+    },
+    {
+      "asset": "ETH",
+      "usd": "$2,452",
+      "jpy": "約37.7万円",
+      "change_24h": "-1.26%",
+      "direction": "down"
+    },
+    {
+      "asset": "BNB",
+      "usd": "$721",
+      "jpy": "約11.1万円",
+      "change_24h": "-4.24%",
+      "direction": "down"
+    }
+  ],
+  "intraday_range": {
+    "BTC": {
+      "high": "$79,753",
+      "low": "$77,916",
+      "source": "coinbase",
+      "retrieved_at": "2026-09-10T07:37:52.075722+09:00",
+      "representative": true,
+      "inconsistent": false,
+      "notable_move": false
+    },
+    "ETH": {
+      "high": "$2,523",
+      "low": "$2,454",
+      "source": "coinbase",
+      "retrieved_at": "2026-09-10T07:37:52.220402+09:00",
+      "representative": true,
+      "inconsistent": true,
+      "notable_move": false
+    },
+    "BNB": {
+      "high": "$757",
+      "low": "$732",
+      "source": "coinbase",
+      "retrieved_at": "2026-09-10T07:37:52.371187+09:00",
+      "representative": false,
+      "inconsistent": true
+    }
+  },
+  "scheduled_events": [],
+  "market": {
+    "fear_greed": {
+      "value": 71,
+      "label": "Greed"
+    },
+    "market_cap": "$2.653兆",
+    "market_cap_jpy": "¥408.0兆",
+    "volume_24h": "$861.1億",
+    "volume_24h_jpy": "¥13.25兆",
+    "btc_dominance": "59.03%",
+    "eth_dominance": "11.28%"
+  },
+  "base": {
+    "tvl": "$56.37億",
+    "tvl_jpy": "¥8,671億",
+    "tvl_change": "-0.09%",
+    "tvl_direction": "down",
+    "dex_volume": "$9.970億",
+    "dex_volume_jpy": "¥1,534億",
+    "dex_volume_eth_usdc": "$91.99M",
+    "dex_volume_eth_usdc_jpy": "¥141億",
+    "usdc_dominance": "86.2%"
+  },
+  "lp": {
+    "pools": [
+      {
+        "name": "Base 0.05%プール",
+        "apr": "45.68%",
+        "tvl": "$9.17M",
+        "volume_24h": "$22.94M",
+        "change_vs_prev": {
+          "apr_change": "+77.60%",
+          "volume_24h_change": "+85.44%",
+          "tvl_change": "+4.39%"
+        }
+      },
+      {
+        "name": "Base 0.3%プール",
+        "apr": "63.94%",
+        "tvl": "$118.25M",
+        "volume_24h": "$69.05M",
+        "change_vs_prev": {
+          "apr_change": "+17.56%",
+          "volume_24h_change": "+18.21%",
+          "tvl_change": "+0.55%"
+        }
+      }
+    ],
+    "check_message": "#ETHが下落中。#ETH偏り・下限側レンジ外・下落耐性を確認"
+  },
+  "domestic": {
+    "bitflyer_eth_24h": "1,905.84 ETH",
+    "coincheck_eth_24h": "601.63 ETH",
+    "combined_eth": "2,507.48 ETH",
+    "combined_usd": "$6.15M",
+    "retrieved_at": "2026-09-10 07:37 JST"
+  },
+  "footer": {
+    "retrieved_at": "2026-09-10 07:37 JST",
+    "usd_jpy": "¥153.82",
+    "sources": "CoinMarketCap API / GeckoTerminal / DefiLlama / ExchangeRate-API / bitFlyer公式API / Coincheck公式API"
+  }
+}
