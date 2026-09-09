@@ -1,0 +1,471 @@
+{
+  "target_date_jst": "2026-09-08",
+  "level": "L0",
+  "sections": {
+    "part0_target_date": "2026年9月8日（火）",
+    "part1_headline": "決済系企業CircleがクロスボーダーPaymentsのTazapayを買収すると報じられ、USDCの決済網拡大への思惑が意識されました。BTC・ETH・BNBの24時間の値動きは方向感に乏しく、市場は次の材料待ちの様相です。 #BTC #ETH #BNB #USDC",
+    "part1_points": "・Circleがクロスボーダー決済企業Tazapayを約4億ドルで買収することで合意したと報じられました。USDCと従来型銀行網をつなぐ「ラストマイル」インフラの獲得が狙いとされていますが、公式発表での確認は取れていません（CoinDesk、Cointelegraph、2026年9月8日）。\n・原油価格が3カ月ぶり高値を付ける中、米国では戦略石油備蓄が1982年以来の低水準まで減少したとReutersが報じました。原油高・インフレ懸念を通じた市場全体のリスク選好への影響が意識される可能性がありますが、暗号通貨価格への直接因果は未確認です（Reuters、2026年9月8日）。\n・英中銀（BoE）のベイリー総裁が利上げが不可避との見方をけん制したとReutersが報じました。金利観測を通じてドルや世界的な流動性環境に波及する可能性がありますが、暗号通貨価格への直接因果は未確認です（Reuters、2026年9月8日）。",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.681兆（¥413.9兆）｜24時間取引高 $887.7億（¥13.71兆）\n・ #BTC：$78,483（約1,211.9万円）｜24時間比 -0.68%\n　（24時間レンジ $77,589〜$79,477）\n・ #ETH：$2,483（約38.3万円）｜24時間比 +0.02%\n　（24時間レンジ $2,440〜$2,507）\n・ #BNB：$753（約11.6万円）｜24時間比 +1.93%\n・市場心理：Fear & Greed 72（Greed、CoinMarketCap API）\n・ドミナンス：BTC 58.79%｜ETH 11.30%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年9月9日07:37 JST、USD/JPY ¥154.41",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $8.89M vs Base上ETH/USDC $70.78M｜参考：Base上DEX全体 $9.045億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $56.52億（¥8,728億）｜24時間比 -0.78%｜USDCドミナンス 86.2%\n・ ETH/USDC（Base）参考APR：0.05% 25.72%（TVL $8.78M／24h出来高 $12.37M）｜0.3% 54.39%（TVL $117.60M／24h出来高 $58.41M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年9月9日07:37 JST",
+    "part2_flow": "・CircleによるTazapay買収報道 → USDCの決済網拡大への思惑が意識された可能性 → ただし公式発表は未確認のため、24時間比ではUSDCドミナンスやDEX出来高に明確な反応は確認できませんでした。\n・原油価格の上昇と米戦略石油備蓄の低水準化 → インフレ懸念を通じた市場全体のリスク選好低下が意識された可能性 → 同時期にBTCは24時間比で下落する場面がありましたが、直接の因果関係は断定できません。\n・英中銀ベイリー総裁による利上げ観測のけん制 → ドルや世界的な流動性環境への波及が意識された可能性 → ETH・BNBは24時間比でおおむね横ばいから小幅上昇にとどまり、明確な方向性は確認できませんでした。",
+    "lp_comment": "参考APRは両プールとも前日から上昇しました。\nBase 0.05%プールの参考APRは20.54%→25.72%へ上昇しました（24時間出来高 +25.59%、TVL +0.32%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは52.12%→54.39%へ上昇しました（24時間出来高 +4.73%、TVL +0.36%）。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+0.02%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "本日の暗号通貨市場は、Circleの決済網拡大に関する思惑や海外の金利・インフレを巡る報道が意識される場面がありましたが、いずれも暗号通貨価格への直接的な因果は確認されておらず、BTC・ETH・BNBは方向感に乏しい値動きとなりました。市場心理はGreed（強気）圏を維持していますが、原油高や中銀総裁発言など外部環境の不確実性は残ります。なお、Bitmineの追加ETH購入報道については、ETHの需給動向を巡る継続監視材料として引き続き注目されます。今後は公式発表の有無や金利観測の変化を確認しつつ、値動きの方向性を見極める必要があります。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "Circle、Tazapay買収でUSDC決済網を拡大",
+  "audit_ledger": [
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/statistics/dl/depo/kashi/kasi2608.pdf",
+      "title": "貸出・預金動向（8月）",
+      "published_at": "Tue, 08 Sep 2026 08:50:00 +0900",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 国内貸出・預金統計で、暗号通貨や市場への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/fact-sheets/2026/09/fact-sheet-president-donald-j-trump-accelerates-veterans-access-to-benefits-and-employment-opportunities/",
+      "title": "Fact Sheet: President Donald J. Trump Accelerates Veterans’ Access to Benefits and Employment Opportunities",
+      "published_at": "Tue, 08 Sep 2026 19:02:42 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 退役軍人向け給付関連の大統領令で、市場への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/09/accelerating-access-to-veterans-benefits-and-employment-opportunities/",
+      "title": "Accelerating Access To Veterans’ Benefits And Employment Opportunities",
+      "published_at": "Tue, 08 Sep 2026 19:00:01 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 退役軍人給付・雇用に関する大統領令で、市場への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/09/adjusting-certain-delegations-under-the-defense-production-act-e2de/",
+      "title": "Adjusting Certain Delegations Under the Defense Production Act",
+      "published_at": "Tue, 08 Sep 2026 18:52:09 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 国防生産法の権限委任調整で、市場への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/releases/2026/09/president-trump-honors-9-11-heroes-and-renews-americas-vow-to-never-forget/",
+      "title": "President Trump Honors 9/11 Heroes and Renews America’s Vow to Never Forget",
+      "published_at": "Tue, 08 Sep 2026 18:11:32 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 9/11追悼行事の記念発表で、市場への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス（大統領令等）",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/09/accelerating-access-to-veterans-benefits-and-employment-opportunities/",
+      "title": "Accelerating Access To Veterans’ Benefits And Employment Opportunities",
+      "published_at": "Tue, 08 Sep 2026 19:00:01 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: candidate_id 3と同一内容の重複で、市場への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス（大統領令等）",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/09/adjusting-certain-delegations-under-the-defense-production-act-e2de/",
+      "title": "Adjusting Certain Delegations Under the Defense Production Act",
+      "published_at": "Tue, 08 Sep 2026 18:52:09 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: candidate_id 4と同一内容の重複で、市場への波及経路を説明できない"
+    },
+    {
+      "source": "ADP",
+      "url": "https://mediacenter.adp.com/2026-09-08-ADP-Partners-with-AWS-to-Accelerate-AI-Powered-Innovation-in-Human-Capital-Management",
+      "title": "ADP Partners with AWS to Accelerate AI-Powered Innovation in Human Capital Management",
+      "published_at": "Tue, 08 Sep 2026 09:28:00 -0400",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ADPとAWSの人事管理AI提携で、市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxOWlRjczJ5ZkY3dlllZktUcXZKWWJfalZkNzQySjhndkVOWFRUNEFjck9kU1ZYMGFKdk5mTEdpejlRc1JXdjRfZjVqRTBFTG5QN0ZiU0lqcW1DUF9fc3loUnVsYkIyZGxYQkN5cmFHTVRZbTdWYnNQOUt3UjUzV3FwTDNFc1ZkQlhrUHdRaExtR0x6YTQ?oc=5",
+      "title": "SEC schedules vote on ousting LSU from conference - Reuters",
+      "published_at": "Tue, 08 Sep 2026 20:50:49 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 大学スポーツ連盟の議決に関する報道で、市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxPaGxGLU42eXBVSi1MbGdyWmhMX3hiSUhzZFpCcl9jYmhzMnV2UmZib1NGMy01VDJZM3haUEZaTldGNGE2YWRIZGpIN2o2bVBnUzRndUJYQV9FT3JrOU85LVlybTY4X0tvTzdWSjN2QzJPNndRZlpGS2ZuVXlIcEE5MFU2ZkdzUG1rX1FsM05SVkZ6dkpIUG8yOHp0ZnVON0xaRnN0Sw?oc=5",
+      "title": "Chevron to double oil rigs in Venezuela as part of growth plan - Reuters",
+      "published_at": "Tue, 08 Sep 2026 18:41:43 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 原油生産拡大の話だが個別企業の増産計画で内容が薄く参考材料としても不十分"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxQMTJHeXY1WWRiVXhNYkFVY01lNmZFR2FWZy1LbVZkczdzZzB4Z2NKRVlabHZmR2tQT3l1b2YyWXpLYWZfX0h3Ynl6Sm4tNGVtWUY2V0JHSGJJVHVEbVdyc1NRSl9IS3FHWGpaTmZBNU5kZTFYM2ZUczk0MWpjRUhtckZ6UVR6UURpVEk5QzNFc3pGYVNxOGZjcE9zVEMyQkw4YWh4VXhyVDV3NWMwYloyRTFGT05GRkxrUDlIV00yaw?oc=5",
+      "title": "Consumers more worried about personal finances and jobs, New York Fed report shows - Reuters",
+      "published_at": "Tue, 08 Sep 2026 17:16:58 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 消費者マインド低下は波及経路を説明できるが内容が簡潔すぎ主要材料に採用しにくい"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxPTld0TDZ4T2dYWVFpajYzdEFURWNnM2l0eXZDWDVXRUs3RVVjUVZjWlpFaDZ6bTVNYUUwUEhvaDVfS3BUcVlhb09icnV4b3g5cVVUSEY4eURkUWRZU1dRTVh3VkktUmh4eDRlY1V4dDNHelZpblJJd3d0WlpqWWlkOWZ5MnMyeTJZU3E2SW9kaDRJS1gxcmJsaTVOekZzbXJMcU1wNG5ZSlpXTjl6Wk1YQ0VyZ3Y2dzJ5VE9aT3FoRzBMZw?oc=5",
+      "title": "European shares muted as oil rally fuels caution; Novartis tumbles - Reuters",
+      "published_at": "Tue, 08 Sep 2026 16:46:16 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 欧州株の様子見report、原油高との関連はあるが内容が薄く参考材料としても不十分"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxQZEprZzBjSzNENHRjMDBEOTdLUkFBQk1KQ3J5VnVYSWxjWHRWSTV5X1ZEa1JWS3pvc3NLM1dSZms0YllJaTB0eVMxUWZuNFcwMTFReUJQTDdHSDdaNVE1WkNPTlhvOEx5OXZ4OG5XT05FNmFwUjJkT1VXZjVBYk8xNHpKQmV5bXZuUWpETi1zNTVMQklJQWotTkpWWmtHRWNhaXVtTC0xdThQaHU0MTM1b05QUHlGcm1RTFFJTHRCYWVDeWdnb0E?oc=5",
+      "title": "Oil stocks in US Strategic Petroleum Reserve fall by 1.2 million barrels to lowest level since 1982 - Reuters",
+      "published_at": "Tue, 08 Sep 2026 16:17:44 GMT",
+      "verified_by": "Reutersによる報道",
+      "decision": "採用",
+      "reason": "B: 米戦略石油備蓄の減少は原油需給を通じインフレ・リスク選好に波及しうる材料として掲載"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxQSk5ZbUFqcWNQcktCOExEaGVxMVVya3JQc0dBdE50NE1NN2hHQzEtcTRGaThDMERRZk9CWlBLRW9EM0QtUWxoeFdsY3BXdkExMDBvZ2E3VDFlWHJXc1FoM1N2Q2x2N0Itbk5yNlA0V2dubWFlUXotY0VpVzlEem5wT2owa3hyd012RVJYNEwwN08xUDhfajlodUJ1ZkJwTFVfRDRYZGd3?oc=5",
+      "title": "BoE's Bailey pushes back against idea of rate hike being inevitable - Reuters",
+      "published_at": "Tue, 08 Sep 2026 15:59:56 GMT",
+      "verified_by": "Reutersによる報道",
+      "decision": "採用",
+      "reason": "B: BoE総裁の利上げ観測発言は金利・流動性を通じた波及経路を説明できる材料として掲載"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxQTV9HYUdSSlNYVFMwd3dUdUpFamtYakxkTEhMM09TS282djJLOTlTQTdaMGZzb19UdnlQeXc0RmQ3MzhDNFBNY0dBSEZwaHNUckprd1dabm1kdGhjNDlQVTNSYnFuREw5YzZpcVlGeTdjTG91S2cyQXdYS04tOElVNlV5OXZaTU1TM1FzN3FUREtvaUJVUHlJRTJVSkU5RE5RRVFiLUpVcFRITmVCcVo5OWNzUTBLZ0NTd2RnR3Fjd1pTRUhXbzd2Qk9RWQ?oc=5",
+      "title": "US seeks more access to Venezuela's mineral wealth after tapping its oil, sources say - Reuters",
+      "published_at": "Tue, 08 Sep 2026 15:46:14 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ベネズエラ鉱物資源アクセスの話で波及経路は間接的、内容も限定的"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxPT3VpUHFNT2xIeWVHSTFCVEVrbV9ROWp1b1UxMUVWOTFPNV9zdEJ0c3dxR2VaYTlldEZhMXhEMnhKZmZuWjlMTFhKSUNkOWdmR3UzdkVUUnRscHRPUzIwY0UwYmNHY2k0VkJNR2NfdzR2MTNwTVV0bmM0ejd2Rkd1ZUl0S0VCMktXamRBOG10NU1nTWRyeWxJNkhqdkx2UmFqYThaLWZiWFcyQnpLU3pqSnV3?oc=5",
+      "title": "UK borrows at highest interest rate since 1998, showing pressure on public finances - Reuters",
+      "published_at": "Tue, 08 Sep 2026 15:39:35 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 英国債利回り上昇は財政懸念材料だが、他候補と重複せず単独掲載は見送り"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxQYl9BaXFxZ2RZcTJiNEN5bi1TSy1sOWtPS1NwQ1ZCUHo2UEhGdE9mMVp5UjY1SnNMbDcybXlZLUdqaXRGRGZuSFVCZUN4SEZFYXVxN1BnemVIYlhDal83bHpMaGN4ZUZJSnBSeFNmSU1rQTVzR3g0WFZxNXU5cnBjeGxNWXBGdXIyUXpFbEhKeDFnWmtPTk01RnlnQUVCLUFsYkJsQmx2WWE3cjlSQ2JJUWlMS3BzbkJCcURKQTR3?oc=5",
+      "title": "Robinhood expands prediction-market push with Crypto.com, OG.com tie-up - Reuters",
+      "published_at": "Tue, 08 Sep 2026 15:32:28 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: Robinhoodの予測市場提携報道だが、tier3裏取り記事と重複するため本文はtier3側で扱う"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMifkFVX3lxTE5CUFk1czBwVHg4X0ZrMHhVdlk0NVlKcVNYWm1pTkc0cWdFMWlaS3RrWDVHaE1iaE5RVWJYS25Fc0RkZHFrNnJXaG1kM1hGYmhLWDkzdTFuSERyTnpDQXk5SzVwemxVNnB3bEI0UWtzQkNTU1R6WUVZTVVOUHRwdw?oc=5",
+      "title": "PODCAST: Yen at Work - Reuters",
+      "published_at": "Tue, 08 Sep 2026 14:32:27 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 円相場に関するポッドキャスト紹介で、内容の実質的な事実報道がない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxOdmxiUlp3YlVMa2hJdkxGNTF2RWFESHFWVWJNSUwydFBnMmh5SlRMdU1ZeUV1NjB4R3gyaXBmYU1VQUtEUDBLQzZlQlZYTS1Sa0JPRlZqbThSbHpscjEzXzhKWjRfNUwxYVIxanBGb3c5dzMwUEdFWkVFQnZjOGVBTk5zZnlYVlpwYnVRc04tWWMtekF4Y0tiZ1NuOEQ0dnk3YlpDQ3JVZzBMYWha?oc=5",
+      "title": "South Korea sends team to assess situation in Strait of Hormuz - Reuters",
+      "published_at": "Tue, 08 Sep 2026 13:56:06 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ホルムズ海峡情勢の視察派遣で波及経路はあるが内容が簡潔すぎる"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxONnp2ak1XM3dDOFRYRW9EMkVqMFFFN2hjbm9ITDM0d3Vnb0dPSFplcGZKcWU1aWRaR3I2U01Md1NvcU9ic09ydmJEN0lwUTBuem50V2dMeEJFSWVhTWIyUmxOb1dGZGFwMkpZWDJ0S0plSDhGVkhEWDNiMy03UC1oeHBHc2hkUmVsOXYtSWp5YlY1MkpYeV9odXQ1X2JFVFRkQk9HY1pHMVZ3RlZxNHhObjNLcC0zOEFxQk8xVERDcndlVG4zRWc?oc=5",
+      "title": "Hormuz disruptions hitting small businesses hardest, UN trade agency warns - Reuters",
+      "published_at": "Tue, 08 Sep 2026 13:13:06 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ホルムズ海峡混乱の影響報道だが中小企業への影響が主眼で参考材料としても薄い"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxOOTFEU28tMFYxNmlMamZKRlFIX0U0dU1rWVRacEp2cDhnRC1UQWFuTkFnQ1EzZlBicG9NMkwtVFlwbUs3QzFjZk02dkxJLWc1R3AzeENRRDVHa2hOV0lFOWZuazZVZ2RCaDUtOVNuaHUtM0RiMFp5OUdYYjdROG04X2o5OU91b05mU3d4bVRVQTZRRHVpdUpPQVc5ZkxjY19LVmEtdkZ4dEVaU1lBVWhMaHZBMUZ0ZWowaTMwdA?oc=5",
+      "title": "German gas supply diversification ensures imports, but at a price, Equinor says - Reuters",
+      "published_at": "Tue, 08 Sep 2026 13:05:07 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 独ガス供給多様化の話で波及経路は間接的、内容も限定的"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxPdGIzV0F3YktKRDRhMnNHdk8xUjg3MEpaOEdfX1BYUnFNNkxyOXo0eWdsaXJDSnRlTGNDa19nQkdjUWl6VGpkQy1Ra3FaQ21hU2FjOGQ2amp2TkNQN0xXdUZzYlpNTWRneXNfS1lDYnotcVZtaVBmSjJsSXFRZTRybUdENlduMFhSZjRYVWRfYmk0NkhvWUtPNF9KQVFocFAxODVmR1NCdk1IR0lIWVVET1UxRXV2UEFH?oc=5",
+      "title": "Dangote expects fuel shortages beyond Iran war as it spurs expansion - Reuters",
+      "published_at": "Tue, 08 Sep 2026 13:03:43 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 燃料不足見通しの話で波及経路はあるが内容が簡潔すぎる"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxNcHF6c29XSjdLTXBjblUwU0lSWndwcHFqWldEOWhwbGRXd3RjbTJ3NkpmUHg3dGdXcF9Mc1ZKZndwQkEwYkM1R3dHQXlVNGp6TFVyT0tGQXVWbm16NW5zYnFDYjFKTnBMdzNQdTNMUUlXRG1QdHFkMlFiX3pSeFhkZk9majRES2hraVFWLUh6eG9uR3lDN0VGYlgxTFk1ZF8xeENCa0VLQlF4YkhyekpDUEVLNFd5TkU?oc=5",
+      "title": "Russia's Arctic LNG 2 seeks $1 billion in damages from South Korea's Hanwha - Reuters",
+      "published_at": "Tue, 08 Sep 2026 12:31:43 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: LNGプロジェクトの損害賠償請求で、市場全体への波及経路を説明できない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/stablecoinx-franklin-templeton-veteran-to-oversee-roughly-480m-ena-treasury?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Franklin Templeton digital asset veteran takes helm at StablecoinX",
+      "published_at": "Tue, 08 Sep 2026 20:59:20 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: StablecoinX新CEO就任の単独tier3報道で、他媒体との重複確認ができない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/what-happened-in-crypto-today?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Here’s what happened in crypto today",
+      "published_at": "Tue, 08 Sep 2026 20:13:27 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 「今日の暗号通貨まとめ」の総集編記事で個別事実の根拠にならない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/bybit-expands-tradfi-push-with-100x-fx-perpetuals?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bybit launches 24/7 perpetuals for major currency pairs",
+      "published_at": "Tue, 08 Sep 2026 18:51:08 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: Bybitの為替永久先物開始は単独tier3報道で、他媒体との重複確認ができない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/robinhood-takes-stakes-in-cryptocom-ogcom-in-prediction-markets-deal?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Robinhood takes stakes in Crypto.com, OG.com in prediction markets deal",
+      "published_at": "Tue, 08 Sep 2026 17:03:47 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: Robinhoodの予測市場提携はtier2候補と内容が重なるが単独では独立2ソースの条件を満たさない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/visa-stablecoin-blockchain-lending-payment-settlement?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Visa brings onchain credit to its growing stablecoin card business",
+      "published_at": "Tue, 08 Sep 2026 16:11:53 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: Visaのオンチェーン与信の件はcandidate_id 33と同一事実の可能性があるが独自の重要新事実として単独主根拠にはしない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/markets/bitcoin-faces-key-support-test-at-783k-as-us-crude-oil-hits-three-month-high?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bitcoin faces key support test at $78.3K as US crude oil hits three-month high",
+      "published_at": "Tue, 08 Sep 2026 15:41:11 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: BTCのサポートライン分析記事で、分析・予想であり事実報道ではないため独立2ソース規定の対象外"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/09/08/copper-ceo-amar-kuchinad-departs-as-search-for-a-buyer-enters-a-fourth-month",
+      "title": "Copper CEO Amar Kuchinad departs as search for a buyer enters a fourth month",
+      "published_at": "Tue, 08 Sep 2026 15:23:46 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: カストディ企業CEO退任の単独tier3報道で、他媒体との重複確認ができない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/09/08/circle-agrees-to-buy-cross-border-payments-firm-tazapay-for-usd400-million",
+      "title": "Circle agrees to buy cross-border payments firm Tazapay for $400 million",
+      "published_at": "Tue, 08 Sep 2026 14:40:46 +0000",
+      "verified_by": "CoinDeskとCointelegraphの独立2媒体による同一事実の報道",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: CircleによるTazapay買収をCoinDesk・Cointelegraphの独立した2媒体が同一事実として報じており、独立2ソース規定に該当するため掲載"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/09/08/strive-s-sata-nears-usd1-billion-market-cap-as-strategy-s-strc-continues-to-underperform",
+      "title": "Strive’s SATA nears $1 billion market cap as Strategy’s STRC continues to underperform",
+      "published_at": "Tue, 08 Sep 2026 14:33:32 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: StriveのSATA時価総額に関する単独tier3報道で、他媒体との重複確認ができない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/09/08/visa-opens-settlement-data-to-help-blockchain-lenders-finance-crypto-cards-as-volume-surges",
+      "title": "Visa combines VisaNet data with onchain lending to power stablecoin card working capital",
+      "published_at": "Tue, 08 Sep 2026 14:29:14 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: Visaのオンチェーン与信報道はcandidate_id 28と重複するが、本文では補強的言及にとどめ単独主根拠にしない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/bitmine-buys-28k-eth-completes-97-treasury-goal?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bitmine buys 28k ETH, completes 97% of treasury accumulation goal",
+      "published_at": "Tue, 08 Sep 2026 13:51:04 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: BitmineのETH購入報道はcandidate_id 38と類似するが金額表現が異なり同一事実の厳密な一致とは言えないため慎重を期し不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/magazine/is-bitcoin-too-volatile-to-risk-your-retirement-on?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Is Bitcoin too volatile to risk your retirement on?",
+      "published_at": "Tue, 08 Sep 2026 13:30:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: BTCの退職金運用に関する意見コラムで、事実報道ではない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/tech/2026/09/08/ethereum-makes-quantum-resistance-a-top-priority-with-a-2029-deadline",
+      "title": "Ethereum makes quantum resistance a top priority with a 2029 deadline",
+      "published_at": "Tue, 08 Sep 2026 13:18:24 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: イーサリアム財団の量子耐性方針は単独tier3報道で、他媒体との重複確認ができない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/09/03/bitcoin-rally-has-more-room-as-volatility-shorts-unwind-two-prime-ceo-says",
+      "title": "Bitcoin rally has more room as volatility shorts unwind, Two Prime CEO says",
+      "published_at": "Tue, 08 Sep 2026 13:18:21 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個人の相場見通しコメントで、事実報道ではなく分析・予想にあたる"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/09/08/bitmine-purchased-another-usd69-million-of-eth-with-tom-demark-expecting-price-uptrend-to-soon-resume",
+      "title": "Bitmine purchased another $69 million of ETH, with Tom DeMark expecting price uptrend to soon resume",
+      "published_at": "Tue, 08 Sep 2026 13:06:34 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: BitmineのETH追加購入報道はcandidate_id 34と類似するが金額表現の相違があり厳密な同一事実確認に至らず不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/circle-tazapay-usdc-cross-border-payments?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Circle to acquire Tazapay to expand USDC cross-border payments",
+      "published_at": "Tue, 08 Sep 2026 11:33:14 +0000",
+      "verified_by": "CoinDeskとCointelegraphの独立2媒体による同一事実の報道",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: CircleによるTazapay買収をCointelegraph・CoinDeskの独立した2媒体が同一事実として報じており、独立2ソース規定に該当するため掲載"
+    }
+  ],
+  "reusable_for_summary": [
+    "Bitmineが追加のETH購入を実施しツイート基準達成に近づいているとの報道があり、ETH需給の継続的な観察材料となります（CoinDesk、Cointelegraph）。",
+    "Ethereum財団が2029年を期限とする量子耐性対応の優先方針を示したと報じられており、長期的な技術動向として継続監視の対象です（CoinDesk）。"
+  ],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 0
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 0
+    },
+    "FRB（speeches）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "FRB（testimony）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 1
+    },
+    "米財務省": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "USTR": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "ホワイトハウス": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 4
+    },
+    "ホワイトハウス（大統領令等）": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 2
+    },
+    "ADP": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 1
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 21
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 19
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 42
+    }
+  },
+  "news_candidate_count": 39,
+  "part1_md": "【対象日】2026年9月8日（火）\n\n【ヘッドライン】\n決済系企業CircleがクロスボーダーPaymentsのTazapayを買収すると報じられ、USDCの決済網拡大への思惑が意識されました。BTC・ETH・BNBの24時間の値動きは方向感に乏しく、市場は次の材料待ちの様相です。 #BTC #ETH #BNB #USDC\n\n【主要なポイント】\n・Circleがクロスボーダー決済企業Tazapayを約4億ドルで買収することで合意したと報じられました。USDCと従来型銀行網をつなぐ「ラストマイル」インフラの獲得が狙いとされていますが、公式発表での確認は取れていません（CoinDesk、Cointelegraph、2026年9月8日）。\n・原油価格が3カ月ぶり高値を付ける中、米国では戦略石油備蓄が1982年以来の低水準まで減少したとReutersが報じました。原油高・インフレ懸念を通じた市場全体のリスク選好への影響が意識される可能性がありますが、暗号通貨価格への直接因果は未確認です（Reuters、2026年9月8日）。\n・英中銀（BoE）のベイリー総裁が利上げが不可避との見方をけん制したとReutersが報じました。金利観測を通じてドルや世界的な流動性環境に波及する可能性がありますが、暗号通貨価格への直接因果は未確認です（Reuters、2026年9月8日）。\n\n【主要指標】\n・市場全体：時価総額 $2.681兆（¥413.9兆）｜24時間取引高 $887.7億（¥13.71兆）\n・ #BTC：$78,483（約1,211.9万円）｜24時間比 -0.68%\n　（24時間レンジ $77,589〜$79,477）\n・ #ETH：$2,483（約38.3万円）｜24時間比 +0.02%\n　（24時間レンジ $2,440〜$2,507）\n・ #BNB：$753（約11.6万円）｜24時間比 +1.93%\n・市場心理：Fear & Greed 72（Greed、CoinMarketCap API）\n・ドミナンス：BTC 58.79%｜ETH 11.30%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年9月9日07:37 JST、USD/JPY ¥154.41\n",
+  "part2_md": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $8.89M vs Base上ETH/USDC $70.78M｜参考：Base上DEX全体 $9.045億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $56.52億（¥8,728億）｜24時間比 -0.78%｜USDCドミナンス 86.2%\n・ ETH/USDC（Base）参考APR：0.05% 25.72%（TVL $8.78M／24h出来高 $12.37M）｜0.3% 54.39%（TVL $117.60M／24h出来高 $58.41M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年9月9日07:37 JST\n\n【市場のフロー】\n・CircleによるTazapay買収報道 → USDCの決済網拡大への思惑が意識された可能性 → ただし公式発表は未確認のため、24時間比ではUSDCドミナンスやDEX出来高に明確な反応は確認できませんでした。\n・原油価格の上昇と米戦略石油備蓄の低水準化 → インフレ懸念を通じた市場全体のリスク選好低下が意識された可能性 → 同時期にBTCは24時間比で下落する場面がありましたが、直接の因果関係は断定できません。\n・英中銀ベイリー総裁による利上げ観測のけん制 → ドルや世界的な流動性環境への波及が意識された可能性 → ETH・BNBは24時間比でおおむね横ばいから小幅上昇にとどまり、明確な方向性は確認できませんでした。\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から上昇しました。\nBase 0.05%プールの参考APRは20.54%→25.72%へ上昇しました（24時間出来高 +25.59%、TVL +0.32%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは52.12%→54.39%へ上昇しました（24時間出来高 +4.73%、TVL +0.36%）。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+0.02%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\n本日の暗号通貨市場は、Circleの決済網拡大に関する思惑や海外の金利・インフレを巡る報道が意識される場面がありましたが、いずれも暗号通貨価格への直接的な因果は確認されておらず、BTC・ETH・BNBは方向感に乏しい値動きとなりました。市場心理はGreed（強気）圏を維持していますが、原油高や中銀総裁発言など外部環境の不確実性は残ります。なお、Bitmineの追加ETH購入報道については、ETHの需給動向を巡る継続監視材料として引き続き注目されます。今後は公式発表の有無や金利観測の変化を確認しつつ、値動きの方向性を見極める必要があります。\n"
+}
