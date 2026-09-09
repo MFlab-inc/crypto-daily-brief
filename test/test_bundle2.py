@@ -1841,6 +1841,16 @@ verify_post.check_c23(
 check("check_c23: Fear&Greed指数の分類ラベル（Fear&Greed・Extreme）は誤検知しない（8/26実データで発見・回帰確認）",
       _au_c23g.checks[0]["result"] == "PASS", str(_au_c23g.checks[0]))
 
+# 9/8実データの実例（「Fear & Greed Index」という英語表記の「Index」が
+# 固有名詞候補として誤検知され、C23がFAILしフェイルクローズにより
+# 本文が一度もコミットされなかった事象）。
+_au_c23h = verify_post.Audit()
+verify_post.check_c23(
+    _au_c23h, "市場心理を示す指数（Fear & Greed Index）は「Greed（強欲）」圏を維持しており。",
+    "・材料A", [])
+check("check_c23: 「Fear & Greed Index」の「Index」は誤検知しない（9/8実データで発見・回帰確認）",
+      _au_c23h.checks[0]["result"] == "PASS", str(_au_c23h.checks[0]))
+
 # 8/26実データの実例（米PCEインフレ指標が本文未確認のまま総括に持ち出された事象）。
 # 「PCE」は片仮名・漢字に前後を挟まれた埋め込み形だが、findallは文字クラスの
 # 連続部分だけを抽出するため単語境界に依存せず正しく抽出できる。

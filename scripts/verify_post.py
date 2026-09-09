@@ -575,7 +575,9 @@ _PROPER_NOUN_ALLOWLIST = {
     # 固定語彙・CoinMarketCap APIの定型区分名であり、本文材料ではない）。
     # 8/26実データの実チェックで「Fear&Greed」「Extreme」が誤検知したため追加
     # （「Fear&Greed指数がExtreme greedを示しており」のような記述）。
-    "FEAR", "GREED", "EXTREME", "NEUTRAL", "FEAR&GREED",
+    # 9/8実データで「Index」単独が誤検知したため追加（「Fear & Greed Index」
+    # という英語表記の一部であり、本文材料の新規持ち出しではない）。
+    "FEAR", "GREED", "EXTREME", "NEUTRAL", "FEAR&GREED", "INDEX",
 } | _ISO4217_CURRENCY_CODES
 
 
