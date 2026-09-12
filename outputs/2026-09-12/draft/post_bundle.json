@@ -1,0 +1,354 @@
+{
+  "target_date_jst": "2026-09-12",
+  "level": "L0",
+  "sections": {
+    "part0_target_date": "2026年9月12日（土）",
+    "part1_headline": "BTC・ETH・BNBは24時間比でいずれも小幅な上昇となりました。英国の政党Reform UKが暗号資産関連の富豪2名から多額の寄付を受けたと複数媒体が報じており、暗号資産業界と政治の関わりを示す動きとして関心を集めています。 #BTC #ETH #BNB",
+    "part1_points": "・英国のReform UK（ナイジェル・ファラージ党首）が、暗号資産関連の富豪2名から合計で高額の寄付を受けたと報じられました。BitMEX共同創業者のベン・デロ氏と、クリストファー・ハーボーン氏がそれぞれ多額を寄付したとされていますが、公式発表での確認は取れていません（CoinDesk、Cointelegraph、2026年9月12日）。\n・市場全体は前日から大きな材料が乏しく、BTC・ETH・BNBともに小幅な値動きにとどまりました。地政学関連の報道（ウクライナ、ホルムズ海峡情勢等）は複数見られましたが、暗号通貨価格への直接の波及経路を示す内容は確認できませんでした。",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.639兆（¥405.8兆）｜24時間取引高 $439.9億（¥6.76兆）\n・ #BTC：$77,185（約1,186.8万円）｜24時間比 +0.24%\n　（24時間レンジ $76,949〜$77,495）\n・ #ETH：$2,521（約38.8万円）｜24時間比 +0.26%\n　（24時間レンジ $2,506〜$2,546）\n・ #BNB：$726（約11.2万円）｜24時間比 +0.24%\n・市場心理：Fear & Greed 68（Greed、CoinMarketCap API）\n・ドミナンス：BTC 58.73%｜ETH 11.65%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年9月13日07:37 JST、USD/JPY ¥153.76",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $4.60M vs Base上ETH/USDC $19.32M｜参考：Base上DEX全体 $12.953億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $55.85億（¥8,587億）｜24時間比 +1.12%｜USDCドミナンス 86.0%\n・ ETH/USDC（Base）参考APR：0.05% 10.99%（TVL $9.10M／24h出来高 $5.48M）｜0.3% 12.58%（TVL $120.45M／24h出来高 $13.84M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年9月13日07:37 JST",
+    "part2_flow": "・英国Reform UKが暗号資産関連の富豪2名から多額の寄付を受けたと報じられた件は、暗号資産業界と政治の結びつきを示す話題として関心を集めましたが、公式発表での確認は取れておらず、この報道自体が個別銘柄の価格変動に直接影響したとは断定できません。BTC・ETH・BNBは24時間比でいずれも小幅な上昇にとどまり、値幅も限定的でした。 #BTC #ETH #BNB\n・地政学関連の報道（ウクライナ、ホルムズ海峡情勢等）も複数見られましたが、暗号通貨価格への直接の波及経路は確認できず、市場全体は前日から大きな材料に乏しい中で推移したとみられます。BTC・ETHの値動きは限定的な範囲にとどまりました。 #BTC #ETH",
+    "lp_comment": "参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは73.86%→10.99%へ低下しました（24時間出来高 -85.03%、TVL +0.64%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは134.18%→12.58%へ低下しました（24時間出来高 -90.50%、TVL +1.37%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+0.26%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "本日は英国の政党への暗号資産関連の富豪からの寄付報道が話題となったものの、公式発表での確認は取れておらず、市場心理や価格への具体的な影響は見極めが必要です。Fear & Greed指数はGreed（強欲）圏を示しており、過熱感の有無について今後の値動きを注視する必要があります。BTC・ETH・BNBは24時間比でいずれも小幅な上昇にとどまり、方向感に乏しい展開でした。ビットコイン・イーサリアムETFの資金フローについては、直近営業日までの確定値として流入・流出の方向は確認されていますが、本日（土曜）は具体的な金額の記載を控えます。なお、RLUSDの企業財務向け需要拡大に関する主張も継続監視材料として挙がっており、今後の推移を確認していきます。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "BTC・ETH・BNBはいずれも小幅高、市場は落ち着いた展開",
+  "audit_ledger": [
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxNODF2R3NqX3FXdjdXZXN3LVczYXJmTFJPV053RDdRVEI5OHE0amI0WTB5R1BGSVJyY3MwNC1TNnVIaEpYcG9xeUU1X3RsbjI4TU9PTGtrUEx2UG5rWXRVWkR1N3pOdFVObEV6NndQaXBFZzBRRHVMckx2TnJodjdWLUw3OWxqcUoxdXlSa3ktZFBpNUNibkhHbV8tc2ctNVJjWmJQZ1VQdlU2U0RD?oc=5",
+      "title": "Kyiv preparing for talks to resume in October, senior Ukrainian official says - Reuters",
+      "published_at": "Sat, 12 Sep 2026 19:45:43 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ウクライナ和平交渉再開の見通しに関する報道で、暗号通貨や金利・為替等への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxOSDN2Q1FMZWstUm9pbTEyaFJBcmxMY2FiV0g2RFF2bGNISTEwVGE4RV9nZW1LcHBKU0luVjR2a0FUVGh2OElMdl92d2FjREhPbW1oMUlSRm5Mc19kR2xzclVHRnJaM21lR2N2NkNhSlpwN1ZZS1VPRjVmYThyb1dNV1JxQlIySG52dzJkcEpaTE12M1k?oc=5",
+      "title": "Larry Ellison cancels plan to sell Oracle stock - Reuters",
+      "published_at": "Sat, 12 Sep 2026 18:38:45 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別企業（Oracle）の株式売却計画撤回であり、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxNYWtMYlBMQkZoRHN1bzl5cmZvZE1fd1ZIMzZiUFlVYU02SFFlSC05dlNCNDlJc29kOEpZU2gyT2lsWkdxb2R2eXdhWFNqRkg4MU1BZWpCYWlOSTMyTmtsRUdPWDJ6TEpuYUI0RmFRZzlwMGp4V0FYbFZRdGU2QUtaQ0JxcE5rZkVjNllYanEyZEsxZ2hsWFVHTHgyOEVOdWp0U2xuYlc5ZXhSdm80bExTZnByaHBER1JHNnhYS2dvMUtHSDVkYjNiUTVoMi05bUpqU21N?oc=5",
+      "title": "Canadian boycott of US products pushes grocers to adapt, explore new supply sources - Reuters",
+      "published_at": "Sat, 12 Sep 2026 18:09:11 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: カナダの対米製品不買運動に関する内容で、暗号通貨や金融市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxNRW5TNjNTcmZYblVha2ZGQmNCREdQSERKcEhzWkFFQ2JCLTUtWU14a2gwU1RoTXhIeHJBQkZLUHAxNEFsZ2M2NDZodnNHVi1DbDlPNE5taU9Cb3J3NzNkTmFEMnc3Q2NYazE5NU5LblJyZGhXckNDMmIycHAyUWRCZEQwdVJ2cmgwcU5raGp6MA?oc=5",
+      "title": "Explosion hits another EMCO weapons site in Bulgaria; probe underway - Reuters",
+      "published_at": "Sat, 12 Sep 2026 18:04:56 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ブルガリアの兵器施設爆発事故で、暗号通貨や金融市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxOeDhWQzZ1XzNhR29sQnlqci1HYVJBcW9CM0RuMl9MVHRZbzJVSE1tLXllUGRVYUlVZjhfYS0xbmxfM0lGSEQwUHNsaE1YMDJWNFhHTDZwQ2VYS0JOTzAzd2lVTXFhUWJLTEc4blVyQjVNdUFuOG52M0VUV1oyTGY5aGlCUUJqYy16Z3REaHdJZ295UUxXNmREMElhcEJIUQ?oc=5",
+      "title": "Ukraine braces for harsh winter as Russian attacks hit economy - Reuters",
+      "published_at": "Sat, 12 Sep 2026 17:21:36 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ウクライナ経済への影響に触れるが、内容が薄く市場参考材料としても波及経路の説明が不十分"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxNXzF6RlhPNHFNSGk2RzFzNnNVc3ZaT0RWYldmaWNGaDNQWkE1ZTl2MDQ2VnpKN0xuMENvc05KaG1xdjFVaEpPQWN1cXFjMk1IdVcxRkN0YzI5cEtHdjNUeUVfUUxHTVVfbGxfejVnZVFnVHZTWjNTa0RiQWhud2F0RmZJZExhOEZBa0xmaUxoaHF4YXk4bWN5VllHRFlSQ21wekM0Ri1aR1p5V2pEbkYyLTJzQWxBa0p6Ri1IVktiVnE1MkZieXpR?oc=5",
+      "title": "Iran-Oman understanding does not provide for immediate reopening of Strait of Hormuz, Tasnim reports - Reuters",
+      "published_at": "Sat, 12 Sep 2026 16:45:33 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ホルムズ海峡関連で原油への波及経路はあり得るが、即時再開が無いとの内容で価格材料として薄い"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxOVm5zVzRuT2hnR3JwQXlmVC02VTMwRV9WRUM3QWxiQUlucFE2Y3BXbklBMHQtcGJ1LTBYU3hnei1Pc0owTUNCaGdLNFdlNlVKTGRZU1N6RjMyclhRTDVJR3B1azRuRDB2SzY2T1hOeEF4NVU0dGtKQ0ZkLVVXRE0wU2tvdjBEc3JhN2dicW94WQ?oc=5",
+      "title": "PODCAST: Saudi pipeline, Trump in Ireland and Celine in Paris - Reuters",
+      "published_at": "Sat, 12 Sep 2026 16:33:33 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ポッドキャスト紹介記事で、暗号通貨や金融市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQbnNNQmo4TzJxd3p0NTF6alU4ZmI5NmpMOFprZEhCQzJTdkhsWjdtdzFWNnR0TTNsWGZKRmQ5YUR5cGh5V00wQ2FvNERYWTE2QzVUall1T3EtUHBxZzM4ZmdxQUlMR2dmSTJvWERuTzhrc1JwU2wtY1E4UjR2ejQ5WFpCVDl0bDdSWWhCQ2wyMTdSRDN6ckJ2Sk5YWllBM1RRNVhFUkp3NHU?oc=5",
+      "title": "Hungary PM Magyar says to scrap Orban-era restriction on gay adoption - Reuters",
+      "published_at": "Sat, 12 Sep 2026 16:15:57 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ハンガリーの国内法制に関する報道で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxQNkd2T3JFYkQtX1BpRFMwdUY5V0tXY0xuX1JpY3cwa2hEZmxKRWVSdGtNQkR5dFBIT2JPanlxM0N3WjA5YVVpZExUOFJIWG1MZTNLUXNrTXZaZDRLRnFac2Vkclp3eWhkaTFUNEZrdGk4RzBYTmVVV1kwMHRJWHdXbGs3Z3U5VlZ1eldGOGJXLTU5d3B2NUE?oc=5",
+      "title": "Houthi advance in Yemen puts U.S. in a new bind - Reuters",
+      "published_at": "Sat, 12 Sep 2026 15:22:51 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: イエメン情勢は地政学リスクだが、米国の対応が未定でリスク選好への波及経路が具体的でない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE9QdzdQRzdPV0lNMEhDOWYtWUozMzhMamE3cFE0ejFmVWt4Ym5xbnQwZ0xib0lLSmNUOXhURU9CUDZDMzlkRUFWUy1QUEJMV29IbEozdmNxZDRjMXhDcHgtWTNmOHRnUUE?oc=5",
+      "title": "After Houthi strikes, will the US get involved? - Reuters",
+      "published_at": "Sat, 12 Sep 2026 14:22:07 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: フーシ派攻撃後の米国関与を問う内容で、波及経路は推測の域を出ず参考材料としても薄い"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxOMjRPcnNCbm5pRmk4dUdiRGtNYm5IM21ZRGVhZF9Ncjd0dTJSQjE4YXNuOW1BY2pxUHVZUXlOQi1RdDZWaERfSmhfRWRHOFpXWFFpVlYwaUVrdmJDWWVuNExraVVkOXpMenp2b19yTS1OM0xpSUpRRWxaRVFTSllSZFNMbVVBLXBrT0E?oc=5",
+      "title": "Saudi pipeline, Trump in Ireland and Celine in Paris - Reuters - Reuters",
+      "published_at": "Sat, 12 Sep 2026 14:09:00 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ポッドキャスト紹介の重複記事で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQUTNpQUZmemxkOGh4bEtlV0pYb3NlR2lwYTlUMWs0emtlNTJiZUdFZDBFa0pscEd4dVRKRDd0YVp6VUFrdXVqX2pTRHBBMkVEcDFzZVlIcjRrdDc5cUM0UFBvS0V5cGdGcTBKSlF6d3p2Z1p0dkJGdmU4SDdqcGp4VC1SU3ZSMFpMVzlWeDE0bzlVbFRNVmJVaHhjbjZPdmpNZEctTklTSkFacFF3Z1pOZTZNSU9oWkFw?oc=5",
+      "title": "Farage's Reform UK lands second record £36 million donation in 48 hours - Reuters",
+      "published_at": "Sat, 12 Sep 2026 13:59:46 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 同一事実をtier3が独立2ソースで報じているため、そちらを主根拠として採用した"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxNeXF6bE9PTlU2N3Q2TTc1VEkzbUdNRXlDNVJTVTNhX2ZHRmJuSEx2OHI5MEhGVUs1Mjc4TElRZXdFRlplRlF3WDBoMjhSQXdHN3RYOWpvb25SRE14OUEtMXhTOVhVMWJLeTdpNmNsT0NIR0pPOGxFZnVwMEFMQ2tubTJxUTdpQXdaVkNna2JrLWFCODA2cGxhaktEOUtVQ1lxVXM1YnFnUjhxUFFKbGVYV3h3WVlIVHZlZVBxcnoyVTVUSFR0bTIwd193?oc=5",
+      "title": "No signed Hormuz deal expected yet from Oman meeting on Monday, Iranian official says - Reuters",
+      "published_at": "Sat, 12 Sep 2026 13:44:20 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ホルムズ海峡合意が未署名との内容で、原油への波及経路はあるが材料として薄い"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxNU3JWY0h1VnVaSWl6MW5nYnlmcktHNS1uTVM0WHNnYnVPREdhalFjSnRNWUpsV3pXdGVCWjltLUttTW5qbXZLZjZQaDZwVENpY3JkbjhRSEZCRXZjOHpURjdsVmZLbEZoaHVLYXdXemE1QlpCWG5kc0lDWWVNem84ZjRWOVM4ZEZaeHRfMFFCeDVlWjhSN185U0ZaR2N6cVBxb0tiT0swU0xBRDczU2x2cWR2R0poQjRi?oc=5",
+      "title": "Hidden crypto farm in Mexican mountains puts spotlight on cartel funding - Reuters",
+      "published_at": "Sat, 12 Sep 2026 12:20:22 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 暗号資産関連だが違法資金供給の分析記事で、価格材料としての直接性が乏しく単独では採用しない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE5nanM4VkhIbEpzNlVBY2JfVGk2YmYtaUpHMkplVDRiTWd0ZXNMb3A0a1VMdWg4Q3ZXMWd2RDRQdjFMSGJTUU5PQ29sRjlUNlBpMVV5N3FVcmFOeWFoZUFScE9tWUl2RExVdUs3OWxjd21HQ3BpZ1JYTXBQVHAyYWc?oc=5",
+      "title": "SAQL.DE - | Stock Price & Latest News - Reuters",
+      "published_at": "Sat, 12 Sep 2026 12:15:46 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別株価情報のみで内容が空白であり、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/09/12/nigel-farage-s-reform-uk-lands-usd97-million-donations-from-two-crypto-billionaires-in-24-hours",
+      "title": "Nigel Farage’s Reform UK lands $97 million donations from two crypto billionaires in 24 hours",
+      "published_at": "Sat, 12 Sep 2026 18:51:04 +0000",
+      "verified_by": "CoinDesk記事とCointelegraph記事が同一の寄付事実（Ben Delo氏・Christopher Harborne氏によるReform UKへの巨額寄付）を独立して報じていることを確認した",
+      "decision": "採用（独立2ソース）",
+      "reason": "独立2ソース規定に該当。暗号資産業界と英国政治の関わりを示す事実報道であり、暗号通貨価格への直接因果は未確認である旨を明記した上で参考材料として掲載"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/tech/2026/09/12/anthropic-ceo-calls-for-ai-race-to-slow-down-musk-and-openai-s-altman-agrees",
+      "title": "Anthropic CEO calls for AI race to slow down citing safety. Musk and OpenAI's Altman agrees",
+      "published_at": "Sat, 12 Sep 2026 18:43:33 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: AI開発速度に関する経営者の見解表明で、暗号通貨市場への直接の波及経路を説明できない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/what-happened-in-crypto-today?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Here’s what happened in crypto today",
+      "published_at": "Sat, 12 Sep 2026 16:09:41 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3の総括記事で個別の具体的事実が無く、単独の根拠にできない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/north-korea-using-foreign-talent-to-help-infiltrate-us-companies-report?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "North Korea using foreign talent to help infiltrate US companies: Report",
+      "published_at": "Sat, 12 Sep 2026 16:08:29 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 北朝鮮関連の人材侵入手口の報道だが、tier3単独であり独立2ソースの相手も無いため不採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/09/12/ripple-stablecoin-chief-sees-usd13-trillion-corporate-treasury-opportunity-for-rlusd",
+      "title": "Ripple stablecoin chief sees $13 trillion corporate treasury opportunity for RLUSD",
+      "published_at": "Sat, 12 Sep 2026 16:00:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: RLUSDの需要見通しに関する企業幹部の発言で、tier3単独であり独立2ソースの相手も無いため不採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/09/12/ditching-bonds-for-bitcoin-how-crypto-can-tackle-the-ai-heavy-portfolio-dilemma",
+      "title": "Ditching bonds for bitcoin: How crypto can tackle the AI-heavy portfolio dilemma",
+      "published_at": "Sat, 12 Sep 2026 16:00:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: ビットコインの資産配分に関する分析記事で、意見・分析であり事実報道ではないため不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/farages-reform-uk-gets-biggest-donation-ever-from-crypto-billionaire-reports?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Farage’s Reform UK gets $97M from two crypto billionaires",
+      "published_at": "Sat, 12 Sep 2026 15:50:14 +0000",
+      "verified_by": "CoinDesk記事とCointelegraph記事が同一の寄付事実を独立して報じていることを確認した",
+      "decision": "採用（独立2ソース）",
+      "reason": "独立2ソース規定に該当。16と同一事実の報道であり、媒体名を明記した上で参考材料として掲載"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/nvidia-considers-10b-investment-in-anthropic-record-ipo-reuters?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Nvidia considers $10B investment in potential record Anthropic IPO: Reuters",
+      "published_at": "Sat, 12 Sep 2026 15:12:40 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: NvidiaによるAnthropicへの出資検討報道で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/opinion/2026/09/12/staked-ether-should-be-seen-as-the-benchmark-of-the-decentralized-economy",
+      "title": "Staked ether should be seen as the benchmark of the decentralized economy",
+      "published_at": "Sat, 12 Sep 2026 14:00:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: ステーキングETHに関する寄稿者の意見記事であり、意見・分析であるため事実報道として不採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/tech/2026/09/12/bitcoin-activity-passports-exposed-after-revolut-falls-for-fake-government-request",
+      "title": "Bitcoin activity, passports exposed after Revolut falls for fake government request",
+      "published_at": "Sat, 12 Sep 2026 10:11:01 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: Revolutを巡る詐欺被害の報道だが、tier3単独であり独立2ソースの相手も無いため不採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/09/11/robinhood-ceo-says-companies-shouldn-t-get-veto-over-stock-tokens-in-amc-feud",
+      "title": "Robinhood CEO says companies shouldn't get veto over stock tokens in AMC feud",
+      "published_at": "Fri, 11 Sep 2026 23:47:51 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 株式トークン化を巡る経営者発言で、tier3単独であり独立2ソースの相手も無いため不採用"
+    }
+  ],
+  "reusable_for_summary": [
+    "Ripple幹部がRLUSDの企業財務向け需要拡大を主張（CoinDesk、tier3、継続監視）",
+    "北朝鮮関連の人材を通じた米企業への浸透手口が報じられている（Cointelegraph、tier3、継続監視）"
+  ],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 0
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 0
+    },
+    "FRB（speeches）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "FRB（testimony）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 0
+    },
+    "米財務省": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "USTR": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "ホワイトハウス": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 0
+    },
+    "ホワイトハウス（大統領令等）": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 0
+    },
+    "ADP": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 7
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 4
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 48
+    }
+  },
+  "news_candidate_count": 26,
+  "part1_md": "【対象日】2026年9月12日（土）\n\n【ヘッドライン】\nBTC・ETH・BNBは24時間比でいずれも小幅な上昇となりました。英国の政党Reform UKが暗号資産関連の富豪2名から多額の寄付を受けたと複数媒体が報じており、暗号資産業界と政治の関わりを示す動きとして関心を集めています。 #BTC #ETH #BNB\n\n【主要なポイント】\n・英国のReform UK（ナイジェル・ファラージ党首）が、暗号資産関連の富豪2名から合計で高額の寄付を受けたと報じられました。BitMEX共同創業者のベン・デロ氏と、クリストファー・ハーボーン氏がそれぞれ多額を寄付したとされていますが、公式発表での確認は取れていません（CoinDesk、Cointelegraph、2026年9月12日）。\n・市場全体は前日から大きな材料が乏しく、BTC・ETH・BNBともに小幅な値動きにとどまりました。地政学関連の報道（ウクライナ、ホルムズ海峡情勢等）は複数見られましたが、暗号通貨価格への直接の波及経路を示す内容は確認できませんでした。\n\n【主要指標】\n・市場全体：時価総額 $2.639兆（¥405.8兆）｜24時間取引高 $439.9億（¥6.76兆）\n・ #BTC：$77,185（約1,186.8万円）｜24時間比 +0.24%\n　（24時間レンジ $76,949〜$77,495）\n・ #ETH：$2,521（約38.8万円）｜24時間比 +0.26%\n　（24時間レンジ $2,506〜$2,546）\n・ #BNB：$726（約11.2万円）｜24時間比 +0.24%\n・市場心理：Fear & Greed 68（Greed、CoinMarketCap API）\n・ドミナンス：BTC 58.73%｜ETH 11.65%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年9月13日07:37 JST、USD/JPY ¥153.76\n",
+  "part2_md": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $4.60M vs Base上ETH/USDC $19.32M｜参考：Base上DEX全体 $12.953億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $55.85億（¥8,587億）｜24時間比 +1.12%｜USDCドミナンス 86.0%\n・ ETH/USDC（Base）参考APR：0.05% 10.99%（TVL $9.10M／24h出来高 $5.48M）｜0.3% 12.58%（TVL $120.45M／24h出来高 $13.84M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年9月13日07:37 JST\n\n【市場のフロー】\n・英国Reform UKが暗号資産関連の富豪2名から多額の寄付を受けたと報じられた件は、暗号資産業界と政治の結びつきを示す話題として関心を集めましたが、公式発表での確認は取れておらず、この報道自体が個別銘柄の価格変動に直接影響したとは断定できません。BTC・ETH・BNBは24時間比でいずれも小幅な上昇にとどまり、値幅も限定的でした。 #BTC #ETH #BNB\n・地政学関連の報道（ウクライナ、ホルムズ海峡情勢等）も複数見られましたが、暗号通貨価格への直接の波及経路は確認できず、市場全体は前日から大きな材料に乏しい中で推移したとみられます。BTC・ETHの値動きは限定的な範囲にとどまりました。 #BTC #ETH\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは73.86%→10.99%へ低下しました（24時間出来高 -85.03%、TVL +0.64%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは134.18%→12.58%へ低下しました（24時間出来高 -90.50%、TVL +1.37%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+0.26%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\n本日は英国の政党への暗号資産関連の富豪からの寄付報道が話題となったものの、公式発表での確認は取れておらず、市場心理や価格への具体的な影響は見極めが必要です。Fear & Greed指数はGreed（強欲）圏を示しており、過熱感の有無について今後の値動きを注視する必要があります。BTC・ETH・BNBは24時間比でいずれも小幅な上昇にとどまり、方向感に乏しい展開でした。ビットコイン・イーサリアムETFの資金フローについては、直近営業日までの確定値として流入・流出の方向は確認されていますが、本日（土曜）は具体的な金額の記載を控えます。なお、RLUSDの企業財務向け需要拡大に関する主張も継続監視材料として挙がっており、今後の推移を確認していきます。\n"
+}
