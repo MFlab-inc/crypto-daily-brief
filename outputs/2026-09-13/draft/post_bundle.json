@@ -1,0 +1,345 @@
+{
+  "target_date_jst": "2026-09-13",
+  "level": "L0",
+  "sections": {
+    "part0_target_date": "2026年9月13日（日）",
+    "part1_headline": "サウジアラビアのパイプライン障害による原油供給懸念と、FRB利下げを巡るトランプ大統領の発言が市場心理に影響した可能性があります。BTC・ETH・BNBはいずれも24時間比で下落しました。 #BTC #ETH #BNB",
+    "part1_points": "・Reutersによると、サウジアラビアで発生したパイプライン障害により世界の原油供給の一部喪失が懸念されています。原油供給不安は市場全体のリスク選好に影響し得る材料ですが、暗号通貨価格への直接因果は未確認です（Reuters、9月13日）。\n・Reutersによると、トランプ大統領はFRBの会合を前に、米国は世界最低水準の金利を持つべきだと発言しました。金融政策・金利動向は暗号通貨を含むリスク資産の価格形成に波及し得る材料ですが、暗号通貨価格への直接因果は未確認です（Reuters、9月13日）。",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.620兆（¥403.0兆）｜24時間取引高 $459.5億（¥7.07兆）\n・ #BTC：$76,829（約1,181.6万円）｜24時間比 -0.46%\n　（24時間レンジ $76,457〜$77,395）\n・ #ETH：$2,481（約38.2万円）｜24時間比 -1.54%\n　（24時間レンジ $2,461〜$2,529）\n・ #BNB：$716（約11.0万円）｜24時間比 -1.29%\n・市場心理：Fear & Greed 66（Greed、CoinMarketCap API）\n・ドミナンス：BTC 58.88%｜ETH 11.55%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年9月14日07:37 JST、USD/JPY ¥153.80",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $5.88M vs Base上ETH/USDC $47.10M｜参考：Base上DEX全体 $4.894億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $55.96億（¥8,607億）｜24時間比 +0.27%｜USDCドミナンス 86.0%\n・ ETH/USDC（Base）参考APR：0.05% 18.19%（TVL $8.98M／24h出来高 $8.96M）｜0.3% 34.73%（TVL $120.29M／24h出来高 $38.15M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年9月14日07:37 JST",
+    "part2_flow": "・Reutersが報じたサウジアラビアでのパイプライン障害による原油供給懸念が市場全体のリスク選好の低下を意識させた可能性があり、同時期にBTC・ETH・BNBはいずれも24時間比で下落しました。ただし原油供給不安と暗号通貨価格の直接的な因果関係は断定できません。 #BTC #ETH #BNB\n・トランプ大統領がFRB会合を前に米国の低金利志向を発言したと伝えられたことが、金融政策を巡る不透明感として意識された可能性があり、同時期にETHは相対的に大きめの下落となりました。もっとも金利発言とETH下落の直接的な因果は未確認です。 #ETH",
+    "lp_comment": "参考APRは両プールとも前日から上昇しました。\nBase 0.05%プールの参考APRは10.99%→18.19%へ上昇しました（24時間出来高 +63.43%、TVL -1.28%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは12.58%→34.73%へ上昇しました（24時間出来高 +175.64%、TVL -0.13%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比-1.54%と下落中のため、ETH偏り・下限側レンジ外・下落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "本日はサウジアラビアの原油供給懸念とFRB利下げを巡る発言が市場心理に影響した可能性がある一方、暗号通貨価格への直接的な因果関係は確認されていません。Fear&Greed指数はGreed圏で推移しており、市場心理は総じて楽観的とみられますが、BTC・ETH・BNBはいずれも24時間比で下落しており、方向感には注意が必要です。米上院でのClarity法案の審議動向についても、採決を巡る不透明感が続いている模様で、今後の進展が注視されます。ETFの資金フローについては、直近営業日までの確定値として流出方向が確認されています。引き続き原油市場の動向や米金融政策を巡る発言、規制動向の進展を確認していく必要があります。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "地政学リスクと利下げ観測が交錯、BTC・ETHは軟調",
+  "audit_ledger": [
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxPT01mN2pHSkgtLWNGSFhGWm9vSDBvNjlLVVB5N2lFRnczZ012SW1pZDdxTXRmY2NZWmw2MmRiOEJPZ1ZNdklvMkgxbXlEQXd6a3ozbWNrLTNaLWlMekNhalBBQjZTSXhEZEItM0s5WUM2cGN5akN6SXRVZVJseUR1M2Q1X2RoM2VBMEFMZHNrdVU0VUZyU2k5eWEtalNvbGVjQk5sS1NkbUV1QThfaUxocWV5NkVmRDBLQmdrNXJBQmp1ckhHTDBOdQ?oc=5",
+      "title": "Oman meeting between Gulf states and Iran postponed, Omani foreign minister says - Reuters",
+      "published_at": "Sun, 13 Sep 2026 19:14:32 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: オマーンでの湾岸・イラン会談延期という外交日程の報道で、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxQd1VBMmEzZldmZWJscDBPb3hwTERGU2hNYVhFOUh1b0Q1NjhDYXlMRWlRUDFZNXdWdjR6bmZkR0UxTGs0MFlvcXViM1F1aTdzSjdpUEFGMldoRHhvRE5PYkVad19FLU15RHNUdHhpYy1KUHp6d3hiX0w3T2puNnRtNlNNNzlVb0x5cWs2eHZHLW5yckJJV2p0cnlLTDFxWTZpTGx3?oc=5",
+      "title": "Ukraine's Zelenskiy imposes sanctions on former press secretary - Reuters",
+      "published_at": "Sun, 13 Sep 2026 18:27:43 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ウクライナ国内の人事制裁措置に関する報道で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxNSFYySWw1NWJ0UTM5Nk9pckRNeE5Ka3JIcHVuN0JFZEtmTUJKekZyT2NXSlBVdTJPeUZrc1Q5R0o3V0hPS3dlbkZHNUpxckFJZEQ3VWVQNFVnMVYwN0dXR0lBNXpkcEdJTlVoZG9yVi1aUmoyUDdrN3VDWmxkRnF6TDZNdm9TLUhha3d3R1cySFpWd0lBMmlPcTAxZktuZFVOc1cxZExwUFBLVHNRaG1YLWZkS0JWalU0V0JJWkE1T2xDOXR4Z3p4LTR3?oc=5",
+      "title": "Russian nuclear head says Ukraine attacked fuel trucks, endangered Zaporizhzhia plant - Reuters",
+      "published_at": "Sun, 13 Sep 2026 17:26:28 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 原子力施設を巡る安全懸念だが、供給・市場への波及経路が薄く参考材料としても不十分"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxNbGlUbF9PYnU0Q05JZW03V3BDSW1EcUp2djVmYXZjdWxXcmsyUWREY2M5MHpSNkU4ZERvQWlmV0d3bThhdmx2RUQtU3VockNIRTVmWGltUmllOUJuTHdrYUJqRU02cHdBUlNlb1dwSGZhWWtKejlDakkxUWhqR3RJRFc5TWRFdDFabTNUbEJfNU9aZlMzUkI0S0dqNkZYSXFYMndoNlR4c2R2SzdxZVEycDlIMHBaXzg?oc=5",
+      "title": "Ahead of Fed meeting, Trump says US should have world's lowest interest rate - Reuters",
+      "published_at": "Sun, 13 Sep 2026 17:24:54 GMT",
+      "verified_by": "Reuters報道内容を直接根拠として使用",
+      "decision": "採用",
+      "reason": "理由が記載されませんでした（自動補完）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxQamdUcHJzQktXeDBYd3NSY3FjaDR6djYybkRwa3VLVU9lS0hRY1Jla1d3SC16RjNpb0gtMXpmNlJzY1d3ZGFfQVpPWXRqTGMtNC1IdUF2d2hfTlRzZWs1YnlSMERpdl9nMlJFNVhSbk81VTZ1S2VTTktfbFhJRFN6VnBnWDZVVjZyNEpTRXFkMk1QdlFnUkZTSHZaUVF2cGV6U3RfR2xYTEJKZnpfbkJfTzNFaGVwZVdSRjYtcEVvdw?oc=5",
+      "title": "Trump reiterates support for united Ireland, says won't talk about Scotland 'yet' - Reuters",
+      "published_at": "Sun, 13 Sep 2026 17:21:10 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 英国内政治に関する発言報道で、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPN1o5cTJrWHRkQWxRa1JJbWp5SXc1bENTNS1MU3JJMHlGOWhtUnlaZEhqcG5MNE5MZHBhaE56OW9aNm81SWpYcmVaaFY4QS1Dc25OZXdrS3VYdnRiTnFLN05NTUFoemdCQjFxZ1NaUWlzQ3A5bmhWbzdTWGpJXzRSdFMyTGYzeTBuc21pS0kzbldZQ1plNDRsNDlPYjBGN01La0xwc0I2Z1lBU1lILUJv?oc=5",
+      "title": "Trump tells Ukraine's Zelenskiy to stop hitting Russian diesel - Reuters",
+      "published_at": "Sun, 13 Sep 2026 17:12:06 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ロシア・ウクライナ間の軍事関連発言で、市場への波及経路を具体的に説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxOb3FTbnBqRHlWOWIwM29yRVE2dmJnTlJOcVY0RV9oMFdYRm1WcXhCZThObGp5d1lHdE9GQVBkM080dlhZT0VleG1BUm1kOHpWbEJPZUcwTnNIaEJ2ZnpsZWJyd0RpWjdMcUpGMFotNnRmQ3lMeFRpMC1mUnlxbm1nVlFMSGdMWC1LU3lBMGZlOGoyN21QZWh3dU0yM3hVUU1pMDQ2RDdWRUJFcy0t?oc=5",
+      "title": "Saudi pipeline outage threatens loss of 4% of global oil supply - Reuters",
+      "published_at": "Sun, 13 Sep 2026 17:09:24 GMT",
+      "verified_by": "Reuters報道内容を直接根拠として使用",
+      "decision": "採用",
+      "reason": "理由が記載されませんでした（自動補完）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxPVW5JS1dQXzBGbUxRbTRyWHB3WHd4STRja1FlWHlPZ2RFdXltZ1BGdWJqeVIxbk5zZ1o5TjFtREZaM2Z4TGkzNmZLWnJJdldPX1dkbkpFcE1hSVM2OWFCeDFRWjUtN09neVZ0aGtaQXNTVjdXSUJZUkJhQm1wX1FVeURaejZ4cGg1Q1F1MFhVb1F4UzZZZ2NGOGRDSnBRX25BcWpfcFVMejJlTWVJeS1SaFpJOUFwbXpkbjQtbg?oc=5",
+      "title": "Israel and Lebanon to meet in Rome in October, US State Department official says - Reuters",
+      "published_at": "Sun, 13 Sep 2026 17:03:46 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: イスラエル・レバノン間の外交日程調整の報道で、市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxPMndlVi15QURjTkwwbUI2ZDhyMG5kcDZaV0I2OWh2ekl3eFdkbXpUa1cwSzRSZW4zRGE5Qk1EQzBKUG1KZHpDMmJEVXI4dUFVd2tzQUV3eUZSUXVhUXBPd3F5Z0F6MkFQZG5fbVVqYzFfeHBSSkJnUzY5Wk44UER2MmstalY3d3V6VklDMUlOWDd6dl85WS1pUF84NTRQQzVHV29nWk93algxckVB?oc=5",
+      "title": "Russia hits passenger train on Ukraine's border with Poland, just misses 'diplomatic train' - Reuters",
+      "published_at": "Sun, 13 Sep 2026 16:59:20 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 鉄道攻撃に関する軍事関連報道で、金融市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxOX0JoY2VGb08xV0N2bWR6cnNzaFZoVm9MMGZ4WW1aa292SHNWTVBoVERfLW96ZVllX2thQjdUU1RMOTBvRkRoMGpDd2ZyMXVyb0t2bEFabVBJczM2SnhwM0w5c3diVnZiT1E4QnBxZ3YxaEVnYjE1cVJndExhaUloWENHQjlWdmtvUHRmNG1sSWtWQ3ZIRTJQUU5wQTFDaEw0MDVIdThHdnl5NnVCSTdHUmUwR3RPU0tXalFfSA?oc=5",
+      "title": "Houthis' Yemen advance leaves Gulf states with uncomfortable choice - Reuters",
+      "published_at": "Sun, 13 Sep 2026 16:58:09 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 地政学的緊張の分析記事だが、具体的な市場波及経路の説明が薄く参考材料としても不十分"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxPcDg3dC1KTGZCUzVUbnNPOGpvSUZHdUhZTlI0eEJjYmdFUE1ZT3RaV29jd3ZJamtjakVRTnNKbE0zcVFETmtSaC1RRXZHTS1GNG56UV8tYkJkbnJpVEVwSzM4MnhpZ3o2bkhkM3Y0aWVNcW1QT0dJVlZoTUlzc0JfaWhvS2phRVE3dVYyYnpzSmJ3UzhZRWVVb0FSblpxUDA?oc=5",
+      "title": "Anthropic selects Nasdaq for IPO, Business Insider reports - Reuters",
+      "published_at": "Sun, 13 Sep 2026 16:23:45 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: AI企業のIPO先選定報道で、暗号通貨・DEX市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxQY1Y5U2xFbGpBM1ppYU9rcmhrdVk5b2hKTkNNZHdyakV6Y0UzS2lJenNKS0s2SjFZdVY0cDBDUm42MnNib1BlYzZLWENheHpobzhOanc1LXVnblVHNFo1MDNtUEFjcE93T0ZIOW85VmcwWk1zOEMtcGh4NXpOSk94dVowaVlya1IzWkJxX2NOcDhtZWhVRURzeGRCWUhHV1FuNGRzSUI0bS1ERVZ3TUdhbUZGOWpwZw?oc=5",
+      "title": "Carney pushes idea of making Canada 'associate member' of EU, WSJ reports - Reuters",
+      "published_at": "Sun, 13 Sep 2026 16:22:21 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: カナダのEU準加盟構想に関する報道で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxPaTcydnNQUEtheElJcVluYUNpWTlxZUtpT2VTdHZoZnEzRjFrM2Q3UzNKZDhIeTBxamY1cHRsRGVDaW0xOUN2ZmZaRVZidkRLejVhQUNzTzBOaGN1ZDVBMGNETTN5LWJpZUpVOTFDSjVOVWFncU90TXlVYndva2FEZ280Nkg5by10RDBTM2dqc3pKQzE3SDhxajhrblpmbnNiMTRpUTFTWnFEUnFXaXZvNFRwaw?oc=5",
+      "title": "S&P Dow Jones Indices loosens Canadian index inclusion criteria - Reuters",
+      "published_at": "Sun, 13 Sep 2026 15:58:09 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 株価指数の組入基準変更の報道で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxNaFhfNEJ3cEZwOURCeW84SEFKRXM3Y0VlWUFlTVJxbDg5NVNCNDhESXViQnkwOC1vN3Z3dEhieU15VWY5bms1ZWJ1U0pkemREcm1pTU1DbzF0eVBEUW1HYkZBUnp5QkJ5U3ktNWoybGxGUWpqNm5BdktlYkFnWlNKd2FZNUJJV2JBRGxzSzdxWUhObXAxVlpfQjFSZlhJQUNUeUdqcU01Sm4wUEQyeUN4ZXFxdlNGak8zd0RKTU5fd2t6RzdldTIweWtBcWd3WWJyamhJ?oc=5",
+      "title": "Lithuania says drone sighting turns out to be flock of birds, after NATO summons jets - Reuters",
+      "published_at": "Sun, 13 Sep 2026 15:46:02 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ドローン誤認事案の報道で、市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxOc3NKNXdjMkx2Q2ZXOWVWU25Oa1hXRGFZcWJLRktNQWdoclBWVEJQdXhLMS1ZQV9TWHhmNlZSMTlIVXlSZWlWRGdrWXN2a2gxNzZiOWJlTUtVd2xIbW5tb0pJVVNGNFdmNWdEZktuV0JuT3pmaUF3VHYtZXotVklQWGt2YlEzN2Uwa21ac1I1bjlHRi1iM1VpMF90bFhJZk5wNl9aaG9rVmNsVkpUUUdF?oc=5",
+      "title": "Trump says US could stay in Iran and keep oil, like Venezuela deal - Reuters",
+      "published_at": "Sun, 13 Sep 2026 15:28:53 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 中東政策方針に関する発言だが原油供給への具体的言及がなく、7番と重複するため参考材料として不採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/09/13/is-clarity-dead-a-vibes-based-analysis-state-of-crypto",
+      "title": "Is Clarity dead? A vibes-based analysis: State of Crypto",
+      "published_at": "Sun, 13 Sep 2026 18:45:08 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: Clarity法案の見通しに関する分析的な記事で、tier3単独のため事実根拠として不採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/opinion/2026/09/13/quantum-proof-blockchain-why-math-not-machines-holds-the-key",
+      "title": "Quantum-proof blockchain: why math, not machines, holds the key",
+      "published_at": "Sun, 13 Sep 2026 17:00:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 量子耐性ブロックチェーンに関する意見記事で、価格材料としての事実性がなく不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/what-happened-in-crypto-today?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Here’s what happened in crypto today",
+      "published_at": "Sun, 13 Sep 2026 16:47:53 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 暗号通貨全般のまとめ記事で、具体的な単一事実の根拠として使えない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/09/13/fed-rate-hike-is-about-wall-street-not-inflation-says-economist",
+      "title": "Fed rate hike is about Wall Street, not inflation, says economist",
+      "published_at": "Sun, 13 Sep 2026 13:00:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: FRB利上げに関する経済学者の見解記事だが、tier3単独のため事実根拠として不採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/09/13/circle-s-usd400m-tazapay-deal-buys-emerging-market-links-that-take-years-to-build",
+      "title": "Circle's $400M Tazapay deal buys emerging market links that take ‘years to build’",
+      "published_at": "Sun, 13 Sep 2026 13:00:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: Circleの買収報道はtier3単独であり、独立2ソースの裏付けがないため不採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/news-analysis/2026/09/11/crypto-s-clarity-act-is-a-schroedinger-s-cat-in-life-death-limbo-as-u-s-senate-returns",
+      "title": "Crypto's Clarity Act is a Schrödinger's cat in life-death limbo as U.S. Senate returns",
+      "published_at": "Sun, 13 Sep 2026 12:00:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: Clarity法案の採決見通しに関する記事だがtier3単独であり不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/anthropic-chief-urges-slowdown-in-ai-development-to-safer-pace?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Anthropic chief urges slowdown in AI development to safer pace",
+      "published_at": "Sun, 13 Sep 2026 11:09:54 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: AI開発速度に関する発言報道で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/revolut-says-customer-data-exposed-through-fake-government-email?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Revolut says customer data exposed through fake government email",
+      "published_at": "Sun, 13 Sep 2026 09:27:21 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 特定金融サービス企業の情報漏えい事案で、暗号通貨市場全体への波及経路を説明できない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/09/12/openai-ipo-won-t-happen-this-year-says-sam-altman",
+      "title": "OpenAI IPO won't happen this year, says Sam Altman",
+      "published_at": "Sat, 12 Sep 2026 21:09:31 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: AI企業のIPO見送り発言報道で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/09/12/bitcoin-suisse-plans-to-cut-up-to-half-its-swiss-jobs-as-it-shifts-work-abroad",
+      "title": "Bitcoin Suisse plans to cut up to half its Swiss jobs as it shifts work abroad",
+      "published_at": "Sat, 12 Sep 2026 21:09:06 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 暗号通貨関連企業の人員削減報道だが、市場価格への波及経路を説明できない"
+    }
+  ],
+  "reusable_for_summary": [
+    "米上院での「Clarity法案」の審議動向は9月15日の採決予定を巡り不透明感が続いている模様（CoinDesk、継続監視）。",
+    "Circleがステーブルコイン事業拡大のためTazapayを買収したとの報道があり、新興国市場への展開が注目されている（CoinDesk、継続監視）。"
+  ],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 0
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 0
+    },
+    "FRB（speeches）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "FRB（testimony）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 0
+    },
+    "米財務省": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "USTR": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "ホワイトハウス": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 0
+    },
+    "ホワイトハウス（大統領令等）": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 0
+    },
+    "ADP": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 7
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 3
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 45
+    }
+  },
+  "news_candidate_count": 25,
+  "part1_md": "【対象日】2026年9月13日（日）\n\n【ヘッドライン】\nサウジアラビアのパイプライン障害による原油供給懸念と、FRB利下げを巡るトランプ大統領の発言が市場心理に影響した可能性があります。BTC・ETH・BNBはいずれも24時間比で下落しました。 #BTC #ETH #BNB\n\n【主要なポイント】\n・Reutersによると、サウジアラビアで発生したパイプライン障害により世界の原油供給の一部喪失が懸念されています。原油供給不安は市場全体のリスク選好に影響し得る材料ですが、暗号通貨価格への直接因果は未確認です（Reuters、9月13日）。\n・Reutersによると、トランプ大統領はFRBの会合を前に、米国は世界最低水準の金利を持つべきだと発言しました。金融政策・金利動向は暗号通貨を含むリスク資産の価格形成に波及し得る材料ですが、暗号通貨価格への直接因果は未確認です（Reuters、9月13日）。\n\n【主要指標】\n・市場全体：時価総額 $2.620兆（¥403.0兆）｜24時間取引高 $459.5億（¥7.07兆）\n・ #BTC：$76,829（約1,181.6万円）｜24時間比 -0.46%\n　（24時間レンジ $76,457〜$77,395）\n・ #ETH：$2,481（約38.2万円）｜24時間比 -1.54%\n　（24時間レンジ $2,461〜$2,529）\n・ #BNB：$716（約11.0万円）｜24時間比 -1.29%\n・市場心理：Fear & Greed 66（Greed、CoinMarketCap API）\n・ドミナンス：BTC 58.88%｜ETH 11.55%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年9月14日07:37 JST、USD/JPY ¥153.80\n",
+  "part2_md": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $5.88M vs Base上ETH/USDC $47.10M｜参考：Base上DEX全体 $4.894億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $55.96億（¥8,607億）｜24時間比 +0.27%｜USDCドミナンス 86.0%\n・ ETH/USDC（Base）参考APR：0.05% 18.19%（TVL $8.98M／24h出来高 $8.96M）｜0.3% 34.73%（TVL $120.29M／24h出来高 $38.15M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年9月14日07:37 JST\n\n【市場のフロー】\n・Reutersが報じたサウジアラビアでのパイプライン障害による原油供給懸念が市場全体のリスク選好の低下を意識させた可能性があり、同時期にBTC・ETH・BNBはいずれも24時間比で下落しました。ただし原油供給不安と暗号通貨価格の直接的な因果関係は断定できません。 #BTC #ETH #BNB\n・トランプ大統領がFRB会合を前に米国の低金利志向を発言したと伝えられたことが、金融政策を巡る不透明感として意識された可能性があり、同時期にETHは相対的に大きめの下落となりました。もっとも金利発言とETH下落の直接的な因果は未確認です。 #ETH\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から上昇しました。\nBase 0.05%プールの参考APRは10.99%→18.19%へ上昇しました（24時間出来高 +63.43%、TVL -1.28%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは12.58%→34.73%へ上昇しました（24時間出来高 +175.64%、TVL -0.13%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比-1.54%と下落中のため、ETH偏り・下限側レンジ外・下落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\n本日はサウジアラビアの原油供給懸念とFRB利下げを巡る発言が市場心理に影響した可能性がある一方、暗号通貨価格への直接的な因果関係は確認されていません。Fear&Greed指数はGreed圏で推移しており、市場心理は総じて楽観的とみられますが、BTC・ETH・BNBはいずれも24時間比で下落しており、方向感には注意が必要です。米上院でのClarity法案の審議動向についても、採決を巡る不透明感が続いている模様で、今後の進展が注視されます。ETFの資金フローについては、直近営業日までの確定値として流出方向が確認されています。引き続き原油市場の動向や米金融政策を巡る発言、規制動向の進展を確認していく必要があります。\n"
+}
