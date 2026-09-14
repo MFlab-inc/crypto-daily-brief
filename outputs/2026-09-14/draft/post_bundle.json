@@ -1,0 +1,489 @@
+{
+  "target_date_jst": "2026-09-14",
+  "level": "L0",
+  "sections": {
+    "part0_target_date": "2026年9月14日（月）",
+    "part1_headline": "BTC・ETH・BNBはいずれも24時間比で上昇しました。米上院共和党が暗号通貨関連法案（クラリティ法案）の新たな条文を公表し、火曜日の採決を控えて市場の関心が高まっているとみられます。米国の金利動向を巡る報道も相場心理に影響した可能性があります。 #BTC #ETH #BNB",
+    "part1_points": "・Reutersによると、米上院共和党は暗号通貨市場構造に関する新たな法案（クラリティ法案）の条文を公表し、重要な採決を控えています（Reuters、2026年9月14日）。\n・Reutersは、ビットコインの直近の上昇局面が、FRB（米連邦準備制度理事会）の金融政策および議会の動向という試練に直面すると報じています。金利・流動性を巡る環境が暗号通貨相場に影響を与える可能性がありますが、直接の因果関係は未確認です（Reuters、2026年9月14日）。\n・クラリティ法案を巡っては、複数の州司法長官が連邦法による州権限の制約を懸念し反対を表明していると報じられています。公式発表での確認は取れていませんが、Cointelegraph・CoinDeskの双方が同様の内容を伝えています（Cointelegraph、CoinDesk、2026年9月14日）。\n・Reutersは、FRB（米連邦準備制度理事会）が利上げの環境を整えつつあるとも報じています。米金利・ドルの動向は暗号通貨を含むリスク資産全般の投資家心理に波及し得る材料ですが、暗号通貨価格への直接因果は未確認です（Reuters、2026年9月14日）。",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.677兆（¥411.2兆）｜24時間取引高 $847.5億（¥13.02兆）\n・ #BTC：$78,524（約1,206.2万円）｜24時間比 +2.26%\n　（24時間レンジ $76,347〜$79,591）\n・ #ETH：$2,539（約39.0万円）｜24時間比 +2.40%\n　（24時間レンジ $2,463〜$2,615）\n・ #BNB：$723（約11.1万円）｜24時間比 +0.93%\n・市場心理：Fear & Greed 70（Greed、CoinMarketCap API）\n・ドミナンス：BTC 58.95%｜ETH 11.58%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年9月15日07:38 JST、USD/JPY ¥153.61",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $10.60M vs Base上ETH/USDC $129.81M｜参考：Base上DEX全体 $6.219億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $56.94億（¥8,747億）｜24時間比 +1.70%｜USDCドミナンス 85.9%\n・ ETH/USDC（Base）参考APR：0.05% 41.73%（TVL $9.29M／24h出来高 $21.25M）｜0.3% 97.66%（TVL $121.72M／24h出来高 $108.55M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年9月15日07:38 JST",
+    "part2_flow": "・米上院共和党による暗号通貨市場構造法案（クラリティ法案）の新たな条文公表と火曜日の採決を控えた動きが、市場の期待感を高めた可能性があります。同時期にBTC・ETHがともに24時間比で上昇したことが確認されていますが、法案動向と価格上昇の直接の因果関係は断定できません。\n・FRB（米連邦準備制度理事会）の金融政策や金利動向を巡る報道が、リスク資産全般への投資家心理に影響を与えた可能性が意識されました。この間BTCは日中一時上値を試す場面も見られましたが、金利報道と値動きの直接的な因果は未確認です。\n・クラリティ法案を巡り複数の州司法長官が反対を表明していると報じられている一方、公式発表での確認は取れておらず、法案採決を控えて市場の不確実性が残る状況とみられます。",
+    "lp_comment": "参考APRは両プールとも前日から上昇しました。\nBase 0.05%プールの参考APRは18.19%→41.73%へ上昇しました（24時間出来高 +137.21%、TVL +3.50%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは34.73%→97.66%へ上昇しました（24時間出来高 +184.54%、TVL +1.19%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+2.40%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "本日はBTC・ETH・BNBがそろって24時間比で上昇し、Fear & Greed指数も強気寄りの水準を示しており、市場全体としては楽観的な地合いがうかがえます。ただし米クラリティ法案の採決を火曜日に控え、州司法長官らの反対報道もあることから、制度・政策面での不確実性は残っています。あわせてFRBの金融政策動向も引き続き相場心理を左右し得る材料として注視が必要です。なお、Kaiko社の資金調達など企業関連の動きも継続的な観察材料として意識されます。今後は法案採決の行方とFRBを巡る報道を中心に、市場の反応を注視していく必要がありそうです。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "BTC・ETH・BNBともに上昇",
+  "audit_ledger": [
+    {
+      "source": "SEC",
+      "url": "https://www.sec.gov/newsroom/press-releases/2026-88-sec-grants-exemptive-relief-certain-inline-xbrl-filing-or-submission-requirements",
+      "title": "SEC Grants Exemptive Relief from Certain Inline XBRL Filing or Submission Requirements",
+      "published_at": "Mon, 14 Sep 2026 12:47:00 -0400",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: SECのXBRL提出要件の一部免除に関する内容で、暗号通貨や市場への波及経路を説明できない"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/statistics/boj/other/mei/release/2026/mei260910.xlsx",
+      "title": "日本銀行が保有する国債の銘柄別残高",
+      "published_at": "Mon, 14 Sep 2026 17:00:00 +0900",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 日銀保有国債の銘柄別残高データのみで、暗号通貨・市場への波及経路を説明できない"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/research/imes/dps/dps260914b.htm",
+      "title": "（論文）金融研究所DPS：ユーザブルセキュリティ研究の現状と展望",
+      "published_at": "Mon, 14 Sep 2026 11:00:00 +0900",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ユーザブルセキュリティ研究に関する論文で、市場への波及経路を説明できない"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/research/imes/dps/dps260914a.htm",
+      "title": "（論文）金融研究所DPS：2026年国際コンファランスの模様",
+      "published_at": "Mon, 14 Sep 2026 11:00:00 +0900",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 国際コンファランスの模様に関する内容で、市場への波及経路を説明できない"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/research/imes/dps/dps26_e.htm",
+      "title": "金融研究所ディスカッション・ペーパー・シリーズ（E-Series : 英語版）（2026年収録分）",
+      "published_at": "Mon, 14 Sep 2026 11:00:00 +0900",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 日銀の研究論文一覧で、市場への波及経路を説明できない"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/statistics/boj/other/acmai/release/2026/ac260910.htm",
+      "title": "営業毎旬報告（9月10日現在）",
+      "published_at": "Mon, 14 Sep 2026 10:00:00 +0900",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 日銀の営業毎旬報告（資産・負債内訳）で、暗号通貨市場への直接の波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/09/nominations-sent-to-the-senate-9fc3/",
+      "title": "Nominations Sent to the Senate",
+      "published_at": "Mon, 14 Sep 2026 19:25:34 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 連邦判事等の指名に関する内容で、市場への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/releases/2026/09/warrior-ethos-in-action-dude-44-bravos-incredible-story/",
+      "title": "Warrior Ethos in Action: DUDE 44 Bravo’s Incredible Story",
+      "published_at": "Mon, 14 Sep 2026 17:45:59 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 軍人の体験談に関する内容で、市場への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/briefings-statements/2026/09/presidential-message-on-the-anniversary-of-the-battle-of-fort-mchenry/",
+      "title": "Presidential Message on the Anniversary of the Battle of Fort McHenry",
+      "published_at": "Sun, 13 Sep 2026 21:37:19 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: フォートマッケンリー戦の記念に関する内容で、市場への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス（大統領令等）",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/09/nominations-sent-to-the-senate-9fc3/",
+      "title": "Nominations Sent to the Senate",
+      "published_at": "Mon, 14 Sep 2026 19:25:34 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: candidate_id 7と同一内容の重複。市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxQYVB5TUc4VTc5MGdNMjVWcVYxUUszYjdXU3hrVnZXbVRCRm40Z3JBX3BhTElKaXVFQmU4SW82WWRwLVdxcGFTVVhPclllM25kSzR0MWdqUmU5YjQydl9MZDhLZ1MzQmF0b01UY3MxaWx0VkxOMjJUQzhmbHJPQjQzdXJMWkJ2OGs5R0ZQc2FjeVpEdjZkM2VqMC1aeGhXSm8?oc=5",
+      "title": "Wall Street ends down, calls for AI slowdown pummel chipmakers - Reuters",
+      "published_at": "Mon, 14 Sep 2026 20:45:43 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: AI半導体株急落を受けた株式相場下落の内容で、リスク選好への波及は考えられるが暗号通貨への直接言及がなく内容も薄い"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxOczY1S0dabWl4V3hFOWdJd3J6N1Z1UENYbjJnbm1DeFlteW1ZM3lLUkxBUzMwRFRjaHZGN21fS29zR25xMTFWY2NTa2ZVejh1ZGxHYWhFWXdTUjlhNzViT0ZaY0RQcm9CdkZmS0pVZnRUNU5OelJkajNIVTV4ck5Kc0RYSDBzRTZPN25BaVExR2RiYld5bzhJT3FCQklVYlVhRlRTcm9nQlNQajFqUnEzYg?oc=5",
+      "title": "Exxon Mobil shuts down Joliet refinery after power outage - Reuters",
+      "published_at": "Mon, 14 Sep 2026 19:56:42 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 製油所の停電による操業停止で、暗号通貨・金融市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxNNm15SzdOekVDNV9rUTlPanJOckRvYlVjbzNtRU1BVFlWLV9DUVFBRHIxQWwzbzZJNHNuUWt4VXpyM0piZVZCTjRXelNxMUN3ZHB4WXNuZmdoeTJvZkI5Mmp5azBwVGxRNU1qdEEwelJ4c3lCUGxORXRGUFkxckEwZFkwMjRIR3pUbnZhQnllUXp6ZVN2QllZeEg5LUhuVm9tdDhHZmhlTEt5RV8temxtSTJqb0RYWENfckZLTVV1RmlzNjQwdjBj?oc=5",
+      "title": "Billionaire Dangote launches oil refinery 'people's IPO', Africa's biggest - Reuters",
+      "published_at": "Mon, 14 Sep 2026 19:34:10 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: アフリカの製油所IPOに関する内容で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxOTmR4eUlzVVZXLUFSSEpiLUs3UkxJMDYwVVpsU2o1REJIOUFSTlN3U2VBV2NRZ3hUTUNzSy1KRTNlODFaTmh6bGgtTFpCM3BCWE13c250dlBDTW5XaS1rWHpUMjV0cFJiSkxqN3g4OTVVZmJKN1dKSXZhRHZ2bW1Lbndrc3UxRGhjNG9LY01lZklaajE4?oc=5",
+      "title": "Fed's table is set for a rate hike, a first under Warsh - Reuters",
+      "published_at": "Mon, 14 Sep 2026 18:25:51 GMT",
+      "verified_by": "Reuters報道（tier2）",
+      "decision": "採用",
+      "reason": "B: FRBの利上げ環境に関する報道で、金利・流動性を通じたリスク資産全般への波及経路を説明できるため参考材料として採用"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQZDNjc2NYOEVMdEEzT3RGNm5ld0htOTVaNzZqYWZEQXJwRnN6Mjc4blVsRnhEX3JrV2sxc0RzczBmSGZfTm4xbXVZTDR1TXNoWkd2RUJWUUlsNzRTV1FlOS1vREpqbllNTi1UcWxoSy05dF96M3BFRmdOaXFfNlhFY2EyQnFpUS13OERadW5yNEstUGY2bVlBd1p2S1ppelNmRmZuc0d0NG9ES2NEd2M1ODRmbERqcENX?oc=5",
+      "title": "CVC-backed Bamboo Insurance targets $3.24 billion valuation in US IPO - Reuters",
+      "published_at": "Mon, 14 Sep 2026 18:02:05 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 保険会社のIPOに関する内容で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxPTUd0QXl4cFJlZFQ1SXRIdkhVMFVOZEZpNXpfNDgwbGU3ZTZlTV9vU0UyT0o1RUdsQm5HLTdsYm1hYmJSUVk3dURLSWFzTkY3QVkxX3hRWXpHYVhUeHUzWmRZNTJIWnRjRWo1RjYtT093aEQ5SmVRMmo1aldpcWk3Yk5DUG5TX2szYWlyUlpoVUlPeXNPQXNYRUFocld1NTZGNXc1OFFpV3FLem5sNU44YlB2RUtsNDBU?oc=5",
+      "title": "US Senate Republicans release new crypto bill text ahead of critical vote - Reuters",
+      "published_at": "Mon, 14 Sep 2026 17:59:15 GMT",
+      "verified_by": "Reuters報道（tier2）",
+      "decision": "採用",
+      "reason": "A: 米上院共和党による暗号通貨市場構造法案（クラリティ法案）の新条文公表という暗号通貨への直接材料であり採用"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxOdG1rc3FYb052YWJBRHJmOUZKUDYxSUV2UWVjSjdNdmNWaXdLMlVtcTg0aVQ2aGVycWYxa2Q4SENoeFQwRmVhY2tWQkpvWExoYUpBaWZzcUdEdU8zTldNbW1nZmxtcTVnMVpRSjl2ak5lbHhHbVZBOHk4OHk3MmZvY0hWWUE3QVVEYmNRMmdrSkdqY0lzT3BfWnVLVWF3cGJWd2NJNGdyZGJLLTBHLUluZGhIX25FeXZpV1RFVFd3WmtmUjg4R1hNbQ?oc=5",
+      "title": "Wizz Air CEO says it has no interest in airBaltic, other carriers at risk - Reuters",
+      "published_at": "Mon, 14 Sep 2026 17:36:01 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 航空会社の経営方針に関する内容で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxOUjZKZTRlamNqVlRYLW9tMEVSRWlSRU1xaDZyUkdLTVkxWnVlLVdRNzkwUWlPVlNXbElNT3R6ajgxSTVtNnRVZXZZd0l2dWc5dk1fSkN2SXkwSTJqS0NMdG93cFlaZHJna3hjMU1MMUVHem9LQnBaQkFHOFYxMl9tMFAwU09zT2gwYzhtSEZuV3RJaEhSdXpjVWdIMG1VVDdwOS1CMmhLVnRwek9hRXFvZHh0T2MwRHpLQjVobmtIc3pNUVRBQjJrVkE3c2NmcjlJMWc?oc=5",
+      "title": "Global investment firm Carlyle extends reach in Canada; purchases oil and gas firm Parallax - Reuters",
+      "published_at": "Mon, 14 Sep 2026 17:05:10 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 投資会社によるカナダの石油ガス会社買収で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxOYnRBN25PT3VyNGo4ZWpYa0tUWUdjZG9ROG9CTkVJSENDdGI5RU83NllDbGE2MzExd0JBNWJtM3NnYlNfMzNpZTdDbEx4TGJycmViN0hxdnlFMnMzVTMwQ0VHclZIclVrbS1LZmdZOWtBbnZmTUYwcU84d2ZmOWV2ODhoNWNRbm42SWkyU3I3cUVFREFmbDhxVTRFWkNaVld1X3ZaZml3MGR1RnRWTUZqeUNKR1VtTnBsaWtGbjJwcEwyTHda?oc=5",
+      "title": "TotalEnergies, Iraq have agreed to start talks on energy projects, Iraq, France say - Reuters",
+      "published_at": "Mon, 14 Sep 2026 16:29:51 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: エネルギー事業に関する協議開始で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxNWHBFeTJZa1h1M002MExObkxVSGNDSWxWWHMwRDZvWVZ0RDBDN0xWVXVhblBsLWFFN1QxS2loUnhUZEFEOUxaVUpIWXFWZVFKREs1V1B6QVRqZGFkQ2tycXhITm9MTjJlbXZNYURPWG1vMk5NQjY2cjRYUDRSR096V3AxalBBVjZ6Y2IyTVNmWXByRzBpTjFHRGlIRHh6TFBQel8zLW5n?oc=5",
+      "title": "Defensive stocks lift FTSE 100 at start of pivotal week for central banks - Reuters",
+      "published_at": "Mon, 14 Sep 2026 16:28:40 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 中央銀行の重要週における株式相場動向だが、内容が薄く暗号通貨への波及の参考材料としても不十分"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxNSEVEbDgzNEZ0Ri1EVEo0el9wd0lZZFh1TExjMU16amxsbzluZG5fVXFhemhldzhYSVVFd2ZvWlJXMElMQU8tM1FhMTBDbm5GS0tkcU44aGZFVDNoUmlpQ0owN0R5dXdsZ042UGZ3Y0Y2YzQyczRoajRhYjFDSFFvVW1qdWoyeDg3V25MdkowbDdxeWM?oc=5",
+      "title": "US 10-year yields reach 5%, highest since 2023 - Reuters",
+      "published_at": "Mon, 14 Sep 2026 16:02:48 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 米国債利回り上昇の内容で金利・流動性への波及経路は説明できるが、candidate_id14と重複するテーマのため個別項目化を見送り"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxNalROb3hVS0lNZDNRVGlydnBOQUx4VkxiQzR4ZktfdjMwX1NQOXZvUkhFOUI4S2ktcFpaQjBON0hObW9tT0xRRkFPRTBjVTFDa0dQTS1IbWIxS3pwUWp0Xy1EcXVnOHhmRnFiUVllUkNJcVNZbUItUkM0N0hJZTNCS29mbXR1MFltN2phTzZxU1pSNW1lcFk4aTRQS3BNU3lrdTNsa0cxbEQybUNSZ1lTbXFxN0FQX1NlWnNKdGpMVQ?oc=5",
+      "title": "Oil stocks in US Strategic Petroleum Reserve fall to lowest level since 1982 - Reuters",
+      "published_at": "Mon, 14 Sep 2026 15:53:59 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 米国の戦略石油備蓄に関する内容で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxPWkI5aGljZE4zRG9EdFJuNEs4bmVINHVRSkY5Zmp4alhsc2JyVkJKSW42R2VWdFdxbG96aF8xQzZ3dXdPMXNoVG1xelh0QlRfMjRjOEJ6Z0ZCSkZDMjlmNnVseHlSQlh3NG5IcGRILVBEYm9TRDhOOFBNeEoyY1Z1TUEyUjhVY2ZsTThYZVR3SmdqdE5ialR6UV9mZWpyc2F2dkFhQ2dneUZJY0tuMWQySGtOOWt4Y3FQX2ZnWFh0bmNGZzJD?oc=5",
+      "title": "Crypto data firm Kaiko secures $110 million funding round led by S&P Global - Reuters",
+      "published_at": "Mon, 14 Sep 2026 15:45:57 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 暗号通貨データ企業の資金調達だが、価格材料としての波及経路が薄く継続監視に留める"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxQZEV1dXlZWDh3VTJpMHVvclNtOWY1WVZXSGFIM3JZa1h0bDYyNVUzd0lvcUFpdVJtVjFZemVZSGotMnJmR3Q5aDN5MzVaenluWUhseElqVEltb2RBQU8zTnktd3hOaWZnQ20yTG5OY3ltMjlXZU9ta0tvTkpnTlhncW1DcEg0bl9BNWdnVEdJOFc5THpPZmZYNjFNZEhPdEVvU1ZtWW5vWUlVMFp5VDd2RXpBcw?oc=5",
+      "title": "Bitcoin's late summer rally set to face off against the Fed, Congress - Reuters",
+      "published_at": "Mon, 14 Sep 2026 15:45:30 GMT",
+      "verified_by": "Reuters報道（tier2）",
+      "decision": "採用",
+      "reason": "A: ビットコインの上昇局面がFRB・議会の動向という試練に直面するという暗号通貨への直接材料であり採用"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxPMm04dVBfRldsLWZON3hSZHphNFdSWnBfOENSb2Y4dmNrNVVncU1PNXF3ekJRUkdULVpXTU1mWUx5YU50TXV4bkRTQThkS2gyUXdkc1dJc2REWmxoTHJEaWR1UUVzSDRCck5fTFpjbmhwem5WeFJjT3J1dWU5VDdpN2NibGRaVTEyLVJQNmV0bUk1b1hRazFkVWQ0REhBbmp6SFpJbE1uY0l2QkpVOTZ6TkJfSmNsN3UtTGNN?oc=5",
+      "title": "Kremlin welcomes Trump's call on Ukraine to halt strikes on diesel facilities - Reuters",
+      "published_at": "Mon, 14 Sep 2026 14:20:15 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ウクライナ情勢に関する内容で、暗号通貨市場への直接の波及経路を説明できない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/kraken-brings-defi-yield-to-tokenized-stocks-and-etfs?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Kraken brings DeFi yield to tokenized stocks and ETFs",
+      "published_at": "Mon, 14 Sep 2026 20:54:10 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C相当（tier3単独）: Krakenの新サービスに関する内容で、tier1・tier2の裏付けや独立2ソースの相方が無い"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/what-happened-in-crypto-today?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Here’s what happened in crypto today",
+      "published_at": "Mon, 14 Sep 2026 20:41:38 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C相当（tier3単独）: 総括記事で個別の事実根拠に乏しく、tier1・tier2の裏付けが無い"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/09/14/trump-s-usd800-million-stake-into-world-liberty-financial-s-token-now-has-a-timeline-to-becoming-sellable",
+      "title": "Trump's $800 million stake into World Liberty Financial's token now has a timeline to becoming sellable",
+      "published_at": "Mon, 14 Sep 2026 19:21:58 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A相当だがtier3単独: World Liberty Financialのトークンに関する内容で、独立2ソースの相方が無い"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/markets/bitcoin-passes-79k-oil-prices-cool-on-trump-iran-war-hints?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bitcoin tops $79K, oil falls as Trump says Iran war could end",
+      "published_at": "Mon, 14 Sep 2026 18:56:28 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A相当だがtier3単独: BTC価格とイラン情勢の内容で、tier1・tier2の裏付けや独立2ソースの相方が無い"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/09/14/white-house-crypto-adviser-says-trump-gave-up-historic-ethics-powers-in-compromise",
+      "title": "White House crypto adviser says Trump gave up 'historic' ethics powers in compromise",
+      "published_at": "Mon, 14 Sep 2026 18:34:09 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A相当だがtier3単独: candidate_id38と同一source（CoinDesk）のため独立2ソースの要件を満たさない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/09/14/banks-escalate-stablecoin-rewards-fight-as-senate-prepares-for-a-clarity-act-vote",
+      "title": "Banks escalate stablecoin rewards fight as Senate prepares for a Clarity Act vote",
+      "published_at": "Mon, 14 Sep 2026 17:51:20 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A相当だがtier3単独: 銀行団体のステーブルコイン報酬規制要求の内容で、独立2ソースの相方が無い"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/strive-adds-469-bitcoin-to-reach-25000-btc-treasury?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Strive adds 469 Bitcoin to reach 25,000 BTC treasury",
+      "published_at": "Mon, 14 Sep 2026 17:50:12 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A相当だがtier3単独: Strive社のビットコイン購入に関する内容で、独立2ソースの相方が無い"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/clarity-act-faces-new-opposition-ahead-of-key-senate-vote?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "CLARITY Act faces state AGs opposition ahead of key Senate vote",
+      "published_at": "Mon, 14 Sep 2026 17:42:04 +0000",
+      "verified_by": "Cointelegraph・CoinDeskの独立2媒体が州司法長官の反対を報道",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: クラリティ法案への州司法長官の反対という同一事実をCointelegraphとCoinDeskの独立した2媒体が報じており独立2ソース規定に該当する"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/sp-global-leads-110m-kaiko-funding-round-as-wall-street-eyes-tokenized-markets?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "S&P Global backs Kaiko as Series B reaches $110M",
+      "published_at": "Mon, 14 Sep 2026 16:17:52 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C相当（tier3単独）: candidate_id41と同一事実（Kaiko資金調達）だがtier2のcandidate_id23と重複テーマのため個別項目化を見送り"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/09/14/bipartisan-group-of-state-attorneys-general-oppose-clarity-act-over-federal-preemption-worry",
+      "title": "A bipartisan coalition of 17 state attorneys generals urge Senate to reject Clarity Act",
+      "published_at": "Mon, 14 Sep 2026 15:57:01 +0000",
+      "verified_by": "Cointelegraph・CoinDeskの独立2媒体が州司法長官の反対を報道",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: クラリティ法案への州司法長官の反対という同一事実をCoinDeskとCointelegraphの独立した2媒体が報じており独立2ソース規定に該当する"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/bitmine-5-million-eth-staked-334-million-revenue?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bitmine projects $334M in annual staking revenue from $15.8B crypto treasury",
+      "published_at": "Mon, 14 Sep 2026 15:55:59 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A相当だがtier3単独: Bitmine社のステーキング収益見通しに関する内容で、独立2ソースの相方が無い"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/magazine/why-are-biggest-ai-companies-suddenly-asking-to-slow-down?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Why are AI’s biggest companies suddenly asking to slow down?",
+      "published_at": "Mon, 14 Sep 2026 15:18:46 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: AI企業の減速要請に関する内容で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/09/14/clarity-act-odds-surge-on-prediction-markets-but-crypto-bill-still-faces-long-road",
+      "title": "Clarity Act odds surge on prediction markets, but crypto bill still faces long road",
+      "published_at": "Mon, 14 Sep 2026 15:10:29 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A相当だがtier3単独: 予測市場でのクラリティ法案通過確率上昇の内容で、candidate_id30と同一source（CoinDesk）のため独立2ソース要件を満たさない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/09/14/consensus-heads-to-hong-kong-for-third-straight-year-with-expanded-focus-on-ai",
+      "title": "Consensus heads to Hong Kong for third year with expanded focus on AI",
+      "published_at": "Mon, 14 Sep 2026 14:37:56 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C相当（tier3単独）: カンファレンス開催告知に関する内容で、価格材料としての根拠に乏しい"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/opinion/2026/09/14/don-t-let-perfect-be-the-enemy-of-clarity",
+      "title": "Don’t let perfect be the enemy of Clarity",
+      "published_at": "Mon, 14 Sep 2026 14:34:56 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C相当（tier3単独）: 意見記事であり事実報道ではないため独立2ソース規定の対象外"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/09/14/kaiko-extends-series-b-funding-round-to-usd110-million-with-s-and-p-global-bnp-paribas",
+      "title": "Kaiko extends Series B funding round to $110 million with S&P Global, BNP Paribas",
+      "published_at": "Mon, 14 Sep 2026 14:06:28 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C相当（tier3単独）: Kaiko資金調達の詳細記事でcandidate_id23の裏取りとして言及するに留める"
+    }
+  ],
+  "reusable_for_summary": [
+    "Kaiko（暗号通貨データ企業）がS&P Global主導のシリーズBで資金調達（約1.1億ドル）を実施したと報じられており、継続的な材料として注視されます。",
+    "Bitmine社の大量のETHステーキングによる年間収益見通しなど、企業の暗号通貨保有動向が複数報じられています。"
+  ],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 1
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 0
+    },
+    "FRB（speeches）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "FRB（testimony）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 5
+    },
+    "米財務省": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "USTR": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "ホワイトハウス": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 3
+    },
+    "ホワイトハウス（大統領令等）": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 1
+    },
+    "ADP": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 19
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 20
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 49
+    }
+  },
+  "news_candidate_count": 41,
+  "part1_md": "【対象日】2026年9月14日（月）\n\n【ヘッドライン】\nBTC・ETH・BNBはいずれも24時間比で上昇しました。米上院共和党が暗号通貨関連法案（クラリティ法案）の新たな条文を公表し、火曜日の採決を控えて市場の関心が高まっているとみられます。米国の金利動向を巡る報道も相場心理に影響した可能性があります。 #BTC #ETH #BNB\n\n【主要なポイント】\n・Reutersによると、米上院共和党は暗号通貨市場構造に関する新たな法案（クラリティ法案）の条文を公表し、重要な採決を控えています（Reuters、2026年9月14日）。\n・Reutersは、ビットコインの直近の上昇局面が、FRB（米連邦準備制度理事会）の金融政策および議会の動向という試練に直面すると報じています。金利・流動性を巡る環境が暗号通貨相場に影響を与える可能性がありますが、直接の因果関係は未確認です（Reuters、2026年9月14日）。\n・クラリティ法案を巡っては、複数の州司法長官が連邦法による州権限の制約を懸念し反対を表明していると報じられています。公式発表での確認は取れていませんが、Cointelegraph・CoinDeskの双方が同様の内容を伝えています（Cointelegraph、CoinDesk、2026年9月14日）。\n・Reutersは、FRB（米連邦準備制度理事会）が利上げの環境を整えつつあるとも報じています。米金利・ドルの動向は暗号通貨を含むリスク資産全般の投資家心理に波及し得る材料ですが、暗号通貨価格への直接因果は未確認です（Reuters、2026年9月14日）。\n\n【主要指標】\n・市場全体：時価総額 $2.677兆（¥411.2兆）｜24時間取引高 $847.5億（¥13.02兆）\n・ #BTC：$78,524（約1,206.2万円）｜24時間比 +2.26%\n　（24時間レンジ $76,347〜$79,591）\n・ #ETH：$2,539（約39.0万円）｜24時間比 +2.40%\n　（24時間レンジ $2,463〜$2,615）\n・ #BNB：$723（約11.1万円）｜24時間比 +0.93%\n・市場心理：Fear & Greed 70（Greed、CoinMarketCap API）\n・ドミナンス：BTC 58.95%｜ETH 11.58%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年9月15日07:38 JST、USD/JPY ¥153.61\n",
+  "part2_md": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $10.60M vs Base上ETH/USDC $129.81M｜参考：Base上DEX全体 $6.219億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $56.94億（¥8,747億）｜24時間比 +1.70%｜USDCドミナンス 85.9%\n・ ETH/USDC（Base）参考APR：0.05% 41.73%（TVL $9.29M／24h出来高 $21.25M）｜0.3% 97.66%（TVL $121.72M／24h出来高 $108.55M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年9月15日07:38 JST\n\n【市場のフロー】\n・米上院共和党による暗号通貨市場構造法案（クラリティ法案）の新たな条文公表と火曜日の採決を控えた動きが、市場の期待感を高めた可能性があります。同時期にBTC・ETHがともに24時間比で上昇したことが確認されていますが、法案動向と価格上昇の直接の因果関係は断定できません。\n・FRB（米連邦準備制度理事会）の金融政策や金利動向を巡る報道が、リスク資産全般への投資家心理に影響を与えた可能性が意識されました。この間BTCは日中一時上値を試す場面も見られましたが、金利報道と値動きの直接的な因果は未確認です。\n・クラリティ法案を巡り複数の州司法長官が反対を表明していると報じられている一方、公式発表での確認は取れておらず、法案採決を控えて市場の不確実性が残る状況とみられます。\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から上昇しました。\nBase 0.05%プールの参考APRは18.19%→41.73%へ上昇しました（24時間出来高 +137.21%、TVL +3.50%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは34.73%→97.66%へ上昇しました（24時間出来高 +184.54%、TVL +1.19%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+2.40%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\n本日はBTC・ETH・BNBがそろって24時間比で上昇し、Fear & Greed指数も強気寄りの水準を示しており、市場全体としては楽観的な地合いがうかがえます。ただし米クラリティ法案の採決を火曜日に控え、州司法長官らの反対報道もあることから、制度・政策面での不確実性は残っています。あわせてFRBの金融政策動向も引き続き相場心理を左右し得る材料として注視が必要です。なお、Kaiko社の資金調達など企業関連の動きも継続的な観察材料として意識されます。今後は法案採決の行方とFRBを巡る報道を中心に、市場の反応を注視していく必要がありそうです。\n"
+}
