@@ -276,13 +276,38 @@ def _causal_violations_in_sentence(sentence: str) -> list[str]:
     return hits
 
 
-def check_c18(au: Audit, sections: dict, llm_section_keys: list[str], allowlist: set[str]) -> None:
-    llm_text = "\n".join(sections.get(k, "") for k in llm_section_keys)
-    hits = []
-    for sentence in re.split(r"[。\n]", llm_text):
-        if not sentence.strip() or any(s in sentence for s in allowlist):
+def _find_c18_violations(sections: dict, llm_section_keys: list[str], allowlist: set[str]) -> list[dict]:
+    """C18の検知をセクション単位で行い、違反文をセクションへ帰属させて返す
+    （v1.76・repair_post.pyが局所修正の対象文を特定するために使う）。
+
+    従来実装は4セクションを"\n"でjoinしてから一括で文分割していたが、
+    どのセクション由来の違反かをコードが追跡できなかった。本関数は
+    セクションごとに同じ分割・判定を適用する——joinに使う"\n"自体が
+    分割文字でもあるため、文がセクション境界をまたいで結合されることは
+    なく、検知結果（PASS/FAILおよびhitsの内容）は旧実装と完全に同値
+    （test_bundle2.pyの既存C18回帰テストで確認）。
+    返す"sentence"は`re.split`が返す生の部分文字列（区切り文字・前後の
+    空白を除去していない）——post_bundle.json内の元テキストへの
+    `str.replace(sentence, ..., 1)`による置換で使うため、意図的に
+    stripしていない。
+    """
+    violations = []
+    for key in llm_section_keys:
+        text = sections.get(key, "")
+        if not isinstance(text, str):
             continue
-        hits += _causal_violations_in_sentence(sentence)
+        for sentence in re.split(r"[。\n]", text):
+            if not sentence.strip() or any(s in sentence for s in allowlist):
+                continue
+            reasons = _causal_violations_in_sentence(sentence)
+            if reasons:
+                violations.append({"section": key, "sentence": sentence, "reasons": reasons})
+    return violations
+
+
+def check_c18(au: Audit, sections: dict, llm_section_keys: list[str], allowlist: set[str]) -> None:
+    violations = _find_c18_violations(sections, llm_section_keys, allowlist)
+    hits = [r for v in violations for r in v["reasons"]]
     detail = (f"検出（限界あり・完全な保証ではない。誤検知時は config/c18_allowlist.json へ登録）: {hits}"
               if hits else "断定表現なし")
     au.add("C18_causal_assertion", not hits, detail)

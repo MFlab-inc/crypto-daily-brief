@@ -23,6 +23,7 @@ import verify_post  # noqa: E402
 import collect_news  # noqa: E402
 import fetch_data  # noqa: E402
 import compose_numeric  # noqa: E402
+import repair_post  # noqa: E402
 
 PASS = []
 FAIL = []
@@ -2821,6 +2822,161 @@ check("SYSTEM_AにINTRADAY_MOVE_GUIDANCE（オーナー指定の文言）が含�
       "その24時間の値動きは記述に値する材料である" in generate_post.SYSTEM_A
       and "あなたは数値を書かないこと" in generate_post.SYSTEM_A
       and "値動きの" in generate_post.SYSTEM_A and "形状のみを記述する" in generate_post.SYSTEM_A)
+
+print("=== verify_post._find_c18_violations: セクション帰属付き検知が旧実装と同値（v1.76） ===")
+_v18 = json.loads(json.dumps(b_ok))
+_v18["sections"]["part2_flow"] = "規制強化を受けてBTC価格が下落した。"
+_violations = verify_post._find_c18_violations(_v18["sections"], _v18["llm_section_keys"], set())
+check("_find_c18_violations: 違反1件をpart2_flowへ正しく帰属",
+      len(_violations) == 1 and _violations[0]["section"] == "part2_flow", str(_violations))
+check("_find_c18_violations: sentenceは句点を含まない元の部分文字列（置換用に非stripのまま）",
+      _violations[0]["sentence"] == "規制強化を受けてBTC価格が下落した", repr(_violations[0]["sentence"]))
+_au_via_helper = verify_post.Audit()
+verify_post.check_c18(_au_via_helper, _v18["sections"], _v18["llm_section_keys"], set())
+check("check_c18: _find_c18_violations経由でも従来どおりFAILする",
+      next(c for c in _au_via_helper.checks if c["id"] == "C18_causal_assertion")["result"] == "FAIL")
+
+print("=== repair_post.py: C13機械修正（LLM非依存・v1.76） ===")
+check("_fix_c13_missing_space: '。#BTC'をスペース挿入で修正",
+      repair_post._fix_c13_missing_space("市場は上昇しました。#BTC") == ("市場は上昇しました。 #BTC", 1))
+check("_fix_c13_missing_space: 文字列先頭の'#'は変更しない（行頭扱い・verify_post.pyの判定と一致）",
+      repair_post._fix_c13_missing_space("#BTC上昇") == ("#BTC上昇", 0))
+check("_fix_c13_missing_space: 既に半角スペースがある場合は変更しない（冪等）",
+      repair_post._fix_c13_missing_space("上昇しました。 #BTC") == ("上昇しました。 #BTC", 0))
+check("_fix_c13_missing_space: 改行の直後は変更しない",
+      repair_post._fix_c13_missing_space("上昇しました。\n#BTC") == ("上昇しました。\n#BTC", 0))
+check("_split_bullet_prefix: 箇条書き記号を分離できる",
+      repair_post._split_bullet_prefix("・規制強化により下落した") == ("・", "規制強化により下落した"))
+check("_split_bullet_prefix: 記号が無い場合は空文字を返す",
+      repair_post._split_bullet_prefix("規制強化により下落した") == ("", "規制強化により下落した"))
+
+print("=== repair_post.py: 合成テスト（9/9・9/11・9/15の実監査ログと同一パターン、v1.76） ===")
+# 9/16運用観察報告（DESIGN_CHANGES.md v1.75）でジョブログに残っていた実際の
+# 検知根拠と同一パターンの文を合成する。実際の違反文そのものは、フェイル
+# クローズにより本文が一度もコミットされておらず、デバッグ用アーティファクトも
+# このセッションのネットワーク許可リスト外(Azure Blob Storage・403)のため
+# 取得できなかった。オーナー承認により、検知根拠が一致する合成文での検証に
+# 限定する。
+SYNTH_C18_SENTENCES = {
+    "9/9-1（を受けて＋上昇）": "米国の経済指標発表を受けてBTC価格が上昇した。",
+    "9/9-2（を受けて＋下落）": "規制強化の発表を受けてETH価格が下落した。",
+    "9/11（を受けて＋上昇）": "米中央銀行の発言を受けてBTC価格が上昇した。",
+    "9/15（を受けて＋下落）": "供給懸念の高まりを受けてBTC価格が下落した。",
+}
+for _label, _sentence in SYNTH_C18_SENTENCES.items():
+    _hits = verify_post._causal_violations_in_sentence(_sentence)
+    check(f"合成文[{_label}]はC18の実際の検知根拠と同一パターン（を受けて＋価格変動語・限定表現なし）",
+          len(_hits) > 0, f"{_sentence!r} -> {_hits}")
+
+REPAIR_REWRITE_MAP = {
+    "米国の経済指標発表を受けてBTC価格が上昇した": "米国の経済指標発表を受けてBTC価格が上昇した可能性がある",
+    "規制強化の発表を受けてETH価格が下落した": "規制強化の発表を受けてETH価格が下落したとみられる",
+}
+
+
+def _repair_fn_rescue(kw, n):
+    user_text = kw["messages"][0]["content"]
+    rewritten = REPAIR_REWRITE_MAP.get(user_text)
+    check(f"repair(): call_rへ渡されるuser_contentは句点なしの元文({n}回目)", rewritten is not None, user_text)
+    return json_response({"rewritten_sentence": rewritten or (user_text + "可能性がある")})
+
+
+# 9/9型: 同一セクション(part2_flow)内に2件同時（1ラウンドでまとめて修正する
+# 設計＝オーナー承認済みのラウンド定義）。あわせてpart1_headlineにC13
+# （'#'直前のスペース欠落。9/9で実際に同時発生していたパターン）も仕込む。
+b_repair_src = json.loads(json.dumps(b_ok))
+b_repair_src["sections"]["part2_flow"] = (
+    "米国の経済指標発表を受けてBTC価格が上昇した。"
+    "規制強化の発表を受けてETH価格が下落した。"
+)
+b_repair_src["sections"]["part1_headline"] = CALL_A_DATA["part1_headline"] + "#BTC #ETH #BNB"
+b_repair_src["part1_md"], b_repair_src["part2_md"] = compose_post.render_markdown(
+    b_repair_src["sections"], b_repair_src["level"])
+_pre_au = verify_post.run_all(b_repair_src, DAILY_DATA)
+_pre_failing = {c["id"] for c in _pre_au.checks if c["result"] == "FAIL"}
+check("合成テスト前提: 修正前はC18・C13の両方がFAILする（9/9型の複合違反）",
+      _pre_failing == {"C18_causal_assertion", "C13_hashtag_boundary"}, json.dumps(_pre_au.checks, ensure_ascii=False))
+
+REPAIR_TEST_DATE = "2026-08-17"  # 既存テストでdaily_data.jsonを書き出し済みの日付を再利用
+os.makedirs(f"outputs/{REPAIR_TEST_DATE}/draft", exist_ok=True)
+Path(f"outputs/{REPAIR_TEST_DATE}/draft/post_bundle.json").write_text(
+    json.dumps(b_repair_src, ensure_ascii=False), encoding="utf-8")
+
+_fake_rescue = FakeClient(_repair_fn_rescue)
+_result = repair_post.repair(REPAIR_TEST_DATE, client=_fake_rescue)
+
+check("repair(): 1ラウンドで救済できる（C18・C13とも解消）",
+      _result["rounds_used"] == 1 and _result["rescued"], json.dumps(_result, ensure_ascii=False))
+check("repair(): C18の呼び出し回数は違反文の数と一致する（2回。C13はLLMを使わない）",
+      len(_fake_rescue.messages.calls) == 2, len(_fake_rescue.messages.calls))
+
+_repaired_bundle = json.loads(Path(f"outputs/{REPAIR_TEST_DATE}/draft/post_bundle.json").read_text(encoding="utf-8"))
+_final_au = verify_post.run_all(_repaired_bundle, DAILY_DATA)
+check("repair(): 修正後はC18・C13ともPASSする",
+      all(c["result"] != "FAIL" for c in _final_au.checks if c["id"] in
+          ("C18_causal_assertion", "C13_hashtag_boundary")), json.dumps(_final_au.checks, ensure_ascii=False))
+check("repair(): 修正後もC12〜C24の他チェックに新たな違反を生まない（全PASS/SKIP）",
+      _final_au.failed == 0, json.dumps(_final_au.checks, ensure_ascii=False))
+check("repair(): 修正後の文がBTC/上昇・ETH/下落という元の事実を保持している",
+      all(w in _repaired_bundle["sections"]["part2_flow"] for w in ("BTC", "上昇", "ETH", "下落")),
+      _repaired_bundle["sections"]["part2_flow"])
+check("repair(): 句点の二重化（「。。」）が発生していない",
+      "。。" not in _repaired_bundle["sections"]["part2_flow"], _repaired_bundle["sections"]["part2_flow"])
+check("repair(): C13は半角スペース挿入のみで修正されている（元の文言はそのまま）",
+      _repaired_bundle["sections"]["part1_headline"] == CALL_A_DATA["part1_headline"] + " #BTC #ETH #BNB",
+      _repaired_bundle["sections"]["part1_headline"])
+
+_status_note = repair_post.render_status_note(_result)
+check("render_status_note: 修正前後の文言が両方記録される",
+      "米国の経済指標発表を受けてBTC価格が上昇した" in _status_note
+      and "米国の経済指標発表を受けてBTC価格が上昇した可能性がある" in _status_note, _status_note)
+check("render_status_note: トークン増分(input=/output=)が記録される",
+      "input=" in _status_note and "output=" in _status_note, _status_note)
+check("render_status_note: 最終結果が「救済」と記録される", "救済" in _status_note, _status_note)
+print(f"  [トークン増分] 合成テスト（2文同時修正・1ラウンド）: {_result['total_usage']}")
+
+print("=== repair_post.py: 2ラウンドでも救済できない場合は従来どおりFAILのまま（v1.76） ===")
+
+
+def _repair_fn_never_hedges(kw, n):
+    # 限定表現を一切含めない書き直し（実質そのまま）を返し続け、C18が
+    # 解消されない状況を再現する。
+    return json_response({"rewritten_sentence": "米国の経済指標発表を受けてBTC価格が上昇した"})
+
+
+b_repair_stuck = json.loads(json.dumps(b_ok))
+b_repair_stuck["sections"]["part2_flow"] = "米国の経済指標発表を受けてBTC価格が上昇した。"
+b_repair_stuck["part1_md"], b_repair_stuck["part2_md"] = compose_post.render_markdown(
+    b_repair_stuck["sections"], b_repair_stuck["level"])
+os.makedirs(f"outputs/{REPAIR_TEST_DATE}/draft", exist_ok=True)
+Path(f"outputs/{REPAIR_TEST_DATE}/draft/post_bundle.json").write_text(
+    json.dumps(b_repair_stuck, ensure_ascii=False), encoding="utf-8")
+
+_fake_stuck = FakeClient(_repair_fn_never_hedges)
+_result_stuck = repair_post.repair(REPAIR_TEST_DATE, client=_fake_stuck)
+check("repair(): 限定表現が付かない書き直しが続く場合、最大2ラウンドで打ち切る",
+      _result_stuck["rounds_used"] == 2, json.dumps(_result_stuck, ensure_ascii=False))
+check("repair(): 2ラウンド後も未救済の場合はrescued=False",
+      not _result_stuck["rescued"], json.dumps(_result_stuck, ensure_ascii=False))
+check("repair(): 未救済時、C18は残存FAILとして報告される（従来どおりFAIL）",
+      "C18_causal_assertion" in _result_stuck["final_failing_checks"], _result_stuck["final_failing_checks"])
+check("repair(): 未救済でも呼び出し回数は2ラウンド×1文=2回（無限リトライしない）",
+      len(_fake_stuck.messages.calls) == 2, len(_fake_stuck.messages.calls))
+_stuck_note = repair_post.render_status_note(_result_stuck)
+check("render_status_note: 未救済時は「未救済」「FAILのまま」と明記される",
+      "未救済" in _stuck_note and "FAIL" in _stuck_note, _stuck_note)
+
+print("=== repair_post.py: 修正対象が無い日は何もしない（v1.76） ===")
+Path(f"outputs/{REPAIR_TEST_DATE}/draft/post_bundle.json").write_text(
+    json.dumps(b_ok, ensure_ascii=False), encoding="utf-8")
+_fake_noop = FakeClient(lambda kw, n: json_response({"rewritten_sentence": "呼ばれないはず"}))
+_result_noop = repair_post.repair(REPAIR_TEST_DATE, client=_fake_noop)
+check("repair(): 初回検証でC18・C13ともPASSの日はラウンドを実行しない",
+      _result_noop["rounds_used"] == 0, json.dumps(_result_noop, ensure_ascii=False))
+check("repair(): 対象違反が無ければLLMを一度も呼ばない（コストゼロ）",
+      len(_fake_noop.messages.calls) == 0, len(_fake_noop.messages.calls))
+check("render_status_note: 対象違反が無い日は空文字列（GENERATION_STATUS.mdへ何も追記しない）",
+      repair_post.render_status_note(_result_noop) == "", repair_post.render_status_note(_result_noop))
 
 print()
 print(f"PASS: {len(PASS)}  FAIL: {len(FAIL)}")

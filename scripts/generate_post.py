@@ -1184,6 +1184,48 @@ def call_b(client: "anthropic.Anthropic", daily_data: dict, call_a_data: dict | 
     )
 
 
+# v1.76（オーナー承認・2026-09-16）: C18（断定表現）局所修正用の呼び出し
+# （repair_post.pyから呼ばれる。「呼び出しR」）。9/9・9/11・9/15の3日分の
+# 監査FAILが全てC18のみに起因していたこと（DESIGN_CHANGES.md v1.75）を受け、
+# 違反文1文だけを渡し、事実関係を変えずに限定表現を含む形へ書き直させる。
+# verify_post.py自体はLLM非依存の「純粋な機械監査」のまま変更しないため、
+# 本呼び出しはverify_post.pyとは独立にrepair_post.py側だけが使う。
+CALL_R_MAX_TOKENS = 500
+REQUIRED_KEYS_R = ["rewritten_sentence"]
+
+REPAIR_SYSTEM_TEMPLATE = """あなたは暗号通貨市況レポートの校正者です。
+
+以下に渡す1文について、事実関係（数値・銘柄名・固有名詞・方向性・述べられて
+いる因果関係の内容そのもの）を一切変えずに、限定表現を含む形へ書き直して
+ください。
+
+限定表現の候補（このいずれかを文中に含めること。文末に置くのが自然です）:
+{limiting_expressions}
+
+制約:
+- 元の文が述べている事実・数値・銘柄名・固有名詞は削除・変更しないこと。
+- 元の文にない新しい事実を付け加えないこと。
+- 文を分割せず、1文のまま書き直すこと。
+- 渡される文は文末の句点（。）を含まない形になっています。書き直した文にも
+  句点（。）を含めないでください（後続処理で句点を補います）。
+- 出力は書き直した文1文のみとし、前後に説明・引用符・箇条書き記号を付けないこと。
+
+出力形式（JSONのみ）:
+{{"rewritten_sentence": "書き直した文（句点なし）"}}"""
+
+
+def call_r(client: "anthropic.Anthropic", sentence: str, limiting_expressions: list[str]) -> CallOutcome:
+    """C18違反文1文の局所修正。verify_post.LIMITING_EXPRESSIONSをそのまま
+    候補として渡すことで、判定基準と修正指示を常に一致させる
+    （判定基準側を変更しても修正指示が自動的に追随する設計）。
+    """
+    system = REPAIR_SYSTEM_TEMPLATE.format(limiting_expressions="、".join(limiting_expressions))
+    return _call_json(
+        client, system=system, user_content=sentence,
+        max_tokens=CALL_R_MAX_TOKENS, required_keys=REQUIRED_KEYS_R,
+    )
+
+
 def _load_json_or(path: Path, default: Any) -> Any:
     if not path.exists():
         return default

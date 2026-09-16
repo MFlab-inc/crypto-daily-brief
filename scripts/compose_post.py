@@ -86,6 +86,35 @@ def _render_bullets(items: list[str]) -> str:
     return "\n".join(f"・{p}" for p in items)
 
 
+def render_markdown(sections: dict[str, Any], level: str) -> tuple[str, str]:
+    """sectionsからpart1_md・part2_mdを組み立てる（compose()から抽出。v1.76）。
+
+    repair_post.pyがC18/C13の局所修正後にsectionsを書き換えたうえで
+    part1_md・part2_mdを再構成するために使う。手作業でのMarkdown直接置換は
+    post_bundle.jsonのsectionsとの不整合を招くため、再レンダリングは
+    常に本関数を経由する（compose()と同一のロジックを共有し、挙動の
+    乖離を防ぐ）。
+    """
+    part1_parts = [
+        "【対象日】" + sections["part0_target_date"],
+        "【ヘッドライン】\n" + sections["part1_headline"],
+        "【主要なポイント】\n" + sections["part1_points"],
+        sections["part1_numeric"],
+    ]
+    part2_parts = [
+        sections["part2_numeric"],
+        "【市場のフロー】\n" + sections["part2_flow"],
+        "【LP運用者向けに一言】\n" + sections["lp_comment"],
+        "【総括】\n" + sections["part2_summary"],
+    ]
+    if level == "L2":
+        part1_parts.insert(0, L2_TOP_NOTE.rstrip("\n"))
+
+    part1_md = "\n\n".join(part1_parts) + "\n"
+    part2_md = "\n\n".join(part2_parts) + "\n"
+    return part1_md, part2_md
+
+
 def compose(daily_data: dict, gen: dict[str, Any]) -> dict[str, Any]:
     """generate_post.run()の結果からセクション本文を組み立てる（純粋関数・I/Oなし）。
 
@@ -125,23 +154,7 @@ def compose(daily_data: dict, gen: dict[str, Any]) -> dict[str, Any]:
         "part2_summary": part2_summary,
     }
 
-    part1_parts = [
-        "【対象日】" + sections["part0_target_date"],
-        "【ヘッドライン】\n" + sections["part1_headline"],
-        "【主要なポイント】\n" + sections["part1_points"],
-        sections["part1_numeric"],
-    ]
-    part2_parts = [
-        sections["part2_numeric"],
-        "【市場のフロー】\n" + sections["part2_flow"],
-        "【LP運用者向けに一言】\n" + sections["lp_comment"],
-        "【総括】\n" + sections["part2_summary"],
-    ]
-    if gen["level"] == "L2":
-        part1_parts.insert(0, L2_TOP_NOTE.rstrip("\n"))
-
-    part1_md = "\n\n".join(part1_parts) + "\n"
-    part2_md = "\n\n".join(part2_parts) + "\n"
+    part1_md, part2_md = render_markdown(sections, gen["level"])
 
     llm_section_keys = ["part1_headline", "part1_points", "part2_flow", "part2_summary"]
 

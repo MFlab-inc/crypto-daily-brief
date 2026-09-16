@@ -168,6 +168,14 @@ jobs:
         run: |
           python scripts/compose_post.py "$TARGET_DATE"
 
+      - name: "(7.5) C18/C13局所修正（v1.76・オーナー承認。最大2ラウンド。verify_post.py自体は変更しない）"
+        if: steps.need.outputs.phase2 == 'true'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          TARGET_DATE: ${{ steps.target.outputs.date }}
+        run: |
+          python scripts/repair_post.py "$TARGET_DATE"
+
       - name: "(8) 本文の機械監査（フェイルクローズ。FAILならここで停止し本文コミットへ到達しない）"
         if: steps.need.outputs.phase2 == 'true'
         env:
