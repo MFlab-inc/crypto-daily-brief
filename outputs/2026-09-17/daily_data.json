@@ -1,0 +1,145 @@
+{
+  "target_date_jst": "2026-09-17",
+  "weekday_jp": "木",
+  "date_title": "2026年9月17日（木）暗号通貨・DEX市場概況",
+  "summary": "（シャドー運用中：ヘッドラインはフェーズ2で生成）",
+  "assets": [
+    {
+      "asset": "BTC",
+      "usd": "$76,249",
+      "jpy": "約1,186.3万円",
+      "change_24h": "+0.82%",
+      "direction": "up"
+    },
+    {
+      "asset": "ETH",
+      "usd": "$2,442",
+      "jpy": "約38.0万円",
+      "change_24h": "+2.18%",
+      "direction": "up"
+    },
+    {
+      "asset": "BNB",
+      "usd": "$734",
+      "jpy": "約11.4万円",
+      "change_24h": "+2.09%",
+      "direction": "up"
+    }
+  ],
+  "intraday_range": {
+    "BTC": {
+      "high": "$77,105",
+      "low": "$75,574",
+      "source": "coinbase",
+      "retrieved_at": "2026-09-18T07:37:47.731704+09:00",
+      "representative": true,
+      "inconsistent": false,
+      "notable_move": false
+    },
+    "ETH": {
+      "high": "$2,481",
+      "low": "$2,387",
+      "source": "coinbase",
+      "retrieved_at": "2026-09-18T07:37:47.829397+09:00",
+      "representative": true,
+      "inconsistent": false,
+      "notable_move": false
+    },
+    "BNB": {
+      "high": "$736",
+      "low": "$718",
+      "source": "coinbase",
+      "retrieved_at": "2026-09-18T07:37:47.948756+09:00",
+      "representative": false,
+      "inconsistent": false
+    }
+  },
+  "scheduled_events": [
+    {
+      "title": "GDP q/q",
+      "country": "NZD",
+      "impact": "High",
+      "time_jst": "2026-09-17T07:45:00+09:00"
+    },
+    {
+      "title": "Monetary Policy Summary",
+      "country": "GBP",
+      "impact": "High",
+      "time_jst": "2026-09-17T20:00:00+09:00"
+    },
+    {
+      "title": "MPC Official Bank Rate Votes",
+      "country": "GBP",
+      "impact": "High",
+      "time_jst": "2026-09-17T20:00:00+09:00"
+    },
+    {
+      "title": "Official Bank Rate",
+      "country": "GBP",
+      "impact": "High",
+      "time_jst": "2026-09-17T20:00:00+09:00"
+    }
+  ],
+  "market": {
+    "fear_greed": {
+      "value": 63,
+      "label": "Greed"
+    },
+    "market_cap": "$2.616兆",
+    "market_cap_jpy": "¥407.0兆",
+    "volume_24h": "$736.3億",
+    "volume_24h_jpy": "¥11.46兆",
+    "btc_dominance": "58.58%",
+    "eth_dominance": "11.39%"
+  },
+  "base": {
+    "tvl": "$55.81億",
+    "tvl_jpy": "¥8,683億",
+    "tvl_change": "+1.59%",
+    "tvl_direction": "up",
+    "dex_volume": "$10.172億",
+    "dex_volume_jpy": "¥1,582億",
+    "dex_volume_eth_usdc": "$105.73M",
+    "dex_volume_eth_usdc_jpy": "¥164億",
+    "usdc_dominance": "85.7%"
+  },
+  "lp": {
+    "pools": [
+      {
+        "name": "Base 0.05%プール",
+        "apr": "32.40%",
+        "tvl": "$8.81M",
+        "volume_24h": "$15.65M",
+        "change_vs_prev": {
+          "apr_change": "-46.37%",
+          "volume_24h_change": "-45.33%",
+          "tvl_change": "+1.89%"
+        }
+      },
+      {
+        "name": "Base 0.3%プール",
+        "apr": "77.10%",
+        "tvl": "$127.95M",
+        "volume_24h": "$90.08M",
+        "change_vs_prev": {
+          "apr_change": "-33.81%",
+          "volume_24h_change": "-32.33%",
+          "tvl_change": "+2.24%"
+        }
+      }
+    ],
+    "check_message": "#ETHが上昇中。#USDC偏り・上限側レンジ外・反落耐性を確認"
+  },
+  "domestic": {
+    "bitflyer_eth_24h": "2,669.22 ETH",
+    "coincheck_eth_24h": "674.07 ETH",
+    "combined_eth": "3,343.29 ETH",
+    "combined_usd": "$8.17M",
+    "retrieved_at": "2026-09-18 07:37 JST"
+  },
+  "footer": {
+    "retrieved_at": "2026-09-18 07:37 JST",
+    "usd_jpy": "¥155.58",
+    "sources": "CoinMarketCap API / GeckoTerminal / DefiLlama / ExchangeRate-API / bitFlyer公式API / Coincheck公式API"
+  }
+}
