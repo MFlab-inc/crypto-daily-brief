@@ -1,0 +1,516 @@
+{
+  "target_date_jst": "2026-09-17",
+  "level": "L0",
+  "sections": {
+    "part0_target_date": "2026年9月17日（木）",
+    "part1_headline": "SECは、証券取引所の定義から一時的・条件付きで適用除外を受けるトークン化証券取引プラットフォームを対象とした「イノベーション・エグゼンプション」を発表しました。トークン化された米国株式のオンチェーン取引に法的な道筋が開かれたとして、暗号通貨市場での関心を集めているとみられます。BTC・ETH・BNBはいずれも24時間比で上昇しました。 #BTC #ETH #BNB",
+    "part1_points": "・SECは、トークン化された米国株式（NMS株式）の取引を促進するため、一定の条件下で「取引所」の定義からの一時的な適用除外をトークン化証券取引プラットフォームに付与すると発表しました。5年間の時限的な枠組みで、意見公募も実施するとしています（SEC、9月17日）。\n・CFTCは、受動的な取引ソフトウェア提供者に対し、ブローカー登録義務に関するノーアクション・ポジションを発表しました。暗号資産ウォレット等が規制対象デリバティブへのアクセスを提供しやすくなる可能性があるとみられます（CFTC、9月17日）。\n・Reutersの報道によると、FRBは2023年7月以来となる利上げを実施し、当局者の多くが年内追加利上げを見込んでいると伝えられています。金利動向は暗号通貨を含むリスク資産全般への波及経路がありますが、暗号通貨価格への直接因果は未確認です（Reuters、9月17日）。\n・Reutersの報道によると、英国の金融規制当局が違法な暗号資産取引が疑われるロンドンの複数拠点を対象に捜査に着手したと伝えられています。規制強化の動きとして注視されますが、市場全体への影響は現時点で未確認です（Reuters、9月17日）。",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.616兆（¥407.0兆）｜24時間取引高 $736.3億（¥11.46兆）\n・ #BTC：$76,249（約1,186.3万円）｜24時間比 +0.82%\n　（24時間レンジ $75,574〜$77,105）\n・ #ETH：$2,442（約38.0万円）｜24時間比 +2.18%\n　（24時間レンジ $2,387〜$2,481）\n・ #BNB：$734（約11.4万円）｜24時間比 +2.09%\n・市場心理：Fear & Greed 63（Greed、CoinMarketCap API）\n・ドミナンス：BTC 58.58%｜ETH 11.39%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年9月18日07:37 JST、USD/JPY ¥155.58",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $8.17M vs Base上ETH/USDC $105.73M｜参考：Base上DEX全体 $10.172億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $55.81億（¥8,683億）｜24時間比 +1.59%｜USDCドミナンス 85.7%\n・ ETH/USDC（Base）参考APR：0.05% 32.40%（TVL $8.81M／24h出来高 $15.65M）｜0.3% 77.10%（TVL $127.95M／24h出来高 $90.08M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年9月18日07:37 JST",
+    "part2_flow": "・SECがトークン化された米国株式の取引を促進する「イノベーション・エグゼンプション」を発表したことで、トークン化証券のオンチーン取引に法的な道筋が開かれたとの期待が意識された可能性があります。同時期にBTC・ETH・BNBはいずれも24時間比で上昇しており、規制の明確化が暗号通貨市場への関心を後押しした可能性はありますが、断定はできません。 #BTC #ETH #BNB\n・CFTCが受動的な取引ソフトウェア提供者へのノーアクション・ポジションを発表したことで、暗号資産ウォレット等が規制対象デリバティブへのアクセスを提供しやすくなる可能性が意識された可能性があります。同時期にETHは上昇し、DEXでの取引環境改善への期待が背景として考えられますが、直接の因果は未確認です。 #ETH\n・FRBの利上げ実施が伝えられ、当局者の多くが年内追加利上げを見込んでいるとの報道を受けて、リスク資産全般への影響が意識された可能性がありますが、同時期のBTC・ETH・BNBの上昇との直接的な因果関係は確認できません。 #BTC #ETH",
+    "lp_comment": "参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは60.41%→32.40%へ低下しました（24時間出来高 -45.33%、TVL +1.89%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは116.48%→77.10%へ低下しました（24時間出来高 -32.33%、TVL +2.24%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+2.18%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "2026年9月17日の暗号通貨市場は、SECによるトークン化証券取引の規制枠組み発表やCFTCのノーアクション・ポジションなど、制度整備に関する材料が相次ぎ、市場心理は「Greed」を示す水準となりました。一方でFRBの利上げや英国当局による暗号資産取引の捜査報道など、マクロ・規制面での不確実性も残っています。CLARITY法案の動向は今後も継続的な注目材料となる可能性があります。今後の規制当局の具体的な運用や、各国の金融政策の方向性を注視する必要があります。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "SEC規制緩和とトークン化株式取引で暗号通貨市場は上昇基調",
+  "audit_ledger": [
+    {
+      "source": "SEC",
+      "url": "https://www.sec.gov/newsroom/press-releases/2026-90-sec-issues-innovation-exemption-facilitate-trading-tokenized-nms-stock-request-comment",
+      "title": "SEC Issues “Innovation Exemption” to Facilitate the Trading of Tokenized NMS Stock and Request for Comment",
+      "published_at": "Thu, 17 Sep 2026 08:55:00 -0400",
+      "verified_by": "SEC公式発表",
+      "decision": "採用",
+      "reason": "A: SECによるトークン化証券取引所の定義適用除外に関する公式発表であり、暗号通貨市場への直接材料として掲載する。"
+    },
+    {
+      "source": "OCC",
+      "url": "https://www.occ.gov/news-issuances/news-releases/2026/nr-occ-2026-79.html",
+      "title": "OCC Announces Enforcement Actions for September 2026",
+      "published_at": "17 Sep 2026 13:00:02 -0400",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 銀行関係者個人に対する懲戒処分の発表で、暗号通貨や金融市場全体への波及経路を説明できない"
+    },
+    {
+      "source": "CFTC",
+      "url": "https://www.cftc.gov/PressRoom/PressReleases/9300-26",
+      "title": "CFTC Staff Issues No-Action Position to Providers of Passive Software",
+      "published_at": "Thu, 17 Sep 2026 13:08:32 +0000",
+      "verified_by": "CFTC公式発表",
+      "decision": "採用",
+      "reason": "A: CFTCによる受動的取引ソフトウェア提供者へのノーアクション・ポジションで、暗号資産ウォレット等への影響があるため直接材料として掲載する。"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/research/research_data/reri/index.htm",
+      "title": "実質輸出入の動向",
+      "published_at": "Thu, 17 Sep 2026 16:00:00 +0900",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 実質輸出入データの定期公表であり、内容自体に暗号通貨や市場への波及経路を説明できる材料がない"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/statistics/sj/sj.htm",
+      "title": "資金循環統計（速報）（2026年第2四半期）",
+      "published_at": "Thu, 17 Sep 2026 08:50:00 +0900",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 資金循環統計の定期公表であり、当日の暗号通貨市場への直接の波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/09/withdrawals-sent-to-the-senate/",
+      "title": "Withdrawals Sent to the Senate",
+      "published_at": "Thu, 17 Sep 2026 15:48:13 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 大使等の人事指名撤回であり、金融市場への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/briefings-statements/2026/09/presidential-message-on-national-hispanic-heritage-month/",
+      "title": "Presidential Message on National Hispanic Heritage Month",
+      "published_at": "Thu, 17 Sep 2026 14:19:32 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ヒスパニック系遺産月間に関する大統領メッセージであり、市場への波及経路がない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/releases/2026/09/president-trumps-top-250-victories-for-people-of-faith/",
+      "title": "President Trump’s Top 250 Victories For People of Faith",
+      "published_at": "Thu, 17 Sep 2026 12:00:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 信仰コミュニティ向けの政策実績まとめであり、市場への波及経路がない"
+    },
+    {
+      "source": "ホワイトハウス（大統領令等）",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/09/withdrawals-sent-to-the-senate/",
+      "title": "Withdrawals Sent to the Senate",
+      "published_at": "Thu, 17 Sep 2026 15:48:13 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: candidate_id6と同一内容の重複投稿であり、市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxORkVra0Q0cjNkbjlDN0N2SENMZHYyeVVFSU1tcG5LOXhBTk5leFlZNjFNRGpad3NoWmhnaWZVd2I3N19oa2hQSERYZzBQWFcxaUJQNDZaSHMwVjFrNGlKbGRUNjg5TEt2WENpMUJiUFRVTjR6WlQyc0IzY2V2M05FanNlWExPdUZ2bTJFUlp4YW5HdTAwTExfNTI3MWkwVEVTMTRZUURlR01lVHA5?oc=5",
+      "title": "Tech leads Wall St to higher close as oil eases, Treasury yields dip - Reuters",
+      "published_at": "Thu, 17 Sep 2026 20:53:08 GMT",
+      "verified_by": "Reuters報道",
+      "decision": "採用",
+      "reason": "B: FRBの利上げ後の株式市場動向を報じるReuters報道であり、金利・リスク選好を通じた波及経路が説明できるため参考材料として掲載する。"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNUnJncHUxLTNvV25NTHFxQzVwcnljdzdsTkJCNFNjSlJybF95bFBhcW9DTWV1dnlYQ0prMkI0SmdnNjBrdXNLV0ZNM1pQNW1FcUxuaWpqd3NnRXJ6U2lkQWFqQlR0UVE2X3lYU0RXNXlBdno3QkRkSzB2SEwxUzdYV2NZWlc3SGhZdGRMbUFCVDJZeXZsTy0zOHF4R013c2xyMl8zNmVkaHlFOXM1MmtuZHJRREI3UQ?oc=5",
+      "title": "EXCLUSIVE: China presses Iran to help rein in Houthis after Saudi appeal, sources say - Reuters",
+      "published_at": "Thu, 17 Sep 2026 20:28:35 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 中国とイランの外交交渉に関する報道で、暗号通貨や金融市場への波及経路を具体的に説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxORHBHWWNMXzJ6VlVwbnBOc3ZudVowMk1sUkw0M1l5MjRzX1BrQzhNUjZrNmdMYTdKakR0OTJaeGZtUC1JeERMVVRpVUZyc2V3ZTgydlNBTE5aZW9SZTZiejBydGJIWExHS0N1eWhVVGpUNlpmdUVwOEpMbWY3dGxybklRUEVKNU1JOEVZaGYtcjRqeVg0S2g2ODFVWmRmbExyRjdPWHJRR3BYZjBMS0w4?oc=5",
+      "title": "Latam markets inch higher in global risk-on mood after Fed hike - Reuters",
+      "published_at": "Thu, 17 Sep 2026 20:17:29 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 中南米市場の動向報道だが、内容が薄く暗号通貨市場への参考材料として個別掲載するには不十分"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxPSE9zbk1KbEYyWkswNThSN3lRd0xZR3pIVEdYTDkzVHpwM1ZXY2J5TldpdmtJMEU3RUhjM3hFd05XU05NLWFOTEY0MHdHSFJkRVF2Y1hTN29lLVRsTjVlb2NFOEVIbDdneXBIb3dzalFVSE0zdXA1NkdrWTVqN2VkSkJndk1MTkxNQTFNcDVzNGZuOWstU00td0gteV8tRk9RRjc3RjB3WmF6LUJNNFpfZW13WFJadFRXN1FRU0VwV1hoSloxZ2p6ag?oc=5",
+      "title": "Shell-led LNG Canada could approve Phase 2 expansion by early October, sources say - Reuters",
+      "published_at": "Thu, 17 Sep 2026 20:08:50 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: LNG関連企業の事業拡張検討報道で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxQbUtnR01KbXZwRU1yS09FNXhXdnFRaXRXR1YyaWwyOWFvYWl1VC1MbVJFb1dvVWgxNGVFR0xKV3pCQkNycmVDaUJpVjFLYmt4MTVhSmR5dXRlVU54MWFRTG9LY2V4a1g3d2cyblNlVkU2MjNUTWJXaEY0MFNpNG9uZ3dWMWFEZ0ZIZ1dGMFdQby1jd1A5RzZ2TXNsQlJzdEFER2ZjRHE2SWstblhoVFRWWVhGcXFMZw?oc=5",
+      "title": "Impoverished by war in Iran, Afghan migrants return to Taliban rule - Reuters",
+      "published_at": "Thu, 17 Sep 2026 20:05:38 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: アフガニスタン移民の帰還に関する報道で、市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxOaURlQXJpS0g0d3lwVlhOdlQteXlxMXJvWjB0MmgzbDJQT0lNZUFLRlYxOGNqYkVLVWlEdlJIcXNWR19NTzV3YTNSM1YyQ0RYd21sTzJNMnVsSlpGVXZZQUxNUGNOdE1lSnI5V3dyT1h3VUZzUldjLUhmaXo2T0V6Zjh2T1FOMWd6cWxSV3hVVXhNZHRORFRZREg4VDZFWWQ3d001Q3dRb3lIM0pKX2otZVhvanpfYnRaaExfaQ?oc=5",
+      "title": "UK watchdog targets three London sites suspected of illegal crypto trading - Reuters",
+      "published_at": "Thu, 17 Sep 2026 18:31:16 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 英国規制当局の暗号資産取引所捜査報道だが、規制強化の直接材料としてより明確なcandidate_id1を優先し個別項目化を見送った"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxNN2dTSlE2eXVkSlRtazZ2MHFKMndPMGRyckswNXIxQzc0eEtqYTIwYjNwVUFka2dxbnRIeTBucUtOLTlDTjVpMEx4NUdFcDd5eVZScmpsWDhaWnBtN1NSSDZ5cnAyNXE5RmJBdVRIRUN3a0hNQ01CRG9NU05zdC1rZnFBMGZIQ2liay1rR3o0bkVkcXRDSGFaV0ljblpoaGhxSDl0Tjg1ckRtMjBxWDc5X3c0TTcyZ3c?oc=5",
+      "title": "EXCLUSIVE: US shale oil producer HighPeak Energy exploring sale, sources say - Reuters",
+      "published_at": "Thu, 17 Sep 2026 17:56:57 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: シェール石油企業の売却検討報道で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxOTnliZWxoY0djdTZXUkY2QnRNb2pUbnRtckNucmZhcGxrRi1HdzRQbzFXdlY2QmpxQmwzU2xOWVpvMHhnQ25ucXdqWUx3MHpnMkFPaThPaHhoc1RmZ2R6QXFhOVg3dlp4STZmOFhSUzRGRHktUjJRa0RMUEgzLWJ5NzlQcjBpR1k0bXo2VGlfUjNrNi1SZnJCazFFZw?oc=5",
+      "title": "France plans €54 billion savings drive as protests grow - Reuters",
+      "published_at": "Thu, 17 Sep 2026 17:56:28 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: フランスの財政緊縮策に関する報道で、暗号通貨市場への直接の波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxQZl9MV2lRQVlhSGNPcS1Db0RCY05rTnJtS3VENVN2RjNvLUp4eW8yMWxVbFN2T003WUFITzZsVWJMa054RXVNSUxfdnBmRmdOWUg5dF8xWlViQWJGY2pVSjBKNV84RF9rRGRSWXRtZWt2NmJsX0xYek5SaTlBdEFSRk5WQ3l3bGJPTllKM0dlMmQ?oc=5",
+      "title": "US labor market on solid footing; rising mortgages pressuring housing sector - Reuters",
+      "published_at": "Thu, 17 Sep 2026 17:08:47 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 米国労働市場と住宅セクターに関する報道だが、内容が薄く参考材料としても不十分"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxNNWhoYmdDVXhJRVIzYk9qR3ZlTVczUUtHb0tHWi1yWEF4NFMtam5KRE43M0dXUzFGNzA0aXRHcjBXV28ySGV0a0MzU1V3UGJPTElvSVB2LVdGRXlqc21JOWc3MW95REIxd0gyaUJhaDF0XzladDAwUk5NUmt2RGpIUHU4T3lXWUYxS3Qyd2ZvTTE0NW1NMEtiVWs1VUVwbnZ4UW8xd3dDcmlreEFJMGtOdjZfaEl1SUxMYzRIdUVoamlOSUU?oc=5",
+      "title": "Apollo explores sale options for floating LNG infrastructure operator Energos, sources say - Reuters",
+      "published_at": "Thu, 17 Sep 2026 17:08:26 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: LNGインフラ企業の売却検討報道で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxOMGJTTHZsX1M4S3BWWjZkQXZZOWs4aU13T0VXRVB4QTVYdGF3QWRYMUh2LVJzYjhObm9YV3pkdFZnRmRya05xQ09VWm9od1U5OTBTRXZJTjZsc0tEV2hfUUVJSS1xMWF0STluTGZuTVdVQ3IxaTRuXzNMS3FOT216bFduaGVGQnlleG1XNkQxTU14aTNsTHlHWHlEbVlVTkFacTJtLTFJUnJQNXJyOTdZcWxLTFlIWlJBRzZJ?oc=5",
+      "title": "US securities regulator rolls out five-year exemption for tokenized stock trading - Reuters",
+      "published_at": "Thu, 17 Sep 2026 16:59:52 GMT",
+      "verified_by": "Reuters報道",
+      "decision": "採用",
+      "reason": "A: SECのトークン化株式取引に関する適用除外をReutersが独立して報じており、candidate_id1の裏取りとして扱う。"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxOWmhlTzlKbEFSMGdBRGhpNGxzWDVGZzFsWHR5cXZXLVZwTjRZX0xtVjN4UW1LU3BVNW4wSGlod0VLSEhBbWRJNS0za2NIWWkxVlJqSzBsVU1rWHlIcXNUVmRDemNnbFBrV2J3eEhRSjM4NG9xaHl2ZXR0ZzAySFpOT0tFeWxnZw?oc=5",
+      "title": "Rising oil, rates and yields brew up stagflation cocktail for markets - Reuters",
+      "published_at": "Thu, 17 Sep 2026 16:59:07 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 原油・金利・利回り上昇によるスタグフレーション懸念の報道で、candidate_id10と重複するため個別項目化せず言及に留めた"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxOUUdwcm5UdmhsM25Bc2lQT0Y4N0E0YTNGbnlQNEU5dWhsRjB6LXJBbWp0NUNBZ2w5YThsQXc3WXl0dVN6TlMzaGpleE5NbWd2cnljV3ZZV3pKdEZoX0o1U2JDRFRuM1R4bXMyaGNuMU0yX2ktZnEweUR4SmlsTHZNdDgya2RNNjRmU2xKeUtZV0oxUGYtQ1NULUR3QWlBU2JILUVwUXdGaW44cmhqR3ZhbkwyRlU2QThQRDRCb0ttZzl6MlRz?oc=5",
+      "title": "Russia's Yaroslavl refinery shuts processing after a drone attack, sources say - Reuters",
+      "published_at": "Thu, 17 Sep 2026 16:43:59 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ロシア製油所へのドローン攻撃報道で、原油価格への波及経路はあるが内容が限定的で参考材料としては不十分"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPVWQxa3d0cG05Tmpfck4tZm5ZLTRLMUQ1bzRpVUNlbDg0ZDlNemp5d0hPbDVkcjBJdENvbFdldlA3a0h1VkZfOUt2NUE5eVNSaHlMbWZLUTBhNGZoOWEzNDZ6QVFYR095Wmt1dndTak1SaDJHbXBTZzdwWWlmZW16MjBRV3ZTanNaQm00M1VxdXE2OE5JUkdKczBSWTNVNkpJQzl6dTlXaGtHRXNWS21z?oc=5",
+      "title": "Bank of England shifts tone toward rate hikes as inflation set to top 4% - Reuters",
+      "published_at": "Thu, 17 Sep 2026 16:29:04 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: イングランド銀行の利上げ方針転換報道だが、英国内金融政策に限定され当日の暗号通貨市場への参考材料としては見送った"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxQaVJsckZXVWNXbUxyZzBFc1JqQ2hweHBWTzVXcXhyeThaYVMtREhfTFpIcFR5RWx2dVc2Vk1sSWw0R3ZQVmhSSkhKV3F0QktDOFJnMDdIamxuU3FpLWlEZnlmMEVzei1PcTdfV0JkU3otUklHd09tOXQ2SG9xTkdoT21aTzRyMUFSbXJRRWU4TVBSRmppSjFkWjl5UDFSTGQzMm9STmRrT081STJqbHJ0R0NVeHdlSmYwcDREQjREYk5WMzg?oc=5",
+      "title": "Dangote IPO tests Nigeria's fintech infrastructure as investor demand overwhelms platforms - Reuters",
+      "published_at": "Thu, 17 Sep 2026 16:22:38 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ナイジェリア企業のIPOに関する報道で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/what-happened-in-crypto-today?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Here’s what happened in crypto today",
+      "published_at": "Thu, 17 Sep 2026 20:44:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3単独の日次まとめ記事であり、独立2ソース規定にも該当しないため不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/cftc-expands-regulatory-relief-for-passive-trading-software-providers?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "CFTC expands regulatory relief for passive trading software providers",
+      "published_at": "Thu, 17 Sep 2026 19:30:48 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier1のCFTC発表（candidate_id3）の裏取りとして本文中で言及したが、use自体はfalseのまま扱う"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/09/17/kevin-o-leary-says-congress-will-revisit-clarity-by-second-quarter-as-crypto-tax-bill-advances",
+      "title": "Kevin O’Leary says Congress will revisit Clarity early next year as crypto tax bill advances",
+      "published_at": "Thu, 17 Sep 2026 18:40:38 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3単独の分析記事であり、独立2ソース規定にも該当しないため不採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/09/17/sec-opens-door-to-tokenized-u-s-stock-trading-here-s-who-could-benefit",
+      "title": "SEC opens door to tokenized U.S. stock trading. Here’s who could benefit",
+      "published_at": "Thu, 17 Sep 2026 18:38:10 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier1のSEC発表（candidate_id1）の裏取りとして本文中で言及したが、use自体はfalseのまま扱う"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/wisdomtree-moonpay-team-up-to-expand-us-access-to-tokenized-money-market-fund?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "WisdomTree, MoonPay team up to expand US access to tokenized money market fund",
+      "published_at": "Thu, 17 Sep 2026 17:31:12 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3単独の提携報道であり、独立2ソース規定にも該当しないため不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/magazine/is-there-any-chance-left-to-save-the-clarity-act?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Is there any chance left to save the CLARITY Act?",
+      "published_at": "Thu, 17 Sep 2026 17:00:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3単独の分析記事であり、独立2ソース規定にも該当しないため不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/markets/bitcoin-coils-near-765k-as-us-stocks-rebound-from-fed-rate-hike?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bitcoin coils near $76.5K as US stocks rebound from Fed rate hike",
+      "published_at": "Thu, 17 Sep 2026 16:22:23 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3単独の値動き解説記事であり、独立2ソース規定にも該当しないため不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/former-hut-8-ceo-jaime-leverton-to-lead-zcash-miner-fortitude-ahead-of-nasdaq-listing?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Zcash miner Fortitude taps former Hut 8 CEO to lead ahead of public listing",
+      "published_at": "Thu, 17 Sep 2026 15:58:33 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3単独の人事関連報道であり、独立2ソース規定にも該当しないため不採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/09/17/uk-signals-end-of-light-touch-era-with-multi-agency-raid-on-peer-to-peer-crypto-hubs",
+      "title": "UK signals end of 'light-touch' era with multi-agency raid on peer-to-peer crypto hubs",
+      "published_at": "Thu, 17 Sep 2026 15:08:24 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier2のReuters報道（candidate_id15）の裏取りとして本文中で言及可能だが、今回は個別項目化を見送ったため不採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/09/17/u-s-sec-begins-prepping-for-round-the-clock-trading-that-crypto-treats-as-the-norm",
+      "title": "U.S. SEC begins prepping for around-the-clock trading that crypto treats as the norm",
+      "published_at": "Thu, 17 Sep 2026 15:03:19 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier1のSEC発表（candidate_id1）の裏取りとして本文中で言及したが、use自体はfalseのまま扱う"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/coindesk-indices/2026/09/17/crypto-for-advisors-beyond-bitcoin-and-ether",
+      "title": "Crypto for Advisors: Beyond bitcoin and ether",
+      "published_at": "Thu, 17 Sep 2026 14:57:11 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3単独の投資助言コラムであり、独立2ソース規定にも該当しないため不採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/09/17/crypto-industry-leaders-debate-who-the-winners-and-losers-of-the-clarity-act-vote-failure-are",
+      "title": "Clarity Act failure may hamper U.S. crypto as industry seeks legal clarity elsewhere",
+      "published_at": "Thu, 17 Sep 2026 14:50:58 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3単独の分析記事であり、独立2ソース規定にも該当しないため不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/ogcom-cleared-sec-stock-futures-cryptocom-ceo?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "OG.com cleared by SEC to offer single-stock futures, says Crypto.com CEO",
+      "published_at": "Thu, 17 Sep 2026 13:35:57 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3単独の個社動向報道であり、独立2ソース規定にも該当しないため不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/sec-temporary-exemption-tokenized-us-stock-trading?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "SEC grants temporary exemption for tokenized US stock trading",
+      "published_at": "Thu, 17 Sep 2026 13:34:17 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier1のSEC発表（candidate_id1）の裏取りとして本文中で言及したが、use自体はfalseのまま扱う"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/magazine/bitcoin-treasuries-can-outperform-btc-but-is-it-a-risk-worth-taking?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bitcoin treasury firms can outperform BTC... but is the risk worth taking?",
+      "published_at": "Thu, 17 Sep 2026 13:30:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3単独の分析記事であり、独立2ソース規定にも該当しないため不採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/09/17/zcash-miner-fortitude-names-former-hut-8-chief-jaime-leverton-ceo-ahead-of-nasdaq-deal",
+      "title": "Zcash miner Fortitude names former Hut 8 chief Jaime Leverton CEO ahead of Nasdaq deal",
+      "published_at": "Thu, 17 Sep 2026 12:00:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3単独の人事関連報道であり、独立2ソース規定にも該当しないため不採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/09/17/ratings-giant-s-and-p-global-acquires-openzeppelin-in-tokenized-finance-risk-push",
+      "title": "Ratings giant S&P Global acquires OpenZeppelin in tokenized finance risk push",
+      "published_at": "Thu, 17 Sep 2026 13:15:21 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3単独の企業買収報道であり、独立2ソース規定にも該当しないため不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/sp-global-openzeppelin-acquisition-blockchain-security?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "S&P Global to acquire blockchain security platform OpenZeppelin",
+      "published_at": "Thu, 17 Sep 2026 12:56:23 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "candidate_id41と同一事実の報道だが、意見・分析部分が中心のため今回は継続監視に留めた"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/tech/2026/09/17/live-updates-zcash-jumps-17-as-usd345-million-of-liquidations-hit-crypto-traders",
+      "title": "Live updates: Bitcoin edges higher as Nasdaq climbs 1.7% in wake of Fed rate hike",
+      "published_at": "Thu, 17 Sep 2026 10:41:15 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier1のSEC発表（candidate_id1）の裏取りとして本文中で言及したが、use自体はfalseのまま扱う"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/markets/bitcoin-absorbs-fed-rate-hike-as-officials-see-more-tightening?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bitcoin absorbs Fed rate hike as officials see more tightening",
+      "published_at": "Thu, 17 Sep 2026 02:52:08 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier2のReuters報道（candidate_id10）の裏取りとして本文中で言及可能だが、今回は個別項目化を見送ったため不採用"
+    }
+  ],
+  "reusable_for_summary": [
+    "CLARITY法案（暗号資産の市場構造を定める法案）は上院採決で否決されたとされ、今後の動向が継続的な注目材料となる可能性があります。",
+    "S&P GlobalによるOpenZeppelin（ブロックチェーンセキュリティ企業）買収の報道があり、トークン化金融のリスク管理分野での動きとして継続監視の対象です。"
+  ],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 1
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 0
+    },
+    "FRB（speeches）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "FRB（testimony）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 1
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 1
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 2
+    },
+    "米財務省": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "USTR": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "ホワイトハウス": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 3
+    },
+    "ホワイトハウス（大統領令等）": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 1
+    },
+    "ADP": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 19
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 21
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 50
+    }
+  },
+  "news_candidate_count": 44,
+  "part1_md": "【対象日】2026年9月17日（木）\n\n【ヘッドライン】\nSECは、証券取引所の定義から一時的・条件付きで適用除外を受けるトークン化証券取引プラットフォームを対象とした「イノベーション・エグゼンプション」を発表しました。トークン化された米国株式のオンチェーン取引に法的な道筋が開かれたとして、暗号通貨市場での関心を集めているとみられます。BTC・ETH・BNBはいずれも24時間比で上昇しました。 #BTC #ETH #BNB\n\n【主要なポイント】\n・SECは、トークン化された米国株式（NMS株式）の取引を促進するため、一定の条件下で「取引所」の定義からの一時的な適用除外をトークン化証券取引プラットフォームに付与すると発表しました。5年間の時限的な枠組みで、意見公募も実施するとしています（SEC、9月17日）。\n・CFTCは、受動的な取引ソフトウェア提供者に対し、ブローカー登録義務に関するノーアクション・ポジションを発表しました。暗号資産ウォレット等が規制対象デリバティブへのアクセスを提供しやすくなる可能性があるとみられます（CFTC、9月17日）。\n・Reutersの報道によると、FRBは2023年7月以来となる利上げを実施し、当局者の多くが年内追加利上げを見込んでいると伝えられています。金利動向は暗号通貨を含むリスク資産全般への波及経路がありますが、暗号通貨価格への直接因果は未確認です（Reuters、9月17日）。\n・Reutersの報道によると、英国の金融規制当局が違法な暗号資産取引が疑われるロンドンの複数拠点を対象に捜査に着手したと伝えられています。規制強化の動きとして注視されますが、市場全体への影響は現時点で未確認です（Reuters、9月17日）。\n\n【主要指標】\n・市場全体：時価総額 $2.616兆（¥407.0兆）｜24時間取引高 $736.3億（¥11.46兆）\n・ #BTC：$76,249（約1,186.3万円）｜24時間比 +0.82%\n　（24時間レンジ $75,574〜$77,105）\n・ #ETH：$2,442（約38.0万円）｜24時間比 +2.18%\n　（24時間レンジ $2,387〜$2,481）\n・ #BNB：$734（約11.4万円）｜24時間比 +2.09%\n・市場心理：Fear & Greed 63（Greed、CoinMarketCap API）\n・ドミナンス：BTC 58.58%｜ETH 11.39%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年9月18日07:37 JST、USD/JPY ¥155.58\n",
+  "part2_md": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $8.17M vs Base上ETH/USDC $105.73M｜参考：Base上DEX全体 $10.172億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $55.81億（¥8,683億）｜24時間比 +1.59%｜USDCドミナンス 85.7%\n・ ETH/USDC（Base）参考APR：0.05% 32.40%（TVL $8.81M／24h出来高 $15.65M）｜0.3% 77.10%（TVL $127.95M／24h出来高 $90.08M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年9月18日07:37 JST\n\n【市場のフロー】\n・SECがトークン化された米国株式の取引を促進する「イノベーション・エグゼンプション」を発表したことで、トークン化証券のオンチーン取引に法的な道筋が開かれたとの期待が意識された可能性があります。同時期にBTC・ETH・BNBはいずれも24時間比で上昇しており、規制の明確化が暗号通貨市場への関心を後押しした可能性はありますが、断定はできません。 #BTC #ETH #BNB\n・CFTCが受動的な取引ソフトウェア提供者へのノーアクション・ポジションを発表したことで、暗号資産ウォレット等が規制対象デリバティブへのアクセスを提供しやすくなる可能性が意識された可能性があります。同時期にETHは上昇し、DEXでの取引環境改善への期待が背景として考えられますが、直接の因果は未確認です。 #ETH\n・FRBの利上げ実施が伝えられ、当局者の多くが年内追加利上げを見込んでいるとの報道を受けて、リスク資産全般への影響が意識された可能性がありますが、同時期のBTC・ETH・BNBの上昇との直接的な因果関係は確認できません。 #BTC #ETH\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは60.41%→32.40%へ低下しました（24時間出来高 -45.33%、TVL +1.89%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは116.48%→77.10%へ低下しました（24時間出来高 -32.33%、TVL +2.24%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+2.18%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\n2026年9月17日の暗号通貨市場は、SECによるトークン化証券取引の規制枠組み発表やCFTCのノーアクション・ポジションなど、制度整備に関する材料が相次ぎ、市場心理は「Greed」を示す水準となりました。一方でFRBの利上げや英国当局による暗号資産取引の捜査報道など、マクロ・規制面での不確実性も残っています。CLARITY法案の動向は今後も継続的な注目材料となる可能性があります。今後の規制当局の具体的な運用や、各国の金融政策の方向性を注視する必要があります。\n"
+}
