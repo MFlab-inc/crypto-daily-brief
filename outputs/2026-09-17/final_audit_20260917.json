@@ -1,7 +1,7 @@
 {
   "overall": "PASS",
   "failed": 0,
-  "checked_at_jst": "2026-09-18T07:38:02.788877+09:00",
+  "checked_at_jst": "2026-09-18T09:51:23.203299+09:00",
   "checks": [
     {
       "id": "C1_schema",
@@ -15,8 +15,8 @@
     },
     {
       "id": "C3_date_is_yesterday",
-      "result": "PASS",
-      "detail": "target=2026-09-17 expected=2026-09-17"
+      "result": "SKIP",
+      "detail": "skipped"
     },
     {
       "id": "C4_change_format",
@@ -65,8 +65,8 @@
     }
   ],
   "sha256": {
-    "daily_data.json": "9b485b8011cec515ba255af1b474b4e2731e055d92478b719e84f99645d50cad",
-    "infographic.png": "f130ca36a0f7e2c98ca5be2d8134f0a576a8ad4925733c5f6c5c3c83519d8729",
+    "daily_data.json": "4346321079b27cab0f18814a40458e4032f944e2e1dfba93b34286642d692db8",
+    "infographic.png": "4dd7339e91da733f4c2df600ba5df1737fbf377450c0afbec098a775ba90a80a",
     "raw_data.json": "21e88f70d83944735a556f3af808e5f836e45f6621ce23592e31406174f3bae4",
     "apr_screenshot.jpg": "abc2da6e6632ab395024d7d62dc02ad7b15e0960e560edae65244d3995366880"
   }
