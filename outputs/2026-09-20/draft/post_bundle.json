@@ -1,0 +1,318 @@
+{
+  "target_date_jst": "2026-09-20",
+  "level": "L0",
+  "sections": {
+    "part0_target_date": "2026年9月20日（日）",
+    "part1_headline": "直近24時間に暗号通貨市場との関係を確認できる主要なマクロ材料は確認できない。",
+    "part1_points": "・補足できる検証済み材料は確認できない。",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.781兆（¥437.1兆）｜24時間取引高 $706.7億（¥11.10兆）\n・ #BTC：$81,182（約1,275.7万円）｜24時間比 +0.10%\n　（24時間レンジ $80,085〜$81,472）\n・ #ETH：$2,638（約41.4万円）｜24時間比 +0.59%\n　（24時間レンジ $2,564〜$2,650）\n・ #BNB：$770（約12.1万円）｜24時間比 +1.42%\n・市場心理：Fear & Greed 72（Greed、CoinMarketCap API）\n・ドミナンス：BTC 58.61%｜ETH 11.58%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年9月21日07:37 JST、USD/JPY ¥157.14",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $6.92M vs Base上ETH/USDC $87.14M｜参考：Base上DEX全体 $7.026億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $59.06億（¥9,281億）｜24時間比 -0.11%｜USDCドミナンス 85.8%\n・ ETH/USDC（Base）参考APR：0.05% 33.60%（TVL $9.59M／24h出来高 $17.65M）｜0.3% 58.79%（TVL $129.42M／24h出来高 $69.49M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年9月21日07:37 JST",
+    "part2_flow": "・直近24時間については、暗号通貨市場との関係を確認できる主要なマクロ材料は確認できませんでした。BTC・ETH・BNBはいずれも24時間比で小幅な上昇となっており、大きな価格材料が見当たらない中でのレンジ内推移とみられます。\n・ニュース材料が乏しい一方、Base上のDEX市場ではLPプール（流動性提供者向けプール、資金を預けて手数料収益を得る仕組み）のAPR（年率換算利回り）と出来高がともに増加しています。市場全体の恐怖・強欲指数がGreed（強欲）圏にあることもあり、リスク選好的な資金がDEX取引に向かっている可能性が考えられますが、断定はできません。",
+    "lp_comment": "参考APRは両プールとも前日から上昇しました。\nBase 0.05%プールの参考APRは23.47%→33.60%へ上昇しました（24時間出来高 +48.46%、TVL +3.76%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは35.82%→58.79%へ上昇しました（24時間出来高 +64.94%、TVL +0.48%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+0.59%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "本日は暗号通貨市場との関連が確認できる主要なマクロ材料が見当たらず、主要資産は総じて落ち着いた値動きとなりました。市場心理はGreed（強欲）圏にあり、過熱感には留意が必要です。なお、Gemini株価の下落や買収観測、SECのトークン化株式推進を巡る分析については、検証情報源が単独であるため引き続き継続監視の対象としています。今後もマクロ環境や制度動向の変化がないか、確認を続けていく必要があります。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "BTC・ETHともに上昇基調",
+  "audit_ledger": [
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/briefings-statements/2026/09/presidential-message-on-yom-kippur-a68b/",
+      "title": "Presidential Message on Yom Kippur",
+      "published_at": "Sun, 20 Sep 2026 17:02:49 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ヨム・キプールに関する大統領メッセージで、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxOSVlUcU5uX0dwYXlSZFc4Q19ENDFwdG1VRnV1VDczQ2tHb2tTRmRxVnlTU0Y3Ukh4ajh1YTNXOHNPU09jUThMdzYwSUhPVE1DVUpTUnhyVkQwX3F3bVhSeTBrRnhHNzJxSlhQMUhJbWVmUy1Fdi1fU08tVHBXZlZHSzE1RlhDa2hiQ0hhdzZESFRHaUEwMGF1TDlYNzVpVkhhSk5tblJrNUJFeXhVa2owX256eEVMWDA?oc=5",
+      "title": "UBS CEO Ermotti warns against harsh capital rules ahead of vote - Reuters",
+      "published_at": "Sun, 20 Sep 2026 19:33:52 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: UBSの資本規制を巡るCEO発言で、暗号通貨市場への波及経路を説明できる具体的内容が無い"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxOSnpuUzhvbURvMlJhal83Q29DTVpxNHFLVzlHeWtvY21qTG0wakVyZVdoTHpNYXBkb3piRTRBajVaME1ZZDV1bUJ0SDQxZ1lEWjcwR2pnbkJFbEFNVGoyZW1DZG5kbHpWVlhBOGJrbFoxVkhRQ3JzLVRPM0EybFk4U3VDdXhHZmw5dXlHQmtvVHNuZzd2M3BXT2RvN2trQQ?oc=5",
+      "title": "Ukraine's Zelenskiy says he and Trump agree to meet in New York - Reuters",
+      "published_at": "Sun, 20 Sep 2026 19:14:04 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ウクライナ・トランプ会談の予定報道で、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE1YZzNkYXgzMkN3NU4wZ1M2T00tb0hqX2lmdFpEcDd4blNadXpVWmlkYmhhb3hoSFd0WjNZRHRoMWNJdkh3cGt2SGxaUUVCNUxseEJPYXY4OGQ5MEZRblZfRXhGUGFCdl9CYWFFdzlfNm5CSVR0a2d5TQ?oc=5",
+      "title": "LQZf.SG - Reuters",
+      "published_at": "Sun, 20 Sep 2026 18:58:35 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: タイトル・要約が銘柄コードのみで内容不明、波及経路を判断できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTE9EMTRld0FuX0pJbTR5Wl9TWjFxaFYyTGlyczZ1OENaVHUyT0c3SVVWWGQtSGpRWms2QTBFVENPNXV6VXY2QnZDQ0JwcS12SVd4RTVIZUt4SDRWU0FvZjFlMl9pVDFPM1MyckZDR1FIeVZ1ZFlvdlZYUlZUMA?oc=5",
+      "title": "LQZf.SG - Reuters",
+      "published_at": "Sun, 20 Sep 2026 18:54:33 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: タイトル・要約が銘柄コードのみで内容不明、波及経路を判断できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxOcHFKeUZSeUJjTk5kd1RVQ1pOZjg1dmJERV8wYUZvcjJXM3lMT0J6MGxvWlJQalR6U0ZMQzdyeXBOWFhOeFNsZ2REa1JpakIwRHJwRTR3c0NfeUUxRFVMcHB2bHBCTVJGLVJXd3laYklFYlhkcGRVTHV4UngtcFc4bWsyTTJPOXVhR2thZ3BmcWhtTERZRDJuLXhWNGxNbDRvS29sakVTc1ZXd0owX2gzSXFVdGFPdXVtLTNvT1Z6d3d4a1FyRjdVa1B4cUU?oc=5",
+      "title": "Harry and Meghan need protection to avoid Diana's ordeal, her brother Spencer says - Reuters",
+      "published_at": "Sun, 20 Sep 2026 18:20:05 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 王室関連の人物報道で、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxPS0NSWXh5Yk1oTE53RXhpcE14ZHRTUUl2Rzlhbkhhb0wyLXJYdkR4azJXbkxZRENxRTRTNkEyX2xHQTlTLUtTSFhZM0xqMlRJSTdvWUcyOTljYjUtY2tJYTRJcnpwMXNXSjU5VnRpN1JMMVRRS01ZTjZTUklacUQxSWZObk9FOG0xak9lazNlcFhTcFZyRjFxR1hVQQ?oc=5",
+      "title": "Trump wants to use Washington arch as military complex for drones and snipers - Reuters",
+      "published_at": "Sun, 20 Sep 2026 18:05:52 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ワシントンの建造物活用に関する報道で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxOdWJkS01sRHBUcXZGZVVoTy1zVU04amJ0VUc3WnZ4UkVZd25TTTR6RGY1ZkV5OUtGZzFULVNDcEo4MzlZMmNkamt0VjR5VHg3YzRDaWhEOFAtZklDbFpGSXpCeE9BeGR3UWp3aFN1MVp2aUMyZE93ZnFUN0VTdzdkZGJnMDdrOFNtc1lhZC1UQlNDWFl3dGRWdjZwYkc2SHJGelBn?oc=5",
+      "title": "Iran and US trade threats after Houthi attacks escalate regional conflict - Reuters",
+      "published_at": "Sun, 20 Sep 2026 17:46:57 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 地政学的緊張の内容だが詳細が薄く、参考材料として明記するには不十分"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxQMTJjMVliczhnMkswN3ZTMmxMamZ4QnZaeWx5VGlncXZjM2VNYlNnaWdyQmY0YU94QTkyOHJzbjlsa3hBemJDQjJJaS1rRDNOOGJrMTh2VmVpRHAyQUxoZ3ptV185amk2WGduakNUMHU0UnFpRFFtSXRfUWpSR0o1d2ExUjAyaEk?oc=5",
+      "title": "08T.H - | Stock Price & Latest News - Reuters",
+      "published_at": "Sun, 20 Sep 2026 17:18:23 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別銘柄の株価情報のみで、内容が不明であり波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxQc1hVd3hZZmFPOEVudnRhdFpDczA0Qkg4TmxpeDFYN1NuWnFkYVNSLTdrRU42dGdXV21YcmlsM1RVREw1amRxQWV5aWVZZTRPRy1paTNiT2o3M0syblIxdkMtR2xKLVgzUEstZ01CcXRKd0dNbUpLZUxkV1hhS0cwcDZYRXdmYjJrTTc4RERBQWNyeXdHb0ZoVjhPMkQzVDJodDBoc3c0RTc4ckFJeGJ6WDlLTDVzM05rN3k5VWNXVVFlTWM?oc=5",
+      "title": "Fed's Kashkari says inflation is still too high in 'all aspects' of US economy, in Fox News interview - Reuters",
+      "published_at": "Sun, 20 Sep 2026 17:09:32 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: Fed高官のインフレ認識発言だが、既知の政策スタンスの繰り返しで新規の波及材料として薄い"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxOQlRJLXJYMEJSYjF0SVZUN2lOWDFTRnFJaHQ3T25wWmVzOEpfRkFzS09Ya19mMmt5X1FDNkJvWFZmS0dTUnZJLWV2ZzhrdDFfUjBRQzRTcnU1c0V4UXhLMzJmTGlUamVsZVB2Rl9XZU9FYWI3cmdlbk9LS1NrSU5xOVRPWWd2bVppb3Rhem5CS1NNOFloRllua3hBU3d4Z01VTWRFYmtGZ1loM24tQlRhZFdsSHlqU1E?oc=5",
+      "title": "QatarEnergy says Hormuz crisis may delay some expansion projects - Reuters",
+      "published_at": "Sun, 20 Sep 2026 15:22:38 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ホルムズ海峡情勢に関連するが、個社の設備投資延期の話にとどまり市場全体への波及を裏付けるには不十分"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxNNEJfOVNKYWwzX3Z5cXN1bXVFNFBENVpGZ25Md0pGQnB0Y1k0RjQ5b3pXTVl1M2ZXZUg2MU1vY0ZyNW1La2pPMnFPMDJpbHd2REdTeFlvT3lWMzM3bjZCZ193b0duUXBoZ1lnOHRuZzREV2sxa1R3X2g1eFE5UnFGRWNmTDBtaC00YXc?oc=5",
+      "title": "Volvo Cars appoints Skoda chief Klaus Zellmer as new CEO - Reuters",
+      "published_at": "Sun, 20 Sep 2026 15:15:21 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 自動車会社の経営人事に関する報道で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxPb3MxVGZLV3pySXBia1NrUWhDTTBpV1k1V1VhdXM5d1psaXZvS3V3MVJrWFhLNzVIdWNxMDNmRzJyT0tOb05VWDNMNUdQSGlQVnhROXVJMEo4WmdDN1BHMUttX2U1ZTFLdDhRWUxvc1A5b0tNbzgzMUhPYTYxQjBjLQ?oc=5",
+      "title": "BOEU.OQ - | Stock Price & Latest News - Reuters",
+      "published_at": "Sun, 20 Sep 2026 14:41:24 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別銘柄の株価情報のみで、内容が不明であり波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxPSU0ycW9Ud1ZSNVFXbDdVcTB2d2FlNDhjVTgyV0wyR2xUamtxUkwzbF9icWVTc1dWWkJIcW5zWlhQclRqeXNxT0RJLWFNdlpDU29OT3h2aTVWT1Q4TENYR1hieDhIS0xpQmhJbkk0ZzhRQnA5dFRiTTJYd3ZZRkN0bnFkY3hGZw?oc=5",
+      "title": "4LT1.DE - Reuters",
+      "published_at": "Sun, 20 Sep 2026 14:30:45 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 銘柄コードのみで内容不明、波及経路を判断できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQWlhEMEdRSjBjN3ZhU0U5Vll0dWl2aDd0ek1iMjZpVldPTW5YRVpHeGhzbTQxN1g1cGZiTGJJVEh1RzhJYlRsWXFzaU9LUlYtbGU3RzhDdnp0eVZrSzBackZFckxHYnBlNThxUUZlbi0tNkNVdklFRzFjbFF4UVlSWVExNzUwanRQZENEVE1udlF6dVZ4ZHA4TnZ5YkM?oc=5",
+      "title": "PODCAST: Houthis target Saudi, Moscow drone attack and Ed Sheeran - Reuters",
+      "published_at": "Sun, 20 Sep 2026 14:28:35 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ポッドキャスト概要で複数の話題を含み、波及経路を特定できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE5KajhzMUJlQ3ZxV3MzY1o0Z1k1SGpjWG93WDJ1a0piZTZMdFdXN3BoTndzMUlsc1psNnZmVEhVWnVxeDM5Q3EyUE1yWnpWTXdvQkRlM2Z5NTh2NzFFdjllVFFMZl95NE5MblF2dkNOSndnd19lNmNGUw?oc=5",
+      "title": "SDEV.P - Reuters",
+      "published_at": "Sun, 20 Sep 2026 13:57:53 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 銘柄コードのみで内容不明、波及経路を判断できない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/09/20/gemini-s-stock-is-down-80-from-its-ipo-that-s-reviving-takeover-speculation",
+      "title": "Crypto platform Gemini’s stock is down 80% from its IPO. That’s reviving takeover speculation",
+      "published_at": "Sun, 20 Sep 2026 14:54:48 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: Gemini株価下落に関する内容だが、tier3単独ソースで独立2ソース規定に該当する相手候補が無い"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/trump-says-us-will-form-ai-force-and-appoint-ai-czar-reports?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Trump says US will form ‘AI Force’ and appoint AI czar: Reports",
+      "published_at": "Sun, 20 Sep 2026 12:00:52 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: AI政策に関する内容だが、tier3単独ソースで独立2ソース規定に該当する相手候補が無い"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/09/20/coinbase-robinhood-circle-could-be-early-winners-of-sec-s-tokenized-stock-push-analysts-say",
+      "title": "Coinbase, Robinhood, Circle could be early winners of SEC's tokenized-stock push, analysts say",
+      "published_at": "Sun, 20 Sep 2026 12:00:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: SECのトークン化株式推進に関する分析記事だが、tier3単独ソースで独立2ソース規定に該当する相手候補が無い"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/09/18/crypto-traders-braced-for-a-total-wipeout-this-week-but-bitcoin-had-other-plans",
+      "title": "Crypto traders braced for a total wipeout this week but Bitcoin had other plans",
+      "published_at": "Sun, 20 Sep 2026 12:00:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: BTC価格の安定性に関する分析記事だが、tier3単独ソースで独立2ソース規定に該当する相手候補が無い"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/grayscales-zcash-etf-files-for-3-for-1-forward-share-split?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Grayscale’s Zcash ETF files for 3-for-1 forward share split",
+      "published_at": "Sun, 20 Sep 2026 09:14:27 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: Zcash ETFの株式分割に関する内容だが、tier3単独ソースで独立2ソース規定に該当する相手候補が無い"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/anthropic-tabs-accenture-as-embedded-evaluator-to-help-with-ai-slowdown-proposal?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Anthropic taps Accenture as embedded evaluator to help with AI slowdown proposal",
+      "published_at": "Sun, 20 Sep 2026 07:51:24 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: AI企業の業務提携に関する内容で、暗号通貨市場への波及経路を説明できない"
+    }
+  ],
+  "reusable_for_summary": [
+    "Gemini株価がIPO比で大幅下落し買収観測が浮上（CoinDesk、9/20）。tier3単独のため継続監視。",
+    "SECのトークン化株式推進を巡りCoinbase・Robinhood・Circleが恩恵を受けるとの分析（CoinDesk、9/20）。tier3単独のため継続監視。"
+  ],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 0
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 0
+    },
+    "FRB（speeches）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "FRB（testimony）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 0
+    },
+    "米財務省": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "USTR": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "ホワイトハウス": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 1
+    },
+    "ホワイトハウス（大統領令等）": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 0
+    },
+    "ADP": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 3
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 3
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 48
+    }
+  },
+  "news_candidate_count": 22,
+  "part1_md": "【対象日】2026年9月20日（日）\n\n【ヘッドライン】\n直近24時間に暗号通貨市場との関係を確認できる主要なマクロ材料は確認できない。\n\n【主要なポイント】\n・補足できる検証済み材料は確認できない。\n\n【主要指標】\n・市場全体：時価総額 $2.781兆（¥437.1兆）｜24時間取引高 $706.7億（¥11.10兆）\n・ #BTC：$81,182（約1,275.7万円）｜24時間比 +0.10%\n　（24時間レンジ $80,085〜$81,472）\n・ #ETH：$2,638（約41.4万円）｜24時間比 +0.59%\n　（24時間レンジ $2,564〜$2,650）\n・ #BNB：$770（約12.1万円）｜24時間比 +1.42%\n・市場心理：Fear & Greed 72（Greed、CoinMarketCap API）\n・ドミナンス：BTC 58.61%｜ETH 11.58%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年9月21日07:37 JST、USD/JPY ¥157.14\n",
+  "part2_md": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $6.92M vs Base上ETH/USDC $87.14M｜参考：Base上DEX全体 $7.026億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $59.06億（¥9,281億）｜24時間比 -0.11%｜USDCドミナンス 85.8%\n・ ETH/USDC（Base）参考APR：0.05% 33.60%（TVL $9.59M／24h出来高 $17.65M）｜0.3% 58.79%（TVL $129.42M／24h出来高 $69.49M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年9月21日07:37 JST\n\n【市場のフロー】\n・直近24時間については、暗号通貨市場との関係を確認できる主要なマクロ材料は確認できませんでした。BTC・ETH・BNBはいずれも24時間比で小幅な上昇となっており、大きな価格材料が見当たらない中でのレンジ内推移とみられます。\n・ニュース材料が乏しい一方、Base上のDEX市場ではLPプール（流動性提供者向けプール、資金を預けて手数料収益を得る仕組み）のAPR（年率換算利回り）と出来高がともに増加しています。市場全体の恐怖・強欲指数がGreed（強欲）圏にあることもあり、リスク選好的な資金がDEX取引に向かっている可能性が考えられますが、断定はできません。\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から上昇しました。\nBase 0.05%プールの参考APRは23.47%→33.60%へ上昇しました（24時間出来高 +48.46%、TVL +3.76%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは35.82%→58.79%へ上昇しました（24時間出来高 +64.94%、TVL +0.48%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+0.59%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\n本日は暗号通貨市場との関連が確認できる主要なマクロ材料が見当たらず、主要資産は総じて落ち着いた値動きとなりました。市場心理はGreed（強欲）圏にあり、過熱感には留意が必要です。なお、Gemini株価の下落や買収観測、SECのトークン化株式推進を巡る分析については、検証情報源が単独であるため引き続き継続監視の対象としています。今後もマクロ環境や制度動向の変化がないか、確認を続けていく必要があります。\n"
+}
