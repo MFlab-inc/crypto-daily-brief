@@ -11,8 +11,10 @@
                  /v1/global-metrics/quotes/latest
                  /v3/fear-and-greed/latest        (Alternative.me は使用禁止)
 - GeckoTerminal  Base 2プール (DefiLlamaはBase Uniswap V3の追跡を停止)
-- DefiLlama      api.llama.fi/v2/chains, /v2/historicalChainTvl/Base,
+- DefiLlama      api.llama.fi/v2/chains,
                  /overview/dexs/base, stablecoins.llama.fi/stablecoins
+                 （Base TVLの24時間比は/v2/historicalChainTvl/Baseを使わず、
+                 前日の自分自身のraw_data.jsonとの比較で自前算出する。v1.77）
 - ExchangeRate-API open.er-api.com/v6/latest/USD
 - bitFlyer       api.bitflyer.com/v1/ticker?product_code=ETH_JPY（v1.4・後編用）
 - Coincheck      coincheck.com/api/ticker?pair=eth_jpy（v1.4・後編用）
@@ -178,12 +180,81 @@ def fetch_base_tvl() -> float | None:
     return None
 
 
-def fetch_base_tvl_change() -> float | None:
-    hist = get_json("https://api.llama.fi/v2/historicalChainTvl/Base")
-    if len(hist) < 2:
+# v1.77（オーナー承認・2026-09-20）: 従来は
+# `api.llama.fi/v2/historicalChainTvl/Base` の末尾2要素をそのまま引き算して
+# いたが、この2点が実際に24時間離れているか・表示中のTVL（fetch_base_tvl()の
+# 値）と時点が揃っているかを一切検証しておらず、9/19実データで表示TVL水準の
+# 実変化(+0.76%)と大きく乖離した24時間比(+5.93%)が生成される事象が確認された
+# （docs/DESIGN_CHANGES.md参照）。LPプールのAPR/TVL/出来高の前日比
+# （load_prev_pools・change_field、v1.5）と同じ考え方で、前日の自分自身の
+# raw_data.jsonと比較する自前計算へ変更する。
+BASE_TVL_CHANGE_WINDOW_HOURS = (20, 28)
+
+
+def _parse_fetched_at(s: str) -> datetime | None:
+    """raw_data.jsonのfetched_at（タイムゾーン付きISO8601）をdatetimeへ。"""
+    if not s:
         return None
-    prev, last = hist[-2]["tvl"], hist[-1]["tvl"]
-    return (last - prev) / prev * 100 if prev else None
+    try:
+        return datetime.fromisoformat(s)
+    except (TypeError, ValueError):
+        return None
+
+
+def load_prev_raw(target) -> dict | None:
+    """前日 outputs/{前日}/raw_data.json を読み込む（v1.77）。
+
+    ファイルが無い/壊れている場合はNone（呼び出し側で「比較不可」に落とす。
+    load_prev_pools・v1.5と同じ方針）。
+    """
+    prev_path = Path(f"outputs/{(target - timedelta(days=1)).isoformat()}/raw_data.json")
+    if not prev_path.exists():
+        return None
+    try:
+        return json.loads(prev_path.read_text(encoding="utf-8"))
+    except (ValueError, OSError) as e:
+        print(f"[warn] load_prev_raw: {e}", file=sys.stderr)
+        return None
+
+
+def compute_base_tvl_change(target, curr_tvl: float | None, curr_fetched_at: datetime) -> float | None:
+    """Base TVLの24時間比を、前日の自分自身のraw_data.jsonとの比較で算出する。
+
+    以下のいずれかに該当する場合は推測値を置かず「比較不可」としてNoneを返す
+    （呼び出し側でUNCONFIRMED表示・tvl_direction="neutral"へ落ちる。既存の
+    フェイルクローズ方針・daily_data.jsonのスキーマは変更しない）:
+      - 当日のTVL自体が取得できていない
+      - 前日のraw_data.jsonが無い/壊れている
+      - 前日のbase_tvlが数値でない、または0
+      - 前日のfetched_atを解釈できない
+      - 前日との取得時刻の差がBASE_TVL_CHANGE_WINDOW_HOURS（20〜28時間）の
+        範囲外（cron-job.orgの毎日07:37 JST起動を前提に、通常のずれ幅より
+        広い余裕を見た許容範囲。範囲外は「前日と比較にならない間隔で取得
+        された」ことを意味し、黙って計算すると9/19実データと同種の
+        乖離を再生産するため、計算せずに未確認へ倒す）。
+    """
+    if curr_tvl is None:
+        return None
+    prev = load_prev_raw(target)
+    if prev is None:
+        print("[warn] base_tvl_chg: 前日のraw_data.jsonが無いため比較不可", file=sys.stderr)
+        return None
+    prev_tvl = prev.get("base_tvl")
+    if not isinstance(prev_tvl, (int, float)) or isinstance(prev_tvl, bool) or prev_tvl == 0:
+        print(f"[warn] base_tvl_chg: 前日のbase_tvlが未確認/0のため比較不可（値={prev_tvl!r}）", file=sys.stderr)
+        return None
+    prev_fetched_at = _parse_fetched_at(prev.get("fetched_at", ""))
+    if prev_fetched_at is None:
+        print(f"[warn] base_tvl_chg: 前日のfetched_atを解釈できないため比較不可（値={prev.get('fetched_at')!r}）",
+              file=sys.stderr)
+        return None
+    hours = (curr_fetched_at - prev_fetched_at).total_seconds() / 3600
+    lo, hi = BASE_TVL_CHANGE_WINDOW_HOURS
+    if not (lo <= hours <= hi):
+        print(f"[warn] base_tvl_chg: 前日との取得間隔が{hours:.2f}時間で許容範囲"
+              f"（{lo}〜{hi}時間）外のため比較不可", file=sys.stderr)
+        return None
+    return (curr_tvl - prev_tvl) / prev_tvl * 100
 
 
 def fetch_base_dex_volume() -> float | None:
@@ -480,7 +551,7 @@ def main() -> int:
     g005 = safe(fetch_gecko_pool, GECKO_POOLS["0.05"], 0.05)
     g03 = safe(fetch_gecko_pool, GECKO_POOLS["0.3"], 0.3)
     b_tvl = safe(fetch_base_tvl)
-    b_chg = safe(fetch_base_tvl_change)
+    b_chg = compute_base_tvl_change(target, b_tvl, now)
     b_dex = safe(fetch_base_dex_volume)
     usdc_d = safe(fetch_usdc_dominance_base)
     bf_dom = fetch_bitflyer_eth_volume()   # 失敗時 None（内部でフォールバック処理）

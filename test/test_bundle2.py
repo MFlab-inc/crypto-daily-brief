@@ -2743,6 +2743,78 @@ check("compute_inconsistent: close_priceがNone/0なら判定不能（None）",
       fetch_data.compute_inconsistent(81265.0, 78100.0, None) is None
       and fetch_data.compute_inconsistent(81265.0, 78100.0, 0) is None)
 
+print("=== fetch_data.py: Base TVL 24時間比の自前計算（v1.77・オーナー承認・9/19実データの乖離への対処） ===")
+from datetime import date as _date_cls, timedelta as _timedelta_cls  # noqa: E402
+
+
+def _write_raw(day: str, base_tvl, fetched_at: str) -> None:
+    os.makedirs(f"outputs/{day}", exist_ok=True)
+    Path(f"outputs/{day}/raw_data.json").write_text(
+        json.dumps({"run_id": "test", "fetched_at": fetched_at, "base_tvl": base_tvl}, ensure_ascii=False),
+        encoding="utf-8")
+
+
+# 正常系: ちょうど24時間後・レベルどおりの変化率になること
+_write_raw("2099-01-10", 1000.0, "2099-01-10T07:37:00+09:00")
+_chg_normal = fetch_data.compute_base_tvl_change(
+    _date_cls(2099, 1, 11), 1100.0, fetch_data._parse_fetched_at("2099-01-11T07:37:00+09:00"))
+check("compute_base_tvl_change: 24時間後・TVL1000→1100なら+10.0%",
+      _chg_normal is not None and abs(_chg_normal - 10.0) < 1e-9, _chg_normal)
+
+# 9/18→9/19の実データと同一パターンの合成値（実際の乖離事例を単体テストとしても固定化）
+_write_raw("2099-01-20", 5868312588.046856, "2099-01-20T07:37:50.401693+09:00")
+_chg_repro = fetch_data.compute_base_tvl_change(
+    _date_cls(2099, 1, 21), 5912757305.448482,
+    fetch_data._parse_fetched_at("2099-01-21T07:37:46.729469+09:00"))
+check("compute_base_tvl_change: 9/18→9/19と同一の生値パターンで+0.757%付近になる（旧実装の+5.93%は再現しない）",
+      _chg_repro is not None and abs(_chg_repro - 0.757368) < 1e-3, _chg_repro)
+
+# 異常系: 当日TVLがNone
+check("compute_base_tvl_change: 当日TVLがNoneなら比較不可（None）",
+      fetch_data.compute_base_tvl_change(_date_cls(2099, 1, 11), None,
+                                          fetch_data._parse_fetched_at("2099-01-11T07:37:00+09:00")) is None)
+
+# 異常系: 前日raw_data.jsonが無い
+check("compute_base_tvl_change: 前日raw_data.jsonが無ければ比較不可（None）",
+      fetch_data.compute_base_tvl_change(_date_cls(2099, 1, 1), 1000.0,
+                                          fetch_data._parse_fetched_at("2099-01-01T07:37:00+09:00")) is None)
+
+# 異常系: 前日base_tvlが未確認(None)・0
+_write_raw("2099-01-31", None, "2099-01-31T07:37:00+09:00")
+check("compute_base_tvl_change: 前日base_tvlがNoneなら比較不可（None）",
+      fetch_data.compute_base_tvl_change(_date_cls(2099, 2, 1), 1000.0,
+                                          fetch_data._parse_fetched_at("2099-02-01T07:37:00+09:00")) is None)
+_write_raw("2099-02-09", 0, "2099-02-09T07:37:00+09:00")
+check("compute_base_tvl_change: 前日base_tvlが0なら比較不可（ゼロ除算を避ける）",
+      fetch_data.compute_base_tvl_change(_date_cls(2099, 2, 10), 1000.0,
+                                          fetch_data._parse_fetched_at("2099-02-10T07:37:00+09:00")) is None)
+
+# 異常系: 前日fetched_atが壊れている
+os.makedirs("outputs/2099-02-19", exist_ok=True)
+Path("outputs/2099-02-19/raw_data.json").write_text(
+    json.dumps({"run_id": "test", "fetched_at": "not-a-timestamp", "base_tvl": 1000.0}), encoding="utf-8")
+check("compute_base_tvl_change: 前日fetched_atが解釈不能なら比較不可（None）",
+      fetch_data.compute_base_tvl_change(_date_cls(2099, 2, 20), 1100.0,
+                                          fetch_data._parse_fetched_at("2099-02-20T07:37:00+09:00")) is None)
+
+# 異常系: 取得間隔が許容範囲(20〜28時間)の外（短すぎる・長すぎる）
+_write_raw("2099-03-01", 1000.0, "2099-03-01T07:37:00+09:00")
+check("compute_base_tvl_change: 取得間隔が19時間（範囲外・短すぎ）なら比較不可（None）",
+      fetch_data.compute_base_tvl_change(
+          _date_cls(2099, 3, 2), 1100.0,
+          fetch_data._parse_fetched_at("2099-03-01T07:37:00+09:00") + _timedelta_cls(hours=19)) is None)
+check("compute_base_tvl_change: 取得間隔が29時間（範囲外・長すぎ）なら比較不可（None）",
+      fetch_data.compute_base_tvl_change(
+          _date_cls(2099, 3, 2), 1100.0,
+          fetch_data._parse_fetched_at("2099-03-01T07:37:00+09:00") + _timedelta_cls(hours=29)) is None)
+check("compute_base_tvl_change: 取得間隔がちょうど20時間・28時間（境界値）は比較可能",
+      fetch_data.compute_base_tvl_change(
+          _date_cls(2099, 3, 2), 1100.0,
+          fetch_data._parse_fetched_at("2099-03-01T07:37:00+09:00") + _timedelta_cls(hours=20)) is not None
+      and fetch_data.compute_base_tvl_change(
+          _date_cls(2099, 3, 2), 1100.0,
+          fetch_data._parse_fetched_at("2099-03-01T07:37:00+09:00") + _timedelta_cls(hours=28)) is not None)
+
 print("=== compose_numeric.py: 前編【主要指標】への24時間レンジ行の追加（v1.41フォローアップ・オーナー承認） ===")
 _dd_with_range = json.loads(json.dumps(DAILY_DATA))
 _dd_with_range["intraday_range"] = {
