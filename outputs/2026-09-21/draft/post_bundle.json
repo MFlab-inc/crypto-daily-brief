@@ -1,0 +1,471 @@
+{
+  "target_date_jst": "2026-09-21",
+  "level": "L0",
+  "sections": {
+    "part0_target_date": "2026年9月21日（月）",
+    "part1_headline": "BTC・ETH・BNBはいずれも24時間比で上昇しました。Reutersによれば、Fed高官がインフレ抑制のため追加利上げの必要性に言及し、ドル高・金利上昇観測が強まったと報じられていますが、暗号通貨市場ではこうしたマクロ材料とは別に、株式市場の堅調（ナスダック最高値更新）とリスク選好の強まりが意識された可能性があります。 #BTC #ETH #BNB",
+    "part1_points": "・Reutersによると、FRBのムサレム総裁がインフレ抑制のため追加利上げが必要になる可能性を示唆したと報じられました。暗号通貨価格への直接因果は未確認ですが、金利観測を通じてリスク資産全般に影響しうる材料として参考にできます（Reuters、2026年9月21日）。\n・Reutersによると、金利上昇観測とドル高を背景に金価格が下落したと報じられました。暗号通貨価格への直接因果は未確認ですが、ドル・金利動向はリスク資産の資金フローに波及しうる材料です（Reuters、2026年9月21日）。\n・Reutersによると、円安が進行し、通貨当局による為替介入の可能性が意識されていると報じられました。暗号通貨価格への直接因果は未確認ですが、為替市場の変動は投資家のリスク選好に影響し得る材料です（Reuters、2026年9月21日）。\n・Reutersによると、ナスダック総合指数がAIへの楽観と国債利回りの低下を背景に最高値を更新したと報じられました。株式市場の堅調さは暗号通貨を含むリスク資産全般の地合いに波及しうる材料です（Reuters、2026年9月21日）。",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.936兆（¥460.7兆）｜24時間取引高 $1475.7億（¥23.16兆）\n・ #BTC：$86,491（約1,357.2万円）｜24時間比 +6.56%\n　（24時間レンジ $80,571〜$87,397）\n・ #ETH：$2,777（約43.6万円）｜24時間比 +5.20%\n　（24時間レンジ $2,608〜$2,807）\n・ #BNB：$802（約12.6万円）｜24時間比 +3.98%\n・市場心理：Fear & Greed 80（Extreme greed、CoinMarketCap API）\n・ドミナンス：BTC 59.18%｜ETH 11.55%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年9月22日07:37–07:38 JST、USD/JPY ¥156.92",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $21.67M vs Base上ETH/USDC $165.87M｜参考：Base上DEX全体 $6.982億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $62.58億（¥9,820億）｜24時間比 +5.96%｜USDCドミナンス 85.9%\n・ ETH/USDC（Base）参考APR：0.05% 60.76%（TVL $9.30M／24h出来高 $30.96M）｜0.3% 100.98%（TVL $146.29M／24h出来高 $134.91M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年9月22日07:37–07:38 JST",
+    "part2_flow": "・Reutersによれば、FRBのムサレム総裁が追加利上げの必要性に言及したと報じられ、金利上昇観測とドル高が意識された可能性がありますが、同時期にBTC・ETHはいずれも24時間比で上昇しており、金利観測とは別の資金フローが働いたとみられます。\n・Reutersによれば、ナスダック総合指数がAIへの楽観や国債利回り低下を背景に最高値を更新したと報じられており、株式市場の堅調さがリスク選好を後押しした可能性があります。同時期にBTC・ETH・BNBはいずれも上昇しており、株式市場との連動が意識された可能性がありますが、断定はできません。",
+    "lp_comment": "参考APRは両プールとも前日から上昇しました。\nBase 0.05%プールの参考APRは33.60%→60.76%へ上昇しました（24時間出来高 +75.39%、TVL -3.04%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは58.79%→100.98%へ上昇しました（24時間出来高 +94.14%、TVL +13.04%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+5.20%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "本日はBTC・ETH・BNBがいずれも24時間比で上昇し、Fear & Greed指数はExtreme Greed（極度の強欲）圏を示しており、市場心理は強気に傾いている様子がうかがえます。一方でFRB高官の追加利上げ発言や円安・為替介入観測など、マクロ・金利面では不確実性も残っており、今後の金利動向や為替市場の変化が暗号通貨市場にどう波及するかは引き続き注視が必要です。なお、韓国発デジタル債券やmBridgeを巡る動きについても継続監視の材料として挙げられています。投資判断にあたっては、株式市場との連動性や金利観測の変化を踏まえ、ご自身での情報確認をお願いいたします。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "BTC・ETH・BNBともに上昇、市場心理は強気に傾く",
+  "audit_ledger": [
+    {
+      "source": "CFTC",
+      "url": "https://www.cftc.gov/PressRoom/PressReleases/9301-26",
+      "title": "CFTC Innovation Task Force to Host Frontier Forum Series on Innovative Financial Technologies",
+      "published_at": "Mon, 21 Sep 2026 13:00:57 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: CFTCの対話フォーラム開催告知で、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/releases/2026/09/white-house-access-is-a-privilege-not-a-right/",
+      "title": "White House Access Is a Privilege — Not a Right",
+      "published_at": "Mon, 21 Sep 2026 18:01:52 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 報道機関のホワイトハウスアクセスに関する内容で、暗号通貨や市場への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/releases/2026/09/g20-energy-abundance-ministerial-concludes-with-four-consensus-outcomes/",
+      "title": "G20 Energy Abundance Ministerial Concludes with Four Consensus Outcomes",
+      "published_at": "Mon, 21 Sep 2026 14:41:07 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: G20エネルギー閣僚会合の合意内容で、暗号通貨市場への波及経路を具体的に説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/briefings-statements/2026/09/first-lady-melania-trump-releases-details-ahead-of-his-excellency-xi-jinping-president-of-the-peoples-republic-of-china-and-madame-peng-liyuans-visit-to-the-white-house/",
+      "title": "First Lady Melania Trump Releases Details Ahead of His Excellency Xi Jinping, President of The People’s Republic of China, and Madame Peng Liyuan’s Visit to The White House",
+      "published_at": "Mon, 21 Sep 2026 13:17:18 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 習主席訪米の儀礼詳細で、暗号通貨や市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxPQzdFZjM2QWJJQ0xUUE1Tb2llS3dpWkd3QU9lZWk1QjVCenN4VlE2RnVyUnVFRjhNd29mbWxVVVJDWWlCVnFDbFRfY1NldDQzOTg5UEN1UF9oWVZMS0FSeTZLT1NxZU5DN0lYbzgwNVktTjhrMGFtaUp0T3FsWjVQT1JsZFhQSmV2NU1Kd3hpVjdPdFhTbG8yaWFNV1RfeXNLQ1lvU2tkRmJzSnMtN2kzR2d6NDUtUzUwWDRRWkRQYURQMzl0Q0pLRS0tWVE?oc=5",
+      "title": "Trump administration proposes $5 billion to kickstart investment fund to rebuild Gulf energy sites, WSJ reports - Reuters",
+      "published_at": "Mon, 21 Sep 2026 20:49:41 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 湾岸エネルギー施設復興投資基金の提案で、波及経路は薄く参考材料としても不十分"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxQbUY0bG1IQkExN3pxSFZoX1VGN0hTNkluZ1hFd1F6VzZwdWtPRExzOXRnS0prRjV1M0I3U2tfUnhZcmJSQkV6STFKbUo2YXB6S1RhNUkycUFJUXg3UXA0WW9CWkRYaVVVUGRqRmRtUERCU1I4M3ZMYXhETmY1Q3FZQU9Ob1MtMzRONFc3NVFrNzVpcTQySVRzd1dENmcxdw?oc=5",
+      "title": "Nasdaq notches record-high close, AI optimism reignites and Treasury yields retreat - Reuters",
+      "published_at": "Mon, 21 Sep 2026 20:38:52 GMT",
+      "verified_by": "Reuters報道",
+      "decision": "採用",
+      "reason": "B: 株式市場最高値更新と国債利回り低下はリスク選好・流動性を通じ暗号通貨市場にも波及しうる市場環境の参考材料として採用"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxOeEFyOHhrcWVmUjJqdnBjS2NLMUtvajJaU1ZBNHdFNDhobTd6d2VKbEl1cThLOTJOSVdHN3lMUmZXNGluMTJTVW9lckdWSUVKdERCaVFxU1U5ZVowMVE5c2ZxcXE0RDMwLXpfWUtvbDZOajI0N3ZNbG1PUU8yenhDbW5ybG1zbDRjWDRNQXRFVlMwWnZFTnRZbkZVRncxdWlLN0FMX29obHIwOFJyX2gxa0c2Y0E3cTlS?oc=5",
+      "title": "Yen eases as potential for intervention eyed - Reuters",
+      "published_at": "Mon, 21 Sep 2026 19:20:51 GMT",
+      "verified_by": "Reuters報道",
+      "decision": "採用",
+      "reason": "B: 円安・為替介入観測は為替・リスク選好の波及経路を説明できる市場環境の参考材料として採用"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxPVjJsZS0wTVZyNThsTkszYWk2c2xqN19RbzlWSnpqQ3cwZ0xCLWFTT0xaVkpkWkE5MmhDZFg1bHZzUW9EYlBuQVpUOVIydEJoVmR6OVl0ME5WNllZZTRVWXFMYy0yX19mNG9nYU5GbFpMdXdaeTA3ZDFiOXlTTlBGNDBmZ2VxR0I3UzE4M25hVGNZcDZXU0pXSFdXV1FIRVQ3dEh4XzRnLUZDN3do?oc=5",
+      "title": "EXCLUSIVE: Fed's Musalem says more rate hikes likely needed to quell inflation - Reuters",
+      "published_at": "Mon, 21 Sep 2026 18:54:06 GMT",
+      "verified_by": "Reuters報道",
+      "decision": "採用",
+      "reason": "B: Fed高官の追加利上げ発言は金利を通じたリスク資産全般への波及経路を説明できる材料として採用"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxQQUtKdjloRHZCamhPWmFUa00yUkQwRWZJNFVpbUFiRl9KQmNWbmViLTJQN1hvUmphTzVuMm9ubU5VaXNoQ2NPdVgzM3JPd0t6Qk5XOHQ4ZG96bDRkMlhEMG1kN09OaElGdGxsOEpYdzA2eE53aXBsZm1ZaWhXR1JJY0FSN2NPdzFaX2d6UjY4VU5aWTJOcDNRZC1kTURhRWFPUVNoeU9NTEVUcFRuQmc?oc=5",
+      "title": "Gold falls on rising odds of Fed rate hike, stronger dollar - Reuters",
+      "published_at": "Mon, 21 Sep 2026 18:45:41 GMT",
+      "verified_by": "Reuters報道",
+      "decision": "採用",
+      "reason": "B: 金利上昇観測・ドル高による金価格下落は、金利・為替を通じた市場環境の参考材料として採用"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxNNE5HNmRLSkhKLVZHSUdKNGNsOWh6RmUwb3VkRXdmLXN6c0FfSUV5ZTY3T2dpcVFTQWVLMjAzeHZnemlPWnprVC1SOFJxdHNhWXVXcHJTSDFsUFFDQWd5MFduSk43Ul9YaWtpeDZCeC1PeWFvTTIyQjFFWXd6ajNkeldBMy1ZWmJSU3ZwQjZqZVVicXNrOEd5WWFhX2xOWWF5djFsbEhIU01uNFBaR0ZkZTFfVmxabDk4VmpYOVFB?oc=5",
+      "title": "EXCLUSIVE: Russia adapts fertilizer, coal terminals in Baltic, Arctic ports to export Black Sea grain - Reuters",
+      "published_at": "Mon, 21 Sep 2026 17:54:35 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ロシアの穀物輸出港湾整備に関する内容で、金利・為替等への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxQcThldmdWd2c5aHdfck8zYk1XMWtsa3kweWlXaTNQWEpnV2NIUHhiNTh2cHhoSndCV2Z2QkhwNl9DZEJObFJha2pXWG1JcUZpVXlZU1RqQ2diZUJ0YVV2alRBRmRCampGOGdQQnM4UVV2R2ZMQ2p6WC1QSk5iOGJEWDZ2YXdaSzlLeGtZYnNuVld5MGZESG1tenNaMFlFcExWeVhlZjJBTlJOeHNmVkhBYzFkejJkNno5VWEwU05hRHU4NGlqT1U5UXcxUzU?oc=5",
+      "title": "Saudi Arabia ramps up Gulf oil exports after pipeline attack, data shows - Reuters",
+      "published_at": "Mon, 21 Sep 2026 17:14:28 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 湾岸原油輸出の増加は波及経路を説明しうるが、内容が薄く参考材料としても不十分"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxQeEFPNUpOV29zcl9nZlFKaEJNS2tjMnN2OUNidVJvanpPRUE0RTVLNm1tOGZSQzMxLXAzVy1sWk1SM2hjNHQ1bU5GbzdxdGsxT09Ob3FNTEJMTnc2dTFPM1p2UHpQRndJVlRTb3ZzWS1UOHZpSjhpLVEwQVA1bU9ZTlduRVlVdUZwVlJpcjBlZTdiZ2pqXzlv?oc=5",
+      "title": "COMMENTARY: Morning Bid: Summiteering - Reuters",
+      "published_at": "Mon, 21 Sep 2026 16:46:14 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 市況コラムの見出しのみで具体的な波及経路を説明できる内容が確認できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxNYWF0aU9mWUM0TjNtekhpT0I0NTM1RXoydldTZDlzNVM4Q0FnRXFCLTlaLUQxdEZfMS1qeU1XV0lsNHhvc09zMTBUQV9xVFhaakdCU196dW5sQ212UHdLVjVySHo5UWczV0dVS2dnY3d2Q2dTbWRkOWFRZ0g5aTlGaEtnQkFQcno2ZjdfdndQdGdSR1c3MjdEXzNCZlhRM216di1sdllQSl9OT3pkcWRSd3p3?oc=5",
+      "title": "Europe's STOXX 600 rallies on tech, banks strength as oil prices retreat - Reuters",
+      "published_at": "Mon, 21 Sep 2026 16:40:56 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 欧州株式市場の値動きで、暗号通貨への波及経路を具体的に説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxOQ3lMRVU5WWtoUkVvV2d3NWFYNG0wOUJ6UVgyZkp3M2NtdFdiVmV4NHdzVzVFQzlSc1ZhZXllVDZnQXJyaDZiX3lzNXBqOHVMaFl5UHNYWHI5dDZ3MDZvcWJaLUhDTzRMR1I2RDB5Qms4LXppVVhUeTlYSkV3ZUxDeHR2OVJLMGFHSERqcndJQlZkYnNNODRLb3drOE1QVGtPcG5CTnl3TWdHdVBhTjFuaWczdmJEb3IzMS0yenljdnk?oc=5",
+      "title": "Russia will have budget deficit not exceeding 3% of GDP in 2026, Finance Minister says - Reuters",
+      "published_at": "Mon, 21 Sep 2026 16:19:41 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ロシアの財政赤字見通しで、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxONjZTMzdJY2JfUXkxbmNSTjlqdTJnOE5WX19kNVV5NTdTRndYSGJwbHV1aHJMaXprSldzQ19jb0xYbU81MmtRb29NVFV0a0lRTFhmaU1DSTBCYXJsWG9RVE1XOEtJa3ZFMkRkcWtxZ0laaVRHRGlRU2pFQWk5MUpoMFlTTUJlSEtzbkx4TUpxVDJwa0Z4NW4tVFJyWEtsa21QYjJDX1lQdnNWX2tNWDlFSUdaclE5NlRzRURfblRIbw?oc=5",
+      "title": "Smart ring maker Oura eyes $15.6 billion IPO valuation in fall listings demand test - Reuters",
+      "published_at": "Mon, 21 Sep 2026 16:17:15 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: スマートリング企業のIPO評価額に関する内容で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxOODZIYnhhdnBpWldya3A4NDlISEduRzZWd0twSXFsa0tDanh5MV8teTM3T19CS2FLZURxeTRRbW9NR0JIVHdjd01FRTl3S2ZibFNHSENXYzZ0anB1OVdUNDl3eHJfdnBZSUs0NkEteTcybXoxOW5sYmxiQ3EzbnNwUGVUQVRsRWtwQUtXaGczckszX1R1R1JqZWdqMmJnUQ?oc=5",
+      "title": "UK indexes climb as oil prices retreat, banks lead gains - Reuters",
+      "published_at": "Mon, 21 Sep 2026 16:13:37 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 英国株式市場の値動きで、暗号通貨への波及経路を具体的に説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxOMEhRT0NHV1hIcElfc0ZNTkd6MmFBb0I1bFZaaGsyTXNfbUF3c2JsZ0gtbnJiS1BNVmF6ZGdmeDhjeG9HeFp6TmRmcUo4c1NPYVNORXR5T0FjengySmhmbndCODZmUVJlWWx4dHU3SE5odjc1cDFXamRuT1FCX1hSTHBkZHdoSXFNcEcyYy1rYWJzcUVhT3dmSkdJcXFmVjNUSXNNcnJYTjlGZVlSa3Zr?oc=5",
+      "title": "Bank of Canada says new US tariffs could slash fourth quarter growth - Reuters",
+      "published_at": "Mon, 21 Sep 2026 16:11:51 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: カナダの関税影響見通しは波及経路を説明しうるが、内容が薄く参考材料としても不十分"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxOdWJyRTVuNE80Snh1Z3g5UFZyaTNYSGRrTmRvQzY3Nlh2bllfQUY0Ti1XeU1mUWc1SVFpX3VScVdrZVRZZlVuVzBTbTgwZS1JRTRDR0VYZTJzQjFwX05UaGZLdUJzUWtYSUlTdE5FRzhfUlp1ZHl0S1dIMUZ5Z2JKN29nc3RQNHVMcU1oa1VNbEI5RUNSeFNwUVFoNXlHem82Q25sY3UxdTJEWkZncXZwNV9CT3RsS0k4cDZUS2JfWQ?oc=5",
+      "title": "Glencore can bring $236 million UK lawsuit against refinery, court rules - Reuters",
+      "published_at": "Mon, 21 Sep 2026 16:09:28 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別企業の訴訟に関する内容で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxPa2w3TmpnTVNVQVgzdUF5My03STVyMFE1RVpqbmlKSWJLbmQ1ZmhidHNqSmFmWXY5VExfb1ljeXZUTFNfUnJDNnUzaXI3UXZvempLSTNFc1VzVFMyd3J4S2dvcnJTamd2cGFSV01UMHIwUm5uWjhhOF9FZW9mbWpqYzJqV3ktTnRGLThJSnhkWlJEU29DLWh3SVFEVm14X2tiQUQzMmZWaFVHNE9WTnc?oc=5",
+      "title": "Halliburton signs Venezuela energy pacts with Eneva, WESCA - Reuters",
+      "published_at": "Mon, 21 Sep 2026 16:08:27 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別企業のベネズエラでのエネルギー契約締結で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/09/21/bitcoin-could-test-usd90-000-after-shorts-get-squeezed-but-traders-warn-leverage-is-building",
+      "title": "Bitcoin could test $90,000 after shorts get squeezed, but traders warn leverage is building",
+      "published_at": "Mon, 21 Sep 2026 20:39:39 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: BTC価格分析の単独tier3報道で、独立2ソース規定を満たす相手候補がない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/saudi-arabia-exits-china-backed-mbridge-cbdc-project-ft?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Saudi Arabia exits China-backed mBridge CBDC project: FT",
+      "published_at": "Mon, 21 Sep 2026 20:37:15 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: サウジのmBridge離脱報道は単独tier3のみで、独立2ソースの相手候補がない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/what-happened-in-crypto-today?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Here’s what happened in crypto today",
+      "published_at": "Mon, 21 Sep 2026 19:53:04 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 暗号通貨全般のまとめ記事で個別の事実根拠として扱えない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/09/21/why-this-investment-bank-sees-little-demand-for-tokenized-stocks-despite-sec-s-new-trading-rules",
+      "title": "Why this investment bank expects little demand for tokenized stocks despite SEC’s new trading rules",
+      "published_at": "Mon, 21 Sep 2026 19:08:40 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: トークン化株式の需要見通しに関する単独tier3の分析記事で、独立2ソースの相手候補がない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/ondo-lets-institutions-convert-stocks-directly-into-tokenized-shares?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Ondo lets institutions convert stocks directly into tokenized shares",
+      "published_at": "Mon, 21 Sep 2026 18:35:43 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: Ondoの新機能発表は単独tier3報道で、独立2ソースの相手候補がない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/crypto-pac-fairshake-spending-sherrod-brown-ohio-senate-race?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Crypto PAC to spend $30M opposing Sherrod Brown in Ohio, again",
+      "published_at": "Mon, 21 Sep 2026 18:15:22 +0000",
+      "verified_by": "Cointelegraph・CoinDeskの独立2ソース報道",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: 暗号通貨業界PACのオハイオ州上院選への支出計画について、異なるsourceの2媒体が同一事実を報じているため独立2ソース規定に該当すると判断したが、内容は主要ポイントには含めず参考記録に留めた"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/circle-launches-bitcoin-backed-usdc-borrowing-for-institutional-clients?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Circle launches Bitcoin-backed USDC borrowing for institutional clients",
+      "published_at": "Mon, 21 Sep 2026 16:56:53 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: CircleのBTC担保USDC融資開始は単独tier3報道で、独立2ソースの相手候補がない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/markets/bitcoin-price-86k-analysis-sees-crypto-new-bull-market?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bitcoin price tags $86K as analysis sees crypto in ‘new bull market’",
+      "published_at": "Mon, 21 Sep 2026 16:39:40 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: BTC価格と強気相場分析の単独tier3報道で、独立2ソースの相手候補がない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/news-analysis/2026/09/21/crypto-s-fairshake-repeats-history-with-usd30-million-to-oppose-sherrod-brown-senate-bid",
+      "title": "Crypto political group plans to spend $30 million against Sherrod Brown's Senate bid",
+      "published_at": "Mon, 21 Sep 2026 16:01:36 +0000",
+      "verified_by": "CoinDesk・Cointelegraphの独立2ソース報道",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: 同上PAC支出計画についてCoinDeskも報じており独立2ソース規定に該当すると判断したが、政治資金の話題であり主要ポイントには反映しなかった"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/crypto-biz-clarity-act-coinbase-sec-tokenized-stocks?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Crypto Biz: CLARITY Act setback puts Coinbase in the spotlight",
+      "published_at": "Mon, 21 Sep 2026 15:08:17 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: CLARITY法案停滞とCoinbaseへの影響分析は単独tier3で、独立2ソースの相手候補がない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/09/21/ecb-announces-it-will-invest-in-tokenized-securities-via-new-pontes-platform",
+      "title": "ECB plans to buy tokenized bonds with its own funds",
+      "published_at": "Mon, 21 Sep 2026 15:00:47 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: ECBのトークン化債券購入計画はtier1・tier2の裏付けがなく、候補37との重複はあるが同一source系列で独立性が確認できない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/09/21/banks-overseas-crypto-hubs-gain-from-clarity-act-s-senate-defeat-critics-say",
+      "title": "Why banks and offshore hubs like Dubai are winners of the Senate killing the Clarity Act",
+      "published_at": "Mon, 21 Sep 2026 14:53:52 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: CLARITY法案否決の影響分析は単独tier3の意見記事で、事実報道ではなく独立2ソース規定の対象外"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/magazine/kyle-samani-predicts-sol-flippening-claims-no-one-uses-eth?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Kyle Samani predicts SOL flippening, claims ‘no one’ uses ETH",
+      "published_at": "Mon, 21 Sep 2026 13:30:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 個人投資家の価格予想・意見であり、意見・分析のため独立2ソース規定の対象外"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/09/21/bitmine-bought-usd75-million-ether-as-tom-lee-says-institutions-are-still-underweight-crypto",
+      "title": "Bitmine bought $75 million ether as Tom Lee says institutions are still underweight crypto",
+      "published_at": "Mon, 21 Sep 2026 13:11:15 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: Bitmineの ETH購入に関する単独tier3報道で、独立2ソースの相手候補がない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/strategy-950-btc-buy-strc-repurchase-174-million?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Strategy buys 950 Bitcoin for $76M, repurchases $174M in STRC",
+      "published_at": "Mon, 21 Sep 2026 12:48:21 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: Strategy社のBTC購入報道は単独tier3で、独立2ソースの相手候補がない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/daybook-us/2026/09/21/bitcoin-s-44-gain-in-third-quarter-teases-full-blown-crypto-bull-run",
+      "title": "Bitcoin's 44% gain in third quarter teases full-blown crypto bull run",
+      "published_at": "Mon, 21 Sep 2026 11:36:11 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 市況まとめ記事で個別の事実根拠として扱えない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/eurosystem-central-bank-money-tokenized-finance?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "ECB launches Pontes to settle tokenized assets without stablecoins",
+      "published_at": "Mon, 21 Sep 2026 11:27:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: ECB Pontes稼働の報道でcandidate37と同一事実だが、暗号通貨価格への直接材料として主要ポイントには反映せず継続監視扱いとした"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/09/21/ecb-deploys-pontes-platform-to-settle-wholesale-tokenized-assets-in-central-bank-money",
+      "title": "ECB deploys Pontes platform to settle wholesale tokenized assets in central-bank money",
+      "published_at": "Mon, 21 Sep 2026 11:18:55 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: ECB Pontes稼働の報道でcandidate36と同一事実だが、暗号通貨価格への直接材料として主要ポイントには反映せず継続監視扱いとした"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/09/21/hana-bank-issues-south-korea-s-first-digital-bond-using-euroclear-s-blockchain",
+      "title": "Hana Bank issues South Korea’s first digital bond using Euroclear’s blockchain",
+      "published_at": "Mon, 21 Sep 2026 08:49:59 +0000",
+      "verified_by": "CoinDesk・Cointelegraphの独立2ソース報道",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: 韓国Hana Bankのデジタル債券発行についてCoinDesk・Cointelegraphの異なるsourceが同一事実を報じており独立2ソース規定に該当すると判断したが、暗号通貨価格への直接材料ではないため主要ポイントには反映せず継続監視扱いとした"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/hana-bank-euroclear-blockchain-100m-bond?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Hana Bank taps Euroclear blockchain for $100M bond issuance: Report",
+      "published_at": "Mon, 21 Sep 2026 04:27:32 +0000",
+      "verified_by": "Cointelegraph・CoinDeskの独立2ソース報道",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: 同上Hana Bank債券発行についてCointelegraphも報じており独立2ソース規定に該当すると判断したが、主要ポイントには反映せず継続監視扱いとした"
+    }
+  ],
+  "reusable_for_summary": [
+    "Hana Bank（韓国）がEuroclearのブロックチェーン基盤を用い韓国初のデジタル債券を発行したと複数の暗号通貨メディアが報じています（継続監視）。",
+    "サウジアラビアが中国主導のCBDC越境決済プロジェクトmBridgeから離脱したとの報道があり、暗号通貨・CBDC地政学の観点で継続監視の対象です。"
+  ],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 0
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 0
+    },
+    "FRB（speeches）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "FRB（testimony）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 1
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 0
+    },
+    "米財務省": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "USTR": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "ホワイトハウス": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 3
+    },
+    "ホワイトハウス（大統領令等）": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 0
+    },
+    "ADP": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 20
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 19
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 48
+    }
+  },
+  "news_candidate_count": 39,
+  "part1_md": "【対象日】2026年9月21日（月）\n\n【ヘッドライン】\nBTC・ETH・BNBはいずれも24時間比で上昇しました。Reutersによれば、Fed高官がインフレ抑制のため追加利上げの必要性に言及し、ドル高・金利上昇観測が強まったと報じられていますが、暗号通貨市場ではこうしたマクロ材料とは別に、株式市場の堅調（ナスダック最高値更新）とリスク選好の強まりが意識された可能性があります。 #BTC #ETH #BNB\n\n【主要なポイント】\n・Reutersによると、FRBのムサレム総裁がインフレ抑制のため追加利上げが必要になる可能性を示唆したと報じられました。暗号通貨価格への直接因果は未確認ですが、金利観測を通じてリスク資産全般に影響しうる材料として参考にできます（Reuters、2026年9月21日）。\n・Reutersによると、金利上昇観測とドル高を背景に金価格が下落したと報じられました。暗号通貨価格への直接因果は未確認ですが、ドル・金利動向はリスク資産の資金フローに波及しうる材料です（Reuters、2026年9月21日）。\n・Reutersによると、円安が進行し、通貨当局による為替介入の可能性が意識されていると報じられました。暗号通貨価格への直接因果は未確認ですが、為替市場の変動は投資家のリスク選好に影響し得る材料です（Reuters、2026年9月21日）。\n・Reutersによると、ナスダック総合指数がAIへの楽観と国債利回りの低下を背景に最高値を更新したと報じられました。株式市場の堅調さは暗号通貨を含むリスク資産全般の地合いに波及しうる材料です（Reuters、2026年9月21日）。\n\n【主要指標】\n・市場全体：時価総額 $2.936兆（¥460.7兆）｜24時間取引高 $1475.7億（¥23.16兆）\n・ #BTC：$86,491（約1,357.2万円）｜24時間比 +6.56%\n　（24時間レンジ $80,571〜$87,397）\n・ #ETH：$2,777（約43.6万円）｜24時間比 +5.20%\n　（24時間レンジ $2,608〜$2,807）\n・ #BNB：$802（約12.6万円）｜24時間比 +3.98%\n・市場心理：Fear & Greed 80（Extreme greed、CoinMarketCap API）\n・ドミナンス：BTC 59.18%｜ETH 11.55%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年9月22日07:37–07:38 JST、USD/JPY ¥156.92\n",
+  "part2_md": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $21.67M vs Base上ETH/USDC $165.87M｜参考：Base上DEX全体 $6.982億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $62.58億（¥9,820億）｜24時間比 +5.96%｜USDCドミナンス 85.9%\n・ ETH/USDC（Base）参考APR：0.05% 60.76%（TVL $9.30M／24h出来高 $30.96M）｜0.3% 100.98%（TVL $146.29M／24h出来高 $134.91M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年9月22日07:37–07:38 JST\n\n【市場のフロー】\n・Reutersによれば、FRBのムサレム総裁が追加利上げの必要性に言及したと報じられ、金利上昇観測とドル高が意識された可能性がありますが、同時期にBTC・ETHはいずれも24時間比で上昇しており、金利観測とは別の資金フローが働いたとみられます。\n・Reutersによれば、ナスダック総合指数がAIへの楽観や国債利回り低下を背景に最高値を更新したと報じられており、株式市場の堅調さがリスク選好を後押しした可能性があります。同時期にBTC・ETH・BNBはいずれも上昇しており、株式市場との連動が意識された可能性がありますが、断定はできません。\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から上昇しました。\nBase 0.05%プールの参考APRは33.60%→60.76%へ上昇しました（24時間出来高 +75.39%、TVL -3.04%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは58.79%→100.98%へ上昇しました（24時間出来高 +94.14%、TVL +13.04%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+5.20%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\n本日はBTC・ETH・BNBがいずれも24時間比で上昇し、Fear & Greed指数はExtreme Greed（極度の強欲）圏を示しており、市場心理は強気に傾いている様子がうかがえます。一方でFRB高官の追加利上げ発言や円安・為替介入観測など、マクロ・金利面では不確実性も残っており、今後の金利動向や為替市場の変化が暗号通貨市場にどう波及するかは引き続き注視が必要です。なお、韓国発デジタル債券やmBridgeを巡る動きについても継続監視の材料として挙げられています。投資判断にあたっては、株式市場との連動性や金利観測の変化を踏まえ、ご自身での情報確認をお願いいたします。\n"
+}
