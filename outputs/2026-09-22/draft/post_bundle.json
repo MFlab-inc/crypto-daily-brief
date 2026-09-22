@@ -1,0 +1,471 @@
+{
+  "target_date_jst": "2026-09-22",
+  "level": "L0",
+  "sections": {
+    "part0_target_date": "2026年9月22日（火）",
+    "part1_headline": "Binance がCircleの株式を取得し、USDCをめぐる提携を拡大したことが分かりました。BTC・ETH・BNBはいずれも24時間比で下落しました。 #BTC #ETH #BNB",
+    "part1_points": "・Binanceは1億ドル規模でCircle株式を取得し、USDCの普及を後押しする5年間の提携を拡大したとReutersが報じました。ステーブルコイン分野での取引所・発行体連携が強まる動きとして注目されます（Reuters、2026年9月22日）。\n・カナダの大手銀行6行がカナダドルの銀行間トークン化預金の実証実験に乗り出したことが、複数の暗号通貨専門メディアで報じられました。公式発表での確認は取れていませんが、銀行によるトークン化預金への関心の広がりを示す動きとみられます（Cointelegraph、CoinDesk、2026年9月22日）。\n・米CFTCは、発言・出席等の個人の行動に基づく「メンション市場」型契約の上場基準に関する職員向けアドバイザリーを公表しました。暗号資産に直接言及したものではありませんが、イベント契約市場の規律強化に関する規制動向として参考材料になります（CFTC、2026年9月22日）。",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.931兆（¥461.2兆）｜24時間取引高 $1130.8億（¥17.79兆）\n・ #BTC：$86,210（約1,356.5万円）｜24時間比 -0.37%\n　（24時間レンジ $85,059〜$86,987）\n・ #ETH：$2,750（約43.3万円）｜24時間比 -1.03%\n　（24時間レンジ $2,715〜$2,788）\n・ #BNB：$786（約12.4万円）｜24時間比 -1.97%\n・市場心理：Fear & Greed 78（Greed、CoinMarketCap API）\n・ドミナンス：BTC 59.09%｜ETH 11.45%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年9月23日07:37 JST、USD/JPY ¥157.35",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $8.21M vs Base上ETH/USDC $102.41M｜参考：Base上DEX全体 $12.677億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $62.32億（¥9,807億）｜24時間比 -0.41%｜USDCドミナンス 85.9%\n・ ETH/USDC（Base）参考APR：0.05% 39.54%（TVL $9.18M／24h出来高 $19.89M）｜0.3% 58.76%（TVL $153.78M／24h出来高 $82.52M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年9月23日07:37 JST",
+    "part2_flow": "・BinanceがCircle株式を取得しUSDC普及に向けた5年間の提携を拡大したと報じられたことで、ステーブルコイン分野での取引所・発行体連携強化が意識された可能性がありますが、市場データではBTC・ETHは24時間比で下落しており、この提携報道が直接的な押し上げ材料として機能したとは断定できません。\n・カナダの大手銀行6行がカナダドルの銀行間トークン化預金の実証実験に乗り出したと複数の暗号通貨専門メディアで報じられたことで、伝統的金融機関によるブロックチェーン活用の広がりが意識された可能性がありますが、公式発表での確認が取れていないため、市場全体への影響度は現時点で見極めが難しい状況です。",
+    "lp_comment": "参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは60.76%→39.54%へ低下しました（24時間出来高 -35.75%、TVL -1.27%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは100.98%→58.76%へ低下しました（24時間出来高 -38.83%、TVL +5.12%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比-1.03%と下落中のため、ETH偏り・下限側レンジ外・下落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "本日はBTC・ETH・BNBがいずれも24時間比で下落し、市場心理は「Greed」を維持しつつも上値の重さがうかがえる展開でした。BinanceとCircleの提携拡大やカナダ大手銀行のトークン化預金実証など、ステーブルコイン・伝統金融連携に関する材料が相次ぎましたが、いずれも短期的な値動きへの直接的な影響は確認できていません。米SECのカストディ方針や規制当局主導での市場構造整備の動きも継続的な監視材料として意識されています。今後は規制動向の具体化やDEX・国内取引所の出来高推移を注視していく必要がありそうです。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "Binance・Circle提携拡大でUSDC強化",
+  "audit_ledger": [
+    {
+      "source": "SEC",
+      "url": "https://www.sec.gov/newsroom/press-releases/2026-91-sec-censures-otc-link-llc-repeated-compliance-failures-related-regulation-sci",
+      "title": "SEC Censures OTC Link LLC for Repeated Compliance Failures Related to Regulation SCI",
+      "published_at": "Tue, 22 Sep 2026 12:41:11 -0400",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 米国の証券決済インフラ業者に対する規制処分で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "FRB",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/orders20260922a.htm",
+      "title": "Federal Reserve Board announces approval of application by BancFirst Corporation",
+      "published_at": "Tue, 22 Sep 2026 20:30:00 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 米地方銀行の合併認可で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "FRB（speeches）",
+      "url": "https://www.federalreserve.gov/newsevents/speech/jefferson20260922a.htm",
+      "title": "Jefferson, Discount Window Modernization and Treasury Market Functioning",
+      "published_at": "Tue, 22 Sep 2026 14:20:00 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 国債市場機能に関する講演だが、要旨のみで金利・流動性への具体的言及が確認できず参考材料としても不十分"
+    },
+    {
+      "source": "CFTC",
+      "url": "https://www.cftc.gov/PressRoom/PressReleases/9302-26",
+      "title": "CFTC Releases Staff Advisory on Mention Markets",
+      "published_at": "Tue, 22 Sep 2026 20:38:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: イベント契約の上場基準に関するもので暗号資産への直接言及はなく、規制動向の参考程度にとどまるため今回は不採用"
+    },
+    {
+      "source": "USTR",
+      "url": "https://ustr.gov/about/policy-offices/press-office/press-releases/2026/september/public-hearing-regarding-section-301-investigation-germanys-persistent-underpayment-innovative",
+      "title": "Public Hearing Regarding Section 301 Investigation of Germany’s Persistent Underpayment for Innovative Pharmaceutical Products",
+      "published_at": "Mon, 21 Sep 2026 21:12:21 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 医薬品価格を巡る通商調査の公聴会で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/briefings-statements/2026/09/first-lady-melania-trump-unveils-new-fostering-the-future-together-technology-alliances-international-events-and-membership-expansion/",
+      "title": "First Lady Melania Trump Unveils New Fostering the Future Together Technology Alliances, International Events, and Membership Expansion",
+      "published_at": "Tue, 22 Sep 2026 18:07:04 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 大統領夫人の国際連携イベントの発表で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/releases/2026/09/president-trump-at-the-united-nations-while-others-have-talked-i-have-acted/",
+      "title": "President Trump at the United Nations: “While Others Have Talked, I Have Acted”",
+      "published_at": "Tue, 22 Sep 2026 17:04:23 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 国連総会での大統領演説内容で、暗号通貨市場への直接の波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/briefings-statements/2026/09/agreement-between-the-government-of-the-united-states-of-america-and-the-government-of-the-kingdom-of-denmark-together-with-the-government-of-greenland-to-amend-and-supplement-the-agreement-of-27-apri/",
+      "title": "AGREEMENT BETWEEN THE GOVERNMENT OF THE UNITED STATES OF AMERICA AND THE GOVERNMENT OF THE KINGDOM OF DENMARK TOGETHER WITH THE GOVERNMENT OF GREENLAND",
+      "published_at": "Tue, 22 Sep 2026 15:48:16 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 米デンマーク間の防衛協定改定で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxPN3ZiLV9yeVlIX0gzQ2dPLUp0QVVZMVFhcVJ4Uy16TktGdjBXdDkzQ2RkVDRIVXUwVHE5TE5mTzY0Y3RQU1ZIcEkxSGVjekN3M1RGc1FLRzgyOHRYWW43bVpsX0FzM3gzbDdBREhBQXRSOHdjSnpsd3E1MFItY3JhcTRlRUJaR09ORWZhQ3NnandqNDNSV1hpRFJvbDZuak9vc216VzM3aVJnc2JSUmJhX3l0VjdRZ0FqTERxQlEtVVNySUE?oc=5",
+      "title": "Trump pledges 'unmatched military might' against drug cartels - reuters.com",
+      "published_at": "Tue, 22 Sep 2026 20:59:05 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 麻薬カルテルに対する軍事的姿勢の表明で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxPejZNajQteTk5RElWNTZRWHR4YV8tdF90N19DelgxWHI0X0RSTFgtRm9GVVQ2bWIzaWJ4SEFwdi1DUmZ6cXQ3dm5rYVRZdjJQaGRxMDRsZ0IyZ19mVDdHN0VlUXdObko1Y2R1Qkx1ekNDYXNnY05oN3lsUnVwYjRobXFXU2hrUEx6T3BES3Vad25fTDk5cHBjWjVFQTE4VWZCWHlkMS1TRkltc281QUVWRw?oc=5",
+      "title": "Financial stocks fall with AI and flattening yield curve in focus - reuters.com",
+      "published_at": "Tue, 22 Sep 2026 20:52:00 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 金融株下落とイールドカーブの話題だが、暗号通貨市場への波及を具体的に説明する材料が乏しい"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxPd1lrc1pyMmMyNkhnZWQyRmZEbDVEcmdHODFMR0tIYVRiVHZmZmE2U1dpdVVJeFJDci1mN1A0cklyWXQ2Z0VtZXpNWXpZdDVzYkFoTUlXdWxxX0dBQ1FTaUNBR0VsS3did3M1cWduLXBITGJwNmoxSVdzcm54VUVxUm9YT1BVcG1xMXpfcTRYV3hCSW1mcWxoeFg1eDZFckJEcWMxbEJ0TlVOa3dTaGR2c1A0RTIxcHlrb0VZQ2J4aU85T2s?oc=5",
+      "title": "EXCLUSIVE: Microsoft to keep shareholder proposal rights through 2027, even as SEC reduces oversight - reuters.com",
+      "published_at": "Tue, 22 Sep 2026 20:03:03 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: マイクロソフトの株主提案権を巡る話題で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQcXRuQzZ0dWZUMUktT0VqSWFxbE80QTNFSTk2WFdBelpyNThBMWVwQ0l1dDNnanktVHVxR1lvY20yeENubTF0bVdWcl9vdklQd09CcVpGaE0yN0xqVERVQTVKUGhtUjQtZy1KcnR1d0wtZzZOVXl4eWVNRnBRQ2F4OUl3aFZ5N0J2SzFWdlBGS0NOdlA5V2wzQmhjMHY0UDNkUHVDWGdHa3h2dTh1UU9oUG1fd0h0MWhlU3VnemVSZzlHR1pn?oc=5",
+      "title": "France urges EU to postpone methane reporting requirements - reuters.com",
+      "published_at": "Tue, 22 Sep 2026 17:10:26 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: EUのメタン報告規制の延期要請で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxNcWRwZS1feHZJdllyNHhVSlFtb0FpTjdSaEpSMUJCdXVhOE9WVk5xX2NpWHJmWFV1cHk2eDVLbHdPSUhVQnVUdmhtMG1RbGU1dk9qN3FRNE5va01YRHNocHZEaGRhdzVXbHY5eEVaZGFWd3Z1Y2hxYmxXRWtQYy1rd3A0NExUc2prS3BBWENxV1V0ZnFFckhEdXhBbk8?oc=5",
+      "title": "AI infrastructure firm Accelevation targets up to $5.4 billion valuation in US IPO - reuters.com",
+      "published_at": "Tue, 22 Sep 2026 17:00:42 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: AIインフラ企業のIPO計画で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxNZGR3T2ZLcVk2ZkdRdDBJLWZkVlRlUXBONm9UVmoyX1lmVU1CcE1KM2ViNDhrWllDVTdJdnYtYVlsQnBDMzRGU0JoczNhSlV3UGdnMTl4M3o2NDBVcVhDZDZZQUhHUlFZN0tDVWNGUDFMQkJmSWhtNjhKM2E4LTVtZThna01tSTdGekdrQVVmUGthTEpRLXBVTEtqRDBkNmVJbnQ4MURybndmMkwtMmVVU01CWkxIZG9ISUoycg?oc=5",
+      "title": "Fed's Barkin says economy may be firming, inflation not limited to energy, tariff shocks - reuters.com",
+      "published_at": "Tue, 22 Sep 2026 16:56:55 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: FRB高官の金融政策発言だが、要旨のみで具体的な政策的含意が不明確なため参考材料としても不十分"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxNWUNHdHYwOEhlYi1ORzFuRTAzWkhwamp0OHBxR0FPRjB6d2M0YVNUUFlIY2xfcU52MzI3X0hGRmlwcENtVWVhWkJ4d1NMTzFTc0V5bUlnZmZTNnIta29qWURucFJaeXBoUjJfRnIyekN1WjJ1X3B6Z2JqREltNXZ3R2pNYVBKWTB3WjE1c3hiRXFMVXdhNGhqRnRZWFRRZEtsRldVRGtuWWh5RmdDcFM2SE1MemYtOUlTUEotZV95dUJybEExb1E?oc=5",
+      "title": "Saudi Arabia denies buying oil tankers after Iraq blames it for higher shipping costs - reuters.com",
+      "published_at": "Tue, 22 Sep 2026 16:49:45 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 原油輸送コストを巡る話題だが、暗号通貨市場への具体的な波及経路を示す材料としては薄い"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxPMWpkb3RQV3p1VmpBdlAwTHlnTVI2bkJRSW9hWDNHV1JqRFloLXNkV0pOVDR4aXRmNkpIMzFwS0xBMU9zMFRqVUF0VThLWndEeFlSc1NMVGVYc2NiSDVkb05mZVozNGp5RWRkcjNhY2N5amZwX19QT1NGemF4djVKSU51SjRDaWg5dTUwMFpkd243bWlyejFCQWNmY29EbTF1WG9QNGNoTVJBODRHakgwMW1fX2JfaHZI?oc=5",
+      "title": "EXCLUSIVE: Saudi Aramco plans reorganisation to create gas division, sources say - reuters.com",
+      "published_at": "Tue, 22 Sep 2026 16:41:23 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: サウジアラムコの組織再編計画で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxNa3h6S0hQdGMwNVRQaDNROUhRQkNQamszQ1IyRGRGdkhPeUFrTm9icnhRQlZicTdZZ01EdEpWTmFiOTk0UllMN2hQbUJkaElUWjZOWWROZk96eGZPVVQxOHV0U3VOU0YzbXZTVmNQVHRlUkFySURHeXJSdlZMUFpwWXdMa2tWRVp3dkRsWkhhb2NZbWRGa3pMejQ1QUNNMXFMTlVkc01IMTR2TzJiaU44QWNfVTNhUVBsdXd0WlVHcl8xUGo4NUV5ZVpsMA?oc=5",
+      "title": "Global biofuel output to jump nearly 70% by 2030 due to Gulf energy crisis, study finds - reuters.com",
+      "published_at": "Tue, 22 Sep 2026 16:12:26 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: バイオ燃料生産見通しの話題で、暗号通貨市場への具体的な波及経路が乏しい"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxQZ3JCUDhubW1Yb0o4bFpaMFdtVE9oYVVuUll5R0tpVS1YNXpjd285eWxWa1ZDUklJd0ZBNnZJdnJQdEVnZmJ6czA1TEYtMmFhNjlUcWZGeDdhMFdpNXRJd21TaWlmcjRiWTBHNEpDVmg2U0RicWlnUWNWRFkyUy01WXA4c09OREpKM2JNWUk5dHEyNDQ0SWM1U3BudkhJUENDWXVjdlUyRl9nZw?oc=5",
+      "title": "Banks, telecoms weigh on FTSE 100; focus on US-Iran talks - reuters.com",
+      "published_at": "Tue, 22 Sep 2026 16:11:39 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 英株式市場の動向と米イラン協議への注目だが、暗号通貨への波及を示す具体性が乏しい"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxOb1o1SzhDUHo1NFB4VjhYdE5KNFdHWFJ1d0JwR2R6c2xLRzZmOTI1MGJ4cmx0QlY3YTZvRDlUMVJhaG4wS2cyVmVWS045WUxkZE51TjRqbW95UGczdloxMlRSTmVQVEprSFZDN0JRdnRzN0pzVFNxWDRUOXVMZU9RX0xuSmpXbGtGMTRnbDBxZ0dQSy1mRDdFY1QybkhQeGR6bUJ0U2o1enlSSkp4QXdmYVJwTQ?oc=5",
+      "title": "Binance buys $100 million stake in Circle, expands partnership - reuters.com",
+      "published_at": "Tue, 22 Sep 2026 15:20:05 GMT",
+      "verified_by": "Reuters報道（2026年9月22日）",
+      "decision": "採用",
+      "reason": "A分類：暗号通貨取引所と法定通貨担保型ステーブルコイン発行体の資本提携拡大に関する直接材料であり、Reutersの独立報道として単独で採用可能"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxPNmJidHFzNHlscWlnT2hsWFdKc1hNRFMxOWRnTTRQRHVHbV9tRTJySFJoOGFoZXdNdTIwMngxZlczRmY3dWJxWkNiWTRYclVyT0JoWXQyUHJpNThicmpUNDMwWjNqREdrYmw3Ty1peU9oaEtRdC1GWXE1S0o1eGlrWDZONDhqS0FDbWotZXV1LXBvTEhUWHdlT1BzYU5udjNKTTFXdk1hX0wwVk1yczRTdV94R0p4UUQ1bEViTXJ2S2pEaTVLTFlvdw?oc=5",
+      "title": "Saudi Arabia restarts East-West oil pipeline, sources say - reuters.com",
+      "published_at": "Tue, 22 Sep 2026 15:12:19 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: サウジの石油パイプライン再稼働で、暗号通貨市場への具体的な波及経路が乏しい"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxOT0JDdC05Wl9XNzhQVmlyMnBJTmNMYVQtZXM4SmJkeFFBWGFhSmV5eDBTeGdySWtvbEk4VTVpUl9CaGVoYUt0N19qRVF5NldOWVg5dFN3NlJrNW9HSlIwekJralVaNWFEdFhJa3BxYUFQQVRnUkVwb3p0WTRYRV9oTmZCamE5bTJ1WlN0ME1wcVRobDJnLTZqMkMxVlkwOUdoNTU3ZmVQSlZpQ2k1M2E1TFQ4MVlsMFRo?oc=5",
+      "title": "Fed's Collins says she supported rate hike, warns of elevated inflation risks - reuters.com",
+      "published_at": "Tue, 22 Sep 2026 15:01:38 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: FRB高官の利上げ支持発言だが、要旨のみで金利観測への具体的な影響が不明確"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxQOVVMaFBzbF9UZE5pd2VoZlZnclpPTjU3SVRDTkFzSjFOWk04VzREVjRnSlFCZTBJV1g0SXRMT3hJeFRwVjNwM2JuLTBVOHJZcndDZTc0bEt6NFlweElqQ3oyWGFtTzBUVDE1dEV4NFE5UnVDbV9IelEzU2dHNzhSQ3lKbVVBNW1pMTdSbTFqV0RCOXd6Z3FfU2NBMU1tUWZPOXItX3d5Z1RQZnRlU3VzLXVveFN2LThhSjdxaXp3?oc=5",
+      "title": "Traders push for discounts for Venezuelan oil as shipping costs soar, sources say - reuters.com",
+      "published_at": "Tue, 22 Sep 2026 14:48:54 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ベネズエラ産原油の値引き交渉の話題で、暗号通貨市場への波及経路が乏しい"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxNamNYZ1dfWjVyM1ppMEJZbDczdFJybS1RQ0hzdjR0bHo1TldEcmJyR0xaTTN5VWNfNTFzMENCS1pDR1ptT0VlOGp6Z3o1U09QOFNCdl9ZSWFiYUVUUWFpX1pPNXoxLUw3VFNZbU9sS0JyU3pTSjh5UXdlWXYzYlhHMXlhR2J4TXo1Q2lLYXYxWFBjNEhHNmxRUm1Odm9XZ0thUFdNQk1XSUhxUWNIcGc?oc=5",
+      "title": "Brazil's Petrobras to drill new Foz do Amazonas wells in January - reuters.com",
+      "published_at": "Tue, 22 Sep 2026 14:47:44 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ブラジル国営石油会社の掘削計画で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/us-senator-probe-donald-trump-hunter-biden-crypto-business?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Republican senator calls for probe into US presidents’ sons, citing crypto ventures",
+      "published_at": "Tue, 22 Sep 2026 20:57:51 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 大統領家族の暗号資産事業を巡る調査要求だが、単独tier3ソースであり独立2ソースの裏付けがない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/09/22/crypto-market-structure-can-t-wait-for-shot-at-post-election-clarity-act-surge-white-house",
+      "title": "Crypto market structure can't wait for shot at post-election Clarity Act surge: White House",
+      "published_at": "Tue, 22 Sep 2026 20:31:02 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: CLARITY法案を巡る規制方針の話題だが、単独tier3ソースであり独立2ソースの裏付けがない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/what-happened-in-crypto-today?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Here’s what happened in crypto today",
+      "published_at": "Tue, 22 Sep 2026 20:03:30 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 暗号資産業界の日次まとめ記事で、個別の事実根拠として扱えない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/canada-six-largest-banks-explore-tokenized-canadian-dollar-deposits?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Canada’s six largest banks explore tokenized Canadian dollar deposits",
+      "published_at": "Tue, 22 Sep 2026 19:56:48 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: カナダ大手銀行のトークン化預金実証実験。candidate_id 28と同一事実を報じており独立2ソースに該当するため裏取りとして本文へ反映"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/09/22/canada-s-big-six-banks-unite-to-launch-interbank-tokenized-deposit-initiative",
+      "title": "Canada's 'Big Six' banks to launch interbank tokenized deposit initiative",
+      "published_at": "Tue, 22 Sep 2026 17:34:03 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: カナダ大手銀行のトークン化預金実証実験。candidate_id 27と同一事実を報じており独立2ソースに該当するため裏取りとして本文へ反映"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/21shares-zcash-etp-europe-etherfi?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Zcash gets first European ETP following US ETF launch",
+      "published_at": "Tue, 22 Sep 2026 16:21:44 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 欧州でのZcash ETP上場の話題だが、単独tier3ソースであり独立2ソースの裏付けがない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/markets/bitcoin-price-seeks-86k-as-new-support-after-oil-dips-below-90?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bitcoin price seeks $86K as new support after oil dips below $90",
+      "published_at": "Tue, 22 Sep 2026 16:01:55 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: BTC価格分析記事で、意見・予想の性格が強く事実報道の単独根拠として扱わない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/failure-clarity-act-vote-us-lawmakers-2026-midterms?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "CLARITY vote failure could stoke more crypto PAC spending in key races",
+      "published_at": "Tue, 22 Sep 2026 15:55:37 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 中間選挙を巡る暗号資産PAC支出の観測記事で、単独tier3ソースであり独立2ソースの裏付けがない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/escb-new-stablecoin-liquidity-rules-bank-risks?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "ECB, EU cenbanks seek changes in MiCA’s minimum bank deposit for stablecoins",
+      "published_at": "Tue, 22 Sep 2026 15:37:17 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 欧州のMiCA規則見直しに関する話題だが、単独tier3ソースであり独立2ソースの裏付けがない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/09/22/next-for-the-u-s-sec-agency-s-chief-crypto-counsel-illuminates-path-for-custody",
+      "title": "Next for the U.S. SEC: Agency's chief crypto counsel illuminates path for custody",
+      "published_at": "Tue, 22 Sep 2026 15:21:28 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: SEC担当者のカストディ方針に関する発言記事だが、単独tier3ソースであり独立2ソースの裏付けがない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/09/22/european-central-banks-push-to-expand-stablecoin-yield-ban-to-crypto-lending-and-staking",
+      "title": "European central banks push to expand stablecoin yield ban to crypto lending and staking",
+      "published_at": "Tue, 22 Sep 2026 14:32:59 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 欧州中銀のステーブルコイン利回り規制拡大方針だが、単独tier3ソースであり独立2ソースの裏付けがない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/magazine/big-questions-does-satoshi-actually-own-1-million-bitcoin?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Big Questions: Does Satoshi actually own 1.1 million Bitcoin?",
+      "published_at": "Tue, 22 Sep 2026 13:30:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: サトシ・ナカモトの保有量に関する検証記事で、事実報道ではなく分析記事の性格が強い"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/09/21/bitcoin-ether-perpetual-volumes-on-kalshi-are-dominated-by-an-unusual-repetitive-trade-data-shows",
+      "title": "Bitcoin, ether perpetual volumes on Kalshi are dominated by an unusual, repetitive trade, data shows",
+      "published_at": "Tue, 22 Sep 2026 12:32:15 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: Kalshi上のBTC/ETH無期限先物取引の偏りに関する分析だが、単独tier3ソースであり独立2ソースの裏付けがない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/binance-stake-circle-expanded-usdc-deal?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Binance takes $100M stake in Circle under expanded USDC deal",
+      "published_at": "Tue, 22 Sep 2026 12:18:41 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: Binance・Circle提携の件はtier2候補（19）で既に単独裏付けがあるため、本候補は裏取り補強として扱いuseはfalseのまま"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/09/22/visa-partner-reap-eyes-local-currency-stablecoins-in-several-countries-for-24-7-onchain-fx",
+      "title": "Why Payward-backed Reap is betting on non-USD stablecoins for 24/7 cross-border FX settlement",
+      "published_at": "Tue, 22 Sep 2026 12:05:55 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 非ドル建てステーブルコインを用いたFX決済の話題だが、単独tier3ソースであり独立2ソースの裏付けがない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/09/22/binance-buys-usd100-million-circle-stake-in-five-year-usdc-promotion-deal",
+      "title": "Binance buys $100 million Circle stake in five-year USDC promotion deal",
+      "published_at": "Tue, 22 Sep 2026 11:07:23 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: Binance・Circle提携の件はtier2候補（19）で既に単独裏付けがあるため、本候補は裏取り補強として扱いuseはfalseのまま"
+    }
+  ],
+  "reusable_for_summary": [
+    "米SECのクリプトタスクフォース法律顧問が、カストディに関する当局の方向性について言及したとCoinDeskが報じています（continuing watch）。",
+    "米ホワイトハウス関係者が、CLARITY法案の年内成立を待たず規制当局主導で市場構造整備を進める考えを示したとCoinDeskが報じています（continuing watch）。"
+  ],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 1
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 1
+    },
+    "FRB（speeches）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 1
+    },
+    "FRB（testimony）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 1
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 0
+    },
+    "米財務省": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "USTR": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 1
+    },
+    "ホワイトハウス": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 3
+    },
+    "ホワイトハウス（大統領令等）": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 0
+    },
+    "ADP": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 17
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 20
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 45
+    }
+  },
+  "news_candidate_count": 39,
+  "part1_md": "【対象日】2026年9月22日（火）\n\n【ヘッドライン】\nBinance がCircleの株式を取得し、USDCをめぐる提携を拡大したことが分かりました。BTC・ETH・BNBはいずれも24時間比で下落しました。 #BTC #ETH #BNB\n\n【主要なポイント】\n・Binanceは1億ドル規模でCircle株式を取得し、USDCの普及を後押しする5年間の提携を拡大したとReutersが報じました。ステーブルコイン分野での取引所・発行体連携が強まる動きとして注目されます（Reuters、2026年9月22日）。\n・カナダの大手銀行6行がカナダドルの銀行間トークン化預金の実証実験に乗り出したことが、複数の暗号通貨専門メディアで報じられました。公式発表での確認は取れていませんが、銀行によるトークン化預金への関心の広がりを示す動きとみられます（Cointelegraph、CoinDesk、2026年9月22日）。\n・米CFTCは、発言・出席等の個人の行動に基づく「メンション市場」型契約の上場基準に関する職員向けアドバイザリーを公表しました。暗号資産に直接言及したものではありませんが、イベント契約市場の規律強化に関する規制動向として参考材料になります（CFTC、2026年9月22日）。\n\n【主要指標】\n・市場全体：時価総額 $2.931兆（¥461.2兆）｜24時間取引高 $1130.8億（¥17.79兆）\n・ #BTC：$86,210（約1,356.5万円）｜24時間比 -0.37%\n　（24時間レンジ $85,059〜$86,987）\n・ #ETH：$2,750（約43.3万円）｜24時間比 -1.03%\n　（24時間レンジ $2,715〜$2,788）\n・ #BNB：$786（約12.4万円）｜24時間比 -1.97%\n・市場心理：Fear & Greed 78（Greed、CoinMarketCap API）\n・ドミナンス：BTC 59.09%｜ETH 11.45%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年9月23日07:37 JST、USD/JPY ¥157.35\n",
+  "part2_md": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $8.21M vs Base上ETH/USDC $102.41M｜参考：Base上DEX全体 $12.677億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $62.32億（¥9,807億）｜24時間比 -0.41%｜USDCドミナンス 85.9%\n・ ETH/USDC（Base）参考APR：0.05% 39.54%（TVL $9.18M／24h出来高 $19.89M）｜0.3% 58.76%（TVL $153.78M／24h出来高 $82.52M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年9月23日07:37 JST\n\n【市場のフロー】\n・BinanceがCircle株式を取得しUSDC普及に向けた5年間の提携を拡大したと報じられたことで、ステーブルコイン分野での取引所・発行体連携強化が意識された可能性がありますが、市場データではBTC・ETHは24時間比で下落しており、この提携報道が直接的な押し上げ材料として機能したとは断定できません。\n・カナダの大手銀行6行がカナダドルの銀行間トークン化預金の実証実験に乗り出したと複数の暗号通貨専門メディアで報じられたことで、伝統的金融機関によるブロックチェーン活用の広がりが意識された可能性がありますが、公式発表での確認が取れていないため、市場全体への影響度は現時点で見極めが難しい状況です。\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは60.76%→39.54%へ低下しました（24時間出来高 -35.75%、TVL -1.27%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは100.98%→58.76%へ低下しました（24時間出来高 -38.83%、TVL +5.12%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比-1.03%と下落中のため、ETH偏り・下限側レンジ外・下落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\n本日はBTC・ETH・BNBがいずれも24時間比で下落し、市場心理は「Greed」を維持しつつも上値の重さがうかがえる展開でした。BinanceとCircleの提携拡大やカナダ大手銀行のトークン化預金実証など、ステーブルコイン・伝統金融連携に関する材料が相次ぎましたが、いずれも短期的な値動きへの直接的な影響は確認できていません。米SECのカストディ方針や規制当局主導での市場構造整備の動きも継続的な監視材料として意識されています。今後は規制動向の具体化やDEX・国内取引所の出来高推移を注視していく必要がありそうです。\n"
+}
