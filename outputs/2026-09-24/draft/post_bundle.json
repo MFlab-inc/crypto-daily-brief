@@ -1,0 +1,489 @@
+{
+  "target_date_jst": "2026-09-24",
+  "level": "L0",
+  "sections": {
+    "part0_target_date": "2026年9月24日（木）",
+    "part1_headline": "FRBはGENIUS Actに基づくステーブルコイン発行体向け規制枠組みの意見募集を開始し、CFTCもトークン化資産・ブロックチェーン記録の活用に関する指針を更新しました。米国債利回りが2007年以来の高水準まで上昇したことも意識され、BTC・ETHは24時間比でわずかに下落しました。 #BTC #ETH #BNB",
+    "part1_points": "・FRBは9月24日、GENIUS Actに基づき、FRB監督下のステーブルコイン発行体向け規制の枠組みに関する2つの提案について意見公募を開始しました。Reutersもこの提案を報じています（FRB、Reuters、2026年9月24日）。\n・CFTCは9月24日、暗号資産・ブロックチェーン技術に関する登録業者向けFAQを更新し、トークン化された投資商品での顧客資金運用やブロックチェーンによる記録保持の取り扱いを明確化しました（CFTC、2026年9月24日）。\n・米10年国債利回りが2007年以来の高水準まで上昇したことが報じられ、これがリスク資産全般への圧迫材料として意識されたとみられます。BTCは一時下落したのち下げ幅を縮小したと報じられています（Cointelegraph、CoinDesk、2026年9月24日）。\n・中東情勢を巡る地政学報道（イエメン・フーシ派によるサウジ施設攻撃、米・イラン間のホルムズ海峡再開協議等）も相次いでおり、原油価格やリスク選好を通じた市場環境への波及が意識される可能性がありますが、暗号通貨価格への直接因果は未確認です（Reuters、2026年9月24日）。",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.871兆（¥454.0兆）｜24時間取引高 $1008.0億（¥15.94兆）\n・ #BTC：$84,168（約1,330.9万円）｜24時間比 -0.29%\n　（24時間レンジ $82,709〜$84,930）\n・ #ETH：$2,682（約42.4万円）｜24時間比 -0.03%\n　（24時間レンジ $2,627〜$2,706）\n・ #BNB：$777（約12.3万円）｜24時間比 +1.32%\n・市場心理：Fear & Greed 73（Greed、CoinMarketCap API）\n・ドミナンス：BTC 58.87%｜ETH 11.40%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年9月25日07:38 JST、USD/JPY ¥158.13",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $8.51M vs Base上ETH/USDC $151.65M｜参考：Base上DEX全体 $11.046億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $61.98億（¥9,800億）｜24時間比 +0.75%｜USDCドミナンス 85.8%\n・ ETH/USDC（Base）参考APR：0.05% 41.85%（TVL $9.55M／24h出来高 $21.91M）｜0.3% 92.80%（TVL $153.09M／24h出来高 $129.74M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年9月25日07:38 JST",
+    "part2_flow": "・FRBがGENIUS Actに基づくステーブルコイン発行体向け規制枠組みの意見募集を開始し、CFTCもトークン化資産の取り扱いに関する指針を更新したことで、暗号資産の制度整備が進展しているとの受け止めが意識された可能性があります。ただしBTC・ETHは24時間比でわずかな下落にとどまり、規制動向との直接的な因果関係は断定できません。\n・米10年国債利回りが2007年以来の高水準まで上昇したことが報じられ、これがリスク資産全般への圧迫材料として意識された可能性があります。BTCは一時下落したのち下げ幅を縮小したとみられ、実際の値動きも24時間比でごく小幅な下落にとどまりました。\n・中東情勢を巡る地政学報道が相次いでいますが、暗号通貨価格への直接的な影響は未確認です。BNBは24時間比で上昇しており、資産ごとに反応が分かれた可能性があります。",
+    "lp_comment": "Base 0.05%プールの参考APRは48.38%→41.85%へ低下しました（24時間出来高 -12.50%、TVL +1.11%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは86.49%→92.80%へ上昇しました（24時間出来高 +8.02%、TVL +0.68%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比-0.03%と下落中のため、ETH偏り・下限側レンジ外・下落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "本日の暗号通貨市場は、ステーブルコイン規制やトークン化資産に関する制度整備の進展と、米国債利回り上昇によるリスク資産圧迫の思惑が交錯するなか、BTC・ETHはわずかな下落、BNBは上昇と、銘柄ごとにやや異なる動きとなりました。市場心理は「Greed」圏を維持しており、過熱感の有無について引き続き注視が必要です。なお、Duelbitsのホットウォレットを巡るハッキング報道については単独ソースのため継続監視の段階にあります。今後は米長期金利の動向や規制関連の続報が市場心理に与える影響を確認していく必要があります。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "米金利上昇でBTC・ETHは軟調推移",
+  "audit_ledger": [
+    {
+      "source": "FRB",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260924a.htm",
+      "title": "Federal Reserve Board requests public comment on two proposals related to establishing a regulatory framework for Board-supervised payment stablecoin issuers under the GENIUS Act",
+      "published_at": "Thu, 24 Sep 2026 18:30:00 GMT",
+      "verified_by": "FRB公式発表summaryを一次情報として確認",
+      "decision": "採用",
+      "reason": "A: GENIUS Actに基づくステーブルコイン規制枠組みの意見募集は暗号通貨への直接材料であり掲載する。"
+    },
+    {
+      "source": "FRB",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260924a.htm",
+      "title": "Federal Reserve Board issues enforcement action with former employee of Sandy Spring Bank",
+      "published_at": "Thu, 24 Sep 2026 15:00:00 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 銀行元従業員への執行措置で、暗号通貨や金利・為替等への波及経路を説明できない。"
+    },
+    {
+      "source": "CFTC",
+      "url": "https://www.cftc.gov/PressRoom/PressReleases/9303-26",
+      "title": "CFTC Staff Releases Updates to FAQs Concerning Registrants and Registered Entity Activities Relating to Crypto Assets and Blockchain Technologies",
+      "published_at": "Thu, 24 Sep 2026 14:46:00 +0000",
+      "verified_by": "CFTC公式発表summaryを一次情報として確認",
+      "decision": "採用",
+      "reason": "A: トークン化資産・ブロックチェーン記録に関するFAQ更新は暗号通貨への直接材料であり掲載する。"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/about/bcp/fso/fso260924a.pdf",
+      "title": "令和8年台風第25号に伴う災害等に対する金融上の措置について（千葉県、東京都）",
+      "published_at": "Thu, 24 Sep 2026 16:00:00 +0900",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 台風被災地域向け金融措置で、暗号通貨や市場環境への波及経路を説明できない。"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/about/press/kaiken_2026/kk260924a.pdf",
+      "title": "【記者会見】植田総裁（9月18日分）",
+      "published_at": "Thu, 24 Sep 2026 15:20:00 +0900",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 総裁記者会見のsummaryが空で内容を確認できず、掲載根拠にできない。"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/statistics/bis/repo/index.htm",
+      "title": "FSBレポ統計の日本分集計結果",
+      "published_at": "Thu, 24 Sep 2026 08:50:00 +0900",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: レポ市場統計の公表で、暗号通貨市場への直接的な波及経路を説明できない。"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/briefings-statements/2026/09/first-lady-melania-trump-and-madame-peng-liyuan-visit-smithsonian-national-museum-of-asian-art-highlighting-sino-american-artwork-culture-and-the-next-generation/",
+      "title": "First Lady Melania Trump and Madame Peng Liyuan Visit Smithsonian National Museum of Asian Art Highlighting Sino-American Artwork, Culture, and the Next Generation",
+      "published_at": "Thu, 24 Sep 2026 17:33:46 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 大統領夫人の美術館訪問という文化行事で、市場への波及経路を説明できない。"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/briefings-statements/2026/09/presidential-message-on-the-beatification-of-archbishop-fulton-j-sheen/",
+      "title": "Presidential Message on the Beatification of Archbishop Fulton J. Sheen",
+      "published_at": "Thu, 24 Sep 2026 14:00:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 聖職者の列福に関する声明で、市場への波及経路を説明できない。"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/briefings-statements/2026/09/first-lady-melania-trump-releases-details-on-the-state-dinner-with-his-excellency-xi-jinping-president-of-the-peoples-republic-of-china-and-madame-peng-liyuan/",
+      "title": "First Lady Melania Trump Releases Details on the State Dinner with His Excellency Xi Jinping, President of The People’s Republic of China, and Madame Peng Liyuan",
+      "published_at": "Thu, 24 Sep 2026 12:21:19 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 晩餐会のメニュー詳細で、市場への波及経路を説明できない。"
+    },
+    {
+      "source": "ADP",
+      "url": "https://mediacenter.adp.com/2026-09-24-ADP-Nominates-David-W-Kenny-and-Nancy-McKinstry-to-Board-of-Directors",
+      "title": "ADP Nominates David W. Kenny and Nancy McKinstry to Board of Directors",
+      "published_at": "Thu, 24 Sep 2026 16:05:00 -0400",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ADPの役員指名という企業内人事で、市場への波及経路を説明できない。"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxPY25jeWJ2LVJIWmg5cThieHN1M3RDYjNGcGRyR19sNVN0cHBXRXlCUmEzbS1Zb3ZsNnhSM3VmcFQ4QkUzNG1VRXpkTTF2elFfNDhYa19ha0pJZlNpRHFhUXIwcE83ckdBM01Sc3FvRW1hZEY1MkR1RF9ZNFVDUTZkTmRhRXhJanlzRFF2OTdLaWZ4dWJjejJHR0FKRVoycGgzaklV?oc=5",
+      "title": "US Federal Reserve proposes new stablecoin rules - Reuters",
+      "published_at": "Thu, 24 Sep 2026 20:31:52 GMT",
+      "verified_by": "Reuters報道としてFRB提案内容の裏取りに使用",
+      "decision": "採用",
+      "reason": "A: FRBのステーブルコイン規制提案を報じたもので、candidate_id1の事実を補強する。"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxQU3NPbWZrci1yeGFldXMtZ2hocmpYdXBtbDBOMXl3ckl1dmtJUkR3b2Z5eUxyZnVLX0hvelAzRy1WOTZ3QWFEcmJ1TENmTkhySjdTRlJIX1QyM2RxWEpkNmw3RXBkSkFOUDZ5M1dUdmZ3TU5fbmt2a3Vjc1ZJbTJsbVpSc254QUc5eDdfc3B1RXhjaVA4M0NOSDNCY2dIVWNNSnpv?oc=5",
+      "title": "Poverty rate tests Argentina's Milei ahead of election - Reuters",
+      "published_at": "Thu, 24 Sep 2026 20:13:45 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: アルゼンチンの貧困率と選挙情勢で、暗号通貨市場への波及経路を説明できない。"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxNY0Z6R1B2THkxTXRCQXNqNE5ZUkVSbU9RR1Jsd1hwSzk4bkVTYTNpRVJVMjFZdkp5WEpXb1RwWDhOb0xPdW92WGx3dF84UGh2dkI1ZmxHUTdYZTJiREpHZm5XVjIzcUtXWHkzeGh2amdiNEhITkc1Y1BtTElUMWxta25yWUFwVXVKajdISE5RSWRZMmFsMkNNVTJ6bUhwcGN4R0tDODd1Qk5nSXdaQ2g3emE2b3RLbklEaGlLbFN3?oc=5",
+      "title": "France to send military to protect Saudi Arabia on Red Sea oil route, Macron says - Reuters",
+      "published_at": "Thu, 24 Sep 2026 19:51:02 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 紅海の石油輸送路防衛という地政学材料だが、単独報道のみで内容も限定的、参考材料として不十分。"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxQMWlXS0IwYk9WRDdxeGk1MmxybUpOa2lqYWN5Zm8wckN4ZVJJQUlCNXBJUkpsdXdTT240ZDhHMmJOWEszcHJUZDZscy1ibVkyZjlEUm03c3ZXZHlEanBFcE5Wa3A3QjVabTdPRTgtcnd5bWRhcVB0M0hEbW5QTUN0R2R3clB2OV9YblRYREFsY0NLU3ItMTFqRlFoRDVyV00zWnVoTUNzQ1ZDXzV1aUVN?oc=5",
+      "title": "Houthis say they attacked Riyadh and Aramco facilities in Yanbu - Reuters",
+      "published_at": "Thu, 24 Sep 2026 19:24:40 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: フーシ派によるサウジ施設攻撃は原油経由の波及経路があるが、単独報道のため掲載基準を満たさない。"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxOWWNfWndZT3hSNXAxaV9JOUdJV05sQXZYd1JUbEVCd250ZDk0S214a3BZM1pNY0drT0hBaWZoek9leEhNOHNyNVhHRDZUbDAxVFFIakZVUmplb25IbzFtWTFyaEVHRmx1bHNHOGZBbFdJVjV6NzBzRFZ4eVI1OWdqU05UcFJYTHFSN00wcGVYUFhiV3lUYzF5VlExWEZxYXozeGMxSkg3S3A5SFZFbTRUR1g2b1BVUXRTYTdmYzRNS0R4cGotUEozSmtR?oc=5",
+      "title": "US energy secretary seeks refiners' help amid narrow options to curb diesel price - Reuters",
+      "published_at": "Thu, 24 Sep 2026 18:00:34 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ディーゼル価格対策は原油市場に関連するが、単独報道で内容も限定的。"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxPS1FaZTVSeTlieFN5WUNJdHE5VVB5VlM2Q0pSY3BtalppeEt0S0s0YnNBMzlTcUpIWGg0V3dxTTBiWWdpbW1OTTJBSFIwMDUzNG80ekkzM3AtMXFoSmRNQVNPQUxBeUVlTmFPNjdWZmk3enE2NFVpY1U1Y1dqSkdDY080OXBZZGRmbWZmYWw2WGdEVmlTOVVhNXVCb0QxU01Lc0tHSTVDS05ZMjJJ?oc=5",
+      "title": "Fed officials see rates likely rising to curb high inflation - Reuters",
+      "published_at": "Thu, 24 Sep 2026 17:57:23 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 金利見通しに関する材料だが、単独報道でありcandidate_id19等他の金利報道と統合できる裏付けがない。"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxNYXMwQlBmRVM4WXVFeXhQVkcyYnpaUzE3dk1wUWswS3pZWDBKTGNWVEpqdFNsWXZEYm5PQ3pSVmRhVFl1empQN3p6SFY0YTVHRmxxNWpxbXFNWVlCOEF5T0tBLVp0MzNyWVlyQnpkbUtyVzNTeGtxQXZVc3hhb0E4aVV6bU5QVEdHMFhCaXRhV3hxQVJ3MWRXNF9tNG5EeUVzcTdEOUhGSExiS3F2SUlkS2xzRk1mNlg4bkRhR0FoaE5QZw?oc=5",
+      "title": "US and Iran discuss phased deal to reopen Hormuz and end US blockade, sources say - Reuters",
+      "published_at": "Thu, 24 Sep 2026 17:52:33 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ホルムズ海峡再開協議は原油市場への波及経路があるが、単独報道のため掲載基準を満たさない。"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNMFZJN0d4XzBRaUNTeXNUdkhRQVg1Qm9YbW9PRWdqUmoyT1FKOFM5bGszWDgtVDRMV3ZBa2lLUUYySzNhMnVlZmNZZVVwUk56enhuVjhNVjFnTFBQNHNpVmNkN2M1YUQwNmZfaDRaQ0RFWkJiMUV1dmdDc0hSZ29OZ1FqSFpHTXRvTjRGR1VfX2hvc0dRRXpDejdCUlloclJmSDhUWk41N3o?oc=5",
+      "title": "PepsiCo to raise some chip prices as input costs bite - Reuters",
+      "published_at": "Thu, 24 Sep 2026 17:35:53 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 食品メーカーの値上げで、暗号通貨市場への波及経路を説明できない。"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPbkFjbktqV0kzSmJtNEZPU2p1MWRCWTdKLWVySDEtTnJMbUdVR1p4VGZ1YnVlM0tkcEsxSFlsdTY4b1RodjlqVDQ5V0hoT3FubnE1N1c5U0RZOTgyZ0JsQnFWQmJQTGx2QUNTZmJROHN4dmN3VnNXNXRnTVBsQlFIZzVqb0JjMzl1MlVEeDFUNUFJQm53RVU5WkFGd3VhNjhXbHlGVUFnYWZ0VGM?oc=5",
+      "title": "US weekly jobless claims near 57-year lows; price reductions boost new home sales - Reuters",
+      "published_at": "Thu, 24 Sep 2026 17:01:58 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 雇用統計・住宅販売の材料だが、単独報道で他の金利関連報道と統合する裏付けが取れない。"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxQZTRXRkRnZzBpWmo3VklXUlM4NzZOUXZKTjlndXgydERQalUwdHZDV2loS1F4YnRreHRWYlhUb1RnWGt3Nm1NaERsMC1Gb3QxSlZaTWZGWllwbnVwOWhtRkNlc0JFQUdNYTU2X1lTRGxweTBqTk1Gdk5RdTY0NldlUmlSbDgxbGFfM2NqVWk5UHRCTVZCb3NBSS1BcnF4ZHVqVUNlU3Zpd1lyM1BVWkhzT1h0cVZmX0ozQlZUdUFEYw?oc=5",
+      "title": "Saudi oil export strategy hits new hurdle as Red Sea insurance costs soar - Reuters",
+      "published_at": "Thu, 24 Sep 2026 16:57:33 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 紅海保険コスト上昇は原油市場に関連するが、単独報道のため掲載基準を満たさない。"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxPb3I0VVk5djJ3X1JiN2xxaHJyeENPbTdqWTN6MWdTUlQxRktzVm9PejdBTDIyTDl4OG90elFWbDVpSHJBcUJxeG5lVEZrVzlOejdrQnlheE1iMkVUSmY3UWNtbXQ1R3MtTnYwNEFoUU1aeDFuQXQ2b0dCbU1YYjdzRmVUaTc2Snp5M3NXNEpzSDA1ZTRlQ2xj?oc=5",
+      "title": "Bank of England rate setters warn of 'sparks in the tinderbox' - Reuters",
+      "published_at": "Thu, 24 Sep 2026 16:19:18 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 英中銀の金融安定リスク発言だが、単独報道で内容も抽象的、参考材料として不十分。"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxOcXFHYzVORnF1a0lxY1c3ZnJnQTR6SFpWcmFGRXZZVGNqZFNfdTBma0t6T2d5OUJjQXhjQjlVUk1GMloyUUdZZzQ3N29FU2s0YllYOVZyemM2SmNyN1p6QV82TUNlSWFaTVZSdWRrSno2ZGVMMTl0cHhSWlhjWFJsczhGMDRSYi1yUjlZUEJRSjc0V3dBaVlVVl9n?oc=5",
+      "title": "Isabel Schnabel sought to bridge Germany and the ECB - Reuters",
+      "published_at": "Thu, 24 Sep 2026 16:16:10 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ECB高官の人物評という内容で、金利・為替等への直接的な波及経路を説明できない。"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxORHdHT0VLakV1eGx5V2lEejBTV2hZdC02WXdYM3ctdVNtNXA1SURvX25YZjFQeUJfUFVocEFQZ1dUc3RjVnJnX1pTaUxPcEpHdUFkYVYxU01zTGp3bG5yRlRZNmxmcnI3V3JwSUE1VFBWTThOQzVqZHlhWE54bXhhZU85R1FaTkhJNEdTV3ExN1I1YjJqVzZlN0Y3V3dSczVWdE42a1hPVQ?oc=5",
+      "title": "UK stocks fall as lack of progress in US-Iran talks lifts oil prices - Reuters",
+      "published_at": "Thu, 24 Sep 2026 16:08:52 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 英国株安と原油高の材料だが、単独報道であり掲載基準を満たさない。"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxOaGgtcDdGczdUMkFzc1JrZjcySkFsSkp1c1M3U3dKT0xRTm5rb0JiSHJmQ1BsWEUxSkR0dnhiR090aGx0dTA4aXVIS3lkd3ZEX2FoQzRqTGF1eXg4eFVjSkppSVdCQXY4Tlk1VGFFcERYOWtzQU9sWEN1VS1ubjlXdHZZUFlWSzZWQnpoempSaXNPMU10UlozaUNrX1hKVmIwcFlUdlFEd2hxQ2Y3MmpvcUJ4MlBaUQ?oc=5",
+      "title": "Brazil central bank says 2027 slowdown key to inflation convergence - Reuters",
+      "published_at": "Thu, 24 Sep 2026 15:51:30 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ブラジル中銀のインフレ見通しだが、単独報道で市場全体への波及も限定的。"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxNX3JBNU5Xd01SNmh6MUZJdkpYR29fb1ZadV9HX1FaMVZhVVEzREVwTGZKQVVxUHNsSEUtQWF3SlJYWTc1UkxsdXQ2VnFPNk1wRjI1cWR6TWJ6QmplekltYWVBTnBBRm1BcWpFRG95MG45WVJKaHJXWE9SNG80cFZIOHBrWm12U2txZGp2YWpmbkVjMHVwcElUZ0xrVE5fc1JHcm01X3REQ0QwZFdNMUowVQ?oc=5",
+      "title": "Hedge funds sour on basis trade as Treasury selloff continues - Reuters",
+      "published_at": "Thu, 24 Sep 2026 15:18:21 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ヘッジファンドのベーシス取引と国債売りだが、単独報道で掲載基準を満たさない。"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/markets/bitcoin-steadies-ondo-rallies-us-treasury-yields-hit-2007-highs?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bitcoin price steadies, ONDO rallies as US Treasury yields hit 2007 highs",
+      "published_at": "Thu, 24 Sep 2026 20:32:16 +0000",
+      "verified_by": "Cointelegraph・CoinDeskの2媒体が国債利回り上昇とBTC下落・高止まりの同一事実を報じていることを確認",
+      "decision": "採用（独立2ソース）",
+      "reason": "国債利回りが2007年以来の高水準まで上昇し、BTCが下落したのち下げ幅を縮小したという同一事実を独立した2つのtier3媒体が報じている。"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/09/23/someone-was-trying-to-sell-ondo-finance-after-founder-nathan-allman-s-death",
+      "title": "Someone was trying to sell Ondo Finance after founder Nathan Allman's death",
+      "published_at": "Thu, 24 Sep 2026 20:13:25 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: Ondo Finance創業者死去後の売却疑惑という個別企業の風説で、他媒体による独立した事実報道が確認できない。"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/09/24/bullish-alpaca-and-apex-fintech-form-coalition-to-push-issuer-backed-tokenized-stocks",
+      "title": "Bullish, Alpaca and Apex Fintech form coalition to push issuer-backed tokenized stocks",
+      "published_at": "Thu, 24 Sep 2026 20:05:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: トークン化株式を巡る企業連合結成の単独報道で、他媒体による独立した裏付けがない。"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/09/24/u-s-commodities-firms-can-invest-in-tokenized-assets-use-blockchain-records-cftc",
+      "title": "U.S. commodities firms can invest in tokenized assets, use blockchain records: CFTC",
+      "published_at": "Thu, 24 Sep 2026 20:04:46 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier1のCFTC公式発表（candidate_id3）で既に事実確認済みのため、この裏取り記事は本文中で媒体名として言及するに留め、useはfalseとする。"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/doublezero-brings-dedicated-fiber-market-data-hyperliquid-traders?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "DoubleZero brings dedicated fiber market data to Hyperliquid traders",
+      "published_at": "Thu, 24 Sep 2026 20:04:07 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: Hyperliquid向け市場データ提供という個別サービス開始で、他媒体の独立報道が確認できない。"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/opinion/2026/09/24/the-stock-token-debate-and-the-gap-nobody-can-close-alone",
+      "title": "The stock token debate, and the gap nobody can close alone",
+      "published_at": "Thu, 24 Sep 2026 20:03:21 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 意見記事であり、独立2ソース規定の対象となる事実報道ではない。"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/what-happened-in-crypto-today?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Here’s what happened in crypto today",
+      "published_at": "Thu, 24 Sep 2026 19:50:39 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 日次まとめ記事で個別の事実根拠として扱えない。"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/09/24/bitcoin-just-topped-a-key-long-term-moving-average-here-s-what-it-might-mean",
+      "title": "Bitcoin just topped a key long-term moving average. Here's what it might mean",
+      "published_at": "Thu, 24 Sep 2026 18:46:58 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: テクニカル分析・意見記事であり、事実報道ではないため独立2ソース規定の対象外。"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/crypto-treasury-firms-below-nav-sequans-bitcoin-exit?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Crypto treasury model loses its edge as stock premiums fade: DWF",
+      "published_at": "Thu, 24 Sep 2026 17:14:35 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 暗号資産財務戦略企業の株価分析で、他媒体による独立した裏付けが確認できない。"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/sequans-exits-bitcoin-treasury-strategy-after-selling-remaining-314-btc?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Sequans exits Bitcoin treasury strategy after selling remaining 314 BTC",
+      "published_at": "Thu, 24 Sep 2026 17:13:38 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別企業のビットコイン財務戦略撤退で、他媒体の独立報道が確認できない。"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/sofi-moves-25b-card-program-to-stablecoin-settlement-with-mastercard?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "SoFi tie-up shows stablecoins can provide alternative blockchain settlement rail",
+      "published_at": "Thu, 24 Sep 2026 15:57:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別企業のステーブルコイン決済移行で、他媒体による独立した裏付けが確認できない。"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/09/24/crypto-casino-duelbits-goes-offline-after-usd7m-hot-wallet-hack",
+      "title": "Crypto casino Duelbits goes offline after $7 million hot wallet hack",
+      "published_at": "Thu, 24 Sep 2026 15:48:20 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: カジノサービスのハッキングで、他媒体による独立した裏付けが確認できない。"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/new-york-polymarket-illegal-gambling-operation-lawsuit?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "New York sues Polymarket over alleged illegal gambling business",
+      "published_at": "Thu, 24 Sep 2026 15:27:29 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 予測市場運営会社への提訴で、他媒体による独立した裏付けが確認できない。"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/09/24/bitcoin-s-bear-markets-are-getting-milder-the-bull-markets-may-be-next",
+      "title": "Bitcoin’s bear markets are getting milder. Bull markets may be next",
+      "published_at": "Thu, 24 Sep 2026 15:26:34 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 弱気相場の分析記事であり、事実報道ではなく独立2ソース規定の対象外。"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/09/24/uk-s-largest-banks-complete-world-s-first-interbank-transactions-using-tokenized-deposits",
+      "title": "UK’s largest banks complete world’s first interbank transactions using tokenized deposits",
+      "published_at": "Thu, 24 Sep 2026 15:07:18 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 英銀行のトークン化預金取引で、他媒体による独立した裏付けが確認できない。"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/09/24/bitcoin-steadies-near-usd84-000-after-bond-yields-hit-a-2007-high",
+      "title": "Bitcoin slides to $83,300 as bond yields hit highest level since 2007",
+      "published_at": "Thu, 24 Sep 2026 10:30:28 +0000",
+      "verified_by": "Cointelegraph・CoinDeskの2媒体が国債利回り上昇とBTC下落・高止まりの同一事実を報じていることを確認",
+      "decision": "採用（独立2ソース）",
+      "reason": "国債利回りが2007年以来の高水準まで上昇し、BTCが下落したのち下げ幅を縮小したという同一事実を独立した2つのtier3媒体が報じている。"
+    }
+  ],
+  "reusable_for_summary": [
+    "Duelbitsのホットウォレットがハッキングされ、複数チェーンにまたがる資金流出が報じられている（単独ソースのため継続監視）。",
+    "英大手銀行がトークン化預金を用いた世界初の銀行間取引を完了したと報じられている（単独ソースのため継続監視）。"
+  ],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 0
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 2
+    },
+    "FRB（speeches）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "FRB（testimony）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 1
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 3
+    },
+    "米財務省": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "USTR": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "ホワイトハウス": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 3
+    },
+    "ホワイトハウス（大統領令等）": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 0
+    },
+    "ADP": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 1
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 23
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 20
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 48
+    }
+  },
+  "news_candidate_count": 41,
+  "part1_md": "【対象日】2026年9月24日（木）\n\n【ヘッドライン】\nFRBはGENIUS Actに基づくステーブルコイン発行体向け規制枠組みの意見募集を開始し、CFTCもトークン化資産・ブロックチェーン記録の活用に関する指針を更新しました。米国債利回りが2007年以来の高水準まで上昇したことも意識され、BTC・ETHは24時間比でわずかに下落しました。 #BTC #ETH #BNB\n\n【主要なポイント】\n・FRBは9月24日、GENIUS Actに基づき、FRB監督下のステーブルコイン発行体向け規制の枠組みに関する2つの提案について意見公募を開始しました。Reutersもこの提案を報じています（FRB、Reuters、2026年9月24日）。\n・CFTCは9月24日、暗号資産・ブロックチェーン技術に関する登録業者向けFAQを更新し、トークン化された投資商品での顧客資金運用やブロックチェーンによる記録保持の取り扱いを明確化しました（CFTC、2026年9月24日）。\n・米10年国債利回りが2007年以来の高水準まで上昇したことが報じられ、これがリスク資産全般への圧迫材料として意識されたとみられます。BTCは一時下落したのち下げ幅を縮小したと報じられています（Cointelegraph、CoinDesk、2026年9月24日）。\n・中東情勢を巡る地政学報道（イエメン・フーシ派によるサウジ施設攻撃、米・イラン間のホルムズ海峡再開協議等）も相次いでおり、原油価格やリスク選好を通じた市場環境への波及が意識される可能性がありますが、暗号通貨価格への直接因果は未確認です（Reuters、2026年9月24日）。\n\n【主要指標】\n・市場全体：時価総額 $2.871兆（¥454.0兆）｜24時間取引高 $1008.0億（¥15.94兆）\n・ #BTC：$84,168（約1,330.9万円）｜24時間比 -0.29%\n　（24時間レンジ $82,709〜$84,930）\n・ #ETH：$2,682（約42.4万円）｜24時間比 -0.03%\n　（24時間レンジ $2,627〜$2,706）\n・ #BNB：$777（約12.3万円）｜24時間比 +1.32%\n・市場心理：Fear & Greed 73（Greed、CoinMarketCap API）\n・ドミナンス：BTC 58.87%｜ETH 11.40%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年9月25日07:38 JST、USD/JPY ¥158.13\n",
+  "part2_md": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $8.51M vs Base上ETH/USDC $151.65M｜参考：Base上DEX全体 $11.046億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $61.98億（¥9,800億）｜24時間比 +0.75%｜USDCドミナンス 85.8%\n・ ETH/USDC（Base）参考APR：0.05% 41.85%（TVL $9.55M／24h出来高 $21.91M）｜0.3% 92.80%（TVL $153.09M／24h出来高 $129.74M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年9月25日07:38 JST\n\n【市場のフロー】\n・FRBがGENIUS Actに基づくステーブルコイン発行体向け規制枠組みの意見募集を開始し、CFTCもトークン化資産の取り扱いに関する指針を更新したことで、暗号資産の制度整備が進展しているとの受け止めが意識された可能性があります。ただしBTC・ETHは24時間比でわずかな下落にとどまり、規制動向との直接的な因果関係は断定できません。\n・米10年国債利回りが2007年以来の高水準まで上昇したことが報じられ、これがリスク資産全般への圧迫材料として意識された可能性があります。BTCは一時下落したのち下げ幅を縮小したとみられ、実際の値動きも24時間比でごく小幅な下落にとどまりました。\n・中東情勢を巡る地政学報道が相次いでいますが、暗号通貨価格への直接的な影響は未確認です。BNBは24時間比で上昇しており、資産ごとに反応が分かれた可能性があります。\n\n【LP運用者向けに一言】\nBase 0.05%プールの参考APRは48.38%→41.85%へ低下しました（24時間出来高 -12.50%、TVL +1.11%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは86.49%→92.80%へ上昇しました（24時間出来高 +8.02%、TVL +0.68%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比-0.03%と下落中のため、ETH偏り・下限側レンジ外・下落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\n本日の暗号通貨市場は、ステーブルコイン規制やトークン化資産に関する制度整備の進展と、米国債利回り上昇によるリスク資産圧迫の思惑が交錯するなか、BTC・ETHはわずかな下落、BNBは上昇と、銘柄ごとにやや異なる動きとなりました。市場心理は「Greed」圏を維持しており、過熱感の有無について引き続き注視が必要です。なお、Duelbitsのホットウォレットを巡るハッキング報道については単独ソースのため継続監視の段階にあります。今後は米長期金利の動向や規制関連の続報が市場心理に与える影響を確認していく必要があります。\n"
+}
