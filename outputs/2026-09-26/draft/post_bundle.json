@@ -1,0 +1,116 @@
+{
+  "target_date_jst": "2026-09-26",
+  "level": "L1",
+  "sections": {
+    "part0_target_date": "2026年9月26日（土）",
+    "part1_headline": "直近24時間に暗号通貨市場との関係を確認できる主要なマクロ材料は確認できない。",
+    "part1_points": "補足できる検証済み材料は確認できない。",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.890兆（¥455.3兆）｜24時間取引高 $512.8億（¥8.08兆）\n・ #BTC：$84,275（約1,327.7万円）｜24時間比 +0.32%\n　（24時間レンジ $83,615〜$84,325）\n・ #ETH：$2,688（約42.3万円）｜24時間比 -0.19%\n　（24時間レンジ $2,664〜$2,697）\n・ #BNB：$773（約12.2万円）｜24時間比 -0.31%\n・市場心理：Fear & Greed 73（Greed、CoinMarketCap API）\n・ドミナンス：BTC 58.58%｜ETH 11.35%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年9月27日07:37 JST、USD/JPY ¥157.54",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $2.54M vs Base上ETH/USDC $19.43M｜参考：Base上DEX全体 $9.656億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $62.60億（¥9,861億）｜24時間比 +0.45%｜USDCドミナンス 85.5%\n・ ETH/USDC（Base）参考APR：0.05% 10.34%（TVL $9.66M／24h出来高 $5.48M）｜0.3% 9.78%（TVL $156.32M／24h出来高 $13.95M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年9月27日07:37 JST",
+    "part2_flow": "・本日はニュースからの新規材料が確認できなかったため、市場データに基づく整理にとどめます。市場全体の出来高は大きく積み上がっておらず、BTC・ETH・BNBともに24時間比で小幅な値動きにとどまっており、方向感の乏しい持ち合いが意識された可能性があります。 #BTC #ETH #BNB\n・Fear & Greedインデックスが「Greed（強欲）」領域にあることは、市場参加者のリスク選好がやや強めであることを示しますが、この日はBTC・ETHの実際の値動きが小幅にとどまっており、心理指標と実際の価格変動の間に大きな連動は確認できません。",
+    "lp_comment": "参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは39.27%→10.34%へ低下しました（24時間出来高 -73.53%、TVL +0.43%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは74.92%→9.78%へ低下しました（24時間出来高 -86.78%、TVL +1.34%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比-0.19%と下落中のため、ETH偏り・下限側レンジ外・下落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "本日は具体的なニュース材料が確認できなかったため、市場データを中心とした整理となりました。BTC・ETH・BNBはいずれも24時間比で小幅な値動きにとどまり、方向感の乏しい地合いが続いています。Fear & Greedインデックスは強欲寄りの水準を示しており、過熱感の有無については今後の値動きとあわせて確認が必要です。週明け以降のニュースフローや資金動向の変化に注目したいところです。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "9月26日（土）の市況｜BTC 上昇・ETH 下落",
+  "audit_ledger": null,
+  "reusable_for_summary": [],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 0
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 0
+    },
+    "FRB（speeches）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "FRB（testimony）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 0
+    },
+    "米財務省": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "USTR": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "ホワイトハウス": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 2
+    },
+    "ホワイトハウス（大統領令等）": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 0
+    },
+    "ADP": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 8
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 4
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 46
+    }
+  },
+  "news_candidate_count": 29,
+  "part1_md": "【対象日】2026年9月26日（土）\n\n【ヘッドライン】\n直近24時間に暗号通貨市場との関係を確認できる主要なマクロ材料は確認できない。\n\n【主要なポイント】\n補足できる検証済み材料は確認できない。\n\n【主要指標】\n・市場全体：時価総額 $2.890兆（¥455.3兆）｜24時間取引高 $512.8億（¥8.08兆）\n・ #BTC：$84,275（約1,327.7万円）｜24時間比 +0.32%\n　（24時間レンジ $83,615〜$84,325）\n・ #ETH：$2,688（約42.3万円）｜24時間比 -0.19%\n　（24時間レンジ $2,664〜$2,697）\n・ #BNB：$773（約12.2万円）｜24時間比 -0.31%\n・市場心理：Fear & Greed 73（Greed、CoinMarketCap API）\n・ドミナンス：BTC 58.58%｜ETH 11.35%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年9月27日07:37 JST、USD/JPY ¥157.54\n",
+  "part2_md": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $2.54M vs Base上ETH/USDC $19.43M｜参考：Base上DEX全体 $9.656億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $62.60億（¥9,861億）｜24時間比 +0.45%｜USDCドミナンス 85.5%\n・ ETH/USDC（Base）参考APR：0.05% 10.34%（TVL $9.66M／24h出来高 $5.48M）｜0.3% 9.78%（TVL $156.32M／24h出来高 $13.95M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年9月27日07:37 JST\n\n【市場のフロー】\n・本日はニュースからの新規材料が確認できなかったため、市場データに基づく整理にとどめます。市場全体の出来高は大きく積み上がっておらず、BTC・ETH・BNBともに24時間比で小幅な値動きにとどまっており、方向感の乏しい持ち合いが意識された可能性があります。 #BTC #ETH #BNB\n・Fear & Greedインデックスが「Greed（強欲）」領域にあることは、市場参加者のリスク選好がやや強めであることを示しますが、この日はBTC・ETHの実際の値動きが小幅にとどまっており、心理指標と実際の価格変動の間に大きな連動は確認できません。\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは39.27%→10.34%へ低下しました（24時間出来高 -73.53%、TVL +0.43%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは74.92%→9.78%へ低下しました（24時間出来高 -86.78%、TVL +1.34%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比-0.19%と下落中のため、ETH偏り・下限側レンジ外・下落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\n本日は具体的なニュース材料が確認できなかったため、市場データを中心とした整理となりました。BTC・ETH・BNBはいずれも24時間比で小幅な値動きにとどまり、方向感の乏しい地合いが続いています。Fear & Greedインデックスは強欲寄りの水準を示しており、過熱感の有無については今後の値動きとあわせて確認が必要です。週明け以降のニュースフローや資金動向の変化に注目したいところです。\n"
+}
