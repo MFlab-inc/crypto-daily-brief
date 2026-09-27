@@ -1,0 +1,300 @@
+{
+  "target_date_jst": "2026-09-27",
+  "level": "L0",
+  "sections": {
+    "part0_target_date": "2026年9月27日（日）",
+    "part1_headline": "直近24時間に暗号通貨市場との関係を確認できる主要なマクロ材料は確認できない。",
+    "part1_points": "・補足できる検証済み材料は確認できない。",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.886兆（¥454.5兆）｜24時間取引高 $618.3億（¥9.74兆）\n・ #BTC：$84,210（約1,325.9万円）｜24時間比 -0.06%\n　（24時間レンジ $84,014〜$85,158）\n・ #ETH：$2,672（約42.1万円）｜24時間比 -0.60%\n・ #BNB：$776（約12.2万円）｜24時間比 +0.35%\n・市場心理：Fear & Greed 72（Greed、CoinMarketCap API）\n・ドミナンス：BTC 58.62%｜ETH 11.30%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年9月28日07:38 JST、USD/JPY ¥157.45",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $2.86M vs Base上ETH/USDC $37.83M｜参考：Base上DEX全体 $5.037億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $62.96億（¥9,913億）｜24時間比 +0.58%｜USDCドミナンス 85.5%\n・ ETH/USDC（Base）参考APR：0.05% 16.82%（TVL $9.65M／24h出来高 $8.89M）｜0.3% 20.33%（TVL $155.88M／24h出来高 $28.94M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年9月28日07:38 JST",
+    "part2_flow": "・本日は暗号通貨市場との関係を確認できる検証済みの主要マクロ材料は確認できませんでした。BTC・ETH・BNBの24時間比の値動きは小幅にとどまっており、市場心理を示すFear&Greed指数はGreed（強欲）圏で推移しています。特定の材料に牽引されたと断定できる値動きは見当たりません。\n・国内取引所（bitFlyer・Coincheck）のETH出来高およびDEX（分散型取引所）の出来高は、特筆すべき急変を伴わない範囲で推移しています。LP（流動性提供）プールのAPR（年率換算の利回り）変動については、ニュース材料との関連は確認できず、需給要因による可能性が意識されますが断定はできません。",
+    "lp_comment": "参考APRは両プールとも前日から上昇しました。\nBase 0.05%プールの参考APRは10.34%→16.82%へ上昇しました（24時間出来高 +62.30%、TVL -0.11%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは9.78%→20.33%へ上昇しました（24時間出来高 +107.44%、TVL -0.28%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比-0.60%と下落中のため、ETH偏り・下限側レンジ外・下落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "本日は市場を大きく動かす検証済みのニュース材料が確認できず、BTC・ETH・BNBともに24時間比では小幅な値動きにとどまりました。市場心理はGreed（強欲）圏にあり、過熱感には留意が必要な局面と言えます。継続監視材料として、Ethereum創設者による将来ビジョンの提示や、米国の暗号通貨関連法案を巡る審議動向が挙げられ、今後の進展が注目されます。ETF資金フローについては、直近営業日までの確定値として流出入の方向が確認されていますが、本日は土曜・日曜にあたるため具体的な金額の記載は控えます。今後も政策・制度面の動向や需給バランスの変化を注視していく必要があります。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "BTC・ETHとも小幅に軟調",
+  "audit_ledger": [
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxQdldSSzVseFM2QTA5T0RaSGxabENPNUJkdU01bDRMM21qaUdjY1RDaG0wTmRQSFJIV1dQTTU2RHlMS1FvdHh6THF6SU0zMjd5TGotNUt6YU01RzVZZnpMYldoWkdMY01sOWNab20zRWRZTnRibnRON0k5YjNnWXhjMHFOZV9aa1ctaXZydUx6UGFCZFJ1UDk1OU1EUU9aQWFZVXFRR3l2anBGVmRkY1R0U1RNZTVLLU1sT3FtTVlac1h2TlR0RkFv?oc=5",
+      "title": "Foreign banks have expressed UBS merger interest, Swiss newspaper reports - Reuters",
+      "published_at": "Sun, 27 Sep 2026 20:56:48 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: UBS合併に関する報道で、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE0zQy11YUFId3VSbDh1a1Y5UTFfWTJ1dlhvR2ZmSmQzNnZEeWlOOTBPMklSSHZJX3ZWVU5DalpkTXRiMGxiczVMQjFhV3pQd3pmUGlDb2dCLXR4dEFvMEZMemFwTkpTR2ZVdURz?oc=5",
+      "title": "8AK.F - | Stock Price & Latest News - Reuters",
+      "published_at": "Sun, 27 Sep 2026 20:55:24 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別株価情報のみで、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTFBZeUdlbmZIV1M0TTlEa25aZ1gyZFdKdGZ3VTdMQXFobEMxNGNpZ05sV2RYd0xabWh2NmVISHg4OTBBRmJiZ183bVNkNlVvSUNMeG5fZHVtWnA3ZWlYX3NjTjhFY0tLMkFJaldIa3ZOVQ?oc=5",
+      "title": "KELYa.MU - Reuters",
+      "published_at": "Sun, 27 Sep 2026 20:19:57 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別株価情報のみで、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQQmNRNTdyaGdENWhHUlEzVFpTVnRndmtXcDBfZlVmTVZpWWF2SEF6M1FwXzBtbFZRdWJWOGNKc2JfYll1aEZxamJYYTJwZ2pXMUZ0NW1wWjEyQXRObnRJa29BbzhrLWxXOTFmSVZlRlkyS1Z3endodzAyYm9Sc0NOYlE5REhwbnZQbERfdWc2Mi1LbWVyaGpiOGtjZ1dVWGQ2cTJib1FVM1ZJYkVZbmRJWA?oc=5",
+      "title": "Bill Gates joins calls for AI safeguards, including legislation - Reuters",
+      "published_at": "Sun, 27 Sep 2026 19:37:51 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: AI規制に関する内容で、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxOZkNmQkwtUm10YXh0UHZNWS1EclNxOWpBNlViUGxHaDBJczJLbnotMHQ1MkJNWUhBR3VMX29yYlJCWUpCYWJiSGY4Wkl2QXRjUFFwdFd1dDYyb0V4TWUxdnFJSHZpOHV4S1NxTjRmZ2gtX2NXM0ktNk40cTJmMXpiUHFmMEROZw?oc=5",
+      "title": "TP.N - | Stock Price & Latest News - Reuters",
+      "published_at": "Sun, 27 Sep 2026 19:13:18 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別株価情報のみで、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxPNXk2SnRkS3dmaHNvRjdYeU9SeTg1WGRjZDlDa0U5WG4wVGV1OWFqaTJzaTd5c3ltczA1aGtRdl82dXRHS3hjWEFsaDlfWkN3aWlQVU5sVU1iNG9INTllbWQ0NWkyTm1rVU1XSjB6RDhYZzNaaU5YdEI5MkgtbkdWWGxFRF8?oc=5",
+      "title": "ALBC.PK - Reuters",
+      "published_at": "Sun, 27 Sep 2026 18:44:01 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別株価情報のみで、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxOa2NRdDBJT3d5aEdGTzR4VlZCN0ZNMWRXd1F2RHR5bnhkU2RHbGtaZjJLRl9ybjQ1NFl3SnJBcTJ5ZnV3WExNMjNJTmdyenJnU3pLMERFbFRJYzUtQnhyTkcxaVp6ek8yeFBNRUwxTzNPUm5vTU1IQ2FMVXk5NDFfTFNxM24?oc=5",
+      "title": "1BRKR.MI - Reuters",
+      "published_at": "Sun, 27 Sep 2026 18:37:49 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別株価情報のみで、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxNeE5UeElleEt1N0VDVkxLQmxnTGhjRHF4eGZPSWExZ2YwNjQ0MFpxUzJaUlMtd1VTd3otN3c3dng5dWNVNjNUWlZiNGtJT1l1QkxHNzBxUXdYMWVVM2p0WGtCUnlFSzJOVENrRXNfNlEwbHMxTkJTOWJiRG9MeHNldTFn?oc=5",
+      "title": "SMP0.D - Reuters",
+      "published_at": "Sun, 27 Sep 2026 18:16:20 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別株価情報のみで、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5mZTUtbTlIbTJMVUV6YlhOLTlZSGsyc2NuT1V5cGNhQWhhSlVUbkhLb1c1anpPWi1yWnFNQUtRbG9rc0tKTUZpd0tTdUVJQmdLb1VWN3ppNnlQTThSUHJMbkNxenZnZnlMWVBTS3V4dU4?oc=5",
+      "title": "1942.HK - | Stock Price & Latest News - Reuters",
+      "published_at": "Sun, 27 Sep 2026 18:01:11 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別株価情報のみで、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxNdUo5TU5IYWlBcFY4U0NfZVZrTlNQYmZ3M0ZiNDdxMmtFSFBaRjZfUy15V0ZwUG42aUhjUUNQUlNnQzA3dTBhUnhnVEZraF9vSWJqeFJOeXJ5Sm5paC1YU1JLcnI4YnpwMHhoTGszcmxRVFpEWkVlWWJkX1pEN3Z5MVRLLUhrOXNXWURNYS1UZXV3ejRmMjVaWkxoODhfeWdnTFd6SXpJN1hubjNMdk5lckF3OGI2N1hQbFItcw?oc=5",
+      "title": "German foreign minister says Lavrov meeting driven by Russia security concerns - Reuters",
+      "published_at": "Sun, 27 Sep 2026 17:21:43 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 独露外交に関する内容で、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMi2AFBVV95cUxPX0pMdFpwUWhaRHhFM1pvcndCTDdIX1NOQUVwV2JIX0xIcXByV3Z4UWQyblZRVWl5elZ0TkYxV3BXUEluN0llM0VnUDJvVmN4X19pcXJVX0tSNDdEUWdaNGFFVVQ3N01VaWJHQ1FXVEdVZTJJcDFvZlJ0QmE0b2JpeGM4RDdBMDh4YmNxRkhILVJDRGktQzRPdGNsV2VxWHBjZWt0Q3hRN2FwZWlhcDhMcUZ0LUJsS1FoWGVQUG1PVWp4cEpCcEtVdUJVRVQ4cjZxVUxjM1lDWFM?oc=5",
+      "title": "China weighs allowing ByteDance, Alibaba to buy new Nvidia chips, The Information reports - Reuters",
+      "published_at": "Sun, 27 Sep 2026 17:01:50 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 半導体輸出規制の動向だが、内容が薄く参考材料としても不十分"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxPOThaUHcwMHZuZEY2dldUNjhYQ29PeWRJdEYxWFBPV3NEUUdSc0l4MkdhN3liTGdyNG9XaEhwWG8xRk8xR29JVlA0ZEV2ZXM3RVZCRDlPSHhzU29Pek9tZVREdUdvOHRXS1ZuaTR0TXVGV253bkplU1lNbG85WXRjYzcwV2ZSekFCa1gtR1RtV09zM3NYeF93?oc=5",
+      "title": "Trump says men arrested at UK air base used by US were looking to do 'big damage' - Reuters",
+      "published_at": "Sun, 27 Sep 2026 16:44:50 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 英軍事施設での逮捕事案で、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxOcmpFcFFrU1dCaG9XdU11b1NyVEc2V2pPbVYtQ0VIcU5pZWU1QVVPQ1dNMHpTbXNoS3VyN0RVanhxY1VSVGVWd0hiS0RsZFpPdmdnR3NMcGpCbkR5RUZwLVZHS1J5ajZaXzJtM2lWanRpWVI5aENRanBrOGFMR0J3VVczbnV1UQ?oc=5",
+      "title": "2NF.D - | Stock Price & Latest News - Reuters",
+      "published_at": "Sun, 27 Sep 2026 16:26:31 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別株価情報のみで、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxQRmFMQkhwSFZ2TE03R3RGVTczODdfeTdMeTM3OVF1LXZ6a0RaQWtaQ2hpSzE3d1hCYnhzanFPN21fUEVFazdiaG55NXdWY3gyUTJheXdQYjdyeWtMWFRGSl9YaDZKbTB2eVFncUdIWmhjRzFZQWNzeE9TNUFQUW9Da2UyLVluVjdZQWpKX0Q5UFZSYVU1Mk1hZS1JN3ppeTlTMG9J?oc=5",
+      "title": "Swiss voters set to reject initiative to tighten neutrality rules - Reuters",
+      "published_at": "Sun, 27 Sep 2026 16:17:16 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: スイス国民投票に関する内容で、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxQWUY3Q0FpQVhiM3FLSTNKZlJ0TVZqSkE1ZUlKZG9LeERqTThoRTRZbVliaG5OTzZ0QnMwNkN3eTY4UmhFWXUtM3RBaFV3X3BWTjRTcWJMMWVSRGdlRFFTZ0RoLUpVSl9wWjhKVklRNEQ1WWJxYkxlR1lUWDFXdXBPQlFqbUxjemdZSGNjbU5aeTN6ZzYzQ2RxdEgydDRBd25oTFZyb3kwclBNejVrclhpM2ZQT3YxUDR5YldpRUJWX0hjSHR6c1VmWExjdw?oc=5",
+      "title": "Category 3 Hurricane Polo threatens Mexico’s coast, landfall expected Monday - Reuters",
+      "published_at": "Sun, 27 Sep 2026 16:00:10 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ハリケーン接近の報道で、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/tech/2026/09/27/vitalik-buterin-maps-ethereum-s-shift-beyond-a-blockchain-in-sweeping-2030-vision",
+      "title": "Vitalik Buterin maps Ethereum’s shift beyond a blockchain in sweeping 2030 vision",
+      "published_at": "Sun, 27 Sep 2026 14:29:13 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: tier3単独ソースで、独立2ソース規定に該当するペアが無い"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/australia-summons-openai-anthropic-chiefs-to-senate-inquiry-on-health-data-hack-report?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Australia asks OpenAI, Anthropic chiefs to Senate inquiry on rogue hack: Report",
+      "published_at": "Sun, 27 Sep 2026 12:46:28 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: tier3単独ソースで、独立2ソース規定に該当するペアが無い"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/news-analysis/2026/09/27/how-months-of-work-on-the-clarity-act-all-fell-apart",
+      "title": "How months of work on the Clarity Act all fell apart",
+      "published_at": "Sun, 27 Sep 2026 12:00:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: tier3単独ソースで、独立2ソース規定に該当するペアが無い"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/riot-platforms-repays-200m-credit-facility-releases-collateral?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Riot Platforms repays $200M credit facility, releases collateral",
+      "published_at": "Sun, 27 Sep 2026 09:57:19 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: tier3単独ソースで、独立2ソース規定に該当するペアが無い"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/saylor-outlines-bill-of-digital-rights-to-help-build-prosperity-in-future-economy?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Saylor outlines ‘bill of digital rights’ to help build prosperity in future economy",
+      "published_at": "Sun, 27 Sep 2026 07:18:42 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: tier3単独ソースで、独立2ソース規定に該当するペアが無い"
+    }
+  ],
+  "reusable_for_summary": [
+    "Ethereum創設者ブテリン氏が2030年に向けたビジョンを提示（CoinDesk、9/27）",
+    "米クラリティ法案の審議停滞に関する分析記事（CoinDesk、9/27）"
+  ],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 0
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 0
+    },
+    "FRB（speeches）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "FRB（testimony）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 0
+    },
+    "米財務省": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "USTR": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "ホワイトハウス": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 0
+    },
+    "ホワイトハウス（大統領令等）": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 0
+    },
+    "ADP": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 2
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 3
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 48
+    }
+  },
+  "news_candidate_count": 20,
+  "part1_md": "【対象日】2026年9月27日（日）\n\n【ヘッドライン】\n直近24時間に暗号通貨市場との関係を確認できる主要なマクロ材料は確認できない。\n\n【主要なポイント】\n・補足できる検証済み材料は確認できない。\n\n【主要指標】\n・市場全体：時価総額 $2.886兆（¥454.5兆）｜24時間取引高 $618.3億（¥9.74兆）\n・ #BTC：$84,210（約1,325.9万円）｜24時間比 -0.06%\n　（24時間レンジ $84,014〜$85,158）\n・ #ETH：$2,672（約42.1万円）｜24時間比 -0.60%\n・ #BNB：$776（約12.2万円）｜24時間比 +0.35%\n・市場心理：Fear & Greed 72（Greed、CoinMarketCap API）\n・ドミナンス：BTC 58.62%｜ETH 11.30%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年9月28日07:38 JST、USD/JPY ¥157.45\n",
+  "part2_md": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $2.86M vs Base上ETH/USDC $37.83M｜参考：Base上DEX全体 $5.037億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $62.96億（¥9,913億）｜24時間比 +0.58%｜USDCドミナンス 85.5%\n・ ETH/USDC（Base）参考APR：0.05% 16.82%（TVL $9.65M／24h出来高 $8.89M）｜0.3% 20.33%（TVL $155.88M／24h出来高 $28.94M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年9月28日07:38 JST\n\n【市場のフロー】\n・本日は暗号通貨市場との関係を確認できる検証済みの主要マクロ材料は確認できませんでした。BTC・ETH・BNBの24時間比の値動きは小幅にとどまっており、市場心理を示すFear&Greed指数はGreed（強欲）圏で推移しています。特定の材料に牽引されたと断定できる値動きは見当たりません。\n・国内取引所（bitFlyer・Coincheck）のETH出来高およびDEX（分散型取引所）の出来高は、特筆すべき急変を伴わない範囲で推移しています。LP（流動性提供）プールのAPR（年率換算の利回り）変動については、ニュース材料との関連は確認できず、需給要因による可能性が意識されますが断定はできません。\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から上昇しました。\nBase 0.05%プールの参考APRは10.34%→16.82%へ上昇しました（24時間出来高 +62.30%、TVL -0.11%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは9.78%→20.33%へ上昇しました（24時間出来高 +107.44%、TVL -0.28%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比-0.60%と下落中のため、ETH偏り・下限側レンジ外・下落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\n本日は市場を大きく動かす検証済みのニュース材料が確認できず、BTC・ETH・BNBともに24時間比では小幅な値動きにとどまりました。市場心理はGreed（強欲）圏にあり、過熱感には留意が必要な局面と言えます。継続監視材料として、Ethereum創設者による将来ビジョンの提示や、米国の暗号通貨関連法案を巡る審議動向が挙げられ、今後の進展が注目されます。ETF資金フローについては、直近営業日までの確定値として流出入の方向が確認されていますが、本日は土曜・日曜にあたるため具体的な金額の記載は控えます。今後も政策・制度面の動向や需給バランスの変化を注視していく必要があります。\n"
+}
