@@ -7,6 +7,56 @@
 
 ---
 
+## v1.78 — 2026-09-28（オーナー承認・LPプールchange_vs_prevの分母を生値へ変更。9/26実データの乖離を是正）
+
+**経緯**：9/26実データ確認で、LPプール（Base 0.05%・0.3%）の`change_vs_prev`
+（`apr_change`・`volume_24h_change`・`tvl_change`）が、前日の`raw_data.json`の
+生値ではなく前日の`daily_data.json`にある表示丸め済み文字列（例:
+`"$9.62M"`・`"39.27%"`）を分母にしていたことが判明した。0.05%プールのTVLで
+表示`+0.43%`・生値同士の実変化`+0.48%`という乖離が確認され、オーナー承認を
+得て是正した。v1.77（`base.tvl_change`）と同型の不具合だが、対象フィールド・
+コード箇所は完全に別（`lp.pools[].change_vs_prev`、`fetch_data.py`内の
+プール単位の要因分解ロジック）。
+
+### 対処
+
+`scripts/fetch_data.py`:
+- 新設`compute_pool_changes(raw_key, g, prev_raw)`・`compute_pool_change_field`・
+  `_prev_raw_num`が、前日の`raw_data.json`（`load_prev_raw()`。v1.77で新設済みの
+  関数をそのまま再利用）の`gecko_005`/`gecko_03`の生値（`apr`/`tvl`/`vol`）を
+  分母にして`change_vs_prev`を算出する。前日データ・該当フィールドが無い/
+  数値でない場合は、表示値の文字列パースへフォールバックせず、既存の
+  `NO_PREV_DATA`/`NO_PREV_VALUE`/`NO_CURR_VALUE`（「比較不可」）をそのまま返す
+  （v1.77と同じフェイルクローズ方針）。
+- `main()`内のクロージャだった`change_field`・`pool_changes`をモジュール
+  レベル関数へ昇格（`compute_base_tvl_change`と同じ方針。テスト容易性のため）。
+- **`load_prev_pools()`・`_parse_prev_apr()`・`_parse_prev_fmt_m()`は変更・削除
+  していない**。`compose_lp_comment.py`が「LP運用者向けに一言」内の
+  「39.27%→10.34%」のような前日→当日の**表示テキスト**専用に引き続き使用する
+  （オーナー指示により、この表記は表示値のままでよいため）。`change_vs_prev`
+  （本修正の対象）と表示テキスト（変更なし）は完全に別のフィールド・別の
+  コードパスである点に注意。
+
+### 検証
+
+`test/test_bundle2.py`に8件追加（490→498件、全PASS）。正常系（9/25→9/26と
+同一の生値パターンで`tvl_change`が生値ベースの`+0.48%`になり、表示値ベースの
+`+0.43%`にならないこと）、異常系（前日データなし・該当プールキーなし・当日
+値なし・前日値が数値でない）を確認した。
+
+オーナー指示による再現テスト（実データ・読み取り専用。`outputs/2026-09-25`・
+`outputs/2026-09-26`の`raw_data.json`をそのまま使用し、書き換えは行って
+いない）:
+
+```
+0.05%プール: apr_change=-73.66%, volume_24h_change=-73.53%, tvl_change=+0.48%
+0.3%プール : apr_change=-86.95%, volume_24h_change=-86.78%, tvl_change=+1.34%
+```
+
+ご指摘の`+0.48%`（旧実装の`+0.43%`ではない）が得られることを確認した。
+
+---
+
 ## v1.77 — 2026-09-20（オーナー承認・Base TVL 24時間比の算出方法を自前計算へ変更。9/19実データの乖離を是正）
 
 **経緯**：オーナーから、`daily_data.json`の2点について数値確認の依頼があった。

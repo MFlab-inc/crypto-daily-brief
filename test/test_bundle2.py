@@ -2815,6 +2815,62 @@ check("compute_base_tvl_change: 取得間隔がちょうど20時間・28時間�
           _date_cls(2099, 3, 2), 1100.0,
           fetch_data._parse_fetched_at("2099-03-01T07:37:00+09:00") + _timedelta_cls(hours=28)) is not None)
 
+print("=== fetch_data.py: LPプールchange_vs_prevの分母を生値へ変更（v1.78・オーナー承認・9/26実データの乖離への対処） ===")
+# 正常系: 生値同士の変化率になること（前日$9.62M表示・生値9,615,410.635 → 当日9,661,485.5513
+# の場合、表示値ベースなら+0.43%だが生値ベースでは+0.48%になるはず——9/25→9/26実データと同一パターン）
+_prev_raw_005 = {"apr": 39.27029337886918, "tvl": 9615410.635, "vol": 20690410.772315}
+_curr_g005 = {"apr": 10.344741107436814, "tvl": 9661485.5513, "vol": 5476469.41048986}
+_prev_raw_full = {"gecko_005": _prev_raw_005, "gecko_03": {"apr": 1.0, "tvl": 2.0, "vol": 3.0}}
+_pc = fetch_data.compute_pool_changes("gecko_005", _curr_g005, _prev_raw_full)
+check("compute_pool_changes: 9/25→9/26と同一パターンでtvl_changeが生値ベースの+0.48%になる（表示値ベースの+0.43%ではない）",
+      _pc["tvl_change"] == "+0.48%", _pc)
+check("compute_pool_changes: volume_24h_changeも生値ベースで算出される",
+      _pc["volume_24h_change"] == fetch_data.fmt_change((_curr_g005["vol"] / _prev_raw_005["vol"] - 1) * 100),
+      _pc)
+check("compute_pool_changes: apr_changeも生値ベースで算出される",
+      _pc["apr_change"] == fetch_data.fmt_change((_curr_g005["apr"] / _prev_raw_005["apr"] - 1) * 100),
+      _pc)
+
+# 異常系: 前日raw_data.json自体が無い（prev_raw=None）→ 比較不可（推測値を置かない）
+check("compute_pool_changes: prev_rawがNoneなら3指標とも「比較不可（前日データなし）」",
+      fetch_data.compute_pool_changes("gecko_005", _curr_g005, None) ==
+      {"apr_change": fetch_data.NO_PREV_DATA, "volume_24h_change": fetch_data.NO_PREV_DATA,
+       "tvl_change": fetch_data.NO_PREV_DATA})
+
+# 異常系: 該当プールのキー自体が前日raw_data.jsonに無い（例: v1.78適用前の古い形式）
+check("compute_pool_changes: 前日raw_dataに該当プールキーが無ければ「比較不可（前日値未確認）」",
+      fetch_data.compute_pool_changes("gecko_005", _curr_g005, {"gecko_03": {"apr": 1.0, "tvl": 2.0, "vol": 3.0}})
+      == {"apr_change": fetch_data.NO_PREV_VALUE, "volume_24h_change": fetch_data.NO_PREV_VALUE,
+          "tvl_change": fetch_data.NO_PREV_VALUE})
+
+# 異常系: 当日値が無い（g=None、フェッチ失敗時と同じ形）
+check("compute_pool_changes: 当日g=Noneなら3指標とも「比較不可（当日値未確認）」",
+      fetch_data.compute_pool_changes("gecko_005", None, _prev_raw_full) ==
+      {"apr_change": fetch_data.NO_CURR_VALUE, "volume_24h_change": fetch_data.NO_CURR_VALUE,
+       "tvl_change": fetch_data.NO_CURR_VALUE})
+
+# 異常系: 前日値が数値でない（壊れたraw_data.json）→ 表示値へのフォールバックはしない
+check("compute_pool_changes: 前日tvlが数値でない（文字列等）場合は比較不可（表示値パースへフォールバックしない）",
+      fetch_data.compute_pool_changes(
+          "gecko_005", _curr_g005, {"gecko_005": {"apr": 39.27, "tvl": "$9.62M", "vol": 20690410.77}}
+      )["tvl_change"] == fetch_data.NO_PREV_VALUE)
+
+# 再現テスト（オーナー指示）: 実データ（outputs/2026-09-25, 2026-09-26。REPO直下の
+# 本物のコミット済みファイルを絶対パスで直接読む・読み取り専用・書き換えなし。
+# テスト全体はos.chdir(SCRATCH)しているためload_prev_raw()の相対パスは使わない）で
+# 0.05%プールのtvl_changeが+0.48%になることを確認する。
+_real_prev_path = REPO / "outputs/2026-09-25/raw_data.json"
+_real_curr_path = REPO / "outputs/2026-09-26/raw_data.json"
+if _real_prev_path.exists() and _real_curr_path.exists():
+    _real_prev_raw = json.loads(_real_prev_path.read_text(encoding="utf-8"))
+    _real_curr_raw = json.loads(_real_curr_path.read_text(encoding="utf-8"))
+    _real_pc = fetch_data.compute_pool_changes("gecko_005", _real_curr_raw["gecko_005"], _real_prev_raw)
+    check("再現テスト（実データ）: 2026-09-26分0.05%プールのtvl_changeが+0.48%になる（旧実装の+0.43%は再現しない）",
+          _real_pc["tvl_change"] == "+0.48%", _real_pc)
+else:
+    check("再現テスト（実データ）: outputs/2026-09-25・2026-09-26/raw_data.jsonからの再現", False,
+          "実データファイルが見つからなかった（テスト環境の問題）")
+
 print("=== compose_numeric.py: 前編【主要指標】への24時間レンジ行の追加（v1.41フォローアップ・オーナー承認） ===")
 _dd_with_range = json.loads(json.dumps(DAILY_DATA))
 _dd_with_range["intraday_range"] = {

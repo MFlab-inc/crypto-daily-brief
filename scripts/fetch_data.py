@@ -509,6 +509,56 @@ def load_prev_pools(target) -> dict | None:
         return None
 
 
+# --- LPプールのchange_vs_prev（v1.5・v1.78で分母を生値へ変更） ---
+# v1.78（オーナー承認・2026-09-28）: load_prev_pools()は「LP運用者向けに一言」内の
+# 「39.27%→10.34%」のような前日→当日の表示テキスト（compose_lp_comment.py）専用の
+# 用途として残し、変更しない（オーナー指示）。change_vs_prevのapr_change・
+# volume_24h_change・tvl_change（本節）は前日のraw_data.json（load_prev_raw、
+# v1.77で新設）の生値を分母にする——テスト容易性のため、main()内のクロージャでは
+# なくモジュールレベル関数として実装する（compute_base_tvl_changeと同じ方針）。
+NO_PREV_DATA = "比較不可（前日データなし）"
+NO_PREV_VALUE = "比較不可（前日値未確認）"
+NO_CURR_VALUE = "比較不可（当日値未確認）"
+
+
+def compute_pool_change_field(curr: float | None, prev: float | None) -> str:
+    if curr is None:
+        return NO_CURR_VALUE
+    if prev is None or prev == 0:
+        return NO_PREV_VALUE
+    return fmt_change((curr - prev) / prev * 100)
+
+
+def _prev_raw_num(prev_pool_raw: dict | None, key: str) -> float | None:
+    if not isinstance(prev_pool_raw, dict):
+        return None
+    v = prev_pool_raw.get(key)
+    return v if isinstance(v, (int, float)) and not isinstance(v, bool) else None
+
+
+def compute_pool_changes(raw_key: str, g: dict | None, prev_raw: dict | None) -> dict:
+    """1プール分のchange_vs_prev（apr_change/volume_24h_change/tvl_change）を、
+    前日のraw_data.json（prev_raw。load_prev_raw()の戻り値）の生値を分母にして
+    算出する。prev_rawがNone、または該当プール（raw_key="gecko_005"/"gecko_03"）の
+    フィールドが数値でない場合は推測値を置かず「比較不可」を返す。
+    """
+    if prev_raw is None:
+        return {"apr_change": NO_PREV_DATA, "volume_24h_change": NO_PREV_DATA,
+                "tvl_change": NO_PREV_DATA}
+    prev_pool_raw = prev_raw.get(raw_key)
+    prev_apr = _prev_raw_num(prev_pool_raw, "apr")
+    prev_tvl = _prev_raw_num(prev_pool_raw, "tvl")
+    prev_vol = _prev_raw_num(prev_pool_raw, "vol")
+    curr_apr = g["apr"] if g else None
+    curr_tvl = g["tvl"] if g else None
+    curr_vol = g["vol"] if g else None
+    return {
+        "apr_change": compute_pool_change_field(curr_apr, prev_apr),
+        "volume_24h_change": compute_pool_change_field(curr_vol, prev_vol),
+        "tvl_change": compute_pool_change_field(curr_tvl, prev_tvl),
+    }
+
+
 def fetch_coincheck_eth_volume() -> dict | None:
     """Coincheck ETH/JPY 24時間出来高（ETH建て・認証不要 — v1.4）。"""
     try:
@@ -641,40 +691,22 @@ def main() -> int:
         dex_eth_usdc_jpy_s = ""
 
     # ---------- APR変化の要因分解（v1.5 改善②）。算術的分解のみ、解釈・推測はしない ----------
-    NO_PREV_DATA = "比較不可（前日データなし）"
-    NO_PREV_VALUE = "比較不可（前日値未確認）"
-    NO_CURR_VALUE = "比較不可（当日値未確認）"
-    prev_pools = load_prev_pools(target)
-
-    def change_field(curr: float | None, prev: float | None) -> str:
-        if curr is None:
-            return NO_CURR_VALUE
-        if prev is None or prev == 0:
-            return NO_PREV_VALUE
-        return fmt_change((curr - prev) / prev * 100)
-
-    def pool_changes(pool_name: str, g: dict | None) -> dict:
-        if prev_pools is None:
-            return {"apr_change": NO_PREV_DATA, "volume_24h_change": NO_PREV_DATA,
-                    "tvl_change": NO_PREV_DATA}
-        prev = prev_pools.get(pool_name)
-        prev_apr = _parse_prev_apr(prev.get("apr", "")) if prev else None
-        prev_tvl = _parse_prev_fmt_m(prev.get("tvl", "")) if prev else None
-        prev_vol = _parse_prev_fmt_m(prev.get("volume_24h", "")) if prev else None
-        curr_apr = g["apr"] if g else None
-        curr_tvl = g["tvl"] if g else None
-        curr_vol = g["vol"] if g else None
-        return {
-            "apr_change": change_field(curr_apr, prev_apr),
-            "volume_24h_change": change_field(curr_vol, prev_vol),
-            "tvl_change": change_field(curr_tvl, prev_tvl),
-        }
-
+    # v1.78（オーナー承認・2026-09-28）: 分母を前日の表示丸め値（daily_data.json、
+    # 小数第2位までの文字列）から前日の生値（raw_data.json の gecko_005/gecko_03）へ
+    # 変更する。9/26実データで0.05%プールTVLの表示変化率が+0.43%（実際の生値同士の
+    # 変化+0.48%とは別物）になっていた事象への対処（DESIGN_CHANGES.md参照）。
+    # load_prev_raw()はv1.77（base_tvl_chg）で新設済みの関数をそのまま再利用する。
+    # 「LP運用者向けに一言」内の「39.27%→10.34%」のような前日→当日の表示テキスト
+    # (compose_lp_comment.load_prev_pools経由)は表示値のまま変更しない
+    # （オーナー指示・別の目的のフィールドのため）。
+    prev_raw = load_prev_raw(target)
     pools_built = [pool("Base 0.05%プール", g005), pool("Base 0.3%プール", g03)]
     # ループ変数名は既存の CMC グローバル指標 `g`（quotes.get("global")）と
     # 衝突させない（関数スコープのため上書きしてしまう — v1.5 実装時に検出・修正）。
-    for pd, pool_g in zip(pools_built, (g005, g03)):
-        pd["change_vs_prev"] = pool_changes(pd["name"], pool_g)
+    # raw_key は raw_data.json 側のキー名（gecko_005/gecko_03）で、pool()が組む
+    # 表示名（"Base 0.05%プール"等）とは独立（v1.78）。
+    for pd, pool_g, raw_key in zip(pools_built, (g005, g03), ("gecko_005", "gecko_03")):
+        pd["change_vs_prev"] = compute_pool_changes(raw_key, pool_g, prev_raw)
 
     # ---------- 国内2社（v1.4） ----------
     # 片方でも取得不能なら合計は「算出不能」。BTC/JPY・推定値・前日値で代替しない。
