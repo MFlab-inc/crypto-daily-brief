@@ -234,14 +234,26 @@ jobs:
           # 後続へ伝播するため、ここだけは明示的に非致命化する）。
           git push || echo "コスト記録のpushに失敗しましたが、本文コミットの成否には影響しません。"
 
-      - name: 本文コミット（draft/とGENERATION_STATUS.mdのみ。フェーズ1の成果物・監査には触れない。監査PASS時のみ到達）
-        if: steps.need.outputs.phase2 == 'true'
+      # v1.79（オーナー承認）: 「call_Aの失敗やフェイルクローズで本文をコミット
+      # しない日でも、GENERATION_STATUS.md（L0〜L3の判定、どのチェックがFAILしたか、
+      # その詳細）だけはコミットされるようにしてください」への対応として、従来の
+      # 「本文コミット」1ステップ（draft/とGENERATION_STATUS.mdを同時にコミット・
+      # 監査PASS時のみ到達）を2ステップへ分割した。本ステップはalways()を付し、
+      # C12〜C24監査FAIL・L3フェイルクローズ（compose_post.pyがGENERATION_STATUS.md
+      # のみ書いて非0終了する）のいずれでも実行される。月次累計の付記も、
+      # 監査結果によらず記録したい情報のためこちらへ移した。
+      - name: STATUSコミット（常に。フェイルクローズでもGENERATION_STATUS.mdだけはコミットする）
+        if: always() && steps.need.outputs.phase2 == 'true'
         env:
           TARGET_DIR: outputs/${{ steps.target.outputs.date }}
           TARGET_DATE: ${{ steps.target.outputs.date }}
         run: |
           STATUS="$TARGET_DIR/GENERATION_STATUS.md"
           LOG="outputs/token_usage_log.csv"
+          if [ ! -f "$STATUS" ]; then
+            echo "GENERATION_STATUS.md が無いためコミットをスキップします（呼び出しA/Bより前の失敗等）。"
+            exit 0
+          fi
           MONTH="${TARGET_DATE:0:7}"
           if [ -f "$LOG" ]; then
             MONTH_IN=$(awk -F, -v m="$MONTH" 'NR>1 && substr($1,1,7)==m {s+=$2} END{print s+0}' "$LOG")
@@ -252,7 +264,20 @@ jobs:
 
           git config user.name "crypto-daily-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add "$TARGET_DIR/draft" "$STATUS"
+          git add "$STATUS"
+          git commit -m "status: ${TARGET_DATE} (auto)" || echo "no changes"
+          git pull --rebase origin "${GITHUB_REF_NAME}" || true
+          git push
+
+      - name: 本文コミット（draft/のみ。フェーズ1の成果物・監査・STATUSには触れない。監査PASS時のみ到達）
+        if: steps.need.outputs.phase2 == 'true'
+        env:
+          TARGET_DIR: outputs/${{ steps.target.outputs.date }}
+          TARGET_DATE: ${{ steps.target.outputs.date }}
+        run: |
+          git config user.name "crypto-daily-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add "$TARGET_DIR/draft"
           git commit -m "post-draft: ${TARGET_DATE} (auto)" || echo "no changes"
           git pull --rebase origin "${GITHUB_REF_NAME}" || true
           git push
@@ -266,4 +291,6 @@ jobs:
           path: |
             outputs/${{ steps.target.outputs.date }}/draft/
             outputs/${{ steps.target.outputs.date }}/GENERATION_STATUS.md
+            outputs/${{ steps.target.outputs.date }}/news_candidates.json
+            outputs/${{ steps.target.outputs.date }}/rejected_pairs.json
           if-no-files-found: ignore

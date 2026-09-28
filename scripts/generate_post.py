@@ -178,6 +178,16 @@ REQUIRED_KEYS_B = ["part2_flow", "part2_summary"]
 # 参照する — 定義を二重に持たず、常に同じ文言であることを保証するため）。
 FIXED_HEADLINE = "直近24時間に暗号通貨市場との関係を確認できる主要なマクロ材料は確認できない。"
 FIXED_POINTS = "補足できる検証済み材料は確認できない。"
+# v1.79（オーナー承認）: 【市場のフロー】・【総括】の縮退時固定文言も、上記2つと
+# 同じ理由でここに定義を集約する（従来はcompose_post.py側に個別定義していたが、
+# verify_post.pyのC27（総括の役割分離監査）がこの定型文を「LLM生成の散文ではない」
+# と識別するために参照する必要が生じた——verify_post.pyはcompose_post.pyを
+# importできない〈compose_post.py→verify_post.pyの依存が既にあり循環を生む〉ため、
+# FIXED_HEADLINE/FIXED_POINTSと同様にgenerate_post.py側へ集約した。
+# compose_post.pyは後方互換のためcompose_post.FIXED_FLOW/SUMMARY_BLANK_NOTEとして
+# 引き続き参照できる（下記のcompose_post.py側のエイリアス参照）。
+FIXED_FLOW = "価格変動との関係を確認できる主要材料は確認できない。"
+SUMMARY_BLANK_NOTE = "（今回は自動生成できませんでした。確認可能な事実のみで人が補ってください。）"
 
 # --- プロンプト（v0.3 §5.1・§5.2から逐語転記。台本改定時は本ファイルも追随させる） ---
 
@@ -651,7 +661,8 @@ SYSTEM_B = "\n\n".join([
 class CallOutcome:
     def __init__(self, ok: bool, data: dict | None, attempts: int, error: str | None,
                  usage: dict[str, int] | None = None, truncation_stats: dict[str, int] | None = None,
-                 attempt_errors: list[str] | None = None, audit_ledger_auto_filled_count: int = 0):
+                 attempt_errors: list[str] | None = None, audit_ledger_auto_filled_count: int = 0,
+                 rejected_pairs: list[dict] | None = None, force_dropped_candidates: list[dict] | None = None):
         self.ok = ok
         self.data = data
         self.attempts = attempts
@@ -667,12 +678,23 @@ class CallOutcome:
         # 空欄自動補完（_reconstruct_audit_ledger参照）が発生した件数。
         # GENERATION_STATUS.mdへ記録し、非決定的な発生頻度を追跡する。
         self.audit_ledger_auto_filled_count = audit_ledger_auto_filled_count
+        # v1.79（オーナー承認）: ペア判定で却下された候補の診断（両側の
+        # title/source・重なり係数・却下理由）。GitHub Actionsアーティファクト
+        # （rejected_pairs.json）として保存し、config/pair_overlap.jsonの
+        # 閾値調整判断に使う——リポジトリへはコミットしない。
+        self.rejected_pairs = rejected_pairs or []
+        # v1.79（オーナー承認）: 最終試行でも独立2ソースの相方が成立せず
+        # 強制的に不採用にした候補（_derive_decisions参照）。
+        # GENERATION_STATUS.mdへ記録する。
+        self.force_dropped_candidates = force_dropped_candidates or []
 
     def to_dict(self) -> dict:
         return {"ok": self.ok, "attempts": self.attempts, "error": self.error,
                 "usage": self.usage, "data": self.data, "truncation_stats": self.truncation_stats,
                 "attempt_errors": self.attempt_errors,
-                "audit_ledger_auto_filled_count": self.audit_ledger_auto_filled_count}
+                "audit_ledger_auto_filled_count": self.audit_ledger_auto_filled_count,
+                "rejected_pairs": self.rejected_pairs,
+                "force_dropped_candidates": self.force_dropped_candidates}
 
 
 def _extract_text(response: Any) -> str:
@@ -722,7 +744,7 @@ def _add_usage(a: dict[str, int], b: dict[str, int]) -> dict[str, int]:
 
 def _call_json(
     client: "anthropic.Anthropic", *, system: str, user_content: str, max_tokens: int,
-    required_keys: list[str], post_process: Callable[[dict], dict] | None = None,
+    required_keys: list[str], post_process: Callable[[dict, int], dict] | None = None,
     build_retry_note: Callable[[Exception], str | None] | None = None,
 ) -> CallOutcome:
     """system/userプロンプトでJSON応答を取得し、必須キーの充足まで検証する。
@@ -738,6 +760,9 @@ def _call_json(
     呼び出し元固有の後処理（call_aのaudit_ledger再構成など）をここに差し込む。
     例外を送出した場合もこのtryブロック内で捕捉され、他の失敗と同様に
     リトライされる——post_process内の検証エラーもJSON不正等と同列に扱う。
+    v1.79（オーナー承認）: 第2引数として現在の試行回数（1始まり）を渡す。
+    call_a()が最終試行（attempt==MAX_ATTEMPTS）でのみforce_drop_unresolved=Trueを
+    有効にするために使う（それ以外の呼び出し元は無視してよい）。
 
     build_retry_note（v1.66・オーナー承認）: 従来、リトライは直前の試行と
     完全に同一のuser_contentを無変更で再送しており、失敗理由（attempt_errors
@@ -785,7 +810,7 @@ def _call_json(
             if missing:
                 raise ValueError(f"必須キー欠落: {missing}")
             if post_process is not None:
-                data = post_process(data)
+                data = post_process(data, attempt)
             return CallOutcome(True, data, attempt, None, total_usage, attempt_errors=list(attempt_errors))
         except Exception as e:  # noqa: BLE001 — 上記docstring参照
             attempt_errors.append(f"{type(e).__name__}: {e}")
@@ -916,6 +941,48 @@ class AuditLedgerReconstructionError(ValueError):
     """
 
 
+def _pair_claim_detail(claimant_id: int, target_id: int, id_to_candidate: dict[int, dict],
+                        use_by_id: dict[int, bool], threshold: float) -> dict:
+    """_validate_pair_claim()と同じ妥当性判定を行い、判定根拠（両側の
+    タイトル・出典・重なり係数・却下理由）を構造化して返す（v1.79・
+    オーナー承認）。config/pair_overlap.jsonの閾値調整判断のため、却下された
+    ペア申告の実例をGENERATION_STATUS.mdとは別にGitHub Actionsアーティファクト
+    （rejected_pairs.json）として保存する用途で追加した。判定ロジック自体は
+    _validate_pair_claim()から移設したものであり、判定結果（valid）は同一
+    （既存テストで確認）。
+    """
+    claimant = id_to_candidate.get(claimant_id, {})
+    detail = {
+        "claimant_id": claimant_id,
+        "claimant_title": claimant.get("title", ""),
+        "claimant_source": claimant.get("source", ""),
+        "claimant_tier": claimant.get("tier"),
+        "target_id": target_id,
+        "threshold": threshold,
+    }
+    target = id_to_candidate.get(target_id)
+    if target is None or target_id == claimant_id:
+        detail.update(target_title="", target_source="", target_tier=None, target_use=None,
+                      overlap=None, valid=False,
+                      reason="target_not_found" if target is None else "self_reference")
+        return detail
+    detail.update(target_title=target.get("title", ""), target_source=target.get("source", ""),
+                  target_tier=target.get("tier"), target_use=bool(use_by_id.get(target_id)))
+    if target.get("tier") != 3:
+        detail.update(overlap=None, valid=False, reason="target_not_tier3")
+        return detail
+    if not use_by_id.get(target_id):
+        detail.update(overlap=None, valid=False, reason="target_use_false")
+        return detail
+    if target.get("source") == claimant.get("source"):
+        detail.update(overlap=None, valid=False, reason="same_source")
+        return detail
+    sim = _overlap_coefficient(_tokenize_title(claimant.get("title", "")), _tokenize_title(target.get("title", "")))
+    valid = sim >= threshold
+    detail.update(overlap=sim, valid=valid, reason=None if valid else "overlap_below_threshold")
+    return detail
+
+
 def _validate_pair_claim(claimant_id: int, target_id: int, id_to_candidate: dict[int, dict],
                           use_by_id: dict[int, bool], threshold: float) -> bool:
     """tier3のuse:trueエントリがpairs_with_candidate_idで自己申告した相手が
@@ -928,23 +995,40 @@ def _validate_pair_claim(claimant_id: int, target_id: int, id_to_candidate: dict
       - タイトルのトークン重なり係数がthreshold以上であること
     相互申告（双方が互いを指す）は要求しない——片方向の申告が上記条件を
     満たせば成立する（オーナー指示）。
+
+    v1.79: 判定本体は_pair_claim_detail()へ移設し、本関数はvalidのみを
+    取り出す薄いラッパーとした（挙動は完全に同一）。
     """
-    if target_id not in id_to_candidate or target_id == claimant_id:
-        return False
-    target = id_to_candidate[target_id]
-    if target.get("tier") != 3 or not use_by_id.get(target_id):
-        return False
-    claimant = id_to_candidate[claimant_id]
-    if target.get("source") == claimant.get("source"):
-        return False
-    sim = _overlap_coefficient(_tokenize_title(claimant.get("title", "")), _tokenize_title(target.get("title", "")))
-    return sim >= threshold
+    return bool(_pair_claim_detail(claimant_id, target_id, id_to_candidate, use_by_id, threshold)["valid"])
 
 
 def _derive_decisions(llm_entries: list[dict], id_to_candidate: dict[int, dict],
-                       pair_overlap_threshold: float) -> dict[int, str]:
+                       pair_overlap_threshold: float, rejected_pairs: list[dict] | None = None,
+                       force_drop_unresolved: bool = False,
+                       force_dropped: list[dict] | None = None) -> dict[int, str]:
     """candidate_idごとのdecision（"採用"/"採用（独立2ソース）"/"不採用"）を
     コード側で機械的に導出する（v1.53フォローアップ・オーナー指示）。
+
+    rejected_pairs（v1.79・オーナー承認）: 渡された場合、ペア申告が
+    _pair_claim_detail()の条件を満たさず却下されるたびに、その判定根拠
+    （両側のtitle/source・重なり係数・却下理由）を追記する（ミュータブル
+    な蓄積先を渡す既存のstats引数と同じ規約）。config/pair_overlap.jsonの
+    閾値調整判断のため、call_a()がGitHub Actionsアーティファクトとして
+    保存する目的でのみ使う——decisionの導出ロジック自体には影響しない。
+
+    force_drop_unresolved／force_dropped（v1.79・オーナー承認）: 従来、
+    tier3のuse:trueで独立2ソースの相方が最後まで成立しない候補は必ず
+    AuditLedgerReconstructionErrorを送出していた（_call_json()が
+    MAX_ATTEMPTS回リトライしても解消しないaudit_ledgerペア判定エラーが
+    2026-09-26に発生し、L1へ縮退した事象への対処）。force_drop_unresolved=
+    Trueを渡すと、リトライを尽くしても解消しない候補は例外にせず
+    「不採用」へ強制変更して続行する（call_a()が最終試行でのみ渡す）。
+    force_droppedを渡した場合、強制不採用にした候補ごとにcandidate_id・
+    title・source・reasonを追記する——呼び出し元がGENERATION_STATUS.mdへ
+    記録するために使う。この強制変更後は呼び出し元（compose_post.py）が
+    C12〜C24を再監査し、なお失敗する場合は従来どおりのL1（呼び出しA失敗
+    扱い）へフォールバックする設計（オーナー指示・verify_post.py自体は
+    変更しない）。
 
     C21（decision/tier整合性監査）が、tier3候補に対する呼び出しAの誤った
     decisionラベル付け（単独ソースを独立2ソースと誤判定・tier1限定のはずの
@@ -980,9 +1064,12 @@ def _derive_decisions(llm_entries: list[dict], id_to_candidate: dict[int, dict],
     for cid, target_id in claim_by_id.items():
         if id_to_candidate[cid].get("tier") != 3 or not use_by_id.get(cid) or target_id is None:
             continue
-        if _validate_pair_claim(cid, target_id, id_to_candidate, use_by_id, pair_overlap_threshold):
+        detail = _pair_claim_detail(cid, target_id, id_to_candidate, use_by_id, pair_overlap_threshold)
+        if detail["valid"]:
             paired.add(cid)
             paired.add(target_id)
+        elif rejected_pairs is not None:
+            rejected_pairs.append(detail)
 
     decisions: dict[int, str] = {}
     unresolved: list[int] = []
@@ -1002,14 +1089,27 @@ def _derive_decisions(llm_entries: list[dict], id_to_candidate: dict[int, dict],
             decisions[cid] = "不採用"
 
     if unresolved:
-        raise AuditLedgerReconstructionError(
-            f"tier3のuse:trueだが独立2ソースの相方が成立しない候補ID: {sorted(unresolved)}")
+        if not force_drop_unresolved:
+            raise AuditLedgerReconstructionError(
+                f"tier3のuse:trueだが独立2ソースの相方が成立しない候補ID: {sorted(unresolved)}")
+        for cid in unresolved:
+            decisions[cid] = "不採用"
+            if force_dropped is not None:
+                force_dropped.append({
+                    "candidate_id": cid,
+                    "title": id_to_candidate[cid].get("title", ""),
+                    "source": id_to_candidate[cid].get("source", ""),
+                    "reason": "最終試行でも独立2ソースの相方が成立しなかったため強制的に不採用にした",
+                })
     return decisions
 
 
 def _reconstruct_audit_ledger(llm_entries: Any, id_to_candidate: dict[int, dict],
                                pair_overlap_threshold: float = PAIR_OVERLAP_THRESHOLD_DEFAULT,
-                               stats: dict[str, int] | None = None) -> list[dict]:
+                               stats: dict[str, int] | None = None,
+                               rejected_pairs: list[dict] | None = None,
+                               force_drop_unresolved: bool = False,
+                               force_dropped: list[dict] | None = None) -> list[dict]:
     """LLMが出力した candidate_id・use・pairs_with_candidate_id・
     verified_by・reason のみのaudit_ledgerを、候補データのsource/url/
     title/published_atで補完し、decisionをコード側で導出した完全な形へ
@@ -1055,7 +1155,9 @@ def _reconstruct_audit_ledger(llm_entries: Any, id_to_candidate: dict[int, dict]
     if missing:
         raise AuditLedgerReconstructionError(f"audit_ledgerに記録されていない候補ID: {sorted(missing)}")
 
-    decisions = _derive_decisions(parsed, id_to_candidate, pair_overlap_threshold)
+    decisions = _derive_decisions(parsed, id_to_candidate, pair_overlap_threshold,
+                                   rejected_pairs=rejected_pairs, force_drop_unresolved=force_drop_unresolved,
+                                   force_dropped=force_dropped)
 
     reconstructed = []
     auto_filled = 0
@@ -1156,10 +1258,30 @@ def call_a(client: "anthropic.Anthropic", daily_data: dict, news_today: dict,
         daily_data, news_today, news_yesterday, pair_overlap_threshold)
 
     audit_ledger_stats: dict[str, int] = {}
+    # v1.79（オーナー承認）: rejected_pairs_stats・force_dropped_statsは
+    # audit_ledger_statsと同じ「試行ごとにリセットし、最終的に成功した
+    # （＝outcomeを生んだ）試行の値だけが残る」規約に従うミュータブルな
+    # 蓄積先。post_processは_call_json()内で試行ごとに呼ばれるため、
+    # 各試行の開始時にclear()し、失敗した試行分の値が混入しないようにする。
+    rejected_pairs_stats: list[dict] = []
+    force_dropped_stats: list[dict] = []
 
-    def _rebuild_audit_ledger(data: dict) -> dict:
+    def _rebuild_audit_ledger(data: dict, attempt: int) -> dict:
+        rejected_pairs_stats.clear()
+        force_dropped_stats.clear()
+        # v1.79（オーナー承認）: 最終試行でも独立2ソースの相方が解消しない
+        # tier3候補は、従来はAuditLedgerReconstructionErrorで例外化し
+        # MAX_ATTEMPTS回リトライしてもなお解消しない場合そのままcall_a失敗
+        # （縮退L1）としていた。最終試行（attempt==MAX_ATTEMPTS）に限り、
+        # 例外化する代わりに強制的に不採用へ変更して続行する——呼び出し元
+        # （compose_post.py）がこの後C12〜C24を再監査し、なお失敗する場合は
+        # 従来どおりのL1へフォールバックする（_derive_decisionsのdocstring
+        # 参照）。
+        force_drop = attempt >= MAX_ATTEMPTS
         data["audit_ledger"] = _reconstruct_audit_ledger(
-            data.get("audit_ledger"), id_to_candidate, pair_overlap_threshold, audit_ledger_stats)
+            data.get("audit_ledger"), id_to_candidate, pair_overlap_threshold, audit_ledger_stats,
+            rejected_pairs=rejected_pairs_stats, force_drop_unresolved=force_drop,
+            force_dropped=force_dropped_stats)
         return data
 
     outcome = _call_json(
@@ -1173,7 +1295,21 @@ def call_a(client: "anthropic.Anthropic", daily_data: dict, news_today: dict,
     # audit_ledger_statsは最終的に成功した（＝outcomeを生んだ）試行の値で
     # 上書きされている。失敗した試行分の値が混入することはない。
     outcome.audit_ledger_auto_filled_count = audit_ledger_stats.get("audit_ledger_auto_filled_count", 0)
+    outcome.rejected_pairs = list(rejected_pairs_stats)
+    outcome.force_dropped_candidates = list(force_dropped_stats)
     return outcome
+
+
+def regenerate_call_b_as_l1(daily_data: dict, client: "anthropic.Anthropic | None" = None) -> CallOutcome:
+    """v1.79（オーナー承認）: force_drop_unresolvedで続行した呼び出しAの結果を
+    使って合成した本文が、除外後の再監査（C12〜C24）でもFAILする場合、
+    呼び出し元（compose_post.py）が呼び出しAを失敗扱いへ差し戻し、本関数で
+    呼び出しBを news_from_call_a=None で生成し直す（＝従来のL1と同じ状態に
+    戻す）。呼び出しBは元々「Aが失敗している場合はニュースが空で渡される」
+    前提でプロンプト設計されているため（CALL_B_INSTRUCTIONS参照）、
+    call_b()をそのまま再利用できる。
+    """
+    return call_b(client or anthropic.Anthropic(), daily_data, None)
 
 
 def call_b(client: "anthropic.Anthropic", daily_data: dict, call_a_data: dict | None) -> CallOutcome:

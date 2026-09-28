@@ -167,6 +167,8 @@ def repair(target_date: str, *, client: "anthropic.Anthropic | None" = None) -> 
 
     final_audit = verify_post.run_all(bundle, daily_data)
     final_failing = sorted(c["id"] for c in final_audit.checks if c["result"] == "FAIL")
+    final_failing_details = [{"id": c["id"], "detail": c["detail"]}
+                              for c in final_audit.checks if c["result"] == "FAIL"]
     rescued = rounds_used > 0 and not (REPAIRABLE_CHECK_IDS & set(final_failing))
 
     if rounds_used:
@@ -180,6 +182,7 @@ def repair(target_date: str, *, client: "anthropic.Anthropic | None" = None) -> 
         "rounds_log": rounds_log,
         "total_usage": total_usage,
         "final_failing_checks": final_failing,
+        "final_failing_check_details": final_failing_details,
         "rescued": rescued,
     }
 
@@ -208,6 +211,23 @@ def render_status_note(result: dict[str, Any]) -> str:
     return "\n".join(lines) + "\n"
 
 
+def render_final_audit_note(result: dict[str, Any]) -> str:
+    """GENERATION_STATUS.mdへ常に追記する最終監査(C12〜C24)の結果サマリ
+    （v1.79・オーナー承認）。render_status_note()と異なり、局所修正
+    （C18/C13）が1件も発生しなかった日（rounds_used==0）でも常に非空文字列を
+    返す——「call_Aの失敗やフェイルクローズで本文をコミットしない日でも、
+    GENERATION_STATUS.md（L0〜L3の判定、どのチェックがFAILしたか、その詳細）
+    だけはコミットされるようにしてください」という指示への対応。
+    """
+    lines = ["", f"本文機械監査（C12〜C24）: overall={'PASS' if not result['final_failing_checks'] else 'FAIL'}"]
+    if not result["final_failing_check_details"]:
+        lines.append("  FAILしたチェックはありません。")
+    else:
+        for c in result["final_failing_check_details"]:
+            lines.append(f"  FAIL: {c['id']} — {c['detail']}")
+    return "\n".join(lines) + "\n"
+
+
 def main() -> int:
     if len(sys.argv) != 2:
         print("Usage: repair_post.py <対象日 YYYY-MM-DD>", file=sys.stderr)
@@ -220,14 +240,15 @@ def main() -> int:
 
     result = repair(target_date)
     note = render_status_note(result)
-    if note:
-        status_path = Path(f"outputs/{target_date}/GENERATION_STATUS.md")
-        if status_path.exists():
-            with status_path.open("a", encoding="utf-8") as f:
+    final_audit_note = render_final_audit_note(result)
+    status_path = Path(f"outputs/{target_date}/GENERATION_STATUS.md")
+    if status_path.exists():
+        with status_path.open("a", encoding="utf-8") as f:
+            if note:
                 f.write(note)
-        print(note)
-    else:
-        print("局所修正の対象なし（初回検証でC18・C13ともFAILしていない）。")
+            f.write(final_audit_note)
+    print(note or "局所修正の対象なし（初回検証でC18・C13ともFAILしていない）。")
+    print(final_audit_note)
     return 0
 
 

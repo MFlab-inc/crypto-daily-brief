@@ -7,6 +7,115 @@
 
 ---
 
+## v1.79 — 2026-09-28（オーナー承認・call_A強制不採用フォールバック・
+STATUS常時コミット・The Block追加。LP精度修正はv1.78で別途完了済み）
+
+9/28のオーナー承認メッセージで条件付き承認された4項目のうち、以下2項目を
+本版で実装した（LPプール`change_vs_prev`の精度修正はv1.78で別途完了済み。
+C26〜C28の役割分離監査は、ドライラン結果を踏まえたオーナー判断により
+実装済み・ローカルコミット済みのまま本番ブランチへのpushを保留している
+——詳細は別途チャットで報告）。過去の`outputs/`は一切書き換えていない。
+
+### 1. call_A最終試行での強制不採用＋再監査フォールバック（2026-09-26のFAILへの対処）
+
+**背景**：9/26分でcall_Aが3回とも`AuditLedgerReconstructionError`
+（tier3の独立2ソースペアが最後まで成立しない）で失敗し、L1へ縮退した。
+同一入力で同じ候補構成が再現する限りリトライだけでは解消しない構造だった。
+
+**対処**（`scripts/generate_post.py`）：
+- `_pair_claim_detail()`を新設。`_validate_pair_claim()`の判定ロジックを
+  そのまま踏襲しつつ、判定根拠（両側のtitle/source・重なり係数・却下理由：
+  `target_not_found`/`self_reference`/`target_not_tier3`/`target_use_false`/
+  `same_source`/`overlap_below_threshold`）を構造化して返す。
+  `_validate_pair_claim()`は本関数の薄いラッパーへ変更（挙動は完全に同一）。
+- `_derive_decisions()`・`_reconstruct_audit_ledger()`に
+  `rejected_pairs`（却下ペアの診断を蓄積する既存の`stats`と同じ規約の
+  ミュータブルなリスト）と`force_drop_unresolved`・`force_dropped`を追加。
+  `force_drop_unresolved=True`の場合、最終試行でも独立2ソースの相方が
+  成立しない候補を例外化せず「不採用」へ強制変更して続行する。
+- `_call_json()`の`post_process`コールバックへ現在の試行回数（1始まり）を
+  渡すよう変更（`post_process(data, attempt)`）。`call_a()`は
+  `attempt >= MAX_ATTEMPTS`（最終試行）の場合のみ`force_drop_unresolved=True`
+  を有効にする——1・2試行目は従来どおり例外化してLLMへ自己修正の機会を
+  与える（v1.66の設計を維持）。
+- `CallOutcome`へ`rejected_pairs`・`force_dropped_candidates`フィールドを
+  追加（`to_dict()`にも反映）。
+- `generate_post.regenerate_call_b_as_l1(daily_data, client=None)`を新設。
+  呼び出しBを`news_from_call_a=None`で再生成する（＝従来のL1と同じ入力）。
+
+**再監査フォールバック**（`scripts/compose_post.py`）：
+- `main()`は、`force_dropped_candidates`が非空の場合に限り
+  `verify_post.run_all()`で除外後の本文を再監査する。C12〜C24のいずれかが
+  FAILする場合、`_fallback_to_true_l1()`が呼び出しAを失敗扱いへ差し戻し、
+  呼び出しBを`regenerate_call_b_as_l1()`で再生成したうえで
+  levelを再計算する（従来どおりのL1/L2）——オーナー承認の条件
+  「除外後にC12〜C24をすべて再検証し、通らなければ従来どおりL1にして
+  ください」に対応する。
+
+**診断アーティファクト**（`.github/workflows/daily.yml`、Task 2）：
+- `compose_post.py`は`outputs/{date}/rejected_pairs.json`
+  （却下されたペア申告の診断。両側のtitle/source・重なり係数を含む）を
+  毎回書き出す。リポジトリへはコミットせず、`news_candidates.json`と
+  併せて「デバッグ用アーティファクト（本文）」のGitHub Actions
+  アーティファクトへ追加した。`config/pair_overlap.json`の閾値（0.4）は
+  変更していない——実例が集まってから判断する（オーナー指示）。
+
+### 2. GENERATION_STATUS.mdの常時コミット（call_A失敗・フェイルクローズ日でも）
+
+- `compose_post.py`の`_write_l3_status()`：L3判定（daily_data.json欠損・
+  C1〜C11未PASS）時にも、本文（part1.md/part2.md）は従来どおり生成しない
+  一方、`level: L3`と判定理由を記したGENERATION_STATUS.mdだけは書き出す。
+- `compose_post.py`の`render_generation_status()`：
+  `force_dropped`（強制不採用にした候補のID・title・source・理由）と
+  `l1_fallback_failing_checks`（再監査フォールバックが発生した場合の
+  FAILしたチェックID一覧）を記録する引数を追加。
+- `repair_post.py`の`render_final_audit_note()`を新設。局所修正
+  （C18/C13）の対象が1件も無い日（`rounds_used==0`）でも常に非空文字列を
+  返し、最終監査（C12〜C24）のoverall PASS/FAILと、FAILした場合は
+  チェックID・詳細をGENERATION_STATUS.mdへ追記する
+  （従来の`render_status_note()`は局所修正ログ専用のまま維持し、
+  空文字列を返す既存の挙動は変えていない）。
+- `.github/workflows/daily.yml`：従来「本文コミット」の1ステップだった
+  ものを2ステップへ分割した。新設の「STATUSコミット」ステップは
+  `always()`を付し、GENERATION_STATUS.mdのみを常にコミットする
+  （月次累計の付記もこちらへ移設）。既存の「本文コミット」ステップは
+  `draft/`のみをコミットし、監査PASS時のみ到達する条件は変更していない。
+
+### 3. The Blockをtier3情報源として追加
+
+- `config/news_sources.json`：`{ "name": "The Block", "url":
+  "https://www.theblock.co/rss.xml", "tier": 3 }`を追加
+  （オーナーが2026-09-28に有効性を確認済み）。
+- `scripts/collect_news.py`の`_collect_from_feed()`：URLに`/sponsored/`を
+  含む記事を候補から一律除外する（統合運用基準§2「スポンサー記事は
+  主根拠にしない」・全情報源に共通適用）。
+- 初回の定期実行後の実際の取得結果（tier3候補数・上限による除外件数の
+  変化）は、次回スケジュール実行後に別途報告する。
+
+### 補足：FIXED_FLOW・SUMMARY_BLANK_NOTEの定義集約
+
+`FIXED_FLOW`・`SUMMARY_BLANK_NOTE`（旧`compose_post.py`定義）を
+`generate_post.py`へ移設し、`FIXED_HEADLINE`/`FIXED_POINTS`と同じ場所に
+集約した（挙動・文言に変更なし）。`compose_post.py`側は後方互換のため
+エイリアスとして参照する。将来のC26/C27（統合運用基準§3.1の役割分離
+監査。ローカルコミット済みだが本版では未pushのため後日別途記録）が
+これらの定型文を識別する必要があり、verify_post.py→compose_post.pyの
+importは循環を生むため不可であることから、事前に移設した。
+
+### 検証
+
+`test/test_bundle2.py`に加えた新規テストは以下の観点をカバーする
+（498→547件、全PASS）：
+`_pair_claim_detail`の各却下理由、`force_drop_unresolved`の強制不採用・
+`_reconstruct_audit_ledger`への配線、`CallOutcome`の新フィールド、
+`compose_post._fallback_to_true_l1`・`_final_audit_failing_ids`・
+`_write_l3_status`のエンドツーエンド、`render_generation_status`の
+新規記録項目、`repair_post.render_final_audit_note`の常時記録
+（`main()`経由でGENERATION_STATUS.mdへの実際の追記も確認）、
+The Block追加確認・`/sponsored/`除外。
+
+---
+
 ## v1.78 — 2026-09-28（オーナー承認・LPプールchange_vs_prevの分母を生値へ変更。9/26実データの乖離を是正）
 
 **経緯**：9/26実データ確認で、LPプール（Base 0.05%・0.3%）の`change_vs_prev`

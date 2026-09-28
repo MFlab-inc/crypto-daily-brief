@@ -258,14 +258,43 @@ check("callA: pair_overlap_threshold=0.4（overlap0.5のペア成立）を明示
 
 c_strict = FakeClient(lambda kw, n: json_response(_pair_claim_response(kw)))
 out_strict = generate_post.call_a(c_strict, DAILY_DATA, NEWS_PAIR_CANDIDATES, None, 0.6)
-check("callA: pair_overlap_threshold=0.6（overlap0.5のペア不成立）を明示指定するとMAX_ATTEMPTS回"
-      "リトライ後に失敗する（config/pair_overlap.jsonで調整可能なことをend-to-endで確認）",
-      not out_strict.ok and out_strict.attempts == generate_post.MAX_ATTEMPTS,
+check("callA: pair_overlap_threshold=0.6（overlap0.5のペア不成立）を明示指定すると、"
+      "MAX_ATTEMPTS回のうち最初の2回は通常どおりリトライされる"
+      "（config/pair_overlap.jsonで調整可能なことをend-to-endで確認）",
+      out_strict.attempts == generate_post.MAX_ATTEMPTS,
       f"ok={out_strict.ok} attempts={out_strict.attempts}")
+check("callA: v1.79（オーナー承認）・最終試行でも解消しない場合は例外化せず強制不採用にして続行する"
+      "ため、最終的にはokになる（force_dropped_candidatesに両候補が記録される）",
+      out_strict.ok
+      and {c["candidate_id"] for c in out_strict.force_dropped_candidates} == {1, 2},
+      f"ok={out_strict.ok} force_dropped={out_strict.force_dropped_candidates}")
+check("callA: 強制不採用にした候補のaudit_ledger上のdecisionは「不採用」になる（v1.79）",
+      out_strict.ok
+      and all(e["decision"] == "不採用" for e in out_strict.data["audit_ledger"]),
+      str(out_strict.data.get("audit_ledger") if out_strict.data else None))
 check("callA: 閾値超過による失敗のattempt_errorsに「独立2ソースの相方が成立しない」が記録される"
-      "（GENERATION_STATUS.mdへの記録経路の確認・オーナー指示の確認事項）",
-      all("独立2ソースの相方が成立しない" in e for e in out_strict.attempt_errors),
+      "（1・2試行目は例外化されるため。GENERATION_STATUS.mdへの記録経路の確認・オーナー指示の確認事項）",
+      len(out_strict.attempt_errors) == generate_post.MAX_ATTEMPTS - 1
+      and all("独立2ソースの相方が成立しない" in e for e in out_strict.attempt_errors),
       str(out_strict.attempt_errors))
+check("callA: rejected_pairsに最終試行（強制不採用が発生した試行）の却下ペア診断が記録される"
+      "（v1.79・GitHub Actionsアーティファクト用の診断情報）",
+      len(out_strict.rejected_pairs) == 1
+      and out_strict.rejected_pairs[0]["reason"] == "overlap_below_threshold"
+      and out_strict.rejected_pairs[0]["claimant_title"] and out_strict.rejected_pairs[0]["target_title"],
+      str(out_strict.rejected_pairs))
+
+print("=== generate_post.regenerate_call_b_as_l1（v1.79・オーナー承認・"
+      "force_drop後の再監査FAILからのL1フォールバック用） ===")
+
+c_l1 = FakeClient(lambda kw, n: json_response(CALL_B_DATA))
+out_l1 = generate_post.regenerate_call_b_as_l1(DAILY_DATA, client=c_l1)
+check("regenerate_call_b_as_l1: call_b()をnews_from_call_a=Noneで呼び出した場合と同じ結果になる",
+      out_l1.ok, str(out_l1.error))
+_l1_sent = json.loads(c_l1.messages.calls[0]["messages"][0]["content"])
+check("regenerate_call_b_as_l1: 送信されたuser_contentのnews_from_call_aがNoneになっている"
+      "（呼び出しAを失敗扱いに差し戻した従来のL1と同じ入力）",
+      _l1_sent.get("news_from_call_a") is None, json.dumps(_l1_sent))
 
 print("=== generate_post._call_json: build_retry_noteによる失敗フィードバック（v1.66・オーナー承認） ===")
 
@@ -328,8 +357,10 @@ c_pairnote = FakeClient(lambda kw, n: json_response(_pair_claim_response(kw)))
 out_pairnote = generate_post.call_a(c_pairnote, DAILY_DATA, NEWS_PAIR_CANDIDATES, None, 0.6)
 _attempt2_content = c_pairnote.messages.calls[1]["messages"][0]["content"]
 check("call_a: AuditLedgerReconstructionError発生時、2回目のuser_contentに元の候補データが"
-      "維持されたまま修正指示が追記される（v1.66）",
-      not out_pairnote.ok
+      "維持されたまま修正指示が追記される（v1.66）。v1.79導入後は最終（3回目）試行で"
+      "強制不採用により続行するためout_pairnote.ok自体はTrueになるが、1→2回目の"
+      "リトライノート注入という本チェックの対象動作自体は変わらない",
+      out_pairnote.ok
       and "news_candidates_today" in _attempt2_content
       and "直前の試行への修正指示" in _attempt2_content,
       _attempt2_content[-400:])
@@ -873,6 +904,112 @@ check("_derive_decisions: 申告した相方がtier1の場合は妥当性確認�
            2: {"source": "SEC", "title": "Company A files BTC ETF approval application",
                "candidate_id": 2, "tier": 1}}))
 
+print("=== generate_post.py: _pair_claim_detail・却下ペアの診断記録（v1.79・オーナー承認） ===")
+
+check("_pair_claim_detail: _validate_pair_claimと同じ入力でvalid=Trueを返す（成立するペア）",
+      generate_post._pair_claim_detail(
+          1, 2,
+          {1: {"source": "CoinDesk", "title": "Company A files BTC ETF approval", "tier": 3},
+           2: {"source": "Cointelegraph", "title": "Company A files BTC ETF approval application", "tier": 3}},
+          {1: True, 2: True}, 0.4)["valid"] is True)
+check("_pair_claim_detail: 相手が存在しないIDの場合reason=target_not_found",
+      generate_post._pair_claim_detail(1, 99, {1: {"source": "CoinDesk", "title": "x", "tier": 3}},
+                                        {1: True}, 0.4)["reason"] == "target_not_found")
+check("_pair_claim_detail: 自己参照の場合reason=self_reference",
+      generate_post._pair_claim_detail(1, 1, {1: {"source": "CoinDesk", "title": "x", "tier": 3}},
+                                        {1: True}, 0.4)["reason"] == "self_reference")
+check("_pair_claim_detail: 相手がtier3でない場合reason=target_not_tier3",
+      generate_post._pair_claim_detail(
+          1, 2, {1: {"source": "CoinDesk", "title": "x", "tier": 3}, 2: {"source": "SEC", "title": "x", "tier": 1}},
+          {1: True, 2: True}, 0.4)["reason"] == "target_not_tier3")
+check("_pair_claim_detail: 相手がuse:falseの場合reason=target_use_false",
+      generate_post._pair_claim_detail(
+          1, 2, {1: {"source": "CoinDesk", "title": "x", "tier": 3}, 2: {"source": "Cointelegraph", "title": "x", "tier": 3}},
+          {1: True, 2: False}, 0.4)["reason"] == "target_use_false")
+check("_pair_claim_detail: 同一sourceの場合reason=same_source",
+      generate_post._pair_claim_detail(
+          1, 2, {1: {"source": "CoinDesk", "title": "x", "tier": 3}, 2: {"source": "CoinDesk", "title": "x", "tier": 3}},
+          {1: True, 2: True}, 0.4)["reason"] == "same_source")
+_detail_below = generate_post._pair_claim_detail(
+    1, 2,
+    {1: {"source": "CoinDesk", "title": "Company A files BTC ETF approval", "tier": 3},
+     2: {"source": "Cointelegraph", "title": "Totally different unrelated story here", "tier": 3}},
+    {1: True, 2: True}, 0.4)
+check("_pair_claim_detail: 重なり係数が閾値未満の場合reason=overlap_below_thresholdかつoverlapに実測値が入る",
+      _detail_below["reason"] == "overlap_below_threshold" and isinstance(_detail_below["overlap"], float)
+      and _detail_below["valid"] is False, str(_detail_below))
+check("_pair_claim_detail: claimant_title/claimant_source/target_title/target_sourceが両側の値を保持する",
+      _detail_below["claimant_title"] == "Company A files BTC ETF approval"
+      and _detail_below["claimant_source"] == "CoinDesk"
+      and _detail_below["target_title"] == "Totally different unrelated story here"
+      and _detail_below["target_source"] == "Cointelegraph", str(_detail_below))
+
+_rp_candidates = {
+    1: {"source": "CoinDesk", "title": "Company A files BTC ETF approval", "candidate_id": 1, "tier": 3},
+    2: {"source": "CoinDesk", "title": "Totally different unrelated story here", "candidate_id": 2, "tier": 3},
+}
+_rp_stats: list = []
+try:
+    generate_post._derive_decisions(
+        [{"candidate_id": 1, "use": True, "pairs_with_candidate_id": 2, "reason": "x"},
+         {"candidate_id": 2, "use": True, "reason": "y"}],
+        _rp_candidates, 0.4, rejected_pairs=_rp_stats)
+except generate_post.AuditLedgerReconstructionError:
+    pass
+check("_derive_decisions: rejected_pairsを渡すと却下されたペア申告の診断（同一source）が記録される（v1.79）",
+      len(_rp_stats) == 1 and _rp_stats[0]["reason"] == "same_source"
+      and _rp_stats[0]["claimant_id"] == 1 and _rp_stats[0]["target_id"] == 2, str(_rp_stats))
+check("_derive_decisions: rejected_pairsを省略しても例外なく動作する（後方互換）",
+      _raises_for_unresolved_pair(
+          [{"candidate_id": 1, "use": True, "pairs_with_candidate_id": 2, "reason": "x"},
+           {"candidate_id": 2, "use": True, "reason": "y"}],
+          _rp_candidates))
+
+print("=== generate_post.py: force_drop_unresolvedによる強制不採用（v1.79・オーナー承認・"
+      "2026-09-26のcall_A 3連続FAILへの対処） ===")
+
+_fd_candidates = {
+    1: {"source": "CoinDesk", "title": "Company A files BTC ETF approval", "candidate_id": 1, "tier": 3},
+    2: {"source": "CoinDesk", "title": "Totally different unrelated story here", "candidate_id": 2, "tier": 3},
+    3: {"source": "SEC", "title": "Regulator announces new rule", "candidate_id": 3, "tier": 1},
+}
+_fd_entries = [
+    {"candidate_id": 1, "use": True, "pairs_with_candidate_id": 2, "reason": "x"},
+    {"candidate_id": 2, "use": True, "reason": "y"},
+    {"candidate_id": 3, "use": True, "reason": "一次情報"},
+]
+check("_derive_decisions: force_drop_unresolved未指定（既定False）では従来どおり例外化する",
+      _raises_for_unresolved_pair(_fd_entries, _fd_candidates))
+
+_fd_dropped: list = []
+_fd_decisions = generate_post._derive_decisions(
+    _fd_entries, _fd_candidates, 0.4, force_drop_unresolved=True, force_dropped=_fd_dropped)
+check("_derive_decisions: force_drop_unresolved=Trueだと例外化せず、未解決のtier3候補を「不採用」にする",
+      _fd_decisions[1] == "不採用" and _fd_decisions[2] == "不採用", str(_fd_decisions))
+check("_derive_decisions: force_drop_unresolvedはtier1等の他候補のdecisionには影響しない",
+      _fd_decisions[3] == "採用", str(_fd_decisions))
+check("_derive_decisions: force_droppedに強制不採用にした候補のcandidate_id・title・source・reasonが記録される",
+      {d["candidate_id"] for d in _fd_dropped} == {1, 2}
+      and all(d.get("title") and d.get("reason") for d in _fd_dropped), str(_fd_dropped))
+
+_fd_rebuilt = generate_post._reconstruct_audit_ledger(
+    _fd_entries, _fd_candidates, 0.4, force_drop_unresolved=True)
+check("_reconstruct_audit_ledger: force_drop_unresolvedを渡すと例外化せず完全なaudit_ledgerを返す"
+      "（入力の候補順を維持。1・2は強制不採用、3は通常どおり採用）",
+      len(_fd_rebuilt) == 3
+      and [e["decision"] for e in _fd_rebuilt] == ["不採用", "不採用", "採用"], str(_fd_rebuilt))
+
+print("=== generate_post.py: CallOutcome.rejected_pairs / force_dropped_candidates（v1.79） ===")
+
+check("CallOutcome.to_dict(): rejected_pairs・force_dropped_candidatesが既定で空リスト",
+      generate_post.CallOutcome(True, {}, 1, None).to_dict()["rejected_pairs"] == []
+      and generate_post.CallOutcome(True, {}, 1, None).to_dict()["force_dropped_candidates"] == [])
+check("CallOutcome.to_dict(): rejected_pairs・force_dropped_candidatesを明示指定できる",
+      generate_post.CallOutcome(True, {}, 1, None, rejected_pairs=[{"a": 1}],
+                                 force_dropped_candidates=[{"b": 2}]).to_dict()
+      == {**generate_post.CallOutcome(True, {}, 1, None).to_dict(),
+          "rejected_pairs": [{"a": 1}], "force_dropped_candidates": [{"b": 2}]})
+
 print("=== generate_post.py: overlap閾値のconfig化（v1.53フォローアップ・オーナー指示） ===")
 
 _thresh_candidates = {
@@ -940,7 +1077,7 @@ check("_reconstruct_audit_ledger: stats引数を省略しても例外なく動�
 # _derive_decisions自体を一時的に差し替え、フォールバックが実際に機能する
 # ことを確認する（ホワイトボックス・将来のリグレッション検知用）。
 _orig_derive_decisions = generate_post._derive_decisions
-generate_post._derive_decisions = lambda entries, id_map, threshold: {1: "", 2: "採用"}
+generate_post._derive_decisions = lambda entries, id_map, threshold, **kwargs: {1: "", 2: "採用"}
 try:
     _fill_stats3: dict = {}
     _fill_rebuilt3 = generate_post._reconstruct_audit_ledger(
@@ -1214,6 +1351,39 @@ check("GENERATION_STATUS.md: call_Bが全試行失敗した場合も全試行の
       and "試行目: 成功" not in status_text4.split("call_B試行履歴")[1],
       status_text4)
 
+print("=== compose_post.py: force_dropped_candidates・l1_fallback_failing_checksのGENERATION_STATUS.md記録"
+      "（v1.79・オーナー承認） ===")
+
+_gen_fd = json.loads(json.dumps(_gen_not_truncated))
+_status_fd = compose_post.render_generation_status(
+    _gen_fd, force_dropped=[{"candidate_id": 5, "title": "T", "source": "CoinDesk", "reason": "R"}])
+check("render_generation_status: force_dropped_candidatesがある場合、候補ごとの詳細が記録される",
+      "強制不採用" in _status_fd and "candidate_id=5" in _status_fd and "title='T'" in _status_fd
+      and ": R" in _status_fd, _status_fd)
+check("render_generation_status: force_dropped_candidatesが空/未指定の場合は記録されない",
+      "強制不採用" not in compose_post.render_generation_status(_gen_not_truncated, force_dropped=[])
+      and "強制不採用" not in compose_post.render_generation_status(_gen_not_truncated))
+_status_l1fb = compose_post.render_generation_status(
+    _gen_not_truncated, l1_fallback_failing_checks=["C24_flow_no_unadopted_material"])
+check("render_generation_status: l1_fallback_failing_checksがある場合、L1フォールバックの記録が入る",
+      "L1へフォールバック" in _status_l1fb and "C24_flow_no_unadopted_material" in _status_l1fb, _status_l1fb)
+check("render_generation_status: l1_fallback_failing_checks未指定時は記録されない",
+      "L1へフォールバック" not in compose_post.render_generation_status(_gen_not_truncated))
+
+print("=== compose_post.py: L3判定時もGENERATION_STATUS.mdをコミット対象として書く（v1.79・オーナー承認） ===")
+
+_l3_status_path = compose_post._write_l3_status(
+    "2026-08-23", "outputs/2026-08-23/daily_data.json が存在しません")
+check("_write_l3_status: GENERATION_STATUS.mdファイルを作成する", _l3_status_path.exists())
+_l3_status_text = _l3_status_path.read_text(encoding="utf-8")
+check("_write_l3_status: level: L3と判定理由を記録する",
+      "level: L3" in _l3_status_text
+      and "outputs/2026-08-23/daily_data.json が存在しません" in _l3_status_text, _l3_status_text)
+check("_write_l3_status: 本文（part1.md/part2.md）は生成していない旨を明記する",
+      "part1.md" in _l3_status_text and "生成していません" in _l3_status_text, _l3_status_text)
+check("_write_l3_status: draft/ディレクトリ自体は作らない（本文コミット対象を増やさない）",
+      not Path("outputs/2026-08-23/draft").exists())
+
 print("=== generate_post.run(): news_candidate_countは渡した件数基準（v1.21） ===")
 os.makedirs("outputs/2026-08-21", exist_ok=True)
 Path("outputs/2026-08-21/daily_data.json").write_text(
@@ -1296,6 +1466,51 @@ b = compose_post.compose(DAILY_DATA, gen_l0)
 check("L0: 見出し4件が前編に順序どおり", all(h in b["part1_md"] for h in verify_post.REQUIRED_HEADINGS_PART1))
 check("L0: ヘッドラインは実文言", b["sections"]["part1_headline"] == CALL_A_DATA["part1_headline"])
 check("L0: audit_ledger引き継ぎ", b["audit_ledger"] == CALL_A_DATA["audit_ledger"])
+
+print("=== compose_post.py: force_drop後の再監査によるL1フォールバック（v1.79・オーナー承認・"
+      "「除外後にC12〜C24をすべて再検証し、通らなければ従来どおりL1にしてください」への対応） ===")
+
+_fb_gen_base = json.loads(json.dumps(gen_l0))
+_fb_gen_base["call_a"]["force_dropped_candidates"] = [
+    {"candidate_id": 2, "title": "Some tier3 story", "source": "CoinDesk", "reason": "test"}]
+_fb_gen_base["total_usage"] = {"input_tokens": 100, "output_tokens": 50}
+_fb_bundle_ok = compose_post.compose(DAILY_DATA, _fb_gen_base)
+check("_final_audit_failing_ids: PASSする本文はFAILしたチェックIDが空リスト",
+      compose_post._final_audit_failing_ids(_fb_bundle_ok, DAILY_DATA) == [])
+
+_fb_gen_bad = json.loads(json.dumps(_fb_gen_base))
+_fb_gen_bad["call_b"]["data"] = {
+    "part2_flow": ["Something → BankChain Alliance was mentioned but never adopted → price moved."],
+    "part2_summary": "地合いは総じて改善。継続的な確認が必要。",
+}
+_fb_bundle_bad = compose_post.compose(DAILY_DATA, _fb_gen_bad)
+_fb_failing = compose_post._final_audit_failing_ids(_fb_bundle_bad, DAILY_DATA)
+check("_final_audit_failing_ids: part1_pointsに存在しない固有名詞をpart2_flowで持ち出すとC24がFAILする",
+      "C24_flow_no_unadopted_material" in _fb_failing, str(_fb_failing))
+
+c_fb = FakeClient(lambda kw, n: json_response(CALL_B_DATA))
+_fb_new_gen = compose_post._fallback_to_true_l1(DAILY_DATA, _fb_gen_bad, _fb_failing, client=c_fb)
+check("_fallback_to_true_l1: call_Aを失敗扱いへ差し戻す（data=None・ok=False）",
+      _fb_new_gen["call_a"]["ok"] is False and _fb_new_gen["call_a"]["data"] is None, str(_fb_new_gen["call_a"]))
+check("_fallback_to_true_l1: call_Aのforce_dropped_candidatesは記録として保持される（元の情報を失わない）",
+      _fb_new_gen["call_a"]["force_dropped_candidates"] == _fb_gen_bad["call_a"]["force_dropped_candidates"],
+      str(_fb_new_gen["call_a"]))
+check("_fallback_to_true_l1: call_Bをnews_from_call_a=Noneで再生成する（従来のL1と同じ入力）",
+      _fb_new_gen["call_b"]["ok"] is True
+      and json.loads(c_fb.messages.calls[0]["messages"][0]["content"]).get("news_from_call_a") is None,
+      str(c_fb.messages.calls[0]["messages"][0]["content"])[:200])
+check("_fallback_to_true_l1: levelがL1になる（call_Aのみ失敗扱い・call_Bは成功のまま）",
+      _fb_new_gen["level"] == "L1", _fb_new_gen["level"])
+check("_fallback_to_true_l1: total_usageは_add_usage()で元のusageと再生成した呼び出しBの"
+      "usageを合算した値になる（FakeClientはusageを返さないため実際の加算量は0だが、"
+      "素の代入ではなく_add_usage()を経由していることを確認）",
+      _fb_new_gen["total_usage"] == {"input_tokens": 100, "output_tokens": 50}, str(_fb_new_gen["total_usage"]))
+
+_fb_bundle_after = compose_post.compose(DAILY_DATA, _fb_new_gen)
+check("_fallback_to_true_l1: フォールバック後の本文を再度compose()するとC24がもうFAILしない"
+      "（part2_flowが従来のL1固定文言に戻るため）",
+      compose_post._final_audit_failing_ids(_fb_bundle_after, DAILY_DATA) == [],
+      str(compose_post._final_audit_failing_ids(_fb_bundle_after, DAILY_DATA)))
 
 gen_l1a = {"level": "L1", "call_a": {"ok": False, "data": None}, "call_b": {"ok": True, "data": CALL_B_DATA}}
 b = compose_post.compose(DAILY_DATA, gen_l1a)
@@ -2510,6 +2725,46 @@ tier3_names = {s["name"] for s in real_sources if s.get("tier") == 3}
 check("config/news_sources.json: CoinDesk/Cointelegraph(EN/JP)がtier=3で登録されている",
       {"CoinDesk", "Cointelegraph", "Cointelegraph Japan"}.issubset(tier3_names), str(tier3_names))
 
+print("=== config/news_sources.json: The Blockの追加確認（v1.79・オーナー承認・"
+      "2026-09-28にオーナー側でRSSの有効性を確認済み） ===")
+check("The Blockがtier=3で登録されている", "The Block" in tier3_names, str(tier3_names))
+_news_sources_raw_tb = json.loads((REPO / "config" / "news_sources.json").read_text(encoding="utf-8"))
+_the_block_entry = next((s for s in _news_sources_raw_tb["sources"] if s["name"] == "The Block"), None)
+check("The BlockのURLがオーナー確認済みのものと一致する",
+      _the_block_entry is not None and _the_block_entry.get("url") == "https://www.theblock.co/rss.xml",
+      str(_the_block_entry))
+check("The Blockがcollect_news._load_sources()経由で通常フェッチ対象に含まれる",
+      "The Block" in {s["name"] for s in real_sources})
+check("verify_post._load_source_tier_map()がThe Blockをtier=3として認識する（C21/C22で使う経路）",
+      verify_post._load_source_tier_map().get("The Block") == 3)
+
+print("=== collect_news.py: /sponsored/を含むURLの候補除外（v1.79・オーナー承認・"
+      "統合運用基準§2「スポンサー記事は主根拠にしない」への対応） ===")
+RSS_WITH_SPONSORED = """<?xml version="1.0"?>
+<rss version="2.0"><channel>
+<item><title>Normal article</title><link>https://www.theblock.co/post/12345/normal-article</link>
+<pubDate>Mon, 17 Aug 2026 10:00:00 GMT</pubDate></item>
+<item><title>Sponsored article</title><link>https://www.theblock.co/sponsored/67890/paid-placement</link>
+<pubDate>Mon, 17 Aug 2026 11:00:00 GMT</pubDate></item>
+</channel></rss>"""
+
+
+def _fake_sources_sponsored():
+    return [{"name": "TESTTHEBLOCK", "url": "https://example.com/theblock.rss", "tier": 3}]
+
+
+collect_news._load_sources = _fake_sources_sponsored
+_orig_get_sponsored = _patch_requests_get(lambda url, **kw: _FakeRssResp(200, RSS_WITH_SPONSORED.encode("utf-8")))
+_result_sponsored = collect_news.collect_news("2026-08-17")
+collect_news.requests.get = _orig_get_sponsored
+collect_news._load_sources = _sources_backup
+_sponsored_cands = [c for c in _result_sponsored["candidates"] if c["source"] == "TESTTHEBLOCK"]
+check("collect_news(): URLに/sponsored/を含む記事は候補から除外される",
+      len(_sponsored_cands) == 1 and _sponsored_cands[0]["title"] == "Normal article",
+      str(_sponsored_cands))
+check("collect_news(): /sponsored/を含まない記事は通常どおり候補に残る（誤って両方除外しない）",
+      any(c["title"] == "Normal article" for c in _sponsored_cands), str(_sponsored_cands))
+
 print("=== config/news_sources.json: 米財務省・USTR・ホワイトハウスの追加確認（v1.31・オーナー指示） ===")
 tier1_names = {s["name"] for s in real_sources if s.get("tier") == 1}
 check("米財務省・USTR・ホワイトハウス（2本）がtier=1で登録されている",
@@ -3105,6 +3360,46 @@ check("repair(): 対象違反が無ければLLMを一度も呼ばない（コス
       len(_fake_noop.messages.calls) == 0, len(_fake_noop.messages.calls))
 check("render_status_note: 対象違反が無い日は空文字列（GENERATION_STATUS.mdへ何も追記しない）",
       repair_post.render_status_note(_result_noop) == "", repair_post.render_status_note(_result_noop))
+
+print("=== repair_post.py: render_final_audit_note・GENERATION_STATUS.mdへの最終監査結果の常時記録"
+      "（v1.79・オーナー承認・「本文をコミットしない日でもGENERATION_STATUS.mdだけはコミットされる"
+      "ようにしてください」への対応） ===")
+
+_final_note_pass = repair_post.render_final_audit_note(_result_noop)
+check("render_final_audit_note: 局所修正の対象が無い日（rounds_used==0）でも非空文字列を返す"
+      "（render_status_noteは空文字列を返すのと対照的）",
+      _final_note_pass != "", repr(_final_note_pass))
+check("render_final_audit_note: 全項目PASSの場合はoverall=PASSと明記される",
+      "overall=PASS" in _final_note_pass and "FAILしたチェックはありません" in _final_note_pass,
+      _final_note_pass)
+
+_final_note_fail = repair_post.render_final_audit_note(_result_stuck)
+check("render_final_audit_note: FAILが残る場合はoverall=FAILと、FAILしたチェックID・詳細が記録される",
+      "overall=FAIL" in _final_note_fail and "FAIL: C18_causal_assertion" in _final_note_fail
+      and _result_stuck["final_failing_check_details"][0]["detail"] in _final_note_fail,
+      _final_note_fail)
+
+check("repair(): final_failing_check_detailsはfinal_failing_checksと同じチェックIDを持つ",
+      {c["id"] for c in _result_stuck["final_failing_check_details"]} == set(_result_stuck["final_failing_checks"]),
+      str(_result_stuck["final_failing_check_details"]))
+
+# main()相当の経路: GENERATION_STATUS.mdへの実際の追記を確認する
+_status_e2e_path = Path(f"outputs/{REPAIR_TEST_DATE}/GENERATION_STATUS.md")
+_status_e2e_path.write_text("level: L0\n", encoding="utf-8")
+Path(f"outputs/{REPAIR_TEST_DATE}/draft/post_bundle.json").write_text(
+    json.dumps(b_ok, ensure_ascii=False), encoding="utf-8")
+_orig_argv = sys.argv
+sys.argv = ["repair_post.py", REPAIR_TEST_DATE]
+_orig_anthropic_client = repair_post.anthropic.Anthropic
+repair_post.anthropic.Anthropic = lambda: FakeClient(lambda kw, n: json_response({"rewritten_sentence": "x"}))
+try:
+    repair_post.main()
+finally:
+    sys.argv = _orig_argv
+    repair_post.anthropic.Anthropic = _orig_anthropic_client
+_status_e2e_text = _status_e2e_path.read_text(encoding="utf-8")
+check("repair_post.main(): 修正対象が無い日（PASS）でもGENERATION_STATUS.mdへ最終監査結果が追記される",
+      "本文機械監査（C12〜C24）: overall=PASS" in _status_e2e_text, _status_e2e_text)
 
 print()
 print(f"PASS: {len(PASS)}  FAIL: {len(FAIL)}")

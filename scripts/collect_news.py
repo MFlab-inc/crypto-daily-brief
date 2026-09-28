@@ -363,6 +363,13 @@ def _collect_from_feed(name: str, url: str, window_start: datetime, window_end: 
         pub_dt = parse_pubdate_jst(it["published_at"])
         if pub_dt is None or not (window_start <= pub_dt < window_end):
             continue
+        # v1.79（オーナー承認・The Block追加に伴う対応）: URLに"/sponsored/"を
+        # 含む記事は候補から除外する（統合運用基準§2「スポンサー記事は主根拠に
+        # しない」）。特定情報源に限らず全情報源へ一律適用する——スポンサー
+        # 記事の見分け方はURLパスの命名規則に依存するため情報源ごとの個別
+        # 対応にせず、汎用的なフィルタとしてここに置く。
+        if "/sponsored/" in it["url"]:
+            continue
         summary = it.get("summary", "")
         if tier == 1 and it["url"]:
             # v1.39（オーナー指示）: tier1候補のみリンク先本文で補強する
