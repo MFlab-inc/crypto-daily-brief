@@ -1463,9 +1463,54 @@ gen_l0 = {"level": "L0", "call_a": {"ok": True, "data": CALL_A_DATA}, "call_b": 
           # CALL_A_DATA["audit_ledger"]の件数（1件）と一致させる。
           "news_candidate_count": len(CALL_A_DATA["audit_ledger"])}
 b = compose_post.compose(DAILY_DATA, gen_l0)
-check("L0: 見出し4件が前編に順序どおり", all(h in b["part1_md"] for h in verify_post.REQUIRED_HEADINGS_PART1))
+check("L0: 見出し3件が前編に順序どおり", all(h in b["part1_md"] for h in verify_post.REQUIRED_HEADINGS_PART1))
 check("L0: ヘッドラインは実文言", b["sections"]["part1_headline"] == CALL_A_DATA["part1_headline"])
 check("L0: audit_ledger引き継ぎ", b["audit_ledger"] == CALL_A_DATA["audit_ledger"])
+
+print("=== compose_post.py: 【主要指標】【主要指標（詳細）】を投稿本文から外しnumeric_record.mdへ"
+      "（v1.81・オーナー承認・運用上の変更） ===")
+
+check("REQUIRED_HEADINGS_PART1に【主要指標】が含まれない",
+      "【主要指標】" not in verify_post.REQUIRED_HEADINGS_PART1, verify_post.REQUIRED_HEADINGS_PART1)
+check("REQUIRED_HEADINGS_PART2に【主要指標（詳細）】が含まれない",
+      "【主要指標（詳細）】" not in verify_post.REQUIRED_HEADINGS_PART2, verify_post.REQUIRED_HEADINGS_PART2)
+check("REQUIRED_HEADINGS_PART1は【対象日】【ヘッドライン】【主要なポイント】の3件のみ",
+      verify_post.REQUIRED_HEADINGS_PART1 == ["【対象日】", "【ヘッドライン】", "【主要なポイント】"],
+      verify_post.REQUIRED_HEADINGS_PART1)
+check("REQUIRED_HEADINGS_PART2は【市場のフロー】【LP運用者向けに一言】【総括】の3件のみ",
+      verify_post.REQUIRED_HEADINGS_PART2 == ["【市場のフロー】", "【LP運用者向けに一言】", "【総括】"],
+      verify_post.REQUIRED_HEADINGS_PART2)
+
+check("compose(): part1_mdに【主要指標】が含まれない（投稿本文から除外）",
+      "【主要指標】" not in b["part1_md"], b["part1_md"])
+check("compose(): part2_mdに【主要指標（詳細）】が含まれない（投稿本文から除外）",
+      "【主要指標（詳細）】" not in b["part2_md"], b["part2_md"])
+check("compose(): sections['part1_numeric']/['part2_numeric']自体は引き続き生成される"
+      "（numeric_record.md・C16の照合対象として保持）",
+      b["sections"]["part1_numeric"].startswith("【主要指標】")
+      and b["sections"]["part2_numeric"].startswith("【主要指標（詳細）】"),
+      str({k: b["sections"][k] for k in ("part1_numeric", "part2_numeric")}))
+
+check("compose(): numeric_record_mdに【対象日】【主要指標】【主要指標（詳細）】がすべて含まれる",
+      "【対象日】" in b["numeric_record_md"] and "【主要指標】" in b["numeric_record_md"]
+      and "【主要指標（詳細）】" in b["numeric_record_md"], b["numeric_record_md"])
+check("compose(): numeric_record_mdの内容はsections['part1_numeric']/['part2_numeric']と一致する"
+      "（別々に再計算せず同じsectionsから組み立てるため、数値の乖離が生じない）",
+      b["sections"]["part1_numeric"] in b["numeric_record_md"]
+      and b["sections"]["part2_numeric"] in b["numeric_record_md"], b["numeric_record_md"])
+
+_numeric_record_direct = compose_post.render_numeric_record(b["sections"])
+check("render_numeric_record(): main()経由と同じ内容を直接呼び出しでも再現できる",
+      _numeric_record_direct == b["numeric_record_md"], _numeric_record_direct)
+
+au_numeric = verify_post.run_all(b, DAILY_DATA)
+c15_numeric = next(x for x in au_numeric.checks if x["id"] == "C15_heading_order")
+c16_numeric = next(x for x in au_numeric.checks if x["id"] == "C16_numeric_match")
+check("run_all(): 【主要指標】系見出しが投稿本文に無くてもC15はPASSする（必須リストから除外済み）",
+      c15_numeric["result"] == "PASS", str(c15_numeric))
+check("run_all(): C16（数値一致）はsectionsを見るため、本文から見出しを外しても引き続きPASSする"
+      "（数値算出ロジック自体は変更していないことの確認）",
+      c16_numeric["result"] == "PASS", str(c16_numeric))
 
 print("=== compose_post.py: force_drop後の再監査によるL1フォールバック（v1.79・オーナー承認・"
       "「除外後にC12〜C24をすべて再検証し、通らなければ従来どおりL1にしてください」への対応） ===")

@@ -52,8 +52,14 @@ CAUSAL_STANDALONE_PHRASES = ["が牽引した"]
 # できません」のように助詞が挟まる形は本語では拾えない）。
 LIMITING_EXPRESSIONS = ["可能性", "未確認", "意識された", "とみられる", "考えられる", "確認できません", "断定"]
 ALLOWED_TAGS = {"BTC", "ETH", "BNB", "USDC"}
-REQUIRED_HEADINGS_PART1 = ["【対象日】", "【ヘッドライン】", "【主要なポイント】", "【主要指標】"]
-REQUIRED_HEADINGS_PART2 = ["【主要指標（詳細）】", "【市場のフロー】", "【LP運用者向けに一言】", "【総括】"]
+# v1.81（オーナー承認・運用上の変更）: 【主要指標】【主要指標（詳細）】は
+# 投稿本文（part1_md・part2_md）から外し、numeric_record.md（監査専用）で
+# のみ保全することになった（compose_post.render_markdown()参照）。C15は
+# 「実際に投稿される全文」の見出し順を検査する趣旨のため、この2見出しを
+# 必須リストから除く。数値の内容自体の正しさはC16が引き続き検査する
+# （C16はbundle["sections"]と比較しており、この変更の影響を受けない）。
+REQUIRED_HEADINGS_PART1 = ["【対象日】", "【ヘッドライン】", "【主要なポイント】"]
+REQUIRED_HEADINGS_PART2 = ["【市場のフロー】", "【LP運用者向けに一言】", "【総括】"]
 C16B_MIN_LEN = 3
 
 

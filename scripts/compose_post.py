@@ -98,15 +98,23 @@ def render_markdown(sections: dict[str, Any], level: str) -> tuple[str, str]:
     post_bundle.jsonのsectionsとの不整合を招くため、再レンダリングは
     常に本関数を経由する（compose()と同一のロジックを共有し、挙動の
     乖離を防ぐ）。
+
+    v1.81（オーナー承認・運用上の変更）: 【主要指標】【主要指標（詳細）】は
+    投稿本文（part1_md・part2_md）へ含めない。実際のX投稿では文章が長くなる
+    ため掲載しておらず、数値・出典・取得時刻は図版（infographic.png）で
+    伝えている運用実態に合わせた。数値2見出しの内容自体は引き続き
+    sections["part1_numeric"]/["part2_numeric"]として保持し、
+    render_numeric_record()経由でnumeric_record.mdへ出力する（図版との
+    照合・監査用。詳細はDESIGN_CHANGES.md参照）。統合運用基準§3の見出し順
+    固定は、投稿本文への掲載義務としては数値2見出しについて解除し、
+    監査専用ファイルでの保全に代える。
     """
     part1_parts = [
         "【対象日】" + sections["part0_target_date"],
         "【ヘッドライン】\n" + sections["part1_headline"],
         "【主要なポイント】\n" + sections["part1_points"],
-        sections["part1_numeric"],
     ]
     part2_parts = [
-        sections["part2_numeric"],
         "【市場のフロー】\n" + sections["part2_flow"],
         "【LP運用者向けに一言】\n" + sections["lp_comment"],
         "【総括】\n" + sections["part2_summary"],
@@ -117,6 +125,24 @@ def render_markdown(sections: dict[str, Any], level: str) -> tuple[str, str]:
     part1_md = "\n\n".join(part1_parts) + "\n"
     part2_md = "\n\n".join(part2_parts) + "\n"
     return part1_md, part2_md
+
+
+def render_numeric_record(sections: dict[str, Any]) -> str:
+    """v1.81（オーナー承認・運用上の変更）: 投稿本文から外した【主要指標】
+    【主要指標（詳細）】を、図版（infographic.png）との照合・監査用に
+    保全する。X投稿には含めない（render_markdown()参照）。
+
+    part1_numeric・part2_numericの内容自体・算出元は変更していない
+    （compose_numeric.py・intraday_range・国内2社とDEX出来高の比較を含む
+    既存の全項目をそのまま保全する）。intraday_rangeと国内2社・DEX出来高の
+    比較は、オーナー判断により図版へは追加せず、本ファイルにのみ残す。
+    """
+    parts = [
+        "【対象日】" + sections["part0_target_date"],
+        sections["part1_numeric"],
+        sections["part2_numeric"],
+    ]
+    return "\n\n".join(parts) + "\n"
 
 
 def compose(daily_data: dict, gen: dict[str, Any]) -> dict[str, Any]:
@@ -184,12 +210,17 @@ def compose(daily_data: dict, gen: dict[str, Any]) -> dict[str, Any]:
         "news_candidate_count": gen.get("news_candidate_count", -1),
         "part1_md": part1_md,
         "part2_md": part2_md,
+        # v1.81（オーナー承認・運用上の変更）: 投稿本文から外した数値2見出しの
+        # 保全先。draft/numeric_record.mdとして出力する（main()参照）。
+        "numeric_record_md": render_numeric_record(sections),
     }
 
 
 def _attention_and_auto_lists(gen: dict[str, Any]) -> tuple[list[str], list[str]]:
     attention: list[str] = []
-    auto: list[str] = ["数値全項目（前編・後編）", "後編【LP運用者向けに一言】"]
+    # v1.81（オーナー承認）: 数値全項目は投稿本文（前編・後編）からnumeric_record.md
+    # （監査専用・図版との照合用）へ移した。
+    auto: list[str] = ["数値全項目（numeric_record.md）", "後編【LP運用者向けに一言】"]
     if gen["call_a"]["ok"]:
         auto.insert(0, "前編【ヘッドライン】【主要なポイント】")
     else:
@@ -452,6 +483,9 @@ def main() -> int:
     draft_dir.mkdir(parents=True, exist_ok=True)
     (draft_dir / "part1.md").write_text(bundle["part1_md"], encoding="utf-8")
     (draft_dir / "part2.md").write_text(bundle["part2_md"], encoding="utf-8")
+    # v1.81（オーナー承認・運用上の変更）: 投稿本文から外した【主要指標】
+    # 【主要指標（詳細）】を、図版との照合・監査用に保全する。X投稿には含めない。
+    (draft_dir / "numeric_record.md").write_text(bundle["numeric_record_md"], encoding="utf-8")
     (draft_dir / "post_bundle.json").write_text(
         json.dumps(bundle, ensure_ascii=False, indent=2), encoding="utf-8")
 
@@ -468,7 +502,8 @@ def main() -> int:
         gen, daily_data, force_dropped=force_dropped, l1_fallback_failing_checks=l1_fallback_failing_checks)
     status_path.write_text(status_text, encoding="utf-8")
 
-    print(f"OK: level={gen['level']} → {draft_dir}/part1.md, part2.md, post_bundle.json, {status_path}")
+    print(f"OK: level={gen['level']} → {draft_dir}/part1.md, part2.md, numeric_record.md, "
+          f"post_bundle.json, {status_path}")
     print("--- GENERATION_STATUS.md ---")
     print(status_text)
     return 0
