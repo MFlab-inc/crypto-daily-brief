@@ -7,6 +7,35 @@
 
 ---
 
+## v1.80 — 2026-09-28（オーナー承認・C23にscheduled_eventsをバックリファレンス
+許可対象として追加。2026-09-25分「BOE」誤検知への対処）
+
+**経緯**：2026-09-25分でC23（総括の固有名詞バックリファレンス）が'BOE'を
+FAILとして検知したが、調査の結果BOE総裁講演はその日のdaily_data.json
+scheduled_events（経済カレンダー。v1.53導入）に実在する予定だった。
+統合運用基準§3.1の【総括】欄は「翌日に確認すべき対象」の記載を許容して
+おり、scheduled_eventsは正しくその情報源であるため、これは誤検知だった
+（同日もう一方でFAILした'AI'は、元の下書きが未コミットのため文脈を
+特定できず原因不明のまま）。
+
+### 対処
+
+`scripts/verify_post.py`の`check_c23()`に`scheduled_events`引数
+（既定None・省略可）を追加し、各イベントの`title`をpart1_points・
+reusable_for_summaryと同じバックリファレンス対象へ含めた。
+`run_all()`は`daily_data.get("scheduled_events")`を渡すよう更新した。
+無条件の免罪符にはしていない——scheduled_eventsに実在しない固有名詞は
+従来どおりFAILする。
+
+### 検証
+
+`test/test_bundle2.py`に5件追加（547→552件、全PASS）。2026-09-25実例
+（BOE総裁講演）の再現、scheduled_events省略時の後方互換、
+scheduled_eventsに無い固有名詞は従来どおりFAILすること、
+scheduled_eventsがlist型でない場合の防御的動作、`run_all()`配線を確認。
+
+---
+
 ## v1.79 — 2026-09-28（オーナー承認・call_A強制不採用フォールバック・
 STATUS常時コミット・The Block追加。LP精度修正はv1.78で別途完了済み）
 

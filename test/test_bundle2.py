@@ -2113,6 +2113,51 @@ c23_check = next(x for x in au_c23.checks if x["id"] == "C23_summary_no_new_enti
 check("run_all(): C23がpart1_points/reusable_for_summaryを参照して正しくFAILになる",
       c23_check["result"] == "FAIL", str(c23_check))
 
+print("=== verify_post: C23 scheduled_eventsのバックリファレンス許可対象への追加"
+      "（v1.79・オーナー承認・2026-09-25分「BOE」誤検知への対処） ===")
+
+# 2026-09-25実データの再現: BOE総裁講演がその日のscheduled_events（経済カレンダー）に
+# 実在する予定であり、統合運用基準§3.1が【総括】に許容する「翌日に確認すべき対象」の
+# 記述として正当だったにもかかわらず、scheduled_eventsが未参照だったためFAILしていた。
+_boe_scheduled_events = [
+    {"title": "BOE Gov Bailey Speaks", "country": "GBP", "impact": "High",
+     "time_jst": "2026-09-26T01:00:00+09:00"},
+]
+_au_c23_boe_before = verify_post.Audit()
+verify_post.check_c23(_au_c23_boe_before, "明日のBOE総裁講演の内容が注目されます。", "・材料A", [])
+check("check_c23: scheduled_events未指定（省略）の場合は従来どおりFAILする（後方互換の確認）",
+      _au_c23_boe_before.checks[0]["result"] == "FAIL", str(_au_c23_boe_before.checks[0]))
+
+_au_c23_boe_after = verify_post.Audit()
+verify_post.check_c23(_au_c23_boe_after, "明日のBOE総裁講演の内容が注目されます。", "・材料A", [],
+                       scheduled_events=_boe_scheduled_events)
+check("check_c23: scheduled_eventsにtitleが実在すればPASSする（2026-09-25実例の再現）",
+      _au_c23_boe_after.checks[0]["result"] == "PASS", str(_au_c23_boe_after.checks[0]))
+
+_au_c23_boe_other = verify_post.Audit()
+verify_post.check_c23(_au_c23_boe_other, "FOMCの結果を受けた反応が注目されます。", "・材料A", [],
+                       scheduled_events=_boe_scheduled_events)
+check("check_c23: scheduled_eventsに存在しない固有名詞（FOMC）は従来どおりFAILする"
+      "（scheduled_eventsが無条件の免罪符にならないことの確認）",
+      _au_c23_boe_other.checks[0]["result"] == "FAIL", str(_au_c23_boe_other.checks[0]))
+
+_au_c23_malformed = verify_post.Audit()
+verify_post.check_c23(_au_c23_malformed, "明日のBOE総裁講演の内容が注目されます。", "・材料A", [],
+                       scheduled_events="not-a-list")
+check("check_c23: scheduled_eventsがlist型でない場合は無視して従来どおり動作する（防御的）",
+      _au_c23_malformed.checks[0]["result"] == "FAIL", str(_au_c23_malformed.checks[0]))
+
+# run_all()経由の配線確認
+_b_c23_boe = json.loads(json.dumps(b_ok))
+_b_c23_boe["sections"]["part2_summary"] = "明日のBOE総裁講演の内容が注目されます。"
+_b_c23_boe["reusable_for_summary"] = []
+_dd_c23_boe = json.loads(json.dumps(DAILY_DATA))
+_dd_c23_boe["scheduled_events"] = _boe_scheduled_events
+au_c23_boe = verify_post.run_all(_b_c23_boe, _dd_c23_boe)
+c23_boe_check = next(x for x in au_c23_boe.checks if x["id"] == "C23_summary_no_new_entities")
+check("run_all(): daily_data.scheduled_eventsがC23へ実際に配線されPASSになる",
+      c23_boe_check["result"] == "PASS", str(c23_boe_check))
+
 print("=== verify_post: C24 市場のフローの固有名詞バックリファレンス（v1.56・オーナー指示） ===")
 
 _au_c24a = verify_post.Audit()

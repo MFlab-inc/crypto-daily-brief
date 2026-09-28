@@ -606,7 +606,16 @@ _PROPER_NOUN_ALLOWLIST = {
 } | _ISO4217_CURRENCY_CODES
 
 
-def check_c23(au: Audit, part2_summary, part1_points, reusable_for_summary) -> None:
+def check_c23(au: Audit, part2_summary, part1_points, reusable_for_summary, scheduled_events=None) -> None:
+    """scheduled_events（v1.79・オーナー承認）: 2026-09-25分でC23が'BOE'を
+    誤検知した。原因はBOE総裁講演がその日のdaily_data.scheduled_events
+    （経済カレンダー。generate_post.SCHEDULED_EVENTS_GUIDANCE参照）に
+    載っていた予定であり、統合運用基準§3.1の【総括】欄は「翌日に確認す
+    べき対象」を記載してよいと定めているため、scheduled_eventsに実在する
+    固有名詞を総括で言及すること自体は正当な記述だったこと。part1_points・
+    reusable_for_summaryに加え、scheduled_eventsの各titleもバック
+    リファレンス対象へ含める。
+    """
     if not isinstance(part2_summary, str) or not part2_summary.strip():
         au.add("C23_summary_no_new_entities", None, "part2_summaryが空のためSKIP")
         return
@@ -618,6 +627,9 @@ def check_c23(au: Audit, part2_summary, part1_points, reusable_for_summary) -> N
     backing = str(part1_points or "")
     if isinstance(reusable_for_summary, list):
         backing += "\n" + "\n".join(str(x) for x in reusable_for_summary)
+    if isinstance(scheduled_events, list):
+        backing += "\n" + "\n".join(
+            str(e.get("title", "")) for e in scheduled_events if isinstance(e, dict))
     missing = sorted(c for c in candidates if c not in backing)
     if missing:
         au.add("C23_summary_no_new_entities", False,
@@ -711,7 +723,7 @@ def run_all(bundle: dict, daily_data: dict) -> Audit:
     check_c22(au, sections.get("part1_headline"), bundle.get("audit_ledger"), tier_map,
               daily_data.get("intraday_range"))
     check_c23(au, sections.get("part2_summary"), sections.get("part1_points"),
-              bundle.get("reusable_for_summary"))
+              bundle.get("reusable_for_summary"), daily_data.get("scheduled_events"))
     check_c24(au, sections.get("part2_flow"), sections.get("part1_points"))
     return au
 
