@@ -282,7 +282,8 @@ def _causal_violations_in_sentence(sentence: str) -> list[str]:
     return hits
 
 
-def _find_c18_violations(sections: dict, llm_section_keys: list[str], allowlist: set[str]) -> list[dict]:
+def _find_c18_violations(sections: dict, llm_section_keys: list[str], allowlist: set[str],
+                          headline_for_image: str = "") -> list[dict]:
     """C18の検知をセクション単位で行い、違反文をセクションへ帰属させて返す
     （v1.76・repair_post.pyが局所修正の対象文を特定するために使う）。
 
@@ -296,6 +297,15 @@ def _find_c18_violations(sections: dict, llm_section_keys: list[str], allowlist:
     空白を除去していない）——post_bundle.json内の元テキストへの
     `str.replace(sentence, ..., 1)`による置換で使うため、意図的に
     stripしていない。
+
+    headline_for_image（v1.79・オーナー承認）: 2026-09-24分の
+    headline_for_image「米金利上昇でBTC・ETHは軟調推移」が原因を断定する
+    表現でありながらC18の対象外（sections・llm_section_keysに含まれない）
+    のためPASSしていた事象への対処。sections由来ではないため専用の
+    section名"headline_for_image"で違反を帰属させる。repair_post.pyの
+    局所修正（_find_c18_targets）は本引数を渡さないため、この経路の
+    違反は自動修正の対象に含めない（本セッションで承認されたのは検知の
+    拡張のみで、修正ロジックの拡張は別途）。
     """
     violations = []
     for key in llm_section_keys:
@@ -308,11 +318,19 @@ def _find_c18_violations(sections: dict, llm_section_keys: list[str], allowlist:
             reasons = _causal_violations_in_sentence(sentence)
             if reasons:
                 violations.append({"section": key, "sentence": sentence, "reasons": reasons})
+    if isinstance(headline_for_image, str) and headline_for_image:
+        for sentence in re.split(r"[。\n]", headline_for_image):
+            if not sentence.strip() or any(s in sentence for s in allowlist):
+                continue
+            reasons = _causal_violations_in_sentence(sentence)
+            if reasons:
+                violations.append({"section": "headline_for_image", "sentence": sentence, "reasons": reasons})
     return violations
 
 
-def check_c18(au: Audit, sections: dict, llm_section_keys: list[str], allowlist: set[str]) -> None:
-    violations = _find_c18_violations(sections, llm_section_keys, allowlist)
+def check_c18(au: Audit, sections: dict, llm_section_keys: list[str], allowlist: set[str],
+              headline_for_image: str = "") -> None:
+    violations = _find_c18_violations(sections, llm_section_keys, allowlist, headline_for_image)
     hits = [r for v in violations for r in v["reasons"]]
     detail = (f"検出（限界あり・完全な保証ではない。誤検知時は config/c18_allowlist.json へ登録）: {hits}"
               if hits else "断定表現なし")
@@ -698,6 +716,131 @@ def check_c24(au: Audit, part2_flow, part1_points) -> None:
            f"固有名詞候補{len(candidates)}件・すべてpart1_pointsに存在")
 
 
+# --- C26〜C28 共通: 統合運用基準§3.1「4つの編集見出しの役割」表の"記載しない
+# 内容"列のうち、機械的に確実に検知できる語句 ---
+
+# v1.79（オーナー承認）: 「相対強弱」「根拠のない段階」等、意味判定が必要な
+# 項目は対象外とする（C16b/C18/C21/C23と同じ判断——機械的に確実な側だけを
+# 扱い、誤検知の懸念がある項目は目視確認に委ねる）。英字は単語境界つきの
+# 正規表現で判定し、部分一致による誤検知を避ける（オーナー指示。例:
+# 「APR」が「APRIL」や「HELP」の一部として誤って一致しない）。
+#
+# 実装上の注意: Python の re モジュールは日本語の漢字・ひらがな・カタカナを
+# \w（単語構成文字）として扱うため、素朴な \bTERM\b は「LP流動性」のように
+# 英字の直後に空白なしで日本語が続く（本システムの生成文で実際に多用される）
+# ケースで一致しない（英字と日本語の間に\bの境界が生じないため）。そのため
+# \b ではなく、直前・直後がASCII英数字でないことを明示的に確認する肯定的な
+# 先読み・後読みを使う——ASCII英数字との連結のみを「部分一致」とみなし、
+# 日本語文字との連結は正常な区切りとして許容する。
+# 日本語の言い換えも対象に加える。「利回り」単独は対象外とする——「米国債
+# 利回り」のような正当な記述と機械的に区別できないため（オーナー指示）。
+_ROLE_TERMS_EN = ["LP", "APR", "DEX", "Fear & Greed", "Greed"]
+_ROLE_TERMS_JP = ["強欲", "恐怖", "分散型取引所", "年率換算", "流動性提供", "LPプール", "参考APR"]
+_ROLE_TERM_PATTERNS = (
+    [re.compile(r"(?<![A-Za-z0-9])" + re.escape(t) + r"(?![A-Za-z0-9])") for t in _ROLE_TERMS_EN]
+    + [re.compile(re.escape(t)) for t in _ROLE_TERMS_JP]
+)
+
+
+def _find_role_term_hits(text: str) -> list[str]:
+    return [p.pattern for p in _ROLE_TERM_PATTERNS if p.search(text)]
+
+
+# --- C26 市場のフローの役割分離 ---
+
+def check_c26(au: Audit, part2_flow) -> None:
+    if not isinstance(part2_flow, str) or not part2_flow.strip():
+        au.add("C26_flow_role_separation", None, "part2_flowが空のためSKIP")
+        return
+    if part2_flow == generate_post.FIXED_FLOW:
+        au.add("C26_flow_role_separation", None, "縮退時の固定文言のためSKIP")
+        return
+    hits = _find_role_term_hits(part2_flow)
+    au.add("C26_flow_role_separation", not hits,
+           f"統合運用基準§3.1により【市場のフロー】に記載しない語句を検出: {hits}" if hits
+           else "役割分離の禁止語句なし")
+
+
+# --- C27 総括の役割分離（価格表記の混入・文数超過） ---
+
+_PRICE_NOTATION_RE = re.compile(r"[$¥]\s?[0-9][0-9,.]*")
+
+
+def check_c27(au: Audit, part2_summary) -> None:
+    if not isinstance(part2_summary, str) or not part2_summary.strip():
+        au.add("C27_summary_role_separation", None, "part2_summaryが空のためSKIP")
+        return
+    if part2_summary == generate_post.SUMMARY_BLANK_NOTE:
+        au.add("C27_summary_role_separation", None, "縮退時の固定文言（人が補う前提）のためSKIP")
+        return
+    reasons = []
+    term_hits = _find_role_term_hits(part2_summary)
+    if term_hits:
+        reasons.append(f"統合運用基準§3.1により【総括】に記載しない語句を検出: {term_hits}")
+    price_hits = _PRICE_NOTATION_RE.findall(part2_summary)
+    if price_hits:
+        reasons.append(f"価格表記（$・¥＋数値）を検出: {price_hits}")
+    sentence_count = len([s for s in part2_summary.split("。") if s.strip()])
+    if sentence_count >= 3:
+        reasons.append(f"文数が{sentence_count}文（「。」区切りで3文以上はFAIL・1〜2文で統合する規定）")
+    au.add("C27_summary_role_separation", not reasons, "; ".join(reasons) if reasons else "役割分離OK")
+
+
+# --- C28 ヘッドライン・主要なポイントの役割分離（価格・24時間比・Fear&Greedの再掲） ---
+
+def _daily_data_display_values(daily_data: dict) -> set[str]:
+    """C28専用（v1.79・オーナー承認）: #BTC・#ETH・#BNBのusd/jpy/change_24hと
+    Fear & Greedの値（daily_data.jsonの生の表示値そのもの）を集める。
+
+    C16b（散文中の数値転記検知）はdaily_data全体を走査対象にする汎用チェック
+    であり全4セクションに一律適用されるのに対し、C28は【ヘッドライン】
+    【主要なポイント】の2見出しに限り「価格・24時間比・Fear & Greedを一切
+    書かない」という統合運用基準§3.1の役割分離を機械的に強制するための
+    専用チェックであるため、対象をこの2見出しの語彙に絞って照合する
+    （「$・¥＋数値」の一律判定にすると、ニュース中の正当な金額表記——
+    取引所被害額やETF資金流出額等——まで誤検知するため採用しない。
+    オーナー指示）。
+    """
+    values: set[str] = set()
+    for asset in daily_data.get("assets", []):
+        if asset.get("asset") not in ("BTC", "ETH", "BNB"):
+            continue
+        for key in ("usd", "jpy", "change_24h"):
+            v = asset.get(key)
+            if isinstance(v, str) and v:
+                values.add(v)
+    fg_value = daily_data.get("market", {}).get("fear_greed", {}).get("value")
+    if isinstance(fg_value, (int, float)) and not isinstance(fg_value, bool):
+        values.add(str(fg_value))
+    return values
+
+
+def check_c28(au: Audit, part1_headline, part1_points, daily_data: dict) -> None:
+    headline = part1_headline if isinstance(part1_headline, str) else ""
+    points = part1_points if isinstance(part1_points, str) else ""
+    if not headline.strip() and not points.strip():
+        au.add("C28_headline_points_role_separation", None,
+               "part1_headline・part1_pointsともに空のためSKIP")
+        return
+
+    reasons = []
+    display_values = _daily_data_display_values(daily_data)
+    for label, text in (("ヘッドライン", headline), ("主要なポイント", points)):
+        if not text.strip():
+            continue
+        if "24時間比" in text:
+            reasons.append(f"{label}に「24時間比」の文字列を検出")
+        value_hits = sorted(v for v in display_values if v in text)
+        if value_hits:
+            reasons.append(f"{label}にdaily_data.jsonの表示値の再掲を検出: {value_hits}")
+    if headline.strip():
+        term_hits = _find_role_term_hits(headline)
+        if term_hits:
+            reasons.append(f"ヘッドラインに統合運用基準§3.1で記載しない語句を検出: {term_hits}")
+    au.add("C28_headline_points_role_separation", not reasons,
+           "; ".join(reasons) if reasons else "役割分離OK")
+
+
 def run_all(bundle: dict, daily_data: dict) -> Audit:
     au = Audit()
     sections = bundle["sections"]
@@ -718,7 +861,7 @@ def run_all(bundle: dict, daily_data: dict) -> Audit:
     check_c16(au, daily_data, sections)
     check_c16b(au, daily_data, sections, llm_keys, c16b_allowlist, headline_for_image)
     check_c17(au, sections.get("lp_comment", ""))
-    check_c18(au, sections, llm_keys, c18_allowlist)
+    check_c18(au, sections, llm_keys, c18_allowlist, headline_for_image)
     # news_candidate_countが欠落している場合は「0件」と区別できないよう
     # 負値を渡す（フェイルクローズ。存在しないキーを0件と混同して
     # 空配列を誤って許容しないようにする）。
@@ -731,6 +874,9 @@ def run_all(bundle: dict, daily_data: dict) -> Audit:
     check_c23(au, sections.get("part2_summary"), sections.get("part1_points"),
               bundle.get("reusable_for_summary"), daily_data.get("scheduled_events"))
     check_c24(au, sections.get("part2_flow"), sections.get("part1_points"))
+    check_c26(au, sections.get("part2_flow"))
+    check_c27(au, sections.get("part2_summary"))
+    check_c28(au, sections.get("part1_headline"), sections.get("part1_points"), daily_data)
     return au
 
 

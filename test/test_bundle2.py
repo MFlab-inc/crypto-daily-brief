@@ -2271,6 +2271,213 @@ check("run_all(): C24はreusable_for_summaryに材料があってもpart1_points
       "（2026-08-29実データの実例を再現）",
       c24_check["result"] == "FAIL", str(c24_check))
 
+print("=== verify_post: C18をheadline_for_imageにも適用（v1.79・オーナー承認・"
+      "2026-09-24分「米金利上昇でBTC・ETHは軟調推移」がPASSしていた事象への対処） ===")
+
+_au_c18_hfi_none = verify_post.Audit()
+verify_post.check_c18(_au_c18_hfi_none, b_ok["sections"], b_ok["llm_section_keys"], set())
+check("check_c18: headline_for_image省略時（既定""）は従来どおり動作する（後方互換）",
+      _au_c18_hfi_none.checks[0]["result"] == "PASS", str(_au_c18_hfi_none.checks[0]))
+
+_au_c18_hfi_bad = verify_post.Audit()
+verify_post.check_c18(
+    _au_c18_hfi_bad, b_ok["sections"], b_ok["llm_section_keys"], set(),
+    headline_for_image="米金利上昇を受けてBTCが急落した")
+check("check_c18: headline_for_imageに因果マーカー＋価格変動語（限定表現なし）があればFAILする"
+      "（sections自体は正常でもheadline_for_image側の違反を拾う）",
+      _au_c18_hfi_bad.checks[0]["result"] == "FAIL", str(_au_c18_hfi_bad.checks[0]))
+
+_au_c18_hfi_hedged = verify_post.Audit()
+verify_post.check_c18(
+    _au_c18_hfi_hedged, b_ok["sections"], b_ok["llm_section_keys"], set(),
+    headline_for_image="米金利上昇を受けてBTCが急落した可能性")
+check("check_c18: headline_for_imageに限定表現があればPASS（既存ロジックと同じ基準）",
+      _au_c18_hfi_hedged.checks[0]["result"] == "PASS", str(_au_c18_hfi_hedged.checks[0]))
+
+_c18_hfi_violations = verify_post._find_c18_violations(
+    b_ok["sections"], b_ok["llm_section_keys"], set(), headline_for_image="米金利上昇を受けてBTCが急落した")
+check("_find_c18_violations: headline_for_image由来の違反はsection=\"headline_for_image\"で帰属される"
+      "（repair_post.pyの局所修正対象特定と同じ形式）",
+      len(_c18_hfi_violations) == 1 and _c18_hfi_violations[0]["section"] == "headline_for_image",
+      str(_c18_hfi_violations))
+
+# run_all()経由の配線確認
+_b_c18_hfi = json.loads(json.dumps(b_ok))
+_b_c18_hfi["headline_for_image"] = "米金利上昇を受けてBTCが急落した"
+au_c18_hfi = verify_post.run_all(_b_c18_hfi, DAILY_DATA)
+c18_hfi_check = next(x for x in au_c18_hfi.checks if x["id"] == "C18_causal_assertion")
+check("run_all(): headline_for_imageの断定表現がC18としてFAILに反映される",
+      c18_hfi_check["result"] == "FAIL", str(c18_hfi_check))
+check("run_all(): 2026-09-24分の実例そのもの「米金利上昇でBTC・ETHは軟調推移」は、"
+      "既存のCAUSAL_MARKERS（により/を受けて/が原因で等）に「単純な『で』」が含まれないため、"
+      "本拡張後もPASSのままである（既知の限界。CAUSAL_MARKERSの拡張は別途承認が必要——"
+      "「で」は日本語の大半の文に現れる助詞であり、全セクションへの影響が大きすぎるため）",
+      verify_post._causal_violations_in_sentence("米金利上昇でBTC・ETHは軟調推移") == [])
+
+print("=== verify_post: C26 市場のフローの役割分離（v1.79・オーナー承認・"
+      "統合運用基準§3.1「記載しない内容」の機械監査） ===")
+
+_au_c26a = verify_post.Audit()
+verify_post.check_c26(_au_c26a, "")
+check("check_c26: part2_flowが空文字ならSKIP", _au_c26a.checks[0]["result"] == "SKIP", str(_au_c26a.checks[0]))
+
+_au_c26b = verify_post.Audit()
+verify_post.check_c26(_au_c26b, generate_post.FIXED_FLOW)
+check("check_c26: 縮退時の固定文言（FIXED_FLOW）はSKIP", _au_c26b.checks[0]["result"] == "SKIP",
+      str(_au_c26b.checks[0]))
+
+_au_c26c = verify_post.Audit()
+verify_post.check_c26(_au_c26c, CALL_B_DATA["part2_flow"][0])
+check("check_c26: 既存フィクスチャ（CALL_B_DATA）の市場のフローはPASS",
+      _au_c26c.checks[0]["result"] == "PASS", str(_au_c26c.checks[0]))
+
+for _bad_text, _label in [
+    ("LP流動性の状況を踏まえると、市場のフローは堅調でした。", "英字LP（単語境界）"),
+    ("Base上のAPRの動向が意識された可能性があります。", "英字APR"),
+    ("DEXの出来高が増加し値動きに反映された可能性があります。", "英字DEX"),
+    ("Fear & Greedが強気圏で推移したことが意識された可能性があります。", "英字Fear & Greed"),
+    ("市場のGreedが強まったことが意識された可能性があります。", "英字Greed"),
+    ("投資家心理の強欲さが値動きに影響した可能性があります。", "日本語:強欲"),
+    ("市場の恐怖心理が高まったことが意識された可能性があります。", "日本語:恐怖"),
+    ("分散型取引所の出来高増加が意識された可能性があります。", "日本語:分散型取引所"),
+    ("年率換算の利回りが上昇したことが意識された可能性があります。", "日本語:年率換算"),
+    ("流動性提供の増加が意識された可能性があります。", "日本語:流動性提供"),
+    ("LPプールの状況が値動きに影響した可能性があります。", "日本語:LPプール"),
+    ("参考APRの上昇が意識された可能性があります。", "日本語:参考APR"),
+]:
+    _au = verify_post.Audit()
+    verify_post.check_c26(_au, _bad_text)
+    check(f"check_c26: 記載しない語句（{_label}）を含む市場のフローはFAILする",
+          _au.checks[0]["result"] == "FAIL", f"{_label}: {_au.checks[0]}")
+
+_au_c26_yield = verify_post.Audit()
+verify_post.check_c26(_au_c26_yield, "米国債利回りの上昇が意識された可能性があります。")
+check("check_c26: 「利回り」単独は対象外（「米国債利回り」は正当な記述のため誤検知しない・オーナー指示）",
+      _au_c26_yield.checks[0]["result"] == "PASS", str(_au_c26_yield.checks[0]))
+
+_au_c26_boundary = verify_post.Audit()
+verify_post.check_c26(_au_c26_boundary, "APRILの決算発表が意識された可能性があります。")
+check("check_c26: 単語境界つき判定により「APR」が「APRIL」の部分一致として誤検知しない",
+      _au_c26_boundary.checks[0]["result"] == "PASS", str(_au_c26_boundary.checks[0]))
+
+_au_c26_jp_boundary = verify_post.Audit()
+verify_post.check_c26(_au_c26_jp_boundary, "LP流動性の状況が値動きに影響した可能性があります。")
+check("check_c26: 英字と日本語が空白なしで連結する実際の生成パターン（例:「LP流動性」）でも正しく検知する"
+      "（\\bだと日本語をwordとみなすため一致しない実装上の落とし穴に注意。lookaround方式で対処）",
+      _au_c26_jp_boundary.checks[0]["result"] == "FAIL", str(_au_c26_jp_boundary.checks[0]))
+
+print("=== verify_post: C27 総括の役割分離（価格表記・文数超過。v1.79・オーナー承認） ===")
+
+_au_c27a = verify_post.Audit()
+verify_post.check_c27(_au_c27a, "")
+check("check_c27: part2_summaryが空文字ならSKIP", _au_c27a.checks[0]["result"] == "SKIP", str(_au_c27a.checks[0]))
+
+_au_c27b = verify_post.Audit()
+verify_post.check_c27(_au_c27b, generate_post.SUMMARY_BLANK_NOTE)
+check("check_c27: 縮退時の固定文言（SUMMARY_BLANK_NOTE）はSKIP"
+      "（この定型文は「。」区切りで3文相当になるが、人が補う前提の定型文であり対象外）",
+      _au_c27b.checks[0]["result"] == "SKIP", str(_au_c27b.checks[0]))
+
+_au_c27c = verify_post.Audit()
+verify_post.check_c27(_au_c27c, CALL_B_DATA["part2_summary"])
+check("check_c27: 既存フィクスチャ（CALL_B_DATA）の総括はPASS（2文・価格表記なし・禁止語句なし）",
+      _au_c27c.checks[0]["result"] == "PASS", str(_au_c27c.checks[0]))
+
+_au_c27d = verify_post.Audit()
+verify_post.check_c27(_au_c27d, "地合いは総じて改善。BTCは$64,247まで上昇。継続的な確認が必要。")
+check("check_c27: 価格表記（$＋数値）が混入した総括はFAILする",
+      _au_c27d.checks[0]["result"] == "FAIL" and "$64,247" in _au_c27d.checks[0]["detail"],
+      str(_au_c27d.checks[0]))
+
+_au_c27e = verify_post.Audit()
+verify_post.check_c27(_au_c27e, "円建てではETHは¥30.3万円まで上昇。地合いは改善。")
+check("check_c27: 価格表記（¥＋数値）が混入した総括もFAILする",
+      _au_c27e.checks[0]["result"] == "FAIL", str(_au_c27e.checks[0]))
+
+_au_c27f = verify_post.Audit()
+verify_post.check_c27(_au_c27f, "地合いは改善。不確実性は残る。明日も注視が必要。")
+check("check_c27: 「。」区切りで3文以上（価格表記・禁止語句なし）はFAILする（文数超過ルール）",
+      _au_c27f.checks[0]["result"] == "FAIL" and "3文" in _au_c27f.checks[0]["detail"],
+      str(_au_c27f.checks[0]))
+
+_au_c27g = verify_post.Audit()
+verify_post.check_c27(_au_c27g, "地合いは改善したが、不確実性は残る。")
+check("check_c27: 読点で区切られた1文（。は1個のみ）は文数超過にならずPASS",
+      _au_c27g.checks[0]["result"] == "PASS", str(_au_c27g.checks[0]))
+
+_au_c27h = verify_post.Audit()
+verify_post.check_c27(_au_c27h, "Fear & Greedの改善が意識された可能性があります。")
+check("check_c27: C26と同じ語句一覧（Fear & Greed等）を総括にも適用する",
+      _au_c27h.checks[0]["result"] == "FAIL", str(_au_c27h.checks[0]))
+
+print("=== verify_post: C28 ヘッドライン・主要なポイントの役割分離（v1.79・オーナー承認） ===")
+
+_au_c28a = verify_post.Audit()
+verify_post.check_c28(_au_c28a, "", "", DAILY_DATA)
+check("check_c28: ヘッドライン・主要なポイントともに空文字ならSKIP",
+      _au_c28a.checks[0]["result"] == "SKIP", str(_au_c28a.checks[0]))
+
+_au_c28b = verify_post.Audit()
+verify_post.check_c28(_au_c28b, CALL_A_DATA["part1_headline"],
+                       "\n".join(f"・{p}" for p in CALL_A_DATA["part1_points"]), DAILY_DATA)
+check("check_c28: 既存フィクスチャ（CALL_A_DATA）のヘッドライン・主要なポイントはPASS",
+      _au_c28b.checks[0]["result"] == "PASS", str(_au_c28b.checks[0]))
+
+_au_c28c = verify_post.Audit()
+verify_post.check_c28(_au_c28c, "米規制当局の発言を受けて24時間比で上昇しました。", "・材料A", DAILY_DATA)
+check("check_c28: ヘッドラインに「24時間比」の文字列があればFAILする",
+      _au_c28c.checks[0]["result"] == "FAIL" and "24時間比" in _au_c28c.checks[0]["detail"],
+      str(_au_c28c.checks[0]))
+
+_au_c28d = verify_post.Audit()
+verify_post.check_c28(_au_c28d, "米規制当局の発言が確認されました。", f"・BTCは{DAILY_DATA['assets'][0]['usd']}まで上昇", DAILY_DATA)
+check("check_c28: 主要なポイントにdaily_data.jsonの実際の表示値（BTCのusd）が再掲されるとFAILする",
+      _au_c28d.checks[0]["result"] == "FAIL" and DAILY_DATA["assets"][0]["usd"] in _au_c28d.checks[0]["detail"],
+      str(_au_c28d.checks[0]))
+
+_au_c28e = verify_post.Audit()
+verify_post.check_c28(
+    _au_c28e, f"Fear & Greed指数は{DAILY_DATA['market']['fear_greed']['value']}を記録しました。", "・材料A", DAILY_DATA)
+check("check_c28: ヘッドラインにFear & Greedの実際の値が再掲されるとFAILする",
+      _au_c28e.checks[0]["result"] == "FAIL", str(_au_c28e.checks[0]))
+
+_au_c28f = verify_post.Audit()
+verify_post.check_c28(_au_c28f, "Fear & Greed指数の動向が注目されています。", "・材料A", DAILY_DATA)
+check("check_c28: ヘッドラインにC26と同じ語句一覧（Fear & Greed）があればFAILする",
+      _au_c28f.checks[0]["result"] == "FAIL", str(_au_c28f.checks[0]))
+
+_au_c28g = verify_post.Audit()
+verify_post.check_c28(_au_c28g, "米規制当局の発言が確認されました。",
+                       "・LPプールの動向が注目されています。", DAILY_DATA)
+check("check_c28: 主要なポイントはC26と同じ語句一覧の対象外（ヘッドラインのみに適用。オーナー指示）",
+      _au_c28g.checks[0]["result"] == "PASS", str(_au_c28g.checks[0]))
+
+_au_c28h = verify_post.Audit()
+verify_post.check_c28(
+    _au_c28h, "取引所ハッキングにより3億8,750万ドル相当の被害が確認されました。", "・材料A", DAILY_DATA)
+check("check_c28: ニュース中の正当な金額表記（取引所被害額等）はdaily_data.jsonの表示値と一致しないため"
+      "誤検知しない（「$・¥＋数値」の一律判定にしなかった理由そのものの確認・オーナー指示）",
+      _au_c28h.checks[0]["result"] == "PASS", str(_au_c28h.checks[0]))
+
+# run_all()経由の配線確認
+_b_c26 = json.loads(json.dumps(b_ok))
+_b_c26["sections"]["part2_flow"] = "APRの動向が意識された可能性があります。"
+au_c26_wired = verify_post.run_all(_b_c26, DAILY_DATA)
+c26_check_wired = next(x for x in au_c26_wired.checks if x["id"] == "C26_flow_role_separation")
+check("run_all(): C26が実際に配線されFAILを返す", c26_check_wired["result"] == "FAIL", str(c26_check_wired))
+
+_b_c27 = json.loads(json.dumps(b_ok))
+_b_c27["sections"]["part2_summary"] = f"BTCは{DAILY_DATA['assets'][0]['usd']}まで上昇。地合いは改善。"
+au_c27_wired = verify_post.run_all(_b_c27, DAILY_DATA)
+c27_check_wired = next(x for x in au_c27_wired.checks if x["id"] == "C27_summary_role_separation")
+check("run_all(): C27が実際に配線されFAILを返す", c27_check_wired["result"] == "FAIL", str(c27_check_wired))
+
+_b_c28 = json.loads(json.dumps(b_ok))
+_b_c28["sections"]["part1_headline"] = "米規制当局の発言を受けて24時間比で上昇しました。"
+au_c28_wired = verify_post.run_all(_b_c28, DAILY_DATA)
+c28_check_wired = next(x for x in au_c28_wired.checks if x["id"] == "C28_headline_points_role_separation")
+check("run_all(): C28が実際に配線されFAILを返す", c28_check_wired["result"] == "FAIL", str(c28_check_wired))
+
 print("=== verify_post: C23/C24 ISO4217通貨コードのallowlist追加（v1.62・オーナー指示） ===")
 
 # 9/2実データの実例（['CAD', 'NZD']誤検知の再現・回帰確認）。v1.53の
