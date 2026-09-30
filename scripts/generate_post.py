@@ -33,6 +33,7 @@ CLI（単独実行・検証用。実際の合成は compose_post.py が run() �
 """
 from __future__ import annotations
 
+import copy
 import json
 import re
 import sys
@@ -230,14 +231,30 @@ RULES_HASHTAG = """## ハッシュタグ規則（X投稿本文のみ）
 - `ETH/USDC` のようなペア表記にはタグを使わず平文で書く。
 - `headline_for_image` には `#` を一切使わない。"""
 
+# v1.82（オーナー承認）: 統合運用基準§3.1は【ヘッドライン】【主要なポイント】に
+# 価格・24時間比を書かないと定めている。従来のINTRADAY_MOVE_GUIDANCEは
+# notable_moveの値動きを「ヘッドラインの主題」として書く例外（旧③）を
+# 認めていたが、この例外を廃止し、値動きを伝える先を「headline_for_image」
+# （呼び出しA）と「市場のフローの最終段階【暗号通貨価格】」（呼び出しB）の
+# 2か所に限定した。呼び出しBにも同じ指示が要るためSYSTEM_Bにも含める。
 INTRADAY_MOVE_GUIDANCE = """## 24時間の値動き（notable_move）
 
 入力の intraday_range に notable_move: true の銘柄がある場合、
 その24時間の値動きは記述に値する材料である（データはNY 17:00区切りの
 24時間窓で集計しており、暦日の「日中」ではない。v1.49・オーナー指示）。
-ただし具体的な数値は後段のテンプレートが差し込むため、
-あなたは数値を書かないこと。「一時的に上昇したのち上げ幅を縮小した」の
-ような、値動きの形状のみを記述する。"""
+ただし統合運用基準§3.1により、【ヘッドライン】【主要なポイント】には価格・
+24時間比・値動きを書かない（notable_moveを理由にした例外も設けない。
+v1.82・オーナー承認）。値動きを伝えるのは次の2か所に限る。
+
+- headline_for_image（呼び出しA）: 図版下部帯用の短い見出しで、値動きの形状を
+  反映してよい。
+- 【市場のフロー】の最終段階【暗号通貨価格】（呼び出しB）: 材料がある日の連鎖の
+  最終段階として、同時期に確認された値動きの形状を記述してよい。材料が無い日は
+  市場のフロー自体を定型文とするため、値動きは書かない。
+
+具体的な数値は後段のテンプレートが差し込むため、あなたは数値を書かないこと。
+「一時的に上昇したのち上げ幅を縮小した」のような、値動きの形状のみを
+記述する。"""
 
 # v1.53（オーナー指示）: CPI・PCE・FOMC・要人講演等、その日最大の材料を
 # 繰り返し取りこぼした事象（8/22カナダ関税・8/26 PCE・8/28ジャクソンホール
@@ -419,7 +436,7 @@ part1_headlineでの扱いは下記「part1_headline・part1_pointsの決定」�
 ### ヘッドラインの判定手順（v1.44改定・下記へ委譲）
 
 part1_headline・headline_for_imageの決定手順は下記
-「part1_headline・part1_pointsの決定」の①〜④を参照。
+「part1_headline・part1_pointsの決定」の①〜③を参照。
 - 数値・固有名詞・日時はsummary・titleの記載と一致させる。候補に無い情報を
   推測で補わない（確認できないものは掲載しない）。
 - news_candidates_yesterday に同一の法案・政策・企業動向の候補が含まれる
@@ -445,32 +462,34 @@ part1_headline・headline_for_imageの決定手順は下記
 # 統一し、単一の記述箇所以外では判定基準を繰り返さない構成へ変更した。
 NO_CANDIDATES_FALLBACK = f"""## part1_headline・part1_pointsの決定（v1.44・オーナー指示。
 (i)(ii)の判定方法はv1.53フォローアップで改定・オーナー指示。
-(i)にtier2を追加はv1.59・オーナー承認）
+(i)にtier2を追加はv1.59・オーナー承認。v1.82でnotable_move（旧(iii)・旧③）を
+判定軸から除外・オーナー承認）
 
-part1_headline および part1_points は、次の3つを独立に確認して
+part1_headline および part1_points は、次の2つを独立に確認して
 決定する。
 (i)   tier1またはtier2の候補でuse:trueと判断したものがあるか
 (ii)  tier3の候補で、独立2ソース規定に該当すると判断し、
       pairs_with_candidate_idで関連付けてuse:trueとしたものが
       2件以上あるか
-(iii) 入力の intraday_range に notable_move: true の銘柄があるか
 
-定型文を使うのは、(i)(ii)(iii)のすべてが「なし」の場合に限る。
-いずれか1つでも「あり」なら、定型文を使わずその材料・値動きに基づく
-記述を行う。③と④を取り違えないこと。定型文を使うのは④の場合のみである。
+定型文を使うのは、(i)(ii)の両方が「なし」の場合に限る。
+どちらか1つでも「あり」なら、定型文を使わずその材料に基づく記述を行う。
 
-優先順位（複数が「あり」の場合、ヘッドラインで何を主とするかを決める）：
+【ヘッドライン】【主要なポイント】には、材料の有無にかかわらず、価格・
+24時間比・値動きを書かない（統合運用基準§3.1）。入力の intraday_range に
+notable_move: true の銘柄があっても、それを理由にヘッドライン・主要な
+ポイントで値動きを記述せず、定型文を使うかどうかも(i)(ii)のみで決める。
+大きな値動きは、headline_for_image（呼び出しA）と【市場のフロー】の最終段階
+（呼び出しB）で伝える（上記「24時間の値動き（notable_move）」参照）。
 
-① (i)あり → tier1・tier2裏付けの材料をヘッドラインの主とする。(ii)・(iii)も
+優先順位（(i)(ii)の両方が「あり」の場合、ヘッドラインで何を主とするかを決める）：
+
+① (i)あり → tier1・tier2裏付けの材料をヘッドラインの主とする。(ii)も
    あれば、重要度の高い方を主、他方を従として併記してよい。
 ② (i)なし・(ii)あり → 独立2ソース材料をヘッドラインの主とする。
-   (iii)もあれば値動きを従として併記してよい。
-③ (i)なし・(ii)なし・(iii)あり → 値動きを記述する。定型文は使わない。
-   ただし、ニュース材料が確認できなかった旨は主要なポイントに
-   1項目として明記する。
-④ (i)なし・(ii)なし・(iii)なし → 統合運用基準§3.1の定型文を使う。
+③ (i)なし・(ii)なし → 統合運用基準§3.1の定型文を使う。
 
-①〜④は本文の構成方針を表す優先順位であり、下記audit_ledgerの
+①〜③は本文の構成方針を表す優先順位であり、下記audit_ledgerの
 reasonで使うA/B/C——個々の候補材料の重要性判定（「重要性判定と
 因果表現の分離」参照）——とは別の分類である。混同しないこと。
 
@@ -483,15 +502,7 @@ reasonで使うA/B/C——個々の候補材料の重要性判定（「重要性
 headline_for_imageも同様にこの材料の内容を反映してよい（但し書きは
 含めない）。
 
-### ③（(i)なし・(ii)なし・(iii)あり）の詳細
-
-上記「24時間の値動き（notable_move）」の指示に従い、値動きの形状のみを
-記述する（数値は書かない・後段のテンプレートが差し込む）。
-part1_headlineはこの値動きの記述とし、下記④用の定型文は使わない。
-part1_pointsには、値動きの記述に加え「ニュース材料は確認できなかった」
-旨を1項目として明記する。
-
-### ④（(i)なし・(ii)なし・(iii)なし）の詳細
+### ③（(i)なし・(ii)なし）の詳細
 
 - part1_headline: 統合運用基準§3.1の指定文言をそのまま使う（言い換えない）:
   「{FIXED_HEADLINE}」
@@ -500,23 +511,31 @@ part1_pointsには、値動きの記述に加え「ニュース材料は確認�
 
 ### 共通
 
-- headline_for_image: ④の場合（tier1・tier2材料・独立2ソース材料・値動きの
-  いずれも無い場合）は、daily_data.json内のBTC・ETHのdirection
-  （up/down）に基づく短い定性的な見出しにとどめる（例:「BTC・ETHとも
-  に上昇基調」）。数値は書かない。`#`は使わず全角40字以内。
+- headline_for_image: 図版下部帯用。【ヘッドライン】【主要なポイント】と
+  異なり、値動きの形状を反映してよい（数値は書かない）。①②の場合は
+  主材料の内容を反映してよい。入力の intraday_range に notable_move: true
+  の銘柄がある場合は、その値動きの形状を反映してよい（材料の内容に代えて、
+  または併せて）。材料も notable_move も無い場合は、daily_data.json内の
+  BTC・ETHのdirection（up/down）に基づく短い定性的な見出しにとどめる
+  （例:「BTC・ETHともに上昇基調」）。`#`は使わず全角40字以内。
 - reusable_for_summary: tier 4等の継続監視材料があれば記す。無ければ空配列。
 
-### ヘッドラインの構成要件（v1.70・オーナー指示）
+### ヘッドラインの構成要件（v1.70・オーナー指示。v1.82改定）
 
-part1_headlineは次の3点を満たすこと。
+part1_headlineは次の点を満たすこと（v1.82・オーナー承認: 価格・値動きの禁止と
+文数を統合運用基準§3.1に合わせて改定）。
+- 1〜2文にとどめる（統合運用基準§3.1）。
+- 価格・24時間比・値動き・Fear & Greed・相対強弱・DEX・APR・LP助言を
+  書かない（統合運用基準§3.1）。
 - 主要銘柄（BTC・ETH・BNB等）に言及する場合は `#BTC` `#ETH` のように
   ハッシュタグを付す（表記は上記「ハッシュタグ規則」に従う）。
 - 「公式発表での確認が取れていない」旨の但し書きをpart1_headlineに
   書かない（上記②の詳細を参照。part1_pointsの該当項目に明記する）。
 - 対象日の日付をヘッドライン冒頭に書かない（【対象日】欄で別途表示
   されるため重複になる）。「9月7日は、」「9月7日、」のように日付から
-  書き出さない。値動きや材料の内容から書き始めること
-  （例:「BTC・ETH・BNBはいずれも24時間比で下落しました。」）。
+  書き出さない。材料の内容から書き始めること
+  （例:「〇〇（発表主体）が△△を発表しました。」。〇〇・△△は例示用の
+  プレースホルダーであり、この文言や内容を事実として流用しないこと）。
 
 **audit_ledgerは上記と切り離して扱う（統合運用基準・台本の要求）。**
 audit_ledgerは「採否を判断した全候補の記録」であり、本文（ヘッドライン・
@@ -577,9 +596,14 @@ WRITES_A = """## あなたが書くもの
 「〜とみられる。」等の言い切り体）は使わない。
 
 - headline_for_image: 図版下部帯用。`#` を使わず全角40字以内。体言止め可。
-  上記「part1_headline・part1_pointsの決定」の①〜④に従う。
-- part1_headline: 前編のヘッドライン。2〜3文。当日の最重要材料と価格の方向。
-  上記「part1_headline・part1_pointsの決定」の①〜④に従う。
+  上記「part1_headline・part1_pointsの決定」の「共通」に従う（値動きの形状は
+  ここで伝えてよい）。
+- part1_headline: 前編のヘッドライン。1〜2文。当日の最重要材料を記述する。
+  価格・24時間比・値動き・Fear & Greed・相対強弱・DEX・APR・LP助言には
+  触れない（統合運用基準§3.1）。notable_moveを理由にした例外は設けない
+  （値動きはheadline_for_imageと【市場のフロー】で伝える）。材料が無い日
+  （上記(i)(ii)がともに「なし」）は、定型文をそのまま使う。
+  上記「part1_headline・part1_pointsの決定」の①〜③に従う。
 - part1_points: 上限4項目。ヘッドラインと重複しない補足。各項目末尾に
   （媒体名、日付）を付す。項目数は目標ではなく情報源の規律に従った結果
   である——tier1・tier2（または独立2ソース規定該当のtier3）の裏付けがある
@@ -617,10 +641,22 @@ SYSTEM_A = "\n\n".join([
     ETF_WEEKEND_GUIDANCE, WRITES_A, OUTPUT_FORMAT_A,
 ])
 
-CALL_B_INSTRUCTIONS = """入力として、当日の市場データ（daily_data.json）と、呼び出しAの出力
+# v1.82（オーナー承認）: 統合運用基準§3.1（【市場のフロー】【総括】に書いては
+# いけない項目）・§3.3（市場フローの書式）に合わせて全面改定した。
+# 変更点: (1)材料が無い日はpart2_flowを§3.1の定型文にし、市場データからの
+# 作文をやめる、(2)材料がある日は§3.3の書式（【出来事・ニュース】→
+# 【地政学・マクロの変化】→【中間市場指標・市場心理】→【暗号通貨価格】、複数は
+# ①②③で区切る）を使う、(3)part2_summaryへ1〜2文の上限と§3.1の禁止項目を明記、
+# (4)入力daily_dataからFear & Greed・ドミナンス・DEX（base）・LP・国内取引所の
+# データを除外した旨を明記（_daily_data_for_call_b参照）。
+CALL_B_INSTRUCTIONS = f"""入力として、当日の市場データ（daily_data.json）と、呼び出しAの出力
 （採用したニュース、reusable_for_summary）を受け取ります。
-Aが失敗している場合はニュースが空で渡されます。その場合は市場データのみで
-記述し、ニュース材料が確認できなかった旨を明記してください。
+入力のdaily_dataは、統合運用基準§3.1が【市場のフロー】【総括】に書いてはいけない
+項目（Fear & Greed・DEX・APR・LP助言・相対強弱）に当たるデータを除外したもの
+です（v1.82・オーナー承認）。
+Aが失敗している場合はニュースが空で渡されます。その場合、part2_flowは下記
+「材料が無い日」の定型文とし、part2_summaryは確認可能な事実のみで簡潔に記述し、
+ニュース材料が確認できなかった旨を明記してください。
 
 ### 文体（v1.35・オーナー指示）
 
@@ -628,21 +664,52 @@ Aが失敗している場合はニュースが空で渡されます。その場�
 「〜とみられる」等の言い切り体）は使わない。前編（part1_headline・
 part1_points）と文体を揃えること。
 
-- part2_flow: 2〜3本の条件付き連鎖。各連鎖は「材料 → 意識された可能性 →
-  同時期に確認された値動き」の形にし、末尾を因果の限定で締める。
-  地政学・マクロ、制度・政策、企業財務・市場構造のうち根拠のある系統から選ぶ。
-  ここで扱う材料は、呼び出しAのpart1_pointsに既に掲載されている材料に
-  限る。reusable_for_summary（継続監視材料。part2_summaryでの1行言及
-  にのみ使う）や、part1_pointsに書かれていない新規の材料をpart2_flowで
-  持ち出さない（v1.56・オーナー指示）。part2_flowは「意識された可能性」
-  という因果連鎖を組む分、part2_summaryの1行言及より踏み込んだ主張に
-  なるため、根拠の基準もpart1_points採用済み材料に厳格化する——tier1・tier2
-  裏付けまたは独立2ソースの採否規律を経ていない材料（単独tier3ソース等）を
-  因果連鎖の起点にしない。ニュースが無い日（part1_pointsが定型文のみの日）
-  は、市場データ内の事実（出来高の増減、市場心理の変化、国内取引所とDEXの
-  出来高動向）のみで1〜2本にとどめる。
-- part2_summary: 総括。地合い・不確実性・今後の確認事項のみ。ニュースの
-  再説明をしない。reusable_for_summary があれば1行だけ言及する。
+- part2_flow: 統合運用基準§3.3の書式だけを使った条件付き仮説連鎖
+  （v1.82・オーナー承認）。ここで扱う材料は、呼び出しAのpart1_headline・
+  part1_pointsに既に掲載されている材料に限る。reusable_for_summary
+  （継続監視材料。part2_summaryでの1行言及にのみ使う）や、part1_headline・
+  part1_pointsに書かれていない新規の材料をpart2_flowで持ち出さない
+  （v1.56・オーナー指示）。part2_flowは「意識された可能性」という因果連鎖を
+  組む分、part2_summaryの1行言及より踏み込んだ主張になるため、根拠の基準も
+  掲載済み材料に厳格化する——tier1・tier2裏付けまたは独立2ソースの採否規律を
+  経ていない材料（単独tier3ソース等）を因果連鎖の起点にしない。
+
+  【材料が無い日】part1_headlineが定型文で、かつpart1_pointsも定型文のみの日、
+  またはAが失敗している日は、市場データから流れを作文しない。part2_flowを
+  次の定型文1件のみとする（統合運用基準§3.1）:
+  ["{FIXED_FLOW}"]
+
+  【材料がある日】各連鎖を次の書式で1文（句点は末尾に1つだけ）として書く
+  （統合運用基準§3.3）:
+  「【出来事・ニュース】確認済み事実 → 【地政学・マクロの変化】市場で意識された
+  可能性がある変化 → 【中間市場指標・市場心理】確認済みの指標・心理 →
+  【暗号通貨価格】同時期に確認された値動き」
+  - 【出来事・ニュース】: 掲載済みの確認済み事実（媒体名を添える）。
+  - 【地政学・マクロの変化】: 市場で意識された可能性がある変化。断定しない。
+  - 【中間市場指標・市場心理】: 報道で確認できた金利・原油・為替・株価等の
+    指標や、それに伴うリスク選好・回避の心理。Fear & Greed指数には触れない。
+  - 【暗号通貨価格】: BTC・ETHまたは市場全体の同時期の値動きを、24時間比の
+    観点で形状のみ記述する（数値は書かない）。intraday_rangeにnotable_move:
+    trueの銘柄があれば、その値動きの形状を反映してよい（上記「24時間の値動き
+    （notable_move）」参照）。価格因果は断定せず、報道事実は「同時期の材料」
+    として限定して扱う。
+  根拠のある段階のみを書き（統合運用基準§3.1「根拠のない段階」は書かない）、
+  段階の順序は変えない。【出来事・ニュース】と【暗号通貨価格】は必ず置く。
+  ハッシュタグ規則に従い、【暗号通貨価格】では銘柄名を平文（BTC・ETH）で
+  述べ、ハッシュタグを付す場合は連鎖の末尾（句点の後に半角スペースを空けて）
+  にまとめて置く。
+  複数の確認済み材料がある日は、地政学・マクロ、制度・政策、企業財務・資金
+  調達・市場構造のうち根拠がある異なる2系統以上を、最大3本まで、各連鎖の
+  先頭に①②③を付して区切る。根拠が1系統しかない日は、無理に数を埋めず1本に
+  とどめ（①は付けない）、取得できた事実と限界を明記する。
+  各連鎖の末尾（句点の直前）に「可能性」「意識された可能性」「因果は未確認」
+  等の限定を必ず置く。
+- part2_summary: 総括。地合い・不確実性・今後の確認事項のみ、1〜2文に
+  収める（3文以上は機械監査でFAILとなる）。ニュースの再説明をしない。
+  reusable_for_summary があれば1行だけ言及する。価格・24時間比・
+  Fear & Greed・DEX・APR・LP助言には触れない（統合運用基準§3.1）。
+  地合いは「改善」「悪化」「不透明」等の定性的な表現にとどめ、指数や
+  数値を根拠に挙げない。
   対象日の翌日が土日の場合は「翌日」ではなく「今後」「週明け」と書く。
   総括で言及してよい固有名詞・材料は、part1_points に掲載済みのもの、
   または reusable_for_summary に渡された継続材料に限る（v1.35・
@@ -650,11 +717,11 @@ part1_points）と文体を揃えること。
   材料を総括で初めて持ち出さない——読者が文脈を追えないため。
 
 出力形式（JSONのみ）:
-{ "part2_flow": ["...", "..."], "part2_summary": "..." }"""
+{{ "part2_flow": ["...", "..."], "part2_summary": "..." }}"""
 
 SYSTEM_B = "\n\n".join([
-    ROLE_INTRO, RULES_ABSOLUTE, RULES_HASHTAG, RULES_CAUSAL, ETF_WEEKEND_GUIDANCE,
-    CALL_B_INSTRUCTIONS,
+    ROLE_INTRO, RULES_ABSOLUTE, RULES_HASHTAG, RULES_CAUSAL, INTRADAY_MOVE_GUIDANCE,
+    ETF_WEEKEND_GUIDANCE, CALL_B_INSTRUCTIONS,
 ])
 
 
@@ -1200,6 +1267,40 @@ def _build_call_a_user_content(daily_data: dict, news_today: dict, news_yesterda
     return json.dumps(payload, ensure_ascii=False, indent=2), stats, id_to_candidate
 
 
+# v1.82（オーナー承認）: 呼び出しBへ渡すdaily_dataから除外する項目。統合運用基準
+# §3.1が【市場のフロー】【総括】に書いてはいけない項目（Fear & Greed・DEX・APR・
+# LP助言・相対強弱）に当たるデータを、モデルへ渡さないことで混入を防ぐ
+# （9/22〜9/27の5日分ドライランでC26/C27が5日中5日FAILした原因の一つ）。
+# 渡し続けるのはassets（価格・24時間比）・intraday_range・scheduled_events・
+# market.market_cap/volume_24h等。呼び出しA（ヘッドライン・主要なポイント）
+# 側のdaily_dataは対象外（変更していない）。
+CALL_B_EXCLUDED_DAILY_DATA_PATHS: tuple[tuple[str, ...], ...] = (
+    ("market", "fear_greed"),
+    ("market", "btc_dominance"),
+    ("market", "eth_dominance"),
+    ("base",),
+    ("lp",),
+    ("domestic",),
+)
+
+
+def _daily_data_for_call_b(daily_data: dict) -> dict:
+    """呼び出しB向けに、CALL_B_EXCLUDED_DAILY_DATA_PATHSの項目を除いた
+    daily_dataのコピーを返す（元のdaily_dataは変更しない）。存在しない
+    パスは無視する。
+    """
+    sanitized = copy.deepcopy(daily_data)
+    for path in CALL_B_EXCLUDED_DAILY_DATA_PATHS:
+        node = sanitized
+        for key in path[:-1]:
+            node = node.get(key) if isinstance(node, dict) else None
+            if node is None:
+                break
+        if isinstance(node, dict):
+            node.pop(path[-1], None)
+    return sanitized
+
+
 def _build_call_b_user_content(daily_data: dict, call_a_data: dict | None) -> str:
     if call_a_data:
         news_from_a = {
@@ -1212,7 +1313,7 @@ def _build_call_b_user_content(daily_data: dict, call_a_data: dict | None) -> st
     payload = {
         "target_date_jst": daily_data.get("target_date_jst", ""),
         "weekday_jp": daily_data.get("weekday_jp", ""),
-        "daily_data": daily_data,
+        "daily_data": _daily_data_for_call_b(daily_data),
         "news_from_call_a": news_from_a,
     }
     return json.dumps(payload, ensure_ascii=False, indent=2)
@@ -1312,11 +1413,37 @@ def regenerate_call_b_as_l1(daily_data: dict, client: "anthropic.Anthropic | Non
     return call_b(client or anthropic.Anthropic(), daily_data, None)
 
 
+def _has_adopted_material(call_a_data: dict | None) -> bool:
+    """呼び出しAの出力に、採用された材料（定型文以外のpart1_headline、または
+    定型文以外のpart1_points）があるかを返す。呼び出しA失敗（None）は材料なし。
+    """
+    if not call_a_data:
+        return False
+    headline = call_a_data.get("part1_headline")
+    if isinstance(headline, str) and headline.strip() and headline.strip() != FIXED_HEADLINE:
+        return True
+    points = call_a_data.get("part1_points") or []
+    return any(isinstance(p, str) and p.strip() and p.strip() != FIXED_POINTS for p in points)
+
+
 def call_b(client: "anthropic.Anthropic", daily_data: dict, call_a_data: dict | None) -> CallOutcome:
     user_content = _build_call_b_user_content(daily_data, call_a_data)
+    has_material = _has_adopted_material(call_a_data)
+
+    def _enforce_fixed_flow(data: dict, attempt: int) -> dict:
+        # v1.82（オーナー承認）: 材料が無い日（呼び出しA失敗を含む）の
+        # part2_flowは、統合運用基準§3.1の定型文とし、市場データから流れを
+        # 作文しない。CALL_B_INSTRUCTIONSにも同じ指示を書いているが、指示は
+        # 常に遵守されるとは限らない（C26等の既往事象）ため、コード側でも
+        # 確定させる——プロンプトの遵守状況に依存しない。
+        if not has_material:
+            data["part2_flow"] = [FIXED_FLOW]
+        return data
+
     return _call_json(
         client, system=SYSTEM_B, user_content=user_content,
         max_tokens=CALL_B_MAX_TOKENS, required_keys=REQUIRED_KEYS_B,
+        post_process=_enforce_fixed_flow,
     )
 
 

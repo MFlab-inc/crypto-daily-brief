@@ -479,11 +479,18 @@ def check_c21(au: Audit, level: str, audit_ledger, candidate_count: int,
 
 # --- C22 図版でなく本文ヘッドラインのtier1・tier2裏付け ---
 
-def check_c22(au: Audit, part1_headline, audit_ledger, tier_map: dict[str, int],
-              intraday_range: dict | None = None) -> None:
+def check_c22(au: Audit, part1_headline, audit_ledger, tier_map: dict[str, int]) -> None:
     """part1_headlineが定型文かどうかと、根拠（tier1・tier2採用・独立2ソース
-    採用・notable_move）の有無との整合を検査する（v1.44改定・v1.59でtier2を
-    追加・オーナー承認）。
+    採用）の有無との整合を検査する（v1.44改定・v1.59でtier2を追加・オーナー
+    承認）。
+
+    v1.82（オーナー承認）: notable_move（24時間の値動き）は、ヘッドラインの
+    根拠として扱わない。統合運用基準§3.1により【ヘッドライン】に価格・24時間比・
+    値動きを書かないため、材料（tier1・tier2採用・独立2ソース採用）が無い日は
+    notable_moveの有無によらず定型文が正しい（大きな値動きはheadline_for_image
+    と【市場のフロー】の最終段階で伝える）。従来はnotable_moveがあると定型文
+    ヘッドラインをFAILとし、値動きを主題にした非定型文ヘッドラインをSKIPと
+    していたが、この扱いは廃止した（引数intraday_rangeも廃止）。
 
     呼び出しA失敗等でpart1_headlineが文字列でない場合は、この検査自体が
     無意味なためSKIP（縮退時の話であり、本検査が対象とする「モデルが
@@ -505,16 +512,11 @@ def check_c22(au: Audit, part1_headline, audit_ledger, tier_map: dict[str, int],
         isinstance(e, dict) and e.get("decision") == "採用（独立2ソース）"
         for e in audit_ledger
     )
-    # v1.42（オーナー指示）: notable_move（24時間の値動き）はニュースの
-    # 情報源階層（tier1/tier3等）の対象外の市場データ。
-    has_notable_move = isinstance(intraday_range, dict) and any(
-        isinstance(v, dict) and v.get("notable_move") is True for v in intraday_range.values()
-    )
 
     is_fixed = part1_headline == generate_post.FIXED_HEADLINE
     if is_fixed:
-        # v1.44（オーナー指示）: 根拠（tier1採用・独立2ソース採用・
-        # notable_move）が存在するにもかかわらず定型文のままになっている
+        # v1.44（オーナー指示）: 根拠（tier1採用・独立2ソース採用）が
+        # 存在するにもかかわらず定型文のままになっている
         # 状態は、8/23（BitMart）・8/24（Bitmine）・8/26（BankChain
         # Alliance）で繰り返し実測された「ヘッドラインと本文の矛盾」の
         # パターンであり、本来FAILとして検出すべき（従来は定型文なら
@@ -524,8 +526,6 @@ def check_c22(au: Audit, part1_headline, audit_ledger, tier_map: dict[str, int],
             basis.append("tier1・tier2由来の採用")
         if has_pair_adopted:
             basis.append("独立2ソース採用")
-        if has_notable_move:
-            basis.append("notable_move")
         if basis:
             au.add("C22_headline_tier1_basis", False,
                    f"定型文ヘッドラインだが{'/'.join(basis)}が存在（本文に未反映の可能性）")
@@ -539,13 +539,8 @@ def check_c22(au: Audit, part1_headline, audit_ledger, tier_map: dict[str, int],
     if has_pair_adopted:
         au.add("C22_headline_tier1_basis", True, "独立2ソース採用が存在（v1.44・ヘッドラインの根拠として有効）")
         return
-    if has_notable_move:
-        au.add("C22_headline_tier1_basis", None,
-               "tier1・tier2由来の採用・独立2ソース採用は無いがnotable_move（24時間の値動き）が存在するためSKIP"
-               "（値動きは情報源階層の対象外）")
-        return
     au.add("C22_headline_tier1_basis", False,
-           "ヘッドラインが定型文でないにもかかわらずtier1・tier2由来の採用・独立2ソース採用・notable_moveのいずれも存在しない")
+           "ヘッドラインが定型文でないにもかかわらずtier1・tier2由来の採用・独立2ソース採用のいずれも存在しない")
 
 
 # --- C23 総括の固有名詞バックリファレンス ---
@@ -696,7 +691,15 @@ _PROPER_NOUN_ALLOWLIST_C24 = set(_PROPER_NOUN_ALLOWLIST) | {
 }
 
 
-def check_c24(au: Audit, part2_flow, part1_points) -> None:
+def check_c24(au: Audit, part2_flow, part1_points, part1_headline=None) -> None:
+    """part1_headline（v1.82・オーナー承認）: バックリファレンス先へ、part1_points
+    に加えてpart1_headlineも含める。材料が1件だけの日はpart1_pointsが定型文
+    のみになり（ヘッドラインと重複しない補足が無いため）、その1件の材料は
+    part1_headlineにしか載らない。市場のフローはpart1_headline・part1_pointsに
+    掲載済みの材料を連鎖の起点とする（CALL_B_INSTRUCTIONS）ため、ヘッドライン
+    のみに載る固有名詞をFAILにしない。reusable_for_summaryを含めない点は
+    従来どおり（v1.56）。
+    """
     if not isinstance(part2_flow, str) or not part2_flow.strip():
         au.add("C24_flow_no_unadopted_material", None, "part2_flowが空のためSKIP")
         return
@@ -705,15 +708,15 @@ def check_c24(au: Audit, part2_flow, part1_points) -> None:
     if not candidates:
         au.add("C24_flow_no_unadopted_material", True, "市場のフローに固有名詞候補（ASCII表記）なし")
         return
-    backing = str(part1_points or "")
+    backing = str(part1_points or "") + "\n" + str(part1_headline or "")
     missing = sorted(c for c in candidates if c not in backing)
     if missing:
         au.add("C24_flow_no_unadopted_material", False,
-               "市場のフローにpart1_points未確認の固有名詞候補（限界あり・ASCII表記のみ検知。"
+               "市場のフローにpart1_headline・part1_points未確認の固有名詞候補（限界あり・ASCII表記のみ検知。"
                f"誤検知時は要目視確認）: {missing}")
         return
     au.add("C24_flow_no_unadopted_material", True,
-           f"固有名詞候補{len(candidates)}件・すべてpart1_pointsに存在")
+           f"固有名詞候補{len(candidates)}件・すべてpart1_headline・part1_pointsに存在")
 
 
 # --- C26〜C28 共通: 統合運用基準§3.1「4つの編集見出しの役割」表の"記載しない
@@ -815,6 +818,34 @@ def _daily_data_display_values(daily_data: dict) -> set[str]:
     return values
 
 
+# v1.82（オーナー承認）: ヘッドラインに限り、銘柄名と値動き語が同一文にある場合も
+# FAILとする。統合運用基準§3.1は【ヘッドライン】に価格・24時間比を書かないと
+# 定めており、「24時間比」の文字列・実際の表示値・語句一覧（上記）だけでは、
+# 「BTC・ETHは軟調推移」のように数値も「24時間比」も使わない定性的な値動きの
+# 記述を検知できない（C28提案時に開示した限界への対応）。ニュースの引用等で
+# 誤検知した場合は、config/c28_allowlist.jsonへ日付と文字列（部分一致）を
+# 登録する（C18のc18_allowlist.jsonと同じ日付限定の運用）。
+# 英字（BTC・ETH・BNB）はASCII英数字との連結のみを部分一致とみなす
+# （上記_ROLE_TERM_PATTERNSと同じ理由。日本語との連結は許容）。
+_HEADLINE_SYMBOL_PATTERNS = (
+    [(t, re.compile(r"(?<![A-Za-z0-9])" + re.escape(t) + r"(?![A-Za-z0-9])")) for t in ("BTC", "ETH", "BNB")]
+    + [(t, re.compile(re.escape(t))) for t in ("ビットコイン", "イーサリアム")]
+)
+_HEADLINE_MOVE_TERMS = ("上昇", "下落", "反発", "反落", "横ばい")
+
+
+def _find_headline_symbol_move_sentences(headline: str, allowlist: set[str]) -> list[str]:
+    hits = []
+    for sentence in re.split(r"[。\n]", headline):
+        if not sentence.strip() or any(a in sentence for a in allowlist):
+            continue
+        symbols = [t for t, pat in _HEADLINE_SYMBOL_PATTERNS if pat.search(sentence)]
+        moves = [w for w in _HEADLINE_MOVE_TERMS if w in sentence]
+        if symbols and moves:
+            hits.append(f"{symbols}×{moves}（{sentence.strip()}）")
+    return hits
+
+
 def check_c28(au: Audit, part1_headline, part1_points, daily_data: dict) -> None:
     headline = part1_headline if isinstance(part1_headline, str) else ""
     points = part1_points if isinstance(part1_points, str) else ""
@@ -837,6 +868,12 @@ def check_c28(au: Audit, part1_headline, part1_points, daily_data: dict) -> None
         term_hits = _find_role_term_hits(headline)
         if term_hits:
             reasons.append(f"ヘッドラインに統合運用基準§3.1で記載しない語句を検出: {term_hits}")
+        c28_allowlist = _load_allowlist(daily_data.get("target_date_jst", ""), "c28_allowlist.json")
+        move_hits = _find_headline_symbol_move_sentences(headline, c28_allowlist)
+        if move_hits:
+            reasons.append(
+                "ヘッドラインの同一文に銘柄名と値動き語が存在（統合運用基準§3.1: ヘッドラインに"
+                f"価格・値動きを書かない。誤検知時は config/c28_allowlist.json へ登録）: {move_hits}")
     au.add("C28_headline_points_role_separation", not reasons,
            "; ".join(reasons) if reasons else "役割分離OK")
 
@@ -869,11 +906,10 @@ def run_all(bundle: dict, daily_data: dict) -> Audit:
     check_c20(au, headline_for_image)
     tier_map = _load_source_tier_map()
     check_c21(au, bundle["level"], bundle.get("audit_ledger"), bundle.get("news_candidate_count", -1), tier_map)
-    check_c22(au, sections.get("part1_headline"), bundle.get("audit_ledger"), tier_map,
-              daily_data.get("intraday_range"))
+    check_c22(au, sections.get("part1_headline"), bundle.get("audit_ledger"), tier_map)
     check_c23(au, sections.get("part2_summary"), sections.get("part1_points"),
               bundle.get("reusable_for_summary"), daily_data.get("scheduled_events"))
-    check_c24(au, sections.get("part2_flow"), sections.get("part1_points"))
+    check_c24(au, sections.get("part2_flow"), sections.get("part1_points"), sections.get("part1_headline"))
     check_c26(au, sections.get("part2_flow"))
     check_c27(au, sections.get("part2_summary"))
     check_c28(au, sections.get("part1_headline"), sections.get("part1_points"), daily_data)
