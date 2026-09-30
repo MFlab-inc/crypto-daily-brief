@@ -648,7 +648,8 @@ _PROPER_NOUN_ALLOWLIST = {
 # 限界: (1) 総括側で機関名を検知できるのはASCII表記の略称（Fed・FRB・FOMC・SEC・
 # CFTC・BOJ・ECB・BOE）のみ（日銀・日本銀行など日本語表記はC23の検知対象外）。
 # 英語の正式名称（Federal Reserve等）は照合先側の同義語としてのみ扱う。
-# (2) C24（市場のフロー）には適用していない（別途オーナー判断）。
+# (2) C23（総括）とC24（市場のフロー）に同じ同義語照合を適用する（C24へはv1.84・オーナー承認）。
+#     C24の照合先は従来どおり part1_headline・part1_points のみ（reusable_for_summaryを含めない。v1.56）。
 # 大文字小文字の表記ゆれ（英語報道で一般的な「BoJ」「BoE」、全大文字の「FED」）は、
 # 全面的な大文字小文字の無視（本文の「sec」＝秒や動詞の「fed」がSEC・Fedの根拠に
 # なる偽PASSを生む）ではなく、明示的な同義語として登録する（独立レビューの指摘。v1.83）。
@@ -773,6 +774,11 @@ def check_c24(au: Audit, part2_flow, part1_points, part1_headline=None) -> None:
     掲載済みの材料を連鎖の起点とする（CALL_B_INSTRUCTIONS）ため、ヘッドライン
     のみに載る固有名詞をFAILにしない。reusable_for_summaryを含めない点は
     従来どおり（v1.56）。
+    v1.84（オーナー承認）: C23と同じ機関名の同義語照合（_is_backed・
+    _INSTITUTION_ALIAS_GROUPS）を適用する。フローが「Fed」、本文が「FRB」「米連邦
+    準備制度理事会」の表記だと、同じ機関でも文字列一致だけでは未確認と誤判定される
+    ため。無条件の許可リストではなく、本文（ヘッドライン・主要なポイント）に同じ機関の
+    記述がある場合に限って確認済みとする（別機関では確認済みにならない）。
     """
     if not isinstance(part2_flow, str) or not part2_flow.strip():
         au.add("C24_flow_no_unadopted_material", None, "part2_flowが空のためSKIP")
@@ -783,7 +789,7 @@ def check_c24(au: Audit, part2_flow, part1_points, part1_headline=None) -> None:
         au.add("C24_flow_no_unadopted_material", True, "市場のフローに固有名詞候補（ASCII表記）なし")
         return
     backing = str(part1_points or "") + "\n" + str(part1_headline or "")
-    missing = sorted(c for c in candidates if c not in backing)
+    missing = sorted(c for c in candidates if not _is_backed(c, backing))
     if missing:
         au.add("C24_flow_no_unadopted_material", False,
                "市場のフローにpart1_headline・part1_points未確認の固有名詞候補（限界あり・ASCII表記のみ検知。"

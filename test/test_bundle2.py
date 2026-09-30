@@ -4519,6 +4519,207 @@ try:
 except ImportError:
     pass  # 上のテキスト検査が主。PyYAML未導入でも検査は素通りしない
 
+print("=== capture_apr.py: 診断が壊れていても撮影・後続ステップを止めない／通常日の挙動はv1.82以前と同じ（v1.84・オーナー指示） ===")
+
+# ---- 通常日（1回目で成功）: v1.82以前と同じ操作順序・待機・出力（診断・追加待機・flushは一切動かない）----
+_pg = _FakePage([(_OK_BODY, [])])
+_res, _out, _sl, _d, _cl = _run_capture(_pg, "normalday")
+check("通常日: 操作の順序と待機がv1.82以前と同じ（初回読込→3秒→Refresh→8秒→撮影。合計待機11秒）・追加の待機/再読み込み/flushなし",
+      _pg.timeline == ["goto", ("sleep", 3), "click", ("sleep", 8), "shot"] and sum(_sl) == 11 and _pg.flushes == 0
+      and len(_pg.goto_calls) == 1, f"{_pg.timeline} flushes={_pg.flushes}")
+check("通常日: 結果と出力メッセージがv1.82以前と同一（(True,'',1)・3行の出力のみ・診断ファイルなし）",
+      _res == (True, "", 1)
+      and _out.strip().split("\n") == ["[試行 1/3] Refreshクリック...", "  8秒待機（GeckoTerminal/DefiLlamaロード待ち）...",
+                                       "  ✓ 撮影画像の完了を確認。"] and not _d.exists(), _out)
+
+# ---- 診断が壊れていても、診断なし（正常）の実行と「結果・操作順序・出力（診断行を除く）」が同一 ----
+def _outcome(page, tag, patch=None):
+    """patch: 実行中だけ適用する診断側の破壊（コンテキストマネージャ）。"""
+    ctx = patch() if patch else _ctx_apr.nullcontext()
+    with ctx:
+        res, out, sl, d, cl = _run_capture(page, tag)
+    non_diag = [ln for ln in out.split("\n") if "診断" not in ln and "（診断" not in ln and ln.strip()]
+    return res, list(page.timeline), non_diag, cl
+
+
+class _HostileObj:
+    """属性へのアクセスがすべて例外になるイベントオブジェクト（Firefoxで未対応・想定外の形のイベント）。"""
+    def __getattr__(self, name):
+        raise RuntimeError(f"unsupported attribute {name}")
+
+
+@_ctx_apr.contextmanager
+def _patch_snapshot_raises():
+    real = capture_apr._Diagnostics.snapshot
+    capture_apr._Diagnostics.snapshot = lambda *a, **k: (_ for _ in ()).throw(RuntimeError("snapshot broken"))
+    try:
+        yield
+    finally:
+        capture_apr._Diagnostics.snapshot = real
+
+
+@_ctx_apr.contextmanager
+def _patch_format_raises():
+    real = capture_apr._Diagnostics.format_lines
+    capture_apr._Diagnostics.format_lines = staticmethod(lambda *a, **k: (_ for _ in ()).throw(RuntimeError("format broken")))
+    try:
+        yield
+    finally:
+        capture_apr._Diagnostics.format_lines = real
+
+
+@_ctx_apr.contextmanager
+def _patch_caps_broken():
+    real = capture_apr.DIAG_CAPS
+    capture_apr.DIAG_CAPS = None          # DIAG_CAPS.get(...) が例外になる（記録処理の内部エラー）
+    try:
+        yield
+    finally:
+        capture_apr.DIAG_CAPS = real
+
+
+def _scenarios():
+    """(名前, page生成関数(script), パッチ) の一覧。すべて診断側だけを壊す。"""
+    hostile_events = [("response", _HostileObj()), ("requestfailed", _HostileObj()), ("console", _HostileObj()),
+                      ("pageerror", _HostileObj()), ("response", _Obj(url="https://yields.llama.fi/pools", status=503,
+                                                                     headers=_HostileObj()))]
+    return [
+        ("page.onが全イベントで例外（リスナー登録不可）", lambda sc: _FakePage(sc, on_raises=True), None),
+        ("イベントオブジェクトの属性アクセスが例外", lambda sc: _FakePage([(b, hostile_events) for b, _e in sc]), None),
+        ("wait_for_timeout（flush）が例外", None, "flush"),
+        ("snapshot()が例外", lambda sc: _FakePage(sc), _patch_snapshot_raises),
+        ("format_lines()が例外", lambda sc: _FakePage(sc), _patch_format_raises),
+        ("記録上限の設定が壊れている（_addの内部エラー）", lambda sc: _FakePage(sc), _patch_caps_broken),
+    ]
+
+
+class _NoFlushPage(_FakePage):
+    def wait_for_timeout(self, ms):
+        raise RuntimeError("wait_for_timeout unsupported")
+
+
+_diag_scripts = {
+    "1回目で成功": [(_OK_BODY, [])],
+    "標準3回目で成功": [(_FAIL_BODY, []), (_FAIL_BODY, []), (_OK_BODY, [])],
+    "全5回失敗": [(_FAIL_BODY, [])] * 5,
+}
+_broken = []
+for _sc_name, _sc_script in _diag_scripts.items():
+    _base_page = _FakePage(_sc_script)
+    _base = _outcome(_base_page, f"eq_base_{abs(hash(_sc_name)) % 10000}")
+    for _name, _mk, _patch in _scenarios():
+        _pg2 = _NoFlushPage(_sc_script) if _patch == "flush" else _mk(_sc_script)
+        _got = _outcome(_pg2, f"eq_{abs(hash((_sc_name, _name))) % 100000}", None if _patch == "flush" else _patch)
+        if _got != _base:
+            _broken.append((_sc_name, _name, _got[0], _base[0], _got[1] == _base[1], _got[2] == _base[2]))
+check("診断が壊れていても（リスナー登録不可・イベント属性が例外・flush例外・snapshot/format例外・記録処理の内部エラー）、"
+      "撮影の結果・操作順序・診断以外の出力は、診断が正常な実行と完全に同一（撮影と後続が止まらない）。3つの進行×6つの故障",
+      not _broken, str(_broken))
+
+# ---- main(): 診断の保存先の決定が失敗しても撮影は続行し、失敗時も終了コード0 ----
+_real_diag_for = capture_apr._diag_dir_for
+_main_dir3 = Path(SCRATCH) / "apr_main_test3" / "outputs" / "2026-09-30"
+_main_dir3.mkdir(parents=True, exist_ok=True)
+capture_apr._diag_dir_for = lambda out: (_ for _ in ()).throw(OSError("path resolution failed"))
+_real_capture = capture_apr.capture
+_seen = {}
+def _fake_capture_none(tmp, diag_dir=None):
+    _seen["diag_dir"] = diag_dir
+    Path(tmp).write_bytes(b"PNG")
+    return False, "TODAY件数: 0/6", 5
+capture_apr.capture = _fake_capture_none
+_buf = _io_apr.StringIO()
+try:
+    with _ctx_apr.redirect_stdout(_buf):
+        _rc3 = capture_apr.main([str(_main_dir3 / "apr_screenshot.jpg")])
+finally:
+    capture_apr._diag_dir_for, capture_apr.capture = _real_diag_for, _real_capture
+check("main(): 診断の保存先を決定できなくても（例外）診断を無効化して撮影を続行し、全試行失敗でも終了コード0・状態ファイルを記録する",
+      _rc3 == 0 and _seen["diag_dir"] is None
+      and json.loads((_main_dir3 / "apr_capture_status.json").read_text(encoding="utf-8"))["attempts"] == 5
+      and "診断ファイルなしで続行します" in _buf.getvalue() and "診断（失敗画像・診断JSON）:" not in _buf.getvalue(), _buf.getvalue()[-300:])
+
+print("=== verify_post: C24 機関名の同義語照合（C23と同じ案C。v1.84・オーナー承認。案Bは不採用） ===")
+
+def _c24(flow, points="・某社が提携を発表（Reuters）", headline=None):
+    au = verify_post.Audit()
+    verify_post.check_c24(au, flow, points, headline)
+    return au.checks[0]
+
+# オーナー指定の同義語を、C23と同じ全組合せで検証（フローの略称×本文の表記）
+_bad = []
+for _grp, _terms in _OWNER_ALIASES.items():
+    for _abbr in _SUMMARY_ABBRS[_grp]:
+        for _term in _terms:
+            _r = _c24(f"・{_abbr}の動向が意識された可能性があります。", points=f"・{_term}が発表しました（Reuters）")
+            if _r["result"] != "PASS":
+                _bad.append((_abbr, _term, _r["detail"][:60]))
+check("C24同義語: オーナー指定の同義語（Fed・FRB・FOMC・連邦準備制度・米連邦準備理事会／SEC・証券取引委員会／CFTC・"
+      "商品先物取引委員会／BOJ・日銀・日本銀行／ECB・欧州中央銀行／BOE・英中銀・イングランド銀行）が"
+      "同じ機関の表記として本文で確認済みになる（フローの略称×本文の表記の全組合せ）", not _bad, str(_bad))
+
+_bad = []
+for _g1 in _groups:
+    for _g2 in _groups:
+        if _g1 == _g2:
+            continue
+        for _abbr in _SUMMARY_ABBRS[_g1]:
+            for _term in _OWNER_ALIASES[_g2]:
+                _r = _c24(f"・{_abbr}の動向が意識された可能性があります。", points=f"・{_term}が発表しました（Reuters）")
+                if _r["result"] != "FAIL":
+                    _bad.append((_abbr, _term))
+check("C24同義語: 別の機関の表記では確認済みにならない（全組合せ）", not _bad, str(_bad[:5]))
+
+for _abbr in ("Fed", "FRB", "SEC", "CFTC", "BOJ", "ECB", "BOE", "FOMC"):
+    _r = _c24(f"・{_abbr}の動向が意識された可能性があります。")
+    check(f"C24同義語: 案B不採用の回帰確認——本文に同じ機関の記述が無ければ{_abbr}は従来どおりFAIL（無条件の許可リストではない）",
+          _r["result"] == "FAIL" and _abbr in _r["detail"], str(_r))
+
+_bad = [(a, t) for a, t in _ENG_FULL.items()
+        if _c24(f"・{a}の動向が意識された可能性があります。", points=f"・{t}が声明を発表（Reuters）")["result"] != "PASS"]
+check("C24同義語: 英語の正式名称（Federal Reserve等）・大文字小文字の表記ゆれ（BoJ・BoE・FED）・連邦公開市場委員会も本文側の同義語として確認済みにできる",
+      not _bad and _c24("・BOEの動向が意識されました。", points="・BoEが据え置き（Reuters）")["result"] == "PASS"
+      and _c24("・Fedの動向が意識されました。", points="・FEDが示唆（Reuters）")["result"] == "PASS"
+      and _c24("・FOMCの動向が意識されました。", points="・連邦公開市場委員会が声明を発表（Reuters）")["result"] == "PASS", str(_bad))
+check("C24同義語: 本文の小文字（sec＝秒・fed＝動詞）はSEC・BOEの根拠にならない（全面的なIGNORECASEにしていない）",
+      _c24("・SECの動向が意識されました。", points="・fed と sec と frb の小文字")["result"] == "FAIL")
+
+check("C24同義語: 同義語の確認先はヘッドラインも含む（ヘッドラインのみに日本語表記がある日）",
+      _c24("・Fedの動向が意識された可能性があります。", points=generate_post.FIXED_POINTS,
+           headline="米連邦準備制度理事会が利上げに動く可能性が報じられました。")["result"] == "PASS")
+check("C24同義語: 継続監視材料（reusable_for_summary）は照合先に含めない（従来どおり。C24はreusableでは救済されない）",
+      _c24("・SECの動向が意識された可能性があります。", points=generate_post.FIXED_POINTS, headline=generate_post.FIXED_HEADLINE)["result"] == "FAIL")
+
+_r = _c24("・SECとCFTCの動向が意識された可能性があります。", points="・米証券取引委員会が規則案を公表（Reuters）")
+check("C24同義語: 混在ケース——SECは同義語で確認済み・CFTCは根拠なしなら、CFTCだけがFAIL詳細に列挙される",
+      _r["result"] == "FAIL" and "CFTC" in _r["detail"] and "SEC'" not in _r["detail"].replace("CFTC'", ""), str(_r))
+_r = _c24("・SECの動向と米PCEインフレ指標が意識された可能性があります。", points="・某社が提携を発表（Reuters）")
+check("C24同義語: 8/26型（本文に無いSECとPCEをフローが持ち出す）はSEC・PCEともFAIL（真の新規持ち出しの検知を維持）",
+      _r["result"] == "FAIL" and "SEC" in _r["detail"] and "PCE" in _r["detail"], str(_r))
+_r = _c24("・Polygonが脆弱性を開示したとの報道が伝わっています。", points="・FRBが声明を発表（Reuters）")
+check("C24同義語: 同義語グループに無い固有名詞（Polygon等。8/29型）は従来どおり同義語で救済されずFAIL",
+      _r["result"] == "FAIL" and "Polygon" in _r["detail"], str(_r))
+check("C24: 従来の判定（候補の文字列そのものが本文に部分一致）は維持される（既存より厳しくならない）",
+      _c24("・Bitmineの動向が意識されました。", points="・Bitmineが発表（Bloomberg）")["result"] == "PASS"
+      and _c24("・Bitmineの動向が意識されました。")["result"] == "FAIL")
+
+# run_all()経由の配線確認: フローのFed（本文は日本語表記）でC24がPASS・総括のFedと合わせてC23もPASS
+_b_c24alias = json.loads(json.dumps(b_ok))
+_b_c24alias["sections"]["part1_points"] = "・米連邦準備制度理事会が声明を発表しました（Reuters、2026-08-17）"
+_b_c24alias["sections"]["part1_headline"] = generate_post.FIXED_HEADLINE
+_b_c24alias["sections"]["part2_flow"] = "・【出来事・ニュース】Fedが声明を発表 → 【暗号通貨価格】BTCは同時期に軟調（因果は未確認）。"
+_b_c24alias["sections"]["part2_summary"] = "地合いは不透明です。今後はFedの動向を確認していく必要があります。"
+_au_c24alias = verify_post.run_all(_b_c24alias, DAILY_DATA)
+_r24 = next(x for x in _au_c24alias.checks if x["id"] == "C24_flow_no_unadopted_material")
+_r23 = next(x for x in _au_c24alias.checks if x["id"] == "C23_summary_no_new_entities")
+check("run_all(): フローのFedが本文の日本語表記（米連邦準備制度理事会）で確認済みになりC24 PASS（総括のC23もPASS。v1.84）",
+      _r24["result"] == "PASS" and _r23["result"] == "PASS", f"{_r24} {_r23}")
+_b_c24alias2 = json.loads(json.dumps(_b_c24alias))
+_b_c24alias2["sections"]["part1_points"] = "・某社が提携を発表しました（Reuters、2026-08-17）"
+_au_c24alias2 = verify_post.run_all(_b_c24alias2, DAILY_DATA)
+_r24b = next(x for x in _au_c24alias2.checks if x["id"] == "C24_flow_no_unadopted_material")
+check("run_all(): 本文にFRB系の記述が無ければフローのFedは従来どおりC24 FAIL（v1.84）", _r24b["result"] == "FAIL", str(_r24b))
+
 print()
 print(f"PASS: {len(PASS)}  FAIL: {len(FAIL)}")
 if FAIL:

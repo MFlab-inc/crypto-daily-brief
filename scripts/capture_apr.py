@@ -155,8 +155,11 @@ class _Diagnostics:
         self.snapshots: list[dict] = []
 
     def start_attempt(self, n: int) -> None:
-        self.attempt = n
-        self.t0 = time.monotonic()
+        try:
+            self.attempt = n
+            self.t0 = time.monotonic()
+        except Exception:  # noqa: BLE001  # 診断の失敗で撮影を妨げない
+            pass
 
     def flush(self, page) -> None:
         """待機（time.sleep）中に届いたブラウザのイベントを、その試行のうちに受け取る。
@@ -168,15 +171,18 @@ class _Diagnostics:
             pass
 
     def _add(self, kind: str, **kw) -> None:
-        key = (self.attempt, kind)
-        n = self.counts.get(key, 0)
-        if n >= DIAG_CAPS.get(kind, DIAG_DEFAULT_CAP):
-            self.dropped[key] = self.dropped.get(key, 0) + 1
-            return
-        self.counts[key] = n + 1
-        # seen_s: 通知を受けた時点の試行開始からの経過秒（目安。time.sleep中のイベントは
-        # 次のAPI呼び出しまで通知されないため、実際の到着時刻より遅れることがある）
-        self.events.append({"attempt": self.attempt, "seen_s": round(time.monotonic() - self.t0, 1), "kind": kind, **kw})
+        try:
+            key = (self.attempt, kind)
+            n = self.counts.get(key, 0)
+            if n >= DIAG_CAPS.get(kind, DIAG_DEFAULT_CAP):
+                self.dropped[key] = self.dropped.get(key, 0) + 1
+                return
+            self.counts[key] = n + 1
+            # seen_s: 通知を受けた時点の試行開始からの経過秒（目安。time.sleep中のイベントは
+            # 次のAPI呼び出しまで通知されないため、実際の到着時刻より遅れることがある）
+            self.events.append({"attempt": self.attempt, "seen_s": round(time.monotonic() - self.t0, 1), "kind": kind, **kw})
+        except Exception:  # noqa: BLE001  # 診断の失敗で撮影を妨げない
+            pass
 
     def attach(self, page) -> None:
         for name, handler in (("console", self._on_console), ("pageerror", self._on_pageerror),
@@ -224,7 +230,10 @@ class _Diagnostics:
             pass
 
     def note(self, text: str) -> None:
-        self._add("note", text=text[:300])
+        try:
+            self._add("note", text=str(text)[:300])
+        except Exception:  # noqa: BLE001  # 診断の失敗で撮影を妨げない
+            pass
 
     def _attempt_events(self, n: int) -> list[dict]:
         # 試行1には最初のページ読み込み（attempt 0）の初回取得も含める
@@ -427,7 +436,12 @@ def main(argv: "list[str] | None" = None) -> int:
     argv = sys.argv[1:] if argv is None else argv
     out = argv[0] if argv else "apr_screenshot.jpg"
     tmp = str(Path(out).with_suffix(".full.png"))
-    diag_dir = _diag_dir_for(out)
+    try:
+        diag_dir = _diag_dir_for(out)
+    except Exception as e:  # noqa: BLE001
+        # 診断の保存先を決められなくても撮影自体は続ける（診断のみ無効化）
+        print(f"（診断の保存先を決定できません。診断ファイルなしで続行します: {type(e).__name__}: {e}）")
+        diag_dir = None
     ok, detail, attempts = capture(tmp, diag_dir)
     if not ok:
         Path(tmp).unlink(missing_ok=True)
@@ -435,7 +449,8 @@ def main(argv: "list[str] | None" = None) -> int:
         # v1.68（オーナー承認・方針(b)）: 画像なしで正常終了する。数値データ・
         # インフォグラフィックとは無関係な補助画像1点の欠落でフェーズ1全体を
         # フェイルクローズさせない。
-        print(f"診断（失敗画像・診断JSON）: {diag_dir}（アーティファクトにのみ含まれ、コミットされない）")
+        if diag_dir is not None:
+            print(f"診断（失敗画像・診断JSON）: {diag_dir}（アーティファクトにのみ含まれ、コミットされない）")
         print("APR画面の読み込みが完了しなかったため、画像なしで終了します（フェイルクローズではなく正常終了）。")
         return 0
     crop_apr_cards(tmp, out)
