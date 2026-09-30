@@ -90,6 +90,25 @@ def _render_bullets(items: list[str]) -> str:
     return "\n".join(f"・{p}" for p in items)
 
 
+_FLOW_NUMBER_PREFIXES = ("①", "②", "③")
+
+
+def _render_flow(items: list[str]) -> str:
+    """【市場のフロー】の描画（v1.82・オーナー承認）。統合運用基準§3.3は複数の
+    仮説連鎖を①②③で区切ると定めているため、①②③で始まる連鎖には箇条書き記号
+    「・」を付けない（付けると「・①…」になり区切りが二重になる）。材料が無い日の
+    定型文1件のみ（generate_post.FIXED_FLOW）は、L1/L2の縮退時と同じく
+    箇条書き記号なしの定型文そのものとして描画する。
+    """
+    if len(items) == 1 and str(items[0]).strip() == FIXED_FLOW:
+        return FIXED_FLOW
+    lines = []
+    for item in items:
+        text = str(item)
+        lines.append(text if text.lstrip().startswith(_FLOW_NUMBER_PREFIXES) else f"・{text}")
+    return "\n".join(lines)
+
+
 def render_markdown(sections: dict[str, Any], level: str) -> tuple[str, str]:
     """sectionsからpart1_md・part2_mdを組み立てる（compose()から抽出。v1.76）。
 
@@ -167,7 +186,7 @@ def compose(daily_data: dict, gen: dict[str, Any]) -> dict[str, Any]:
         part1_points_text = generate_post.FIXED_POINTS
 
     if b_ok:
-        part2_flow_text = _render_bullets(call_b["data"]["part2_flow"])
+        part2_flow_text = _render_flow(call_b["data"]["part2_flow"])
         part2_summary = call_b["data"]["part2_summary"]
     else:
         part2_flow_text = FIXED_FLOW
