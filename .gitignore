@@ -1,4 +1,4 @@
 __pycache__/
 *.pyc
 # v1.83: APR撮影の診断（失敗画像・診断JSON）。アーティファクト専用でコミットしない。
-apr_diagnostics/
+/apr_diagnostics/

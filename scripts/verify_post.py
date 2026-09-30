@@ -649,13 +649,16 @@ _PROPER_NOUN_ALLOWLIST = {
 # CFTC・BOJ・ECB・BOE）のみ（日銀・日本銀行など日本語表記はC23の検知対象外）。
 # 英語の正式名称（Federal Reserve等）は照合先側の同義語としてのみ扱う。
 # (2) C24（市場のフロー）には適用していない（別途オーナー判断）。
+# 大文字小文字の表記ゆれ（英語報道で一般的な「BoJ」「BoE」、全大文字の「FED」）は、
+# 全面的な大文字小文字の無視（本文の「sec」＝秒や動詞の「fed」がSEC・Fedの根拠に
+# なる偽PASSを生む）ではなく、明示的な同義語として登録する（独立レビューの指摘。v1.83）。
 _INSTITUTION_ALIAS_GROUPS = (
-    ("Fed", "FRB", "FOMC", "Federal Reserve", "連邦準備", "連邦公開市場委員会"),
+    ("Fed", "FED", "FRB", "FOMC", "Federal Reserve", "連邦準備", "連邦公開市場委員会"),
     ("SEC", "Securities and Exchange Commission", "証券取引委員会"),
     ("CFTC", "Commodity Futures Trading Commission", "商品先物取引委員会"),
-    ("BOJ", "Bank of Japan", "日銀", "日本銀行"),
+    ("BOJ", "BoJ", "Bank of Japan", "日銀", "日本銀行"),
     ("ECB", "European Central Bank", "欧州中央銀行"),
-    ("BOE", "Bank of England", "英中銀", "イングランド銀行"),
+    ("BOE", "BoE", "Bank of England", "英中銀", "イングランド銀行"),
 )
 # 総括の固有名詞候補（ASCIIの略称。空白を含まない英字表記）から同義語の集合を引く
 _INSTITUTION_ALIAS_INDEX: dict[str, tuple[str, ...]] = {

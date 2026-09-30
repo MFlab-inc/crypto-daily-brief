@@ -4037,8 +4037,36 @@ check("C23同義語: 8/26型（本文に無いSECとPCEを総括が持ち出す�
 _r = _c23("FRBの動向を確認します。", points="・FedExが提携を発表（Reuters）")
 check("C23同義語: 英字の同義語はASCII英数字に挟まれない場合のみ一致（FedEx内のFedはFRBの根拠にならない）",
       _r["result"] == "FAIL", str(_r))
-check("C23同義語: 英語の正式名称（Federal Reserve）も本文側の同義語として確認済みにできる",
-      _c23("Fedの動向を確認します。", points="・Federal Reserveが声明を発表（Reuters）")["result"] == "PASS")
+# 注意: 総括の略称が本文の英語正式名称の部分文字列になる組（Fed⊂Federal）は、従来の部分一致だけでも
+# PASSするため同義語の検証にならない。部分文字列にならない組で検証する（独立レビューの指摘: 旧テストは空虚）。
+_ENG_FULL = {"FRB": "Federal Reserve", "SEC": "Securities and Exchange Commission",
+             "CFTC": "Commodity Futures Trading Commission", "BOJ": "Bank of Japan",
+             "ECB": "European Central Bank", "BOE": "Bank of England", "FOMC": "Federal Reserve"}
+_bad = [(a, t) for a, t in _ENG_FULL.items()
+        if _c23(f"{a}の動向を確認します。", points=f"・{t}が声明を発表（Reuters）")["result"] != "PASS"]
+check("C23同義語: 英語の正式名称（Federal Reserve・Securities and Exchange Commission・Bank of Japan等）も"
+      "本文側の同義語として確認済みにできる（略称が正式名称の部分文字列にならない組で検証）", not _bad, str(_bad))
+check("C23同義語: 「連邦公開市場委員会」（FOMCの日本語表記）で総括のFOMCが確認済みになる",
+      _c23("FOMCの動向を確認します。", points="・連邦公開市場委員会が声明を発表（Reuters）")["result"] == "PASS")
+_bad = [(a, t) for a, t in (("BOE", "BoE"), ("BOJ", "BoJ"), ("Fed", "FED"), ("FED", "FRB"), ("BoE", "BOE"), ("BoJ", "日銀"))
+        if _c23(f"{a}の動向を確認します。", points=f"・{t}が発表（Reuters）")["result"] != "PASS"]
+check("C23同義語: 英語報道で一般的な大文字小文字の表記ゆれ（BoJ・BoE・FED）も同義語として扱う（独立レビューの指摘への対処）",
+      not _bad, str(_bad))
+_r = _c23("BOEの動向を確認します。", points="・sec 秒あたり fed された（Reuters）")
+_r2 = _c23("SECの動向を確認します。", points="・fed と sec と frb の小文字")
+check("C23同義語: 本文の小文字（sec＝秒・fed＝動詞・frb）はSEC・BOE等の根拠にならない（全面的なIGNORECASEにしていない理由の回帰確認）",
+      _r["result"] == "FAIL" and _r2["result"] == "FAIL", f"{_r} {_r2}")
+_r = _c23("FRBXの動向を確認します。", points="・FRBが声明を発表（Reuters）")
+check("C23同義語: 総括側の候補が別語（FRBX）なら同義語の対象外（候補のキーは完全一致・境界を守る）",
+      _r["result"] == "FAIL" and "FRBX" in _r["detail"], str(_r))
+_r = _c23("SECとCFTCの動向を確認します。", points="・米証券取引委員会が規則案を公表（Reuters）")
+check("C23同義語: 混在ケース——SECは同義語で確認済み・CFTCは根拠なしなら、CFTCだけがFAIL詳細に列挙される",
+      _r["result"] == "FAIL" and "CFTC" in _r["detail"] and "SEC'" not in _r["detail"].replace("CFTC'", ""), str(_r))
+_r = _c23("FRBの動向を確認します。", points="・FRBXが提携（Reuters）")
+check("C23同義語: 英字の同義語はASCII英数字に挟まれる場合は一致しない（FRBXはFRBの根拠にならないが、候補FRBの従来の部分一致は成立）",
+      _r["result"] == "PASS" and verify_post._alias_in_text("FRB", "FRBX") is False
+      and verify_post._alias_in_text("FRB", "x FRB。") is True and verify_post._alias_in_text("FRB", "9FRB") is False)
+
 
 check("C23同義語: ヘッドラインの別表記（連邦準備制度理事会）でも総括のFedが確認済みになる（9/29型の仮説(a)+(b)）",
       _c23("Fedの動向を確認します。", headline="米連邦準備制度理事会（FRB）が利上げに動く可能性が報じられました。")["result"] == "PASS")
@@ -4078,10 +4106,11 @@ _c23_alias2 = next(x for x in _au_alias2.checks if x["id"] == "C23_summary_no_ne
 check("run_all(): 本文にFRB系の記述が無ければ総括のFedは従来どおりC23 FAIL（v1.83）",
       _c23_alias2["result"] == "FAIL", str(_c23_alias2))
 
-print("=== capture_apr.py: 失敗時の診断と追加試行（v1.83・オーナー承認。9/29のAPR撮影失敗への対処） ===")
+print("=== capture_apr.py: 失敗時の診断と追加試行（v1.83・オーナー承認。9/29のAPR撮影失敗への対処。独立レビューの指摘を反映） ===")
 
 import io as _io_apr
 import contextlib as _ctx_apr
+import re as _re_apr
 import subprocess as _sp_apr
 import capture_apr  # noqa: E402
 import playwright.sync_api as _pw_sync_api  # noqa: E402
@@ -4090,24 +4119,43 @@ _OK_BODY = "ETH / USDC\n" + "\n".join("Card TODAY" for _ in range(6))
 _FAIL_BODY = "ETH / USDC V3\nError: HTTP 503\nDefiLlama APIへの接続に失敗しました。"
 
 
-class _FakeLocator:
-    def click(self, timeout=None):
-        pass
+class _Obj:
+    def __init__(self, **kw):
+        self.__dict__.update(kw)
+
+
+class _Boom:
+    def __str__(self):
+        return "boom"
 
 
 class _FakePage:
-    """Playwrightのpageの最小限のフェイク。screenshot/inner_textを呼ぶたびに次のスクリプト
-    （body・その直前に発火させるイベント）を消費する。goto_failuresで再読み込みの失敗も再現できる。"""
+    """Playwright同期APIのpageのフェイク。実際のAPIと同様に、ブラウザのイベントは「APIを呼んだ時」に
+    まとめて通知する（time.sleep中には通知されない）。screenshot/inner_textを呼ぶたびに次のスクリプト
+    （body・その時点で届いているイベント）を消費する。"""
 
-    def __init__(self, script, goto_failures=(), on_raises=False, screenshot_raises_at=None):
+    def __init__(self, script, initial_events=(), goto_failures=(), on_raises=False,
+                 screenshot_raises_at=None, timeline=None):
         self.script = list(script)
+        self.initial_events = list(initial_events)
         self.handlers = {}
+        self.pending = []           # 届いているが、まだ通知されていないイベント
         self.goto_calls = []
         self.goto_failures = set(goto_failures)
         self.on_raises = on_raises
         self.shots = 0
+        self.clicks = 0
+        self.flushes = 0
+        self.closed = 0
         self.screenshot_raises_at = screenshot_raises_at
+        self.timeline = timeline if timeline is not None else []
         self._current = None
+
+    def _dispatch(self):
+        ev, self.pending = self.pending, []
+        for name, obj in ev:
+            if name in self.handlers:
+                self.handlers[name](obj)
 
     def on(self, name, handler):
         if self.on_raises:
@@ -4115,14 +4163,31 @@ class _FakePage:
         self.handlers[name] = handler
 
     def goto(self, url, **kw):
+        self.timeline.append("goto")
         self.goto_calls.append(url)
         if len(self.goto_calls) in self.goto_failures:
             raise RuntimeError("net::ERR_TIMED_OUT")
+        if len(self.goto_calls) == 1:
+            self.pending += self.initial_events
+        self._dispatch()
 
     def locator(self, sel):
-        return _FakeLocator()
+        page = self
+
+        class _L:
+            def click(self, timeout=None):
+                page.timeline.append("click")
+                page.clicks += 1
+                page._dispatch()
+
+        return _L()
+
+    def wait_for_timeout(self, ms):
+        self.flushes += 1
+        self._dispatch()
 
     def screenshot(self, path):
+        self.timeline.append("shot")
         self.shots += 1
         if self.screenshot_raises_at == self.shots:
             raise RuntimeError("browser crashed")
@@ -4131,28 +4196,24 @@ class _FakePage:
 
     def inner_text(self, sel):
         body, events = self._current
-        for name, obj in events:
-            if name in self.handlers:
-                self.handlers[name](obj)
+        self.pending += events
+        self._dispatch()
         return body
 
 
-class _Obj:
-    def __init__(self, **kw):
-        self.__dict__.update(kw)
-
-
-def _run_capture(page, tag, diag=True):
-    """フェイクplaywrightでcapture_apr.capture()を実行し、(戻り値, 出力, sleep記録, diagディレクトリ)を返す。"""
+def _run_capture(page, tag, diag=True, on_sleep=None):
+    """フェイクplaywrightでcapture_apr.capture()を実行し、(戻り値, 出力, sleep記録, diagディレクトリ, browser)を返す。
+    on_sleep(sec)は待機のたびに呼ばれる（待機中にブラウザへイベントが届く状況を再現する）。"""
     sleeps = []
     real_pw, real_sleep = _pw_sync_api.sync_playwright, capture_apr.time.sleep
+    closed = {"n": 0}
 
     class _Browser:
         def new_page(self, viewport=None):
             return page
 
         def close(self):
-            pass
+            closed["n"] += 1
 
     class _PW:
         firefox = _Obj(launch=lambda headless=True: _Browser())
@@ -4164,8 +4225,14 @@ def _run_capture(page, tag, diag=True):
         def __exit__(self, *a):
             return False
 
+    def _sleep(sec):
+        sleeps.append(sec)
+        page.timeline.append(("sleep", sec))
+        if on_sleep:
+            on_sleep(sec)
+
     _pw_sync_api.sync_playwright = lambda: _CM()
-    capture_apr.time.sleep = lambda sec: sleeps.append(sec)
+    capture_apr.time.sleep = _sleep
     buf = _io_apr.StringIO()
     d = Path(SCRATCH) / f"apr_diag_{tag}"
     try:
@@ -4175,98 +4242,166 @@ def _run_capture(page, tag, diag=True):
         res = e
     finally:
         _pw_sync_api.sync_playwright, capture_apr.time.sleep = real_pw, real_sleep
-    return res, buf.getvalue(), sleeps, d
+    return res, buf.getvalue(), sleeps, d, closed["n"]
+
+
+def _snaps(d):
+    return json.loads((d / "apr_diagnostics.json").read_text(encoding="utf-8"))["snapshots"]
 
 
 check("capture_apr: オーナー承認の定数（標準3試行・追加2試行・追加前の待機60秒・Refresh後8/12/16秒）",
       capture_apr.MAX_RETRY == 3 and capture_apr.EXTRA_ATTEMPTS == 2 and capture_apr.EXTRA_COOLDOWN == 60
       and capture_apr.WAIT_AFTER_REFRESH_SCHEDULE == (8, 12, 16))
 
-# 1) 1回目で成功: 追加待機なし・診断ファイルなし・goto1回
+# 1) 1回目で成功
 _pg = _FakePage([(_OK_BODY, [])])
-_res, _out, _sl, _d = _run_capture(_pg, "ok1")
-check("capture: 1回目で成功なら(True,'',1)を返し、60秒待機も再読み込みも診断ファイルも作らない",
-      _res == (True, "", 1) and 60 not in _sl and len(_pg.goto_calls) == 1 and not _d.exists(), f"{_res} {_sl} {_pg.goto_calls}")
+_res, _out, _sl, _d, _cl = _run_capture(_pg, "ok1")
+check("capture: 1回目で成功なら(True,'',1)・60秒待機なし・再読み込みなし・診断ファイルなし・browser.closeが1回",
+      _res == (True, "", 1) and 60 not in _sl and len(_pg.goto_calls) == 1 and not _d.exists() and _cl == 1
+      and _pg.clicks == 1, f"{_res} {_sl} {_pg.goto_calls} close={_cl}")
 
-# 2) 標準の2回失敗→3回目で成功: 診断が失敗2回分だけ残る・60秒待機なし
+# 2) 標準の2回失敗→3回目で成功
 _pg = _FakePage([(_FAIL_BODY, []), (_FAIL_BODY, []), (_OK_BODY, [])])
-_res, _out, _sl, _d = _run_capture(_pg, "ok3")
-check("capture: 標準の3回目で成功なら(True,'',3)・60秒待機なし・再読み込みなし",
-      _res == (True, "", 3) and 60 not in _sl and len(_pg.goto_calls) == 1, f"{_res} {_sl}")
-check("capture: 失敗した試行の画像と診断JSONは診断ディレクトリへ保存される（成功した試行の画像は保存しない）",
+_res, _out, _sl, _d, _cl = _run_capture(_pg, "ok3")
+check("capture: 標準の3回目で成功なら(True,'',3)・60秒待機なし・再読み込みなし・Refreshクリック3回・browser.closeが1回",
+      _res == (True, "", 3) and 60 not in _sl and len(_pg.goto_calls) == 1 and _pg.clicks == 3 and _cl == 1, f"{_res} {_sl}")
+check("capture: 失敗した試行の画像と診断JSONだけが診断ディレクトリへ保存される（成功した試行の画像は保存しない）",
       sorted(x.name for x in _d.glob("*")) == ["apr_diagnostics.json", "apr_failed_attempt1.png", "apr_failed_attempt2.png"],
       str(sorted(x.name for x in _d.glob("*"))))
 
-# 3) 標準3回失敗→追加1回目で成功: 60秒待機・再読み込み1回追加
+# 3) 標準3回失敗→追加1回目で成功
 _pg = _FakePage([(_FAIL_BODY, [])] * 3 + [(_OK_BODY, [])])
-_res, _out, _sl, _d = _run_capture(_pg, "extra1")
-check("capture: 標準3回失敗→追加1回目で成功なら(True,'',4)・60秒待機が1回・再読み込み(goto)が追加で1回",
-      _res == (True, "", 4) and _sl.count(60) == 1 and len(_pg.goto_calls) == 2, f"{_res} {_sl} {_pg.goto_calls}")
+_res, _out, _sl, _d, _cl = _run_capture(_pg, "extra1")
+check("capture: 標準3回失敗→追加1回目で成功なら(True,'',4)・60秒待機が1回・再読み込み(goto)が追加で1回・browser.closeが1回",
+      _res == (True, "", 4) and _sl.count(60) == 1 and len(_pg.goto_calls) == 2 and _cl == 1, f"{_res} {_sl} {_pg.goto_calls}")
 check("capture: 追加試行の出力に「追加試行 1/2」と「4回目の試行で成功」が出る",
       "[追加試行 1/2] 60秒空けてページを再読み込み" in _out and "4回目の試行で成功" in _out, _out[-400:])
 
-# 4) 全5回失敗: 60秒待機2回・診断5回分・(False, 詳細, 5)
+# 4) 全5回失敗: 待機・操作の順序（60秒待機→再読み込み→3秒→Refreshクリック→16秒待機→撮影）を厳密に検証
 _pg = _FakePage([(_FAIL_BODY, [])] * 5)
-_res, _out, _sl, _d = _run_capture(_pg, "allfail")
-check("capture: 標準3＋追加2の全5回失敗なら(False, 判定内訳, 5)・60秒待機が2回・再読み込みが2回",
-      isinstance(_res, tuple) and _res[0] is False and _res[2] == 5 and _sl.count(60) == 2 and len(_pg.goto_calls) == 3
-      and "TODAY件数: 0/6" in _res[1], f"{_res} {_sl}")
+_res, _out, _sl, _d, _cl = _run_capture(_pg, "allfail")
+check("capture: 標準3＋追加2の全5回失敗なら(False, 判定内訳, 5)・browser.closeが1回・Refreshクリック5回",
+      isinstance(_res, tuple) and _res[0] is False and _res[2] == 5 and "TODAY件数: 0/6" in _res[1] and _cl == 1 and _pg.clicks == 5, f"{_res}")
+_expected = ["goto", ("sleep", 3), "click", ("sleep", 8), "shot", ("sleep", 3),
+             "click", ("sleep", 12), "shot", ("sleep", 3),
+             "click", ("sleep", 16), "shot",
+             ("sleep", 60), "goto", ("sleep", 3), "click", ("sleep", 16), "shot",
+             ("sleep", 60), "goto", ("sleep", 3), "click", ("sleep", 16), "shot"]
+check("capture: 操作の順序と待機秒が承認内容どおり（初回読込→3秒→[Refresh→8/12/16秒→撮影→標準間3秒]×3→"
+      "[60秒→再読み込み→3秒→Refresh→16秒→撮影]×2）", _pg.timeline == _expected, str(_pg.timeline))
 check("capture: 全失敗時は失敗画像5枚と診断JSON（スナップショット5件）を診断ディレクトリへ保存する",
-      sorted(x.name for x in _d.glob("*.png")) == [f"apr_failed_attempt{i}.png" for i in range(1, 6)]
-      and len(json.loads((_d / "apr_diagnostics.json").read_text(encoding="utf-8"))["snapshots"]) == 5)
+      sorted(x.name for x in _d.glob("*.png")) == [f"apr_failed_attempt{i}.png" for i in range(1, 6)] and len(_snaps(_d)) == 5)
+check("capture: 失敗画像・診断JSONは撮影画像の保存先（outputs/に相当するディレクトリ）へ漏れない（コミット禁止の不変条件）",
+      not list(Path(SCRATCH).glob("apr_failed_attempt*.png")) and not (Path(SCRATCH) / "apr_diagnostics.json").exists()
+      and _d.parent == Path(SCRATCH) and _d != Path(SCRATCH))
 
-# 5) 診断の内容: 画面の文字・エラー表示・yields.llama.fiの応答（HTTPステータスとヘッダー）・要求失敗・コンソール
+# 5) 診断の内容とログ出力
 _events = [
     ("response", _Obj(url="https://yields.llama.fi/pools?x=1", status=503,
                       headers={"server": "cloudflare", "retry-after": "120", "x-other": "ignored"})),
+    ("response", _Obj(url="https://api.geckoterminal.com/api/v2/networks/base/pools/0xabc", status=429, headers={"retry-after": "30"})),
     ("response", _Obj(url="https://example.com/ignored", status=200, headers={})),
-    ("requestfailed", _Obj(url="https://api.geckoterminal.com/api/v2/networks/base/pools/0xabc", failure="net::ERR_CONNECTION_RESET")),
     ("requestfailed", _Obj(url="https://cdnjs.cloudflare.com/x.js", failure={"errorText": "net::ERR_BLOCKED"})),
+    ("requestfailed", _Obj(url="https://yields.llama.fi/pools", failure="net::ERR_CONNECTION_RESET")),
     ("console", _Obj(type="error", text="Failed to load resource: 503")),
     ("console", _Obj(type="log", text="not recorded")),
-    ("pageerror", _Obj(__str__=lambda self: "boom")),
+    ("pageerror", _Boom()),
 ]
 _pg = _FakePage([(_FAIL_BODY, _events)] + [(_OK_BODY, [])])
-_res, _out, _sl, _d = _run_capture(_pg, "diag")
-_snap = json.loads((_d / "apr_diagnostics.json").read_text(encoding="utf-8"))["snapshots"][0]
+_res, _out, _sl, _d, _cl = _run_capture(_pg, "diag")
+_snap = _snaps(_d)[0]
+_evs = _snap["events"]
 check("診断: 画面の文字（先頭）とエラー表示（Error: HTTP 503…）を記録しログへ出す",
       "Error: HTTP 503" in (_snap["error_banner"] or "") and "ETH / USDC V3" in _snap["body_head"]
-      and "エラー表示: Error: HTTP 503" in _out, str(_snap)[:300])
-check("診断: yields.llama.fiの応答状態（HTTPステータス・関連ヘッダーのみ）を記録する（他ホストの応答・関係ないヘッダーは除く）",
-      _snap["yields_llama_fi"] and _snap["yields_llama_fi"][0]["status"] == 503
+      and "エラー表示: Error: HTTP 503" in _out and "画面の文字(先頭500字): ETH / USDC V3" in _out, str(_snap)[:300])
+check("診断: yields.llama.fiの応答（HTTPステータス・関連ヘッダーのみ）と要求失敗を記録しログへ出す（他ホストの応答・関係ないヘッダーは除く）",
+      [e.get("status") for e in _snap["yields_llama_fi"] if e["kind"] == "response"] == [503]
       and _snap["yields_llama_fi"][0]["headers"] == {"server": "cloudflare", "retry-after": "120"}
-      and "yields.llama.fi の応答: HTTP 503" in _out and "retry-after=120" in _out, _out[-600:])
-check("診断: 要求失敗（str・dict形式の両方）とconsole error・ページ内例外を記録し、consoleのlog等は記録しない",
-      any(e["kind"] == "requestfailed" and "ERR_CONNECTION_RESET" in e["failure"] for e in _snap["events"])
-      and any(e["kind"] == "requestfailed" and "ERR_BLOCKED" in e["failure"] for e in _snap["events"])
-      and any(e["kind"] == "console" and "503" in e["text"] for e in _snap["events"])
-      and not any("not recorded" in json.dumps(e, ensure_ascii=False) for e in _snap["events"]), str(_snap["events"])[:400])
+      and any(e["kind"] == "requestfailed" and "ERR_CONNECTION_RESET" in e["failure"] for e in _snap["yields_llama_fi"])
+      and "yields.llama.fi の応答: HTTP 503" in _out and "retry-after=120" in _out and "要求失敗 net::ERR_CONNECTION_RESET" in _out,
+      _out[-700:])
+check("診断: api.geckoterminal.comの応答も記録し、yields以外の外部要求（geckoterminal・CDNの失敗）はログの「その他の外部要求」へ出す",
+      any(e["kind"] == "response" and e["status"] == 429 for e in _evs) and "その他の外部要求" in _out
+      and "api.geckoterminal.com/api/v2/networks/base/pools/0xabc → HTTP 429" in _out and "ERR_BLOCKED" in _out
+      and not any("example.com" in e.get("url", "") for e in _evs), _out[-700:])
+check("診断: console error・ページ内例外を記録しログの「コンソール・ページ内エラー」へ出し、consoleのlog等は記録しない",
+      any(e["kind"] == "console" and "503" in e["text"] for e in _evs) and any(e["kind"] == "pageerror" and e["text"] == "boom" for e in _evs)
+      and "コンソール・ページ内エラー: [error] Failed to load resource: 503 / [pageerror] boom" in _out
+      and not any("not recorded" in json.dumps(e, ensure_ascii=False) for e in _evs), _out[-700:])
 
-# 応答イベントが無い場合は「応答・失敗イベントなし」と明示する
+# 応答イベントが無い場合は明記する
 _pg = _FakePage([(_FAIL_BODY, [])] + [(_OK_BODY, [])])
-_res, _out, _sl, _d = _run_capture(_pg, "noevt")
-check("診断: yields.llama.fiの応答・失敗イベントが無い試行は「応答・失敗イベントなし」とログに明記する",
-      "yields.llama.fi の応答: 応答・失敗イベントなし" in _out, _out[-500:])
+_res, _out, _sl, _d, _cl = _run_capture(_pg, "noevt")
+check("診断: yields.llama.fiの応答・失敗イベントが無い試行は「記録された応答・失敗イベントなし」とログに明記する",
+      "yields.llama.fi の応答: 記録された応答・失敗イベントなし（要求が発行されていない" in _out, _out[-500:])
 
-# 6) 診断は撮影を妨げない
+# 6) 試行ごとのイベントの切り分け（初回読み込みのイベントは試行1へ含め、試行2には含めない）
+_init_ev = [("response", _Obj(url="https://yields.llama.fi/pools", status=502, headers={}))]
+_pg = _FakePage([(_FAIL_BODY, [])] * 2 + [(_OK_BODY, [])], initial_events=_init_ev)
+_res, _out, _sl, _d, _cl = _run_capture(_pg, "slice")
+_sn = _snaps(_d)
+check("診断: 最初のページ読み込み（attempt 0）の応答は試行1のスナップショットに含め、試行2には含めない",
+      [e["status"] for e in _sn[0]["yields_llama_fi"]] == [502] and _sn[1]["yields_llama_fi"] == [], str(_sn)[:400])
+
+# 7) 待機中に届いたイベントは直前の試行のものとして受け取る（試行間の帰属・flush）
+_late = [("response", _Obj(url="https://yields.llama.fi/pools", status=504, headers={}))]
+_late_state = {"c": 0}
+def _on_sleep_late(sec):
+    # WAIT_INITIAL（最初のページ読み込み後）とWAIT_BETWEEN（標準試行間）は同じ3秒。2回目の3秒待機
+    # ＝試行1の後の標準間待機の最中に、yields.llama.fiの応答がブラウザへ届く状況を再現する
+    if sec == capture_apr.WAIT_BETWEEN:
+        _late_state["c"] += 1
+        if _late_state["c"] == 2:
+            _pg_late.pending += _late
+_pg_late = _FakePage([(_FAIL_BODY, [])] * 2 + [(_OK_BODY, [])])
+_res, _out, _sl, _d, _cl = _run_capture(_pg_late, "late", on_sleep=_on_sleep_late)
+_sn = _snaps(_d)
+check("診断: 標準間の待機中に届いたイベントは、次の試行（試行2）ではなく直前の試行のものとして受け取る（flush。試行2の診断に混入しない）",
+      _late_state["c"] >= 2 and _pg_late.flushes >= 1 and _sn[1]["yields_llama_fi"] == [],
+      f"c={_late_state['c']} flushes={_pg_late.flushes} {_sn[1]['yields_llama_fi']}")
+
+# 8) 種別ごと・試行ごとの上限: 雑音（consoleや他ホストの失敗）が肝心のyields応答を押し出さない・省略は明記する
+_noise = [("console", _Obj(type="error", text=f"noise {i}")) for i in range(30)] + \
+         [("requestfailed", _Obj(url=f"https://cdn{i}.example.com/x", failure="net::ERR")) for i in range(25)]
+_noise += [("response", _Obj(url="https://yields.llama.fi/pools", status=503, headers={}))]
+_pg = _FakePage([(_FAIL_BODY, _noise)] + [(_OK_BODY, [])])
+_res, _out, _sl, _d, _cl = _run_capture(_pg, "caps")
+_sn = _snaps(_d)[0]
+check("診断: consoleの雑音が上限（20件）を超えても、yields.llama.fiの応答は別枠で記録される（押し出されない）",
+      [e["status"] for e in _sn["yields_llama_fi"] if e["kind"] == "response"] == [503]
+      and sum(1 for e in _sn["events"] if e["kind"] == "console") == capture_apr.DIAG_CAPS["console"], str(_sn["dropped_events"]))
+check("診断: 上限超過で省略したイベントの件数をスナップショットとログに明記する",
+      _sn["dropped_events"].get("console") == 10 and _sn["dropped_events"].get("requestfailed") == 5
+      and "省略されたイベント（種別ごとの上限超過）: console=10件, requestfailed=5件" in _out, _out[-500:])
+_full = [("requestfailed", _Obj(url=f"https://cdn{i}.example.com/x", failure="net::ERR")) for i in range(25)] + \
+        [("requestfailed", _Obj(url="https://yields.llama.fi/pools", failure="net::ERR_X"))]
+_pg = _FakePage([(_FAIL_BODY, _full)] + [(_OK_BODY, [])])
+_res, _out, _sl, _d, _cl = _run_capture(_pg, "capsy")
+check("診断: 上限超過でyieldsのイベントが省略された試行は、「要求が発行されていない」と誤誘導せず「断定できない」と明記する",
+      "上限超過で6件のイベントを省略しているため、要求が無かったとは断定できない" in _out
+      and "要求が発行されていない" not in _out, _out[-600:])
+
+# 9) 診断は撮影を妨げない
 _pg = _FakePage([(_FAIL_BODY, []), (_OK_BODY, [])], on_raises=True)
-_res, _out, _sl, _d = _run_capture(_pg, "onraise")
+_res, _out, _sl, _d, _cl = _run_capture(_pg, "onraise")
 check("診断: リスナー登録が失敗（page.onが例外）しても撮影は続行し成功する",
       _res == (True, "", 2) and "リスナーを登録できません" in _out, f"{_res} {_out[:200]}")
 _diag_obj = capture_apr._Diagnostics(None)
-_diag_obj._on_response(_Obj())          # 属性が欠けた不正なイベントでも例外を出さない
-_diag_obj._on_requestfailed(_Obj())
-_diag_obj._on_console(_Obj())
-_diag_obj._on_pageerror(None)
-check("診断: 不正なイベントオブジェクトでもハンドラは例外を外へ出さない", True)
-_pg = _FakePage([(_FAIL_BODY, []), (_OK_BODY, [])])
-_res_ro, _out_ro, _sl_ro, _d_ro = _run_capture(_pg, "diagfail")
+_raised = False
+try:
+    _diag_obj._on_response(_Obj())          # 属性が欠けた不正なイベントでも例外を出さない
+    _diag_obj._on_requestfailed(_Obj())
+    _diag_obj._on_console(_Obj())
+    _diag_obj._on_pageerror(None)
+    _diag_obj.flush(_Obj())                 # wait_for_timeoutが無いオブジェクトでも例外を出さない
+except Exception:  # noqa: BLE001
+    _raised = True
+check("診断: 不正なイベントオブジェクト・flush対象でもハンドラは例外を外へ出さない", not _raised)
+
 _blocker = Path(SCRATCH) / "apr_diag_blocker"
 _blocker.write_text("file, not a directory", encoding="utf-8")
 _pg = _FakePage([(_FAIL_BODY, []), (_OK_BODY, [])])
-_saved_diag = capture_apr._Diagnostics
-_res = None
-_sleeps = []
+_res, _out_b, _sl_b, _d_b, _cl_b = (None, "", [], None, 0)
 _real_pw, _real_sleep = _pw_sync_api.sync_playwright, capture_apr.time.sleep
 class _B2:
     def new_page(self, viewport=None): return _pg
@@ -4276,7 +4411,7 @@ class _CM2:
     def __enter__(self): return _PW2()
     def __exit__(self, *a): return False
 _pw_sync_api.sync_playwright = lambda: _CM2()
-capture_apr.time.sleep = lambda sec: _sleeps.append(sec)
+capture_apr.time.sleep = lambda sec: None
 _buf = _io_apr.StringIO()
 try:
     with _ctx_apr.redirect_stdout(_buf):
@@ -4286,17 +4421,21 @@ finally:
 check("診断: 診断の保存先を作れなくても（ディレクトリ作成の失敗）撮影は続行し成功する",
       _res == (True, "", 2) and "診断の記録に失敗しました" in _buf.getvalue(), f"{_res} {_buf.getvalue()[-300:]}")
 
-# 7) 追加試行中の例外は失敗した試行として扱う（標準試行中の例外は従来どおり呼び出し元へ）
+# 10) 追加試行中の例外は失敗した試行として扱い、診断（例外文）を残す。標準試行中の例外は従来どおり呼び出し元へ
 _pg = _FakePage([(_FAIL_BODY, [])] * 5, goto_failures={2, 3})
-_res, _out, _sl, _d = _run_capture(_pg, "gotofail")
-check("capture: 追加試行の再読み込み(goto)が失敗してもクラッシュせず、失敗した試行として扱い(False,詳細,5)を返す",
-      isinstance(_res, tuple) and _res[0] is False and _res[2] == 5 and "追加試行" in _res[1] and "ERR_TIMED_OUT" in _res[1], f"{_res}")
+_res, _out, _sl, _d, _cl = _run_capture(_pg, "gotofail")
+check("capture: 追加試行の再読み込み(goto)が失敗してもクラッシュせず、失敗した試行として扱い(False,詳細,5)を返す・browser.closeは1回",
+      isinstance(_res, tuple) and _res[0] is False and _res[2] == 5 and "追加試行" in _res[1] and "ERR_TIMED_OUT" in _res[1] and _cl == 1, f"{_res}")
+_sn = _snaps(_d)
+check("診断: 例外で終わった追加試行も診断（例外文の備考）をログと診断JSONへ残す（デッドコードだったnoteの出力）",
+      "備考: 追加試行1で例外: RuntimeError: net::ERR_TIMED_OUT" in _out
+      and any(e["kind"] == "note" and "ERR_TIMED_OUT" in e["text"] for s_ in _sn for e in s_["events"]), _out[-500:])
 _pg = _FakePage([(_FAIL_BODY, [])] * 5, screenshot_raises_at=1)
-_res, _out, _sl, _d = _run_capture(_pg, "stdcrash")
+_res, _out, _sl, _d, _cl = _run_capture(_pg, "stdcrash")
 check("capture: 標準試行中の例外は従来どおり呼び出し元へ送出される（挙動を変えない）",
       isinstance(_res, RuntimeError), str(_res))
 
-# 8) 状態ファイル（C25が読む）
+# 11) 状態ファイル（C25が読む）
 _st_dir = Path(SCRATCH) / "apr_status_test" / "2026-09-30"
 _st_dir.mkdir(parents=True, exist_ok=True)
 capture_apr._write_incomplete_status(str(_st_dir / "apr_screenshot.jpg"), "TODAY件数: 0/6", 5)
@@ -4305,7 +4444,7 @@ check("_write_incomplete_status: attemptsに追加試行を含む実際の試行
       _st["status"] == "incomplete" and _st["attempts"] == 5 and _st["detail"] == "TODAY件数: 0/6"
       and _st["standard_attempts"] == 3 and _st["extra_attempts"] == 2, str(_st))
 
-# 9) main(): 失敗時は画像なしで正常終了・状態ファイル記録・診断先はoutputs/の外
+# 12) main(): 失敗時は画像なしで正常終了・状態ファイル記録・診断先はoutputs/の外
 _main_dir = Path(SCRATCH) / "apr_main_test" / "outputs" / "2026-09-30"
 _main_dir.mkdir(parents=True, exist_ok=True)
 _out_jpg = str(_main_dir / "apr_screenshot.jpg")
@@ -4346,29 +4485,39 @@ check("main(): 成功時は従来どおりクロップして終了コード0・�
       _rc2 == 0 and _cropped.get("out", "").endswith("apr_screenshot.jpg")
       and not (_main_dir2 / "apr_capture_status.json").exists(), str(_cropped))
 
-# 10) リポジトリ側の配線: gitignore・ワークフロー（診断は outputs/ の外・アーティファクトのみ・非致命）
+# 13) リポジトリ側の配線: gitignore・ワークフロー（YAMLライブラリに依存しないテキスト検査。無い環境で素通りしない）
 _gi = _sp_apr.run(["git", "-C", str(REPO), "check-ignore", "-q", "apr_diagnostics/2026-09-30/apr_failed_attempt1.png"])
-check("gitignore: apr_diagnostics/ 配下はgit管理の対象外（誤ってコミットされない）", _gi.returncode == 0, str(_gi))
+check("gitignore: リポジトリ直下のapr_diagnostics/配下はgit管理の対象外（誤ってコミットされない）", _gi.returncode == 0, str(_gi))
+_gi2 = _sp_apr.run(["git", "-C", str(REPO), "check-ignore", "-q", "outputs/2026-09-30/apr_diagnostics/x.png"])
+check("gitignore: 無視するのはリポジトリ直下のみ（outputs/配下の同名ディレクトリは無視しない）", _gi2.returncode == 1, str(_gi2))
+
+_wf_text = (REPO / ".github" / "workflows" / "daily.yml").read_text(encoding="utf-8")
+_blocks = _re_apr.split(r"(?m)^      - (?=name:|uses:)", _wf_text)
+_dblock = next((b for b in _blocks if "APR撮影の診断アーティファクト" in b.split("\n", 1)[0]), None)
+check("daily.yml: APR診断アーティファクトのステップが存在する", _dblock is not None)
+if _dblock:
+    _path_line = _re_apr.search(r"(?m)^\s+path:\s*(.+?)\s*$", _dblock)
+    _date_tpl = "${{ steps.target.outputs.date }}"
+    check("daily.yml: 診断アーティファクトのパスは capture_apr の保存先（_diag_dir_for）と一致する（ずれると診断が無言で失われる）",
+          _path_line is not None
+          and _path_line.group(1).replace(_date_tpl, "2026-09-30").rstrip("/")
+          == str(capture_apr._diag_dir_for("outputs/2026-09-30/apr_screenshot.jpg")), str(_path_line and _path_line.group(1)))
+    check("daily.yml: 診断ステップはフェーズ1が実行された日のみ・失敗時も実行・非致命・ファイル無しは無視・別名アーティファクト・outputs/の外",
+          "always() && steps.need.outputs.phase1 == 'true'" in _dblock and "continue-on-error: true" in _dblock
+          and "if-no-files-found: ignore" in _dblock and "apr-diagnostics-" in _dblock
+          and _path_line is not None and not _path_line.group(1).startswith("outputs/"), _dblock[:400])
+    _pos = {k: _wf_text.find(k) for k in ("③ APR実画面撮影", "APR撮影の診断アーティファクト", "⑤ コミット")}
+    check("daily.yml: ステップ順は ③撮影 → ⑤コミット → 診断アーティファクト（診断は⑤コミットの後で保存）",
+          0 < _pos["③ APR実画面撮影"] < _pos["⑤ コミット"] < _pos["APR撮影の診断アーティファクト"], str(_pos))
+_commit_block = next((b for b in _blocks if b.startswith("name: ⑤ コミット")), "")
+check("daily.yml: フェーズ1の⑤コミットは outputs/ のみをgit addする（診断ディレクトリはコミット対象外であることの前提）",
+      "git add outputs/" in _commit_block and "apr_diagnostics" not in _commit_block, _commit_block[:200])
 try:
     import yaml as _yaml_apr
-    _wf = _yaml_apr.safe_load((REPO / ".github" / "workflows" / "daily.yml").read_text(encoding="utf-8"))
-    _steps = _wf["jobs"]["build"]["steps"]
-    _dstep = next((x for x in _steps if "APR撮影の診断" in str(x.get("name", ""))), None)
-    check("daily.yml: APR診断はフェーズ1の別名アーティファクトへ保存（apr-diagnostics-<日付>・パスは outputs/ の外・非致命・ファイル無しは無視）",
-          _dstep is not None and _dstep["uses"].startswith("actions/upload-artifact@")
-          and _dstep["with"]["path"].startswith("apr_diagnostics/") and not _dstep["with"]["path"].startswith("outputs/")
-          and _dstep["with"]["name"].startswith("apr-diagnostics-") and _dstep.get("continue-on-error") is True
-          and _dstep["with"]["if-no-files-found"] == "ignore", str(_dstep))
-    _commit = next((x for x in _steps if "コミット（監査PASS時のみ到達" in str(x.get("name", "")) and "フェーズ1" not in str(x.get("name", ""))
-                    and "git add outputs/" in str(x.get("run", ""))), None)
-    check("daily.yml: フェーズ1の⑤コミットは outputs/ のみをgit addする（診断ディレクトリはコミット対象外であることの前提）",
-          _commit is not None and "apr_diagnostics" not in _commit["run"], str(_commit)[:200])
-    _idx = {x.get("name"): i for i, x in enumerate(_steps)}
-    _i_cap = next(i for i, x in enumerate(_steps) if "APR実画面撮影" in str(x.get("name", "")))
-    _i_diag = next(i for i, x in enumerate(_steps) if "APR撮影の診断" in str(x.get("name", "")))
-    check("daily.yml: 診断アーティファクトのステップは撮影ステップより後にある", _i_diag > _i_cap)
+    _wf = _yaml_apr.safe_load(_wf_text)
+    check("daily.yml: YAMLとして正しく読み込める（PyYAMLがある環境での追加検査）", isinstance(_wf["jobs"]["build"]["steps"], list))
 except ImportError:
-    check("daily.yml検証: PyYAMLが無い環境ではスキップ", True)
+    pass  # 上のテキスト検査が主。PyYAML未導入でも検査は素通りしない
 
 print()
 print(f"PASS: {len(PASS)}  FAIL: {len(FAIL)}")

@@ -105,7 +105,12 @@ EXTRA_COOLDOWN = 60
 DIAG_DIR_ROOT = "apr_diagnostics"
 DIAG_HOSTS = ("yields.llama.fi", "api.geckoterminal.com")
 DIAG_BODY_CHARS = 500
-DIAG_MAX_EVENTS = 60
+# 種別ごと・試行ごとの記録上限（独立レビューの指摘: 全試行共通の上限だと、早い試行の
+# 雑音〔Chart.js CDNの失敗等〕で後半の試行の診断が黙って欠落する）。超過分は件数だけ数え、
+# スナップショットとログに「省略」と明記する。yields.llama.fi等の応答と要求失敗を
+# コンソール雑音と別枠にして、肝心の応答が押し出されないようにする。
+DIAG_CAPS = {"response": 20, "requestfailed": 20, "console": 20, "pageerror": 10, "note": 10}
+DIAG_DEFAULT_CAP = 10
 DIAG_HEADERS = ("server", "cf-mitigated", "cf-ray", "retry-after", "content-type", "content-length")
 # ETH/USDCプール想定表示件数（3チェーン=Ethereum/Base/Arbitrum × 2手数料=0.05%/0.3%）
 EXPECTED_POOL_COUNT = 6
@@ -145,15 +150,33 @@ class _Diagnostics:
         self.attempt = 0
         self.t0 = time.monotonic()
         self.events: list[dict] = []
+        self.counts: dict[tuple[int, str], int] = {}
+        self.dropped: dict[tuple[int, str], int] = {}
         self.snapshots: list[dict] = []
 
     def start_attempt(self, n: int) -> None:
         self.attempt = n
         self.t0 = time.monotonic()
 
-    def _add(self, **kw) -> None:
-        if len(self.events) < DIAG_MAX_EVENTS:
-            self.events.append({"attempt": self.attempt, "t": round(time.monotonic() - self.t0, 1), **kw})
+    def flush(self, page) -> None:
+        """待機（time.sleep）中に届いたブラウザのイベントを、その試行のうちに受け取る。
+        Playwrightの同期APIはtime.sleep中はイベントを通知せず、次のAPI呼び出しの際にまとめて
+        届くため、何もしないと直前の試行のイベントが次の試行に帰属してしまう。"""
+        try:
+            page.wait_for_timeout(0)
+        except Exception:  # noqa: BLE001
+            pass
+
+    def _add(self, kind: str, **kw) -> None:
+        key = (self.attempt, kind)
+        n = self.counts.get(key, 0)
+        if n >= DIAG_CAPS.get(kind, DIAG_DEFAULT_CAP):
+            self.dropped[key] = self.dropped.get(key, 0) + 1
+            return
+        self.counts[key] = n + 1
+        # seen_s: 通知を受けた時点の試行開始からの経過秒（目安。time.sleep中のイベントは
+        # 次のAPI呼び出しまで通知されないため、実際の到着時刻より遅れることがある）
+        self.events.append({"attempt": self.attempt, "seen_s": round(time.monotonic() - self.t0, 1), "kind": kind, **kw})
 
     def attach(self, page) -> None:
         for name, handler in (("console", self._on_console), ("pageerror", self._on_pageerror),
@@ -166,13 +189,13 @@ class _Diagnostics:
     def _on_console(self, msg) -> None:
         try:
             if getattr(msg, "type", "") in ("error", "warning"):
-                self._add(kind="console", level=msg.type, text=str(msg.text)[:300])
+                self._add("console", level=msg.type, text=str(msg.text)[:300])
         except Exception:  # noqa: BLE001
             pass
 
     def _on_pageerror(self, err) -> None:
         try:
-            self._add(kind="pageerror", text=str(err)[:300])
+            self._add("pageerror", text=str(err)[:300])
         except Exception:  # noqa: BLE001
             pass
 
@@ -187,7 +210,7 @@ class _Diagnostics:
                 headers = {k: str(raw[k])[:80] for k in DIAG_HEADERS if k in raw}
             except Exception:  # noqa: BLE001
                 pass
-            self._add(kind="response", url=url.split("?")[0][:200], status=resp.status, headers=headers)
+            self._add("response", url=url.split("?")[0][:200], status=resp.status, headers=headers)
         except Exception:  # noqa: BLE001
             pass
 
@@ -196,12 +219,12 @@ class _Diagnostics:
             failure = req.failure
             if isinstance(failure, dict):
                 failure = failure.get("errorText")
-            self._add(kind="requestfailed", url=str(req.url).split("?")[0][:200], failure=str(failure)[:200])
+            self._add("requestfailed", url=str(req.url).split("?")[0][:200], failure=str(failure)[:200])
         except Exception:  # noqa: BLE001
             pass
 
     def note(self, text: str) -> None:
-        self._add(kind="note", text=text[:300])
+        self._add("note", text=text[:300])
 
     def _attempt_events(self, n: int) -> list[dict]:
         # 試行1には最初のページ読み込み（attempt 0）の初回取得も含める
@@ -213,6 +236,11 @@ class _Diagnostics:
         banner = re.search(r"Error:[^\n]*(?:\n[^\n]*)?", body or "")
         evs = self._attempt_events(n)
         yields = [e for e in evs if e.get("kind") in ("response", "requestfailed") and "yields.llama.fi" in e.get("url", "")]
+        wanted = {n, 0} if n == 1 else {n}
+        dropped: dict[str, int] = {}
+        for (att, kind), c in self.dropped.items():
+            if att in wanted:
+                dropped[kind] = dropped.get(kind, 0) + c
         return {
             "attempt": n,
             "judge": judge_detail,
@@ -220,11 +248,13 @@ class _Diagnostics:
             "error_banner": banner.group(0).replace("\n", " ")[:300] if banner else None,
             "yields_llama_fi": yields,
             "events": evs,
+            "dropped_events": dropped,
         }
 
     @staticmethod
     def format_lines(snap: dict) -> list[str]:
         n = snap["attempt"]
+        dropped = snap.get("dropped_events") or {}
         lines = [f"  診断[試行{n}] 画面の文字(先頭{DIAG_BODY_CHARS}字): {snap['body_head'] or '（空）'}"]
         lines.append(f"  診断[試行{n}] エラー表示: {snap['error_banner'] or 'なし（Error:の表示は見つからない）'}")
         y = snap["yields_llama_fi"]
@@ -233,12 +263,15 @@ class _Diagnostics:
             for e in y:
                 if e["kind"] == "response":
                     hdr = ",".join(f"{k}={v}" for k, v in (e.get("headers") or {}).items())
-                    parts.append(f"HTTP {e['status']}（{e['t']}秒{', ' + hdr if hdr else ''}）")
+                    parts.append(f"HTTP {e['status']}（検出{e['seen_s']}秒{', ' + hdr if hdr else ''}）")
                 else:
-                    parts.append(f"要求失敗 {e['failure']}（{e['t']}秒）")
+                    parts.append(f"要求失敗 {e['failure']}（検出{e['seen_s']}秒）")
             lines.append(f"  診断[試行{n}] yields.llama.fi の応答: " + " / ".join(parts))
         else:
-            lines.append(f"  診断[試行{n}] yields.llama.fi の応答: 応答・失敗イベントなし（要求が発行されていない・保留中・イベント取得不可のいずれか）")
+            truncated = dropped.get("response", 0) + dropped.get("requestfailed", 0)
+            lines.append(f"  診断[試行{n}] yields.llama.fi の応答: 記録された応答・失敗イベントなし"
+                         + (f"（ただし上限超過で{truncated}件のイベントを省略しているため、要求が無かったとは断定できない）" if truncated
+                            else "（要求が発行されていない・保留中・イベント取得不可のいずれか）"))
         others = [e for e in snap["events"] if e.get("kind") in ("response", "requestfailed") and "yields.llama.fi" not in e.get("url", "")]
         if others:
             lines.append(f"  診断[試行{n}] その他の外部要求: " + " / ".join(
@@ -247,6 +280,12 @@ class _Diagnostics:
         if errs:
             lines.append(f"  診断[試行{n}] コンソール・ページ内エラー: " + " / ".join(
                 f"[{e.get('level') or e['kind']}] {e['text']}" for e in errs[:8]))
+        notes = [e for e in snap["events"] if e.get("kind") == "note"]
+        if notes:
+            lines.append(f"  診断[試行{n}] 備考: " + " / ".join(e["text"] for e in notes))
+        if dropped:
+            lines.append(f"  診断[試行{n}] 省略されたイベント（種別ごとの上限超過）: "
+                         + ", ".join(f"{k}={v}件" for k, v in sorted(dropped.items())))
         return lines
 
     def record_failure(self, n: int, body: str, judge_detail: str, screenshot_path: "str | None") -> None:
@@ -301,6 +340,7 @@ def capture(full_path: str, diag_dir: "str | Path | None" = None) -> tuple[bool,
                 if extra:
                     print(f"[追加試行 {attempt - MAX_RETRY}/{EXTRA_ATTEMPTS}] {EXTRA_COOLDOWN}秒空けてページを再読み込み...")
                     time.sleep(EXTRA_COOLDOWN)
+                    diag.flush(page)  # 待機中に届いたイベントは直前の試行のものとして受け取る
                     # 診断の経過秒は再読み込みの時点から数える（空けた待機を含めない）
                     diag.start_attempt(attempt)
                     page.goto(URL, wait_until="load", timeout=60_000)
@@ -330,6 +370,8 @@ def capture(full_path: str, diag_dir: "str | Path | None" = None) -> tuple[bool,
                 last_detail = f"追加試行{attempt - MAX_RETRY}で例外: {type(e).__name__}: {e}"[:300]
                 print(f"  ✗ {last_detail}")
                 diag.note(last_detail)
+                # 例外で終わった試行も診断（例外文・その時点までのイベント）をログと診断JSONへ残す
+                diag.record_failure(attempt, "", last_detail, None)
                 continue
             incomplete, last_detail = _judge_incomplete(body)
             if not incomplete:
@@ -340,6 +382,7 @@ def capture(full_path: str, diag_dir: "str | Path | None" = None) -> tuple[bool,
             diag.record_failure(attempt, body, last_detail, full_path)
             if attempt < MAX_RETRY:
                 time.sleep(WAIT_BETWEEN)
+                diag.flush(page)  # 待機中に届いたイベントは直前の試行のものとして受け取る
 
         print(f"警告: {total_attempts}回試行（標準{MAX_RETRY}＋追加{EXTRA_ATTEMPTS}）後も未完了（{last_detail}）。撮影を見送ります。")
         browser.close()
