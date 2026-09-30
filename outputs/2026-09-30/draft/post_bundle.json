@@ -1,0 +1,648 @@
+{
+  "target_date_jst": "2026-09-30",
+  "level": "L0",
+  "sections": {
+    "part0_target_date": "2026年9月30日（水）",
+    "part1_headline": "米国の8月分Core PCE物価指数が市場予想を下回る伸びにとどまり、Fedの利下げ観測を巡る思惑が意識されました。 #BTC #ETH",
+    "part1_points": "・Reutersによると、米国の8月分インフレ指標（PCE）が市場予想を下回る伸びとなり、FRBの利上げ観測が後退したと報じられました。暗号通貨市場への直接因果は未確認です（Reuters、9月30日）。\n・Reutersによると、米国・イラン間の協議停滞と燃料市場の逼迫を背景に原油価格が上昇したと報じられました。原油・リスク選好経由の波及は考えられますが、暗号通貨価格への直接因果は未確認です（Reuters、9月30日）。\n・Base（Coinbase系L2）がCobaltと呼ばれるアップグレードを実施し、トークン化資産向けの条件付き取引機能等を追加したと複数の暗号通貨専門媒体が報じました。公式発表での確認は取れていません（Cointelegraph、The Block、9月30日）。",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.869兆（¥451.6兆）｜24時間取引高 $982.2億（¥15.46兆）\n・ #BTC：$83,783（約1,318.6万円）｜24時間比 +0.30%\n　（24時間レンジ $82,912〜$85,614）\n・ #ETH：$2,689（約42.3万円）｜24時間比 +0.44%\n　（24時間レンジ $2,656〜$2,738）\n・ #BNB：$768（約12.1万円）｜24時間比 +1.30%\n・市場心理：Fear & Greed 68（Greed、CoinMarketCap API）\n・ドミナンス：BTC 58.67%｜ETH 11.44%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年10月1日07:37 JST、USD/JPY ¥157.39",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $10.02M vs Base上ETH/USDC $99.54M｜参考：Base上DEX全体 $13.799億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $62.79億（¥9,883億）｜24時間比 +0.26%｜USDCドミナンス 85.5%\n・ ETH/USDC（Base）参考APR：0.05% 35.66%（TVL $9.85M／24h出来高 $19.25M）｜0.3% 54.41%（TVL $161.58M／24h出来高 $80.28M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年10月1日07:37 JST",
+    "part2_flow": "①【出来事・ニュース】Reutersによると、米国の8月分Core PCE物価指数が市場予想を下回る伸びにとどまったと報じられました → 【地政学・マクロの変化】FRBの利下げ観測が後退し得るとの思惑が意識された可能性があります → 【中間市場指標・市場心理】インフレ鈍化を受けたリスク選好の心理が一部で強まった可能性があります → 【暗号通貨価格】BTC・ETHは24時間比でともに上昇し、値動きはおおむね限定的な範囲にとどまったとみられます。 #BTC #ETH\n②【出来事・ニュース】Reutersによると、米国・イラン間の協議停滞と燃料市場の逼迫を背景に原油価格が上昇したと報じられました → 【地政学・マクロの変化】地政学リスクの高まりが市場で意識された可能性があります → 【中間市場指標・市場心理】原油高を受けたリスク回避的な心理が一部で強まった可能性があります → 【暗号通貨価格】BTC・ETHは24時間比で底堅い推移を見せたものの、原油高との直接因果は断定できません。 #BTC #ETH",
+    "lp_comment": "参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは37.83%→35.66%へ低下しました（24時間出来高 -4.57%、TVL +1.25%）。\nBase 0.3%プールの参考APRは67.70%→54.41%へ低下しました（24時間出来高 -19.18%、TVL +0.57%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+0.44%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "米国の物価指標や地政学リスクを巡る報道が相次ぎ、市場心理はなお不透明感を伴っています。ENAを巡る規模拡大予想など一部の継続監視材料もあり、今後の動向が注目されます。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "BTC・ETH・BNBともに堅調に推移",
+  "audit_ledger": [
+    {
+      "source": "SEC",
+      "url": "https://www.sec.gov/newsroom/press-releases/2026-98-sec-charges-meyer-global-management-its-ceo-defrauding-retail-investors-private-funds-held-interests",
+      "title": "SEC Charges Meyer Global Management and Its CEO With Defrauding Retail Investors in Private Funds That Held Interests in SpaceX and Other Pre-IPO Securities",
+      "published_at": "Wed, 30 Sep 2026 14:30:01 -0400",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 未公開株ファンドを巡る詐欺摘発で、暗号通貨や金利・為替等への波及経路を説明できない"
+    },
+    {
+      "source": "SEC",
+      "url": "https://www.sec.gov/newsroom/press-releases/2026-97-sec-charges-two-individuals-orchestrating-fraud-scheme-targeted-veterans",
+      "title": "SEC Charges Two Individuals With Orchestrating Fraud Scheme That Targeted Veterans",
+      "published_at": "Wed, 30 Sep 2026 12:42:15 -0400",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個人を対象とした詐欺摘発で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "SEC",
+      "url": "https://www.sec.gov/newsroom/press-releases/2026-96-sec-proposes-amendments-expand-responsible-retailization-private-markets",
+      "title": "SEC Proposes Amendments to Expand Responsible Retailization of Private Markets",
+      "published_at": "Wed, 30 Sep 2026 11:45:00 -0400",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 私募市場の規則改正提案で、暗号通貨や市場環境への波及経路を説明できない"
+    },
+    {
+      "source": "FRB",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260930a.htm",
+      "title": "Federal Reserve Board finalizes changes to enhance the transparency and public accountability of its stress test and reduce volatility in its stress test-related capital requirements",
+      "published_at": "Wed, 30 Sep 2026 13:00:00 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 銀行のストレステスト運営見直しで、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "FRB（speeches）",
+      "url": "https://www.federalreserve.gov/newsevents/speech/cook20260930a.htm",
+      "title": "Cook, The Dual Mandate in Rural America",
+      "published_at": "Wed, 30 Sep 2026 19:25:00 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 地方経済に関する講演で、金利・流動性等への明確な波及経路を説明できない"
+    },
+    {
+      "source": "OCC",
+      "url": "https://www.occ.gov/news-issuances/news-releases/2026/nr-occ-2026-83.html",
+      "title": "OCC Reports Second Quarter 2026 Bank Trading Revenue",
+      "published_at": "30 Sep 2026 11:00:00 -0400",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 銀行のデリバティブ取引収益統計で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/mopo/mpmdeci/mpr_2026/mpr260930a.pdf",
+      "title": "長期国債買入れ（利回り・価格入札方式）の四半期予定（2026年10～12月）",
+      "published_at": "Wed, 30 Sep 2026 17:00:00 +0900",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 国債買入れの四半期予定で、summaryに内容の記載がなく波及経路も確認できない"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/paym/bond/ryudo.pdf",
+      "title": "国債市場の流動性指標（8月）",
+      "published_at": "Wed, 30 Sep 2026 16:00:00 +0900",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 国債市場流動性指標で、summaryに内容の記載がなく波及経路も確認できない"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/about/bcp/fso/fso260930a.pdf",
+      "title": "令和8年台風第18号に伴う災害等に対する金融上の措置について（鹿児島県）",
+      "published_at": "Wed, 30 Sep 2026 15:30:00 +0900",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 台風被害に対する地域的な金融措置で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/intl_finance/meeting/emeap/eme260930a.htm",
+      "title": "「AIに関するEMEAPノート：経済、金融安定、中央銀行業務への含意」の公表について",
+      "published_at": "Wed, 30 Sep 2026 15:00:00 +0900",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: AIと中央銀行業務に関する研究ノートで、暗号通貨市場への直接の波及経路を説明できない"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/statistics/set/kess/release/2026/kess2608.pdf",
+      "title": "決済動向（8月）",
+      "published_at": "Wed, 30 Sep 2026 11:00:00 +0900",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 決済動向統計で、summaryに内容の記載がなく波及経路も確認できない"
+    },
+    {
+      "source": "USTR",
+      "url": "https://ustr.gov/about/policy-offices/press-office/press-releases/2026/september/ambassador-greer-issues-statement-following-ministerial-meeting-global-forum-steel-excess-capacity",
+      "title": "Ambassador Greer Issues Statement Following the Ministerial Meeting of the Global Forum on Steel Excess Capacity",
+      "published_at": "Wed, 30 Sep 2026 17:28:23 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 鉄鋼の過剰生産能力対策会合で、暗号通貨や金融市場への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/releases/2026/09/icymi-president-trump-announces-largest-ever-steel-plant-coming-to-iowa/",
+      "title": "ICYMI: President Trump Announces Largest-Ever Steel Plant Coming to Iowa",
+      "published_at": "Wed, 30 Sep 2026 17:10:17 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別企業の製鉄所建設発表で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/briefings-statements/2026/09/congressional-bill-s-2398-signed-into-law/",
+      "title": "Congressional Bill S. 2398 Signed into Law",
+      "published_at": "Wed, 30 Sep 2026 16:17:26 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 感染症対策法案の署名で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/briefings-statements/2026/09/adobe-amazon-intel-starlink-google-and-zoom-partner-with-first-lady-melania-trumps-fostering-the-future-together/",
+      "title": "Adobe, Amazon, Intel, Starlink, Google, and Zoom partner with First Lady Melania Trump’s Fostering the Future Together",
+      "published_at": "Wed, 30 Sep 2026 12:28:07 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 教育分野での企業連携発表で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/fact-sheets/2026/09/fact-sheet-president-donald-j-trump-eliminates-disease-carrying-pests-and-restores-enjoyment-of-the-great-outdoors/",
+      "title": "Fact Sheet: President Donald J. Trump Eliminates Disease-Carrying Pests and Restores Enjoyment of The Great Outdoors",
+      "published_at": "Tue, 29 Sep 2026 21:24:24 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 害虫対策の大統領令で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/09/eliminating-disease-carrying-pests-and-restoring-enjoyment-of-the-great-outdoors/",
+      "title": "Eliminating Disease-Carrying Pests And Restoring Enjoyment Of The Great Outdoors",
+      "published_at": "Tue, 29 Sep 2026 21:23:48 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 害虫対策の大統領令で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/fact-sheets/2026/09/fact-sheet-president-donald-j-trump-inaugurates-the-era-of-super-intelligence/",
+      "title": "Fact Sheet: President Donald J. Trump Inaugurates The Era of Super Intelligence",
+      "published_at": "Tue, 29 Sep 2026 21:21:06 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: AI呼称変更の方針で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/09/inaugurating-the-era-of-super-intelligence/",
+      "title": "Inaugurating The Era Of Super Intelligence",
+      "published_at": "Tue, 29 Sep 2026 21:17:25 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: AI呼称変更の大統領令で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス（大統領令等）",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/09/eliminating-disease-carrying-pests-and-restoring-enjoyment-of-the-great-outdoors/",
+      "title": "Eliminating Disease-Carrying Pests And Restoring Enjoyment Of The Great Outdoors",
+      "published_at": "Tue, 29 Sep 2026 21:23:48 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 重複候補（害虫対策大統領令）で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス（大統領令等）",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/09/inaugurating-the-era-of-super-intelligence/",
+      "title": "Inaugurating The Era Of Super Intelligence",
+      "published_at": "Tue, 29 Sep 2026 21:17:25 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 重複候補（AI呼称変更大統領令）で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "ADP",
+      "url": "https://mediacenter.adp.com/2026-09-30-ADP-National-Employment-Report-Private-Sector-Employment-Increased-by-90,000-Jobs-in-September",
+      "title": "ADP National Employment Report: Private-Sector Employment Increased by 90,000 Jobs in September",
+      "published_at": "Wed, 30 Sep 2026 08:15:00 -0400",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 雇用統計は波及経路を説明できるが、内容のみでは市場材料として採否判断に不十分"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxOdXFFNHNQQUxXRkRPN3ZndG5TZS1PSGpvaFZPMG8zRU1oNFdrOUFZQnNsT183YWZ2R3NoNGNUX1NVdmtZNmxaYVc2X2c0Vm5tNWZjbEo1ZkYzNzVqeW1BS0VTaWZYc1hKRlRaRGxrQlk1aGlpQTROOV9mSDZldFlkejFZVGxKYmZzQ3czLUFPUDRBVmNJNWpuMnBPdE00QUlncU9EU2lXZw?oc=5",
+      "title": "S&P 500 dips, Nasdaq higher after data shows moderate inflation rise - Reuters",
+      "published_at": "Wed, 30 Sep 2026 20:40:10 GMT",
+      "verified_by": "Reuters報道（2026-09-30）",
+      "decision": "採用",
+      "reason": "B: 米インフレ指標の緩やかな伸びが金利観測に影響し、リスク資産全般への波及経路を説明できるためReuters報道として掲載"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxPbEZNSGlvd0hfTjdOVTQxTEVYczRjUjdId3NlSGJDSV90UVVjTGhjaFF2OS1xckpOWElrcWRoUXNPa29WTHhsLW9yWVc2N1REdXZONl9iZ2ZUSkNOQ0xndE16LWpMa3c3T2FHWE0yajBlek1La3hVeTVnWkpLc2hhTTRNMnVILWY0RG9VbzVVZnZGV0JmM3VJWkNhVmlfNDlVMThOSVNtNlR3cFJUekNpMVZ3aE03Zw?oc=5",
+      "title": "Oil prices rise by about $1/bbl on stalled US-Iran talks and tight fuel markets - Reuters",
+      "published_at": "Wed, 30 Sep 2026 19:16:51 GMT",
+      "verified_by": "Reuters報道（2026-09-30）",
+      "decision": "採用",
+      "reason": "B: 米イラン協議停滞と燃料市場逼迫による原油価格上昇は、地政学・原油経由の波及経路を説明できるためReuters報道として掲載"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxNTWNmbHNncXZDNWw2TW5KZVdIWDJhZGFyakktUVVlWEpMUHlEVkRlWVRNOG83ZEQ2SmVHbXhOek5nQkdqZW1aYVNOYlRSdUR3WEltTk1ycXNtdVlyWll0dHRPaTlhTEdqLUt0cjl2NnNZN01RU05waGh1RHhwcWFES0hDRGNVbjVCWDhLb05BWWJhOEd0SlZHOWlnV3JEb3QyRVBMc0VDSW52T2NUV0ZxSUxvaWRTRkltcTZ5Qg?oc=5",
+      "title": "SEC clears Tesla-crafted auto-vote plan for wide use, worrying activists - Reuters",
+      "published_at": "Wed, 30 Sep 2026 18:30:24 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別企業の株主総会議決権に関する規則承認で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxOLWdyWGNBSm5SSzQtcFdFaGhDbUZKWS1rcGk5OWlWNUw0eGExVkk4T3otSGpqTHFWeWJjeFkwaG9PdWxBMGNXbUppbWE1Y24zNDF3akRaQjlGbWJCcXpoQ1I2SmctLXhTYnF4YmlDaDI3QVc3cUtOcFJySVJUVW9uYXNoU09TVVJIU19CLUhKMUtmY1pVV25UazJOc1lqWHprQnN5SkdTYW1iMEFlNTRQYnlqaEdQbGdYVDZJMFVPcw?oc=5",
+      "title": "Wall St regulator unveils new retail investor proposals for private assets - Reuters",
+      "published_at": "Wed, 30 Sep 2026 18:19:01 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 私募資産の個人投資家向け規則提案で、暗号通貨市場への直接の波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxPdGFTWGFNZ2Rtd1d3UkVxTE1EQ2FxbW0wdGw3ZENrZnhNMllrVm9MeHhuTFk3c0o5VjZ6TTJZQThOSTJCOVMyZTd2SXBNMlRYd2JNODVRRGpqWU85dFlsTG5MbExxUlVEMHBBZmVjSVlxcHdwTFdteHd5UlVTOVVhS1FqblRPNXBKeVM4OWFPeVo5U0VoZUpsQldJNkdTdDU4bENvM0JRcmQ?oc=5",
+      "title": "EU's emergency diesel stocks are mainly in Germany and France - Reuters",
+      "published_at": "Wed, 30 Sep 2026 18:07:44 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: EUのディーゼル備蓄分布に関する内容で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxQUlhPVVRVeXdDaHV3ZTBFb002Q2x0clB5UW9UZ3h6eFBrNUhRYWg0TTF6cm1OVWlwdjQ2aGpTMkpXSlE3NGg3Mk5RQnpMOU5vb3VINkUzMG5GSy1JdXpjeXhIcklRTHlkdDlOY2o1eEtRaVNLYkIwcDNzdE9JWmRCeW8wSExZUVEyeElQUmdlZFRLeWVLMUFzVFRCTThBSHNSOG9QZlZn?oc=5",
+      "title": "US trade court probes Trump's 'forced labor' tariffs - Reuters",
+      "published_at": "Wed, 30 Sep 2026 17:57:54 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 強制労働関税を巡る貿易裁判所の審査で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxNSktrS2JqeGdwTmowTVBNV2lPbnZwcVdwSzJPVi1aRzZuVDVQU3RtRGZ1UExTOVJnWm9CcTNYbnFneF9wOWlCMU5MNXEwMDN4UmhVVkx2MFVWOC1EYVdyb3Y3WXNYYXhNUzZSUExKQzNZOWk4U1dRaVBMMUZBeklyT0VqNFVhbUV3RjJmbThsM3FOejFUV2lBV0ZtZjNTZjVqRFYwcGZqZWdKdjBRa3FvcmdKRTRWak0?oc=5",
+      "title": "US inflation rises below expectations in August, gives the Fed breathing space - Reuters",
+      "published_at": "Wed, 30 Sep 2026 17:53:33 GMT",
+      "verified_by": "Reuters報道（2026-09-30）",
+      "decision": "採用",
+      "reason": "B: candidate_id23と同一材料の別記事。米インフレ指標とFedの政策余地に関する内容で金利・流動性経由の波及経路を説明できるため掲載"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxNUWIxeWhFenF6Nm1Vc0VSZWYtMWFacWVTTVczakl0RmJHYUNFWFVSMnRPRU1xd292T29nc3l3WTkzMnpvRl9jWjdLcmpxYmFDcmppeHB3M3ZsWG5FRUoxbHhXRU5fT2JpU25pNTFHQktkX01Ga3h2YmQ0TldwbFF6MllnRUl4TmtEdWFvTWdpMEVwRm5HS2JSLThzcjFfMWNJb1ktTw?oc=5",
+      "title": "India cuts windfall taxes on diesel, aviation fuel exports - Reuters",
+      "published_at": "Wed, 30 Sep 2026 17:47:42 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: インドの燃料輸出関税引き下げで、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOdGRnMGNacGYwUnBWUWFLSUJNb2pMaEhzWVB0eWNMc2VhZ2NxQ1ZmNFJiWmx5Q2pOaTBrV3B4RlhTWVVOT3RDcnlXdk9zWEZta2xicGZlSk5kT1YyQVJNYUw4ZVM2SHI1MGJtUV9tNS1DcHkwaFR6bm9wWGlkNW5GQWRmdzdHS1MwSHpaWlV1OHlXU092SHBhUTFYZ2ltM3ZVTzljSl9qdXdLQQ?oc=5",
+      "title": "Honeywell to help build Dangote's new Kenyan mega-refinery - Reuters",
+      "published_at": "Wed, 30 Sep 2026 17:23:30 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別企業のケニア製油所建設協力で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxQNEZjWFpDMnhINXNrdUFFQm50Rjhwc1dLMTRFMTJnU0VSNzgtbDdkS18wTWNGUklqNHAtWnNEM0R0VzYySlR1a3RqZGFMd0pRSnVUd0NzeWREUDFhQVFsVTY4ZVRSNWVuNklsUjJzYTRObHl0NUo0WkRwNFBvUGNNdTBZUlo?oc=5",
+      "title": "Global stocks weather third-quarter AI, bond and crude maelstrom - Reuters",
+      "published_at": "Wed, 30 Sep 2026 17:07:46 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 世界株式市場の総括記事だが、内容が概観にとどまり暗号通貨への参考材料として不十分"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxQUVFNdVQwUWk4OHBrcVJ6ZDFtZ2JSWW5zbktNX2tUSHRlblR2WDQwUERLZnNNN19fVUp5TXpaMWpHdWpsRm5wVWRHUldocXN4b29Qb3dtMFZwbl93cFdxQ21EbTlJLWtsaE1GVTVNYnFfZmtuNE41ekFOQkhyNFFvMEtUY1F2NElLNXEyaHBNVGt4aW1hWTRJTWw1WnlpU2Mw?oc=5",
+      "title": "Explainer: What is Alaska LNG and why does the project face doubts? - Reuters",
+      "published_at": "Wed, 30 Sep 2026 17:05:47 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: アラスカLNGプロジェクトの解説記事で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxQZEplWnFLV0M4NDYtTzNCRWZPTUJRZU16MlJ3S0FleWh4WU5ubmkyWEVDcUJMS3JLLVdHZmVEakdyWkNRV2tmaENmckRQSEJtUGlUM3BJYVN5VElzVnBtWWpvbFIwRV9xQnRPU1FhZ1NPSnktVFY2T0dQbVlhdWdnTjA0R1dpSURWbWN3VQ?oc=5",
+      "title": "Mattel taps Condé Nast's Lynch as CEO Kreiz, who led brand revival, departs - Reuters",
+      "published_at": "Wed, 30 Sep 2026 16:55:34 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別企業の人事異動で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxQamFfZ2NOWFh6ZFZrQXJlOHEzMHZLS1RFSW1OUHk1cjgtUTJYejRQZDh6YzNWaDJkOElNWXBlT3lGRE51YmdfTkZhWUFrMXhHc2RCNm1NcWtoTnhjV05QTmZ3WDZVekVSOHVVbFY0VWlqak5mdUlNR3Qtdk9nUVcxbHlGemtXLWNJXzZFMUdhVjVyWDlDOFBJcU9uMlFOSmhSc0RBVWlMaW1aODY1emxkb29BTQ?oc=5",
+      "title": "Facing climate lawsuits, Big Oil again turns to US Supreme Court - Reuters",
+      "published_at": "Wed, 30 Sep 2026 16:41:44 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 気候訴訟を巡る石油大手の最高裁対応で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxPQVdQMWR6UG9meDhlbWVzZ1dxNFVRbEdSalh3TTdPZU90RUtSYkVjLUpXd2wtODZMOVQyVExxOUJkcGt0RFFZbm0wNUNRbVM3ZlhBRmFpZ3UyLTBTc0FTUGtoVHZJT0pEdk5JNVNLWEJDUE53RGdHdHpQM0ViaEEwY0RNblRmdDBQV18wYnhDc2tLZ2FYTlVWRU1oaFEtUVhaRGlBN3lRa0lJbFhfTWNrM1pxZGR5VWpmclkwZF9mbVVIdWd0ZVpZ?oc=5",
+      "title": "Oil executives worried over lack of essential element for Venezuela expansion: power - Reuters",
+      "published_at": "Wed, 30 Sep 2026 16:37:11 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ベネズエラでの電力不足懸念で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxONkJmckhvcEF2eGlycEZxakpEWU9PdGhueEptR25MUXlsbkJMN0tiS2piSUlkeGtlNkxyaldDNUFNWjFlVGFIU1QzbnU1R1pXSWJnWTh2dDFhS1drZ0JRSHBLaTNJY0hwTXZ2c09hYXI4VlI0ZEhDdFpHRERnMWRTSDQxMHBXVWo1cVRVekpSSVkzQ0ZWMkhyWVRKNTRYc3U0X0pfY2VYNjFHZ0QwdGZQYWZjVENzUmt6MnI3ZlAyNzJpLWdQbDQ1NGd3?oc=5",
+      "title": "US oil, gas output up in Q3, producers wary of price outlook, Dallas Fed says - Reuters",
+      "published_at": "Wed, 30 Sep 2026 16:34:02 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 米石油ガス生産統計で、暗号通貨市場への直接の波及経路を説明できない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/markets/standard-chartered-ethena-usde-growth-40b?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Standard Chartered sees Ethena’s USDe reaching $40B, ENA hitting $2",
+      "published_at": "Wed, 30 Sep 2026 20:57:32 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 価格予想記事であり事実報道でないため独立2ソース規定の要件を満たさない"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/regulation/2026-09-30-cftc-secures-over-30-million-judgment-against-defendants-in-fundsz-fraud-case-417365",
+      "title": "CFTC secures over $30 million judgment against defendants in Fundsz fraud case",
+      "published_at": "Wed, 30 Sep 2026 20:37:08 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: CFTCの司法判断だがtier1・tier2の裏付けおよび独立2ソースの相手がない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/what-happened-in-crypto-today?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Here’s what happened in crypto today",
+      "published_at": "Wed, 30 Sep 2026 19:37:13 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 日次まとめ記事で単独ソースかつ個別事実の特定ができない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/stand-with-crypto-coinbase-senate-picks-us-midterms?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Crypto advocacy group announces picks for US Congress as midterms loom",
+      "published_at": "Wed, 30 Sep 2026 19:11:23 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 暗号通貨業界団体の議会候補支持発表だが単独ソースで独立2ソースの相手がない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/base-cobalt-upgrade-tokenized-finance-b20-kyc?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Base completes Cobalt upgrade, adds new tools for tokenized assets",
+      "published_at": "Wed, 30 Sep 2026 19:00:00 +0000",
+      "verified_by": "Cointelegraph・The Block両媒体の報道内容が一致",
+      "decision": "採用（独立2ソース）",
+      "reason": "Base Cobaltアップグレードの実施という事実がCointelegraphとThe Blockの独立した2媒体で報じられており、独立2ソース規定に該当するため掲載"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/ecosystems/2026-09-30-base-launches-cobalt-upgrade-with-conditional-transactions-and-new-b20-asset-functions-417308",
+      "title": "Base launches Cobalt upgrade with conditional transactions and new B20 asset functions",
+      "published_at": "Wed, 30 Sep 2026 19:00:00 +0000",
+      "verified_by": "Cointelegraph・The Block両媒体の報道内容が一致",
+      "decision": "採用（独立2ソース）",
+      "reason": "Base Cobaltアップグレードの実施という事実がThe BlockとCointelegraphの独立した2媒体で報じられており、独立2ソース規定に該当するため掲載"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/bloomberg-brings-onchain-stablecoin-data-to-its-terminal-news-brief?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bloomberg brings onchain stablecoin data to its Terminal",
+      "published_at": "Wed, 30 Sep 2026 18:49:06 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: Bloombergのステーブルコインデータ提供機能追加で単独ソースかつ独立2ソースの相手がない"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/ecosystems/2026-09-30-dogeos-launches-public-testnet-dogecoin-zk-rollup-evm-417307",
+      "title": "DogeOS launches testnet to bring EVM smart contracts to Dogecoin",
+      "published_at": "Wed, 30 Sep 2026 18:23:57 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: DogeOSのテストネット開始で単独ソースかつ独立2ソースの相手がない"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/regulation/2026-09-30-white-house-weighs-new-cftc-event-contract-rules-in-growing-prediction-market-power-struggle-417345",
+      "title": "White House weighs new CFTC event contract rules in growing prediction market power struggle",
+      "published_at": "Wed, 30 Sep 2026 17:54:45 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: CFTCの予測市場規則検討で単独ソースかつ独立2ソースの相手がない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/brazils-petrobras-uses-cardano-to-track-sustainable-aviation-fuel-renewable-diesel?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Brazil’s Petrobras uses Cardano to track sustainable aviation fuel, renewable diesel",
+      "published_at": "Wed, 30 Sep 2026 17:17:54 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: Petrobrasのブロックチェーン活用で単独ソース（candidate_id54と同一事実だが分析記事的性格が強い）"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/news-analysis/2026/09/30/crypto-industry-gave-usd8-million-to-clarity-act-lobbyists-who-didn-t-close-the-deal",
+      "title": "Crypto industry gave $8 million to Clarity Act lobbyists who didn't close the deal",
+      "published_at": "Wed, 30 Sep 2026 17:16:31 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 業界団体のロビー活動費用に関する分析記事で、単独ソースかつ事実報道というより分析的内容"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/bitget-operations-protection-fund-security-breach?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bitget ‘gradually back to usual’ as protection fund reaches $309M",
+      "published_at": "Wed, 30 Sep 2026 16:28:30 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: Bitget幹部発言の紹介記事で単独ソースかつ独立2ソースの相手がない"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/markets/2026-09-30-bitcoin-pce-inflation-october-rate-hike-417335",
+      "title": "Bitcoin steadies as soft PCE cools October Fed rate hike bets",
+      "published_at": "Wed, 30 Sep 2026 16:10:36 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: BTC価格とPCE統計を結びつけた分析記事で単独ソース、tier1のPCE事実は既にcandidate_id23・29で採用済み"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/09/24/open-usd-takes-on-tether-circle-with-a-different-stablecoin-model-that-s-building-money",
+      "title": "Open USD takes on Tether, Circle with a different stablecoin model that's 'building money'",
+      "published_at": "Wed, 30 Sep 2026 15:34:50 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 新興ステーブルコインプロジェクトの紹介記事で単独ソースかつ独立2ソースの相手がない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/09/30/u-s-cftc-seeks-event-contract-definitions-that-may-defy-states-gambling-claims",
+      "title": "U.S. CFTC  seeks event contract definitions that may defy states' gambling claims",
+      "published_at": "Wed, 30 Sep 2026 15:19:36 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: CFTCの予測市場規則検討記事でcandidate_id46と同一媒体系列の可能性があり独立2ソースの要件を満たさない"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/markets/2026-09-30-standard-chartered-sees-over-600-upside-for-ena-expects-usde-to-hit-40-billion-by-2028-417274",
+      "title": "Standard Chartered sees over 600% upside for ENA, expects USDe to hit $40 billion by 2028",
+      "published_at": "Wed, 30 Sep 2026 12:00:01 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: candidate_id38と同一の価格予想記事であり事実報道でないため独立2ソース規定の要件を満たさない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/tech/2026/09/30/embargo-1-pm-utc-cardano-tapped-by-brazil-s-state-oil-giant-to-track-cleaner-jet-fuel-and-diesel",
+      "title": "Cardano tapped by Brazil’s state oil giant to track cleaner jet fuel and diesel",
+      "published_at": "Wed, 30 Sep 2026 13:00:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: Petrobrasのブロックチェーン活用でcandidate_id47と内容が重なるが分析的性格が強く事実報道の明確性に欠ける"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/09/30/the-clock-s-ticking-uk-s-crypto-regulatory-application-window-opens-with-february-deadline",
+      "title": "Clock's ticking: UK's crypto regulatory application window opens with February deadline",
+      "published_at": "Wed, 30 Sep 2026 14:04:19 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 英国の暗号通貨規制申請窓口開設でcandidate_id56と同一事実の可能性があるが媒体の独立性検証が不十分"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/fca-crypto-authorization-2027-uk-regime?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "FCA opens crypto authorization window ahead of 2027 UK regime",
+      "published_at": "Wed, 30 Sep 2026 12:06:04 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: candidate_id55と類似内容だが、規制適用開始時期の記載に相違があり同一事実の確証に欠ける"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/business/2026-09-29-robinhood-perps-trading-417242",
+      "title": "Robinhood to launch perps, weekend stock trading for US users",
+      "published_at": "Wed, 30 Sep 2026 02:58:24 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: Robinhoodの新機能発表でcandidate_id58と同一事実の可能性があるが媒体の独立性検証が不十分"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/09/29/robinhood-adds-ai-agents-perps-and-weekend-trading-in-push-to-win-active-traders",
+      "title": "Robinhood adds AI agents, perps and weekend trading in push to win active traders",
+      "published_at": "Tue, 29 Sep 2026 23:00:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: candidate_id57と類似内容だが、対象日がtarget_dateの前日であり当日材料として採用を見送った"
+    }
+  ],
+  "reusable_for_summary": [
+    "Standard CharteredがEthenaのUSDe規模拡大とENA価格上昇を予想したとの報道が複数あり、今後の動向を継続監視。",
+    "Bitget、セキュリティ事案に伴うユーザー損失を保護基金で補填し通常運用に復帰したと報道。"
+  ],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 3
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 1
+    },
+    "FRB（speeches）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 1
+    },
+    "FRB（testimony）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 1
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 5
+    },
+    "米財務省": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "USTR": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 1
+    },
+    "ホワイトハウス": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 7
+    },
+    "ホワイトハウス（大統領令等）": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 2
+    },
+    "ADP": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 1
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 21
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 21
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "The Block": {
+      "status": "ok",
+      "raw_count": 19,
+      "kept_count": 11
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 48
+    }
+  },
+  "news_candidate_count": 58,
+  "part1_md": "【対象日】2026年9月30日（水）\n\n【ヘッドライン】\n米国の8月分Core PCE物価指数が市場予想を下回る伸びにとどまり、Fedの利下げ観測を巡る思惑が意識されました。 #BTC #ETH\n\n【主要なポイント】\n・Reutersによると、米国の8月分インフレ指標（PCE）が市場予想を下回る伸びとなり、FRBの利上げ観測が後退したと報じられました。暗号通貨市場への直接因果は未確認です（Reuters、9月30日）。\n・Reutersによると、米国・イラン間の協議停滞と燃料市場の逼迫を背景に原油価格が上昇したと報じられました。原油・リスク選好経由の波及は考えられますが、暗号通貨価格への直接因果は未確認です（Reuters、9月30日）。\n・Base（Coinbase系L2）がCobaltと呼ばれるアップグレードを実施し、トークン化資産向けの条件付き取引機能等を追加したと複数の暗号通貨専門媒体が報じました。公式発表での確認は取れていません（Cointelegraph、The Block、9月30日）。\n",
+  "part2_md": "【市場のフロー】\n①【出来事・ニュース】Reutersによると、米国の8月分Core PCE物価指数が市場予想を下回る伸びにとどまったと報じられました → 【地政学・マクロの変化】FRBの利下げ観測が後退し得るとの思惑が意識された可能性があります → 【中間市場指標・市場心理】インフレ鈍化を受けたリスク選好の心理が一部で強まった可能性があります → 【暗号通貨価格】BTC・ETHは24時間比でともに上昇し、値動きはおおむね限定的な範囲にとどまったとみられます。 #BTC #ETH\n②【出来事・ニュース】Reutersによると、米国・イラン間の協議停滞と燃料市場の逼迫を背景に原油価格が上昇したと報じられました → 【地政学・マクロの変化】地政学リスクの高まりが市場で意識された可能性があります → 【中間市場指標・市場心理】原油高を受けたリスク回避的な心理が一部で強まった可能性があります → 【暗号通貨価格】BTC・ETHは24時間比で底堅い推移を見せたものの、原油高との直接因果は断定できません。 #BTC #ETH\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは37.83%→35.66%へ低下しました（24時間出来高 -4.57%、TVL +1.25%）。\nBase 0.3%プールの参考APRは67.70%→54.41%へ低下しました（24時間出来高 -19.18%、TVL +0.57%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+0.44%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\n米国の物価指標や地政学リスクを巡る報道が相次ぎ、市場心理はなお不透明感を伴っています。ENAを巡る規模拡大予想など一部の継続監視材料もあり、今後の動向が注目されます。\n",
+  "numeric_record_md": "【対象日】2026年9月30日（水）\n\n【主要指標】\n・市場全体：時価総額 $2.869兆（¥451.6兆）｜24時間取引高 $982.2億（¥15.46兆）\n・ #BTC：$83,783（約1,318.6万円）｜24時間比 +0.30%\n　（24時間レンジ $82,912〜$85,614）\n・ #ETH：$2,689（約42.3万円）｜24時間比 +0.44%\n　（24時間レンジ $2,656〜$2,738）\n・ #BNB：$768（約12.1万円）｜24時間比 +1.30%\n・市場心理：Fear & Greed 68（Greed、CoinMarketCap API）\n・ドミナンス：BTC 58.67%｜ETH 11.44%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年10月1日07:37 JST、USD/JPY ¥157.39\n\n【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $10.02M vs Base上ETH/USDC $99.54M｜参考：Base上DEX全体 $13.799億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $62.79億（¥9,883億）｜24時間比 +0.26%｜USDCドミナンス 85.5%\n・ ETH/USDC（Base）参考APR：0.05% 35.66%（TVL $9.85M／24h出来高 $19.25M）｜0.3% 54.41%（TVL $161.58M／24h出来高 $80.28M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年10月1日07:37 JST\n"
+}
