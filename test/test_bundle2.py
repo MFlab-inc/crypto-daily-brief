@@ -695,13 +695,17 @@ check("CALL_B_INSTRUCTIONSに「である調」を使わない旨が明記され
 check("CALL_B_INSTRUCTIONSに前編と文体を揃える旨が明記されている",
       "前編（part1_headline・" in generate_post.CALL_B_INSTRUCTIONS
       and "文体を揃える" in generate_post.CALL_B_INSTRUCTIONS)
-check("CALL_B_INSTRUCTIONSに総括で言及してよい範囲がpart1_points掲載済み・"
-      "reusable_for_summaryの継続材料に限る旨が明記されている",
-      "part1_points に掲載済みのもの" in generate_post.CALL_B_INSTRUCTIONS
-      and "reusable_for_summary に渡された継続材料に限る" in generate_post.CALL_B_INSTRUCTIONS)
+check("CALL_B_INSTRUCTIONSに総括で言及してよい範囲がpart1_headline・part1_points掲載済み・"
+      "reusable_for_summaryの継続材料に限る旨が明記されている（v1.82でヘッドラインを追加・オーナー承認）",
+      "part1_headline・part1_points に" in generate_post.CALL_B_INSTRUCTIONS.replace("\n  ", "")
+      and "掲載済みのもの" in generate_post.CALL_B_INSTRUCTIONS
+      and "reusable_for_summary に渡された継続材料に限る" in generate_post.CALL_B_INSTRUCTIONS.replace("\n  ", ""))
 check("CALL_B_INSTRUCTIONSに本文で扱っていない新規の固有名詞を総括で持ち出さない旨が明記されている",
-      "本文（part1_points）で扱っていない新規の固有名詞・" in generate_post.CALL_B_INSTRUCTIONS
+      "本文（part1_headline・part1_points）で扱っていない新規の固有名詞・" in generate_post.CALL_B_INSTRUCTIONS
       and "材料を総括で初めて持ち出さない" in generate_post.CALL_B_INSTRUCTIONS)
+check("CALL_B_INSTRUCTIONS: 総括の言及範囲の旧表記（part1_pointsのみ）が残っていない（v1.82）",
+      "本文（part1_points）で扱っていない" not in generate_post.CALL_B_INSTRUCTIONS
+      and "part1_points に掲載済みのもの、" not in generate_post.CALL_B_INSTRUCTIONS)
 check("SYSTEM_BがCALL_B_INSTRUCTIONSの更新内容を含む",
       "です・ます調" in generate_post.SYSTEM_B)
 
@@ -3940,6 +3944,42 @@ _au_c28h = verify_post.run_all(_b_c28h, DAILY_DATA)
 _c28h_check = next(x for x in _au_c28h.checks if x["id"] == "C28_headline_points_role_separation")
 check("run_all(): ヘッドラインの銘柄×値動き語がC28 FAILとして配線される",
       _c28h_check["result"] == "FAIL", str(_c28h_check))
+
+print("=== verify_post: C23 バックリファレンス先にpart1_headlineを含める（v1.82・オーナー承認） ===")
+_au_c23h = verify_post.Audit()
+verify_post.check_c23(_au_c23h, "FRBの動向を注視していきます。", "・某社が提携を発表（Reuters）", [], [],
+                      "FRBが利上げに動く可能性が報じられました。")
+check("check_c23: 総括の固有名詞がヘッドラインにのみ存在する場合はPASS（9/23試験のFRB型・v1.82）",
+      _au_c23h.checks[0]["result"] == "PASS", str(_au_c23h.checks[0]))
+_au_c23i = verify_post.Audit()
+verify_post.check_c23(_au_c23i, "FRBの動向を注視していきます。", "・某社が提携を発表（Reuters）", [], [],
+                      generate_post.FIXED_HEADLINE)
+check("check_c23: ヘッドラインにも本文にも無い固有名詞は従来どおりFAIL（新規持ち出しの検知は維持）",
+      _au_c23i.checks[0]["result"] == "FAIL" and "FRB" in _au_c23i.checks[0]["detail"], str(_au_c23i.checks[0]))
+_au_c23j = verify_post.Audit()
+verify_post.check_c23(_au_c23j, "FRBの動向を注視していきます。", "・某社が提携を発表（Reuters）", [], [])
+check("check_c23: part1_headline省略（既定None）でも従来どおり動く（後方互換・FRBが無ければFAIL）",
+      _au_c23j.checks[0]["result"] == "FAIL", str(_au_c23j.checks[0]))
+_au_c23k = verify_post.Audit()
+verify_post.check_c23(_au_c23k, "BitMartの動向を注視。", "・某社が提携を発表（Reuters）", [], [], "FRBが利上げに動く可能性が報じられました。")
+check("check_c23: ヘッドラインに別の固有名詞があっても、総括の別の未確認固有名詞（BitMart）はFAIL",
+      _au_c23k.checks[0]["result"] == "FAIL" and "BitMart" in _au_c23k.checks[0]["detail"], str(_au_c23k.checks[0]))
+
+# run_all()経由の配線確認（ヘッドラインのみにFRBがある構成）
+_b_c23h = json.loads(json.dumps(b_ok))
+_b_c23h["sections"]["part1_headline"] = "FRBが利上げに動く可能性が報じられました。暗号通貨価格への直接因果は未確認です。"
+_b_c23h["sections"]["part2_summary"] = "地合いは不透明です。今後はFRBの動向を確認していく必要があります。"
+_au_c23run = verify_post.run_all(_b_c23h, DAILY_DATA)
+_c23run = next(x for x in _au_c23run.checks if x["id"] == "C23_summary_no_new_entities")
+check("run_all(): part1_headlineがcheck_c23へ配線され、ヘッドラインのみのFRBを総括で言及してもPASS（v1.82）",
+      _c23run["result"] == "PASS", str(_c23run))
+_b_c23h2 = json.loads(json.dumps(b_ok))
+_b_c23h2["sections"]["part1_headline"] = generate_post.FIXED_HEADLINE
+_b_c23h2["sections"]["part2_summary"] = "地合いは不透明です。今後はFRBの動向を確認していく必要があります。"
+_au_c23run2 = verify_post.run_all(_b_c23h2, DAILY_DATA)
+_c23run2 = next(x for x in _au_c23run2.checks if x["id"] == "C23_summary_no_new_entities")
+check("run_all(): ヘッドライン・本文とも根拠が無いFRBの総括はFAIL（従来どおり）",
+      _c23run2["result"] == "FAIL", str(_c23run2))
 
 print()
 print(f"PASS: {len(PASS)}  FAIL: {len(FAIL)}")

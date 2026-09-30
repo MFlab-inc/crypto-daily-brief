@@ -83,6 +83,27 @@ v1.79（C26〜C28分）のドライラン（2026-09-22〜09-27の既存draft）�
    part2_flowの材料をpart1_headline・part1_pointsに掲載済みのものへ限定した
    ため（CALL_B_INSTRUCTIONS）、ヘッドラインのみに載る固有名詞をFAILに
    しない。`reusable_for_summary`を含めない点は従来どおり（v1.56）。
+5. **C23のバックリファレンス先にpart1_headlineを追加し、総括プロンプトの
+   言及範囲を揃える**（2026-09-30・オーナー承認。上記4と同じ扱いを
+   C23にも適用する追加修正）：9/23の試験生成（3サンプル）のうち2件で、
+   C23が総括の「FRB」をFAILとした。FRBは【ヘッドライン】にだけあり
+   【主要なポイント】には無く、C23の照合先（part1_points・
+   reusable_for_summary・scheduled_events）にヘッドラインが含まれて
+   いなかったため（C24にのみ追加してC23に追加していなかったという
+   実装の不整合）。ヘッドラインも本文の一部であり、総括がその材料に触れる
+   ことは新規の持ち出しではない。
+   - `verify_post.check_c23(..., part1_headline=None)`：照合先へ
+     part1_headlineを追加。`run_all()`から`sections["part1_headline"]`を
+     渡す。ヘッドラインにも本文にも継続監視材料にも無い固有名詞は従来どおり
+     FAIL（新規持ち出しの検知は維持）。
+   - `CALL_B_INSTRUCTIONS`（part2_summary）：総括で言及してよい範囲を
+     「part1_headline・part1_pointsに掲載済みのもの、または
+     reusable_for_summaryの継続材料」へ改めた（修正4で承認済みの文言の
+     うち、言及範囲の記述のみ）。
+   - 検討のうえ**実装していないもの**：Fed・FRB・SEC・CFTC・日銀等の
+     機関名をallowlistへ追加する案、および機関略称の同義語（日本語表記を
+     含む）照合。オーナー指示は「ヘッドライン追加で解消しない場合に検討して
+     報告」であり、9/29分の原文確認の結果を踏まえて別途判断する。
 
 ### C28の追加（`hold/c26-c28`側・オーナー承認）
 
@@ -100,7 +121,7 @@ v1.79（C26〜C28分）のドライラン（2026-09-22〜09-27の既存draft）�
 
 ### 検証
 
-`test/test_bundle2.py`：590→671件（全PASS）。プロンプト内容の検査
+`test/test_bundle2.py`：590→678件（全PASS。うちC23の追加分7件）。プロンプト内容の検査
 （2軸判定・①〜③・定型文・プレースホルダー・§3.3書式・INTRADAYの2か所限定）
 の更新、`_daily_data_for_call_b`・`_build_call_b_user_content`（呼び出しA側は
 除外しないことを含む）、`_has_adopted_material`と`call_b`のフローガード

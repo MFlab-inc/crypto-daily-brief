@@ -625,8 +625,16 @@ _PROPER_NOUN_ALLOWLIST = {
 } | _ISO4217_CURRENCY_CODES
 
 
-def check_c23(au: Audit, part2_summary, part1_points, reusable_for_summary, scheduled_events=None) -> None:
-    """scheduled_events（v1.79・オーナー承認）: 2026-09-25分でC23が'BOE'を
+def check_c23(au: Audit, part2_summary, part1_points, reusable_for_summary, scheduled_events=None,
+              part1_headline=None) -> None:
+    """part1_headline（v1.82・オーナー承認）: バックリファレンス先へ、part1_points
+    に加えてpart1_headlineも含める。part1_headlineは当日の最重要材料を書く欄で
+    あり、part1_pointsとは別の材料（例: 9/23の「FRBの利上げ観測」）を載せる
+    ことがある。総括がその材料に触れることは「本文で確認済みの材料への言及」
+    であり、新規の持ち出しではない。9/23の試験生成（9サンプル中2件）で、
+    ヘッドラインにのみあるFRBを総括が言及してC23がFAILした事象への対処
+    （C24へのpart1_headline追加と同じ理由・同じ扱い。v1.82参照）。
+    scheduled_events（v1.79・オーナー承認）: 2026-09-25分でC23が'BOE'を
     誤検知した。原因はBOE総裁講演がその日のdaily_data.scheduled_events
     （経済カレンダー。generate_post.SCHEDULED_EVENTS_GUIDANCE参照）に
     載っていた予定であり、統合運用基準§3.1の【総括】欄は「翌日に確認す
@@ -643,7 +651,7 @@ def check_c23(au: Audit, part2_summary, part1_points, reusable_for_summary, sche
     if not candidates:
         au.add("C23_summary_no_new_entities", True, "総括に固有名詞候補（ASCII表記）なし")
         return
-    backing = str(part1_points or "")
+    backing = str(part1_points or "") + "\n" + str(part1_headline or "")
     if isinstance(reusable_for_summary, list):
         backing += "\n" + "\n".join(str(x) for x in reusable_for_summary)
     if isinstance(scheduled_events, list):
@@ -656,7 +664,7 @@ def check_c23(au: Audit, part2_summary, part1_points, reusable_for_summary, sche
                f"誤検知時は要目視確認）: {missing}")
         return
     au.add("C23_summary_no_new_entities", True,
-           f"固有名詞候補{len(candidates)}件・すべてpart1_points/reusable_for_summaryに存在")
+           f"固有名詞候補{len(candidates)}件・すべてpart1_headline/part1_points/reusable_for_summaryに存在")
 
 
 # --- C24 市場のフローの固有名詞バックリファレンス（part1_points限定） ---
@@ -908,7 +916,8 @@ def run_all(bundle: dict, daily_data: dict) -> Audit:
     check_c21(au, bundle["level"], bundle.get("audit_ledger"), bundle.get("news_candidate_count", -1), tier_map)
     check_c22(au, sections.get("part1_headline"), bundle.get("audit_ledger"), tier_map)
     check_c23(au, sections.get("part2_summary"), sections.get("part1_points"),
-              bundle.get("reusable_for_summary"), daily_data.get("scheduled_events"))
+              bundle.get("reusable_for_summary"), daily_data.get("scheduled_events"),
+              sections.get("part1_headline"))
     check_c24(au, sections.get("part2_flow"), sections.get("part1_points"), sections.get("part1_headline"))
     check_c26(au, sections.get("part2_flow"))
     check_c27(au, sections.get("part2_summary"))
