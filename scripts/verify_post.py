@@ -625,9 +625,72 @@ _PROPER_NOUN_ALLOWLIST = {
 } | _ISO4217_CURRENCY_CODES
 
 
+# v1.83（オーナー承認・2026-09-30）: 機関名の表記ゆれ（同義語）の照合。
+# 9/29分でC23が総括の「Fed」をFAILした（原文は未確認）。本文が「FRB」「米連邦
+# 準備制度理事会」など別の表記で同じ機関を書いていても、総括が「Fed」と書くと
+# 文字列一致で「本文未確認の固有名詞」と誤判定される——同じ機関を指す表記の
+# ゆれは新規の持ち出しではない。機関ごとに同義語の集合を定め、総括の固有名詞候補が
+# その集合のいずれかの表記で照合先に存在すれば「確認済み」とする。
+#
+# 許可リスト（案B: SEC・CFTCを無条件に候補から除外する）は採用しない（オーナー
+# 判断）。同義語照合は「本文のどこかに同じ機関の記述がある」場合に限って確認済みと
+# するため、根拠の無い「SECの…」「Fedの…」の持ち出し（8/26型の真の新規持ち出し）は
+# 従来どおりFAILになる。別の機関の同義語では確認済みにならない（例: 本文がFRBだけ
+# の日に総括がSECと書けばFAIL）。
+#
+# 英字の表記は「ASCII英数字に挟まれない」場合のみ一致とみなす（FRBがFedExの中の
+# Fedに一致しない等。_ROLE_TERM_PATTERNSと同じ理由で\bは使わない）。日本語の表記は
+# 部分一致（「連邦準備」は連邦準備制度・連邦準備理事会・連邦準備制度理事会・
+# 米連邦準備理事会のすべてに含まれる）。既存の挙動（候補の文字列そのものが
+# 照合先に部分一致すれば確認済み）は維持する——本機構は既存より厳しくならない
+# （同義語による確認済みの追加のみ）。
+#
+# 限界: (1) 総括側で機関名を検知できるのはASCII表記の略称（Fed・FRB・FOMC・SEC・
+# CFTC・BOJ・ECB・BOE）のみ（日銀・日本銀行など日本語表記はC23の検知対象外）。
+# 英語の正式名称（Federal Reserve等）は照合先側の同義語としてのみ扱う。
+# (2) C24（市場のフロー）には適用していない（別途オーナー判断）。
+_INSTITUTION_ALIAS_GROUPS = (
+    ("Fed", "FRB", "FOMC", "Federal Reserve", "連邦準備", "連邦公開市場委員会"),
+    ("SEC", "Securities and Exchange Commission", "証券取引委員会"),
+    ("CFTC", "Commodity Futures Trading Commission", "商品先物取引委員会"),
+    ("BOJ", "Bank of Japan", "日銀", "日本銀行"),
+    ("ECB", "European Central Bank", "欧州中央銀行"),
+    ("BOE", "Bank of England", "英中銀", "イングランド銀行"),
+)
+# 総括の固有名詞候補（ASCIIの略称。空白を含まない英字表記）から同義語の集合を引く
+_INSTITUTION_ALIAS_INDEX: dict[str, tuple[str, ...]] = {
+    alias.upper(): group
+    for group in _INSTITUTION_ALIAS_GROUPS
+    for alias in group
+    if alias.isascii() and " " not in alias
+}
+
+
+def _alias_in_text(alias: str, text: str) -> bool:
+    """aliasがtextに存在するか。ASCII表記はASCII英数字に挟まれない場合のみ一致、
+    日本語表記は部分一致。"""
+    if alias.isascii():
+        return re.search(r"(?<![A-Za-z0-9])" + re.escape(alias) + r"(?![A-Za-z0-9])", text) is not None
+    return alias in text
+
+
+def _is_backed(candidate: str, backing: str) -> bool:
+    """総括の固有名詞候補が照合先textで確認済みか。候補の文字列そのものが部分一致する
+    （従来の判定）、または同じ機関を指す同義語のいずれかが存在すれば確認済み。"""
+    if candidate in backing:
+        return True
+    # 候補は[A-Za-z0-9&.\-]の連続として抽出されるため、末尾に句読点相当（. - &）が
+    # 付くことがある（例: 英文の「SEC.」）。同義語の検索キーからは除く。
+    group = _INSTITUTION_ALIAS_INDEX.get(candidate.rstrip(".-&").upper())
+    return bool(group) and any(_alias_in_text(a, backing) for a in group)
+
+
 def check_c23(au: Audit, part2_summary, part1_points, reusable_for_summary, scheduled_events=None,
               part1_headline=None) -> None:
-    """part1_headline（v1.82・オーナー承認）: バックリファレンス先へ、part1_points
+    """v1.83（オーナー承認）: 機関名（Fed・FRB・FOMC・SEC・CFTC・BOJ・ECB・BOE）は
+    同義語（日本語表記を含む）のいずれかが照合先にあれば確認済みとする
+    （_INSTITUTION_ALIAS_GROUPS参照。無条件の許可リストではない）。
+    part1_headline（v1.82・オーナー承認）: バックリファレンス先へ、part1_points
     に加えてpart1_headlineも含める。part1_headlineは当日の最重要材料を書く欄で
     あり、part1_pointsとは別の材料（例: 9/23の「FRBの利上げ観測」）を載せる
     ことがある。総括がその材料に触れることは「本文で確認済みの材料への言及」
@@ -657,7 +720,7 @@ def check_c23(au: Audit, part2_summary, part1_points, reusable_for_summary, sche
     if isinstance(scheduled_events, list):
         backing += "\n" + "\n".join(
             str(e.get("title", "")) for e in scheduled_events if isinstance(e, dict))
-    missing = sorted(c for c in candidates if c not in backing)
+    missing = sorted(c for c in candidates if not _is_backed(c, backing))
     if missing:
         au.add("C23_summary_no_new_entities", False,
                "総括に本文未確認の固有名詞候補（限界あり・ASCII表記のみ検知。"

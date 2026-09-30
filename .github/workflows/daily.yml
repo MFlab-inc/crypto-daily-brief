@@ -127,6 +127,21 @@ jobs:
           path: outputs/${{ steps.target.outputs.date }}/
           if-no-files-found: ignore
 
+      # v1.83（オーナー承認）: APR撮影の失敗時診断（失敗画像・診断JSON）。capture_apr.py
+      # が未完了の試行ごとにリポジトリ直下のapr_diagnostics/<対象日>/へ書く。outputs/の
+      # 外に置くため⑤コミットの対象にならず、ここでアーティファクトにだけ保存する
+      # （撮影が全試行で成功した日はディレクトリ自体が無く、何も保存されない）。
+      # 上のフェーズ1アーティファクトとは別名にして、既存アーティファクトの構成
+      # （outputs/<対象日>/ 直下の並び）を変えない。付随的なログのため非致命。
+      - name: APR撮影の診断アーティファクト（失敗した試行があった日のみ。コミットされない）
+        if: always() && steps.need.outputs.phase1 == 'true'
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: apr-diagnostics-${{ steps.target.outputs.date }}
+          path: apr_diagnostics/${{ steps.target.outputs.date }}/
+          if-no-files-found: ignore
+
       # ============================================================
       # フェーズ2：本文生成（v1.25・オーナー承認によりcron統合。v1.26で
       # 独立レビューの指摘を反映。post_draft.yml と同じ手順を再利用する。
