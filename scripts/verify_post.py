@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""verify_post.py — 本文の機械監査 C12〜C22（v0.3 §8・§10 第2弾-6）。
+"""verify_post.py — 本文の機械監査 C12〜C28（v0.3 §8・§10 第2弾-6。C23〜C28は後続の版で追加。
+v1.85で「警告（WARN）」＝FAILにしない向きの食い違いの検知も追加）。
 
 compose_post.py が書き出す post_bundle.json を入力とする。1件でもFAILなら
 exit 1（既存 verify_data.py の C1〜C11 と同じ fail-close の考え方）が、
@@ -958,6 +959,140 @@ def check_c28(au: Audit, part1_headline, part1_points, daily_data: dict) -> None
            "; ".join(reasons) if reasons else "役割分離OK")
 
 
+# --- 向きの食い違いの警告（WARN。FAILではない。v1.85・オーナー承認）---
+#
+# 背景: 2026-09-30分で、本文（主要なポイント）が「FRBの利上げ観測が後退」と書いている
+# のに、ヘッドラインは「Fedの利下げ観測」、市場のフローは「FRBの利下げ観測が後退し得る」と、
+# 向きが逆の記述になっていた。意味の判定を伴うため、既存の機械監査（C12〜C28）では検出できない。
+# オーナー判断で、まずFAILではなく「警告（WARN）」として始め、1〜2週間の結果を見てFAILに
+# するか判断する。警告はAudit.warningsへ入れ、checks・failed・overall・終了コードには
+# 一切影響しない（post_audit JSONの"warnings"・GENERATION_STATUS.mdの先頭に表示する）。
+#
+# 対象の語の対: 「利上げ／利下げ」「上昇／下落」「流入／流出」。比較の向き: 主要なポイント
+# （part1_points）と、ヘッドライン・市場のフロー・headline_for_imageのそれぞれ。
+# 判定: 同じ「主語」について、対象側の方向語の集合と主要なポイント側の方向語の集合が
+# 重ならない（対象側が下落だけ・本文が上昇だけ、等）場合に警告する。どちらかが両方の
+# 方向語を含む（「上昇した後に下落」等）場合、または主語が違う場合は警告しない。
+# - 利上げ／利下げ: それ自体が主語（文全体で集合を取る）。
+# - 上昇／下落・流入／流出: 方向語の直前（同じ節内・30文字以内）で最後に現れる主語キーワード
+#   （原油・金利・株式・ドル・ゴールド・ビットコイン・イーサリアム・BNB・暗号通貨・資金〔ETF・
+#   マネーを含む〕・ステーブルコイン・取引所）をその方向語の主語とみなす。
+# 限界: 主語の取り出しは単純なキーワード照合で、日本語の係り受けは解析しない。主語が
+# 一覧に無い・方向語が省略された主語にかかる場合は検知できない（見逃し）。逆に、同じ主語の
+# 別の時点・別の対象を述べた文を食い違いと誤判定する可能性がある（だからWARNから始める）。
+# 実データ（本番にコミット済みの34日分）では、警告が出たのは本物の食い違いだった9/30のみで、
+# それ以外の日は0件だった（DESIGN_CHANGES.md v1.85参照）。
+_DIRECTION_RATE_TERMS = ("利上げ", "利下げ")
+_DIRECTION_SUBJECT_PAIRS = (("上昇", "下落"), ("流入", "流出"))
+_DIRECTION_SUBJECTS = (
+    ("原油", ("原油", "WTI", "ブレント")),
+    ("金利", ("金利", "利回り")),
+    ("株式", ("株式", "株価", "S&P", "ナスダック", "ダウ", "日経平均", "日経", "株")),
+    ("ドル", ("ドル",)),
+    ("ゴールド", ("ゴールド", "金価格")),
+    ("ビットコイン", ("ビットコイン", "BTC")),
+    ("イーサリアム", ("イーサリアム", "ETH", "イーサ")),
+    ("BNB", ("BNB",)),
+    ("暗号通貨全体", ("暗号通貨", "暗号資産", "仮想通貨")),
+    ("資金", ("資金", "マネー", "ETF")),
+    ("ステーブルコイン", ("ステーブルコイン", "USDC", "USDT")),
+    ("取引所", ("取引所",)),
+)
+_DIRECTION_BOUNDARY = "、，,。；;→】）)\n"
+_DIRECTION_WINDOW = 30
+
+
+def _direction_subject_before(text: str, idx: int) -> "str | None":
+    start = max(text.rfind(b, 0, idx) for b in _DIRECTION_BOUNDARY) + 1
+    window = text[max(start, idx - _DIRECTION_WINDOW):idx]
+    best = None  # (主語キーワードの終端位置, 長さ, 主語)
+    for subject, keywords in _DIRECTION_SUBJECTS:
+        for kw in keywords:
+            pos = window.rfind(kw)
+            if pos >= 0:
+                cand = (pos + len(kw), len(kw), subject)
+                if best is None or cand[:2] > best[:2]:
+                    best = cand
+    return best[2] if best else None
+
+
+def _direction_map(text: str) -> "dict[tuple[str, str], set[str]]":
+    """{(語の対, 主語): {方向語}}。利上げ／利下げは主語を持たない（主語は"-"）。"""
+    out: dict[tuple[str, str], set[str]] = {}
+    for term in _DIRECTION_RATE_TERMS:
+        if term in text:
+            out.setdefault(("利上げ/利下げ", "-"), set()).add(term)
+    for a, b in _DIRECTION_SUBJECT_PAIRS:
+        for term in (a, b):
+            for m in re.finditer(re.escape(term), text):
+                subject = _direction_subject_before(text, m.start())
+                if subject:
+                    out.setdefault((f"{a}/{b}", subject), set()).add(term)
+    return out
+
+
+def _sentence_with(text: str, term: str, subject_hint: "str | None" = None) -> str:
+    """termを含む最初の文（なければ空）。ログ・警告の根拠表示用。"""
+    for sent in re.split(r"[。\n]", text):
+        if term in sent:
+            return sent.strip()[:120]
+    return ""
+
+
+def find_direction_mismatches(points, targets: "dict[str, str]") -> "list[dict]":
+    """主要なポイント（points）と、各対象（見出し名→本文）の向きの食い違いを返す。"""
+    pts = points if isinstance(points, str) else ""
+    pm = _direction_map(pts)
+    hits = []
+    for name, txt in targets.items():
+        if not isinstance(txt, str) or not txt.strip():
+            continue
+        for key, dirs in _direction_map(txt).items():
+            pdirs = pm.get(key)
+            if pdirs and not (dirs & pdirs):
+                t_term, p_term = sorted(dirs)[0], sorted(pdirs)[0]
+                hits.append({
+                    "section": name, "pair": key[0], "subject": None if key[1] == "-" else key[1],
+                    "section_directions": sorted(dirs), "points_directions": sorted(pdirs),
+                    "section_sentence": _sentence_with(txt, t_term),
+                    "points_sentence": _sentence_with(pts, p_term),
+                })
+    return hits
+
+
+def check_direction_warn(au: Audit, sections: dict, headline_for_image) -> None:
+    """向きの食い違いをau.warningsへ追加する（FAILにしない。上のコメント参照）。"""
+    targets = {"ヘッドライン": sections.get("part1_headline"),
+               "市場のフロー": sections.get("part2_flow"),
+               "headline_for_image": headline_for_image}
+    for h in find_direction_mismatches(sections.get("part1_points"), targets):
+        subj = f"（{h['subject']}）" if h["subject"] else ""
+        au.warn("W_direction_mismatch",
+                f"{h['section']}は「{'・'.join(h['section_directions'])}」、主要なポイントは"
+                f"「{'・'.join(h['points_directions'])}」と、{h['pair']}{subj}の向きが食い違っています。"
+                f" {h['section']}: 「{h['section_sentence']}」／主要なポイント: 「{h['points_sentence']}」",
+                **h)
+
+
+def summarize_check_ids(checks: "list[dict]") -> str:
+    """実際に評価したチェックのID要約（例: 「C12〜C24・C26〜C28・計17項目」）。
+    GENERATION_STATUS.mdの監査表記を、固定文言ではなく実際の評価対象から作る（v1.85）。
+    C16b等の枝番つきIDは親番号に含め、項目数（計N項目）には数える。"""
+    nums = sorted({int(m.group(1)) for c in checks for m in [re.match(r"C(\d+)", str(c.get("id", "")))] if m})
+    if not nums:
+        return f"計{len(checks)}項目"
+    ranges, start, prev = [], nums[0], nums[0]
+    for n in nums[1:]:
+        if n == prev + 1:
+            prev = n
+            continue
+        ranges.append((start, prev))
+        start = prev = n
+    ranges.append((start, prev))
+    parts = [f"C{a}" if a == b else f"C{a}〜C{b}" for a, b in ranges]
+    return "・".join(parts) + f"・計{len(checks)}項目"
+
+
 def run_all(bundle: dict, daily_data: dict) -> Audit:
     au = Audit()
     sections = bundle["sections"]
@@ -994,6 +1129,12 @@ def run_all(bundle: dict, daily_data: dict) -> Audit:
     check_c26(au, sections.get("part2_flow"))
     check_c27(au, sections.get("part2_summary"))
     check_c28(au, sections.get("part1_headline"), sections.get("part1_points"), daily_data)
+    # 警告（WARN）: FAILにしない。checks・failed・overall・終了コードに影響しない（v1.85）。
+    # 警告の検知の失敗で監査全体を止めない（例外はログに出して警告なしとして続行）。
+    try:
+        check_direction_warn(au, sections, headline_for_image)
+    except Exception as e:  # noqa: BLE001
+        print(f"WARN: 向きの食い違いチェック自体が失敗しました（警告なしとして続行）: {type(e).__name__}: {e}", file=sys.stderr)
     return au
 
 
@@ -1015,9 +1156,13 @@ def main() -> int:
         "failed": au.failed,
         "level": bundle["level"],
         "checks": au.checks,
+        # v1.85: 警告（FAILではない）。overall・failed・終了コードには影響しない。
+        "warnings": au.warnings,
     }
     out_path = bundle_path.parent / f"post_audit_{compact}.json"
     out_path.write_text(json.dumps(audit, ensure_ascii=False, indent=2), encoding="utf-8")
+    for w in au.warnings:
+        print(f"⚠ WARN（FAILではない）: {w['id']} — {w['detail']}")
     print(json.dumps(audit, ensure_ascii=False, indent=2))
     return 0 if au.failed == 0 else 1
 

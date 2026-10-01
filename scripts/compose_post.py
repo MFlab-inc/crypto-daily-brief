@@ -312,7 +312,7 @@ def _fallback_to_true_l1(daily_data: dict, gen: dict[str, Any], failing_checks: 
     b2 = generate_post.regenerate_call_b_as_l1(daily_data, client=client)
     new_b = b2.to_dict()
     new_a = {**old_a, "ok": False, "data": None,
-             "error": ("force_drop_unresolvedで続行したが除外後の再監査(C12〜C24)がFAILしたため"
+             "error": ("force_drop_unresolvedで続行したが除外後の再監査（C12〜C28）がFAILしたため"
                        f"L1へフォールバック（FAILしたチェック: {failing_checks}）")}
     failed_count = 1 + (0 if new_b["ok"] else 1)
     return {
@@ -414,7 +414,7 @@ def render_generation_status(gen: dict[str, Any], daily_data: dict | None = None
             )
     if l1_fallback_failing_checks is not None:
         lines.append(
-            "call_A 強制不採用後の再監査(C12〜C24)がFAILしたため、call_Aを失敗扱いへ差し戻し"
+            "call_A 強制不採用後の再監査（C12〜C28）がFAILしたため、call_Aを失敗扱いへ差し戻し"
             f"L1へフォールバックしました（FAILしたチェック: {l1_fallback_failing_checks}）。"
         )
     lines += [

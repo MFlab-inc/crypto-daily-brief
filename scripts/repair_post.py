@@ -2,7 +2,7 @@
 """repair_post.py — C18/C13違反の局所修正（v1.76・オーナー承認・2026-09-16）。
 
 compose_post.py が書き出した post_bundle.json を対象に、verify_post.py と
-同じ機械監査(C12〜C24)を実行し、C18（断定表現）・C13（ハッシュタグ境界の
+同じ機械監査（C12〜C28。実際に評価したチェックはGENERATION_STATUS.mdに記録）を実行し、C18（断定表現）・C13（ハッシュタグ境界の
 うち「'#'の直前が行頭/半角スペースでない」パターンのみ）が検出された場合に
 限り、違反箇所だけを局所的に修正してから再検証する。運用観察報告
 （DESIGN_CHANGES.md v1.75）で、観察期間7日中の監査FAIL3日がすべてC18のみに
@@ -23,7 +23,7 @@ compose_post.py が書き出した post_bundle.json を対象に、verify_post.p
     対象外とし、従来どおりFAILのまま扱う（観測していない事象に先回りで
     対処しない）。
   - 1ラウンド = その時点で検出されている対象違反すべてを1件ずつ修正した
-    うえで、機械監査(C12〜C24)全体を再実行する（書き直しが他の文・他の
+    うえで、機械監査（C12〜C28）全体を再実行する（書き直しが他の文・他の
     チェックへ影響する可能性があるため、個別に確認せずまとめて直してから
     再検査する）。最大2ラウンドまで。2ラウンド終えても対象違反が残る場合は
     従来どおりFAILとして扱う——本スクリプトは常に正常終了（exit 0）し、
@@ -169,6 +169,8 @@ def repair(target_date: str, *, client: "anthropic.Anthropic | None" = None) -> 
     final_failing = sorted(c["id"] for c in final_audit.checks if c["result"] == "FAIL")
     final_failing_details = [{"id": c["id"], "detail": c["detail"]}
                               for c in final_audit.checks if c["result"] == "FAIL"]
+    checked_ids = verify_post.summarize_check_ids(final_audit.checks)
+    warnings = list(getattr(final_audit, "warnings", []))
     rescued = rounds_used > 0 and not (REPAIRABLE_CHECK_IDS & set(final_failing))
 
     if rounds_used:
@@ -183,6 +185,8 @@ def repair(target_date: str, *, client: "anthropic.Anthropic | None" = None) -> 
         "total_usage": total_usage,
         "final_failing_checks": final_failing,
         "final_failing_check_details": final_failing_details,
+        "checked_ids": checked_ids,
+        "warnings": warnings,
         "rescued": rescued,
     }
 
@@ -212,19 +216,44 @@ def render_status_note(result: dict[str, Any]) -> str:
 
 
 def render_final_audit_note(result: dict[str, Any]) -> str:
-    """GENERATION_STATUS.mdへ常に追記する最終監査(C12〜C24)の結果サマリ
+    """GENERATION_STATUS.mdへ常に追記する最終監査の結果サマリ
     （v1.79・オーナー承認）。render_status_note()と異なり、局所修正
     （C18/C13）が1件も発生しなかった日（rounds_used==0）でも常に非空文字列を
     返す——「call_Aの失敗やフェイルクローズで本文をコミットしない日でも、
     GENERATION_STATUS.md（L0〜L3の判定、どのチェックがFAILしたか、その詳細）
     だけはコミットされるようにしてください」という指示への対応。
+
+    v1.85（オーナー承認）: 見出しの「C12〜C24」を固定文言ではなく、実際に評価した
+    チェックのID（result["checked_ids"]。例: C12〜C24・C26〜C28・計17項目）から作る。
+    あわせて、向きの食い違いの警告（FAILではない）の有無を常に1行で示す。
     """
-    lines = ["", f"本文機械監査（C12〜C24）: overall={'PASS' if not result['final_failing_checks'] else 'FAIL'}"]
+    checked = result.get("checked_ids") or "C12〜C24"
+    lines = ["", f"本文機械監査（{checked}）: overall={'PASS' if not result['final_failing_checks'] else 'FAIL'}"]
     if not result["final_failing_check_details"]:
         lines.append("  FAILしたチェックはありません。")
     else:
         for c in result["final_failing_check_details"]:
             lines.append(f"  FAIL: {c['id']} — {c['detail']}")
+    warnings = result.get("warnings") or []
+    if warnings:
+        lines.append(f"向きの食い違いチェック（警告のみ・FAILにしない）: 警告{len(warnings)}件（ファイル先頭に表示）")
+    else:
+        lines.append("向きの食い違いチェック（警告のみ・FAILにしない）: 警告なし")
+    return "\n".join(lines) + "\n"
+
+
+def render_warning_block(result: dict[str, Any]) -> str:
+    """GENERATION_STATUS.mdの先頭に置く警告ブロック（v1.85・オーナー承認）。警告が無ければ空文字列。
+    FAILではない旨を明記する。コスト記録のステップがこのファイルから「input=」「output=」の
+    数値を抽出するため、ここではそれらの文字列を使わない。"""
+    warnings = result.get("warnings") or []
+    if not warnings:
+        return ""
+    lines = [f"⚠⚠ 警告（向きの食い違い）{len(warnings)}件 — FAILではありません（機械監査の合否には影響しません）。"
+             "投稿前に本文を見直してください。"]
+    for w in warnings:
+        lines.append(f"  ⚠ {w['detail']}")
+    lines.append("")
     return "\n".join(lines) + "\n"
 
 
@@ -247,6 +276,10 @@ def main() -> int:
             if note:
                 f.write(note)
             f.write(final_audit_note)
+        # v1.85: 向きの食い違いの警告は、目立つようファイル先頭へ置く（警告が無い日は何もしない）。
+        warning_block = render_warning_block(result)
+        if warning_block:
+            status_path.write_text(warning_block + status_path.read_text(encoding="utf-8"), encoding="utf-8")
     print(note or "局所修正の対象なし（初回検証でC18・C13ともFAILしていない）。")
     print(final_audit_note)
     return 0

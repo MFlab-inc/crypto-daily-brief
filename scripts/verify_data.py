@@ -48,10 +48,17 @@ def parse_money(s: str) -> float | None:
 class Audit:
     def __init__(self) -> None:
         self.checks: list[dict] = []
+        # v1.85（オーナー承認）: FAILにしない「警告（WARN）」。checksには含めず、
+        # failed・overall・終了コードに一切影響しない（本文の向きの食い違い等、
+        # 誤検知の可能性があり当面は人の目視に委ねる項目用）。
+        self.warnings: list[dict] = []
 
     def add(self, cid: str, ok: bool | None, detail: str) -> None:
         result = "SKIP" if ok is None else ("PASS" if ok else "FAIL")
         self.checks.append({"id": cid, "result": result, "detail": detail})
+
+    def warn(self, wid: str, detail: str, **extra) -> None:
+        self.warnings.append({"id": wid, "detail": detail, **extra})
 
     @property
     def failed(self) -> int:

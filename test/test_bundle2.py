@@ -3749,8 +3749,12 @@ finally:
     sys.argv = _orig_argv
     repair_post.anthropic.Anthropic = _orig_anthropic_client
 _status_e2e_text = _status_e2e_path.read_text(encoding="utf-8")
-check("repair_post.main(): 修正対象が無い日（PASS）でもGENERATION_STATUS.mdへ最終監査結果が追記される",
-      "本文機械監査（C12〜C24）: overall=PASS" in _status_e2e_text, _status_e2e_text)
+check("repair_post.main(): 修正対象が無い日（PASS）でもGENERATION_STATUS.mdへ最終監査結果が追記される"
+      "（見出しは実際に評価したチェックから作る。v1.85: C12〜C24・C26〜C28・計17項目）",
+      "本文機械監査（C12〜C24・C26〜C28・計17項目）: overall=PASS" in _status_e2e_text, _status_e2e_text)
+check("repair_post.main(): 警告が無い日はファイル先頭に警告ブロックを置かず、「警告なし」と1行で示す（v1.85）",
+      _status_e2e_text.startswith("level: L0") and "向きの食い違いチェック（警告のみ・FAILにしない）: 警告なし" in _status_e2e_text,
+      _status_e2e_text)
 
 print("=== generate_post: 呼び出しBへのdaily_data除外（v1.82・オーナー承認） ===")
 
@@ -4719,6 +4723,174 @@ _b_c24alias2["sections"]["part1_points"] = "・某社が提携を発表しまし
 _au_c24alias2 = verify_post.run_all(_b_c24alias2, DAILY_DATA)
 _r24b = next(x for x in _au_c24alias2.checks if x["id"] == "C24_flow_no_unadopted_material")
 check("run_all(): 本文にFRB系の記述が無ければフローのFedは従来どおりC24 FAIL（v1.84）", _r24b["result"] == "FAIL", str(_r24b))
+
+print("=== 向きの食い違いの警告（WARN。FAILにしない）（v1.85・オーナー承認）・GENERATION_STATUSの監査表記 ===")
+
+# ---- 9/30の実際の本文（本番の自動生成。向きの食い違いが実際に起きた事例）を逐語で再現 ----
+_D930_POINTS = ("・Reutersによると、米国の8月分インフレ指標（PCE）が市場予想を下回る伸びとなり、FRBの利上げ観測が後退したと報じられました。"
+                "暗号通貨市場への直接因果は未確認です（Reuters、9月30日）。\n"
+                "・Reutersによると、米国・イラン間の協議停滞と燃料市場の逼迫を背景に原油価格が上昇したと報じられました。"
+                "原油・リスク選好経由の波及は考えられますが、暗号通貨価格への直接因果は未確認です（Reuters、9月30日）。")
+_D930_HEADLINE = "米国の8月分Core PCE物価指数が市場予想を下回る伸びにとどまり、Fedの利下げ観測を巡る思惑が意識されました。 #BTC #ETH"
+_D930_FLOW = ("①【出来事・ニュース】Reutersによると、米国の8月分Core PCE物価指数が市場予想を下回る伸びにとどまったと報じられました → "
+              "【地政学・マクロの変化】FRBの利下げ観測が後退し得るとの思惑が意識された可能性があります → "
+              "【中間市場指標・市場心理】インフレ鈍化を受けたリスク選好の心理が一部で強まった可能性があります → "
+              "【暗号通貨価格】BTC・ETHは24時間比でともに上昇し、値動きはおおむね限定的な範囲にとどまったとみられます。 #BTC #ETH\n"
+              "②【出来事・ニュース】Reutersによると、米国・イラン間の協議停滞と燃料市場の逼迫を背景に原油価格が上昇したと報じられました → "
+              "【地政学・マクロの変化】地政学リスクの高まりが市場で意識された可能性があります → "
+              "【中間市場指標・市場心理】原油高を受けたリスク回避的な心理が一部で強まった可能性があります → "
+              "【暗号通貨価格】BTC・ETHは24時間比で底堅い推移を見せたものの、原油高との直接因果は断定できません。 #BTC #ETH")
+_h930 = verify_post.find_direction_mismatches(
+    _D930_POINTS, {"ヘッドライン": _D930_HEADLINE, "市場のフロー": _D930_FLOW, "headline_for_image": "BTC・ETH・BNBともに堅調に推移"})
+check("向きの食い違い: 9/30の実例（本文は利上げ観測の後退・ヘッドラインとフロー①は利下げ）を、ヘッドラインと市場のフローの2件として検知する"
+      "（headline_for_imageは警告なし・フロー②の原油上昇は本文と一致するため警告なし）",
+      sorted(h["section"] for h in _h930) == ["ヘッドライン", "市場のフロー"]
+      and all(h["pair"] == "利上げ/利下げ" and h["section_directions"] == ["利下げ"] and h["points_directions"] == ["利上げ"] for h in _h930),
+      str(_h930))
+check("向きの食い違い: 警告に、食い違いのある文（対象側・本文側）が根拠として含まれる",
+      all("利下げ" in h["section_sentence"] and "利上げ" in h["points_sentence"] for h in _h930), str(_h930))
+
+# ---- 語の対ごとの検知（対象はヘッドライン・市場のフロー・headline_for_image）----
+def _dm(points, **targets):
+    return verify_post.find_direction_mismatches(points, targets)
+
+check("向きの食い違い: 利上げ／利下げ（本文が利下げ・対象が利上げ。逆向きも）",
+      len(_dm("・FRBの利下げ観測が強まった（Reuters）", ヘッドライン="FRBの利上げ観測が意識されました。")) == 1
+      and len(_dm("・FRBの利上げ観測が強まった（Reuters）", ヘッドライン="FRBの利下げ観測が意識されました。")) == 1)
+check("向きの食い違い: 上昇／下落（同じ主語＝原油で、本文が上昇・フローが下落）",
+      [h["subject"] for h in _dm("・原油価格が上昇したと報じられました（Reuters）", 市場のフロー="→ 原油価格が下落したことで意識された可能性があります。")] == ["原油"])
+check("向きの食い違い: 流入／流出（同じ主語＝資金〔ETF含む〕で、本文が流入・対象が流出）",
+      [h["subject"] for h in _dm("・ビットコインETFへの資金流入が報じられました（CoinDesk）", ヘッドライン="ETFから資金が流出したことが意識されました。")] == ["資金"])
+check("向きの食い違い: headline_for_imageも対象（短い見出しでも主語＝金利を取り出す）",
+      [h["section"] for h in _dm("・米長期金利が上昇しました（Reuters）", headline_for_image="長期金利が下落し暗号通貨は堅調")] == ["headline_for_image"])
+
+# ---- 警告しないケース（誤検知の抑制）----
+check("向きの食い違い: 同じ向きなら警告しない",
+      _dm("・原油価格が上昇しました（Reuters）", ヘッドライン="原油価格の上昇が意識されました。") == []
+      and _dm("・FRBの利上げ観測が後退しました（Reuters）", ヘッドライン="FRBの利上げ観測の後退が意識されました。") == [])
+check("向きの食い違い: 本文が両方の向きを書いている（上昇した後に下落等）場合は警告しない",
+      _dm("・原油価格は上昇した後に下落しました（Reuters）", ヘッドライン="原油価格の下落が意識されました。") == []
+      and _dm("・利上げ観測が後退し、利下げ観測が強まりました（Reuters）", ヘッドライン="FRBの利下げ観測が意識されました。") == [])
+check("向きの食い違い: 対象側が両方の向きを書いている場合は警告しない",
+      _dm("・原油価格が上昇しました（Reuters）", 市場のフロー="原油価格は上昇の後、下落に転じました。") == [])
+check("向きの食い違い: 主語が違えば警告しない（本文は原油の上昇・フローはBTCの下落／株式の下落）",
+      _dm("・原油価格が上昇しました（Reuters）", 市場のフロー="→ 【暗号通貨価格】BTC・ETHは24時間比で下落しました。") == []
+      and _dm("・原油価格が上昇し、米国株式市場は下落しました（Reuters）", ヘッドライン="原油価格の上昇が意識されました。") == [])
+check("向きの食い違い: 同じ文の中でも節ごとに主語を分ける（「原油価格が上昇し、米国株式市場は下落」→原油:上昇・株式:下落）",
+      verify_post._direction_map("原油価格が上昇し、米国株式市場は下落しました")[("上昇/下落", "原油")] == {"上昇"}
+      and verify_post._direction_map("原油価格が上昇し、米国株式市場は下落しました")[("上昇/下落", "株式")] == {"下落"})
+check("向きの食い違い: 主語が一覧に無い・方向語が無い・空欄・定型文・文字列でない場合は警告しない（見逃しは限界として開示）",
+      _dm("・某社の株主総会で議案が可決（Reuters）", ヘッドライン="BTCは上昇しました。") == []
+      and _dm(generate_post.FIXED_POINTS, ヘッドライン=generate_post.FIXED_HEADLINE, 市場のフロー=generate_post.FIXED_FLOW) == []
+      and _dm("", ヘッドライン="利上げ観測が意識されました。") == [] and _dm(None, ヘッドライン=None, 市場のフロー=123) == [])
+
+# ---- run_all(): WARNはFAILにしない（checks・failed・overall・終了コードに影響しない）----
+_b_dir = json.loads(json.dumps(b_ok))
+_b_dir["sections"]["part1_points"] = "・FRBの利上げ観測が後退したと報じられました（Reuters、2026-08-17）"
+_b_dir["sections"]["part1_headline"] = "FRBの利下げ観測が意識されました。暗号通貨価格への直接因果は未確認です。"
+_b_base = json.loads(json.dumps(_b_dir))
+_b_base["sections"]["part1_headline"] = "FRBの利上げ観測の後退が意識されました。暗号通貨価格への直接因果は未確認です。"
+_au_dir, _au_base = verify_post.run_all(_b_dir, DAILY_DATA), verify_post.run_all(_b_base, DAILY_DATA)
+check("run_all(): 向きの食い違いは警告（au.warnings）に入り、警告が無い場合は空のまま",
+      len(_au_dir.warnings) == 1 and _au_dir.warnings[0]["id"] == "W_direction_mismatch" and _au_base.warnings == [],
+      str(_au_dir.warnings))
+check("run_all(): 警告はchecksに入らず、failedを増やさない（FAILにしない）。チェック項目の構成・件数は警告の有無で変わらない",
+      [c["id"] for c in _au_dir.checks] == [c["id"] for c in _au_base.checks]
+      and _au_dir.failed == _au_base.failed and not any(c["id"].startswith("W_") for c in _au_dir.checks), str(_au_dir.failed))
+_real_find = verify_post.find_direction_mismatches
+_stderr_buf = _io_apr.StringIO()
+try:
+    verify_post.find_direction_mismatches = lambda *a, **k: (_ for _ in ()).throw(RuntimeError("detector broken"))
+    with _ctx_apr.redirect_stderr(_stderr_buf):
+        _au_broken = verify_post.run_all(_b_dir, DAILY_DATA)
+finally:
+    verify_post.find_direction_mismatches = _real_find
+check("run_all(): 警告の検知自体が失敗しても監査全体は止めず（警告なしとして続行）、ログに残す",
+      _au_broken.warnings == [] and _au_broken.failed == _au_base.failed and "detector broken" in _stderr_buf.getvalue(), _stderr_buf.getvalue())
+
+# ---- verify_post.main(): post_audit JSONにwarningsが入り、WARNだけでは終了コード0・overall PASS ----
+_vm_date = "2026-08-17"
+Path(f"outputs/{_vm_date}/draft").mkdir(parents=True, exist_ok=True)
+Path(f"outputs/{_vm_date}/daily_data.json").write_text(json.dumps(DAILY_DATA, ensure_ascii=False), encoding="utf-8")
+_b_main = json.loads(json.dumps(_b_dir)); _b_main["target_date_jst"] = _vm_date
+_bp = Path(f"outputs/{_vm_date}/draft/post_bundle.json")
+_bp.write_text(json.dumps(_b_main, ensure_ascii=False), encoding="utf-8")
+_orig_argv = sys.argv
+sys.argv = ["verify_post.py", str(_bp)]
+_buf_main = _io_apr.StringIO()
+try:
+    with _ctx_apr.redirect_stdout(_buf_main):
+        _rc_main = verify_post.main()
+finally:
+    sys.argv = _orig_argv
+_audit_json = json.loads(Path(f"outputs/{_vm_date}/draft/post_audit_{_vm_date.replace('-', '')}.json").read_text(encoding="utf-8"))
+check("verify_post.main(): 警告があってもoverallはPASS・終了コード0（FAILにしない）。post_audit JSONに警告が記録され、ログに「⚠ WARN」が出る",
+      _rc_main == 0 and _audit_json["overall"] == "PASS" and _audit_json["failed"] == 0 and len(_audit_json["warnings"]) == 1
+      and "⚠ WARN（FAILではない）: W_direction_mismatch" in _buf_main.getvalue(), _buf_main.getvalue()[:300])
+
+# ---- GENERATION_STATUS.md: 先頭の警告ブロック・見出しの表記・コスト記録のgrepを壊さない ----
+_REPAIR_RES = {"final_failing_checks": [], "final_failing_check_details": [], "checked_ids": "C12〜C24・C26〜C28・計17項目",
+               "warnings": _au_dir.warnings}
+_blk = repair_post.render_warning_block(_REPAIR_RES)
+check("警告ブロック: 先頭に「⚠⚠ 警告」・件数・FAILではない旨・警告の内容を含み、警告が無ければ空文字列",
+      _blk.startswith("⚠⚠ 警告（向きの食い違い）1件 — FAILではありません") and "投稿前に本文を見直してください" in _blk
+      and "向きが食い違っています" in _blk and repair_post.render_warning_block({**_REPAIR_RES, "warnings": []}) == "", _blk)
+check("警告ブロック: コスト記録のステップが抽出する「input=」「output=」の文字列を含まない（daily.ymlのgrep -oPを壊さない）",
+      "input=" not in _blk and "output=" not in _blk)
+_note = repair_post.render_final_audit_note(_REPAIR_RES)
+check("最終監査の表記: 見出しは実際に評価したチェックのID（C12〜C24・C26〜C28・計17項目）から作り、警告の件数とファイル先頭に表示する旨を示す",
+      "本文機械監査（C12〜C24・C26〜C28・計17項目）: overall=PASS" in _note and "警告1件（ファイル先頭に表示）" in _note, _note)
+check("最終監査の表記: 古い固定文言（C12〜C24のみ）が残っていない／結果dictにchecked_idsが無い旧形式でも例外にならない",
+      "（C12〜C24）" not in _note
+      and "本文機械監査（C12〜C24）" in repair_post.render_final_audit_note({"final_failing_checks": [], "final_failing_check_details": []}))
+
+# main()経由: 警告がある日はGENERATION_STATUS.mdの先頭に警告ブロックが置かれ、コスト記録の抽出結果は変わらない
+_status_w_path = Path(f"outputs/{REPAIR_TEST_DATE}/GENERATION_STATUS.md")
+_status_w_path.write_text("level: L0\ntoken_usage（実消費量）: input=12345, output=678 (call_A: in=1 out=2 / call_B: in=3 out=4)\n", encoding="utf-8")
+Path(f"outputs/{REPAIR_TEST_DATE}/draft/post_bundle.json").write_text(json.dumps(_b_dir, ensure_ascii=False), encoding="utf-8")
+_orig_argv = sys.argv
+sys.argv = ["repair_post.py", REPAIR_TEST_DATE]
+_orig_anthropic_client = repair_post.anthropic.Anthropic
+repair_post.anthropic.Anthropic = lambda: FakeClient(lambda kw, n: json_response({"rewritten_sentence": "x"}))
+try:
+    with _ctx_apr.redirect_stdout(_io_apr.StringIO()):
+        repair_post.main()
+finally:
+    sys.argv = _orig_argv
+    repair_post.anthropic.Anthropic = _orig_anthropic_client
+_status_w = _status_w_path.read_text(encoding="utf-8")
+check("repair_post.main(): 警告がある日はGENERATION_STATUS.mdの先頭に警告ブロックを置き、最終監査の記録（警告N件）も追記する",
+      _status_w.startswith("⚠⚠ 警告（向きの食い違い）1件") and "level: L0" in _status_w
+      and "向きの食い違いチェック（警告のみ・FAILにしない）: 警告1件" in _status_w, _status_w[:400])
+check("repair_post.main(): 警告ブロックを先頭に置いても、コスト記録の抽出（grep -oP '(?<=input=)[0-9]+' | head -1）は従来どおり12345・678",
+      __import__("re").findall(r"(?<=input=)[0-9]+", _status_w)[0] == "12345"
+      and __import__("re").findall(r"(?<=output=)[0-9]+", _status_w)[0] == "678", _status_w[:300])
+
+# ---- summarize_check_ids ----
+check("summarize_check_ids: 連続する番号は範囲にまとめ、飛ぶ所は分け、枝番つき（C16b）は親番号に含めて項目数に数える",
+      verify_post.summarize_check_ids([{"id": i} for i in ("C12_a", "C13_a", "C14_a", "C16_a", "C16b_a", "C18_a", "C19_a", "C20_a")])
+      == "C12〜C14・C16・C18〜C20・計8項目")
+check("summarize_check_ids: 単独の番号・空・C以外のIDでも例外にならない",
+      verify_post.summarize_check_ids([{"id": "C26_x"}]) == "C26・計1項目" and verify_post.summarize_check_ids([]) == "計0項目"
+      and verify_post.summarize_check_ids([{"id": "X1"}, {"id": "Y"}]) == "計2項目")
+check("固定文言の整合: compose_postの利用者向け文言（force_drop後の再監査）もC12〜C28になっている",
+      "（C12〜C28）" in (REPO / "scripts" / "compose_post.py").read_text(encoding="utf-8")
+      and "再監査(C12〜C24)がFAIL" not in (REPO / "scripts" / "compose_post.py").read_text(encoding="utf-8"))
+
+print("=== generate_post.py: 米連邦準備制度の表記を「FRB」に統一する指示（v1.85・オーナー承認） ===")
+_RA = generate_post.RULES_ABSOLUTE
+check("RULES_ABSOLUTE: 米連邦準備制度の略称を「FRB」に統一する規則（7番）がある・「Fed」「FED」を「FRB」に書き換え・混在させない旨が明記される",
+      "7. 米連邦準備制度（連邦準備制度理事会）の略称は「FRB」に統一する" in _RA
+      and "「Fed」「FED」も「FRB」と書き換え" in _RA and "「Fed」と「FRB」を混在させない" in _RA, _RA[-420:])
+check("RULES_ABSOLUTE: 規則の対象に前編（ヘッドライン・主要なポイント）・後編（市場のフロー・総括）・headline_for_imageのすべてが含まれる",
+      all(k in _RA for k in ("ヘッドライン", "主要なポイント", "市場のフロー", "総括", "headline_for_image")))
+check("RULES_ABSOLUTE: FOMCは会合・委員会そのものを指す場合に限って使ってよい／地区連銀（ダラス連銀等）は日本語表記のままでよい旨が明記される",
+      "FOMC（連邦公開市場委員会）は、会合・委員会" in _RA and "地区連銀は" in _RA.replace("\n   ", ""), _RA[-300:])
+check("SYSTEM_A・SYSTEM_BのどちらにもFRB表記統一の規則が含まれる（呼び出しA=前編・headline_for_image／呼び出しB=後編）",
+      "7. 米連邦準備制度" in generate_post.SYSTEM_A and "7. 米連邦準備制度" in generate_post.SYSTEM_B)
+check("RULES_ABSOLUTE: 既存の規則1〜6は変更されていない（規則7の追加のみ）",
+      all(f"{i}. " in _RA for i in range(1, 7)) and "3. 「暗号通貨」と表記する。「仮想通貨」は使わない。" in _RA
+      and "4. 変化率のラベルは「24時間比」。「前日比」は使わない。" in _RA)
 
 print()
 print(f"PASS: {len(PASS)}  FAIL: {len(FAIL)}")
