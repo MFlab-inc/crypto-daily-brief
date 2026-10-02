@@ -1,0 +1,576 @@
+{
+  "target_date_jst": "2026-10-02",
+  "level": "L0",
+  "sections": {
+    "part0_target_date": "2026年10月2日（金）",
+    "part1_headline": "FRBがFleur Capital Corporationによる申請の承認を発表しました。 #BTC #ETH",
+    "part1_points": "・FRBはFleur Capital Corporationによる申請を承認したと発表しました。詳細な事業内容は原文からは確認できません（FRB、10月2日）。\n・FRBはRegulation O（銀行役員向け信用供与規制）の近代化提案について、意見募集期間を延長すると発表しました。暗号通貨関連企業への直接の言及はなく、暗号通貨価格への直接因果は未確認です（FRB、10月2日）。\n・Reutersによると、G7は米国の働きかけを受けIEA（国際エネルギー機関）を通じてディーゼル等の備蓄放出に合意したと報じられています。原油・エネルギー価格の動向はリスク選好を通じて暗号通貨市場にも波及し得る材料ですが、暗号通貨価格への直接因果は未確認です（Reuters、10月2日）。\n・Reutersによると、米国の9月の非農業部門雇用者数は市場予想を下回ったものの、労働市場は総じて安定していると報じられています。雇用統計の下振れは利上げ観測の後退につながり得る材料ですが、暗号通貨価格への直接因果は未確認です（Reuters、10月2日）。",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.872兆（¥453.5兆）｜24時間取引高 $1182.8億（¥18.68兆）\n・ #BTC：$84,527（約1,334.9万円）｜24時間比 -0.13%\n　（24時間レンジ $83,850〜$87,249）\n・ #ETH：$2,666（約42.1万円）｜24時間比 -1.25%\n　（24時間レンジ $2,650〜$2,777）\n・ #BNB：$767（約12.1万円）｜24時間比 -0.55%\n・市場心理：Fear & Greed 67（Greed、CoinMarketCap API）\n・ドミナンス：BTC 59.15%｜ETH 11.33%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年10月3日07:37 JST、USD/JPY ¥157.92",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $11.64M vs Base上ETH/USDC $136.58M｜参考：Base上DEX全体 $12.404億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $63.35億（¥1.00兆）｜24時間比 -0.20%｜USDCドミナンス 84.8%\n・ ETH/USDC（Base）参考APR：0.05% 41.52%（TVL $9.85M／24h出来高 $22.40M）｜0.3% 77.13%（TVL $162.09M／24h出来高 $114.17M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年10月3日07:37 JST",
+    "part2_flow": "①FRBはFleur Capital Corporationによる申請の承認、およびRegulation O近代化提案に関する意見募集期間の延長を発表しました（FRB、10月2日）。規制面での動きとして市場に意識された可能性がありますが、暗号通貨価格への直接因果は未確認です。BTC・ETHは24時間比でいずれも下落となりましたが、日中に上下に振れる場面もみられました。 #BTC #ETH\n②Reutersによると、G7は米国の働きかけを受けIEAを通じた備蓄放出に合意したと報じられており、原油・エネルギー価格の変動を通じたリスク選好心理への波及が意識された可能性があります。同時期、米国の9月の非農業部門雇用者数は市場予想を下回ったものの労働市場は総じて安定していると報じられ、利上げ観測の後退が意識された可能性があります。これらの中間指標を背景に、BTCは高値圏から値を落とす場面があり、ETHも同様に上値を切り下げる展開となりましたが、価格変動との直接因果は断定できません。",
+    "lp_comment": "参考APRは両プールとも前日から上昇しました。\nBase 0.05%プールの参考APRは35.06%→41.52%へ上昇しました（24時間出来高 +18.22%、TVL -0.19%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは52.83%→77.13%へ上昇しました（24時間出来高 +44.95%、TVL -0.72%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比-1.25%と下落中のため、ETH偏り・下限側レンジ外・下落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "雇用統計の下振れやエネルギー備蓄放出合意など複数のマクロ材料が重なり、市場心理はやや不透明感を帯びた一日となりました。Blastの撤退表明も継続監視の対象として引き続き注視が必要です。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "BTC一時急伸、ETHも乱高下",
+  "audit_ledger": [
+    {
+      "source": "FRB",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261002a.htm",
+      "title": "Federal Reserve Board announces approval of application by Fleur Capital Corporation",
+      "published_at": "Fri, 2 Oct 2026 20:45:00 GMT",
+      "verified_by": "FRB公式発表",
+      "decision": "採用",
+      "reason": "A: 規制当局による個別企業の申請承認で、原則掲載対象の直接材料"
+    },
+    {
+      "source": "FRB",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20261002a.htm",
+      "title": "Federal Reserve Board announces it will extend, until November 4, the comment period on its proposal to modernize Regulation O",
+      "published_at": "Fri, 2 Oct 2026 20:00:00 GMT",
+      "verified_by": "FRB公式発表",
+      "decision": "採用",
+      "reason": "A: 銀行規制の意見募集期間延長。金融規制動向として掲載し、暗号通貨への直接因果は未確認である旨を明記"
+    },
+    {
+      "source": "FRB",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261002a.htm",
+      "title": "Federal Reserve Board issues enforcement action with Ontario Bancorporation, Inc.",
+      "published_at": "Fri, 2 Oct 2026 15:00:00 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 特定銀行への執行措置で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/statistics/boj/other/mei/release/2026/mei260930.xlsx",
+      "title": "日本銀行が保有する国債の銘柄別残高",
+      "published_at": "Fri, 02 Oct 2026 17:00:00 +0900",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: summaryが空で内容確認不能、統計データの公表のみ"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/statistics/boj/other/col/col2609.xlsx",
+      "title": "日本銀行が受入れている担保の残高（9月末）",
+      "published_at": "Fri, 02 Oct 2026 17:00:00 +0900",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: summaryが空で内容確認不能、統計データの公表のみ"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/statistics/dl/loan/yaku/yaku2608.pdf",
+      "title": "貸出約定平均金利（8月）",
+      "published_at": "Fri, 02 Oct 2026 08:50:00 +0900",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: summaryが空で内容確認不能、統計データの公表のみ"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/statistics/boj/other/mb/mb.htm",
+      "title": "マネタリーベース（9月）",
+      "published_at": "Fri, 02 Oct 2026 08:50:00 +0900",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: summaryが空で内容確認不能、統計データの公表のみ"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/statistics/tk/tankan09b.htm",
+      "title": "短観（9月）＜調査全容＞",
+      "published_at": "Fri, 02 Oct 2026 08:50:00 +0900",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: summaryが空で内容確認不能、統計データの公表のみ"
+    },
+    {
+      "source": "USTR",
+      "url": "https://ustr.gov/about/policy-offices/press-office/press-releases/2026/october/ambassador-greer-commends-trade-ministers-signing-statement-eliminating-forced-labor-global-supply",
+      "title": "Ambassador Greer Commends Trade Ministers Signing on to Statement Eliminating Forced Labor in Global Supply Chains",
+      "published_at": "Fri, 02 Oct 2026 20:54:52 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 強制労働撤廃の通商声明で、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "USTR",
+      "url": "https://ustr.gov/about/policy-offices/press-office/press-releases/2026/october/ambassador-greer-issues-statement-g20-trade-ministers-reaching-consensus-condemning-weaponization",
+      "title": "Ambassador Greer Issues a Statement on G20 Trade Ministers Reaching Consensus on Condemning the Weaponization of Food through Coercive Trade Actions",
+      "published_at": "Fri, 02 Oct 2026 20:50:42 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 食料の武器化非難に関する声明で、波及経路を説明できない"
+    },
+    {
+      "source": "USTR",
+      "url": "https://ustr.gov/about/policy-offices/press-office/press-releases/2026/october/chairs-statement-g20-trade-ministerial",
+      "title": "Chair’s Statement of the G20 Trade Ministerial",
+      "published_at": "Fri, 02 Oct 2026 20:46:25 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: G20通商閣僚会合の議長声明で、波及経路を具体的に説明できない"
+    },
+    {
+      "source": "USTR",
+      "url": "https://ustr.gov/about/policy-offices/press-office/press-releases/2026/october/united-states-and-mexico-announce-course-remediation-corporacion-de-occidente-facility",
+      "title": "United States and Mexico Announce Course of Remediation at Corporación de Occidente Facility",
+      "published_at": "Fri, 02 Oct 2026 18:46:40 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別工場の労働是正措置で、波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/10/national-manufacturing-day-2026/",
+      "title": "National Manufacturing Day, 2026",
+      "published_at": "Fri, 02 Oct 2026 19:29:58 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 製造業の日の宣言文で、波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/briefings-statements/2026/10/presidential-message-on-national-cybersecurity-awareness-month/",
+      "title": "Presidential Message on National Cybersecurity Awareness Month",
+      "published_at": "Fri, 02 Oct 2026 18:28:12 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: サイバーセキュリティ月間の声明で、波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/briefings-statements/2026/10/presidential-message-on-national-domestic-violence-awareness-month/",
+      "title": "Presidential Message on National Domestic Violence Awareness Month",
+      "published_at": "Fri, 02 Oct 2026 18:25:08 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: DV防止月間の声明で、波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/briefings-statements/2026/10/presidential-message-on-national-breast-cancer-awareness-month-a680/",
+      "title": "Presidential Message on National Breast Cancer Awareness Month",
+      "published_at": "Fri, 02 Oct 2026 18:20:21 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 乳がん啓発月間の声明で、波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/releases/2026/10/new-report-dsa-policies-would-cost-americans-trillions/",
+      "title": "New Report: DSA Policies Would Cost Americans Trillions",
+      "published_at": "Thu, 01 Oct 2026 22:22:29 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 政治的な政策批判レポートで、波及経路を具体的に説明できない"
+    },
+    {
+      "source": "ホワイトハウス（大統領令等）",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/10/national-manufacturing-day-2026/",
+      "title": "National Manufacturing Day, 2026",
+      "published_at": "Fri, 02 Oct 2026 19:29:58 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 候補13と同一内容の重複、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxNLWE0blFwNjQtYzV3UTJuODNjRmZQbTJydkY1SkVmZjd3bkFjVW5ET0JKS1U3aTEyb3N0MUN0RWNRUEdXX2YzSnpBMG9mbk9Ock8tNjZUMzdLRWRoN2lGMTlYY3BDVVdTeW5SdFlyNzVDbXBVSmJwWWdWTVcwSVFwaXgySHlleW56TS1ZN1k0S2ZlekxDemVmaWpnU3dWWHFQQlZfLXRvUEM2UGZVdjdJWThvRTd1djlsbWJuUkVFNUlpUQ?oc=5",
+      "title": "Wall St Week Ahead Spiking bond yields, midterms, earnings to test US stocks' typical fourth-quarter strength - Reuters",
+      "published_at": "Fri, 02 Oct 2026 20:43:04 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 来週の株式市場見通し記事で、具体的な新規事実に乏しく参考材料としても不十分"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQZnMyRFpEcDhNOHlnU2NJT3F1R2M5QkEzMjJPaGRUYlZ1S2RYYmNMZ1pERlZINEtxMkJDTktfMThYeHZ0U2FDZjVoQ3l3eHViLVkyajQ0S1RfSDJ4QS1xTEgxNVlaZzJSSkVjLTJYM04tX3ZHUEVSY0VHdjJHUU45RHBRajVxQzA3emVQNXpvRG9XRVVVZUtSdUtveUN2WUp6RzhBeVQwQ0JzVk8zWWYzS1FCVUtTZ3UtNTllVzJrbTJyUC00?oc=5",
+      "title": "EXCLUSIVE: G7 countries agree on release of diesel and oil stocks after US pressure - Reuters",
+      "published_at": "Fri, 02 Oct 2026 20:42:24 GMT",
+      "verified_by": "Reuters報道",
+      "decision": "採用",
+      "reason": "B: G7が米国の働きかけでIEAを通じた石油・ディーゼル備蓄放出に合意。原油・エネルギー価格を通じたリスク選好への波及経路があり参考材料として掲載。暗号通貨価格への直接因果は未確認"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxPeTVxVTNLX2pUZEc1U0xtNWdyYWRjY0NjSVcweXJNYk9PTDVKVnJaTzFNTUdnNW5LVEFxaHlELU9fVW9neE93Q0VDanlUbkJPcUhMaXNmNUJQX3pXd0JvcU1VSHh5Z1NEZnQzWGFsclpXZ08zRTVmY2ZaV1J4a2JBU3lPTEVNTUNBSVdVcWRydUlJOEY5ZU13NERhMFE3YUstSzB2RE5JV1gtZw?oc=5",
+      "title": "Equities close higher as softer jobs data quiets rate-hike expectations - Reuters",
+      "published_at": "Fri, 02 Oct 2026 20:28:31 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 株式市場の終値に関する報道で、雇用統計の内容は候補23と重複するため候補23を優先"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxOQk9FMWR2VUFlZnNHVHBWUVJ6VVYxc29ZbTdtNWNUUEx1UkwzY2c2MjhvUGVwSEM5THZKV3R5RF82VHJfRGJHSF9BT0RFalJFZ3NDeVVmT3Z3V0ZDQ183YngzN3A3R2diamNBU1RBZ1BKbldoMEVRSFRoT1M5M19mVTZxNm9VN2ZEMmkxdUszYklqNmNhVlZQdW45UXV4clZYLTRKRGpGRQ?oc=5",
+      "title": "Italy hikes growth outlook but budget deficit to rise from next year - Reuters",
+      "published_at": "Fri, 02 Oct 2026 20:13:05 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: イタリアの成長見通しと財政赤字に関する内容で、暗号通貨市場への波及経路を具体的に説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxNQmltMmFiSHRscEo3QjJKNWdUYW5QM3NIVVM5OEhtOFMzekduZlEyTHA3amZSM3VvVmF1V3hZeWtLdDJ5TVdIQ0gzaVl6WlhBZm9hUDFDQXZKTF9RN3ZEWHlFZGZpMENOQUpoRVM4RXpaOFJCa2tZa1ZibmRhTzVObHJOTG1zaFdobmhrSDl3VXNJRmhiRzF1NnE5a1VIMmdPV2dnUE13M1dIbXpNdVE?oc=5",
+      "title": "US job growth undershoots expectations in September, but labor market remains stable - Reuters",
+      "published_at": "Fri, 02 Oct 2026 18:41:57 GMT",
+      "verified_by": "Reuters報道",
+      "decision": "採用",
+      "reason": "B: 米9月雇用統計が予想を下回ったとの報道。利上げ観測後退を通じた流動性環境への波及経路があり参考材料として掲載。暗号通貨価格への直接因果は未確認"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxPMUlBeEJPRzRGMUNUWWFBRWpJVzRKNU5zVHI2aDRKN1hIYWxRbE5YSDNFbHd1aHFnOC13SEVYZnhTM0g5TEJYQnd6NjZJOUtCVWFtcVp5UkVkMlM3WHJpcUxXcTJOaHdFNnBTbDNEZGpXVWJFNnNma09kaHU5VzRTYWZwX0JNdGF3RlZpU1dUR0k2a2laeGQwa0ZvYTlWUEN5Wl9MdTNQdEZfSkExRVJDeFlFb0FPLUc2YkR0ZHFmY3BPS2pnVkZORWoyNnY?oc=5",
+      "title": "Blue Owl flagship fund withdrawal requests slow as private credit turmoil eases - Reuters",
+      "published_at": "Fri, 02 Oct 2026 18:16:58 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: プライベートクレジットファンドの解約状況で、波及経路を具体的に説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxNcHZzWUw2YjVHbmx6SmNmYURKOGxkcy0zbndDQnpTMnRSc0JLOEpIaWw0MzVmeGRzNGZPeUFZQlM4aGduVEV5cVRCYlFwSk53RUQxYzhoZHd2UFhwX25mZlJKbmFzR2Zza3E3OGRVRVN4M0lvV2w3bTQwb1FzQ0s5eUhvQ3VjZTBZbW11QzVKTWctQ3FYQk9GZ2VYRVdKMEo1RVp2S3Z0LTVVMV9OZE15ZURBejNCWVkteVdzZDRsMHc?oc=5",
+      "title": "IEA's Birol says oil prices starting to fall after reserve release decision - Reuters",
+      "published_at": "Fri, 02 Oct 2026 17:36:32 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 原油価格下落に関する内容だが、候補20・27と重複するため追加項目としては不採用"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxPRVl3X2F3djhLSmxyT010N1Z2YU1KTTRUUVNRYWFtaFpoNXhKcGIzWl9LRUhmSWFSNGZqWnF1QTcxTG81dS00elV1aDRlN2dobnpSY3hhOU44WGN6TlNVLV90WEwyYm40Y0g2UGZ3dDZkT3hBVDZRaFppb3VRMWljREI5c3NDYzdISFBFRElPaVRIcy1YamFfaw?oc=5",
+      "title": "Fed's Goolsbee says rate hike and pause both 'on the table' - Reuters",
+      "published_at": "Fri, 02 Oct 2026 17:23:43 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: FRB高官の利上げ・利下げ両論発言だが、具体性に乏しく参考材料としても不十分"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxOb19pQnVCc2dwWWN3NlFDRl9LSTJvQVRYQlpDNDRxM2lhcm9kQzNkOGE5Y1c4eGFQcEFaSHZfUTlydnhfZ25hbFdWSUlBMy1IMVM1S1hOYnA1SEJWby0tZnNzY25jek44MGY1UGprN2lHT25qN3hqLTMxazdES2s0QUczSTBzcUVpTmRRc0pqcG1wd19yR1FidVJka3otVWx5SkF1dm9TaHdzN2hzLW92M1lLdVlqSVk?oc=5",
+      "title": "G7 to release 100 million barrels of diesel and other reserves through IEA - Reuters",
+      "published_at": "Fri, 02 Oct 2026 16:49:45 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: G7の備蓄放出詳細で候補20と同一事実のため重複、候補20を優先"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxPMHpSdDRDc2MzeVQ0R28ycC03cXdDVTBvUGN0WTh3eGJSQ0I4UEN1Sk1PSzQ4NjF2QjVRTVhXbnMtN2JFSWxrUGtlTDhoNTRMVUZpTS1KT2xVcGh3czdZN0loQnNDb1d4UXVJMllkTk00cXhrUHNRbHpnakhJSGJ3OVRCRjA2QloydDZILUQyTl9UaFc5aHlmVjVYZWRBbUE4dXp4Q0ZfWEdGdEp1cTRLeXkxNVdvNFBObDVWd3hmWUtfZw?oc=5",
+      "title": "Trump says US deal with South Korea has $8.4 billion for oil recovery - Reuters",
+      "published_at": "Fri, 02 Oct 2026 16:16:00 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 米韓間の個別協定内容で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxQRGd3RVh4MnhWQlFveG5ybTVIclRIUmtwUlhmdGx1SkRfT3VvRkloVWVtTXNsZl9ZLUNfaWh4MndBZHdLTFhsdXRMTWlKbGtoWnhQYUhPSFdQMlNraWxFUzk1amx2ekV3ZHdKZ054OWhhU2I3MERNUHRaMDZNRmxFbHBCN0RSQTJ3b0RZS2QwX1ZhQTBLTFM0ZjVHcEdGUkRQQTNvVw?oc=5",
+      "title": "UK's FTSE 100 posts biggest weekly drop since April as bond rout rattles investors - Reuters",
+      "published_at": "Fri, 02 Oct 2026 16:08:20 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 英国株式市場の週間下落に関する内容だが、具体的材料としての掲載優先度は他候補に劣る"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxNZ0l1bkJFbVQwY0lWdXRvbmM1aUxFQUZVLWQwd1RPM1JINHhNLTZqLWY0cEFMb3RKVnFFbmQ2ZERnX0tuam9KdG90aW5RaGtsV0ZXOUd1WkdVNjUteXVTSHYxUTkwSWdZdnI3RXRmTEVMWEpyTXB0NF9GSnQ5UTNOU1V4ZWtLaUdTVFJQT1F5NG84cWdRVFZveXh3?oc=5",
+      "title": "Explainer: How Turkey's investment fund bubble burst - Reuters",
+      "published_at": "Fri, 02 Oct 2026 14:58:56 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: トルコの投資ファンドバブル崩壊の解説記事で、波及経路を具体的に説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxPUjFoeE14UXo1UVZVQ3BoTmlmQ0FmODgzMFdHNFR5d25OVHhpS2M0SGxPOFNzLW92TDkzMDhNSm9fdnhkM2taZlFQUjVIbWZCN0dFU3JqVHVyeF9Ib1dPTmhQWWVFUW9walRLUDd3VVdFVXFnN3NMTDBIb3RZaFhVcjA1TlVxQl9lYlJNY2dSU29wZzNCQThHRXhudWZzZFhNRjJqaEU3ck0zNDdwZlhsblprR3N5NENnTEtMcFFaa2NBSlA4T3lnTHNR?oc=5",
+      "title": "Dangote's planned Kenya refinery faces legal challenge by consumer-rights group - Reuters",
+      "published_at": "Fri, 02 Oct 2026 14:38:48 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ケニアの個別製油所計画への法的異議で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxPQTk2ZFJ4YklNcjZMNEJ3aWlPSG9HZlZ5RzF1Q3o1RW16emhJWUQ3VVFkV3luT3FjSG9EaFVpR1VpYjRnMElVWFR0SFJ2Y1FRT0lNVHV6bHExMmJlbGI2U2FKMkRDakE5clVydmdkUkRXY3plNE16ZHVMZEhGNWtwQ25Nd2lQRndnM1lPTnJOSkx2ODNjeUloUGhaemlLMTR5NGY4ZmZnWnBpVG45RGwzcGVjcTU4SjNaRjdVd0ZSdlI?oc=5",
+      "title": "Iran readies harder retaliation if attacked as diplomacy faces long odds - Reuters",
+      "published_at": "Fri, 02 Oct 2026 14:32:10 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: イランの報復準備に関する地政学記事だが、具体的な波及経路の記述が薄く参考材料として不十分"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxPOVdpUmRIWHB4RTJyblAwYnVUV2d4VVBaV0pFNUx0TXBLeV9rMDJONlpnTDJPdXVRNEhkWUU5cjVFNEI1Q0ZSTTNhMFJIcTZnY2M3SnFTNzROVDlqeENyN2pQV2d4RnJ2bVlVMUhrcl9RbmoweWp6VkEyRUJjMHl1QmdqN1d0TElTc1hkVURIQURJZmxiWllrV0R1TWh2M1psNlBBN1dIckNIa3BsbDE0VVNua1h5UE5LbDVCSjMtTVJkLVk?oc=5",
+      "title": "US Coast Guard says it intercepted ship carrying fuel to Cuba - Reuters",
+      "published_at": "Fri, 02 Oct 2026 14:20:35 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: キューバ向け燃料船の拿捕で、波及経路を説明できない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/what-happened-in-crypto-today?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Here’s what happened in crypto today",
+      "published_at": "Fri, 02 Oct 2026 20:46:58 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 日次まとめ記事で個別の事実報道ではなく単独では根拠にできない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/mica-strengthened-retail-trust-regulated-crypto-exchanges-bitpanda-ceo-says?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "European crypto users have ‘more faith’ in regulated firms under MiCA: Bitpanda co-CEO",
+      "published_at": "Fri, 02 Oct 2026 20:40:47 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: MiCA規制への信頼感に関するインタビュー記事で、意見・見解であり独立2ソース規定の事実報道要件を満たさない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/anchorage-digital-cuts-workforce-report?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "$4.2B crypto bank Anchorage Digital cuts 17% of workforce: Report",
+      "published_at": "Fri, 02 Oct 2026 18:41:17 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: Anchorage Digitalの人員削減報道だが単独ソースでtier1・2の裏付けがなく独立2ソースの相方も確認できない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/blast-to-wind-down-ethereum-l2-after-costs-outpace-revenue?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Blast to wind down Ethereum L2 after costs outpace revenue",
+      "published_at": "Fri, 02 Oct 2026 18:24:05 +0000",
+      "verified_by": "CoinDesk・The Blockの独立報道により同一事実を確認",
+      "decision": "採用（独立2ソース）",
+      "reason": "独立2ソース規定に該当：Blast L2の撤退・サービス終了という事実をCointelegraph・CoinDesk・The Blockが独立に報道しており、公式発表での確認は取れていない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/09/30/bny-in-talks-with-kraken-parent-payward-over-infrastructure-partnership",
+      "title": "BNY in talks with Kraken parent Payward over infrastructure partnership",
+      "published_at": "Fri, 02 Oct 2026 17:34:40 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: BNYとKrakenの提携協議報道で、単独ソースかつ意見・交渉段階の内容であり独立2ソースの相方も確認できない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/tech/2026/10/02/once-a-usd2-billion-ethereum-layer-2-blast-is-shutting-down-after-assets-plunge-98",
+      "title": "Once a $2 billion Ethereum layer-2, Blast is shutting down after assets plunge 98%",
+      "published_at": "Fri, 02 Oct 2026 17:15:35 +0000",
+      "verified_by": "Cointelegraph・The Blockの独立報道により同一事実を確認",
+      "decision": "採用（独立2ソース）",
+      "reason": "独立2ソース規定に該当：Blast L2の撤退という事実をCoinDesk・Cointelegraph・The Blockが独立に報じており、公式発表での確認は取れていない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/news-analysis/2026/10/02/possible-next-crypto-czar-jay-clayton-began-crypto-s-regulation-by-enforcement-at-sec",
+      "title": "Trump’s potential AI czar, Jay Clayton, helped pioneer the SEC’s crypto crackdown",
+      "published_at": "Fri, 02 Oct 2026 17:12:48 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 人事観測記事で意見・分析が中心であり事実報道の要件を満たさない"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/ecosystems/2026-10-02-drift-opens-exploit-recovery-claims-initial-payouts-just-over-1-user-losses-417581",
+      "title": "Drift opens exploit recovery claims with initial payouts of just over 1% of user losses",
+      "published_at": "Fri, 02 Oct 2026 17:10:40 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: Driftのハッキング被害返金に関する単独ソース記事で独立2ソースの相方が確認できない"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/business/2026-10-02-blast-ethereum-layer-2-shutting-down-417583",
+      "title": "Paradigm-backed Layer 2 Blast to wind down network as costs exceed revenue",
+      "published_at": "Fri, 02 Oct 2026 16:54:29 +0000",
+      "verified_by": "Cointelegraph・CoinDeskの独立報道により同一事実を確認",
+      "decision": "採用（独立2ソース）",
+      "reason": "独立2ソース規定に該当：Blast L2の撤退という事実をCointelegraph・CoinDesk・The Blockが独立に報じており、公式発表での確認は取れていない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/71-percent-uk-finance-leaders-expect-tokenization-reshape-financial-services-lloyds?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "71% of UK finance leaders expect tokenization to reshape financial services: Lloyds",
+      "published_at": "Fri, 02 Oct 2026 16:20:24 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: トークン化に関する英国の調査記事で、単独ソースの意見・調査結果であり事実報道要件を満たさない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/crypto-biz-kalshi-blockchain-com-crypto-treasury-valuations?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Crypto’s billions are back, but the premiums aren’t",
+      "published_at": "Fri, 02 Oct 2026 15:32:53 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 暗号通貨企業の評価額動向に関する分析記事で単独ソースかつ分析中心"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/markets/bitcoin-briefly-taps-87k-as-bond-yields-drop-on-low-us-nonfarm-payrolls-data?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bitcoin briefly hits $87K as weak US jobs data sends bond yields lower",
+      "published_at": "Fri, 02 Oct 2026 15:27:31 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: BTC価格動向に関するtier3単独の市況記事で、ヘッドライン・主要ポイントの新規根拠にはしない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/euro-stablecoin-not-enough-eu-case-usd-tokens?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "‘Euro stablecoin isn’t enough’: EU issuers make case for USD tokens",
+      "published_at": "Fri, 02 Oct 2026 14:12:48 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 欧州でのドル建てステーブルコイン需要に関する意見記事で単独ソース"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/markets/2026-10-02-bitcoin-nears-highest-level-january-85000-sell-wall-clears-us-jobs-data-disappoints-417570",
+      "title": "Bitcoin nears highest level since January as $85,000 sell wall clears, US jobs data disappoints",
+      "published_at": "Fri, 02 Oct 2026 13:34:40 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: BTC価格動向に関するtier3単独の市況記事で、ヘッドライン・主要ポイントの新規根拠にはしない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/magazine/furious-debate-about-thorchain-vs-near-shows-idealism-has-limits?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Furious debate about THORChain vs NEAR shows idealism has limits",
+      "published_at": "Fri, 02 Oct 2026 13:30:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: THORChain対NEARの議論を扱う意見記事で事実報道の要件を満たさない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/sec-moves-to-clear-custody-hurdle-for-advisers-offering-crypto?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "SEC moves to clear custody hurdle for advisers offering crypto",
+      "published_at": "Fri, 02 Oct 2026 01:07:08 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: SEC提案に関するtier3報道で候補50と重複、tier1・2の裏付けがなく独立2ソースの事実報道要件（規制提案自体は確認できるが意見混在）を慎重に判断し不採用"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/regulation/2026-10-01-sec-proposes-crypto-custody-rule-investment-advisers-funds-417498",
+      "title": "SEC proposes framework allowing investment advisers, funds to self-custody crypto",
+      "published_at": "Thu, 01 Oct 2026 21:00:53 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: SEC提案に関するtier3報道で候補49と内容重複、tier1・2の裏付けがなく単独では採用基準を満たさない"
+    }
+  ],
+  "reusable_for_summary": [
+    "イーサリアムのレイヤー2「Blast」がコストが収益を上回ったことを理由に撤退・サービス終了を発表したと複数の暗号通貨メディアが報じています（CoinDesk・The Block・Cointelegraph、10月2日）。継続監視の対象とします。",
+    "Anchorage Digitalが人員削減を実施したとの報道があります（Cointelegraph、10月2日）。続報を確認します。"
+  ],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 0
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 3
+    },
+    "FRB（speeches）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "FRB（testimony）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 5
+    },
+    "米財務省": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "USTR": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 4
+    },
+    "ホワイトハウス": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 5
+    },
+    "ホワイトハウス（大統領令等）": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 1
+    },
+    "ADP": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 11
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 27
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "The Block": {
+      "status": "ok",
+      "raw_count": 19,
+      "kept_count": 9
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 47
+    }
+  },
+  "news_candidate_count": 50,
+  "part1_md": "【対象日】2026年10月2日（金）\n\n【ヘッドライン】\nFRBがFleur Capital Corporationによる申請の承認を発表しました。 #BTC #ETH\n\n【主要なポイント】\n・FRBはFleur Capital Corporationによる申請を承認したと発表しました。詳細な事業内容は原文からは確認できません（FRB、10月2日）。\n・FRBはRegulation O（銀行役員向け信用供与規制）の近代化提案について、意見募集期間を延長すると発表しました。暗号通貨関連企業への直接の言及はなく、暗号通貨価格への直接因果は未確認です（FRB、10月2日）。\n・Reutersによると、G7は米国の働きかけを受けIEA（国際エネルギー機関）を通じてディーゼル等の備蓄放出に合意したと報じられています。原油・エネルギー価格の動向はリスク選好を通じて暗号通貨市場にも波及し得る材料ですが、暗号通貨価格への直接因果は未確認です（Reuters、10月2日）。\n・Reutersによると、米国の9月の非農業部門雇用者数は市場予想を下回ったものの、労働市場は総じて安定していると報じられています。雇用統計の下振れは利上げ観測の後退につながり得る材料ですが、暗号通貨価格への直接因果は未確認です（Reuters、10月2日）。\n",
+  "part2_md": "【市場のフロー】\n①FRBはFleur Capital Corporationによる申請の承認、およびRegulation O近代化提案に関する意見募集期間の延長を発表しました（FRB、10月2日）。規制面での動きとして市場に意識された可能性がありますが、暗号通貨価格への直接因果は未確認です。BTC・ETHは24時間比でいずれも下落となりましたが、日中に上下に振れる場面もみられました。 #BTC #ETH\n②Reutersによると、G7は米国の働きかけを受けIEAを通じた備蓄放出に合意したと報じられており、原油・エネルギー価格の変動を通じたリスク選好心理への波及が意識された可能性があります。同時期、米国の9月の非農業部門雇用者数は市場予想を下回ったものの労働市場は総じて安定していると報じられ、利上げ観測の後退が意識された可能性があります。これらの中間指標を背景に、BTCは高値圏から値を落とす場面があり、ETHも同様に上値を切り下げる展開となりましたが、価格変動との直接因果は断定できません。\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から上昇しました。\nBase 0.05%プールの参考APRは35.06%→41.52%へ上昇しました（24時間出来高 +18.22%、TVL -0.19%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは52.83%→77.13%へ上昇しました（24時間出来高 +44.95%、TVL -0.72%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比-1.25%と下落中のため、ETH偏り・下限側レンジ外・下落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\n雇用統計の下振れやエネルギー備蓄放出合意など複数のマクロ材料が重なり、市場心理はやや不透明感を帯びた一日となりました。Blastの撤退表明も継続監視の対象として引き続き注視が必要です。\n",
+  "numeric_record_md": "【対象日】2026年10月2日（金）\n\n【主要指標】\n・市場全体：時価総額 $2.872兆（¥453.5兆）｜24時間取引高 $1182.8億（¥18.68兆）\n・ #BTC：$84,527（約1,334.9万円）｜24時間比 -0.13%\n　（24時間レンジ $83,850〜$87,249）\n・ #ETH：$2,666（約42.1万円）｜24時間比 -1.25%\n　（24時間レンジ $2,650〜$2,777）\n・ #BNB：$767（約12.1万円）｜24時間比 -0.55%\n・市場心理：Fear & Greed 67（Greed、CoinMarketCap API）\n・ドミナンス：BTC 59.15%｜ETH 11.33%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年10月3日07:37 JST、USD/JPY ¥157.92\n\n【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $11.64M vs Base上ETH/USDC $136.58M｜参考：Base上DEX全体 $12.404億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $63.35億（¥1.00兆）｜24時間比 -0.20%｜USDCドミナンス 84.8%\n・ ETH/USDC（Base）参考APR：0.05% 41.52%（TVL $9.85M／24h出来高 $22.40M）｜0.3% 77.13%（TVL $162.09M／24h出来高 $114.17M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年10月3日07:37 JST\n"
+}
