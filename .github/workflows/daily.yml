@@ -308,4 +308,6 @@ jobs:
             outputs/${{ steps.target.outputs.date }}/GENERATION_STATUS.md
             outputs/${{ steps.target.outputs.date }}/news_candidates.json
             outputs/${{ steps.target.outputs.date }}/rejected_pairs.json
+            outputs/${{ steps.target.outputs.date }}/attempt_diagnostics.json
+            outputs/${{ steps.target.outputs.date }}/failed_attempt.json
           if-no-files-found: ignore

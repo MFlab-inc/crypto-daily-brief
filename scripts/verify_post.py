@@ -83,7 +83,7 @@ def _load_allowlist(target_date: str, filename: str) -> set[str]:
 
 def check_c12(au: Audit, full_text: str) -> None:
     hits = [t for t in BANNED_TERMS if t in full_text]
-    au.add("C12_banned_terms", not hits, f"検出: {hits}" if hits else "禁止語なし")
+    au.add("C12_banned_terms", not hits, f"検出: {hits}" if hits else "禁止語なし", terms=list(hits))
 
 
 # --- C13 ハッシュタグ境界 ---
@@ -239,7 +239,7 @@ def check_c16b(au: Audit, daily_data: dict, sections: dict, llm_section_keys: li
     hits = _find_transcriptions(daily_data, llm_text, allowlist)
     detail = (f"検知網ヒット（限界あり・要人手確認。誤爆時は config/c16b_allowlist.json へ登録）: {hits}"
               if hits else "転記検知なし")
-    au.add("C16b_transcription_scan", not hits, detail)
+    au.add("C16b_transcription_scan", not hits, detail, hits=list(hits))
 
 
 # --- C17 LP免責定型文 ---
@@ -729,7 +729,7 @@ def check_c23(au: Audit, part2_summary, part1_points, reusable_for_summary, sche
     if missing:
         au.add("C23_summary_no_new_entities", False,
                "総括に本文未確認の固有名詞候補（限界あり・ASCII表記のみ検知。"
-               f"誤検知時は要目視確認）: {missing}")
+               f"誤検知時は要目視確認）: {missing}", names=list(missing))
         return
     au.add("C23_summary_no_new_entities", True,
            f"固有名詞候補{len(candidates)}件・すべてpart1_headline/part1_points/reusable_for_summaryに存在")
@@ -794,7 +794,7 @@ def check_c24(au: Audit, part2_flow, part1_points, part1_headline=None) -> None:
     if missing:
         au.add("C24_flow_no_unadopted_material", False,
                "市場のフローにpart1_headline・part1_points未確認の固有名詞候補（限界あり・ASCII表記のみ検知。"
-               f"誤検知時は要目視確認）: {missing}")
+               f"誤検知時は要目視確認）: {missing}", names=list(missing))
         return
     au.add("C24_flow_no_unadopted_material", True,
            f"固有名詞候補{len(candidates)}件・すべてpart1_headline・part1_pointsに存在")
@@ -842,7 +842,7 @@ def check_c26(au: Audit, part2_flow) -> None:
     hits = _find_role_term_hits(part2_flow)
     au.add("C26_flow_role_separation", not hits,
            f"統合運用基準§3.1により【市場のフロー】に記載しない語句を検出: {hits}" if hits
-           else "役割分離の禁止語句なし")
+           else "役割分離の禁止語句なし", patterns=list(hits))
 
 
 # --- C27 総括の役割分離（価格表記の混入・文数超過） ---
@@ -867,7 +867,8 @@ def check_c27(au: Audit, part2_summary) -> None:
     sentence_count = len([s for s in part2_summary.split("。") if s.strip()])
     if sentence_count >= 3:
         reasons.append(f"文数が{sentence_count}文（「。」区切りで3文以上はFAIL・1〜2文で統合する規定）")
-    au.add("C27_summary_role_separation", not reasons, "; ".join(reasons) if reasons else "役割分離OK")
+    au.add("C27_summary_role_separation", not reasons, "; ".join(reasons) if reasons else "役割分離OK",
+           patterns=list(term_hits), prices=list(price_hits))
 
 
 # --- C28 ヘッドライン・主要なポイントの役割分離（価格・24時間比・Fear&Greedの再掲） ---
@@ -1091,6 +1092,158 @@ def summarize_check_ids(checks: "list[dict]") -> str:
     ranges.append((start, prev))
     parts = [f"C{a}" if a == b else f"C{a}〜C{b}" for a, b in ranges]
     return "・".join(parts) + f"・計{len(checks)}項目"
+
+
+# --- FAIL時の証拠（セクション・該当語・該当文）の抽出（v1.86・オーナー承認・案G）---
+#
+# 背景: 2026-10-01分で、強制不採用後の再監査がC18でFAILしL1へ落ちたが、GENERATION_STATUS.md
+# にはチェックIDしか残らず、どの文のどの語が検出されたか（誤検知か否か）が分からなかった。
+# オーナーはCI成果物を見られないため、STATUSだけで判断できるよう、FAILしたチェックごとに
+# 「セクション・（由来となった呼び出し）・該当語・該当文（先頭100字）」を取り出す。
+# 判定（run_allの結果）には一切影響しない純粋な事後説明で、位置を特定できないチェックは
+# detail（従来どおり）のみを示す。
+
+# 各セクションがどの呼び出し・テンプレートに由来するか（compose_post.compose()の構成どおり）。
+SECTION_ORIGIN = {
+    "part1_headline": "call_A", "part1_points": "call_A", "headline_for_image": "call_A",
+    "part2_flow": "call_B", "part2_summary": "call_B",
+    "lp_comment": "テンプレート", "part1_numeric": "テンプレート",
+    "part2_numeric": "テンプレート", "part0_target_date": "テンプレート",
+}
+_EVIDENCE_SCAN_ORDER = ("part1_headline", "part1_points", "part2_flow", "part2_summary",
+                        "headline_for_image", "lp_comment", "part1_numeric", "part2_numeric",
+                        "part0_target_date")
+EVIDENCE_SENTENCE_CHARS = 100
+
+
+def _clip_sentence(s: str, n: int = EVIDENCE_SENTENCE_CHARS) -> str:
+    s = s.strip()
+    return s if len(s) <= n else s[:n] + "…"
+
+
+def _evidence_texts(bundle: dict) -> list[tuple[str, str]]:
+    sections = bundle.get("sections", {}) or {}
+    out = []
+    for key in _EVIDENCE_SCAN_ORDER:
+        v = bundle.get("headline_for_image") if key == "headline_for_image" else sections.get(key)
+        if isinstance(v, str) and v.strip():
+            out.append((key, v))
+    return out
+
+
+def _display_term(word: str, regex: bool) -> str:
+    """STATUS表示用。C26/C27の語句は単語境界つきの正規表現（_ROLE_TERM_PATTERNS）で
+    持っているため、読めるよう先読み・後読みとエスケープを取り除く。"""
+    if not regex:
+        return word
+    return re.sub(r"\(\?<!\[A-Za-z0-9\]\)|\(\?!\[A-Za-z0-9\]\)", "", word).replace("\\", "")
+
+
+def _find_term_evidence(bundle: dict, check_id: str, words: list[str], *, regex: bool = False,
+                         scope: "tuple[str, ...] | None" = None) -> list[dict]:
+    """words（語・正規表現）を含む文を、セクション走査順に1語につき最初の1件だけ返す。"""
+    found: list[dict] = []
+    for word in words:
+        pat = re.compile(word) if regex else None
+        for name, text in _evidence_texts(bundle):
+            if scope is not None and name not in scope:
+                continue
+            hit = next((s for s in re.split(r"[。\n]", text)
+                        if s.strip() and ((pat.search(s) is not None) if pat else (word in s))), None)
+            if hit is not None:
+                clipped = _clip_sentence(hit)
+                shown = _display_term(word, regex)
+                same = next((f for f in found if f["section"] == name and f["sentence"] == clipped), None)
+                if same is not None:  # 同じ文に複数の語がある場合は1件にまとめる
+                    same["words"].append(shown)
+                else:
+                    found.append({"check": check_id, "section": name, "origin": SECTION_ORIGIN.get(name),
+                                  "words": [shown], "sentence": clipped})
+                break
+    return found
+
+
+def collect_fail_evidence(bundle: dict, checks: "list[dict]") -> "list[dict]":
+    """FAILしたチェックごとの証拠を返す。各要素は
+    {"check", "section", "origin", "words": [...], "sentence"}。位置を特定できない
+    FAILは section=None の1件（detailのみ示す側で使う）。"""
+    evidence: list[dict] = []
+    sections = bundle.get("sections", {}) or {}
+    hfi = bundle.get("headline_for_image", "")
+    target_date = bundle.get("target_date_jst", "")
+    for c in checks:
+        if c.get("result") != "FAIL":
+            continue
+        cid = c["id"]
+        found: list[dict] = []
+        try:
+            if cid == "C18_causal_assertion":
+                allowlist = _load_allowlist(target_date, "c18_allowlist.json")
+                for v in _find_c18_violations(sections, bundle.get("llm_section_keys", []), allowlist, hfi):
+                    sent = v["sentence"]
+                    words = ([m for m in CAUSAL_MARKERS if m in sent]
+                             + [w for w in PRICE_MOVEMENT_WORDS if w in sent]
+                             + [p for p in CAUSAL_STANDALONE_PHRASES if p in sent])
+                    found.append({"check": cid, "section": v["section"],
+                                  "origin": SECTION_ORIGIN.get(v["section"]), "words": words,
+                                  "sentence": _clip_sentence(sent)})
+            elif cid == "C12_banned_terms":
+                found = _find_term_evidence(bundle, cid, c.get("terms", []))
+            elif cid == "C13_hashtag_boundary":
+                for name, text in _evidence_texts(bundle):
+                    for msg in _hashtag_violations(text):
+                        m = re.match(r"位置(\d+):", msg)
+                        pos = int(m.group(1)) if m else 0
+                        start = max(text.rfind("。", 0, pos), text.rfind("\n", 0, pos)) + 1
+                        ends = [i for i in (text.find("。", pos), text.find("\n", pos)) if i != -1]
+                        sentence = text[start:min(ends) if ends else len(text)]
+                        found.append({"check": cid, "section": name, "origin": SECTION_ORIGIN.get(name),
+                                      "words": [msg], "sentence": _clip_sentence(sentence)})
+            elif cid == "C16b_transcription_scan":
+                found = _find_term_evidence(bundle, cid, c.get("hits", []),
+                                            scope=tuple(bundle.get("llm_section_keys", [])) + ("headline_for_image",))
+            elif cid == "C23_summary_no_new_entities":
+                found = _find_term_evidence(bundle, cid, c.get("names", []), scope=("part2_summary",))
+            elif cid == "C24_flow_no_unadopted_material":
+                found = _find_term_evidence(bundle, cid, c.get("names", []), scope=("part2_flow",))
+            elif cid == "C26_flow_role_separation":
+                found = _find_term_evidence(bundle, cid, c.get("patterns", []), regex=True, scope=("part2_flow",))
+            elif cid == "C27_summary_role_separation":
+                found = (_find_term_evidence(bundle, cid, c.get("patterns", []), regex=True, scope=("part2_summary",))
+                         + _find_term_evidence(bundle, cid, c.get("prices", []), scope=("part2_summary",)))
+        except Exception as e:  # noqa: BLE001 — 証拠抽出の失敗で監査・STATUS生成を止めない
+            print(f"WARN: FAIL証拠の抽出に失敗しました（{cid}）: {type(e).__name__}: {e}", file=sys.stderr)
+            found = []
+        evidence.extend(found if found else [
+            {"check": cid, "section": None, "origin": None, "words": [], "sentence": ""}])
+    return evidence
+
+
+def format_fail_evidence_lines(evidence: "list[dict]", check_id: "str | None" = None,
+                               indent: str = "    ") -> "list[str]":
+    """GENERATION_STATUS.md用。セクションを特定できた証拠だけを1件1行で返す。"""
+    lines = []
+    for e in evidence:
+        if not e.get("section"):
+            continue
+        if check_id is not None and e.get("check") != check_id:
+            continue
+        origin = f"（由来: {e['origin']}）" if e.get("origin") else ""
+        words = "・".join(e.get("words", [])) or "—"
+        lines.append(f"{indent}└ セクション={e['section']}{origin}／該当語: {words}／該当文: 「{e['sentence']}」")
+    return lines
+
+
+def failing_check_details(bundle: dict, checks: "list[dict]") -> "list[dict]":
+    """FAILしたチェックごとに {"id","detail","evidence":[...]} を返す（STATUS・失敗試行の保存用）。"""
+    evidence = collect_fail_evidence(bundle, checks)
+    out = []
+    for c in checks:
+        if c.get("result") != "FAIL":
+            continue
+        out.append({"id": c["id"], "detail": c["detail"],
+                    "evidence": [e for e in evidence if e["check"] == c["id"] and e.get("section")]})
+    return out
 
 
 def run_all(bundle: dict, daily_data: dict) -> Audit:

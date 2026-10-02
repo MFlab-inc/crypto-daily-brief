@@ -268,26 +268,93 @@ def _inconsistent_symbols(daily_data: dict) -> list[str]:
             if isinstance(d, dict) and d.get("inconsistent")]
 
 
-def _render_attempt_errors(label: str, call_result: dict[str, Any]) -> list[str]:
+def _clip(s: Any, n: int) -> str:
+    s = str(s or "").strip()
+    return s if len(s) <= n else s[:n] + "…"
+
+
+def _render_reason_entry(r: dict) -> str:
+    """相方不成立の理由1件（generate_post._explain_unresolvedの出力）を1行にする。"""
+    code = r.get("code") or "不明"
+    label = generate_post.PAIR_REJECT_REASON_LABELS.get(code, "")
+    extra = ""
+    if r.get("overlap") is not None and code == "overlap_below_threshold":
+        extra = f"・重なり係数{r['overlap']:.2f}＜閾値{r.get('threshold')}"
+    what = f"{code}（{label}{extra}）" if label else str(code)
+    if r.get("role") == "incoming_claim":
+        return (f"ID{r.get('other_id')} [{r.get('other_source', '')}] 「{_clip(r.get('other_title'), 50)}」"
+                f"からの申告: {what}")
+    if code == "no_claim":
+        return f"自身の申告: {what}"
+    return (f"自身の申告→ID{r.get('other_id')} [{r.get('other_source', '')}] "
+            f"「{_clip(r.get('other_title'), 50)}」: {what}")
+
+
+def _render_unresolved_diag(diag: dict | None) -> list[str]:
+    """試行ごとの「相方が成立しなかった候補ID・理由」（v1.86・オーナー承認・案G）。
+    オーナーはCI成果物を見られないため、候補のタイトル・媒体と理由コードを
+    STATUSだけで読めるように出す（理由コードは_pair_claim_detailの6種類と、
+    申告なしを示す表示専用のno_claim）。"""
+    if not diag or not diag.get("unresolved"):
+        return []
+    lines = [f"      相方が成立しなかった候補の内訳（{diag.get('attempt')}試行目）:"]
+    for u in diag["unresolved"]:
+        lines.append(f"        - 候補ID{u.get('candidate_id')} [{u.get('source', '')}] "
+                     f"「{_clip(u.get('title'), 70)}」")
+        for r in u.get("reasons", []):
+            lines.append(f"            ・{_render_reason_entry(r)}")
+    return lines
+
+
+def _render_attempt_errors(label: str, call_result: dict[str, Any],
+                            force_drop_note: str | None = None) -> list[str]:
     """v1.48（オーナー指示）: リトライが発生した場合（最終的に成功した場合を
     含む）、各試行の失敗理由をGENERATION_STATUS.mdへ記録する。従来は成功時に
     それ以前の試行の失敗理由が失われており、リトライの常態化＝劣化の兆候に
     気づけなかった。1試行目で成功した場合（attempt_errorsが空）は何も出さない。
+
+    v1.86（オーナー承認・案G）: call_Aの試行ごとの「相方が成立しなかった候補ID・
+    理由」（attempt_diagnostics）を、該当する試行の下に記録する。また、最終試行が
+    強制不採用で続行した場合（force_drop_note）は、L1へ差し戻されて「N試行目: 成功」
+    の行が出なくなる場合も含め、最終試行の行を必ず出す（従来は3試行目の行が欠落した）。
     """
     errors = call_result.get("attempt_errors") or []
-    if not errors:
+    diags = {d.get("attempt"): d for d in (call_result.get("attempt_diagnostics") or [])}
+    if not errors and not force_drop_note:
         return []
     lines = [f"  {label}試行履歴（リトライ発生・劣化の兆候として記録）:"]
     for i, err in enumerate(errors, start=1):
         lines.append(f"    {i}試行目: {err}")
-    if call_result.get("ok"):
-        lines.append(f"    {call_result['attempts']}試行目: 成功")
+        lines += _render_unresolved_diag(diags.get(i))
+    n = call_result.get("attempts")
+    if force_drop_note:
+        lines.append(f"    {n}試行目: " + (f"成功（{force_drop_note}）" if call_result.get("ok") else force_drop_note))
+        lines += _render_unresolved_diag(diags.get(n))
+    elif call_result.get("ok"):
+        lines.append(f"    {n}試行目: 成功")
     return lines
 
 
 def _final_audit_failing_ids(bundle: dict[str, Any], daily_data: dict) -> list[str]:
     au = verify_post.run_all(bundle, daily_data)
     return [c["id"] for c in au.checks if c["result"] == "FAIL"]
+
+
+def _final_audit_failure_report(bundle: dict[str, Any], daily_data: dict) -> tuple[list[str], list[dict], list[dict]]:
+    """_final_audit_failing_ids()の詳細版（v1.86・オーナー承認・案G）。
+    (FAILしたチェックID, FAILごとの{id, detail, evidence}, 全チェック結果) を返す。
+    evidenceは該当セクション・該当語・該当文（先頭100字）。判定は_final_audit_failing_idsと同一。"""
+    au = verify_post.run_all(bundle, daily_data)
+    ids = [c["id"] for c in au.checks if c["result"] == "FAIL"]
+    return ids, verify_post.failing_check_details(bundle, au.checks), au.checks
+
+
+def _render_fail_details(details: list[dict]) -> list[str]:
+    lines = []
+    for d in details:
+        lines.append(f"  FAIL: {d['id']} — {d['detail']}")
+        lines += verify_post.format_fail_evidence_lines(d.get("evidence", []))
+    return lines
 
 
 def _fallback_to_true_l1(daily_data: dict, gen: dict[str, Any], failing_checks: list[str],
@@ -326,7 +393,8 @@ def _fallback_to_true_l1(daily_data: dict, gen: dict[str, Any], failing_checks: 
 
 def render_generation_status(gen: dict[str, Any], daily_data: dict | None = None,
                               force_dropped: list[dict] | None = None,
-                              l1_fallback_failing_checks: list[str] | None = None) -> str:
+                              l1_fallback_failing_checks: list[str] | None = None,
+                              l1_fallback_details: list[dict] | None = None) -> str:
     a, b = gen["call_a"], gen["call_b"]
     news_status = gen.get("news_source_status", {})
     attention, auto = _attention_and_auto_lists(gen)
@@ -336,7 +404,12 @@ def render_generation_status(gen: dict[str, Any], daily_data: dict | None = None
         f"call_A: {'OK' if a['ok'] else 'FAILED'}"
         + (f" ({a['error']} / {a['attempts']}回試行)" if not a["ok"] else f"（{a['attempts']}回試行）"),
     ]
-    lines += _render_attempt_errors("call_A", a)
+    force_drop_note = None
+    if force_dropped:
+        ids = sorted(d.get("candidate_id") for d in force_dropped)
+        force_drop_note = f"強制不採用（候補ID {ids}）で続行" + (
+            " → 再監査FAILのためL1へフォールバック" if l1_fallback_failing_checks is not None else "")
+    lines += _render_attempt_errors("call_A", a, force_drop_note=force_drop_note)
     lines.append(
         f"call_B: {'OK' if b['ok'] else 'FAILED'}"
         + (f" ({b['error']} / {b['attempts']}回試行)" if not b["ok"] else f"（{b['attempts']}回試行）")
@@ -417,6 +490,9 @@ def render_generation_status(gen: dict[str, Any], daily_data: dict | None = None
             "call_A 強制不採用後の再監査（C12〜C28）がFAILしたため、call_Aを失敗扱いへ差し戻し"
             f"L1へフォールバックしました（FAILしたチェック: {l1_fallback_failing_checks}）。"
         )
+        # v1.86（オーナー承認・案G）: FAILの中身（セクション・由来・該当語・該当文先頭100字）。
+        # 破棄される3試行目の本文そのものはCI成果物failed_attempt.jsonに保存する。
+        lines += _render_fail_details(l1_fallback_details or [])
     lines += [
         "",
         "手当が必要な箇所:",
@@ -491,10 +567,24 @@ def main() -> int:
     force_dropped = gen["call_a"].get("force_dropped_candidates", []) if gen["call_a"]["ok"] else []
     rejected_pairs = gen["call_a"].get("rejected_pairs", [])
     l1_fallback_failing_checks: list[str] | None = None
+    l1_fallback_details: list[dict] | None = None
+    failed_attempt: dict | None = None
     if force_dropped:
-        failing = _final_audit_failing_ids(bundle, daily_data)
+        failing, failing_details, all_checks = _final_audit_failure_report(bundle, daily_data)
         if failing:
             l1_fallback_failing_checks = failing
+            l1_fallback_details = failing_details
+            # v1.86（オーナー承認・案G）: L1への差し戻しで破棄される本文・検出内容を、
+            # CI成果物（コミットしない）として保存する。
+            failed_attempt = {
+                "target_date_jst": target_date,
+                "reason": "force_drop後の再監査（C12〜C28）がFAILしたためL1へフォールバック",
+                "failing_checks": failing,
+                "failing_details": failing_details,
+                "section_origin": verify_post.SECTION_ORIGIN,
+                "checks": all_checks,
+                "bundle": bundle,
+            }
             gen = _fallback_to_true_l1(daily_data, gen, failing)
             bundle = compose(daily_data, gen)
 
@@ -516,9 +606,24 @@ def main() -> int:
     (out_dir / "rejected_pairs.json").write_text(
         json.dumps(rejected_pairs, ensure_ascii=False, indent=2), encoding="utf-8")
 
+    # v1.86（オーナー承認・案G）: 試行ごとの「相方が成立しなかった候補ID・理由」（1・2試行目を含む）
+    # と、失敗した試行の本文・検出内容。いずれもGitHub Actionsアーティファクトとして保存し、
+    # リポジトリへはコミットしない（要点はGENERATION_STATUS.mdにも記録する）。
+    (out_dir / "attempt_diagnostics.json").write_text(json.dumps({
+        "target_date_jst": target_date,
+        "call_a_attempts": gen["call_a"].get("attempts"),
+        "attempt_errors": gen["call_a"].get("attempt_errors", []),
+        "attempt_diagnostics": gen["call_a"].get("attempt_diagnostics", []),
+        "force_dropped_candidates": force_dropped,
+    }, ensure_ascii=False, indent=2), encoding="utf-8")
+    if failed_attempt is not None:
+        (out_dir / "failed_attempt.json").write_text(
+            json.dumps(failed_attempt, ensure_ascii=False, indent=2), encoding="utf-8")
+
     status_path = out_dir / "GENERATION_STATUS.md"
     status_text = render_generation_status(
-        gen, daily_data, force_dropped=force_dropped, l1_fallback_failing_checks=l1_fallback_failing_checks)
+        gen, daily_data, force_dropped=force_dropped, l1_fallback_failing_checks=l1_fallback_failing_checks,
+        l1_fallback_details=l1_fallback_details)
     status_path.write_text(status_text, encoding="utf-8")
 
     print(f"OK: level={gen['level']} → {draft_dir}/part1.md, part2.md, numeric_record.md, "

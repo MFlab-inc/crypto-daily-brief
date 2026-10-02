@@ -167,8 +167,8 @@ def repair(target_date: str, *, client: "anthropic.Anthropic | None" = None) -> 
 
     final_audit = verify_post.run_all(bundle, daily_data)
     final_failing = sorted(c["id"] for c in final_audit.checks if c["result"] == "FAIL")
-    final_failing_details = [{"id": c["id"], "detail": c["detail"]}
-                              for c in final_audit.checks if c["result"] == "FAIL"]
+    # v1.86（オーナー承認・案G）: FAILごとに該当セクション・該当語・該当文（先頭100字）も持つ。
+    final_failing_details = verify_post.failing_check_details(bundle, final_audit.checks)
     checked_ids = verify_post.summarize_check_ids(final_audit.checks)
     warnings = list(getattr(final_audit, "warnings", []))
     rescued = rounds_used > 0 and not (REPAIRABLE_CHECK_IDS & set(final_failing))
@@ -234,6 +234,9 @@ def render_final_audit_note(result: dict[str, Any]) -> str:
     else:
         for c in result["final_failing_check_details"]:
             lines.append(f"  FAIL: {c['id']} — {c['detail']}")
+            # v1.86（オーナー承認・案G）: STATUSだけで誤検知かを判断できるよう、
+            # セクション・由来・該当語・該当文（先頭100字）を併記する。
+            lines += verify_post.format_fail_evidence_lines(c.get("evidence", []))
     warnings = result.get("warnings") or []
     if warnings:
         lines.append(f"向きの食い違いチェック（警告のみ・FAILにしない）: 警告{len(warnings)}件（ファイル先頭に表示）")

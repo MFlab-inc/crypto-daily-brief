@@ -4892,6 +4892,322 @@ check("RULES_ABSOLUTE: 既存の規則1〜6は変更されていない（規則7
       all(f"{i}. " in _RA for i in range(1, 7)) and "3. 「暗号通貨」と表記する。「仮想通貨」は使わない。" in _RA
       and "4. 変化率のラベルは「24時間比」。「前日比」は使わない。" in _RA)
 
+print("=== 案G（v1.86・オーナー承認）: 失敗試行の診断保存／1・2試行目の相方不成立の理由／STATUSにFAIL詳細 ===")
+
+# ---- 1) generate_post._explain_unresolved: 理由コード（6種類＋表示専用no_claim）と他候補からの申告 ----
+_eu_cands = {
+    1: {"candidate_id": 1, "title": "NEAR Intents hit by $3.8 million exploit", "source": "CoinDesk", "tier": 3},
+    2: {"candidate_id": 2, "title": "NEAR Intents suffers $3.8M exploit", "source": "Cointelegraph", "tier": 3},
+    3: {"candidate_id": 3, "title": "Hackers drain NEAR cross-chain protocol", "source": "The Block", "tier": 3},
+    4: {"candidate_id": 4, "title": "SEC press release", "source": "SEC", "tier": 1},
+    5: {"candidate_id": 5, "title": "Another CoinDesk story about exploit", "source": "CoinDesk", "tier": 3},
+}
+_eu_use = {1: True, 2: True, 3: False, 4: True, 5: True}
+
+
+def _eu(unres, claims, use=None, thr=0.4):
+    return generate_post._explain_unresolved(unres, claims, _eu_cands, use or _eu_use, thr)
+
+
+_r = _eu([1], {1: None})
+check("_explain_unresolved: 申告なしは表示専用のno_claim（own_claim）として記録される（理由欄が空白にならない）",
+      _r[0]["reasons"] == [{"role": "own_claim", "code": "no_claim"}]
+      and _r[0]["title"].startswith("NEAR Intents") and _r[0]["source"] == "CoinDesk" and _r[0]["tier"] == 3, str(_r))
+_codes = {
+    "target_not_found": _eu([1], {1: 99}), "self_reference": _eu([1], {1: 1}),
+    "target_not_tier3": _eu([1], {1: 4}), "target_use_false": _eu([1], {1: 3}),
+    "same_source": _eu([1], {1: 5}), "overlap_below_threshold": _eu([1], {1: 2}, thr=0.99),
+}
+for _code, _res in _codes.items():
+    check(f"_explain_unresolved: 自身の申告の却下理由{_code}が記録される（_pair_claim_detailの理由コードそのもの）",
+          _res[0]["reasons"][0]["code"] == _code and _res[0]["reasons"][0]["role"] == "own_claim"
+          and _code in generate_post.PAIR_REJECT_REASON_LABELS, str(_res))
+check("_explain_unresolved: overlap_below_thresholdは重なり係数・閾値・申告先のタイトル/媒体を持つ",
+      _codes["overlap_below_threshold"][0]["reasons"][0]["overlap"] is not None
+      and _codes["overlap_below_threshold"][0]["reasons"][0]["threshold"] == 0.99
+      and _codes["overlap_below_threshold"][0]["reasons"][0]["other_source"] == "Cointelegraph"
+      and _codes["overlap_below_threshold"][0]["reasons"][0]["other_id"] == 2, str(_codes["overlap_below_threshold"]))
+_inc = _eu([2], {1: 2, 2: None}, thr=0.99)
+check("_explain_unresolved: 他のtier3・use:true候補からの申告（incoming_claim）の却下理由も記録される",
+      any(r["role"] == "incoming_claim" and r["other_id"] == 1 and r["code"] == "overlap_below_threshold"
+          for r in _inc[0]["reasons"])
+      and any(r["role"] == "own_claim" and r["code"] == "no_claim" for r in _inc[0]["reasons"]), str(_inc))
+_inc_skip = _eu([2], {3: 2, 2: None})
+check("_explain_unresolved: use:falseの候補からの申告は成立判定の対象外なので理由に含めない",
+      not any(r["role"] == "incoming_claim" for r in _inc_skip[0]["reasons"]), str(_inc_skip))
+check("_explain_unresolved: 理由コードの表示ラベルは6種類＋no_claimの計7つ",
+      set(generate_post.PAIR_REJECT_REASON_LABELS) == {
+          "target_not_found", "self_reference", "target_not_tier3", "target_use_false", "same_source",
+          "overlap_below_threshold", "no_claim"})
+
+# ---- 2) call_a(): 試行ごとの診断（1・2試行目を含む） ----
+check("callA: attempt_diagnosticsは各試行（1・2・3試行目）の相方不成立を残す（最終試行の分だけでない）",
+      [d["attempt"] for d in out_strict.attempt_diagnostics] == [1, 2, generate_post.MAX_ATTEMPTS]
+      and [d["force_drop"] for d in out_strict.attempt_diagnostics] == [False, False, True],
+      str([(d["attempt"], d["force_drop"]) for d in out_strict.attempt_diagnostics]))
+_d1 = out_strict.attempt_diagnostics[0]
+check("callA: 1試行目の診断に候補ID・タイトル・媒体・申告先・却下理由・重なり係数・閾値が入る",
+      {u["candidate_id"] for u in _d1["unresolved"]} == {1, 2}
+      and any(r["code"] == "overlap_below_threshold" and r["overlap"] is not None and r["threshold"] == 0.6
+              for u in _d1["unresolved"] for r in u["reasons"])
+      and all(u["title"] and u["source"] for u in _d1["unresolved"])
+      and any(r["code"] == "no_claim" for u in _d1["unresolved"] for r in u["reasons"]),
+      str(_d1["unresolved"]))
+check("callA: rejected_pairs（却下ペア診断）も試行ごとにattempt_diagnosticsへ保持される（1試行目の分が消えない）",
+      all(len(d["rejected_pairs"]) == 1 and d["rejected_pairs"][0]["reason"] == "overlap_below_threshold"
+          for d in out_strict.attempt_diagnostics), str([d["rejected_pairs"] for d in out_strict.attempt_diagnostics]))
+check("callA: 従来のrejected_pairs（最終試行の分のみ）は変わらない（後方互換）",
+      len(out_strict.rejected_pairs) == 1)
+check("callA: 相方が成立する日（1回目で成功）はattempt_diagnosticsが空",
+      out_loose.attempt_diagnostics == [], str(out_loose.attempt_diagnostics))
+check("CallOutcome.to_dict()にattempt_diagnosticsが含まれ、既定は空リスト",
+      generate_post.CallOutcome(True, {}, 1, None).to_dict()["attempt_diagnostics"] == []
+      and generate_post.CallOutcome(True, {}, 1, None, attempt_diagnostics=[{"x": 1}]).to_dict()["attempt_diagnostics"] == [{"x": 1}])
+
+# 1試行目だけ失敗して2試行目で成功: 診断は1試行目のみ
+_state_g = {"n": 0}
+
+
+def _g_retry_fn(kw, n):
+    content = _parse_leading_json(kw["messages"][0]["content"])
+    ids = sorted(c["candidate_id"] for c in content.get("news_candidates_today", []))
+    if n == 1:
+        entries = [{"candidate_id": ids[0], "use": True, "reason": "x"}, {"candidate_id": ids[1], "use": False, "reason": "y"}]
+    else:
+        entries = [{"candidate_id": ids[0], "use": False, "reason": "x"}, {"candidate_id": ids[1], "use": False, "reason": "y"}]
+    return json_response({**CALL_A_DATA, "audit_ledger": entries})
+
+
+_g_out = generate_post.call_a(FakeClient(_g_retry_fn), DAILY_DATA, NEWS_PAIR_CANDIDATES, None, 0.4)
+check("callA: 1試行目に相方不成立（申告なし）→2試行目で成功した場合、診断は1試行目の分だけが残り強制不採用は無い",
+      _g_out.ok and _g_out.attempts == 2 and len(_g_out.attempt_diagnostics) == 1
+      and _g_out.attempt_diagnostics[0]["attempt"] == 1 and _g_out.force_dropped_candidates == []
+      and _g_out.attempt_diagnostics[0]["unresolved"][0]["reasons"][0]["code"] == "no_claim",
+      str(_g_out.attempt_diagnostics))
+
+# ---- 3) STATUSの表示（1・2試行目の理由・3試行目の行・FAILの中身） ----
+_gen_g = {
+    "level": "L1", "news_candidate_count": 51,
+    "total_usage": {"input_tokens": 10, "output_tokens": 5},
+    "call_a": {"ok": False, "data": None, "attempts": 3, "usage": {"input_tokens": 9, "output_tokens": 4},
+               "error": "force_dropで続行したが再監査FAIL", "truncation_stats": {},
+               "attempt_errors": ["AuditLedgerReconstructionError: tier3のuse:trueだが独立2ソースの相方が成立しない候補ID: [43, 46]",
+                                  "AuditLedgerReconstructionError: tier3のuse:trueだが独立2ソースの相方が成立しない候補ID: [43, 46]"],
+               "attempt_diagnostics": [
+                   {"attempt": 1, "force_drop": False, "rejected_pairs": [], "unresolved": [
+                       {"candidate_id": 43, "title": "NEAR Intents exploit story from Cointelegraph", "source": "Cointelegraph",
+                        "tier": 3, "own_claim_target_id": 46, "reasons": [
+                            {"role": "own_claim", "code": "overlap_below_threshold", "other_id": 46,
+                             "other_title": "NEAR Intents hit by $3.8 million exploit", "other_source": "CoinDesk",
+                             "overlap": 0.31, "threshold": 0.4}]},
+                       {"candidate_id": 46, "title": "NEAR Intents hit by $3.8 million exploit", "source": "CoinDesk",
+                        "tier": 3, "own_claim_target_id": None, "reasons": [
+                            {"role": "own_claim", "code": "no_claim"},
+                            {"role": "incoming_claim", "code": "overlap_below_threshold", "other_id": 43,
+                             "other_title": "NEAR Intents exploit story from Cointelegraph", "other_source": "Cointelegraph",
+                             "overlap": 0.31, "threshold": 0.4}]}]},
+                   {"attempt": 3, "force_drop": True, "rejected_pairs": [], "unresolved": [
+                       {"candidate_id": 46, "title": "NEAR Intents hit by $3.8 million exploit", "source": "CoinDesk",
+                        "tier": 3, "own_claim_target_id": 7, "reasons": [
+                            {"role": "own_claim", "code": "same_source", "other_id": 7, "other_title": "x", "other_source": "CoinDesk",
+                             "overlap": None, "threshold": 0.4}]}]}],
+               "force_dropped_candidates": [{"candidate_id": 46, "title": "NEAR Intents hit by $3.8 million exploit",
+                                             "source": "CoinDesk", "reason": "R"}]},
+    "call_b": {"ok": True, "data": CALL_B_DATA, "attempts": 1, "error": None, "usage": {"input_tokens": 1, "output_tokens": 1}},
+}
+_fail_detail = [{"id": "C18_causal_assertion", "detail": "検出: [...]", "evidence": [
+    {"check": "C18_causal_assertion", "section": "part1_points", "origin": "call_A", "words": ["を受けて", "上昇"],
+     "sentence": "A社の発表を受けてBTCが上昇しました"}]}]
+_st_g = compose_post.render_generation_status(
+    _gen_g, force_dropped=_gen_g["call_a"]["force_dropped_candidates"],
+    l1_fallback_failing_checks=["C18_causal_assertion"], l1_fallback_details=_fail_detail)
+check("STATUS: 1試行目の下に、相方が成立しなかった候補ID・媒体・タイトルが記録される",
+      "1試行目: AuditLedgerReconstructionError" in _st_g and "相方が成立しなかった候補の内訳（1試行目）" in _st_g
+      and "候補ID43 [Cointelegraph]" in _st_g and "候補ID46 [CoinDesk]" in _st_g, _st_g)
+check("STATUS: 理由コードとその意味（6種類のどれか）・重なり係数と閾値が読める",
+      "overlap_below_threshold（タイトルの重なり係数が閾値未満・重なり係数0.31＜閾値0.4）" in _st_g
+      and "自身の申告→ID46 [CoinDesk]" in _st_g and "自身の申告: no_claim（相方の申告なし" in _st_g
+      and "ID43 [Cointelegraph] 「NEAR Intents exploit story from Cointelegraph」からの申告" in _st_g
+      and "same_source（申告先が同じ媒体）" in _st_g, _st_g)
+check("STATUS: 3試行目（強制不採用）の行が必ず出る（従来は欠落）。L1フォールバックも同じ行に示す",
+      "3試行目: 強制不採用（候補ID [46]）で続行 → 再監査FAILのためL1へフォールバック" in _st_g
+      and "相方が成立しなかった候補の内訳（3試行目）" in _st_g, _st_g)
+check("STATUS: 再監査でFAILしたチェックの詳細に、チェックID・セクション・由来・該当語・該当文が出る",
+      "FAIL: C18_causal_assertion — 検出" in _st_g
+      and "└ セクション=part1_points（由来: call_A）／該当語: を受けて・上昇／該当文: 「A社の発表を受けてBTCが上昇しました」" in _st_g, _st_g)
+_st_g_ok = compose_post.render_generation_status(
+    {**_gen_g, "call_a": {**_gen_g["call_a"], "ok": True, "data": CALL_A_DATA}},
+    force_dropped=_gen_g["call_a"]["force_dropped_candidates"])
+check("STATUS: 強制不採用で続行しL1へ落ちなかった日は「3試行目: 成功（強制不採用で続行）」と示す",
+      "3試行目: 成功（強制不採用（候補ID [46]）で続行）" in _st_g_ok and "L1へフォールバック" not in _st_g_ok, _st_g_ok)
+_st_g_plain = compose_post.render_generation_status(
+    {**_gen_g, "call_a": {**_gen_g["call_a"], "ok": True, "data": CALL_A_DATA, "attempt_errors": [], "attempts": 1,
+                          "attempt_diagnostics": [], "force_dropped_candidates": []}})
+check("STATUS: リトライも強制不採用も無い通常日は試行履歴・内訳を出さない（従来どおり）",
+      "試行履歴" not in _st_g_plain and "相方が成立しなかった" not in _st_g_plain, _st_g_plain)
+
+# ---- 4) verify_post.collect_fail_evidence: セクション・由来・該当語・該当文（先頭100字） ----
+
+def _mk_bundle(**overrides):
+    bb = json.loads(json.dumps(compose_post.compose(DAILY_DATA, gen_l0)))
+    for k, v in overrides.items():
+        if k == "headline_for_image":
+            bb["headline_for_image"] = v
+        else:
+            bb["sections"][k] = v
+    bb["part1_md"], bb["part2_md"] = compose_post.render_markdown(bb["sections"], bb["level"])
+    return bb
+
+
+def _ev(bb, cid=None):
+    au_ = verify_post.run_all(bb, DAILY_DATA)
+    return au_, verify_post.collect_fail_evidence(bb, au_.checks)
+
+
+_long = "A社の発表を受けて" + "市場参加者の見方が広がり、" * 12 + "BTCが上昇しました"
+_bb = _mk_bundle(part1_points="・" + _long + "。\n・別の文です")
+_au, _evs = _ev(_bb)
+_e18 = [e for e in _evs if e["check"] == "C18_causal_assertion"]
+check("evidence C18: セクション（part1_points）・由来（call_A）・該当語（マーカーと価格変動語）・該当文が取れる",
+      len(_e18) == 1 and _e18[0]["section"] == "part1_points" and _e18[0]["origin"] == "call_A"
+      and "を受けて" in _e18[0]["words"] and "上昇" in _e18[0]["words"] and "A社の発表を受けて" in _e18[0]["sentence"], str(_e18))
+check("evidence: 該当文は先頭100字で切り、超える場合は「…」を付ける",
+      len(_e18[0]["sentence"]) == verify_post.EVIDENCE_SENTENCE_CHARS + 1 and _e18[0]["sentence"].endswith("…"),
+      str(len(_e18[0]["sentence"])))
+_bb = _mk_bundle(headline_for_image="米金利の上昇を受けてBTC・ETHは軟調")
+_au, _evs = _ev(_bb)
+_e18h = [e for e in _evs if e["check"] == "C18_causal_assertion"]
+check("evidence C18: headline_for_image由来の違反はセクション名headline_for_image（由来call_A）で特定できる"
+      "（案Dの要否を判断するための記録）",
+      len(_e18h) == 1 and _e18h[0]["section"] == "headline_for_image" and _e18h[0]["origin"] == "call_A", str(_e18h))
+_bb = _mk_bundle(part2_flow="好感 → 買い戻しのため上昇が確認された。")
+_au, _evs = _ev(_bb)
+_e18f = [e for e in _evs if e["check"] == "C18_causal_assertion"]
+check("evidence C18: part2_flow由来の違反は由来call_Bとして特定できる（call_A由来とは限らないことの区別）",
+      len(_e18f) == 1 and _e18f[0]["section"] == "part2_flow" and _e18f[0]["origin"] == "call_B", str(_e18f))
+_bb = _mk_bundle(part2_summary="仮想通貨市場は落ち着いた。確認が必要。")
+_au, _evs = _ev(_bb)
+_e12 = [e for e in _evs if e["check"] == "C12_banned_terms"]
+check("evidence C12: 禁止語（仮想通貨）を含むセクションと文を特定できる",
+      len(_e12) == 1 and _e12[0]["section"] == "part2_summary" and _e12[0]["words"] == ["仮想通貨"]
+      and "仮想通貨市場" in _e12[0]["sentence"], str(_e12))
+_bb = _mk_bundle(part1_points="・Reutersの報道#BTCは上昇、とみられる")
+_au, _evs = _ev(_bb)
+_e13 = [e for e in _evs if e["check"] == "C13_hashtag_boundary"]
+check("evidence C13: ハッシュタグ境界違反のセクションと文を特定できる",
+      len(_e13) >= 1 and _e13[0]["section"] == "part1_points" and "#BTC" in _e13[0]["sentence"], str(_e13))
+_bb = _mk_bundle(part2_flow="Something → BankChain Alliance was mentioned → price moved.")
+_au, _evs = _ev(_bb)
+_e24 = [e for e in _evs if e["check"] == "C24_flow_no_unadopted_material"]
+check("evidence C24: 未確認の固有名詞を含む市場のフローの文を特定できる（由来call_B）",
+      len(_e24) == 1 and _e24[0]["section"] == "part2_flow" and _e24[0]["origin"] == "call_B"
+      and "BankChain" in _e24[0]["words"] and "BankChain Alliance" in _e24[0]["sentence"], str(_e24))
+_bb = _mk_bundle(part2_summary="総じて堅調。BankChain Allianceの動向に注目。")
+_au, _evs = _ev(_bb)
+_e23 = [e for e in _evs if e["check"] == "C23_summary_no_new_entities"]
+check("evidence C23: 総括中の未確認の固有名詞の文を特定できる（由来call_B）",
+      len(_e23) == 1 and _e23[0]["section"] == "part2_summary" and "BankChain" in _e23[0]["words"], str(_e23))
+_bb = _mk_bundle(part2_flow="Fear & Greedが改善した可能性があります。")
+_au, _evs = _ev(_bb)
+_e26 = [e for e in _evs if e["check"] == "C26_flow_role_separation"]
+check("evidence C26: 役割分離の禁止語句を含む文を特定できる",
+      len(_e26) >= 1 and _e26[0]["section"] == "part2_flow" and "Greed" in _e26[0]["sentence"], str(_e26))
+_bb = _mk_bundle(part2_summary="BTCは$64,247で推移。LP運用に注意。確認を続ける。")
+_au, _evs = _ev(_bb)
+_e27 = [e for e in _evs if e["check"] == "C27_summary_role_separation"]
+check("evidence C27: 総括の役割分離違反（価格表記・禁止語句）の文を特定できる",
+      len(_e27) >= 1 and all(e["section"] == "part2_summary" for e in _e27)
+      and any("$64,247" in e["sentence"] for e in _e27), str(_e27))
+_bb = _mk_bundle(headline_for_image="市況" * 30)
+_au, _evs = _ev(_bb)
+_e20 = [e for e in _evs if e["check"] == "C20_image_headline"]
+check("evidence: 位置を特定できないFAIL（例: C20の字数超過）はsection=Noneの1件で、detailのみで示す",
+      len(_e20) == 1 and _e20[0]["section"] is None, str(_e20))
+_au_p, _evs_p = _ev(compose_post.compose(DAILY_DATA, gen_l0))
+check("evidence: FAILが無い本文では証拠は空",
+      _evs_p == [], str(_evs_p))
+_lines = verify_post.format_fail_evidence_lines(_e18)
+check("format_fail_evidence_lines: セクション特定済みの証拠だけを1件1行で整形する",
+      len(_lines) == 1 and _lines[0].startswith("    └ セクション=part1_points（由来: call_A）／該当語: ")
+      and verify_post.format_fail_evidence_lines(_e20) == [], str(_lines))
+_det = verify_post.failing_check_details(_mk_bundle(part1_points="・" + _long), verify_post.run_all(_mk_bundle(part1_points="・" + _long), DAILY_DATA).checks)
+check("failing_check_details: FAILごとにid・detail・evidence（セクション特定済みのみ）を返す",
+      any(d["id"] == "C18_causal_assertion" and d["evidence"] and d["evidence"][0]["section"] == "part1_points" for d in _det), str(_det))
+_orig_run_all_checks = verify_post.run_all(_mk_bundle(part1_points="・" + _long), DAILY_DATA)
+check("Audit.add: 構造化extras（hits/names等）は判定result・detailに影響しない（既存のPASS/FAIL・件数は不変）",
+      _orig_run_all_checks.failed == sum(1 for c in _orig_run_all_checks.checks if c["result"] == "FAIL")
+      and verify_post.run_all(compose_post.compose(DAILY_DATA, gen_l0), DAILY_DATA).failed == 0)
+
+# ---- 5) repair_post: 最終監査の記録にもFAILの中身が入る ----
+_res_g = {"final_failing_checks": ["C18_causal_assertion"],
+          "final_failing_check_details": _fail_detail, "checked_ids": "C12〜C24・C26〜C28・計17項目", "warnings": []}
+_note_g = repair_post.render_final_audit_note(_res_g)
+check("repair_post.render_final_audit_note: FAIL行の下にセクション・由来・該当語・該当文が出る（draftがコミットされない日でも判断できる）",
+      "FAIL: C18_causal_assertion — 検出" in _note_g
+      and "└ セクション=part1_points（由来: call_A）／該当語: を受けて・上昇／該当文: 「A社の発表を受けてBTCが上昇しました」" in _note_g, _note_g)
+check("repair_post.render_final_audit_note: evidenceキーが無い旧形式の入力でも例外にならず従来どおり出る",
+      "FAIL: C18_causal_assertion — x" in repair_post.render_final_audit_note(
+          {"final_failing_checks": ["C18_causal_assertion"],
+           "final_failing_check_details": [{"id": "C18_causal_assertion", "detail": "x"}]}))
+
+# ---- 6) compose_post.main() end-to-end: force_drop→再監査FAIL→L1。成果物（CI成果物のみ）とSTATUS ----
+_G_DATE = "2026-08-17"
+_g_out_dir = Path(f"outputs/{_G_DATE}")
+(_g_out_dir).mkdir(parents=True, exist_ok=True)
+(_g_out_dir / "daily_data.json").write_text(json.dumps(DAILY_DATA, ensure_ascii=False), encoding="utf-8")
+(_g_out_dir / f"final_audit_{_G_DATE.replace('-', '')}.json").write_text(json.dumps({"overall": "PASS"}), encoding="utf-8")
+_g_call_a_data = {**CALL_A_DATA, "part1_points": ["規制当局の発表を受けてBTCが上昇しました（Reuters、2026-08-17）"]}
+_g_gen = {
+    "level": "L0", "news_candidate_count": 1, "news_source_status": {"BLS": {"status": "failed", "detail": "HTTP 403"}},
+    "total_usage": {"input_tokens": 100, "output_tokens": 50},
+    "call_a": {"ok": True, "data": _g_call_a_data, "attempts": 3, "error": None,
+               "usage": {"input_tokens": 90, "output_tokens": 40}, "truncation_stats": {},
+               "attempt_errors": ["AuditLedgerReconstructionError: tier3のuse:trueだが独立2ソースの相方が成立しない候補ID: [43, 46]"] * 2,
+               "attempt_diagnostics": _gen_g["call_a"]["attempt_diagnostics"], "rejected_pairs": [],
+               "force_dropped_candidates": [{"candidate_id": 46, "title": "T46", "source": "CoinDesk", "reason": "R"}]},
+    "call_b": {"ok": True, "data": CALL_B_DATA, "attempts": 1, "error": None, "usage": {"input_tokens": 10, "output_tokens": 10}},
+}
+_orig_run, _orig_anth = generate_post.run, generate_post.anthropic.Anthropic
+generate_post.run = lambda target_date, **kw: _g_gen
+generate_post.anthropic.Anthropic = lambda: FakeClient(lambda kw, n: json_response(CALL_B_DATA))
+_orig_argv = sys.argv
+sys.argv = ["compose_post.py", _G_DATE]
+try:
+    _rc_main = compose_post.main()
+finally:
+    sys.argv = _orig_argv
+    generate_post.run, generate_post.anthropic.Anthropic = _orig_run, _orig_anth
+_g_status = (_g_out_dir / "GENERATION_STATUS.md").read_text(encoding="utf-8")
+_g_failed = json.loads((_g_out_dir / "failed_attempt.json").read_text(encoding="utf-8"))
+_g_diag = json.loads((_g_out_dir / "attempt_diagnostics.json").read_text(encoding="utf-8"))
+check("compose_post.main(): 強制不採用後の再監査FAILでL1へ落ちる（従来どおり最終ゲートは不変）",
+      _rc_main == 0 and _g_status.startswith("level: L1") and "L1へフォールバックしました" in _g_status, _g_status[:300])
+check("compose_post.main(): STATUSにFAILしたチェックID・セクション・該当語・該当文（先頭100字）が出る",
+      "FAIL: C18_causal_assertion" in _g_status and "└ セクション=part1_points（由来: call_A）" in _g_status
+      and "該当語: を受けて・上昇" in _g_status and "規制当局の発表を受けてBTCが上昇しました" in _g_status, _g_status)
+check("compose_post.main(): STATUSに1・2・3試行目の相方不成立の内訳と3試行目の行が出る",
+      "相方が成立しなかった候補の内訳（1試行目）" in _g_status and "候補ID43 [Cointelegraph]" in _g_status
+      and "3試行目: 強制不採用（候補ID [46]）で続行 → 再監査FAILのためL1へフォールバック" in _g_status, _g_status)
+check("compose_post.main(): failed_attempt.jsonに破棄された本文（sections・headline_for_image）・検出内容・由来が保存される",
+      _g_failed["failing_checks"] == ["C18_causal_assertion"]
+      and "規制当局の発表を受けてBTCが上昇しました" in _g_failed["bundle"]["sections"]["part1_points"]
+      and _g_failed["failing_details"][0]["evidence"][0]["section"] == "part1_points"
+      and _g_failed["section_origin"]["part2_flow"] == "call_B"
+      and any(c["id"] == "C18_causal_assertion" and c["result"] == "FAIL" for c in _g_failed["checks"]), str(_g_failed.keys()))
+check("compose_post.main(): attempt_diagnostics.jsonに全試行の診断（1・2試行目を含む）が保存される",
+      [d["attempt"] for d in _g_diag["attempt_diagnostics"]] == [1, 3] and len(_g_diag["attempt_errors"]) == 2
+      and _g_diag["force_dropped_candidates"][0]["candidate_id"] == 46, str(_g_diag.keys()))
+check("compose_post.main(): コミットされるdraft/にはフォールバック後（L1）の本文が書かれ、失敗した本文は含まれない",
+      "BTCが上昇しました" not in (_g_out_dir / "draft" / "part1.md").read_text(encoding="utf-8")
+      and "BTCが上昇しました" not in (_g_out_dir / "draft" / "post_bundle.json").read_text(encoding="utf-8")
+      and json.loads((_g_out_dir / "draft" / "post_bundle.json").read_text(encoding="utf-8"))["level"] == "L1", "")
+_yml = (REPO / ".github" / "workflows" / "daily.yml").read_text(encoding="utf-8")
+check("daily.yml: attempt_diagnostics.json・failed_attempt.jsonがCI成果物（post-draft）の対象に入る（コミットはしない）",
+      "outputs/${{ steps.target.outputs.date }}/attempt_diagnostics.json" in _yml
+      and "outputs/${{ steps.target.outputs.date }}/failed_attempt.json" in _yml
+      and not any(("failed_attempt" in ln or "attempt_diagnostics" in ln) for ln in _yml.splitlines()
+                  if ln.strip().startswith("git add")), "")
+
 print()
 print(f"PASS: {len(PASS)}  FAIL: {len(FAIL)}")
 if FAIL:

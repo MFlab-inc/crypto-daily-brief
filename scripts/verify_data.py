@@ -53,9 +53,14 @@ class Audit:
         # 誤検知の可能性があり当面は人の目視に委ねる項目用）。
         self.warnings: list[dict] = []
 
-    def add(self, cid: str, ok: bool | None, detail: str) -> None:
+    def add(self, cid: str, ok: bool | None, detail: str, **extra) -> None:
         result = "SKIP" if ok is None else ("PASS" if ok else "FAIL")
-        self.checks.append({"id": cid, "result": result, "detail": detail})
+        rec = {"id": cid, "result": result, "detail": detail}
+        # v1.86（オーナー承認・案G）: FAIL時にSTATUSへ「該当語・該当文」を示すための
+        # 構造化データ（例: hits/names/terms）。判定（result）・detailには一切影響しない。
+        if extra:
+            rec.update(extra)
+        self.checks.append(rec)
 
     def warn(self, wid: str, detail: str, **extra) -> None:
         self.warnings.append({"id": wid, "detail": detail, **extra})

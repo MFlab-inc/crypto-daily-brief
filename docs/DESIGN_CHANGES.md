@@ -7,6 +7,85 @@
 
 ---
 
+## v1.86 — 2026-10-02（オーナー承認・案G：失敗した試行の診断保存／1・2試行目の相方不成立の理由／FAILの中身をSTATUSへ）
+
+2026-10-01分（run 65）でL1に落ちた原因調査（報告）で、次の2点が確認できなかった：
+(a) 候補ID 43のタイトル・相方が成立しなかった理由、(b) 3試行目で再監査FAILしたC18の検出文・該当語。
+前者は`rejected_pairs.json`（CI成果物）に最終試行の分しか残らず（試行ごとにclear）、後者は
+`_final_audit_failing_ids`がIDしか返さず`_fallback_to_true_l1`が本文ごと破棄していたため、どこにも
+残っていなかった。オーナーはCI成果物を見られないため、**STATUSだけで誤検知かどうかを判断できる**ことを
+目的に、判定ロジックを変えずに記録だけを追加した。過去の`outputs/`は書き換えていない。
+
+### 変更点
+
+1. **試行ごとの「相方が成立しなかった候補ID・理由」を残す**（`generate_post.py`）
+   - `_explain_unresolved()`新設。tier3・use:trueなのに独立2ソースの相方が成立しなかった候補ごとに、
+     候補ID・タイトル・媒体・申告先・**却下理由コード**を構造化して返す。判定は`_pair_claim_detail()`を
+     そのまま使うので、成立判定と同一。理由は自身の申告（own_claim）に加え、他のtier3・use:true候補からの
+     その候補を指す申告（incoming_claim）も含む。
+   - 理由コードは`_pair_claim_detail`の6種類（target_not_found／self_reference／target_not_tier3／
+     target_use_false／same_source／overlap_below_threshold）に加え、**表示専用のno_claim（申告なし＝
+     pairs_with_candidate_idがnull）**を新設した。申告が無い場合は`_pair_claim_detail`が呼ばれず
+     `rejected_pairs`にも記録が残らないため、理由欄が空白にならないようにするもの。ラベルは
+     `PAIR_REJECT_REASON_LABELS`。
+   - `call_a()`が試行ごとの診断を`attempt_diagnostics`（試行をまたいで蓄積。例外化する試行もtry/finallyで
+     回収）に残し、`CallOutcome.attempt_diagnostics`として返す。従来の`rejected_pairs`（最終試行の分のみ）は
+     変更していない。
+
+2. **STATUSに内訳を出す**（`compose_post.py`）：試行履歴の各試行の下に「相方が成立しなかった候補の内訳」
+   （候補ID・媒体・タイトル先頭70字・理由コードと意味・重なり係数と閾値）を出す。強制不採用で続行した日は、
+   L1へ落ちて「N試行目: 成功」の行が出なくなる場合を含め、**最終試行の行を必ず出す**（従来は3試行目の行が
+   欠落していた）。例：
+   ```
+   call_A試行履歴（リトライ発生・劣化の兆候として記録）:
+     1試行目: AuditLedgerReconstructionError: …候補ID: [43, 46]
+       相方が成立しなかった候補の内訳（1試行目）:
+         - 候補ID43 [Cointelegraph] 「…」
+             ・自身の申告→ID46 [CoinDesk] 「…」: overlap_below_threshold（タイトルの重なり係数が閾値未満・重なり係数0.31＜閾値0.4）
+         - 候補ID46 [CoinDesk] 「…」
+             ・自身の申告: no_claim（相方の申告なし（pairs_with_candidate_id=null））
+     3試行目: 強制不採用（候補ID [46]）で続行 → 再監査FAILのためL1へフォールバック
+   ```
+
+3. **FAILしたチェックの「セクション・由来・該当語・該当文（先頭100字）」をSTATUSに出す**
+   （`verify_post.collect_fail_evidence`・`format_fail_evidence_lines`・`failing_check_details`）。
+   強制不採用後の再監査FAIL（L1フォールバック）と、最終ゲート（repair_post後）のFAILの両方で、
+   `FAIL: <チェックID> — <detail>`の下に
+   `└ セクション=part1_points（由来: call_A）／該当語: を受けて・上昇／該当文: 「…（先頭100字）」`を出す。
+   由来は`SECTION_ORIGIN`（part1_headline・part1_points・headline_for_image=call_A、part2_flow・
+   part2_summary=call_B、LP一言・数値=テンプレート）。headline_for_image由来のC18が出れば、保留中の案D
+   （headline_for_imageの局所修正）の要否を判断できる。
+   - 該当文を特定できるチェック：C12（禁止語）・C13（ハッシュタグ境界）・C16b（数値転記）・**C18**・C23・C24・
+     C26・C27。位置を特定できないチェック（C20の字数超過等）は従来どおりdetailのみ。
+   - 実装は`Audit.add(..., **extra)`（任意の構造化データをcheck記録へ足す。判定resultとdetailは不変）と、
+     上記チェックへの`terms/hits/names/patterns/prices`の付加のみ。**判定ロジックは変えていない**。
+
+4. **CI成果物（コミットしない）**：`attempt_diagnostics.json`（全試行の診断・試行エラー・強制不採用）を毎回、
+   `failed_attempt.json`（L1へ差し戻される前の本文〈sections・headline_for_image・全文〉・全チェック結果・
+   FAIL詳細・由来）をL1フォールバックした日に保存する。`daily.yml`の`post-draft-<日付>`アーティファクトの
+   対象に追加（`git add`の対象には入れない）。
+
+### 検証
+
+- テスト：`test/test_bundle2.py` 848項目すべてPASS（800→848）。追加は、理由コード7種類・他候補からの申告・
+  試行ごとの診断（1・2・3試行目、1回目で成功する日は空）・STATUSの各表示（通常日は出さない）・
+  証拠抽出（C12/C13/C18〈call_A・call_B・headline_for_image〉/C23/C24/C26/C27・位置不明・100字切り・
+  FAILなし）・`repair_post`の最終監査記録・`compose_post.main()`のend-to-end（強制不採用→C18 FAIL→L1、
+  成果物・STATUS・コミット対象にfailed本文が入らないこと）・`daily.yml`の成果物対象。
+- **判定は不変**：コミット済みの全35日分の本文（`outputs/*/draft/post_bundle.json`）に対し、変更前（HEAD）と
+  変更後の`run_all`の全チェック結果を比較し、**差は0件**（例外も0件）。
+
+### 限界
+
+- 該当文の特定は文字列の位置による簡易な事後説明で、誤検知かどうかの最終判断は人が行う。C13は全文を
+  対象とする判定をセクション単位に再走査して位置を示すため、セクションをまたぐ違反は「位置不明」になり得る。
+- 1・2試行目で例外が`AuditLedgerReconstructionError`以外（JSON不正・必須キー欠落等）の場合、候補単位の
+  内訳は無く、従来どおりエラー文のみ。
+- `failed_attempt.json`はforce_drop後のL1フォールバックの日だけ作る（最終ゲートのFAIL日は`draft/`が
+  成果物に含まれるため）。CI成果物の保持期間はGitHubの設定による（既定90日）。
+
+---
+
 ## v1.85 — 2026-10-01（オーナー承認・向きの食い違いの警告（WARN）／GENERATION_STATUSの監査表記の実態合わせ／米連邦準備制度の表記を「FRB」に統一するプロンプト）
 
 2026-09-30分の実行（run 64・17/17 PASS）で、ヘッドラインと市場のフロー①が「利下げ観測」、主要なポイントが

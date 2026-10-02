@@ -736,7 +736,8 @@ class CallOutcome:
     def __init__(self, ok: bool, data: dict | None, attempts: int, error: str | None,
                  usage: dict[str, int] | None = None, truncation_stats: dict[str, int] | None = None,
                  attempt_errors: list[str] | None = None, audit_ledger_auto_filled_count: int = 0,
-                 rejected_pairs: list[dict] | None = None, force_dropped_candidates: list[dict] | None = None):
+                 rejected_pairs: list[dict] | None = None, force_dropped_candidates: list[dict] | None = None,
+                 attempt_diagnostics: list[dict] | None = None):
         self.ok = ok
         self.data = data
         self.attempts = attempts
@@ -761,6 +762,11 @@ class CallOutcome:
         # 強制的に不採用にした候補（_derive_decisions参照）。
         # GENERATION_STATUS.mdへ記録する。
         self.force_dropped_candidates = force_dropped_candidates or []
+        # v1.86（オーナー承認・案G）: 試行ごとの「相方が成立しなかった候補」の診断
+        # （候補ID・タイトル・媒体・申告先・却下理由コード）。rejected_pairsは最終
+        # 試行の分しか残らない（試行ごとにclear）ため、1・2試行目の理由が消えていた。
+        # 各要素: {"attempt", "force_drop", "unresolved": [...], "rejected_pairs": [...]}。
+        self.attempt_diagnostics = attempt_diagnostics or []
 
     def to_dict(self) -> dict:
         return {"ok": self.ok, "attempts": self.attempts, "error": self.error,
@@ -768,7 +774,8 @@ class CallOutcome:
                 "attempt_errors": self.attempt_errors,
                 "audit_ledger_auto_filled_count": self.audit_ledger_auto_filled_count,
                 "rejected_pairs": self.rejected_pairs,
-                "force_dropped_candidates": self.force_dropped_candidates}
+                "force_dropped_candidates": self.force_dropped_candidates,
+                "attempt_diagnostics": self.attempt_diagnostics}
 
 
 def _extract_text(response: Any) -> str:
@@ -1076,10 +1083,63 @@ def _validate_pair_claim(claimant_id: int, target_id: int, id_to_candidate: dict
     return bool(_pair_claim_detail(claimant_id, target_id, id_to_candidate, use_by_id, threshold)["valid"])
 
 
+# v1.86（オーナー承認・案G）: 相方不成立の理由コードの表示用ラベル。先頭6つは
+# _pair_claim_detail()の却下理由コードそのもの。"no_claim"は表示専用に新設した
+# ラベルで、LLMがpairs_with_candidate_idを書かなかった（申告なし）場合を、理由欄が
+# 空白にならないよう明示するためのもの（_pair_claim_detail()は呼ばれず、却下ペア診断
+# rejected_pairsにも記録されない）。
+PAIR_REJECT_REASON_LABELS = {
+    "target_not_found": "申告先の候補IDが存在しない",
+    "self_reference": "自分自身を申告している",
+    "target_not_tier3": "申告先がtier3でない",
+    "target_use_false": "申告先がuse:false（不採用）",
+    "same_source": "申告先が同じ媒体",
+    "overlap_below_threshold": "タイトルの重なり係数が閾値未満",
+    "no_claim": "相方の申告なし（pairs_with_candidate_id=null）",
+}
+
+
+def _explain_unresolved(unresolved: list[int], claim_by_id: dict, id_to_candidate: dict[int, dict],
+                         use_by_id: dict[int, bool], threshold: float) -> list[dict]:
+    """tier3のuse:trueなのに独立2ソースの相方が成立しなかった候補ごとに、
+    「なぜ成立しなかったか」を構造化して返す（v1.86・オーナー承認・案G）。
+    own_claim=その候補自身の申告、incoming_claim=他のtier3・use:true候補からの
+    その候補を指す申告。判定は_pair_claim_detail()をそのまま使う（成立判定と同一）。
+    """
+    out = []
+    for cid in sorted(unresolved):
+        cand = id_to_candidate.get(cid, {})
+        entry = {"candidate_id": cid, "title": cand.get("title", ""), "source": cand.get("source", ""),
+                 "tier": cand.get("tier"), "own_claim_target_id": claim_by_id.get(cid), "reasons": []}
+        if claim_by_id.get(cid) is None:
+            entry["reasons"].append({"role": "own_claim", "code": "no_claim"})
+        else:
+            d = _pair_claim_detail(cid, claim_by_id[cid], id_to_candidate, use_by_id, threshold)
+            entry["reasons"].append({
+                "role": "own_claim", "code": d.get("reason") or "no_claim", "other_id": d.get("target_id"),
+                "other_title": d.get("target_title", ""), "other_source": d.get("target_source", ""),
+                "overlap": d.get("overlap"), "threshold": d.get("threshold")})
+        for other, target in claim_by_id.items():
+            if other == cid or target != cid:
+                continue
+            if id_to_candidate.get(other, {}).get("tier") != 3 or not use_by_id.get(other):
+                continue
+            d = _pair_claim_detail(other, cid, id_to_candidate, use_by_id, threshold)
+            if d.get("valid"):
+                continue
+            entry["reasons"].append({
+                "role": "incoming_claim", "code": d.get("reason"), "other_id": other,
+                "other_title": d.get("claimant_title", ""), "other_source": d.get("claimant_source", ""),
+                "overlap": d.get("overlap"), "threshold": d.get("threshold")})
+        out.append(entry)
+    return out
+
+
 def _derive_decisions(llm_entries: list[dict], id_to_candidate: dict[int, dict],
                        pair_overlap_threshold: float, rejected_pairs: list[dict] | None = None,
                        force_drop_unresolved: bool = False,
-                       force_dropped: list[dict] | None = None) -> dict[int, str]:
+                       force_dropped: list[dict] | None = None,
+                       diagnostics: dict | None = None) -> dict[int, str]:
     """candidate_idごとのdecision（"採用"/"採用（独立2ソース）"/"不採用"）を
     コード側で機械的に導出する（v1.53フォローアップ・オーナー指示）。
 
@@ -1163,6 +1223,11 @@ def _derive_decisions(llm_entries: list[dict], id_to_candidate: dict[int, dict],
             decisions[cid] = "不採用"
 
     if unresolved:
+        if diagnostics is not None:
+            # v1.86（案G）: 例外化・強制不採用のどちらの前でも、成立しなかった理由を残す
+            # （呼び出し元がtry/finallyで試行ごとに回収する）。
+            diagnostics["unresolved"] = _explain_unresolved(
+                unresolved, claim_by_id, id_to_candidate, use_by_id, pair_overlap_threshold)
         if not force_drop_unresolved:
             raise AuditLedgerReconstructionError(
                 f"tier3のuse:trueだが独立2ソースの相方が成立しない候補ID: {sorted(unresolved)}")
@@ -1183,7 +1248,8 @@ def _reconstruct_audit_ledger(llm_entries: Any, id_to_candidate: dict[int, dict]
                                stats: dict[str, int] | None = None,
                                rejected_pairs: list[dict] | None = None,
                                force_drop_unresolved: bool = False,
-                               force_dropped: list[dict] | None = None) -> list[dict]:
+                               force_dropped: list[dict] | None = None,
+                               diagnostics: dict | None = None) -> list[dict]:
     """LLMが出力した candidate_id・use・pairs_with_candidate_id・
     verified_by・reason のみのaudit_ledgerを、候補データのsource/url/
     title/published_atで補完し、decisionをコード側で導出した完全な形へ
@@ -1231,7 +1297,7 @@ def _reconstruct_audit_ledger(llm_entries: Any, id_to_candidate: dict[int, dict]
 
     decisions = _derive_decisions(parsed, id_to_candidate, pair_overlap_threshold,
                                    rejected_pairs=rejected_pairs, force_drop_unresolved=force_drop_unresolved,
-                                   force_dropped=force_dropped)
+                                   force_dropped=force_dropped, diagnostics=diagnostics)
 
     reconstructed = []
     auto_filled = 0
@@ -1373,6 +1439,9 @@ def call_a(client: "anthropic.Anthropic", daily_data: dict, news_today: dict,
     # 各試行の開始時にclear()し、失敗した試行分の値が混入しないようにする。
     rejected_pairs_stats: list[dict] = []
     force_dropped_stats: list[dict] = []
+    # v1.86（オーナー承認・案G）: 上の2つと異なり試行をまたいで蓄積する（1・2試行目の
+    # 「相方が成立しなかった候補と理由」を、最終的な成否によらず残すため）。
+    attempt_diagnostics: list[dict] = []
 
     def _rebuild_audit_ledger(data: dict, attempt: int) -> dict:
         rejected_pairs_stats.clear()
@@ -1386,10 +1455,17 @@ def call_a(client: "anthropic.Anthropic", daily_data: dict, news_today: dict,
         # 従来どおりのL1へフォールバックする（_derive_decisionsのdocstring
         # 参照）。
         force_drop = attempt >= MAX_ATTEMPTS
-        data["audit_ledger"] = _reconstruct_audit_ledger(
-            data.get("audit_ledger"), id_to_candidate, pair_overlap_threshold, audit_ledger_stats,
-            rejected_pairs=rejected_pairs_stats, force_drop_unresolved=force_drop,
-            force_dropped=force_dropped_stats)
+        diag: dict = {}
+        try:
+            data["audit_ledger"] = _reconstruct_audit_ledger(
+                data.get("audit_ledger"), id_to_candidate, pair_overlap_threshold, audit_ledger_stats,
+                rejected_pairs=rejected_pairs_stats, force_drop_unresolved=force_drop,
+                force_dropped=force_dropped_stats, diagnostics=diag)
+        finally:
+            if diag.get("unresolved"):
+                attempt_diagnostics.append({
+                    "attempt": attempt, "force_drop": force_drop, "unresolved": diag["unresolved"],
+                    "rejected_pairs": list(rejected_pairs_stats)})
         return data
 
     outcome = _call_json(
@@ -1405,6 +1481,7 @@ def call_a(client: "anthropic.Anthropic", daily_data: dict, news_today: dict,
     outcome.audit_ledger_auto_filled_count = audit_ledger_stats.get("audit_ledger_auto_filled_count", 0)
     outcome.rejected_pairs = list(rejected_pairs_stats)
     outcome.force_dropped_candidates = list(force_dropped_stats)
+    outcome.attempt_diagnostics = list(attempt_diagnostics)
     return outcome
 
 
