@@ -5361,6 +5361,185 @@ check("repair(): 結果のcheck_countsは実際の最終監査の件数（L1の�
 check("repair(): 件数の追加は判定に影響しない（final_failing_checks・rescuedは従来どおり）",
       _rep_cnt["final_failing_checks"] == [] and _rep_cnt["rounds_used"] == 0)
 
+print("=== 案A（v1.89・オーナー承認・v1.79の条件の拡張）: 強制不採用後の再監査がC18・C13のみFAILなら、L1へ落とす前に局所修正→再監査 ===")
+import shutil as _shutil
+
+
+def _usage_resp(obj, i=111, o=22):
+    r = json_response(obj)
+    r.usage = type("U", (), {"input_tokens": i, "output_tokens": o})()
+    return r
+
+
+def _run_force_drop_main(gen_call_a_data, call_b_data=CALL_B_DATA, client_fn=None, patch_repair=None):
+    """compose_post.main()を強制不採用ありのgenで実行し、(rc, status, files, call_log)を返す。"""
+    _d = Path(f"outputs/{_G_DATE}")
+    for sub in ("draft",):
+        _shutil.rmtree(_d / sub, ignore_errors=True)
+    for f in ("GENERATION_STATUS.md", "failed_attempt.json", "attempt_diagnostics.json", "rejected_pairs.json"):
+        (_d / f).unlink(missing_ok=True)
+    (_d / "daily_data.json").write_text(json.dumps(DAILY_DATA, ensure_ascii=False), encoding="utf-8")
+    (_d / f"final_audit_{_G_DATE.replace('-', '')}.json").write_text(json.dumps({"overall": "PASS"}), encoding="utf-8")
+    gen = json.loads(json.dumps(_g_gen))
+    gen["call_a"]["data"] = gen_call_a_data
+    gen["call_b"]["data"] = call_b_data
+    calls = []
+
+    def _default_client_fn(kw, n):
+        sysm = str(kw.get("system", ""))
+        if "rewritten_sentence" in sysm:
+            return _usage_resp({"rewritten_sentence": "規制当局の発表を受けてBTCが上昇した可能性があります（Reuters、2026-08-17）"})
+        return json_response(CALL_B_DATA)
+
+    _inner_fn = client_fn or _default_client_fn
+
+    def fn(kw, n):
+        sysm = str(kw.get("system", ""))
+        calls.append("repair" if "rewritten_sentence" in sysm else ("call_b" if "part2_flow" in sysm else "other"))
+        return _inner_fn(kw, n)
+    _o_run, _o_anth = generate_post.run, generate_post.anthropic.Anthropic
+    _o_rb = None
+    generate_post.run = lambda target_date, **kw: gen
+    generate_post.anthropic.Anthropic = lambda: FakeClient(fn)
+    if patch_repair is not None:
+        _o_rb = repair_post.repair_bundle
+        repair_post.repair_bundle = patch_repair
+    _argv = sys.argv
+    sys.argv = ["compose_post.py", _G_DATE]
+    try:
+        rc = compose_post.main()
+    finally:
+        sys.argv = _argv
+        generate_post.run, generate_post.anthropic.Anthropic = _o_run, _o_anth
+        if _o_rb is not None:
+            repair_post.repair_bundle = _o_rb
+    status = (_d / "GENERATION_STATUS.md").read_text(encoding="utf-8")
+    files = {"failed": (_d / "failed_attempt.json").exists(),
+             "bundle": json.loads((_d / "draft" / "post_bundle.json").read_text(encoding="utf-8")),
+             "part1": (_d / "draft" / "part1.md").read_text(encoding="utf-8")}
+    if files["failed"]:
+        files["failed_json"] = json.loads((_d / "failed_attempt.json").read_text(encoding="utf-8"))
+    return rc, status, files, calls
+
+
+# S1: 修正に成功 → L0のまま続行
+_rc1, _st1, _f1, _calls1 = _run_force_drop_main(_g_call_a_data)
+check("案A（S1）: 強制不採用後の再監査がC18のみFAILのとき、局所修正を適用して再監査PASS→L0のまま続行する（L1へ落ちない）",
+      _rc1 == 0 and _st1.startswith("level: L0") and _f1["bundle"]["level"] == "L0"
+      and "可能性があります" in _f1["bundle"]["sections"]["part1_points"], _st1[:200])
+check("案A（S1）: 修正は違反文のcall_Rだけ（call_Aの再試行・call_Bの再生成は行わない）",
+      _calls1 == ["repair"], str(_calls1))
+check("案A（S1）: STATUSに局所修正の前後の文（修正前・修正後）が記載される",
+      "局所修正（repair_postと同じ処理・v1.89）を適用しました" in _st1
+      and "修正前: ・規制当局の発表を受けてBTCが上昇しました（Reuters、2026-08-17）" in _st1
+      and "修正後: ・規制当局の発表を受けてBTCが上昇した可能性があります（Reuters、2026-08-17）" in _st1
+      and "局所修正後の再監査: 全項目PASS → L0のまま続行します" in _st1 and "[C18_causal_assertion / part1_points] OK" in _st1, _st1)
+check("案A（S1）: L1フォールバックの記録は出ず、failed_attempt.jsonも作られない（破棄された本文が無いため）",
+      "L1へフォールバックしました" not in _st1 and not _f1["failed"], str(_f1["failed"]))
+check("案A（S1）: 修正呼び出しのトークンがtoken_usage（合計）に加算される（元の合計 in=100/out=50 に修正分 in=111/out=22）",
+      "input=211, output=72" in _st1, _st1.split("token_usage")[1].split("\n")[0])
+check("案A（S1）: コミットされるdraft/part1.mdは修正後の文（post_bundle.jsonと一致）",
+      "可能性があります" in _f1["part1"] and "BTCが上昇しました（Reuters" not in _f1["part1"], _f1["part1"])
+check("案A（S1）: 修正後のbundleは全チェックPASS（最終ゲート相当のrun_allでFAIL0）",
+      verify_post.run_all(_f1["bundle"], DAILY_DATA).failed == 0)
+
+# S2: 修正しても違反が残る → 従来どおりL1
+_rc2, _st2, _f2, _calls2 = _run_force_drop_main(
+    _g_call_a_data,
+    client_fn=lambda kw, n: _usage_resp({"rewritten_sentence": "規制当局の発表を受けてBTCが上昇しました"})
+    if "rewritten_sentence" in str(kw.get("system", "")) else json_response(CALL_B_DATA))
+check("案A（S2）: 修正後もC18が残る場合は、従来どおりL1へフォールバックする（最終ゲートは不変）",
+      _rc2 == 0 and _st2.startswith("level: L1") and "L1へフォールバックしました" in _st2
+      and "局所修正後の再監査: なおFAIL ['C18_causal_assertion']" in _st2, _st2[:300])
+check("案A（S2）: 修正の試行（修正前の文・修正後の文）と、残ったFAILの中身（セクション・該当語・該当文）がSTATUSに残る",
+      "修正前: ・規制当局の発表を受けてBTCが上昇しました" in _st2 and "└ セクション=part1_points（由来: call_A）" in _st2
+      and "最終結果: 未救済" in _st2, _st2)
+check("案A（S2）: failed_attempt.jsonに修正前の本文・修正の記録（rounds_log）・修正後のbundleが保存される。コミット対象のdraft/はL1の本文",
+      _f2["failed"] and "BTCが上昇しました" in _f2["failed_json"]["bundle"]["sections"]["part1_points"]
+      and _f2["failed_json"]["local_repair"]["rounds_log"] and "bundle_after_repair" in _f2["failed_json"]["local_repair"]
+      and _f2["bundle"]["level"] == "L1", str(_f2.get("failed_json", {}).keys()))
+check("案A（S2）: 修正が最大2ラウンドで打ち切られ、その呼び出し＋L1用のcall_B再生成が行われる（repair×2→call_b）",
+      _calls2 == ["repair", "repair", "call_b"], str(_calls2))
+check("案A（S2）: 修正のトークン（2ラウンド分）もtoken_usageに加算される（in=100+111×2、out=50+22×2）",
+      "input=322, output=94" in _st2, _st2.split("token_usage")[1].split("\n")[0])
+
+# S3: C18以外もFAIL → 修正しない
+_cb_bad = {"part2_flow": ["Something → BankChain Alliance was mentioned but never adopted → price moved。"],
+           "part2_summary": "地合いは総じて改善。継続的な確認が必要。"}
+_rc3, _st3, _f3, _calls3 = _run_force_drop_main(_g_call_a_data, call_b_data=_cb_bad)
+check("案A（S3）: FAILがC18・C13以外を含む（C24もFAIL）場合は局所修正を試みず、従来どおりL1へ落ちる（call_Rを呼ばない）",
+      _rc3 == 0 and _st3.startswith("level: L1") and "repair" not in _calls3 and "局所修正" not in _st3
+      and "C24_flow_no_unadopted_material" in _st3, str(_calls3))
+
+# S4: 修正が例外 → L1
+def _boom(bundle, daily_data, client):
+    raise RuntimeError("boom")
+
+
+_rc4, _st4, _f4, _calls4 = _run_force_drop_main(_g_call_a_data, patch_repair=_boom)
+check("案A（S4）: 局所修正が例外を出しても、日を止めずL1へフォールバックし、例外をSTATUSに記録する",
+      _rc4 == 0 and _st4.startswith("level: L1") and "局所修正は例外で失敗しました（RuntimeError: boom）" in _st4
+      and _f4["failed"], _st4[:300])
+
+# S5: headline_for_image由来のC18のみ → 局所修正の対象外（案D保留）なのでL1。STATUSで由来が分かる
+_ca_hfi = {**CALL_A_DATA, "headline_for_image": "米金利の上昇を受けてBTC・ETHは軟調"}
+_rc5, _st5, _f5, _calls5 = _run_force_drop_main(_ca_hfi)
+check("案A（S5）: headline_for_image由来のC18は局所修正の対象外（案Dは保留）なので修正されずL1へ落ちる（call_Rを呼ばない）",
+      _rc5 == 0 and _st5.startswith("level: L1") and "repair" not in _calls5, str(_calls5))
+check("案A（S5）: STATUSに、FAILの由来がheadline_for_imageであること（案Dの要否の判断材料）と、対象文が無かった旨が記録される",
+      "セクション=headline_for_image（由来: call_A）" in _st5 and "局所修正後の再監査: なおFAIL ['C18_causal_assertion']" in _st5, _st5)
+
+# S6: 強制不採用が無い日は、compose_postでは局所修正しない（従来どおりrepair_postの担当）
+_g_gen_nofd = json.loads(json.dumps(_g_gen))
+_g_gen_nofd["call_a"]["force_dropped_candidates"] = []
+_g_gen_nofd["call_a"]["data"] = _g_call_a_data
+_d6 = Path(f"outputs/{_G_DATE}")
+_shutil.rmtree(_d6 / "draft", ignore_errors=True)
+_o_run6 = generate_post.run
+generate_post.run = lambda target_date, **kw: _g_gen_nofd
+_calls6 = []
+_o_anth6 = generate_post.anthropic.Anthropic
+generate_post.anthropic.Anthropic = lambda: FakeClient(lambda kw, n: (_calls6.append(1), json_response(CALL_B_DATA))[1])
+_argv6 = sys.argv
+sys.argv = ["compose_post.py", _G_DATE]
+try:
+    compose_post.main()
+finally:
+    sys.argv = _argv6
+    generate_post.run, generate_post.anthropic.Anthropic = _o_run6, _o_anth6
+_b6 = json.loads((_d6 / "draft" / "post_bundle.json").read_text(encoding="utf-8"))
+check("案A（S6）: 強制不採用が無い日は、compose_postでは修正もフォールバックもしない（C18違反を含むL0のまま。従来どおり後段のrepair_postが担当）",
+      _b6["level"] == "L0" and not _calls6 and "BTCが上昇しました" in _b6["sections"]["part1_points"], str(_calls6))
+
+# 単体: 修正の対象判定
+_bd = compose_post.compose(DAILY_DATA, gen_l0)
+check("_apply_local_repair_after_force_drop: FAILが空・修正対象外のチェックを含む場合はNone（修正を試みない）",
+      compose_post._apply_local_repair_after_force_drop(_bd, DAILY_DATA, []) is None
+      and compose_post._apply_local_repair_after_force_drop(_bd, DAILY_DATA, ["C18_causal_assertion", "C24_flow_no_unadopted_material"]) is None
+      and compose_post._apply_local_repair_after_force_drop(_bd, DAILY_DATA, ["C23_summary_no_new_entities"]) is None)
+_before_copy = json.dumps(_bd, sort_keys=True)
+_bd2 = json.loads(json.dumps(_bd))
+_bd2["sections"]["part1_points"] = "・規制当局の発表を受けてBTCが上昇しました（Reuters、2026-08-17）"
+_bd2["part1_md"], _bd2["part2_md"] = compose_post.render_markdown(_bd2["sections"], _bd2["level"])
+_snap2 = json.dumps(_bd2, sort_keys=True)
+_info = compose_post._apply_local_repair_after_force_drop(
+    _bd2, DAILY_DATA, ["C18_causal_assertion"],
+    client=FakeClient(lambda kw, n: _usage_resp({"rewritten_sentence": "規制当局の発表を受けてBTCが上昇した可能性があります（Reuters、2026-08-17）"})))
+check("_apply_local_repair_after_force_drop: 元のbundleは変更せず、修正後のコピーを返す（L1フォールバック時に元の本文を保存できる）",
+      json.dumps(_bd2, sort_keys=True) == _snap2 and _info["bundle"] is not _bd2
+      and "可能性があります" in _info["bundle"]["sections"]["part1_points"] and _info["result"]["final_failing_checks"] == [], str(_info["result"]["final_failing_checks"]))
+# repair_bundleとrepair()の同値性（ファイル経由と同じ結果）
+_R_DATE = "2026-08-17"
+Path(f"outputs/{_R_DATE}/draft").mkdir(parents=True, exist_ok=True)
+Path(f"outputs/{_R_DATE}/draft/post_bundle.json").write_text(json.dumps(_bd2, ensure_ascii=False), encoding="utf-8")
+_fc = lambda: FakeClient(lambda kw, n: _usage_resp({"rewritten_sentence": "規制当局の発表を受けてBTCが上昇した可能性があります（Reuters、2026-08-17）"}))
+_file_res = repair_post.repair(_R_DATE, client=_fc())
+_mem = json.loads(json.dumps(_bd2))
+_mem_res = repair_post.repair_bundle(_mem, DAILY_DATA, _fc())
+check("repair_bundle（メモリ）とrepair()（ファイル経由）は同じ結果を返す（抽出前後で挙動が変わらない）",
+      {k: v for k, v in _file_res.items() if k != "target_date_jst"} == _mem_res
+      and json.loads(Path(f"outputs/{_R_DATE}/draft/post_bundle.json").read_text(encoding="utf-8"))["sections"] == _mem["sections"], "")
+
 print()
 print(f"PASS: {len(PASS)}  FAIL: {len(FAIL)}")
 if FAIL:

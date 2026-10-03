@@ -133,18 +133,11 @@ def _repair_c13(bundle: dict, round_log: list[dict]) -> None:
                                "before": hfi, "after": fixed, "ok": True, "fixes": n, "error": None})
 
 
-def repair(target_date: str, *, client: "anthropic.Anthropic | None" = None) -> dict[str, Any]:
-    """draft/post_bundle.jsonを読み込み、必要ならC18/C13を局所修正して
-    書き戻す。呼び出し元に無関係な失敗（他チェックのFAIL）はそのまま残す。
+def repair_bundle(bundle: dict, daily_data: dict, client: "anthropic.Anthropic") -> dict[str, Any]:
+    """メモリ上のbundleを（その場で）局所修正し、結果を返す（v1.89でrepair()から抽出。
+    ファイルの読み書きをしない純粋な処理で、repair()とcompose_post.py〔強制不採用後の
+    再監査FAIL時。v1.89・オーナー承認〕の両方から使う）。修正の判定・手順はv1.76のまま。
     """
-    draft_dir = Path(f"outputs/{target_date}/draft")
-    bundle_path = draft_dir / "post_bundle.json"
-    bundle = json.loads(bundle_path.read_text(encoding="utf-8"))
-    daily_data = json.loads(Path(f"outputs/{target_date}/daily_data.json").read_text(encoding="utf-8"))
-
-    if client is None:
-        client = anthropic.Anthropic()
-
     rounds_log: list[dict] = []
     total_usage = {"input_tokens": 0, "output_tokens": 0}
     rounds_used = 0
@@ -173,14 +166,7 @@ def repair(target_date: str, *, client: "anthropic.Anthropic | None" = None) -> 
     check_counts = verify_post.summarize_check_results(final_audit.checks)
     warnings = list(getattr(final_audit, "warnings", []))
     rescued = rounds_used > 0 and not (REPAIRABLE_CHECK_IDS & set(final_failing))
-
-    if rounds_used:
-        (draft_dir / "part1.md").write_text(bundle["part1_md"], encoding="utf-8")
-        (draft_dir / "part2.md").write_text(bundle["part2_md"], encoding="utf-8")
-        bundle_path.write_text(json.dumps(bundle, ensure_ascii=False, indent=2), encoding="utf-8")
-
     return {
-        "target_date_jst": target_date,
         "rounds_used": rounds_used,
         "rounds_log": rounds_log,
         "total_usage": total_usage,
@@ -191,6 +177,28 @@ def repair(target_date: str, *, client: "anthropic.Anthropic | None" = None) -> 
         "warnings": warnings,
         "rescued": rescued,
     }
+
+
+def repair(target_date: str, *, client: "anthropic.Anthropic | None" = None) -> dict[str, Any]:
+    """draft/post_bundle.jsonを読み込み、必要ならC18/C13を局所修正して
+    書き戻す。呼び出し元に無関係な失敗（他チェックのFAIL）はそのまま残す。
+    """
+    draft_dir = Path(f"outputs/{target_date}/draft")
+    bundle_path = draft_dir / "post_bundle.json"
+    bundle = json.loads(bundle_path.read_text(encoding="utf-8"))
+    daily_data = json.loads(Path(f"outputs/{target_date}/daily_data.json").read_text(encoding="utf-8"))
+
+    if client is None:
+        client = anthropic.Anthropic()
+
+    result = repair_bundle(bundle, daily_data, client)
+
+    if result["rounds_used"]:
+        (draft_dir / "part1.md").write_text(bundle["part1_md"], encoding="utf-8")
+        (draft_dir / "part2.md").write_text(bundle["part2_md"], encoding="utf-8")
+        bundle_path.write_text(json.dumps(bundle, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    return {"target_date_jst": target_date, **result}
 
 
 def render_status_note(result: dict[str, Any]) -> str:

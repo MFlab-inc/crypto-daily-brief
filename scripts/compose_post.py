@@ -29,6 +29,7 @@ CLI:
 """
 from __future__ import annotations
 
+import copy
 import json
 import sys
 from datetime import date
@@ -391,10 +392,62 @@ def _fallback_to_true_l1(daily_data: dict, gen: dict[str, Any], failing_checks: 
     }
 
 
+def _apply_local_repair_after_force_drop(bundle: dict, daily_data: dict, failing: list[str],
+                                         client: "anthropic.Anthropic | None" = None) -> dict | None:
+    """v1.89（オーナー承認・案A・v1.79の条件の拡張）: 強制不採用後の再監査がC18・C13**のみ**
+    FAILした場合に限り、repair_postと同じ局所修正（v1.76。違反文だけをcall_Rで書き直す／
+    C13は空白の機械挿入。最大2ラウンド）を適用して再監査する。従来はこの経路の本文が
+    repair_postを一度も通らず、そのままL1へ落ちていた（2026-10-01）。
+    戻り値: 修正を試みなかった（修正可能なFAILのみでない）ならNone。試みた場合は
+    {"bundle": 修正後のbundle, "result": repair_bundleの結果 or None, "error": 例外文 or None}。
+    元のbundleは変更しない（L1フォールバック時にfailed_attempt.jsonへ保存するため）。
+    最終ゲート（修正後の再監査でFAILならL1）は変えない。headline_for_image由来のC18は
+    従来どおり局所修正の対象外（案Dは保留）なので、その場合は修正されずL1へ落ちる。
+    """
+    import repair_post  # 遅延import（repair_postがcompose_postをimportするため循環を避ける）
+
+    if not failing or not set(failing) <= repair_post.REPAIRABLE_CHECK_IDS:
+        return None
+    work = copy.deepcopy(bundle)
+    try:
+        cl = client or generate_post.anthropic.Anthropic()
+        result = repair_post.repair_bundle(work, daily_data, cl)
+    except Exception as e:  # noqa: BLE001 — 修正の失敗はL1へのフォールバック（従来どおり）に倒す
+        return {"bundle": bundle, "result": None, "error": f"{type(e).__name__}: {e}"}
+    return {"bundle": work, "result": result, "error": None}
+
+
+def _render_force_drop_repair(repair_info: dict, failing_before: list[str]) -> list[str]:
+    """STATUS用。局所修正の前後の文（修正前→修正後）と、修正後の再監査の結果。"""
+    import repair_post
+
+    lines = [
+        "call_A 強制不採用後の再監査（C12〜C28）がC18・C13のみFAILしたため、L1へ落とす前に局所修正"
+        "（repair_postと同じ処理・v1.89）を適用しました。",
+        f"  再監査のFAIL（修正前）: {failing_before}",
+    ]
+    if repair_info.get("error"):
+        lines.append(f"  局所修正は例外で失敗しました（{repair_info['error']}）。")
+        return lines
+    result = repair_info["result"]
+    note = repair_post.render_status_note(result).strip("\n")
+    if note:
+        lines += ["  " + ln if ln else ln for ln in note.split("\n")]
+    else:
+        lines.append("  局所修正の対象文が見つかりませんでした（修正なし）。")
+    if result["final_failing_checks"]:
+        lines.append(f"  局所修正後の再監査: なおFAIL {result['final_failing_checks']}。")
+    else:
+        lines.append("  局所修正後の再監査: 全項目PASS → L0のまま続行します"
+                     "（最終ゲートは従来どおりverify_post.pyが担います）。")
+    return lines
+
+
 def render_generation_status(gen: dict[str, Any], daily_data: dict | None = None,
                               force_dropped: list[dict] | None = None,
                               l1_fallback_failing_checks: list[str] | None = None,
-                              l1_fallback_details: list[dict] | None = None) -> str:
+                              l1_fallback_details: list[dict] | None = None,
+                              force_drop_repair: dict | None = None) -> str:
     a, b = gen["call_a"], gen["call_b"]
     news_status = gen.get("news_source_status", {})
     attention, auto = _attention_and_auto_lists(gen)
@@ -485,6 +538,9 @@ def render_generation_status(gen: dict[str, Any], daily_data: dict | None = None
                 f"  - candidate_id={d.get('candidate_id')} title={d.get('title')!r} "
                 f"source={d.get('source')!r}: {d.get('reason')}"
             )
+    if force_drop_repair is not None:
+        # v1.89（オーナー承認・案A）: 局所修正の前後の文をSTATUSに記載する。
+        lines += _render_force_drop_repair(force_drop_repair["info"], force_drop_repair["failing_before"])
     if l1_fallback_failing_checks is not None:
         lines.append(
             "call_A 強制不採用後の再監査（C12〜C28）がFAILしたため、call_Aを失敗扱いへ差し戻し"
@@ -569,8 +625,28 @@ def main() -> int:
     l1_fallback_failing_checks: list[str] | None = None
     l1_fallback_details: list[dict] | None = None
     failed_attempt: dict | None = None
+    force_drop_repair: dict | None = None
     if force_dropped:
         failing, failing_details, all_checks = _final_audit_failure_report(bundle, daily_data)
+        if failing:
+            # v1.89（オーナー承認・案A）: FAILがC18・C13のみなら、L1へ落とす前に局所修正を適用して
+            # 再監査する（最終ゲート＝修正後もFAILならL1、は従来どおり）。
+            failing_before = failing
+            repair_info = _apply_local_repair_after_force_drop(bundle, daily_data, failing)
+            pre_repair_bundle = bundle
+            if repair_info is not None:
+                force_drop_repair = {"info": repair_info, "failing_before": failing_before}
+                if repair_info["result"] is not None:
+                    gen = {**gen, "total_usage": generate_post._add_usage(
+                        gen["total_usage"], repair_info["result"]["total_usage"])}
+                    if not repair_info["result"]["final_failing_checks"]:
+                        bundle = repair_info["bundle"]
+                        failing = []
+                    else:
+                        failing = repair_info["result"]["final_failing_checks"]
+                        failing_details = repair_info["result"]["final_failing_check_details"]
+                else:
+                    failing = failing_before
         if failing:
             l1_fallback_failing_checks = failing
             l1_fallback_details = failing_details
@@ -583,8 +659,13 @@ def main() -> int:
                 "failing_details": failing_details,
                 "section_origin": verify_post.SECTION_ORIGIN,
                 "checks": all_checks,
-                "bundle": bundle,
+                "bundle": pre_repair_bundle,
             }
+            if force_drop_repair is not None and force_drop_repair["info"].get("result"):
+                failed_attempt["local_repair"] = {
+                    "rounds_log": force_drop_repair["info"]["result"]["rounds_log"],
+                    "bundle_after_repair": force_drop_repair["info"]["bundle"],
+                }
             gen = _fallback_to_true_l1(daily_data, gen, failing)
             bundle = compose(daily_data, gen)
 
@@ -623,7 +704,7 @@ def main() -> int:
     status_path = out_dir / "GENERATION_STATUS.md"
     status_text = render_generation_status(
         gen, daily_data, force_dropped=force_dropped, l1_fallback_failing_checks=l1_fallback_failing_checks,
-        l1_fallback_details=l1_fallback_details)
+        l1_fallback_details=l1_fallback_details, force_drop_repair=force_drop_repair)
     status_path.write_text(status_text, encoding="utf-8")
 
     print(f"OK: level={gen['level']} → {draft_dir}/part1.md, part2.md, numeric_record.md, "

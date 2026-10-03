@@ -7,6 +7,49 @@
 
 ---
 
+## v1.89 — 2026-10-03（オーナー承認・案A：強制不採用後の再監査がC18・C13のみFAILなら、L1へ落とす前に局所修正→再監査。v1.79の条件の拡張）
+
+2026-10-01分では、call_Aの3試行目で相方が成立しなかった候補（43・46）を強制不採用にして続行した結果、
+再監査でC18（因果断定）がFAILし、**この経路の本文はrepair_post（v1.76の局所修正）を一度も通らず**そのままL1
+（候補なし本文）へ落ちた。repair_postは通常経路（compose_post→repair_post→verify_post）でだけ動くため、
+強制不採用の経路には局所修正が効いていなかった。オーナーが「v1.79の条件の拡張」として承認した。
+最終ゲート（修正後の再監査でFAILならL1）は変えない。案D（headline_for_image由来のC18）は保留のまま。
+
+### 変更点
+
+- `repair_post.repair_bundle(bundle, daily_data, client)`：v1.76の修正ループ本体（違反文だけをcall_Rで書き直す／
+  C13は空白の機械挿入。最大2ラウンド。ロジックは不変）を、ファイルの読み書きから切り離してメモリ上で動くように抽出。
+  `repair()`はファイルを読み→`repair_bundle`→（修正があれば）書き出す形に変わっただけで、結果は従来と同一
+  （同値性をテストで固定）。
+- `compose_post._apply_local_repair_after_force_drop()`：強制不採用後の再監査のFAILが
+  `repair_post.REPAIRABLE_CHECK_IDS`（C18・C13）**の部分集合**のときだけ、bundleのコピーに局所修正を適用する。
+  他のチェックが1つでもFAILしている場合、FAILが無い場合は何もしない（従来どおりL1／L0）。
+  局所修正が例外で失敗した場合も、例外内容をSTATUSに残して従来どおりL1へ倒す。
+- `compose_post.main()`：修正後の再監査が全項目PASSならL0のまま続行（修正後の本文をdraft/とpost_bundle.jsonへ）。
+  なおFAILならL1へ落とす（従来どおり）。修正のトークンはtoken_usage（合計）に加算する。
+- STATUS：修正の前後の文（`修正前:`／`修正後:`）、再監査の結果（全項目PASS→L0続行／なおFAIL→L1）を記載
+  （オーナー依頼：「局所修正を適用した場合は、修正前後の文をSTATUSに記載」）。
+- `failed_attempt.json`：L1へ落ちた場合は、修正前の本文に加えて`local_repair`（rounds_log・修正後のbundle）を保存する。
+
+### 検証
+
+- テスト：`test/test_bundle2.py` 897項目すべてPASS（877→897）。S1 修正成功→L0続行（call_Rだけ呼ぶ・STATUSに前後の文・
+  トークン加算・修正後の本文が全チェックPASS）、S2 修正してもC18が残る→L1（repair×2→call_B再生成・STATUSに
+  修正前の文と残ったFAILの中身・failed_attempt.jsonにlocal_repair）、S3 C18以外もFAIL→修正しない、
+  S4 修正が例外→L1（STATUSに例外内容）、S5 headline_for_image由来のC18→修正しない（案Dは保留のまま）、
+  S6 強制不採用なし→compose_postは修正しない（通常経路はrepair_postが担当）、
+  `repair_bundle`と`repair()`の同値性。
+- 実際のAPIは呼んでいない（テストは偽クライアント）。本番モデル（claude-sonnet-5）での修正文の質は、
+  実際に該当する日が来るまで未確認。
+
+### 注意（残る限界）
+
+- この変更が効くのは「強制不採用が起きた日」かつ「再監査のFAILがC18・C13のみ」の日だけ。2026-10-01のように
+  headline_for_image由来のC18だった場合は修正されずL1になる（案D・保留）。
+- 修正後の文の意味の妥当性は、C18（断定表現の機械検出）では保証されない。STATUSの前後の文でオーナーが確認する。
+
+---
+
 ## v1.88 — 2026-10-03（オーナー承認・STATUSの本文監査にPASS／SKIP／FAILの件数を併記。表示のみの変更）
 
 2026-10-01分（L1）の`GENERATION_STATUS.md`は「本文機械監査（C12〜C24・C26〜C28・計17項目）: overall=PASS」と
