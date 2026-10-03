@@ -31,6 +31,7 @@ from __future__ import annotations
 
 import copy
 import json
+import re
 import sys
 from datetime import date
 from pathlib import Path
@@ -252,15 +253,98 @@ def _attention_and_auto_lists(gen: dict[str, Any]) -> tuple[list[str], list[str]
     return attention, auto
 
 
-def _render_news_source_lines(news_status: dict[str, Any]) -> list[str]:
+_STATUS_DATE_DIR_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+_STATUS_NEWS_LINE_RE = re.compile(r"^\s+- (?P<name>.+?): (?P<st>ok|failed)")
+
+
+def _parse_news_sources_block(status_text: str) -> dict[str, str] | None:
+    """過去のGENERATION_STATUS.mdの`news_sources:`ブロックから {情報源名: "ok"|"failed"} を読む。
+    ブロックが無い（L3の最小STATUS等）・「（情報源未実行）」のときはNone（＝その日の取得状況は不明）。"""
+    lines = status_text.split("\n")
+    try:
+        i = lines.index("news_sources:")
+    except ValueError:
+        return None
+    found: dict[str, str] = {}
+    for ln in lines[i + 1:]:
+        m = _STATUS_NEWS_LINE_RE.match(ln)
+        if not m:
+            break
+        found[m.group("name")] = m.group("st")
+    return found or None
+
+
+def _news_failure_streaks(target_date: str, news_status: dict[str, Any],
+                          outputs_root: Path | None = None) -> dict[str, tuple[int, bool]]:
+    """v1.90（オーナー承認・ニュース取得は現状維持＋「連続○日」表示）: 本日failedの情報源ごとに、
+    何日連続でfailedか（本日を含む）を数える。{名前: (連続日数, 記録の先頭まで遡っても回復が無かったか)}。
+
+    数え方: 対象日より前の日付ディレクトリを新しい順にたどり、各日のGENERATION_STATUS.mdの
+    `news_sources:`ブロックで同じ情報源が
+      - failed → 連続日数に加える
+      - ok     → そこで止める（回復した日）
+      - ブロックに無い（他の情報源は並んでいる） → その情報源がまだ無かった日なので止める
+    STATUSが無い日・取得状況の記載が無い日（L3等）は数えず、連続も途切れさせない
+    （＝「GENERATION_STATUS.mdが残っている日だけ」の連続日数）。回復が見つからないまま
+    最も古い記録まで達した場合は、それ以前の状況が不明なので2つ目の値をTrue（「N日以上」と表示）。
+    """
+    failed_today = [n for n, st in (news_status or {}).items() if st.get("status") != "ok"]
+    if not failed_today:
+        return {}
+    root = outputs_root or Path("outputs")
+    past: list[tuple[str, dict[str, str]]] = []
+    try:
+        for d in sorted((p.name for p in root.iterdir() if p.is_dir() and _STATUS_DATE_DIR_RE.match(p.name)
+                         and p.name < target_date), reverse=True):
+            sp = root / d / "GENERATION_STATUS.md"
+            if not sp.is_file():
+                continue
+            try:
+                blk = _parse_news_sources_block(sp.read_text(encoding="utf-8"))
+            except (OSError, UnicodeDecodeError):
+                continue
+            if blk is not None:
+                past.append((d, blk))
+    except OSError:
+        past = []
+    result: dict[str, tuple[int, bool]] = {}
+    for name in failed_today:
+        n, open_ended = 1, True
+        for _d, blk in past:
+            st = blk.get(name)
+            if st == "failed":
+                n += 1
+            else:  # ok、またはその情報源がまだ無かった日 → 回復（または開始前）なので止める
+                open_ended = False
+                break
+        result[name] = (n, open_ended)
+    return result
+
+
+def _render_news_source_lines(news_status: dict[str, Any],
+                              news_streaks: dict[str, tuple[int, bool]] | None = None) -> list[str]:
     if not news_status:
         return ["  （情報源未実行）"]
     lines = []
+    any_streak = False
     for name, st in news_status.items():
         if st.get("status") == "ok":
             lines.append(f"  - {name}: ok（対象日{st.get('kept_count', 0)}件／取得{st.get('raw_count', 0)}件）")
         else:
-            lines.append(f"  - {name}: failed（{st.get('detail', '')}）")
+            streak = ""
+            if news_streaks and name in news_streaks:
+                n, open_ended = news_streaks[name]
+                any_streak = True
+                if n == 1:
+                    # 昨日以前の記録で回復（ok）が確認できた場合だけ「新規」。過去の記録が無ければ不明。
+                    streak = "・連続1日" + ("（過去の記録なし）" if open_ended else "（新規）")
+                else:
+                    streak = f"・連続{n}日" + ("以上" if open_ended else "")
+            lines.append(f"  - {name}: failed（{st.get('detail', '')}）{streak}")
+    if any_streak:
+        lines.append("  ※「連続○日」は本日を含み、GENERATION_STATUS.mdが残っている日だけを数えます"
+                     "（記録の無い日は数えず、連続を途切れさせません）。「以上」は、最も古い記録まで遡っても"
+                     "回復が見つからず、それ以前の状況が不明なことを表します。")
     return lines
 
 
@@ -447,7 +531,8 @@ def render_generation_status(gen: dict[str, Any], daily_data: dict | None = None
                               force_dropped: list[dict] | None = None,
                               l1_fallback_failing_checks: list[str] | None = None,
                               l1_fallback_details: list[dict] | None = None,
-                              force_drop_repair: dict | None = None) -> str:
+                              force_drop_repair: dict | None = None,
+                              news_streaks: dict[str, tuple[int, bool]] | None = None) -> str:
     a, b = gen["call_a"], gen["call_b"]
     news_status = gen.get("news_source_status", {})
     attention, auto = _attention_and_auto_lists(gen)
@@ -475,7 +560,7 @@ def render_generation_status(gen: dict[str, Any], daily_data: dict | None = None
         f"call_B: in={b['usage']['input_tokens']} out={b['usage']['output_tokens']})",
         "news_sources:",
     ]
-    lines += _render_news_source_lines(news_status)
+    lines += _render_news_source_lines(news_status, news_streaks)
     audit_ledger = (a.get("data") or {}).get("audit_ledger") if a["ok"] else None
     ledger_len = len(audit_ledger) if isinstance(audit_ledger, list) else "N/A"
     lines += [
@@ -704,7 +789,8 @@ def main() -> int:
     status_path = out_dir / "GENERATION_STATUS.md"
     status_text = render_generation_status(
         gen, daily_data, force_dropped=force_dropped, l1_fallback_failing_checks=l1_fallback_failing_checks,
-        l1_fallback_details=l1_fallback_details, force_drop_repair=force_drop_repair)
+        l1_fallback_details=l1_fallback_details, force_drop_repair=force_drop_repair,
+        news_streaks=_news_failure_streaks(target_date, gen.get("news_source_status", {})))
     status_path.write_text(status_text, encoding="utf-8")
 
     print(f"OK: level={gen['level']} → {draft_dir}/part1.md, part2.md, numeric_record.md, "

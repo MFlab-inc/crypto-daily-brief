@@ -5540,6 +5540,100 @@ check("repair_bundle（メモリ）とrepair()（ファイル経由）は同じ�
       {k: v for k, v in _file_res.items() if k != "target_date_jst"} == _mem_res
       and json.loads(Path(f"outputs/{_R_DATE}/draft/post_bundle.json").read_text(encoding="utf-8"))["sections"] == _mem["sections"], "")
 
+print("=== ニュース取得の「連続○日」表示（v1.90・オーナー承認：現状維持＋表示。取得の挙動・判定は変えない） ===")
+_SR = Path("streak_outputs")
+
+
+def _write_status(day, sources, body=None):
+    d = _SR / day
+    d.mkdir(parents=True, exist_ok=True)
+    if body is None:
+        body = "level: L0\nnews_sources:\n" + "".join(f"  - {n}: {st}\n" for n, st in sources) + "news_candidates_today: 3件\n"
+    (d / "GENERATION_STATUS.md").write_text(body, encoding="utf-8")
+
+
+_ok = "ok（対象日1件／取得25件）"
+_BLS403 = "failed（HTTP 403）"
+_NS = {"BLS": {"status": "failed", "detail": "HTTP 403"}, "SEC": {"status": "ok", "kept_count": 1, "raw_count": 25}}
+check("_parse_news_sources_block: ok／failedを情報源ごとに読む（件数表記・括弧の中身は無視）",
+      compose_post._parse_news_sources_block("level: L0\nnews_sources:\n  - SEC: ok（対象日1件／取得25件）\n"
+                                              "  - Google News (Reuters検索): ok（対象日0件／取得0件）\n  - BLS: failed（HTTP 403）\n"
+                                              "news_candidates_today: 3件\n")
+      == {"SEC": "ok", "Google News (Reuters検索)": "ok", "BLS": "failed"})
+check("_parse_news_sources_block: ブロックが無い（L3の最小STATUS）・「（情報源未実行）」のときはNone（取得状況は不明）",
+      compose_post._parse_news_sources_block("level: L3\n判定理由: x\n") is None
+      and compose_post._parse_news_sources_block("level: L0\nnews_sources:\n  （情報源未実行）\nnews_candidates_today: 0件\n") is None)
+
+# 連続: 8日前=ok、7〜1日前=failed（途中2日はSTATUSなし・1日はL3）→ 本日を含め、STATUSのある日だけ数える
+_write_status("2026-09-20", [("BLS", _ok), ("SEC", _ok)])
+_write_status("2026-09-21", [("BLS", _BLS403), ("SEC", _ok)])
+_write_status("2026-09-22", [("BLS", _BLS403), ("SEC", _ok)])
+# 2026-09-23: STATUSなし（数えず・途切れさせない）
+_write_status("2026-09-24", None, body="level: L3\n判定理由: x\n")  # 取得状況の記載なし（数えず・途切れさせない）
+_write_status("2026-09-25", [("BLS", _BLS403), ("SEC", _ok)])
+(_SR / "2026-09-26").mkdir(parents=True, exist_ok=True)  # STATUSファイルの無いディレクトリ
+_write_status("2026-09-27", [("BLS", _BLS403), ("SEC", _ok)])
+_st = compose_post._news_failure_streaks("2026-09-28", _NS, outputs_root=_SR)
+check("連続日数: 本日を含め、STATUSのある連続failed日を数え、okの日で止まる（9/27・9/25・9/22・9/21＋本日＝5日。STATUS無し・L3の日は数えず途切れさせない）",
+      _st == {"BLS": (5, False)}, str(_st))
+check("連続日数: okの情報源・本日failedでない情報源は対象外（SECは出ない）", "SEC" not in _st)
+check("連続日数: 本日の対象日より後の日付ディレクトリは数えない（未来日・当日の既存STATUSは無視）",
+      (_write_status("2026-09-28", [("BLS", _BLS403)]) or True)
+      and compose_post._news_failure_streaks("2026-09-28", _NS, outputs_root=_SR) == {"BLS": (5, False)}
+      and (_write_status("2026-09-29", [("BLS", _BLS403)]) or True)
+      and compose_post._news_failure_streaks("2026-09-28", _NS, outputs_root=_SR) == {"BLS": (5, False)})
+# 昨日がok → 新規（1日）
+_write_status("2026-10-01", [("BLS", _ok)])
+_st1 = compose_post._news_failure_streaks("2026-10-02", _NS, outputs_root=_SR)
+check("連続日数: 昨日の記録がokなら連続1日・回復を確認済み（＝新規）", _st1 == {"BLS": (1, False)}, str(_st1))
+# 過去の記録がその情報源を並べていない → その情報源がまだ無かった日なので止める
+_write_status("2026-10-03", [("SEC", _ok)])
+_st2 = compose_post._news_failure_streaks("2026-10-04", _NS, outputs_root=_SR)
+check("連続日数: 昨日の記録に情報源が無い（他の情報源は並ぶ）なら、その日で止める（まだ無かった日）", _st2 == {"BLS": (1, False)}, str(_st2))
+# 回復が見つからないまま最古の記録に達する → 以上（open_ended）
+_SR2 = Path("streak_outputs2")
+for _d in ("2026-09-01", "2026-09-02", "2026-09-03"):
+    (_SR2 / _d).mkdir(parents=True, exist_ok=True)
+    (_SR2 / _d / "GENERATION_STATUS.md").write_text(f"level: L0\nnews_sources:\n  - BLS: {_BLS403}\n", encoding="utf-8")
+_st3 = compose_post._news_failure_streaks("2026-09-04", _NS, outputs_root=_SR2)
+check("連続日数: 回復が見つからないまま最も古い記録まで達したら open_ended=True（それ以前は不明）", _st3 == {"BLS": (4, True)}, str(_st3))
+check("連続日数: 過去の記録が1件も無ければ（1, True）＝本日だけ・過去不明",
+      compose_post._news_failure_streaks("2026-09-04", _NS, outputs_root=Path("no_such_dir")) == {"BLS": (1, True)})
+check("連続日数: 全情報源がokの日は何も数えない（空dict）",
+      compose_post._news_failure_streaks("2026-09-04", {"SEC": {"status": "ok"}}, outputs_root=_SR2) == {}
+      and compose_post._news_failure_streaks("2026-09-04", {}, outputs_root=_SR2) == {})
+check("連続日数: 読めない・壊れたSTATUSがあっても例外にならず、その日は数えない",
+      (_SR2 / "2026-09-02" / "GENERATION_STATUS.md").write_bytes(b"\xff\xfe\x00") is not None
+      and compose_post._news_failure_streaks("2026-09-04", _NS, outputs_root=_SR2) == {"BLS": (3, True)})
+
+# 表示
+_lines = compose_post._render_news_source_lines(_NS, {"BLS": (5, False)})
+check("表示: failedの行に「・連続N日」が付き、okの行は従来どおり", "  - BLS: failed（HTTP 403）・連続5日" in _lines
+      and "  - SEC: ok（対象日1件／取得25件）" in _lines, "\n".join(_lines))
+check("表示: 注記（本日を含む・STATUSのある日だけ数える）が連続日数を出す日だけ付く",
+      any("本日を含み" in ln and "GENERATION_STATUS.mdが残っている日だけ" in ln for ln in _lines)
+      and not any("本日を含み" in ln for ln in compose_post._render_news_source_lines(_NS)), "\n".join(_lines))
+check("表示: 連続1日は、回復確認済みなら（新規）／過去の記録が無ければ（過去の記録なし）",
+      "  - BLS: failed（HTTP 403）・連続1日（新規）" in compose_post._render_news_source_lines(_NS, {"BLS": (1, False)})
+      and "  - BLS: failed（HTTP 403）・連続1日（過去の記録なし）" in compose_post._render_news_source_lines(_NS, {"BLS": (1, True)}))
+check("表示: 回復が見つからないままの長期連続は「N日以上」",
+      "  - BLS: failed（HTTP 403）・連続37日以上" in compose_post._render_news_source_lines(_NS, {"BLS": (37, True)}))
+check("後方互換: news_streaksを渡さなければ従来の表示のまま（連続・注記なし）",
+      compose_post._render_news_source_lines(_NS) == ["  - BLS: failed（HTTP 403）", "  - SEC: ok（対象日1件／取得25件）"]
+      and compose_post._render_news_source_lines({}) == ["  （情報源未実行）"])
+
+# main()の統合: 前日のSTATUSがBLS failedなら、本日のSTATUSに「連続2日」が出る（判定・終了コードは不変）
+_prev = Path("outputs/2026-08-16")
+_prev.mkdir(parents=True, exist_ok=True)
+(_prev / "GENERATION_STATUS.md").write_text(f"level: L0\nnews_sources:\n  - BLS: {_BLS403}\n", encoding="utf-8")
+_rc_s, _st_s, _f_s, _calls_s = _run_force_drop_main(_g_call_a_data)
+check("main()統合: STATUSのnews_sourcesに「BLS: failed（HTTP 403）・連続2日」が出る（前日分のSTATUS＋本日）。levelや終了コードは連続日数表示の影響を受けない",
+      "  - BLS: failed（HTTP 403）・連続2日" in _st_s and _rc_s == 0 and _st_s.startswith("level: L0"), _st_s[:600])
+(_prev / "GENERATION_STATUS.md").unlink()
+_rc_s2, _st_s2, _f_s2, _c_s2 = _run_force_drop_main(_g_call_a_data)
+check("main()統合: 過去のSTATUSが無い場合は「連続1日（過去の記録なし）」（本日分だけ）",
+      "  - BLS: failed（HTTP 403）・連続1日（過去の記録なし）" in _st_s2 and _rc_s2 == 0, _st_s2[:600])
+
 print()
 print(f"PASS: {len(PASS)}  FAIL: {len(FAIL)}")
 if FAIL:
