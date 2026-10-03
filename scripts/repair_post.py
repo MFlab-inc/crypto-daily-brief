@@ -170,6 +170,7 @@ def repair(target_date: str, *, client: "anthropic.Anthropic | None" = None) -> 
     # v1.86（オーナー承認・案G）: FAILごとに該当セクション・該当語・該当文（先頭100字）も持つ。
     final_failing_details = verify_post.failing_check_details(bundle, final_audit.checks)
     checked_ids = verify_post.summarize_check_ids(final_audit.checks)
+    check_counts = verify_post.summarize_check_results(final_audit.checks)
     warnings = list(getattr(final_audit, "warnings", []))
     rescued = rounds_used > 0 and not (REPAIRABLE_CHECK_IDS & set(final_failing))
 
@@ -186,6 +187,7 @@ def repair(target_date: str, *, client: "anthropic.Anthropic | None" = None) -> 
         "final_failing_checks": final_failing,
         "final_failing_check_details": final_failing_details,
         "checked_ids": checked_ids,
+        "check_counts": check_counts,
         "warnings": warnings,
         "rescued": rescued,
     }
@@ -223,12 +225,18 @@ def render_final_audit_note(result: dict[str, Any]) -> str:
     GENERATION_STATUS.md（L0〜L3の判定、どのチェックがFAILしたか、その詳細）
     だけはコミットされるようにしてください」という指示への対応。
 
+    v1.88（オーナー承認）: overall表記にPASS／SKIP／FAILの件数（SKIPしたチェック番号つき）を併記する。
     v1.85（オーナー承認）: 見出しの「C12〜C24」を固定文言ではなく、実際に評価した
     チェックのID（result["checked_ids"]。例: C12〜C24・C26〜C28・計17項目）から作る。
     あわせて、向きの食い違いの警告（FAILではない）の有無を常に1行で示す。
     """
     checked = result.get("checked_ids") or "C12〜C24"
-    lines = ["", f"本文機械監査（{checked}）: overall={'PASS' if not result['final_failing_checks'] else 'FAIL'}"]
+    # v1.88（オーナー承認・表示のみの変更）: overall=PASSでもSKIPが多い日（L1等）が分かるよう、
+    # PASS／SKIP／FAILの件数とSKIPしたチェックを併記する（件数が無い旧形式の入力では出さない）。
+    counts = result.get("check_counts")
+    counts_text = f"（内訳 {verify_post.format_check_counts(counts)}）" if counts else ""
+    lines = ["", f"本文機械監査（{checked}）: overall={'PASS' if not result['final_failing_checks'] else 'FAIL'}"
+                 f"{counts_text}"]
     if not result["final_failing_check_details"]:
         lines.append("  FAILしたチェックはありません。")
     else:

@@ -5308,6 +5308,59 @@ else:
           and 'text(draw, (x1 + 770, y), f"（{sub}）", 25, NAVY, False, "lm")' in _src
           and 'text(draw, (x1 + 165, y), label, 37, NAVY, True, "lm")' in _src)
 
+
+print("=== 本文機械監査のPASS／SKIP／FAIL件数の併記（v1.88・オーナー承認・表示のみの変更） ===")
+_l1_bundle = compose_post.compose(DAILY_DATA, {"level": "L1", "call_a": {"ok": False, "data": None},
+                                                "call_b": {"ok": True, "data": CALL_B_DATA}, "news_candidate_count": 1})
+_au_l1 = verify_post.run_all(_l1_bundle, DAILY_DATA)
+_cnt_l1 = verify_post.summarize_check_results(_au_l1.checks)
+check("summarize_check_results: L1の本文はPASS・SKIP・FAILの件数と合計（計17項目）、SKIPしたチェック番号が取れる",
+      _cnt_l1["total"] == 17 and _cnt_l1["PASS"] + _cnt_l1["SKIP"] + _cnt_l1["FAIL"] == 17
+      and _cnt_l1["FAIL"] == 0 and _cnt_l1["SKIP"] >= 3 and "C19" in _cnt_l1["skip_ids"] and "C21" in _cnt_l1["skip_ids"],
+      str(_cnt_l1))
+_cnt_l0 = verify_post.summarize_check_results(verify_post.run_all(compose_post.compose(DAILY_DATA, gen_l0), DAILY_DATA).checks)
+check("summarize_check_results: L0（全チェック評価）ではSKIPが0件・skip_idsは空",
+      _cnt_l0["SKIP"] == 0 and _cnt_l0["skip_ids"] == [] and _cnt_l0["PASS"] == _cnt_l0["total"] - _cnt_l0["FAIL"], str(_cnt_l0))
+check("summarize_check_results: C16bのような枝番つきIDは親番号の形（C16b）で、同じ番号は重複して数えない",
+      verify_post.summarize_check_results([
+          {"id": "C16b_transcription_scan", "result": "SKIP"}, {"id": "C16b_x", "result": "SKIP"},
+          {"id": "C19_audit_ledger", "result": "SKIP"}, {"id": "C12_x", "result": "PASS"}, {"id": "C13_x", "result": "FAIL"}])
+      == {"PASS": 1, "SKIP": 3, "FAIL": 1, "total": 5, "skip_ids": ["C16b", "C19"]})
+check("summarize_check_results: 空・想定外のresultでも例外にならない",
+      verify_post.summarize_check_results([]) == {"PASS": 0, "SKIP": 0, "FAIL": 0, "total": 0, "skip_ids": []}
+      and verify_post.summarize_check_results([{"id": "X", "result": "?"}])["total"] == 1)
+check("format_check_counts: 「PASS13・SKIP4〔C19・C21・C22・C26〕・FAIL0」の形（SKIPが無ければ番号を出さない）",
+      verify_post.format_check_counts({"PASS": 13, "SKIP": 4, "FAIL": 0, "total": 17, "skip_ids": ["C19", "C21", "C22", "C26"]})
+      == "PASS13・SKIP4〔C19・C21・C22・C26〕・FAIL0"
+      and verify_post.format_check_counts({"PASS": 17, "SKIP": 0, "FAIL": 0, "total": 17, "skip_ids": []}) == "PASS17・SKIP0・FAIL0")
+_res_cnt = {"final_failing_checks": [], "final_failing_check_details": [], "checked_ids": "C12〜C24・C26〜C28・計17項目",
+            "check_counts": {"PASS": 13, "SKIP": 4, "FAIL": 0, "total": 17, "skip_ids": ["C19", "C21", "C22", "C26"]}, "warnings": []}
+_note_cnt = repair_post.render_final_audit_note(_res_cnt)
+check("render_final_audit_note: overall=PASSの横に件数（内訳 PASS13・SKIP4〔C19・C21・C22・C26〕・FAIL0）が併記される",
+      "本文機械監査（C12〜C24・C26〜C28・計17項目）: overall=PASS（内訳 PASS13・SKIP4〔C19・C21・C22・C26〕・FAIL0）" in _note_cnt, _note_cnt)
+_res_cnt_fail = {"final_failing_checks": ["C18_causal_assertion"], "final_failing_check_details": [{"id": "C18_causal_assertion", "detail": "x"}],
+                 "checked_ids": "C12〜C28・計17項目", "check_counts": {"PASS": 15, "SKIP": 1, "FAIL": 1, "total": 17, "skip_ids": ["C26"]}}
+check("render_final_audit_note: FAILの日もoverall=FAILの横に件数が出る",
+      "overall=FAIL（内訳 PASS15・SKIP1〔C26〕・FAIL1）" in repair_post.render_final_audit_note(_res_cnt_fail))
+check("render_final_audit_note: check_countsが無い旧形式の入力では従来どおりの表記（後方互換）",
+      "overall=PASS\n" in repair_post.render_final_audit_note({"final_failing_checks": [], "final_failing_check_details": []})
+      and "内訳" not in repair_post.render_final_audit_note({"final_failing_checks": [], "final_failing_check_details": []}))
+_orig_checks_note = repair_post.render_final_audit_note(_res_cnt)
+check("render_final_audit_note: 件数の併記は表示のみ（FAILしたチェックの詳細行・警告行は従来どおり）",
+      "FAILしたチェックはありません。" in _orig_checks_note and "向きの食い違いチェック（警告のみ・FAILにしない）: 警告なし" in _orig_checks_note)
+# repair()の結果にも件数が入る（実際のrun_allの結果から）。L1の本文でrepair()を通す
+_REPAIR_CNT_DATE = "2026-08-17"
+Path(f"outputs/{_REPAIR_CNT_DATE}/draft").mkdir(parents=True, exist_ok=True)
+Path(f"outputs/{_REPAIR_CNT_DATE}/daily_data.json").write_text(json.dumps(DAILY_DATA, ensure_ascii=False), encoding="utf-8")
+Path(f"outputs/{_REPAIR_CNT_DATE}/draft/post_bundle.json").write_text(json.dumps(_l1_bundle, ensure_ascii=False), encoding="utf-8")
+_rep_cnt = repair_post.repair(_REPAIR_CNT_DATE, client=FakeClient(lambda kw, n: json_response({"rewritten_sentence": "x"})))
+check("repair(): 結果のcheck_countsは実際の最終監査の件数（L1の本文はSKIPあり・FAIL0）で、render_final_audit_noteに併記される",
+      _rep_cnt["check_counts"] == _cnt_l1
+      and f"（内訳 {verify_post.format_check_counts(_cnt_l1)}）" in repair_post.render_final_audit_note(_rep_cnt),
+      str(_rep_cnt["check_counts"]))
+check("repair(): 件数の追加は判定に影響しない（final_failing_checks・rescuedは従来どおり）",
+      _rep_cnt["final_failing_checks"] == [] and _rep_cnt["rounds_used"] == 0)
+
 print()
 print(f"PASS: {len(PASS)}  FAIL: {len(FAIL)}")
 if FAIL:

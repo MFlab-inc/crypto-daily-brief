@@ -7,6 +7,33 @@
 
 ---
 
+## v1.88 — 2026-10-03（オーナー承認・STATUSの本文監査にPASS／SKIP／FAILの件数を併記。表示のみの変更）
+
+2026-10-01分（L1）の`GENERATION_STATUS.md`は「本文機械監査（C12〜C24・C26〜C28・計17項目）: overall=PASS」と
+だけ表示していたが、実際は**17項目中PASS13・SKIP4・FAIL0**（C19・C21・C22・C26がL1のためSKIP）だった。
+「17項目PASS」と読めてしまうため、件数を併記する。判定・監査の中身・終了コードは変えていない。
+過去の`outputs/`・`GENERATION_STATUS.md`は書き換えていない（新表記は次回の実行から出る）。
+
+### 変更点
+
+- `verify_post.summarize_check_results()`（件数と、SKIPしたチェック番号。C16b等の枝番は親番号〈C16b〉に含め、
+  重複は1つにまとめる）と`format_check_counts()`を新設。
+- `repair_post.repair()`の結果に`check_counts`を加え、`render_final_audit_note()`が
+  `overall=PASS（内訳 PASS13・SKIP4〔C19・C21・C22・C26〕・FAIL0）`の形で併記する（FAILの日も
+  `overall=FAIL（内訳 PASS15・SKIP1〔C26〕・FAIL1）`）。`check_counts`が無い旧形式の入力では従来どおりの表記
+  （後方互換）。
+- 例（2026-10-01のbundleで実行）：`本文機械監査（C12〜C24・C26〜C28・計17項目）: overall=PASS（内訳
+  PASS13・SKIP4〔C19・C21・C22・C26〕・FAIL0）`。
+
+### 検証
+
+- テスト：`test/test_bundle2.py` 877項目すべてPASS（866→877）。L1・L0の実際の`run_all`結果から件数を作ること、
+  枝番・重複・空・想定外のresultの扱い、表記の形、FAILの日の表記、旧形式の後方互換、`repair()`の結果と
+  表示の一致、判定が変わらないこと。
+- 実データ：コミット済みの2026-10-01のbundleで`PASS13・SKIP4・FAIL0`（C19・C21・C22・C26）を再現した。
+
+---
+
 ## v1.87 — 2026-10-03（オーナー承認・図版案a：第3パネルの主値を幅制限し、円換算との重なりを解消）
 
 2026-10-01分の調査報告（依頼2）で、第3パネル「Base 24h DEX出来高」の主値（`$14.909億`）が円換算

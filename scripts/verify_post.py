@@ -1094,6 +1094,32 @@ def summarize_check_ids(checks: "list[dict]") -> str:
     return "・".join(parts) + f"・計{len(checks)}項目"
 
 
+def summarize_check_results(checks: "list[dict]") -> dict:
+    """本文監査の結果の件数（v1.88・オーナー承認・表示のみの変更）。
+    {"PASS": n, "SKIP": n, "FAIL": n, "total": n, "skip_ids": ["C19", ...]}。
+    GENERATION_STATUS.mdの「overall=PASS（計17項目）」だけでは、L1の日のようにSKIPが
+    多い（10/1は17項目中PASS13・SKIP4）ことが分からなかったため、件数を併記する。
+    skip_idsはSKIPしたチェックの番号（C16b等の枝番は親番号に含め、重複は1つにまとめる）。"""
+    counts = {"PASS": 0, "SKIP": 0, "FAIL": 0}
+    skip_ids: list[str] = []
+    for c in checks:
+        r = c.get("result")
+        if r in counts:
+            counts[r] += 1
+        if r == "SKIP":
+            m = re.match(r"(C\d+[a-z]?)", str(c.get("id", "")))
+            sid = m.group(1) if m else str(c.get("id", ""))
+            if sid not in skip_ids:
+                skip_ids.append(sid)
+    return {**counts, "total": len(checks), "skip_ids": skip_ids}
+
+
+def format_check_counts(summary: dict) -> str:
+    """例: 「PASS13・SKIP4〔C19・C21・C22・C26〕・FAIL0」。"""
+    skip = f"〔{'・'.join(summary['skip_ids'])}〕" if summary.get("skip_ids") else ""
+    return f"PASS{summary['PASS']}・SKIP{summary['SKIP']}{skip}・FAIL{summary['FAIL']}"
+
+
 # --- FAIL時の証拠（セクション・該当語・該当文）の抽出（v1.86・オーナー承認・案G）---
 #
 # 背景: 2026-10-01分で、強制不採用後の再監査がC18でFAILしL1へ落ちたが、GENERATION_STATUS.md
