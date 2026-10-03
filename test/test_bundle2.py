@@ -5208,6 +5208,106 @@ check("daily.yml: attempt_diagnostics.json・failed_attempt.jsonがCI成果物�
       and not any(("failed_attempt" in ln or "attempt_diagnostics" in ln) for ln in _yml.splitlines()
                   if ln.strip().startswith("git add")), "")
 
+print("=== 図版案a（v1.87・オーナー承認）: 第3パネルの主値を幅制限（幅218px）。通常日は画像不変・重なる日だけ縮小 ===")
+import importlib
+import infographic_renderer
+from PIL import Image as _PILImage, ImageDraw as _PILDraw, ImageChops as _PILChops
+import numpy as _np
+
+_FONTS_OK = any(Path(p).exists() for p in infographic_renderer.FONT_CANDIDATES["bold"][:2]) and \
+    any(Path(p).exists() for p in infographic_renderer.FONT_CANDIDATES["regular"][:2])
+if not _FONTS_OK:
+    print("  （Noto Sans CJKが無いため、図版の画像比較テストを省略）")
+else:
+    R_ = infographic_renderer
+
+    def _ink_extent(value, size, bold, x):
+        im = _PILImage.new("L", (1400, 100), 0)
+        _PILDraw.Draw(im).text((x, 50), value, font=R_.font(size, bold), fill=255, anchor="lm")
+        cols = _np.where((_np.array(im) > 0).any(axis=0))[0]
+        return int(cols.min()), int(cols.max())
+
+    def _chosen_size(value):
+        probe = _PILImage.new("RGB", (10, 10))
+        return R_.fitted_text(_PILDraw.Draw(probe), (0, 0), value, R_.BASE_MAIN_MAX_WIDTH, R_.BASE_MAIN_FONT_SIZE,
+                              R_.NAVY, True, "lm", R_.BASE_MAIN_MIN_FONT_SIZE)
+
+    def _width_at(value, size):
+        probe = _PILDraw.Draw(_PILImage.new("RGB", (10, 10)))
+        b = probe.textbbox((0, 0), value, font=R_.font(size, True), anchor="lm")
+        return b[2] - b[0]
+
+    def _ink_gap(main, sub):
+        """主値（描画原点x=620）と円換算（x=830。「（」の字形が右寄りのためインク左端は約847）のインクの
+        すき間（px）。0以下なら重なっている。"""
+        m = _ink_extent(main, _chosen_size(main), True, 620)
+        s = _ink_extent(f"（{sub}）", 25, False, 830)
+        return s[0] - m[1] - 1
+
+    # ---- 境界の固定（幅の判定） ----
+    check("図版a: 定数が承認どおり（最大幅218px・通常のフォントサイズ51・下限36）",
+          R_.BASE_MAIN_MAX_WIDTH == 218 and R_.BASE_MAIN_FONT_SIZE == 51 and R_.BASE_MAIN_MIN_FONT_SIZE == 36,
+          f"{R_.BASE_MAIN_MAX_WIDTH},{R_.BASE_MAIN_FONT_SIZE},{R_.BASE_MAIN_MIN_FONT_SIZE}")
+    _normal_vals = ["$9.999億", "$9.979億", "$4.950億", "$0.123億", "$63.48億", "$99.99億", "$47.11億", "84.7%", "未確認"]
+    check("図版a（境界）: 通常の主値（4桁の数字までの$X.XXX億・$XX.XX億・USDCドミナンス・未確認）は幅218px以内で、従来と同じ51pxで描く",
+          all(_chosen_size(v) == 51 and _width_at(v, 51) <= R_.BASE_MAIN_MAX_WIDTH for v in _normal_vals),
+          str({v: (_chosen_size(v), _width_at(v, 51)) for v in _normal_vals}))
+    _long_vals = ["$10.000億", "$14.909億", "$16.705億", "$100.00億", "$100.000億"]
+    check("図版a（境界）: 5桁以上の主値（$10.000億・$14.909億・$100.00億等）は51pxでは幅218pxを超え、縮小して218px以内に収める",
+          all(_width_at(v, 51) > R_.BASE_MAIN_MAX_WIDTH and R_.BASE_MAIN_MIN_FONT_SIZE <= _chosen_size(v) < 51
+              and _width_at(v, _chosen_size(v)) <= R_.BASE_MAIN_MAX_WIDTH for v in _long_vals),
+          str({v: (_width_at(v, 51), _chosen_size(v)) for v in _long_vals}))
+    check("図版a（境界）: 4桁の数字の最大（$9.999億）と5桁の最小（$10.000億）の間に境界がある（DEX出来高が約10億ドルを超えると縮小）",
+          _width_at("$9.999億", 51) <= 218 < _width_at("$10.000億", 51),
+          f"{_width_at('$9.999億', 51)} / {_width_at('$10.000億', 51)}")
+    check("図版a: $14.909億は44pxに縮小される（調査時の実測と同じ）",
+          _chosen_size("$14.909億") == 44, str(_chosen_size("$14.909億")))
+
+    # ---- 重なりの解消（インクのすき間） ----
+    check("図版a: 修正前の描画（幅制限なし・51px）では$14.909億と「（¥2,345億）」のインクが重なる（再発防止テストの前提＝バグの再現）",
+          (lambda m, s: s[0] - m[1] - 1)(_ink_extent("$14.909億", 51, True, 620), _ink_extent("（¥2,345億）", 25, False, 830)) < 0)
+    for _main, _sub in [("$14.909億", "¥2,345億"), ("$12.404億", "¥1,959億"), ("$16.705億", "¥2,655億"),
+                         ("$10.000億", "¥1,579億"), ("$100.00億", "¥1.57兆"), ("$9.999億", "¥1,579億"), ("$63.48億", "¥9,985億")]:
+        check(f"図版a: {_main}＋（{_sub}）は主値と円換算のインクが重ならない（すき間>0px）",
+              _ink_gap(_main, _sub) > 0, str(_ink_gap(_main, _sub)))
+
+    # ---- 実データ全日：通常日は画像不変・重なる日は主値の領域だけが変わり、重なりが残らない ----
+    _same, _changed, _remaining = [], [], []
+    for _dp in sorted((REPO / "outputs").glob("2026-*/daily_data.json")):
+        _day = _dp.parent.name
+        _png = _dp.parent / "infographic.png"
+        if not _png.exists():
+            continue
+        _data = json.loads(_dp.read_text(encoding="utf-8"))
+        _img = R_.render(_data).convert("RGB")
+        _old = _PILImage.open(_png).convert("RGB")
+        _bbox = _PILChops.difference(_img, _old).getbbox()
+        _b = _data["base"]
+        for _k in ("tvl", "dex_volume"):
+            if _ink_gap(_b[_k], _b[_k + "_jpy"]) <= 0:
+                _remaining.append((_day, _k))
+        if _bbox is None:
+            _same.append(_day)
+        else:
+            _changed.append((_day, _bbox, _b["dex_volume"]))
+    check("図版a（実データ）: コミット済みの全日（52日以上）で、修正後の描画に主値と円換算の重なりが残らない",
+          len(_same) + len(_changed) >= 52 and not _remaining, f"days={len(_same) + len(_changed)} remaining={_remaining}")
+    check("図版a（実データ）: 修正前に重なっていなかった33日の画像は、修正後もコミット済み画像とピクセル完全一致（通常日は不変）",
+          len(_same) >= 33, f"same={len(_same)}")
+    check("図版a（実データ）: 変わった日は、すべてDEX出来高が$10億（表示$10.000億）以上の日で、変化は第3パネルDEX行の主値の領域（x622〜868・y981〜1032）に限られる",
+          len(_changed) >= 19 and all(float(d[2].lstrip('$').rstrip('億')) >= 10 for d in _changed)
+          and all(d[1][0] >= 600 and d[1][2] <= 900 and 960 <= d[1][1] and d[1][3] <= 1045 for d in _changed),
+          str(_changed[:3]))
+    check("図版a（実データ）: 修正前に重なっていた19日（2026-08-20〜10-01）と10/2が、変わった日と一致する",
+          {d[0] for d in _changed} >= {"2026-08-20", "2026-09-29", "2026-09-30", "2026-10-01"}, str([d[0] for d in _changed]))
+
+    # ---- 他の描画箇所は不変（fitted_text化は第3パネルの主値だけ） ----
+    _src = (REPO / "scripts" / "infographic_renderer.py").read_text(encoding="utf-8")
+    check("図版a: 第3パネルの主値は幅制限つき（fitted_text・BASE_MAIN_MAX_WIDTH）で描く。円換算の位置（x1+770・25px）は変えていない",
+          "fitted_text(draw, (x1 + 560, y), main, BASE_MAIN_MAX_WIDTH, BASE_MAIN_FONT_SIZE" in _src
+          and 'text(draw, (x1 + 770, y), f"（{sub}）", 25, NAVY, False, "lm")' in _src
+          and 'text(draw, (x1 + 165, y), label, 37, NAVY, True, "lm")' in _src)
+
 print()
 print(f"PASS: {len(PASS)}  FAIL: {len(FAIL)}")
 if FAIL:

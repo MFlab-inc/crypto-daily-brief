@@ -12,6 +12,10 @@ See docs/DESIGN_CHANGES.md. Do not change the fixed layout, palette, panel
 structure or 2560x1440 canvas without a fresh explicit owner approval, per
 operating standard section 5. This applies to bug fixes too when they would
 alter the layout.
+Approved exception (v1.87, owner-approved 2026-10-03): panel 3 main values are
+width-limited (BASE_MAIN_MAX_WIDTH) so that a longer value such as "$14.909億"
+no longer overlaps the yen conversion. Days whose main value already fits are
+rendered pixel-identically to before.
 Note: docs/recovered/ holds the v1.0 original and still uses "#BTC"-style asset
 keys; it is reference material and is not rendered by this pipeline.
 """
@@ -245,6 +249,19 @@ def draw_market(draw: ImageDraw.ImageDraw, data: dict[str, Any], box: tuple[int,
         fitted_text(draw, (x1 + 700, y), detail, stat_text_width, 32, NAVY, True, "lm", 20)
 
 
+# v1.87（オーナー承認・2026-10-03・図版案a）: 第3パネルの主値（TVL・DEX出来高・USDCドミナンス）の
+# 最大幅（px）。円換算は x1+770（描画原点。「（」の字形が右寄りのためインクの左端は約17px右の
+# x=847）に固定されており、主値は x1+560 から描くため、主値のインクが使える幅は約225px。従来は
+# 主値に幅制限が無く、DEX出来高が約10億ドル以上で「$14.909億」のように数字が1桁増えると
+# 主値が約30px伸びて円換算の「（¥」に重なった（2026-08-20以降の52日中19日）。
+# 4桁の数字の主値（通常日の最大。最も長い「$9.999億」「$63.48億」）は幅218pxでちょうど収まり
+# （従来と同じ51pxで描画＝通常日の画像は不変）、5桁以上は51px→44px等へ縮小して収める。
+# この値を変えるとどちらかの側が壊れるため、境界はtest/test_bundle2.pyで固定している。
+BASE_MAIN_MAX_WIDTH = 218
+BASE_MAIN_FONT_SIZE = 51
+BASE_MAIN_MIN_FONT_SIZE = 36
+
+
 def draw_base(draw: ImageDraw.ImageDraw, data: dict[str, Any], box: tuple[int, int, int, int]) -> None:
     panel_header(draw, box, "3", "Baseチェーンの状況")
     x1, y1, x2, _ = box
@@ -261,7 +278,8 @@ def draw_base(draw: ImageDraw.ImageDraw, data: dict[str, Any], box: tuple[int, i
             line(draw, (x1 + 30, y - 52), (x2 - 30, y - 52), LIGHT_GRAY, 2)
         stat_icon(draw, x1 + 80, y, kind)
         text(draw, (x1 + 165, y), label, 37, NAVY, True, "lm")
-        text(draw, (x1 + 560, y), main, 51, NAVY, True, "lm")
+        fitted_text(draw, (x1 + 560, y), main, BASE_MAIN_MAX_WIDTH, BASE_MAIN_FONT_SIZE, NAVY, True, "lm",
+                    BASE_MAIN_MIN_FONT_SIZE)
         if sub:
             text(draw, (x1 + 770, y), f"（{sub}）", 25, NAVY, False, "lm")
         if change:
