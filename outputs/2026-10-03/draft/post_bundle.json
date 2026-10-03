@@ -1,0 +1,369 @@
+{
+  "target_date_jst": "2026-10-03",
+  "level": "L0",
+  "sections": {
+    "part0_target_date": "2026年10月3日（土）",
+    "part1_headline": "米地域銀行団体がOCCを提訴し、暗号通貨企業への信託銀行免許付与の是非が争点となりました。 #BTC #ETH",
+    "part1_points": "・全米地域銀行協会（ICBA）がOCC（通貨監督庁）を相手取り、暗号通貨企業への信託銀行免許付与がOCCの法的権限を逸脱しているとして提訴したと報じられました。公式発表での確認は取れていませんが、CoinDeskとCointelegraphの2媒体が同一の提訴事実を報じています（CoinDesk、Cointelegraph、10月2日・3日）。暗号通貨企業の銀行参入を巡る規制環境の先行きに関わる材料ですが、暗号通貨価格への直接因果は未確認です。",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.890兆（¥456.1兆）｜24時間取引高 $432.9億（¥6.83兆）\n・ #BTC：$84,769（約1,337.8万円）｜24時間比 +0.29%\n　（24時間レンジ $84,400〜$85,022）\n・ #ETH：$2,687（約42.4万円）｜24時間比 +0.81%\n　（24時間レンジ $2,657〜$2,691）\n・ #BNB：$788（約12.4万円）｜24時間比 +2.72%\n・市場心理：Fear & Greed 67（Greed、CoinMarketCap API）\n・ドミナンス：BTC 58.94%｜ETH 11.35%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年10月4日07:37 JST、USD/JPY ¥157.82",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $2.38M vs Base上ETH/USDC $12.18M｜参考：Base上DEX全体 $13.683億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $63.68億（¥1.01兆）｜24時間比 +0.53%｜USDCドミナンス 84.8%\n・ ETH/USDC（Base）参考APR：0.05% 6.97%（TVL $9.93M／24h出来高 $3.79M）｜0.3% 5.65%（TVL $162.58M／24h出来高 $8.39M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年10月4日07:37 JST",
+    "part2_flow": "・【出来事・ニュース】全米地域銀行協会（ICBA）がOCC（通貨監督庁）を相手取り、暗号通貨企業への信託銀行免許付与の是非を争点として提訴したとCoinDeskとCointelegraphが報じました → 【地政学・マクロの変化】暗号通貨企業の銀行参入を巡る規制環境の先行きに不透明感が意識された可能性があります → 【暗号通貨価格】BTC・ETHは24時間比でいずれも小幅な上昇にとどまり、目立った値動きは確認されていません。因果は未確認です。 #BTC #ETH",
+    "lp_comment": "参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは41.52%→6.97%へ低下しました（24時間出来高 -83.08%、TVL +0.84%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは77.13%→5.65%へ低下しました（24時間出来高 -92.65%、TVL +0.31%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+0.81%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "規制を巡る訴訟の行方は暗号通貨企業の銀行参入環境に影響し得る材料として、今後の進展が注目されます。NEAR Intentsの盗難資金回収報道については公式な裏取りが未確認であり、継続監視が必要です。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "BTC・ETH・BNBともに上昇基調",
+  "audit_ledger": [
+    {
+      "source": "USTR",
+      "url": "https://ustr.gov/about/policy-offices/press-office/press-releases/2026/october/ustr-seeks-public-comment-2027-joint-review-usmca",
+      "title": "USTR Seeks Public Comment on the 2027 Joint Review of USMCA",
+      "published_at": "Fri, 02 Oct 2026 21:53:09 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: USMCA共同レビューに関する意見公募手続きで、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/fact-sheets/2026/10/fact-sheet-president-donald-j-trump-announces-medicare-improvement-fund-payments-for-seniors/",
+      "title": "Fact Sheet: President Donald J. Trump Announces Medicare Improvement Fund Payments for Seniors",
+      "published_at": "Sat, 03 Oct 2026 03:01:43 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 高齢者向けメディケア給付金の発表で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxOUmVOVEVCTVdITFV4aHd1aWM4aC1lZzBQTUIxcG9zSkU0ZXJKbHVRdTRWTUVsRWVsRmZHYlI2ZW01dnp3NlQ4WEV3Wnp0YXpVV2VCQ2RmeVBQQ3BUN0E3S1ZrRkw0ODdkVVJsSnFWWVM5YWVZZExacUlwdGRrc3h1LVJkNHNWY1dZS1F2UE1aR1JHYzNkX0ktS0RIQW4zX3RJUWV4eVBqVFd6X0t1?oc=5",
+      "title": "Yemen's Houthis say they attacked Aramco facility in Riyadh with missiles, drones - Reuters",
+      "published_at": "Sat, 03 Oct 2026 20:51:59 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 原油施設への攻撃報道だが、被害・供給への具体的影響が未確認で参考材料としても薄い"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxOQ0JETXJlUlJGblZwbTljbXFFb0JkS2REVzBWUVdPUE5uN0xSRGpVZVBpS3B3Qnh1VkFWQjdYUzdOWnFFZkd4aVRFQmViaEJkVkVzTUxUMDJKdWh5UWJfaExXMi1UbTlLd1AxVnJ2UF9BUUZFc2g0ZEFTOWJGTi1WS3h0YlNtYzFRY0FTam5WbllJVXdGbUp1S0tQcGgtdmppSHpIMGg5dUtuLVN3SjJFME9MYTNSci1maHptc3RVVVk5d3k4NmgwS0oxZUZ5alpUNmYzR09R?oc=5",
+      "title": "EXCLUSIVE: Ukraine will hit Russian refineries in response to Moscow's 'new doctrine' of airstrikes, Zelenskiy says - Reuters",
+      "published_at": "Sat, 03 Oct 2026 20:25:53 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ウクライナ関連の地政学報道で、原油供給への波及経路はあるが内容が不確定で参考材料として薄い"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxPRWFXeUhOM2ZldTc1dEhPdGxOcjZ4MldhbHl1aWI3UE40akNDQnA3SWNHS2FrNjYtTFJDR2VVeUxsWnkxRXpMbU1jZUFlZFg5Y0xpSndJNUs4WTZWdDE1dXFJczJMUEVMRUVkMHVrZnFkdEMtMXZjSWRWdS1fb0R2enktclJCNlMwalZCREplbW5QdXlMT1lGbU43a2llczVqbS1pNW45RjN2ak1LV3JaOGxHWVhzLW56eTN4SGFiUQ?oc=5",
+      "title": "Iraq says it transported 2 million barrels of crude through Strait of Hormuz - Reuters",
+      "published_at": "Sat, 03 Oct 2026 20:25:43 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ホルムズ海峡経由の原油輸送量の発表だが、供給混乱を示す内容ではなく波及経路を具体的に説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxPVHdRMU9vOENaaEdwWjJzTk9FaFlwUlV0ay04ZE9tdEdFOGhMT1pIR0VtWm5fR3RjU0NRVGVlTW9xbUZBV0o5RkRvZEQ2ZTJGNTFEMjJSY0d2dVlVOXdZSk03bWxEcGRuem5lS1l2b2hRS2hhUTNpdjJZU00tMTJMXzJYQnBYeFEzWmxmX1NFVndWUk1NRFJkTElwWXd5aGdldEM2VDN2S1U3SVpSa0RmUnhucW8yU2loV05sX3locw?oc=5",
+      "title": "Italy's Intesa raises MPS takeover offer price and warns it could drop bid - Reuters",
+      "published_at": "Sat, 03 Oct 2026 18:11:43 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: イタリア国内銀行買収案件で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxOc1lRUU9NNzVFRk5EbFFHVnJPa25fVVZIMTFVWl9uYUpheXM5d01fWURkazFTU0RHVFc5a3otcFZHazJDQXBSNkNEemdpMVVjOXk1MHZURndvSTU4YTVPdW5sN0ZfNGJLbDBmOWQwX3NfZWktS0tBNEFOUE9hZ2JHMHhoWEhWUmt5dnFkeGQzWEhLQUJMTWNFVzd1UHRxZHJaOHctaFdZand1MnlYMGEzMDYtZFpCakM4?oc=5",
+      "title": "High school students in Paris' deprived suburbs spark national protest movement - Reuters",
+      "published_at": "Sat, 03 Oct 2026 17:31:26 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: パリ郊外の高校生による抗議運動で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxPWWg0TDhpZGM4T3YwLU53ZXRBbS1Ma29wWWtkWHAzcks0aU1GWVJoTnprZUM1OU4xYzRNOUd5NWtOT0JERVlteHk2UVNia05uWkhsOWdmVTlsN1lKbjhZd0tENmFNeER6VTJ2UktfeFlOUUd2OWJkek00UVl5eXFlU1BHZWdURmw4VFZNd1dEMllYZnBwc3hzdjBONGZoUUQ1S3ZFd0dvdXZobmVvRXhqZQ?oc=5",
+      "title": "PODCAST: Flydubai attack probe, Kyiv bridge strikes and G7’s emergency oil stocks - Reuters",
+      "published_at": "Sat, 03 Oct 2026 16:14:29 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ポッドキャスト紹介記事で、個別の事実報道としての具体性に欠ける"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxNSXNBYUpPd1pPY2dKT0RzdDVqX0U4aGZGeDhHMDlCeUJIRU40Zjh4N1pYcnFEOFBXNEo1MEN1QkwwV2ZLRnpYem9iRnhMcWk0Q3N2Y0QzY0Q0S2lfX1g3ZVdya1RUSlpVQWR2ZGt3SlUxelNKTmlidXJvaUZCOWFlNjJsLUc4MVQxV2c5a0UzUS1sbWdBTHZ1c2NqMlFQbE9hWEZtLWxLczFjbDlCNktHaVMwZ1NVSG5PTmtxY1Vn?oc=5",
+      "title": "Russia pledges to continue massive strikes on Kyiv, urges foreign diplomats to leave city - Reuters",
+      "published_at": "Sat, 03 Oct 2026 16:13:33 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ウクライナ地政学報道だが、リスク選好への波及経路を具体的に示せず参考材料として薄い"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxOMHJNOW5XTDUxRFhDNlVveFlUaEdSQzRremg4aUUxdUtQUlNJXzBFNzZMbFIyTk1IN0RUSE9DT3hMZ2x0dEJpamFiVEFCa2VqZmVmaEpzZmZqNEhLWTFZUnpwQjRBSjBNelItT2R3MlFNN0Q4R0tDZUs2c0pZYVN6eHBUU2Nia0xyXzNF?oc=5",
+      "title": "Flydubai, Kyiv bridge strikes and G7's emergency oil stocks - Reuters - Reuters",
+      "published_at": "Sat, 03 Oct 2026 16:05:00 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: candidate_id 8と重複するポッドキャスト紹介記事で内容が薄い"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxNc0NxeXcwNnV1dXJzdU5xcWdjQm1Udmx5cGVfMGNlSGgtWkJhLU1JLU5uXzVfUFJPNkdYbWNiVFpZY1NtUm9sWHY1YXNSRWxSX1VTUjA0ZW1oMzdfV2Q3Y1Q1YV9GcllMRmlRNV80RHE1OFN1WG5RNjRvYzhPa3BGSzRmcjlJWU9mOXJoZEZZbVg0SHJWcC1WOXZzbFB6cDcxcGlDZmlVblFucVU5Mzd4MmxoRGN5c2lH?oc=5",
+      "title": "US to lend $4.2 billion to Vistra to boost nuclear power output, source says - Reuters",
+      "published_at": "Sat, 03 Oct 2026 13:49:07 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 米国の原子力発電向け融資案件で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxNWWdCNVhKclljQnl4eG5rV1Q0a3RaZW9qQTE5M2dSd1ZOWTZMMXkyMFBVVVJXVkszUDZoNlhfMGhiVWd3NGFydlFtWGNMUzJxUmlZNTdZcXR2eGJPTG1zeXdZeXNBWkhuclFZLUR5cWliekd6M1Z5aHFQYWd5NzZWaS1JWUJ5c09QbXktRG5pZ1JJUHNQc1FzNlBMa2pQYjczTjVxeWUtcDRYcThsdG1haUlmU215eUE?oc=5",
+      "title": "Nestle's low-fat dairy whitener sample found 'unsafe' in India, says regulator - Reuters",
+      "published_at": "Sat, 03 Oct 2026 13:28:27 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 食品規制に関する内容で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxPbmFPZmFUa2VCS2V3LVd1STlzak4yVHdXd2VoMW9hbGg0T1JsdDd3WUdIQkkxWExLa3RvQ3hZTVdYYXA3T19MOGN0eDlpcU9xbC1VM0tZcF9Idm9IdnVBQkNkaG44S0lWLTV5bU5faDZVR1lhYndvY2lIWE9ZZjJ5eGRveW4xMzRlWklmTkhWZFc4TnowWkNtVkFRalI5d2hxY2d1YnpDNlJFb1dMcWE1aThScw?oc=5",
+      "title": "Renault to invest over €10 billion in France in EVs, affordable cars, CEO says - Reuters",
+      "published_at": "Sat, 03 Oct 2026 11:51:42 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 自動車産業の投資計画で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxONjR3QlYwQW4waExURk95MUgyLW9xWDY5aC05V084dklTR1dIcU9iQzRaSDNqci1IRnJJcUVNbjA3YkllVlBkYkZqSUJCU2w5cWNENzNCaXVTVDVwSnZCNFZ5TkNFbGk0RHYxbXVUUVlvRUo3SHFmZ0VqNjM5SEM4T2VYYXdsWlR1V2Fidl9VV0lxekpoVENFOElwNlJSUXoyNHQ5MlNubG4?oc=5",
+      "title": "Russia hits Liberian-flagged ship in Ukraine's Odesa port, kills one - Reuters",
+      "published_at": "Sat, 03 Oct 2026 10:48:50 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ウクライナ地政学報道だが、個別事案で市場全体への波及経路を具体的に示せない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNemp1OERHaHdaM1hfUlhOQXFJOGx5OWkzS1ZvZlFJd1VCLTNTRVExR3lnaGVHNjE4V19yX3ljdFhCSXJSLTgxN1doWlgzUDcxWC11akFQZlA4eFhaUk5nQzFUZnpnME8zQkE0ZVFyeEFiNC1OdEZFazQtQWdza05sbGNMU01zWk1JWUNPRldiczJZbl9jT0NoMk1yUzlSdXFMWXRaR09yQ3g?oc=5",
+      "title": "Germany risks Weimar-style divisions, President Steinmeier warns - Reuters",
+      "published_at": "Sat, 03 Oct 2026 10:35:43 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ドイツ国内政治に関する発言で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxPbXFtRVNvb2d6UFFRcG1ER2ZEcTktc3Y3UzZyYjU1QmRJcWdJWE9kNy16bXQyR054ekNKMTFXN2s2RlVVc1RRMTliajBMQTQ2X2wwYnZTdWM2V05aSE53ZzZkd0tBZm5iSUtRQkhqX2tyV2dkRkRCYkNkRXlUdjlCM1U5WHNNeWVWcWFLUFFjZU5BT1ZqbE1iRGxJeTAyUGpBb2Ytdlp1bnExci00R1lSdnRjOWhZMkhlRzRMWEViM3JYaXM?oc=5",
+      "title": "US-Russia talks on Ukraine involve multi-billion dollar oil deal, NYT reports - Reuters",
+      "published_at": "Sat, 03 Oct 2026 10:30:09 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 米露交渉と原油取引の報道だが、NYT報道の又聞きで内容が不確定"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE02b05nV01kTGpnUllxNlNCWWRLY3g4LWNtOWc0ZXRHOEZZX003QTVIbzZqdDJlZEFkV1kzc05VUlBxZ0pQNUh3YmhZQXlGZTRfUS1wNE55aWVVQ3lYUDlWQzJIcmRPZw?oc=5",
+      "title": "Trump: US will soon fill its strategic oil stockpile 'for nothing' - Reuters",
+      "published_at": "Sat, 03 Oct 2026 10:07:28 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 米国の戦略石油備蓄に関する発言だが、具体性に欠け参考材料として薄い"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/10/03/openpayd-targets-year-end-nasdaq-listing-to-fund-u-s-expansion-and-acquisitions",
+      "title": "Payments firm OpenPayd targets year-end Nasdaq listing to fund U.S. expansion and acquisitions",
+      "published_at": "Sat, 03 Oct 2026 16:00:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 決済企業の上場計画報道だが、tier3単独でtier1・tier2の裏付けがなく独立2ソースにも該当しない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/10/03/crypto-job-postings-triple-to-over-1-200-in-september-but-applications-fall",
+      "title": "Crypto job postings triple to over 1,200 in September, but applications fall",
+      "published_at": "Sat, 03 Oct 2026 16:00:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 暗号通貨業界の求人動向だが、tier3単独でtier1・tier2の裏付けがなく独立2ソースにも該当しない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/10/01/cathie-wood-says-smart-investors-need-to-start-watching-where-ai-agents-spend-money",
+      "title": "Cathie Wood says smart investors need to start watching where AI agents spend money",
+      "published_at": "Sat, 03 Oct 2026 15:00:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: AIエージェントの消費動向に関する意見記事で、暗号通貨市場への直接の波及経路を説明できない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/opinion/2026/10/03/crypto-s-sisyphean-struggle",
+      "title": "Crypto's Sisyphean struggle",
+      "published_at": "Sat, 03 Oct 2026 13:00:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 米議会の暗号通貨法案に関する意見記事で、tier3単独では採用不可"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/10/03/blackrock-offers-a-glimpse-of-how-tokenization-may-change-your-investment-portfolio",
+      "title": "BlackRock offers a glimpse of how tokenization may change your investment portfolio",
+      "published_at": "Sat, 03 Oct 2026 13:00:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: トークン化に関する解説記事で、tier3単独では採用不可"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/what-happened-in-crypto-today?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Here’s what happened in crypto today",
+      "published_at": "Sat, 03 Oct 2026 12:20:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 日次まとめ記事で個別事実の特定ができず、tier3単独では採用不可"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/near-intents-recovers-entire-stolen-38m-after-ultimatum-to-exploiter?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "NEAR Intents recovers entire stolen $3.8M after ultimatum to exploiter",
+      "published_at": "Sat, 03 Oct 2026 11:59:10 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 盗難資金回収の報道だが、tier3単独で他媒体による独立報道が候補中に確認できない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/community-banks-sue-occ-over-trust-bank-charters-of-crypto-firms?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Community banks sue OCC over trust bank charters of crypto firms",
+      "published_at": "Sat, 03 Oct 2026 09:25:01 +0000",
+      "verified_by": "CoinDeskとCointelegraphの2媒体が同一のOCC提訴事実を報じている",
+      "decision": "採用（独立2ソース）",
+      "reason": "独立2ソース規定に該当。地域銀行団体によるOCC提訴という事実をCointelegraphとCoinDeskの双方が報じており、暗号通貨企業への信託銀行免許付与を巡る規制環境の材料として掲載した。"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/trump-is-expected-to-appoint-jay-clayton-as-new-ai-czar-reports?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Trump is expected to appoint Jay Clayton as new AI czar: Reports",
+      "published_at": "Sat, 03 Oct 2026 07:06:08 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: AI政策責任者の人事報道で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/10/02/bank-group-sues-u-s-regulator-over-granting-crypto-trust-charters",
+      "title": "Bank group sues U.S. regulator over granting crypto trust charters",
+      "published_at": "Fri, 02 Oct 2026 21:23:20 +0000",
+      "verified_by": "CoinDeskとCointelegraphの2媒体が同一のOCC提訴事実を報じている",
+      "decision": "採用（独立2ソース）",
+      "reason": "独立2ソース規定に該当。candidate_id 25と同一のOCC提訴事実をCoinDeskが報じており、独立した2媒体による事実報道として掲載した。"
+    }
+  ],
+  "reusable_for_summary": [
+    "NEAR Intentsから盗まれた資金が全額回収されたと報じられている（Cointelegraph）。公式発表等での裏取りは未確認で継続監視。",
+    "ホルムズ海峡経由の原油輸送やアラムコ施設への攻撃など中東情勢に関する報道が複数あり、原油・リスク選好を通じた波及の可能性があるが、個別の事実としては価格への直接の波及経路を明確に説明できる内容ではなかった。"
+  ],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 0
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 0
+    },
+    "FRB（speeches）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "FRB（testimony）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 0
+    },
+    "米財務省": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "USTR": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 1
+    },
+    "ホワイトハウス": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 1
+    },
+    "ホワイトハウス（大統領令等）": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 0
+    },
+    "ADP": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 6
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 4
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "The Block": {
+      "status": "ok",
+      "raw_count": 19,
+      "kept_count": 0
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 50
+    }
+  },
+  "news_candidate_count": 27,
+  "part1_md": "【対象日】2026年10月3日（土）\n\n【ヘッドライン】\n米地域銀行団体がOCCを提訴し、暗号通貨企業への信託銀行免許付与の是非が争点となりました。 #BTC #ETH\n\n【主要なポイント】\n・全米地域銀行協会（ICBA）がOCC（通貨監督庁）を相手取り、暗号通貨企業への信託銀行免許付与がOCCの法的権限を逸脱しているとして提訴したと報じられました。公式発表での確認は取れていませんが、CoinDeskとCointelegraphの2媒体が同一の提訴事実を報じています（CoinDesk、Cointelegraph、10月2日・3日）。暗号通貨企業の銀行参入を巡る規制環境の先行きに関わる材料ですが、暗号通貨価格への直接因果は未確認です。\n",
+  "part2_md": "【市場のフロー】\n・【出来事・ニュース】全米地域銀行協会（ICBA）がOCC（通貨監督庁）を相手取り、暗号通貨企業への信託銀行免許付与の是非を争点として提訴したとCoinDeskとCointelegraphが報じました → 【地政学・マクロの変化】暗号通貨企業の銀行参入を巡る規制環境の先行きに不透明感が意識された可能性があります → 【暗号通貨価格】BTC・ETHは24時間比でいずれも小幅な上昇にとどまり、目立った値動きは確認されていません。因果は未確認です。 #BTC #ETH\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは41.52%→6.97%へ低下しました（24時間出来高 -83.08%、TVL +0.84%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは77.13%→5.65%へ低下しました（24時間出来高 -92.65%、TVL +0.31%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+0.81%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\n規制を巡る訴訟の行方は暗号通貨企業の銀行参入環境に影響し得る材料として、今後の進展が注目されます。NEAR Intentsの盗難資金回収報道については公式な裏取りが未確認であり、継続監視が必要です。\n",
+  "numeric_record_md": "【対象日】2026年10月3日（土）\n\n【主要指標】\n・市場全体：時価総額 $2.890兆（¥456.1兆）｜24時間取引高 $432.9億（¥6.83兆）\n・ #BTC：$84,769（約1,337.8万円）｜24時間比 +0.29%\n　（24時間レンジ $84,400〜$85,022）\n・ #ETH：$2,687（約42.4万円）｜24時間比 +0.81%\n　（24時間レンジ $2,657〜$2,691）\n・ #BNB：$788（約12.4万円）｜24時間比 +2.72%\n・市場心理：Fear & Greed 67（Greed、CoinMarketCap API）\n・ドミナンス：BTC 58.94%｜ETH 11.35%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年10月4日07:37 JST、USD/JPY ¥157.82\n\n【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $2.38M vs Base上ETH/USDC $12.18M｜参考：Base上DEX全体 $13.683億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $63.68億（¥1.01兆）｜24時間比 +0.53%｜USDCドミナンス 84.8%\n・ ETH/USDC（Base）参考APR：0.05% 6.97%（TVL $9.93M／24h出来高 $3.79M）｜0.3% 5.65%（TVL $162.58M／24h出来高 $8.39M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年10月4日07:37 JST\n"
+}
