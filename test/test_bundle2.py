@@ -5855,7 +5855,8 @@ check("R1: 出力形式は {text, carried_from, candidate_ids} 形式で、形�
       and "システムが機械的に除外する" in _A)
 check("R1: 採用（use:true）した材料はすべて主要なポイントへ載せる／載せない材料はuse:false／ヘッドラインの繰り返しにしない（オーナー指示）",
       "採用（use:true）した材料はすべて part1_headline・part1_points に載せる" in _A
-      and "載せない材料は use:false にする" in _A and "ヘッドラインの繰り返しにしない" in _A
+      and "載せない材料は use:false にする" in _A and "ヘッドラインの主題と同じ\n  材料を繰り返さない" in _A
+      and "採用した材料がヘッドライン\n  の1件だけの日は、従来どおり1項目とする" in _A
       and "上限4項目に収まらない場合は、関連する材料を1項目に" in _A and "重要度の低い材料を use:false にする" in _A)
 check("R1: tier4はreusable_for_summaryを含め本文・総括のどこにも書かない（情報源規律の抜け道を残さない）。旧指示（継続監視の対象としてreusableに記す）は残っていない",
       "reusable_for_summaryにも書かない" in _A
@@ -6220,6 +6221,57 @@ check("_derive_decisions: 相方が成立しない場合の例外に、理由の
       _raised is not None and _raised.unresolved_details and _raised.unresolved_details[0]["candidate_id"] == 1
       and any(r.get("code") == "overlap_below_threshold" and r.get("overlap") == 0.25 and r.get("threshold") == 0.4
               for d in _raised.unresolved_details for r in d["reasons"]), str(getattr(_raised, "unresolved_details", None)))
+
+print("=== v1.92追補3・v1.93追補（独立レビューの指摘への対応） ===")
+_pp_r = [{"date": "2026-10-01", "part1_headline": "CircleがTazapayを買収しました。", "part1_points": ["・Circleの買収は完了しました（CoinDesk、10月1日）。"]}]
+check("reusable機械フィルタ: carried_fromが文字列でない（リスト・数値・None・辞書）場合も例外にならず、除外として記録される",
+      all(generate_post._normalize_reusable_for_summary([{"text": "CircleがTazapayを買収した件は継続です", "carried_from": v}], _pp_r)[0] == []
+          and len(generate_post._normalize_reusable_for_summary([{"text": "x", "carried_from": v}], _pp_r)[1]) == 1
+          for v in (["2026-10-01"], 20261001, None, {"a": 1}, True)))
+_k_ci, _d_ci = generate_post._normalize_reusable_for_summary(
+    [{"text": "CircleがTazapayを買収した件は新しい動きがありません（CoinDesk、10月1日）。", "carried_from": "2026-10-01", "candidate_ids": 3}],
+    _pp_r, {3: {"tier": 4}}, {3: "不採用"})
+check("reusable機械フィルタ: candidate_idsが数値1つで書かれた場合も候補IDとして扱い、tier4の判定を飛ばさない",
+      _k_ci == [] and "tier4" in _d_ci[0]["reason"], str(_d_ci))
+_c_bad = _client_reusable([{"text": "x", "carried_from": ["2026-10-01"], "candidate_ids": []}, {"text": "y", "carried_from": {"a": 1}}])
+_out_bad = generate_post.call_a(_c_bad, DAILY_DATA, _news_r, None, previous_posts=_pp_norm)
+check("call_a: reusable_for_summaryの形式が不正（carried_fromがリスト・辞書）でも、call_Aは失敗せず1回目で成功し、該当項目は除外される（試行の失敗・L1にしない）",
+      _out_bad.ok and _out_bad.attempts == 1 and _out_bad.data["reusable_for_summary"] == [] and len(_out_bad.reusable_dropped) == 2,
+      f"ok={_out_bad.ok} attempts={_out_bad.attempts} err={_out_bad.error}")
+_orig_norm = generate_post._normalize_reusable_for_summary
+generate_post._normalize_reusable_for_summary = lambda *a, **k: (_ for _ in ()).throw(RuntimeError("boom"))
+try:
+    _out_boom = generate_post.call_a(_client_reusable([_good]), DAILY_DATA, _news_r, None, previous_posts=_pp_norm)
+finally:
+    generate_post._normalize_reusable_for_summary = _orig_norm
+check("call_a: 機械フィルタが想定外の例外を出しても、試行を失敗させず、reusable_for_summaryは空（安全側）・STATUS用に理由を残す",
+      _out_boom.ok and _out_boom.attempts == 1 and _out_boom.data["reusable_for_summary"] == []
+      and "例外で失敗したため全件除外" in _out_boom.reusable_dropped[0]["reason"], str(_out_boom.reusable_dropped))
+# 材料なしの日（L0）の本文は「・補足…」と箇条書き記号つきで保存される → 定型文の日として飛ばす
+_write_post("2026-09-24", generate_post.FIXED_HEADLINE, "・" + generate_post.FIXED_POINTS)  # L0の材料なし日
+_write_post("2026-09-23", generate_post.FIXED_HEADLINE, "・" + generate_post.FIXED_POINTS)
+_write_post("2026-09-22", "FRBがFleur Capitalの申請を承認しました。", "・FRBは承認を発表しました（FRB、9月22日）。")
+check("_load_previous_posts: L0の材料なし日（主要なポイントが「・補足できる検証済み材料は確認できない。」）も定型文の日として飛ばし、材料のある日だけを集める（レビュー指摘）",
+      [p["date"] for p in generate_post._load_previous_posts("2026-09-25", outputs_root=_PR)][:1] == ["2026-09-22"]
+      and generate_post._is_fixed_post(generate_post.FIXED_HEADLINE, "・" + generate_post.FIXED_POINTS)
+      and generate_post._is_fixed_post(generate_post.FIXED_HEADLINE, generate_post.FIXED_POINTS)
+      and not generate_post._is_fixed_post("FRBが承認しました。", "・" + generate_post.FIXED_POINTS)
+      and not generate_post._is_fixed_post(generate_post.FIXED_HEADLINE, "・FRBは承認を発表しました。"))
+check("実データ: 材料なしの日（9/5・9/6）を飛ばして、9/7の前日以前の投稿は材料のある日だけになる",
+      all(not generate_post._is_fixed_post(json.loads((REPO / "outputs" / p["date"] / "draft" / "post_bundle.json").read_text(encoding="utf-8"))["sections"]["part1_headline"],
+                                          json.loads((REPO / "outputs" / p["date"] / "draft" / "post_bundle.json").read_text(encoding="utf-8"))["sections"]["part1_points"])
+          for p in generate_post._load_previous_posts("2026-09-07", outputs_root=REPO / "outputs"))
+      and "2026-09-06" not in [p["date"] for p in generate_post._load_previous_posts("2026-09-07", outputs_root=REPO / "outputs")])
+check("プロンプト（レビュー指摘4a）: 手続き的な発表しか採用材料が無い日は、定型文（C22でFAIL）にせず、その材料を見出しにしてよい旨を規則(3)に明記している",
+      "ほかにヘッドラインにできる材料が無い日）は、定型文を使わず、その材料を" in generate_post.SYSTEM_A
+      and "「定型文を使うのは(i)(ii)の両方が『なし』の場合に限る」" in generate_post.SYSTEM_A)
+check("プロンプト（レビュー指摘4b）: 採用材料がヘッドラインの1件だけの日は従来どおり主要なポイントを1項目とする（ヘッドラインの繰り返しを禁じるのは採用材料が複数の日だけ）",
+      "採用した材料が複数ある日は、part1_pointsの項目でヘッドラインの主題と同じ" in generate_post.SYSTEM_A
+      and "採用した材料がヘッドライン\n  の1件だけの日は、従来どおり1項目とする" in generate_post.SYSTEM_A)
+check("プロンプト（レビュー指摘4c）: (1)〜(3)に当てはまらない日は、①の「重要度の高い方」（暗号通貨市場への関わりの大きい材料）で決める",
+      "上記①の「重要度の高い方」（暗号通貨市場への" in generate_post.SYSTEM_A)
+check("プロンプト（レビュー指摘・指標日）: 指標の結果が候補に書かれていない場合（発表前の予想記事など）は規則(1)を適用しない（結果を推測で書かない）",
+      "指標の結果（発表後の数値・\n    予想との比較）が候補に書かれていない場合（発表前の予想記事など）は、この(1)を" in generate_post.SYSTEM_A)
 
 print()
 print(f"PASS: {len(PASS)}  FAIL: {len(FAIL)}")

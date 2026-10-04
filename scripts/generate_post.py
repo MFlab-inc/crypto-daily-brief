@@ -526,14 +526,20 @@ reasonで使うA/B/C——個々の候補材料の重要性判定（「重要性
     経済指標（雇用統計・CPI・PPI・PCE・GDP・FOMC など）があり、それに対応する
     材料（候補の scheduled_event_match が付いたもの）をuse:trueにした場合は、
     原則としてその材料をpart1_headlineの主とする。指標の結果（予想との比較等）を、
-    候補のtitle・summaryに書かれている事実の範囲で書く。
+    候補のtitle・summaryに書かれている事実の範囲で書く。指標の結果（発表後の数値・
+    予想との比較）が候補に書かれていない場合（発表前の予想記事など）は、この(1)を
+    適用しない（結果を推測で書かない）。
 (2) 例外: 暗号通貨に直接関わる大型の制度材料——SEC・CFTC等の規則案・最終規則・
     登録承認、ETFの承認など——が公式発表（tier1）で確認できる日は、その材料を
     part1_headlineの主とする。この場合、(1)の指標の材料はpart1_pointsの1番目に置く。
 (3) 手続き的な発表: 暗号通貨との関係が薄い個別の申請の承認、意見募集期間の延長
     など手続き的な発表は、use:trueにしてもpart1_headlineの主題にしない
-    （part1_pointsに載せる）。
-(1)〜(3)に当てはまる材料が無い日は、暗号通貨市場への関わりの大きい材料を主とする。
+    （part1_pointsに載せる）。ただし、use:trueとした材料がその手続き的な発表しか
+    無い日（ほかにヘッドラインにできる材料が無い日）は、定型文を使わず、その材料を
+    ヘッドラインにしてよい（「定型文を使うのは(i)(ii)の両方が『なし』の場合に限る」
+    が優先する）。
+(1)〜(3)に当てはまる材料が無い日は、上記①の「重要度の高い方」（暗号通貨市場への
+関わりの大きい材料）を主とする。
 
 ### ②（(i)なし・(ii)あり）の詳細
 
@@ -674,8 +680,10 @@ WRITES_A = """## あなたが書くもの
   前日以前の本文と題材が対応しない項目は、システムが機械的に除外する。
 - 採用（use:true）した材料はすべて part1_headline・part1_points に載せる
   （reusable_for_summaryに回さない）。載せない材料は use:false にする。
-  part1_pointsの項目は、ヘッドラインの繰り返しにしない（同じ材料を重ねて
-  項目枠を使わない）。上限4項目に収まらない場合は、関連する材料を1項目に
+  採用した材料が複数ある日は、part1_pointsの項目でヘッドラインの主題と同じ
+  材料を繰り返さない（項目枠は他の採用材料に使う）。採用した材料がヘッドライン
+  の1件だけの日は、従来どおり1項目とする（項目数は材料の件数）。
+  上限4項目に収まらない場合は、関連する材料を1項目に
   まとめる。まとめられない場合は、重要度の低い材料を use:false にする
   （載せないまま use:true のままにしない・reusable_for_summaryへ回さない）。"""
 
@@ -1534,7 +1542,10 @@ def _strip_hashtags(text: str) -> str:
 
 
 def _is_fixed_post(headline: str, points: str) -> bool:
-    return headline.strip().startswith(FIXED_HEADLINE.rstrip("。")) and points.strip().startswith(FIXED_POINTS.rstrip("。"))
+    # L0のbundleの主要なポイントは「・補足できる検証済み材料は確認できない。」と箇条書き記号つきで保存される
+    # （L1は記号なし）ため、先頭の「・」を除いて比べる。
+    return (headline.strip().startswith(FIXED_HEADLINE.rstrip("。"))
+            and points.strip().lstrip("・").strip().startswith(FIXED_POINTS.rstrip("。")))
 
 
 def _load_previous_posts(target_date: str, outputs_root: Path | None = None) -> list[dict]:
@@ -1604,7 +1615,7 @@ def _normalize_reusable_for_summary(raw: Any, previous_posts: list[dict] | None,
             drop(item, "形式不正（textが空）")
             continue
         carried = item.get("carried_from")
-        if carried not in prev_by_date:
+        if not isinstance(carried, str) or carried not in prev_by_date:
             drop(item, f"carried_from（{carried!r}）が、渡した前日以前の投稿の日付"
                        f"（{'・'.join(sorted(prev_by_date)) or 'なし'}）に無い")
             continue
@@ -1614,6 +1625,8 @@ def _normalize_reusable_for_summary(raw: Any, previous_posts: list[dict] | None,
             drop(item, f"{carried}の投稿本文と対応する語が見つからない（当日初出の材料の可能性。共通語: {shared or 'なし'}）")
             continue
         cids = item.get("candidate_ids")
+        if isinstance(cids, int) and not isinstance(cids, bool):
+            cids = [cids]  # 数値1つで書かれた場合も候補IDとして扱う（tier4・採用済みの判定を飛ばさない）
         cids = [c for c in cids if isinstance(c, int) and not isinstance(c, bool)] if isinstance(cids, list) else []
         if any(id_to_candidate.get(c, {}).get("tier") == 4 for c in cids):
             drop(item, "tier4（候補発見のみ）の候補を含む（tier4は本文・総括のどこにも書かない）")
@@ -1741,8 +1754,12 @@ def call_a(client: "anthropic.Anthropic", daily_data: dict, news_today: dict,
                     "rejected_pairs": list(rejected_pairs_stats)})
         # v1.92（オーナー承認・R2）: reusable_for_summaryを機械フィルタにかけ、前日以前の投稿本文で
         # 扱った材料だけを文字列のリストとして残す（以降のcall_B・bundle・C23は従来どおり文字列を扱う）。
-        data["reusable_for_summary"], dropped = _normalize_reusable_for_summary(
-            data.get("reusable_for_summary"), previous_posts, id_to_candidate, decisions_by_id)
+        try:
+            data["reusable_for_summary"], dropped = _normalize_reusable_for_summary(
+                data.get("reusable_for_summary"), previous_posts, id_to_candidate, decisions_by_id)
+        except Exception as e:  # noqa: BLE001 — 想定外の入力でも試行を失敗させない（総括の1行言及が出ない側＝安全側に倒す）
+            data["reusable_for_summary"], dropped = [], [
+                {"text": "", "reason": f"機械フィルタが例外で失敗したため全件除外（{type(e).__name__}: {e}）"}]
         reusable_dropped_stats.extend(dropped)
         return data
 
