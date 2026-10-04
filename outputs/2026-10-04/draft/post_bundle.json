@@ -1,0 +1,341 @@
+{
+  "target_date_jst": "2026-10-04",
+  "level": "L0",
+  "sections": {
+    "part0_target_date": "2026年10月4日（日）",
+    "part1_headline": "直近24時間に暗号通貨市場との関係を確認できる主要なマクロ材料は確認できない。",
+    "part1_points": "・補足できる検証済み材料は確認できない。",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.936兆（¥463.4兆）｜24時間取引高 $441.6億（¥6.97兆）\n・ #BTC：$86,381（約1,363.3万円）｜24時間比 +1.89%\n・ #ETH：$2,726（約43.0万円）｜24時間比 +1.44%\n・ #BNB：$795（約12.6万円）｜24時間比 +1.01%\n・市場心理：Fear & Greed 70（Greed、CoinMarketCap API）\n・ドミナンス：BTC 59.13%｜ETH 11.34%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年10月5日07:38 JST、USD/JPY ¥157.82",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $2.65M vs Base上ETH/USDC $26.09M｜参考：Base上DEX全体 $6.708億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $64.33億（¥1.02兆）｜24時間比 +1.01%｜USDCドミナンス 84.8%\n・ ETH/USDC（Base）参考APR：0.05% 10.37%（TVL $10.07M／24h出来高 $5.72M）｜0.3% 13.64%（TVL $163.52M／24h出来高 $20.37M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年10月5日07:38 JST",
+    "part2_flow": "価格変動との関係を確認できる主要材料は確認できない。",
+    "lp_comment": "参考APRは両プールとも前日から上昇しました。\nBase 0.05%プールの参考APRは6.97%→10.37%へ上昇しました（24時間出来高 +50.90%、TVL +1.38%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは5.65%→13.64%へ上昇しました（24時間出来高 +142.74%、TVL +0.57%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+1.44%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "直近24時間に市場との関係を確認できる主要なマクロ材料は確認できず、地合いは方向感に乏しい状況です。米地域銀行団体がOCCを相手取り、暗号通貨企業への信託銀行免許付与の是非を争う訴訟の動向については、引き続き注視が続いています。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "BTC・ETHともに上昇基調",
+  "audit_ledger": [
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/releases/2026/10/us-leads-international-coalition-to-endorse-kyoto-vision-for-a-golden-age-of-science/",
+      "title": "U.S. Leads International Coalition to Endorse Kyoto Vision for a Golden Age of Science",
+      "published_at": "Sun, 04 Oct 2026 09:14:42 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 科学技術協力に関する国際宣言で、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxQakVRMW8teEV5WlFoeU03VXNyU0hoSW8zSFNURk5WeTMyUXlFSGRqa2JieU1UcjZCWGd3SXp3UzVRMXFGWHZQMVJBUlFpem9iWkpGODVjZVplVFZTU1BXV1htc2FkcmNaMVREVi1WMVhQcnY2MFlCWm90LW5OcTVQZHJYLVhrY3ViYkpyRE11UkdkOExSLUtzTXAyRzRwQQ?oc=5",
+      "title": "Britain's Green Party votes to class Zionism as a form of racism - Reuters",
+      "published_at": "Sun, 04 Oct 2026 20:55:39 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 英国政党の内部投票に関する内容で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxPTzYxcENTQ3M0VnFWR3h0cVF2TkRtc2Rlci13bDE5dnZXMENGLWVPTzdKX3RpRXBvZGJFcEo3d2tmelg2QmN4Q1lkNGhnN1luQ3FCdnRMeUxlTHlTeGswVzNjWVBzdVI2ZWttdm5HR3REQ3lSd3JqSUltVTRuTTY2dWdVTFVsRUNyZGVTVDBkY2E1M3poNG8tNktZMjNtNWliR2dlRkxR?oc=5",
+      "title": "Polls close in Brazil as country awaits results of high-stakes election - Reuters",
+      "published_at": "Sun, 04 Oct 2026 20:23:05 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ブラジル選挙の投票終了に関する内容で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxQUERRVnN2QjBRRGRfc3ZELVlQY0FMZUhwVlJnajRWR2NSRDcxQktKQ1VWdXpTT3cxd2FoVXFwMkhGTnpOODJnWi1lSjJzUDRJbHczM1gyV3JIb0U2bHhwTWNmY1FtV2FJckpqcEw4NEVtN2VUbWU5Mi0tV2VtbjZoWFRWUnVTekJfMEVoa1NBYWxsdThWeFRBVkVJODl1OWZuMmx2cmRzYm9XYTB4?oc=5",
+      "title": "Explainer: Who are the Houthis, Iran’s allies in Yemen? - Reuters",
+      "published_at": "Sun, 04 Oct 2026 19:55:29 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: フーシ派の解説記事で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxPaHV2QlVZQUd1RW4zNFRzUzQ3ZlZlcHJHWHlRbm8yRjlBWGlkQ3BSek9GS0ZwOVJ0SnMtMDV5N3FsZjVsRm9EaUgwcGVhNVdaS1RCTDRqVjh5blN0NXhGenAxVlY3ZUhKQUpNN0J2ajJ2S0tlRXZyMmRaNG9VWTlXY3VpUlRWMVhKSjV3QTJXZW42OHZhaldrdzJxR2I1aDZrRDRMVHlYa2tOVW5GR2J4VWM2RjVPcjdqNUwzMUdsSVhPbDhqd0ttdmN4TUlTQWM?oc=5",
+      "title": "Yemeni government launches offensive to seize all areas from Iran-backed Houthis - Reuters",
+      "published_at": "Sun, 04 Oct 2026 19:46:37 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 地政学的緊張に関する内容だが、情報が薄く原油・リスク選好への波及を具体的に説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE1Fa19jZ3V5bkZsa1psZWNEUnZ1c1dUUTFkbEpEbE9iLUVlbUJId0w1WFpPa0J1WWJMU2ZmUmpzV0lBdm9YTm1EX2l2V0VGeWFXc18xMjd2N3JqTTFMU1loMDJwUngycDYySHB5WmoxQmlwaTJQZ3dZeQ?oc=5",
+      "title": "Cornell president vows 'serious look' at Greek life after rape claims - Reuters",
+      "published_at": "Sun, 04 Oct 2026 19:05:20 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 大学の学内問題に関する内容で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxPdHdEN1VYYjFqdkJyRThRQ2ZheFQzeElqRHRBNVR2N1UwV2lWbi1CcDdQYk9IV0ZuSURnc29jZXNDM1hmV0YzMDNRN0xlR055WlhBS0M2SVNJVW9NNE0yYlUyc3F0YVJma1JhQ0RnX096YjlGMTRiUmhVSDE4VGlOZ2MwMjljcVhNZnhER2gtYWk4QUYxZGpzZ202dVJLUQ?oc=5",
+      "title": "Iran's oil minister resigns for personal reasons, state media reports - Reuters",
+      "published_at": "Sun, 04 Oct 2026 18:53:27 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: イラン石油相辞任は原油市場に関わり得るが、情報が薄く波及経路を具体的に説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxNRlEwLU42X1ZWRmUxZm8tS1pwTGNwOUZ6cTFhLWNxM1R6OEFWdk1HZzJENlFUamNZRERZTUFfY0xiRmVPcFhlWml2NHloNEk0S0VoaVVVQ1prZ0Z3eG9ScGpnU1BVbTkza1p5YWg3dUt3NzVTWXozZmN3YTRLdm1XcFB1Q3E2TW5HcXpmMzhFVTVDczFaamducnNOZjdHck10elZ4Y1N1MG11VGVfbVFqWm5pWl9HZE0?oc=5",
+      "title": "Woman at center of Cornell rape allegations targeted with threats, lawyer says - Reuters",
+      "published_at": "Sun, 04 Oct 2026 18:33:06 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 大学関連の個人の脅迫事案で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTE5CQUJqOC1nRWxXbVZRWWRERkVZWEJjQThlamtYS0E4MDZOMkIzVmljX2J0VGJja1dwWWVsUjhDUk9rV0VGT1Y4VFFxX1JCRnFsUjVCVGxvbVlyODVKRkxURlhyOU1HdG1Hcmt2a0ROVlJUamZ0NUNUV1JR?oc=5",
+      "title": "Lula and Bolsonaro offer contrasting visions for Brazil on election day - Reuters",
+      "published_at": "Sun, 04 Oct 2026 18:14:32 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ブラジル大統領選の政治的対立構図の記事で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxQMTBhc1NGUkpHaVFaUUh2T0UyWDBHZnZrV2lXZURiZV9zVmpCTmxzVEg0ZWVJaDNhQlJ1SzNydno2YTVnZW50LXRjc2FHMVhOWGlWeGw4RjFyT0JtNXZHS1hBWVRBNzhZMHcySFp2VUp6SVJMaXVsLWgyT3Y3cGxaZWhuSTRHd2FmUE54MC1aZGlrQQ?oc=5",
+      "title": "- rmb.reuters.com",
+      "published_at": "Sun, 04 Oct 2026 18:10:13 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: タイトル・本文とも内容不明で、波及経路を確認できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxQT1lwRkt2ZlBuMTlqLVZCbk5ZVExzN0JMd0FnT0F5SllkSGdCU2xkNUlsSHVKZTRuNklIYlY5VTU5QmpqeUdWOXpJWEdhWGhaSE11dmRpQ0taekpfUllyay16MDg3VERqRm5WSjY3bGhKSGZVcnJWOFBod1FsQzBIdjVVN1U0b0xfT3VoZDNJdFZpVDJyN1Q0NlpjeUUtM2hFbUxF?oc=5",
+      "title": "Musk says he will rename SpaceXAI to SpaceXSI - Reuters",
+      "published_at": "Sun, 04 Oct 2026 16:56:09 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 企業名称変更に関する内容で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxNUHk0NnhtSzljVk9RcUlKeF90V3VFaEh4NG9ITDZSdmsxX2o0bFFYWUdiWUhrQ0FzSFVlaGxBYW1McU1GdHBNWURXRTJNNkZpQ3I5Vmx2bGdXcmVCUGpFZ0RUdjJsZnNwMWJhdERPd2dndnZJNDB6cjBfcExGZ3BYd0xtQ1JoUDRMMzZoQVNURWlabXNtRjdFV3l6UFhjVTAzeG1GUTBoZ3k3dw?oc=5",
+      "title": "Australia probes flydubai co-pilot's links to the country, police say - Reuters",
+      "published_at": "Sun, 04 Oct 2026 16:54:13 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 航空機副操縦士に関する捜査の内容で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxOVFNoVUJwWFRHa2hyMjdWTnQwNWJzeEsxN004aTEwczk5Y2tDeW0wdW9od2FjUlJNVVBLTUEtRTJ3YWlQaHgyTlZxV2RBVEdsMERUdnZzU1BQeVhrTXRnR0RuSXJlUUFhWkNRanY5akk5aEE5aTdMUGxBaFFSRjlZbzd3N00yWjRIRjMyZlIyUGNCOTNaNjc1QUcwSWlUWGtOaEhyU2F2WVB4NXA1WnY2Tw?oc=5",
+      "title": "Latvian PM on track to lead pro-Ukraine coalition after election win - Reuters",
+      "published_at": "Sun, 04 Oct 2026 16:52:43 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ラトビアの選挙結果に関する内容で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxQS2VheFNzRWFqbHN5T24yR1p5cXZnNjVRZHl2cnhxU3NiaDh3QWJFNEtYZlFwM3RnaHlCQlk1X25iVm1OenR0Szl5RTBmSjFnWENnUzJrbXpLQ3YydjRMTFNhdFV2cGFRT0xSX25MTzFqOFpLUGFzQ1RrZjdtdHozby1obzY5WnpLNThMZVFnVnBWMUVjZ21Md3dwNEFEaDRoaTI0bGJRZFRGYWdnVHowU2NxMA?oc=5",
+      "title": "Ukrainian drones deliver new batch of food to Russian-occupied Oleshky - Reuters",
+      "published_at": "Sun, 04 Oct 2026 16:33:45 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 人道支援に関する内容で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxNVXVqai1NbFo5LVhWcnM3RElRUWVwa21sQ3p6dVhFXzBwQVBtN3BGR09DOGZhaXV5Z09BQ0RXN0JfODgtS2VoeUVqV3I0OFd3cVFjMzNLSGV3QnBidDY4eTVIUzc4YThTalE0b3JNRndHbHhQdW43S3MxN25NOWRnckZKUDU2MGl3V1YtZUVaRG5IMF9PUTVWMVM3NUptZGdkaUlYSDdLcTQxMlVxMWlkcg?oc=5",
+      "title": "Government forces seize capital of Ethiopia's Tigray region from rebels - Reuters",
+      "published_at": "Sun, 04 Oct 2026 16:30:34 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: エチオピア国内紛争の軍事動向で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxQZ2pRTER4OGtQS01WaGYxMkVLOWVnRVNlTGFKb1ZuQjVFT296TUhVSkNsSV9BTXItRVhlQUNUZG56OC1KS3B5WUVIWVIzZG1EUEUwbkt3Tm80NEc4dVloT0RLMkVZZlQ0WlFTRGVGeW1Va2NxdThBY1hSeHM2Wkg0S0hNcjFaa0ZBVm9QMVhodGxSRHVGVjduVmliTlhQQ3VLY2xWVnNLVnlZVzlKS0J2YXVRRWZIa3hIUWc?oc=5",
+      "title": "EXCLUSIVE: Saudi Arabia quietly shelving NEOM Stadium, one of 2034 World Cup venues - Reuters",
+      "published_at": "Sun, 04 Oct 2026 16:21:11 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: サッカースタジアム計画の見直しに関する内容で、波及経路を説明できない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/what-happened-in-crypto-today?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Here’s what happened in crypto today",
+      "published_at": "Sun, 04 Oct 2026 18:51:50 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 包括的な日次まとめ記事で個別事実の単独根拠にならず、tier1・tier2の裏取りにも該当しない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/10/04/there-s-an-election-next-month-state-of-crypto",
+      "title": "There's an election next month: State of Crypto",
+      "published_at": "Sun, 04 Oct 2026 18:30:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 選挙前の議会動向に関する分析記事で、単独では事実の根拠にならない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/10/04/crypto-poured-years-into-new-products-the-next-challenge-is-keeping-users",
+      "title": "Crypto poured years into new products. The next challenge is keeping users",
+      "published_at": "Sun, 04 Oct 2026 14:00:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 業界動向の分析記事で、単独では事実の根拠にならない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/trump-taps-jay-clayton-to-lead-new-super-intelligence-force?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Trump taps intel chief Jay Clayton to lead new Super Intelligence Force",
+      "published_at": "Sun, 04 Oct 2026 13:48:48 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 人事に関する内容で、tier3単独のため独立2ソース規定にも該当しない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/10/04/the-clarity-act-stalled-crypto-dealmakers-aren-t-hitting-the-brakes-yet",
+      "title": "The Clarity Act stalled. Bankers aren’t hitting the brakes yet on crypto dealmaking",
+      "published_at": "Sun, 04 Oct 2026 13:00:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: Clarity Act停滞に関する内容だがtier3単独で、独立2ソース規定にも該当しない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/japan-adds-garantex-to-list-of-russia-sanctions-over-ukraine-war?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Japan adds Garantex to list of Russia sanctions over Ukraine war",
+      "published_at": "Sun, 04 Oct 2026 12:42:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 日本の対露制裁追加の内容だがtier3単独で、独立2ソース規定にも該当しない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/el-salvador-receives-138-million-from-imf-after-bitcoin-waivers-granted?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "El Salvador receives $138 million from IMF after Bitcoin waivers granted",
+      "published_at": "Sun, 04 Oct 2026 09:40:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: エルサルバドルのIMF資金受領の内容だがtier3単独で、独立2ソース規定にも該当しない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/russias-finance-ministry-pays-wages-in-digital-rubles-for-first-time?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Russia’s Finance Ministry pays wages in digital rubles for first time",
+      "published_at": "Sun, 04 Oct 2026 07:18:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: デジタルルーブル導入の内容だがtier3単独で、独立2ソース規定にも該当しない"
+    }
+  ],
+  "reusable_for_summary": [
+    "米地域銀行団体がOCCを相手取り、暗号通貨企業への信託銀行免許付与の是非を争う訴訟の動向が注視されています（CoinDesk、Cointelegraph、10月2日・3日）。"
+  ],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 0
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 0
+    },
+    "FRB（speeches）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "FRB（testimony）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 0
+    },
+    "米財務省": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "USTR": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "ホワイトハウス": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 1
+    },
+    "ホワイトハウス（大統領令等）": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 0
+    },
+    "ADP": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 3
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 5
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "The Block": {
+      "status": "ok",
+      "raw_count": 19,
+      "kept_count": 0
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 49
+    }
+  },
+  "news_candidate_count": 24,
+  "part1_md": "【対象日】2026年10月4日（日）\n\n【ヘッドライン】\n直近24時間に暗号通貨市場との関係を確認できる主要なマクロ材料は確認できない。\n\n【主要なポイント】\n・補足できる検証済み材料は確認できない。\n",
+  "part2_md": "【市場のフロー】\n価格変動との関係を確認できる主要材料は確認できない。\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から上昇しました。\nBase 0.05%プールの参考APRは6.97%→10.37%へ上昇しました（24時間出来高 +50.90%、TVL +1.38%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは5.65%→13.64%へ上昇しました（24時間出来高 +142.74%、TVL +0.57%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+1.44%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\n直近24時間に市場との関係を確認できる主要なマクロ材料は確認できず、地合いは方向感に乏しい状況です。米地域銀行団体がOCCを相手取り、暗号通貨企業への信託銀行免許付与の是非を争う訴訟の動向については、引き続き注視が続いています。\n",
+  "numeric_record_md": "【対象日】2026年10月4日（日）\n\n【主要指標】\n・市場全体：時価総額 $2.936兆（¥463.4兆）｜24時間取引高 $441.6億（¥6.97兆）\n・ #BTC：$86,381（約1,363.3万円）｜24時間比 +1.89%\n・ #ETH：$2,726（約43.0万円）｜24時間比 +1.44%\n・ #BNB：$795（約12.6万円）｜24時間比 +1.01%\n・市場心理：Fear & Greed 70（Greed、CoinMarketCap API）\n・ドミナンス：BTC 59.13%｜ETH 11.34%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年10月5日07:38 JST、USD/JPY ¥157.82\n\n【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $2.65M vs Base上ETH/USDC $26.09M｜参考：Base上DEX全体 $6.708億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $64.33億（¥1.02兆）｜24時間比 +1.01%｜USDCドミナンス 84.8%\n・ ETH/USDC（Base）参考APR：0.05% 10.37%（TVL $10.07M／24h出来高 $5.72M）｜0.3% 13.64%（TVL $163.52M／24h出来高 $20.37M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年10月5日07:38 JST\n"
+}
