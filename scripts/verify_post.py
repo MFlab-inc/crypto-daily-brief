@@ -960,6 +960,41 @@ def check_c28(au: Audit, part1_headline, part1_points, daily_data: dict) -> None
            "; ".join(reasons) if reasons else "役割分離OK")
 
 
+# --- 警告（WARN）の種類の登録簿と件数表示（v1.91・オーナー承認）---
+#
+# オーナー指示: 新しく追加するWARNは、GENERATION_STATUS.mdの「向きの食い違いチェック」と同じ欄に
+# まとめ、種類ごとの件数つきで表示する（毎朝の確認をそこだけで済ませるため）。警告の種類は
+# ここに登録し、STATUSの欄（repair_post.render_final_audit_note／render_warning_block）は
+# この登録簿から「種類別の件数」を作る。件数が0の種類も毎回表示する（「見ていない」と
+# 「0件だった」を区別するため）。警告はいずれもFAILにしない（checks・failed・overall・終了コードに影響しない）。
+WARNING_KINDS: "tuple[tuple[str, str], ...]" = (
+    ("W_direction_mismatch", "向きの食い違い"),
+    ("W_headline_hashtag", "見出しのタグ"),
+)
+
+
+def warning_kind_label(wid: str) -> str:
+    return dict(WARNING_KINDS).get(wid, "その他")
+
+
+def format_warning_counts(warnings: "list[dict]") -> str:
+    """種類別の警告件数（例: 「向きの食い違い0・見出しのタグ1」）。登録済みの種類は0件でも表示し、
+    未登録のIDの警告は「その他」にまとめる（その他が0件のときは表示しない）。"""
+    ws = warnings or []
+    counts = {wid: 0 for wid, _ in WARNING_KINDS}
+    other = 0
+    for w in ws:
+        wid = w.get("id")
+        if wid in counts:
+            counts[wid] += 1
+        else:
+            other += 1
+    parts = [f"{label}{counts[wid]}" for wid, label in WARNING_KINDS]
+    if other:
+        parts.append(f"その他{other}")
+    return "・".join(parts)
+
+
 # --- 向きの食い違いの警告（WARN。FAILではない。v1.85・オーナー承認）---
 #
 # 背景: 2026-09-30分で、本文（主要なポイント）が「FRBの利上げ観測が後退」と書いている
@@ -1073,6 +1108,32 @@ def check_direction_warn(au: Audit, sections: dict, headline_for_image) -> None:
                 f"「{'・'.join(h['points_directions'])}」と、{h['pair']}{subj}の向きが食い違っています。"
                 f" {h['section']}: 「{h['section_sentence']}」／主要なポイント: 「{h['points_sentence']}」",
                 **h)
+
+
+# --- 見出しのタグの警告（WARN。FAILではない。v1.91・オーナー承認）---
+#
+# 背景: 2026-10-02分で、ヘッドラインの末尾に「 #BTC #ETH」が付いていた（本文に銘柄名が無いのに）。
+# 発端はv1.70（9/8）の「主要銘柄に言及する場合はハッシュタグを付す」で、v1.82で見出しに価格・値動きを
+# 書かなくなった後も条件が見直されず残っていた。オーナー判断（10/4）: 見出しにタグは不要。
+# プロンプト（generate_post.py）からタグの指示を外したうえで、タグが付いた日を見逃さないよう、
+# ヘッドライン（part1_headline）にハッシュタグがあれば警告する（本文は変えない・FAILにしない）。
+# 対象はヘッドラインのみ。市場のフローの連鎖末尾のタグは従来どおり許容する（別の指示）。
+_HEADLINE_HASHTAG_RE = re.compile(r"(?<![A-Za-z0-9_])#[A-Za-z0-9_]+")
+
+
+def find_headline_hashtags(headline) -> "list[str]":
+    return _HEADLINE_HASHTAG_RE.findall(str(headline or ""))
+
+
+def check_hashtag_warn(au: Audit, sections: dict) -> None:
+    """ヘッドラインのハッシュタグをau.warningsへ追加する（FAILにしない。上のコメント参照）。"""
+    headline = sections.get("part1_headline") or ""
+    tags = find_headline_hashtags(headline)
+    if tags:
+        au.warn("W_headline_hashtag",
+                f"ヘッドラインにハッシュタグ（{' '.join(tags)}）が付いています（オーナー指示: 見出しにタグは付けない）。"
+                f" ヘッドライン: 「{_clip_sentence(headline, 100)}」",
+                tags=tags, section="ヘッドライン", sentence=str(headline))
 
 
 def summarize_check_ids(checks: "list[dict]") -> str:
@@ -1310,10 +1371,15 @@ def run_all(bundle: dict, daily_data: dict) -> Audit:
     check_c28(au, sections.get("part1_headline"), sections.get("part1_points"), daily_data)
     # 警告（WARN）: FAILにしない。checks・failed・overall・終了コードに影響しない（v1.85）。
     # 警告の検知の失敗で監査全体を止めない（例外はログに出して警告なしとして続行）。
-    try:
-        check_direction_warn(au, sections, headline_for_image)
-    except Exception as e:  # noqa: BLE001
-        print(f"WARN: 向きの食い違いチェック自体が失敗しました（警告なしとして続行）: {type(e).__name__}: {e}", file=sys.stderr)
+    # v1.91: 警告の種類ごとに独立して実行する（1つの検知が失敗しても他の警告と監査全体は止めない）。
+    for _label, _fn in (
+        ("向きの食い違い", lambda: check_direction_warn(au, sections, headline_for_image)),
+        ("見出しのタグ", lambda: check_hashtag_warn(au, sections)),
+    ):
+        try:
+            _fn()
+        except Exception as e:  # noqa: BLE001
+            print(f"WARN: {_label}チェック自体が失敗しました（警告なしとして続行）: {type(e).__name__}: {e}", file=sys.stderr)
     return au
 
 

@@ -610,10 +610,11 @@ check("②: headline_for_imageにも但し書きを含めない旨が明記さ�
 
 print("=== generate_post.py: ヘッドラインの構成要件（v1.70・オーナー指示・9/7手直しへの対処） ===")
 check("NO_CANDIDATES_FALLBACKにヘッドラインの構成要件の見出しがある",
-      "### ヘッドラインの構成要件（v1.70・オーナー指示。v1.82改定）" in generate_post.NO_CANDIDATES_FALLBACK)
-check("ヘッドラインの構成要件: 主要銘柄言及時のハッシュタグ付与を指示している",
-      "主要銘柄（BTC・ETH・BNB等）に言及する場合は `#BTC` `#ETH` のように"
-      in generate_post.NO_CANDIDATES_FALLBACK)
+      "### ヘッドラインの構成要件（v1.70・オーナー指示。v1.82・v1.91改定）" in generate_post.NO_CANDIDATES_FALLBACK)
+check("v1.91（オーナー指示）: ヘッドラインの構成要件はハッシュタグを付けない旨を明記し、v1.70の「主要銘柄に言及する場合はタグを付す」を廃止している",
+      "ハッシュタグ（`#`）は付けない（v1.91・オーナー指示: 見出しにタグは不要。" in generate_post.NO_CANDIDATES_FALLBACK
+      and "主要銘柄（BTC・ETH・BNB等）に言及する場合は" not in generate_post.NO_CANDIDATES_FALLBACK
+      and "主要銘柄（BTC・ETH・BNB等）に言及する場合は" not in generate_post.SYSTEM_A)
 check("ヘッドラインの構成要件: 公式発表未確認の但し書きをヘッドラインに書かない旨を指示している",
       "「公式発表での確認が取れていない」旨の但し書きをpart1_headlineに"
       in generate_post.NO_CANDIDATES_FALLBACK)
@@ -633,15 +634,20 @@ check("v1.82: ヘッドラインの構成要件に1〜2文・価格/24時間比/
       "1〜2文にとどめる（統合運用基準§3.1）" in generate_post.NO_CANDIDATES_FALLBACK
       and "価格・24時間比・値動き・Fear & Greed・相対強弱・DEX・APR・LP助言を" in generate_post.NO_CANDIDATES_FALLBACK)
 check("ヘッドラインの構成要件がSYSTEM_Aに含まれる（NO_CANDIDATES_FALLBACK経由）",
-      "### ヘッドラインの構成要件（v1.70・オーナー指示。v1.82改定）" in generate_post.SYSTEM_A)
+      "### ヘッドラインの構成要件（v1.70・オーナー指示。v1.82・v1.91改定）" in generate_post.SYSTEM_A)
 
 print("=== generate_post.py: RULES_HASHTAG強化（v1.71・9/8実データのC13境界違反への対処） ===")
 check("RULES_HASHTAGがタグ名の直後に助詞・読点が続く書き方を明示的に禁止している"
       "（実際にC13をFAILさせた「#BTCは下落し、#ETHは」というパターンを名指し）",
       "#BTCは下落し、#ETHは" in generate_post.RULES_HASHTAG)
-check("RULES_HASHTAGが文中主語ではなく文末にまとめて置く代替パターンを具体例で示している",
-      "銘柄を文中の主語にする場合は" in generate_post.RULES_HASHTAG
-      and "BTC・ETHは24時間比でそれぞれ下落・" in generate_post.RULES_HASHTAG)
+check("RULES_HASHTAGが文中主語ではなく連鎖の末尾にまとめて置く代替パターンを具体例で示している（v1.91: 【市場のフロー】の例に整理）",
+      "【市場のフロー】で銘柄を文中の主語にする場合は" in generate_post.RULES_HASHTAG
+      and "前編には使わない" in generate_post.RULES_HASHTAG
+      and "BTC・ETHは24時間比でそれぞれ下落・" not in generate_post.RULES_HASHTAG)
+check("v1.91（オーナー指示）: RULES_HASHTAGは、タグを付けてよいのは【市場のフロー】の連鎖末尾だけで、ヘッドライン・主要なポイント・総括・headline_for_imageには付けない旨を先頭に明記し、SYSTEM_A・SYSTEM_Bの両方に入る",
+      generate_post.RULES_HASHTAG.split("\n- `#` は行頭")[0].count("【市場のフロー】") >= 1
+      and "付けない（v1.91・オーナー指示: 見出しにタグは不要）" in generate_post.RULES_HASHTAG
+      and generate_post.RULES_HASHTAG in generate_post.SYSTEM_A and generate_post.RULES_HASHTAG in generate_post.SYSTEM_B)
 check("RULES_HASHTAGが#の直前に日本語の句読点が来る位置を明示的に禁止している",
       "日本語の句読点になる位置には置かない" in generate_post.RULES_HASHTAG)
 
@@ -3753,7 +3759,7 @@ check("repair_post.main(): 修正対象が無い日（PASS）でもGENERATION_ST
       "（見出しは実際に評価したチェックから作る。v1.85: C12〜C24・C26〜C28・計17項目）",
       "本文機械監査（C12〜C24・C26〜C28・計17項目）: overall=PASS" in _status_e2e_text, _status_e2e_text)
 check("repair_post.main(): 警告が無い日はファイル先頭に警告ブロックを置かず、「警告なし」と1行で示す（v1.85）",
-      _status_e2e_text.startswith("level: L0") and "向きの食い違いチェック（警告のみ・FAILにしない）: 警告なし" in _status_e2e_text,
+      _status_e2e_text.startswith("level: L0") and "向きの食い違い・その他の警告チェック（警告のみ・FAILにしない）: 警告なし（向きの食い違い0・見出しのタグ0）" in _status_e2e_text,
       _status_e2e_text)
 
 print("=== generate_post: 呼び出しBへのdaily_data除外（v1.82・オーナー承認） ===")
@@ -4833,13 +4839,14 @@ _REPAIR_RES = {"final_failing_checks": [], "final_failing_check_details": [], "c
                "warnings": _au_dir.warnings}
 _blk = repair_post.render_warning_block(_REPAIR_RES)
 check("警告ブロック: 先頭に「⚠⚠ 警告」・件数・FAILではない旨・警告の内容を含み、警告が無ければ空文字列",
-      _blk.startswith("⚠⚠ 警告（向きの食い違い）1件 — FAILではありません") and "投稿前に本文を見直してください" in _blk
-      and "向きが食い違っています" in _blk and repair_post.render_warning_block({**_REPAIR_RES, "warnings": []}) == "", _blk)
+      _blk.startswith("⚠⚠ 警告1件（向きの食い違い1・見出しのタグ0） — FAILではありません") and "投稿前に本文を見直してください" in _blk
+      and "⚠ [向きの食い違い] " in _blk and "向きが食い違っています" in _blk and repair_post.render_warning_block({**_REPAIR_RES, "warnings": []}) == "", _blk)
 check("警告ブロック: コスト記録のステップが抽出する「input=」「output=」の文字列を含まない（daily.ymlのgrep -oPを壊さない）",
       "input=" not in _blk and "output=" not in _blk)
 _note = repair_post.render_final_audit_note(_REPAIR_RES)
 check("最終監査の表記: 見出しは実際に評価したチェックのID（C12〜C24・C26〜C28・計17項目）から作り、警告の件数とファイル先頭に表示する旨を示す",
-      "本文機械監査（C12〜C24・C26〜C28・計17項目）: overall=PASS" in _note and "警告1件（ファイル先頭に表示）" in _note, _note)
+      "本文機械監査（C12〜C24・C26〜C28・計17項目）: overall=PASS" in _note
+      and "警告1件（向きの食い違い1・見出しのタグ0）（ファイル先頭に表示）" in _note, _note)
 check("最終監査の表記: 古い固定文言（C12〜C24のみ）が残っていない／結果dictにchecked_idsが無い旧形式でも例外にならない",
       "（C12〜C24）" not in _note
       and "本文機械監査（C12〜C24）" in repair_post.render_final_audit_note({"final_failing_checks": [], "final_failing_check_details": []}))
@@ -4860,8 +4867,8 @@ finally:
     repair_post.anthropic.Anthropic = _orig_anthropic_client
 _status_w = _status_w_path.read_text(encoding="utf-8")
 check("repair_post.main(): 警告がある日はGENERATION_STATUS.mdの先頭に警告ブロックを置き、最終監査の記録（警告N件）も追記する",
-      _status_w.startswith("⚠⚠ 警告（向きの食い違い）1件") and "level: L0" in _status_w
-      and "向きの食い違いチェック（警告のみ・FAILにしない）: 警告1件" in _status_w, _status_w[:400])
+      _status_w.startswith("⚠⚠ 警告1件（向きの食い違い1・見出しのタグ0）") and "level: L0" in _status_w
+      and "向きの食い違い・その他の警告チェック（警告のみ・FAILにしない）: 警告1件（向きの食い違い1・見出しのタグ0）" in _status_w, _status_w[:400])
 check("repair_post.main(): 警告ブロックを先頭に置いても、コスト記録の抽出（grep -oP '(?<=input=)[0-9]+' | head -1）は従来どおり12345・678",
       __import__("re").findall(r"(?<=input=)[0-9]+", _status_w)[0] == "12345"
       and __import__("re").findall(r"(?<=output=)[0-9]+", _status_w)[0] == "678", _status_w[:300])
@@ -5347,7 +5354,8 @@ check("render_final_audit_note: check_countsが無い旧形式の入力では従
       and "内訳" not in repair_post.render_final_audit_note({"final_failing_checks": [], "final_failing_check_details": []}))
 _orig_checks_note = repair_post.render_final_audit_note(_res_cnt)
 check("render_final_audit_note: 件数の併記は表示のみ（FAILしたチェックの詳細行・警告行は従来どおり）",
-      "FAILしたチェックはありません。" in _orig_checks_note and "向きの食い違いチェック（警告のみ・FAILにしない）: 警告なし" in _orig_checks_note)
+      "FAILしたチェックはありません。" in _orig_checks_note
+      and "向きの食い違い・その他の警告チェック（警告のみ・FAILにしない）: 警告なし（向きの食い違い0・見出しのタグ0）" in _orig_checks_note)
 # repair()の結果にも件数が入る（実際のrun_allの結果から）。L1の本文でrepair()を通す
 _REPAIR_CNT_DATE = "2026-08-17"
 Path(f"outputs/{_REPAIR_CNT_DATE}/draft").mkdir(parents=True, exist_ok=True)
@@ -5633,6 +5641,50 @@ check("main()統合: STATUSのnews_sourcesに「BLS: failed（HTTP 403）・連�
 _rc_s2, _st_s2, _f_s2, _c_s2 = _run_force_drop_main(_g_call_a_data)
 check("main()統合: 過去のSTATUSが無い場合は「連続1日（過去の記録なし）」（本日分だけ）",
       "  - BLS: failed（HTTP 403）・連続1日（過去の記録なし）" in _st_s2 and _rc_s2 == 0, _st_s2[:600])
+
+print("=== v1.91（オーナー承認）: 見出しのタグ不要（プロンプトからタグ指示を外す）＋見出しのタグのWARN＋WARN欄の種類別件数 ===")
+check("find_headline_hashtags: ヘッドラインのタグ（#BTC #ETH）を検出し、タグの無い文・C#のような語・空は検出しない",
+      verify_post.find_headline_hashtags("FRBが発表しました。 #BTC #ETH") == ["#BTC", "#ETH"]
+      and verify_post.find_headline_hashtags("FRBが発表しました。") == []
+      and verify_post.find_headline_hashtags("C#の話") == [] and verify_post.find_headline_hashtags(None) == [])
+_hb = json.loads(json.dumps(_b_dir))
+_hb["sections"]["part1_headline"] = "FRBが申請の承認を発表しました。 #BTC #ETH"
+_au_h = verify_post.run_all(_hb, DAILY_DATA)
+_hw = [w for w in _au_h.warnings if w["id"] == "W_headline_hashtag"]
+check("見出しのタグのWARN: ヘッドラインにタグがあると1件の警告（タグ・ヘッドラインを含む）。FAILにはならない（checks・failed・overallに影響しない）",
+      len(_hw) == 1 and _hw[0]["tags"] == ["#BTC", "#ETH"] and "見出しにタグは付けない" in _hw[0]["detail"]
+      and "FRBが申請の承認を発表しました" in _hw[0]["detail"]
+      and _au_h.failed == verify_post.run_all(json.loads(json.dumps(_b_dir)), DAILY_DATA).failed, str(_hw))
+_hb2 = json.loads(json.dumps(_hb)); _hb2["sections"]["part1_headline"] = "FRBが申請の承認を発表しました。"
+check("見出しのタグのWARN: タグが無ければ警告なし",
+      not [w for w in verify_post.run_all(_hb2, DAILY_DATA).warnings if w["id"] == "W_headline_hashtag"])
+_hb3 = json.loads(json.dumps(_hb2)); _hb3["sections"]["part2_flow"] = "①【出来事・ニュース】a → 【暗号通貨価格】BTC・ETHは下落しました。 #BTC #ETH"
+check("見出しのタグのWARN: 市場のフローの連鎖末尾のタグは対象外（従来どおり許容）",
+      not [w for w in verify_post.run_all(_hb3, DAILY_DATA).warnings if w["id"] == "W_headline_hashtag"])
+check("format_warning_counts: 登録済みの種類は0件でも毎回表示し、未登録IDは「その他」にまとめる（0件なら出さない）",
+      verify_post.format_warning_counts([]) == "向きの食い違い0・見出しのタグ0"
+      and verify_post.format_warning_counts([{"id": "W_headline_hashtag"}, {"id": "W_direction_mismatch"}, {"id": "W_direction_mismatch"}])
+      == "向きの食い違い2・見出しのタグ1"
+      and verify_post.format_warning_counts([{"id": "W_unknown"}]) == "向きの食い違い0・見出しのタグ0・その他1"
+      and verify_post.format_warning_counts(None) == "向きの食い違い0・見出しのタグ0")
+_res_two = {"final_failing_checks": [], "final_failing_check_details": [], "checked_ids": "C12〜C24・C26〜C28・計17項目",
+            "warnings": _au_dir.warnings + _hw}
+_blk2 = repair_post.render_warning_block(_res_two)
+check("警告ブロック: 種類別の件数が見出しに出て、各警告の先頭に種類名が付く（向きの食い違いと見出しのタグが同じ欄に並ぶ）。input=／output=は含まない",
+      _blk2.startswith("⚠⚠ 警告2件（向きの食い違い1・見出しのタグ1）") and "⚠ [向きの食い違い] " in _blk2
+      and "⚠ [見出しのタグ] ヘッドラインにハッシュタグ（#BTC #ETH）" in _blk2 and "input=" not in _blk2 and "output=" not in _blk2, _blk2)
+check("最終監査の表記: 警告の種類別件数が1行に出る（件数0の種類も表示）",
+      "向きの食い違い・その他の警告チェック（警告のみ・FAILにしない）: 警告2件（向きの食い違い1・見出しのタグ1）（ファイル先頭に表示）"
+      in repair_post.render_final_audit_note(_res_two), repair_post.render_final_audit_note(_res_two))
+# 実データ（本番にコミット済みのbundle）: v1.70（9/8）より前の日はタグ無しで警告なし、タグ付きの日は警告になる（読み取りのみ）
+_tag_days, _pre_days = [], []
+for _bp in sorted((REPO / "outputs").glob("2026-*/draft/post_bundle.json")):
+    _bb = json.loads(_bp.read_text(encoding="utf-8"))
+    _day = _bp.parent.parent.name
+    _has = bool(verify_post.find_headline_hashtags(_bb["sections"].get("part1_headline")))
+    (_tag_days if _has else _pre_days).append(_day)
+check("実データ: タグ付きの見出しの日（9/8以降の材料つき日・10/2を含む）が警告対象になり、9/8より前の日は1日も対象にならない",
+      len(_tag_days) >= 14 and "2026-10-02" in _tag_days and all(d >= "2026-09-08" for d in _tag_days), str(_tag_days))
 
 print()
 print(f"PASS: {len(PASS)}  FAIL: {len(FAIL)}")

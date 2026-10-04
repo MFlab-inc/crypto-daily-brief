@@ -253,25 +253,30 @@ def render_final_audit_note(result: dict[str, Any]) -> str:
             # v1.86（オーナー承認・案G）: STATUSだけで誤検知かを判断できるよう、
             # セクション・由来・該当語・該当文（先頭100字）を併記する。
             lines += verify_post.format_fail_evidence_lines(c.get("evidence", []))
+    # v1.91（オーナー承認）: 新しいWARNも「向きの食い違いチェック」と同じ欄にまとめ、種類ごとの件数を
+    # 毎回表示する（件数0の種類も表示。毎朝の確認をこの1行で済ませるため）。
     warnings = result.get("warnings") or []
+    counts = verify_post.format_warning_counts(warnings)
     if warnings:
-        lines.append(f"向きの食い違いチェック（警告のみ・FAILにしない）: 警告{len(warnings)}件（ファイル先頭に表示）")
+        lines.append("向きの食い違い・その他の警告チェック（警告のみ・FAILにしない）: "
+                     f"警告{len(warnings)}件（{counts}）（ファイル先頭に表示）")
     else:
-        lines.append("向きの食い違いチェック（警告のみ・FAILにしない）: 警告なし")
+        lines.append("向きの食い違い・その他の警告チェック（警告のみ・FAILにしない）: "
+                     f"警告なし（{counts}）")
     return "\n".join(lines) + "\n"
 
 
 def render_warning_block(result: dict[str, Any]) -> str:
-    """GENERATION_STATUS.mdの先頭に置く警告ブロック（v1.85・オーナー承認）。警告が無ければ空文字列。
+    """GENERATION_STATUS.mdの先頭に置く警告ブロック（v1.85・オーナー承認。v1.91: 種類別の件数つき）。警告が無ければ空文字列。
     FAILではない旨を明記する。コスト記録のステップがこのファイルから「input=」「output=」の
     数値を抽出するため、ここではそれらの文字列を使わない。"""
     warnings = result.get("warnings") or []
     if not warnings:
         return ""
-    lines = [f"⚠⚠ 警告（向きの食い違い）{len(warnings)}件 — FAILではありません（機械監査の合否には影響しません）。"
-             "投稿前に本文を見直してください。"]
+    lines = [f"⚠⚠ 警告{len(warnings)}件（{verify_post.format_warning_counts(warnings)}）"
+             " — FAILではありません（機械監査の合否には影響しません）。投稿前に本文を見直してください。"]
     for w in warnings:
-        lines.append(f"  ⚠ {w['detail']}")
+        lines.append(f"  ⚠ [{verify_post.warning_kind_label(w.get('id'))}] {w['detail']}")
     lines.append("")
     return "\n".join(lines) + "\n"
 
