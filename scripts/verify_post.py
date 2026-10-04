@@ -973,6 +973,7 @@ WARNING_KINDS: "tuple[tuple[str, str], ...]" = (
     ("W_headline_hashtag", "見出しのタグ"),
     ("W_indicator_headline", "指標日の見出し"),
     ("W_flow_format", "フロー書式"),
+    ("W_media_mismatch", "媒体名照合"),
 )
 
 
@@ -1281,6 +1282,83 @@ def check_flow_format_warn(au: Audit, sections: dict) -> None:
                 chain_no=v["chain_no"], reasons=v["reasons"], sentence=v["text"])
 
 
+# --- 本文の項目の媒体名と台帳の照合の警告（WARN。FAILではない。v1.95・オーナー承認・質問7の案A）---
+#
+# 背景: 強制不採用（generate_post.py・v1.79）は台帳のdecisionだけを「不採用」に変え、本文は変えない。そのため、
+# 不採用にした候補を元にした記述が【ヘッドライン】【主要なポイント】に残っても、現行の機械監査（C12〜C28）は
+# 検知できない（本文の項目と台帳の候補を結びつける検査が無い。調査では、過去のL0日の台帳で独立2ソースのペアを
+# 両方不採用に書き換えても、21組中18組は全チェックPASSのままだった）。構造案S（本文の項目にcandidate_idsを持たせる）は保留とし、
+# まず本文の項目末尾の「（媒体名、日付）」と台帳の採用候補の媒体を照合するWARNで観察する（オーナー判断・10/4）。
+# 判定: 項目（【主要なポイント】の各行・日付つきの括弧があるヘッドライン）の「（媒体名、日付）」（複数文の項目は全部）の媒体名のうち、
+# 台帳の候補の媒体（または設定済みの情報源名）として認識できるものが1つ以上あり、そのどれも台帳で採用された
+# （採用／採用（独立2ソース））候補の媒体でない場合に警告する。tier1・tier2の事実をtier3が補強する書き方
+# （「（FRB、CoinDesk、日付）」でFRBが採用）は、1つでも採用側の媒体があれば警告しない。
+# 限界: ①同じ媒体の別記事が採用されている日は検知できない（過去データの試算では、強制不採用の再現18組中13組を検知）。
+# ②媒体名が項目に付いていない・認識できない場合は判定しない。③ヘッドラインは日付つきの括弧が付くことが少なく、ほぼ対象外。
+# ④検知するだけで直さない（人が確認する）。
+_MEDIA_DATE_TOKEN_RE = re.compile(r"^\s*(?:\d{4}年)?\d{1,2}月\d{1,2}日|^\s*\d{1,2}日\s*$|^\s*\d{4}-\d{2}-\d{2}|^\s*\d{1,2}/\d{1,2}")
+_MEDIA_PAREN_RE = re.compile(r"（([^（）]*)）")
+_MEDIA_DATE_ANYWHERE_RE = re.compile(r"\d{1,2}月\d{1,2}日|\d{4}-\d{2}-\d{2}|\d{1,2}/\d{1,2}")
+
+
+def _normalize_media_name(name: str) -> str:
+    """媒体名の照合用の正規化: 空白・末尾の括弧書き（「FRB（speeches）」「ホワイトハウス（大統領令等）」等）を除いて小文字化する。"""
+    n = re.sub(r"[（(][^）)]*[）)]\s*$", "", str(name or "")).strip()
+    return re.sub(r"\s+", "", n).lower()
+
+
+def item_media_names(item: str) -> "list[str]":
+    """項目内の「（媒体名、日付）」（日付つきの括弧すべて。複数文の項目は文ごとに付くため全部）から、媒体名の候補
+    （日付らしい語を除いた語）を出現順・重複なしで返す。日付つきの括弧が無ければ空リスト。"""
+    out: "list[str]" = []
+    for m in _MEDIA_PAREN_RE.finditer(str(item or "")):
+        if not _MEDIA_DATE_ANYWHERE_RE.search(m.group(1)):
+            continue
+        for t in re.split(r"[、・,，／/]", m.group(1)):
+            t = t.strip()
+            if t and not _MEDIA_DATE_TOKEN_RE.search(t) and t not in out:
+                out.append(t)
+    return out
+
+
+def find_media_mismatches(sections: dict, audit_ledger, tier_map: "dict[str, int] | None" = None) -> "list[dict]":
+    ledger = [e for e in (audit_ledger if isinstance(audit_ledger, list) else []) if isinstance(e, dict)]
+    if not ledger:
+        return []
+    known = {_normalize_media_name(n) for n in (tier_map or {})} | {_normalize_media_name(e.get("source")) for e in ledger}
+    known.discard("")
+    adopted_sources = {_normalize_media_name(e.get("source")) for e in ledger
+                       if str(e.get("decision", "")).startswith("採用")}
+    adopted_sources.discard("")
+    items: "list[tuple[str, str]]" = []
+    headline = str(sections.get("part1_headline") or "")
+    if headline.strip() and headline.strip() != generate_post.FIXED_HEADLINE:
+        items.append(("ヘッドライン", headline))
+    for ln in str(sections.get("part1_points") or "").split("\n"):
+        if ln.strip() and ln.strip() != generate_post.FIXED_POINTS:
+            items.append(("主要なポイント", re.sub(r"^・", "", ln.strip())))
+    hits = []
+    for section, text in items:
+        media = [m for m in item_media_names(text) if _normalize_media_name(m) in known]
+        if not media or any(_normalize_media_name(m) in adopted_sources for m in media):
+            continue
+        hits.append({"section": section, "media": media, "sentence": text,
+                     "adopted_sources": sorted({str(e.get("source")) for e in ledger
+                                                if str(e.get("decision", "")).startswith("採用")})})
+    return hits
+
+
+def check_media_warn(au: Audit, sections: dict, audit_ledger, tier_map: "dict[str, int] | None" = None) -> None:
+    """本文の項目の媒体名と台帳の採用候補の媒体の不一致をau.warningsへ追加する（項目ごとに1件。FAILにしない）。"""
+    for h in find_media_mismatches(sections, audit_ledger, tier_map):
+        adopted = "・".join(h["adopted_sources"]) or "なし"
+        au.warn("W_media_mismatch",
+                f"{h['section']}の項目の媒体（{'・'.join(h['media'])}）が、台帳で採用された候補の媒体（{adopted}）のどれとも一致しません"
+                "（不採用にした候補・強制不採用の候補を根拠にしている可能性。同じ媒体の別記事が採用されている場合は検知できません）。"
+                f" 項目: 「{_clip_sentence(h['sentence'], 100)}」",
+                section=h["section"], media=h["media"], sentence=h["sentence"], adopted_sources=h["adopted_sources"])
+
+
 def summarize_check_ids(checks: "list[dict]") -> str:
     """実際に評価したチェックのID要約（例: 「C12〜C24・C26〜C28・計17項目」）。
     GENERATION_STATUS.mdの監査表記を、固定文言ではなく実際の評価対象から作る（v1.85）。
@@ -1523,6 +1601,7 @@ def run_all(bundle: dict, daily_data: dict) -> Audit:
         ("指標日の見出し", lambda: check_indicator_headline_warn(
             au, sections, bundle.get("audit_ledger"), daily_data.get("scheduled_events"))),
         ("フロー書式", lambda: check_flow_format_warn(au, sections)),
+        ("媒体名照合", lambda: check_media_warn(au, sections, bundle.get("audit_ledger"), tier_map)),
     ):
         try:
             _fn()

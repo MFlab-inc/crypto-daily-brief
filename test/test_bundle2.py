@@ -96,7 +96,9 @@ DAILY_DATA = {
 CALL_A_DATA = {
     "headline_for_image": "規制動向を材料に暗号通貨市場は総じて上昇",
     "part1_headline": "米規制当局の発言が確認され、同時期に主要銘柄は軒並み上昇して推移しました（因果は未確認）。",
-    "part1_points": ["規制当局高官が友好的な発言（Reuters、2026-08-17）", "機関投資家の資金流入が継続との報道（Bloomberg、2026-08-17）"],
+    # v1.95: 媒体名照合のWARN（項目末尾の媒体と台帳の採用候補の媒体の照合）が他のテストの警告件数に混ざらないよう、
+    # 1つ目の項目の媒体は台帳で採用されているSEC（tier1）に合わせた（2つ目のBloombergは情報源名として未登録のため照合の対象外）。
+    "part1_points": ["規制当局高官が友好的な発言（SEC、2026-08-17）", "機関投資家の資金流入が継続との報道（Bloomberg、2026-08-17）"],
     "reusable_for_summary": ["某国の法整備は継続審議中、新展開なし"],
     "audit_ledger": [
         # v1.29: sourceはC21がtier判定に使うため実在のtier1名（SEC）を使う
@@ -4808,7 +4810,7 @@ check("向きの食い違い: 主語が一覧に無い・方向語が無い・�
 
 # ---- run_all(): WARNはFAILにしない（checks・failed・overall・終了コードに影響しない）----
 _b_dir = json.loads(json.dumps(b_ok))
-_b_dir["sections"]["part1_points"] = "・FRBの利上げ観測が後退したと報じられました（Reuters、2026-08-17）"
+_b_dir["sections"]["part1_points"] = "・FRBの利上げ観測が後退したと報じられました（SEC、2026-08-17）"
 _b_dir["sections"]["part1_headline"] = "FRBの利下げ観測が意識されました。暗号通貨価格への直接因果は未確認です。"
 _b_base = json.loads(json.dumps(_b_dir))
 _b_base["sections"]["part1_headline"] = "FRBの利上げ観測の後退が意識されました。暗号通貨価格への直接因果は未確認です。"
@@ -6077,7 +6079,7 @@ check("フロー書式のWARN: 違反のある連鎖ごとに1件（何本目か
       and "1文でない" in _au_f.warnings[0]["detail"] and _au_f.failed == 0, str(_au_f.warnings))
 check("フロー書式のWARN: 種類は登録簿に登録済みで、STATUSの種類別件数・警告ブロックに「フロー書式」として出る",
       verify_post.warning_kind_label("W_flow_format") == "フロー書式"
-      and _wk(flow=1).endswith("フロー書式1") and "フロー書式1" in verify_post.format_warning_counts(_au_f.warnings)
+      and "フロー書式1" in _wk(flow=1) and "フロー書式1" in verify_post.format_warning_counts(_au_f.warnings)
       and "⚠ [フロー書式] 市場のフローの2本目" in repair_post.render_warning_block(
           {"warnings": _au_f.warnings, "final_failing_checks": [], "final_failing_check_details": []}))
 _hf = json.loads(json.dumps(_b_dir)); _hf["sections"]["part2_flow"] = _prose
@@ -6092,6 +6094,78 @@ for _bp in sorted((REPO / "outputs").glob("2026-*/draft/post_bundle.json")):
 check("実データ: 書式どおりだった本番9/30は警告なし・L1の定型文の10/1は対象外・書式外だった10/2は2連鎖とも警告",
       _ff["2026-09-30"] == [] and _ff["2026-10-01"] == [] and [v["chain_no"] for v in _ff["2026-10-02"]] == [1, 2]
       and all("no_event_label" in v["reasons"] and "sentences" in v["reasons"] for v in _ff["2026-10-02"]), str(_ff["2026-10-02"]))
+
+print("=== v1.95（オーナー承認・質問7の案A）: 本文の項目の媒体名と台帳の採用候補の媒体の照合のWARN ===")
+_imn = verify_post.item_media_names
+check("item_media_names: 日付つきの括弧（（媒体名、日付））から媒体名だけを取り出す（日付・複数の区切り・複数文の項目の全括弧・重複なし）",
+      _imn("FRBが発表しました（FRB、10月2日）。") == ["FRB"]
+      and _imn("提訴したと報じられました（CoinDesk、Cointelegraph、10月2日・3日）。") == ["CoinDesk", "Cointelegraph"]
+      and _imn("A（Reuters、2026年9月3日／Cointelegraph）。B（Reuters、9月3日）。") == ["Reuters", "Cointelegraph"]
+      and _imn("OCC（通貨監督庁）が提訴されました（CoinDesk、2026-10-02）。") == ["CoinDesk"]
+      and _imn("日付の無い括弧（通貨監督庁）だけの文です。") == [] and _imn("") == [] and _imn(None) == [])
+check("_normalize_media_name: 空白・末尾の括弧書き（FRB（speeches）等）を除いて小文字化する",
+      verify_post._normalize_media_name("FRB（speeches）") == "frb" and verify_post._normalize_media_name(" The Block ") == "theblock"
+      and verify_post._normalize_media_name("ホワイトハウス（大統領令等）") == "ホワイトハウス" and verify_post._normalize_media_name(None) == "")
+_led_m = [{"source": "FRB", "title": "t1", "decision": "採用"},
+          {"source": "Reuters", "title": "t2", "decision": "不採用"},
+          {"source": "CoinDesk", "title": "t3", "decision": "不採用"},
+          {"source": "Cointelegraph", "title": "t4", "decision": "採用（独立2ソース）"}]
+_tm_m = {"FRB": 1, "Reuters": 2, "CoinDesk": 3, "Cointelegraph": 3, "The Block": 3}
+_fmm = verify_post.find_media_mismatches
+def _mm(points, headline="FRBが承認を発表しました。", ledger=_led_m, tm=_tm_m):
+    return _fmm({"part1_headline": headline, "part1_points": points}, ledger, tm)
+check("媒体名照合: 項目の媒体が台帳で採用された候補の媒体（FRB・採用（独立2ソース）のCointelegraph）なら警告なし",
+      _mm("・FRBは承認を発表しました（FRB、10月2日）。") == [] and _mm("・提訴が報じられました（Cointelegraph、10月2日）。") == [])
+_h1 = _mm("・Reutersはイラン情勢を報じました（Reuters、10月2日）。")
+check("媒体名照合: 項目の媒体が台帳で不採用の候補の媒体だけなら警告（9/7のReuters型）。警告に媒体・採用された媒体を含める",
+      len(_h1) == 1 and _h1[0]["media"] == ["Reuters"] and _h1[0]["section"] == "主要なポイント"
+      and _h1[0]["adopted_sources"] == ["Cointelegraph", "FRB"], str(_h1))
+check("媒体名照合: tier1・tier2の事実をtier3が補強する書き方（FRB、CoinDesk）は、FRBが採用なら警告なし／採用側が1つも無ければ警告",
+      _mm("・FRBは承認を発表しました（FRB、CoinDesk、10月2日）。") == []
+      and len(_mm("・Xが起きました（Reuters、CoinDesk、10月2日）。")) == 1)
+check("媒体名照合: 判定できない場合は警告しない（媒体名の無い項目・日付つきの括弧が無い項目・情報源名として認識できない媒体〈Bloomberg〉・定型文）",
+      _mm("・媒体名の無い項目です。") == [] and _mm("・Xが起きました（通貨監督庁）。") == []
+      and _mm("・Xが起きました（Bloomberg、10月2日）。") == []
+      and _mm(generate_post.FIXED_POINTS, headline=generate_post.FIXED_HEADLINE) == [])
+check("媒体名照合: 台帳が空・None・不正なら判定しない（L1等）",
+      _fmm({"part1_headline": "x", "part1_points": "・Xです（Reuters、10月2日）。"}, [], _tm_m) == []
+      and _fmm({"part1_headline": "x", "part1_points": "・Xです（Reuters、10月2日）。"}, None, _tm_m) == []
+      and _fmm({}, _led_m, _tm_m) == [])
+check("媒体名照合: 日付つきの括弧があるヘッドラインも対象。設定に無くても台帳に出る媒体名は認識する（tier_mapが空でも）",
+      len(_mm("・x", headline="Reutersが報じました（Reuters、10月2日）。")) == 1 and _mm("・x", headline="Reutersが報じました（Reuters、10月2日）。")[0]["section"] == "ヘッドライン"
+      and len(_mm("・Xです（Reuters、10月2日）。", tm={})) == 1)
+_au_m = verify_post.Audit()
+verify_post.check_media_warn(_au_m, {"part1_headline": "x", "part1_points": "・Aです（Reuters、10月2日）。\n・Bです（CoinDesk、10月2日）。\n・FRBです（FRB、10月2日）。"}, _led_m, _tm_m)
+check("媒体名照合のWARN: 項目ごとに1件（媒体・採用された媒体・項目を含む）。FAILにしない",
+      len(_au_m.warnings) == 2 and all(w["id"] == "W_media_mismatch" for w in _au_m.warnings) and _au_m.failed == 0
+      and "主要なポイントの項目の媒体（Reuters）が、台帳で採用された候補の媒体（Cointelegraph・FRB）のどれとも一致しません" in _au_m.warnings[0]["detail"]
+      and "同じ媒体の別記事が採用されている場合は検知できません" in _au_m.warnings[0]["detail"], str(_au_m.warnings))
+check("媒体名照合のWARN: 種類は登録簿に登録済みで、STATUSの種類別件数・警告ブロックに「媒体名照合」として出る（ほかの警告と同じ欄）",
+      verify_post.warning_kind_label("W_media_mismatch") == "媒体名照合" and "媒体名照合2" in verify_post.format_warning_counts(_au_m.warnings)
+      and "⚠ [媒体名照合] 主要なポイントの項目の媒体（Reuters）" in repair_post.render_warning_block(
+          {"warnings": _au_m.warnings, "final_failing_checks": [], "final_failing_check_details": []}))
+_hm = json.loads(json.dumps(_b_dir)); _hm["sections"]["part1_points"] = "・Aです（Reuters、2026-08-17）"
+check("run_all: 媒体名照合の警告は他の監査項目の結果（failed）を変えない（FAILにしない）。台帳の採用がSECだけの日にReuters項目があれば警告",
+      any(w["id"] == "W_media_mismatch" for w in verify_post.run_all(_hm, DAILY_DATA).warnings)
+      and verify_post.run_all(_hm, DAILY_DATA).failed == verify_post.run_all(json.loads(json.dumps(_b_dir)), DAILY_DATA).failed)
+# 強制不採用の再現: 独立2ソースで採用された記事（Cointelegraph・CoinDesk）を不採用にし、本文に媒体名が残る場合に検知する
+_led_fd = [{"source": "Reuters", "title": "a", "decision": "採用"}, {"source": "Cointelegraph", "title": "b", "decision": "採用（独立2ソース）"},
+           {"source": "CoinDesk", "title": "c", "decision": "採用（独立2ソース）"}]
+_pts_fd = "・Reutersの報道です（Reuters、10月2日）。\n・複数媒体が報じました（Cointelegraph、CoinDesk、10月2日）。"
+check("媒体名照合: 強制不採用の再現（Cointelegraph・CoinDeskの記事を不採用にしたのに、本文にその媒体の項目が残る）を検知する／採用のままなら検知しない",
+      _fmm({"part1_headline": "x", "part1_points": _pts_fd}, _led_fd, _tm_m) == []
+      and len(_fmm({"part1_headline": "x", "part1_points": _pts_fd},
+                   [_led_fd[0], {**_led_fd[1], "decision": "不採用"}, {**_led_fd[2], "decision": "不採用"}], _tm_m)) == 1)
+# 実データ（本番にコミット済みの投稿・読み取りのみ）
+_mm_days = {}
+_tm_real = verify_post._load_source_tier_map()
+for _bp in sorted((REPO / "outputs").glob("2026-*/draft/post_bundle.json")):
+    _bb = json.loads(_bp.read_text(encoding="utf-8"))
+    _mm_days[_bp.parent.parent.name] = len(_fmm(_bb["sections"], _bb.get("audit_ledger"), _tm_real))
+check("実データ: 過去のL0日で警告が出るのは、台帳で採用の無い媒体だけを挙げた項目があった9/7（1件）・9/22（2件）で、それ以外の日は0件（9/1・10/2・10/3も0件）",
+      _mm_days.get("2026-09-07") == 1 and _mm_days.get("2026-09-22") == 2
+      and all(v == 0 for d, v in _mm_days.items() if d not in ("2026-09-07", "2026-09-22") and d <= "2026-10-03"),
+      str({d: v for d, v in _mm_days.items() if v}))
 
 print()
 print(f"PASS: {len(PASS)}  FAIL: {len(FAIL)}")
