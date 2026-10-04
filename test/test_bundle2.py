@@ -6262,9 +6262,11 @@ check("実データ: 材料なしの日（9/5・9/6）を飛ばして、9/7の�
                                           json.loads((REPO / "outputs" / p["date"] / "draft" / "post_bundle.json").read_text(encoding="utf-8"))["sections"]["part1_points"])
           for p in generate_post._load_previous_posts("2026-09-07", outputs_root=REPO / "outputs"))
       and "2026-09-06" not in [p["date"] for p in generate_post._load_previous_posts("2026-09-07", outputs_root=REPO / "outputs")])
-check("プロンプト（レビュー指摘4a）: 手続き的な発表しか採用材料が無い日は、定型文（C22でFAIL）にせず、その材料を見出しにしてよい旨を規則(3)に明記している",
-      "ほかにヘッドラインにできる材料が無い日）は、定型文を使わず、その材料を" in generate_post.SYSTEM_A
-      and "「定型文を使うのは(i)(ii)の両方が『なし』の場合に限る」" in generate_post.SYSTEM_A)
+check("プロンプト（v1.93追補・オーナー指示）: 手続き的な発表しか採用したい材料が無い日は、その材料を見出しにせずuse:falseにして定型文（材料なし）を使う旨を規則(3)に明記している",
+      "use:trueにしたい材料がその手続き的な発表しか無い日\n    （ほかに採用できる材料が無い日）は、その材料をuse:falseにして、定型文\n    （材料なし）を使う" in generate_post.SYSTEM_A
+      and "より「主要材料は確認できない」と書くほうが趣旨に合う" in generate_post.SYSTEM_A
+      and "手続き的な発表のため\n    不採用」と書く" in generate_post.SYSTEM_A
+      and "その材料を\n    ヘッドラインにしてよい" not in generate_post.SYSTEM_A)
 check("プロンプト（レビュー指摘4b）: 採用材料がヘッドラインの1件だけの日は従来どおり主要なポイントを1項目とする（ヘッドラインの繰り返しを禁じるのは採用材料が複数の日だけ）",
       "採用した材料が複数ある日は、part1_pointsの項目でヘッドラインの主題と同じ" in generate_post.SYSTEM_A
       and "採用した材料がヘッドライン\n  の1件だけの日は、従来どおり1項目とする" in generate_post.SYSTEM_A)
@@ -6272,6 +6274,49 @@ check("プロンプト（レビュー指摘4c）: (1)〜(3)に当てはまらな
       "上記①の「重要度の高い方」（暗号通貨市場への" in generate_post.SYSTEM_A)
 check("プロンプト（レビュー指摘・指標日）: 指標の結果が候補に書かれていない場合（発表前の予想記事など）は規則(1)を適用しない（結果を推測で書かない）",
       "指標の結果（発表後の数値・\n    予想との比較）が候補に書かれていない場合（発表前の予想記事など）は、この(1)を" in generate_post.SYSTEM_A)
+
+print("=== v1.93追補2（オーナー指示）: 採用材料が手続き的な発表だけの日は、use:falseにして定型文（材料なし）→C22はSKIPでL0のまま出力される ===")
+# 10/2のFleur Capital型の日を再現する: 候補はFRB（tier1）の個別の申請承認1件だけ。モデルがuse:falseにして定型文を返す。
+_news_fleur = {"collected_at": "2026-10-02T09:00:00+09:00", "target_date_jst": "2026-10-02", "source_status": {}, "candidates": [
+    {"title": "Federal Reserve Board announces approval of application by Fleur Capital Corporation", "url": "https://e/fleur",
+     "source": "FRB", "published_at": "Fri, 02 Oct 2026 10:00:00 GMT", "summary": "...", "kind": "primary", "tier": 1}]}
+
+
+def _fleur_gen(use, headline, points):
+    def fn(kw, n):
+        ids = [c["candidate_id"] for c in _parse_leading_json(kw["messages"][0]["content"]).get("news_candidates_today", [])]
+        return json_response({"headline_for_image": "FRB関連の動きを確認", "part1_headline": headline, "part1_points": points,
+                              "reusable_for_summary": [],
+                              "audit_ledger": [{"candidate_id": i, "use": use, "verified_by": "RSS summary" if use else "",
+                                                "reason": "A: 個別の申請承認" if use else "手続き的な発表のため不採用"} for i in ids]})
+    out = generate_post.call_a(FakeClient(fn), DAILY_DATA, _news_fleur, None)
+    g = json.loads(json.dumps(_g_gen))
+    g["level"] = "L0"; g["news_candidate_count"] = 1
+    g["call_a"] = out.to_dict()
+    g["call_b"] = {"ok": True, "attempts": 1, "error": None, "usage": {"input_tokens": 0, "output_tokens": 0}, "attempt_errors": [],
+                   "data": {"part2_flow": [generate_post.FIXED_FLOW], "part2_summary": "地合いは不透明で、今後の確認が必要です。"}}
+    return out, compose_post.compose(DAILY_DATA, g)
+
+
+_out_fl, _b_fl = _fleur_gen(False, generate_post.FIXED_HEADLINE, [generate_post.FIXED_POINTS])
+_au_fl = verify_post.run_all(_b_fl, DAILY_DATA)
+_c22_fl = next(c for c in _au_fl.checks if c["id"].startswith("C22"))
+check("Fleur型の日（手続き的な発表だけ）: use:falseで定型文のとき、call_Aは成功し、ledgerは不採用・levelはL0のまま",
+      _out_fl.ok and _out_fl.attempts == 1 and _out_fl.data["audit_ledger"][0]["decision"] == "不採用" and _b_fl["level"] == "L0"
+      and _b_fl["sections"]["part1_headline"] == generate_post.FIXED_HEADLINE, str(_out_fl.error))
+check("Fleur型の日: C22は材料なし（定型文ヘッドライン）としてSKIPになり、FAILにならない（C19・C21・C23〜C24等を含め機械監査はFAIL 0）",
+      _c22_fl["result"] == "SKIP" and "材料なし（定型文ヘッドライン）のためSKIP" in _c22_fl["detail"] and _au_fl.failed == 0,
+      f"{_c22_fl} failed={_au_fl.failed} {[c['id'] for c in _au_fl.checks if c['result'] == 'FAIL']}")
+check("Fleur型の日: 【市場のフロー】は定型文（コード側で確定）・主要なポイントは定型文で、WARN（フロー書式・媒体名照合・指標日の見出し）も出ない",
+      _b_fl["sections"]["part2_flow"] == generate_post.FIXED_FLOW and _b_fl["sections"]["part1_points"].lstrip("・") == generate_post.FIXED_POINTS
+      and _au_fl.warnings == [], str(_au_fl.warnings))
+# 対照: 同じ材料をuse:trueにして定型文の見出しを書くとC22がFAIL（規則(3)を例外にしないと、この日は本文が出ない）。実文言の見出しならPASS（従来の10/2型）。
+_, _b_fl_bad = _fleur_gen(True, generate_post.FIXED_HEADLINE, [generate_post.FIXED_POINTS])
+_c22_bad = next(c for c in verify_post.run_all(_b_fl_bad, DAILY_DATA).checks if c["id"].startswith("C22"))
+_, _b_fl_old = _fleur_gen(True, "FRBがFleur Capitalによる申請の承認を発表しました。", ["FRBはFleur Capitalの申請を承認したと発表しました（FRB、10月2日）。"])
+_c22_old = next(c for c in verify_post.run_all(_b_fl_old, DAILY_DATA).checks if c["id"].startswith("C22"))
+check("対照: 手続き的な発表をuse:trueにしたまま定型文の見出しにするとC22はFAIL（だからuse:falseにする）。実文言の見出し（従来の10/2型）ならPASS（この扱いは今回やめる）",
+      _c22_bad["result"] == "FAIL" and _c22_old["result"] == "PASS", f"{_c22_bad['result']} / {_c22_old['result']}")
 
 print()
 print(f"PASS: {len(PASS)}  FAIL: {len(FAIL)}")
