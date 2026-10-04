@@ -972,6 +972,7 @@ WARNING_KINDS: "tuple[tuple[str, str], ...]" = (
     ("W_direction_mismatch", "向きの食い違い"),
     ("W_headline_hashtag", "見出しのタグ"),
     ("W_indicator_headline", "指標日の見出し"),
+    ("W_flow_format", "フロー書式"),
 )
 
 
@@ -1173,6 +1174,111 @@ def check_indicator_headline_warn(au: Audit, sections: dict, audit_ledger, sched
                 "規則どおりです。目視で確認してください。",
                 family=fam["key"], events=f["events"], matched_titles=[str(e.get("title", "")) for e in matched],
                 points_first_mentions=first == "触れています")
+
+
+# --- 市場のフローの書式の警告（WARN。FAILではない。v1.94・オーナー承認）---
+#
+# 背景: 2026-10-02分の【市場のフロー】が、統合運用基準§3.3の書式（【出来事・ニュース】→【地政学・マクロの変化】→
+# 【中間市場指標・市場心理】→【暗号通貨価格】、①②③区切り、1連鎖1文）ではなく、ラベルも矢印も無い3文の散文だった。
+# 既存の機械監査（C12〜C28）は書式（ラベル・矢印・文数）を一切見ないため、17項目PASSのまま素通りした。
+# 原因（モデルのばらつきか構造的か）はv1.82以降の本番のL0日が少なく断定できないため、まずWARNとして検出する
+# （オーナー判断: WARNとして追加。誤検知の調整を実データで進めてからFAILに昇格するかを判断する）。
+# 判定は連鎖（1行）ごと。材料が無い日の定型文（FIXED_FLOW）1件のみの日は対象外。
+#   ①必須ラベル【出来事・ニュース】【暗号通貨価格】がある ②ラベルは定められた順序で、各1回以内
+#   ③【出来事・ニュース】で始まる ④「→」の直後は必ずラベル／矢印は（段階数−1）本以上 ⑤1文（句点は
+#   全角括弧（）内を除いて末尾の1つだけ） ⑥ハッシュタグは連鎖の末尾（句点の後）だけ
+#   ⑦①②③（2本以上なら①から連番、1本なら付けない、最大3本） ⑧末尾（句点の直前45字以内）に限定表現
+# ⑧は語彙に依存し最も壊れやすい（試作で、本番9/30の①「…とみられます」を誤検知した→語幹で判定）。
+# 限界: 書式（構造）だけを見る。ラベルが付いていても中身が不適切な場合（確認済み事実でない内容を
+# 【地政学・マクロの変化】に書く等）は検出できない。
+_FLOW_LABELS = ("【出来事・ニュース】", "【地政学・マクロの変化】", "【中間市場指標・市場心理】", "【暗号通貨価格】")
+_FLOW_NUMBERS = "①②③"
+_FLOW_LIMITING_STEMS = ("可能性", "未確認", "意識され", "とみられ", "考えられ", "確認できません", "確認できない", "断定")
+FLOW_FORMAT_REASON_LABELS = {
+    "no_event_label": "【出来事・ニュース】が無い",
+    "no_price_label": "【暗号通貨価格】が無い",
+    "label_order": "段階の順序が違う",
+    "label_dup": "同じ段階が複数回ある",
+    "not_start_event": "【出来事・ニュース】で始まっていない",
+    "arrow_label_mismatch": "「→」の直後がラベルでない",
+    "arrows": "「→」が足りない",
+    "no_arrows": "「→」が無い",
+    "sentences": "1文でない（句点が末尾の1つだけでない。全角括弧内は除く）",
+    "tag_in_body": "ハッシュタグが連鎖の途中にある",
+    "tag_not_after_period": "ハッシュタグが句点の後に無い",
+    "numbering": "①②③の付け方が違う（複数なら①から連番、1本なら付けない）",
+    "too_many_chains": "連鎖が4本以上ある（最大3本）",
+    "no_limit_at_end": "末尾に限定表現（可能性・未確認等）が無い",
+}
+
+
+def _flow_chain_violations(raw: str, idx: int, n: int) -> "list[str]":
+    s = raw.strip()
+    m = re.match(r"^([①②③])\s*", s)
+    num = m.group(1) if m else None
+    body = s[m.end():] if m else s
+    tm = re.search(r"((?:\s#[A-Za-z]+)+)\s*$", body)
+    core = body[:tm.start()] if tm else body
+    r: "list[str]" = []
+    if "#" in core:
+        r.append("tag_in_body")
+    if tm and not core.rstrip().endswith("。"):
+        r.append("tag_not_after_period")
+    if (n >= 2 and num != _FLOW_NUMBERS[idx:idx + 1]) or (n == 1 and num):
+        r.append("numbering")
+    if idx >= 3:
+        r.append("too_many_chains")
+    present = [lb for lb in _FLOW_LABELS if lb in core]
+    pos = [core.index(lb) for lb in present]
+    if _FLOW_LABELS[0] not in core:
+        r.append("no_event_label")
+    if _FLOW_LABELS[3] not in core:
+        r.append("no_price_label")
+    if pos != sorted(pos):
+        r.append("label_order")
+    if any(core.count(lb) > 1 for lb in _FLOW_LABELS):
+        r.append("label_dup")
+    if not core.lstrip().startswith(_FLOW_LABELS[0]):
+        r.append("not_start_event")
+    segs = re.split(r"\s*→\s*", core)
+    if len(segs) > 1 and any(not any(sg.lstrip().startswith(lb) for lb in _FLOW_LABELS) for sg in segs):
+        r.append("arrow_label_mismatch")
+    if len(present) >= 2 and core.count("→") < len(present) - 1:
+        r.append("arrows")
+    if len(present) < 2 and "→" not in core:
+        r.append("no_arrows")
+    if re.sub(r"（[^（）]*）", "", core).count("。") != 1 or not core.rstrip().endswith("。"):
+        r.append("sentences")
+    last = core.rstrip().rstrip("。")
+    if not any(w in last[-45:] for w in _FLOW_LIMITING_STEMS):
+        r.append("no_limit_at_end")
+    return r
+
+
+def find_flow_format_violations(part2_flow) -> "list[dict]":
+    """市場のフロー（レンダリング済みの文字列）の書式違反を連鎖ごとに返す。各要素:
+    {"chain_no"（1始まり）, "text"（連鎖）, "reasons"（FLOW_FORMAT_REASON_LABELSのコード）}。
+    定型文（FIXED_FLOW）1件のみ・空の場合は対象外（空リスト）。"""
+    text = str(part2_flow or "")
+    items = [re.sub(r"^・", "", ln.strip()) for ln in text.split("\n") if ln.strip()]
+    if not items or (len(items) == 1 and items[0].startswith(generate_post.FIXED_FLOW.rstrip("。"))):
+        return []
+    out = []
+    for i, it in enumerate(items):
+        reasons = _flow_chain_violations(it, i, len(items))
+        if reasons:
+            out.append({"chain_no": i + 1, "text": it, "reasons": reasons})
+    return out
+
+
+def check_flow_format_warn(au: Audit, sections: dict) -> None:
+    """市場のフローの書式違反をau.warningsへ追加する（連鎖ごとに1件。FAILにしない。上のコメント参照）。"""
+    for v in find_flow_format_violations(sections.get("part2_flow")):
+        labels = "・".join(FLOW_FORMAT_REASON_LABELS.get(c, c) for c in v["reasons"])
+        au.warn("W_flow_format",
+                f"市場のフローの{v['chain_no']}本目が書式（統合運用基準§3.3）から外れています: {labels}。"
+                f" 連鎖: 「{_clip_sentence(v['text'], 100)}」",
+                chain_no=v["chain_no"], reasons=v["reasons"], sentence=v["text"])
 
 
 def summarize_check_ids(checks: "list[dict]") -> str:
@@ -1416,6 +1522,7 @@ def run_all(bundle: dict, daily_data: dict) -> Audit:
         ("見出しのタグ", lambda: check_hashtag_warn(au, sections)),
         ("指標日の見出し", lambda: check_indicator_headline_warn(
             au, sections, bundle.get("audit_ledger"), daily_data.get("scheduled_events"))),
+        ("フロー書式", lambda: check_flow_format_warn(au, sections)),
     ):
         try:
             _fn()

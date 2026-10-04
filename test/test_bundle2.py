@@ -107,7 +107,10 @@ CALL_A_DATA = {
     ],
 }
 CALL_B_DATA = {
-    "part2_flow": ["規制当局の発言 → 好感された可能性 → 主要銘柄の上昇が同時期に確認された（因果は未確認）。"],
+    # v1.94: 統合運用基準§3.3の書式（【出来事・ニュース】→…→【暗号通貨価格】・1文・末尾に限定表現）に合わせた
+    # 共通フィクスチャ（書式を見るWARNが他のテストの警告件数に混ざらないようにするため）。
+    "part2_flow": ["【出来事・ニュース】規制当局が発言した → 【地政学・マクロの変化】好感された可能性 → "
+                   "【暗号通貨価格】主要銘柄の上昇が同時期に確認されたが、因果は未確認です。"],
     "part2_summary": "地合いは総じて改善。継続的な確認が必要。",
 }
 
@@ -6021,6 +6024,74 @@ check("v1.93のプロンプト: scheduled_event_matchは機械的な目印であ
       "`scheduled_event_match`" in generate_post.SCHEDULED_EVENTS_GUIDANCE
       and "事実の根拠でも採否の根拠でもありません" in generate_post.SCHEDULED_EVENTS_GUIDANCE
       and generate_post.SCHEDULED_EVENTS_GUIDANCE in _A93)
+
+print("=== v1.94（オーナー承認）: 市場のフローの書式のWARN（統合運用基準§3.3） ===")
+_OK1 = ("【出来事・ニュース】米国の9月の雇用統計が市場予想を下回ったとReutersが報じました → 【地政学・マクロの変化】利上げ観測の後退が意識された可能性があります → "
+        "【中間市場指標・市場心理】債券利回りの低下が確認されたとされます → 【暗号通貨価格】BTC・ETHは同時期に下落しましたが、因果は未確認です。 #BTC #ETH")
+_OK2 = "【出来事・ニュース】G7が備蓄放出に合意しました（Reuters、10月2日。公式発表は未確認） → 【暗号通貨価格】BTC・ETHは小幅な動きにとどまり、因果は未確認です。"
+_fv = verify_post.find_flow_format_violations
+check("フロー書式: §3.3どおりの1本（4段階・矢印3本・1文・末尾に限定表現・タグは末尾）は違反なし",
+      _fv("・" + _OK1) == [] and _fv(_OK1) == [])
+check("フロー書式: 複数連鎖は①②から連番で、①②で始まる行（「・」なし）が違反なし。全角括弧内の句点は文数に数えない",
+      _fv("①" + _OK1 + "\n②" + _OK2) == [])
+check("フロー書式: 材料が無い日の定型文1件のみ・空・None・空行だけは対象外",
+      _fv(generate_post.FIXED_FLOW) == [] and _fv("・" + generate_post.FIXED_FLOW) == [] and _fv("") == []
+      and _fv(None) == [] and _fv("\n \n") == [])
+_prose = ("・FRBの手続きに関する発表が相次ぎました。暗号通貨への直接の言及は確認できません。BTC・ETHは24時間比でいずれも下落となりました。 #BTC #ETH")
+_vp = _fv(_prose)
+check("フロー書式: 10/2型（ラベルも矢印も無い散文・3文）は、ラベル欠落・矢印なし・1文でない・先頭が違う等で違反になる",
+      len(_vp) == 1 and {"no_event_label", "no_price_label", "not_start_event", "no_arrows", "sentences"} <= set(_vp[0]["reasons"])
+      and _vp[0]["chain_no"] == 1, str(_vp))
+def _reasons(text): return set(c for v in _fv(text) for c in v["reasons"])
+check("フロー書式: 【暗号通貨価格】が無い／【出来事・ニュース】が無い／先頭が違う",
+      "no_price_label" in _reasons("【出来事・ニュース】aが起きました → 【地政学・マクロの変化】bの可能性があります。")
+      and {"no_event_label", "not_start_event"} <= _reasons("【地政学・マクロの変化】bが意識された可能性 → 【暗号通貨価格】cで因果は未確認です。"))
+check("フロー書式: 段階の順序違反・同じ段階の重複・矢印の直後がラベルでない・矢印の不足",
+      "label_order" in _reasons("【出来事・ニュース】a → 【暗号通貨価格】c → 【地政学・マクロの変化】bの可能性があります。")
+      and "label_dup" in _reasons("【出来事・ニュース】a → 【出来事・ニュース】b → 【暗号通貨価格】cで因果は未確認です。")
+      and "arrow_label_mismatch" in _reasons("【出来事・ニュース】a → 好感された可能性 → 【暗号通貨価格】cで因果は未確認です。")
+      and "arrows" in _reasons("【出来事・ニュース】a 【地政学・マクロの変化】b → 【暗号通貨価格】cで因果は未確認です。"))
+check("フロー書式: 文数（句点が2つ・句点が無い）はNG。全角括弧内の句点は数えない",
+      "sentences" in _reasons("【出来事・ニュース】a → 【暗号通貨価格】cでした。因果は未確認です。")
+      and "sentences" in _reasons("【出来事・ニュース】a → 【暗号通貨価格】cで因果は未確認です")
+      and "sentences" not in _reasons(_OK2))
+check("フロー書式: ハッシュタグは連鎖の末尾（句点の後）だけ。途中・句点の前はNG",
+      "tag_in_body" in _reasons("【出来事・ニュース】a #BTC → 【暗号通貨価格】cで因果は未確認です。")
+      and "tag_not_after_period" in _reasons("【出来事・ニュース】a → 【暗号通貨価格】cで因果は未確認です #BTC")
+      and not (_reasons("・" + _OK1) & {"tag_in_body", "tag_not_after_period"}))
+_ok_a = "【出来事・ニュース】a → 【暗号通貨価格】cで因果は未確認です。"
+check("フロー書式: ①②③の付け方（複数なら①から連番・1本なら付けない）と最大3本",
+      "numbering" in _reasons("・" + _ok_a + "\n・" + _ok_a) and "numbering" in _reasons("①" + _ok_a)
+      and "numbering" in _reasons("②" + _ok_a + "\n①" + _ok_a)
+      and _reasons("①" + _ok_a + "\n②" + _ok_a + "\n③" + _ok_a) == set()
+      and "too_many_chains" in _reasons("\n".join(("①②③④"[i] if i < 3 else "・") + _ok_a for i in range(4))))
+check("フロー書式: 末尾（句点の直前45字以内）に限定表現が無い連鎖は違反（語幹で判定。「とみられます」「意識された可能性」等は許容）",
+      "no_limit_at_end" in _reasons("【出来事・ニュース】a → 【暗号通貨価格】BTCが上昇しました。")
+      and "no_limit_at_end" not in _reasons("【出来事・ニュース】a → 【暗号通貨価格】BTCが上昇したとみられます。")
+      and "no_limit_at_end" not in _reasons("【出来事・ニュース】a → 【暗号通貨価格】BTCが上昇し、断定はできません。"))
+_au_f = verify_post.Audit()
+verify_post.check_flow_format_warn(_au_f, {"part2_flow": "①" + _OK1 + "\n②" + "【出来事・ニュース】a → 【暗号通貨価格】cでした。因果は未確認です。"})
+check("フロー書式のWARN: 違反のある連鎖ごとに1件（何本目か・理由・連鎖を含む）。FAILにしない",
+      len(_au_f.warnings) == 1 and _au_f.warnings[0]["id"] == "W_flow_format" and _au_f.warnings[0]["chain_no"] == 2
+      and "市場のフローの2本目が書式（統合運用基準§3.3）から外れています" in _au_f.warnings[0]["detail"]
+      and "1文でない" in _au_f.warnings[0]["detail"] and _au_f.failed == 0, str(_au_f.warnings))
+check("フロー書式のWARN: 種類は登録簿に登録済みで、STATUSの種類別件数・警告ブロックに「フロー書式」として出る",
+      verify_post.warning_kind_label("W_flow_format") == "フロー書式"
+      and _wk(flow=1).endswith("フロー書式1") and "フロー書式1" in verify_post.format_warning_counts(_au_f.warnings)
+      and "⚠ [フロー書式] 市場のフローの2本目" in repair_post.render_warning_block(
+          {"warnings": _au_f.warnings, "final_failing_checks": [], "final_failing_check_details": []}))
+_hf = json.loads(json.dumps(_b_dir)); _hf["sections"]["part2_flow"] = _prose
+check("run_all: 書式の警告は他の監査項目の結果（failed）を変えない（FAILにしない）。散文のフローでも警告になる",
+      any(w["id"] == "W_flow_format" for w in verify_post.run_all(_hf, DAILY_DATA).warnings)
+      and verify_post.run_all(_hf, DAILY_DATA).failed == verify_post.run_all(json.loads(json.dumps(_b_dir)), DAILY_DATA).failed)
+# 実データ（本番にコミット済みの投稿・読み取りのみ）
+_ff = {}
+for _bp in sorted((REPO / "outputs").glob("2026-*/draft/post_bundle.json")):
+    _bb = json.loads(_bp.read_text(encoding="utf-8"))
+    _ff[_bp.parent.parent.name] = _fv(_bb["sections"].get("part2_flow"))
+check("実データ: 書式どおりだった本番9/30は警告なし・L1の定型文の10/1は対象外・書式外だった10/2は2連鎖とも警告",
+      _ff["2026-09-30"] == [] and _ff["2026-10-01"] == [] and [v["chain_no"] for v in _ff["2026-10-02"]] == [1, 2]
+      and all("no_event_label" in v["reasons"] and "sentences" in v["reasons"] for v in _ff["2026-10-02"]), str(_ff["2026-10-02"]))
 
 print()
 print(f"PASS: {len(PASS)}  FAIL: {len(FAIL)}")
