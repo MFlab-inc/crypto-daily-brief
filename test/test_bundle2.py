@@ -5707,7 +5707,10 @@ _write_post("2026-09-29", "米ホワイトハウスがStablecoin Clarity法案�
 _write_post("2026-09-30", "G7が備蓄放出に合意しました。", "・原油価格が低下しました（Reuters、9月30日）。")
 _write_post("2026-10-01", "SECがトークン化株式の免除を公表しました。", "・SECの発表を受け市場が反応しました（SEC、10月1日）。")
 _write_post("2026-09-20", "古い投稿（7日より前）です。", "・古い項目です（CoinDesk、9月20日）。")
+_write_post("2026-10-01", "SECがトークン化株式の免除を公表しました。 #BTC #ETH", "・SECの発表を受け市場が反応しました（SEC、10月1日）。")
 _pp = generate_post._load_previous_posts("2026-10-02", outputs_root=_PR)
+check("_load_previous_posts: 過去の見出しに残るハッシュタグ（v1.91より前の「 #BTC #ETH」）はpayloadから除く（モデルが真似てタグを付けないため）",
+      _pp[0]["part1_headline"] == "SECがトークン化株式の免除を公表しました。" and "#" not in json.dumps(_pp, ensure_ascii=False), str(_pp[0]))
 check("_load_previous_posts: 対象日より前の投稿を新しい順に最大3件、7日以内から集める（定型文だけ・ファイル無し・壊れたファイルの日は飛ばす）",
       [p["date"] for p in _pp] == ["2026-10-01", "2026-09-30", "2026-09-29"], str([p["date"] for p in _pp]))
 check("_load_previous_posts: 各要素はdate・part1_headline・part1_points（「・」始まりの行のリスト）",

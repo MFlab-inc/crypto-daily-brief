@@ -1470,6 +1470,13 @@ _REUSABLE_NON_DISTINCTIVE = frozenset({
 })
 
 
+_HASHTAG_RE = re.compile(r"\s*(?<![A-Za-z0-9_])#[A-Za-z0-9_]+")
+
+
+def _strip_hashtags(text: str) -> str:
+    return _HASHTAG_RE.sub("", text).strip()
+
+
 def _is_fixed_post(headline: str, points: str) -> bool:
     return headline.strip().startswith(FIXED_HEADLINE.rstrip("。")) and points.strip().startswith(FIXED_POINTS.rstrip("。"))
 
@@ -1494,8 +1501,10 @@ def _load_previous_posts(target_date: str, outputs_root: Path | None = None) -> 
         headline, points = sections.get("part1_headline"), sections.get("part1_points")
         if not isinstance(headline, str) or not isinstance(points, str) or _is_fixed_post(headline, points):
             continue
-        result.append({"date": d, "part1_headline": headline,
-                       "part1_points": [ln.strip() for ln in points.split("\n") if ln.strip()]})
+        # 過去の見出しには、v1.91より前の指示で付いたハッシュタグ（「 #BTC #ETH」）が残っている。
+        # モデルが前日以前の見出しの形を真似てタグを付けないよう、payloadからはタグを除く。
+        result.append({"date": d, "part1_headline": _strip_hashtags(headline),
+                       "part1_points": [_strip_hashtags(ln) for ln in points.split("\n") if ln.strip()]})
         if len(result) >= PREVIOUS_POSTS_MAX:
             break
     return result
