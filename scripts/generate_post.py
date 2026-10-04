@@ -675,7 +675,9 @@ WRITES_A = """## あなたが書くもの
 - 採用（use:true）した材料はすべて part1_headline・part1_points に載せる
   （reusable_for_summaryに回さない）。載せない材料は use:false にする。
   part1_pointsの項目は、ヘッドラインの繰り返しにしない（同じ材料を重ねて
-  項目枠を使わない）。"""
+  項目枠を使わない）。上限4項目に収まらない場合は、関連する材料を1項目に
+  まとめる。まとめられない場合は、重要度の低い材料を use:false にする
+  （載せないまま use:true のままにしない・reusable_for_summaryへ回さない）。"""
 
 OUTPUT_FORMAT_A = """## 出力形式
 

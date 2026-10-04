@@ -26,6 +26,9 @@ import compose_numeric  # noqa: E402
 import repair_post  # noqa: E402
 import indicator_events  # noqa: E402
 
+# リトライの待機（本番は2秒・4秒）は、テストでは0にして実行時間を短くする（待機はリトライの回数・内容には影響しない）。
+generate_post.RETRY_DELAYS_SEC = (0, 0)
+
 
 # 警告の種類別件数の期待文字列を、登録簿（verify_post.WARNING_KINDS）から作る（警告の種類が増えてもテストが壊れないように）。
 # 例: _wk(direction=1) → 「向きの食い違い1・見出しのタグ0・指標日の見出し0…」
@@ -5852,7 +5855,8 @@ check("R1: 出力形式は {text, carried_from, candidate_ids} 形式で、形�
       and "システムが機械的に除外する" in _A)
 check("R1: 採用（use:true）した材料はすべて主要なポイントへ載せる／載せない材料はuse:false／ヘッドラインの繰り返しにしない（オーナー指示）",
       "採用（use:true）した材料はすべて part1_headline・part1_points に載せる" in _A
-      and "載せない材料は use:false にする" in _A and "ヘッドラインの繰り返しにしない" in _A)
+      and "載せない材料は use:false にする" in _A and "ヘッドラインの繰り返しにしない" in _A
+      and "上限4項目に収まらない場合は、関連する材料を1項目に" in _A and "重要度の低い材料を use:false にする" in _A)
 check("R1: tier4はreusable_for_summaryを含め本文・総括のどこにも書かない（情報源規律の抜け道を残さない）。旧指示（継続監視の対象としてreusableに記す）は残っていない",
       "reusable_for_summaryにも書かない" in _A
       and "継続監視の対象として reusable_for_summary に記す" not in _A
@@ -6189,7 +6193,6 @@ check("リトライ指示: 重なり係数の説明（共通語数÷語数の少
 check("リトライ指示: 1試行目のuser_contentには含まれない（修正指示は2回目以降だけ）。3試行目も直前（2回目）の理由に更新される",
       "システムが判定した" not in _c_blast.messages.calls[0]["messages"][0]["content"]
       and "システムが判定した" in _c_blast.messages.calls[2]["messages"][0]["content"])
-_pc = generate_post.call_a(FakeClient(lambda kw, n: json_response(_pair_claim_response(kw))), DAILY_DATA, NEWS_PAIR_CANDIDATES, None, 0.6)
 _c_p6 = FakeClient(lambda kw, n: json_response(_pair_claim_response(kw)))
 generate_post.call_a(_c_p6, DAILY_DATA, NEWS_PAIR_CANDIDATES, None, 0.6)
 check("リトライ指示: 閾値は呼び出しに使った値（0.6）がそのまま出る（重なり係数0.50が閾値0.6に届かない）",
