@@ -45,6 +45,7 @@ from typing import Any, Callable
 import anthropic
 
 import collect_news
+import indicator_events
 
 MODEL = "claude-sonnet-5"
 # v1.21: 4000→8000へ再引き上げ。v1.20でtier3（CoinDesk・Cointelegraph）を
@@ -279,7 +280,15 @@ SCHEDULED_EVENTS_GUIDANCE = """## 経済カレンダー（scheduled_events）
 です。これらは「探すべき材料」のヒントであり、それ自体を材料として本文に
 書いてはいけません。対応するRSS候補が存在する場合に限り、通常の採否判定
 （tier1・tier2の裏付け、または独立2ソース）を経て本文へ反映してください。
-予定はあったが候補が無い場合は、その旨を書かず、単に掲載しないでください。"""
+予定はあったが候補が無い場合は、その旨を書かず、単に掲載しないでください。
+
+重要度High・米国（USD）の指標の日は、その指標に対応しうる候補に
+`scheduled_event_match`（例:「雇用統計（Non-Farm Employment Change）」）が
+付きます（v1.93・オーナー承認）。これはタイトルのキーワード照合による
+機械的な目印であり、事実の根拠でも採否の根拠でもありません（採否は
+従来どおりtier・独立2ソースの規律で判断する）。目印があっても指標と
+無関係な記事なら無視してよい。目印が付いた候補をuse:trueにした場合の
+ヘッドラインでの扱いは、下記「①の中での主題の選び方」に従う。"""
 
 RULES_CAUSAL = """## 因果表現
 
@@ -507,6 +516,24 @@ notable_move: true の銘柄があっても、それを理由にヘッドライ�
 ①〜③は本文の構成方針を表す優先順位であり、下記audit_ledgerの
 reasonで使うA/B/C——個々の候補材料の重要性判定（「重要性判定と
 因果表現の分離」参照）——とは別の分類である。混同しないこと。
+
+### ①の中での主題の選び方（v1.93・オーナー指示）
+
+①で、use:trueとした材料が複数ある場合、part1_headline（①のheadline_for_imageも同じ）の
+主題は次の順で決める。A/B/Cの分類やtierの違い（tier1かtier2か）では決めない。
+
+(1) 指標日: 入力の daily_data.scheduled_events に、重要度High・米国（USD）の
+    経済指標（雇用統計・CPI・PPI・PCE・GDP・FOMC など）があり、それに対応する
+    材料（候補の scheduled_event_match が付いたもの）をuse:trueにした場合は、
+    原則としてその材料をpart1_headlineの主とする。指標の結果（予想との比較等）を、
+    候補のtitle・summaryに書かれている事実の範囲で書く。
+(2) 例外: 暗号通貨に直接関わる大型の制度材料——SEC・CFTC等の規則案・最終規則・
+    登録承認、ETFの承認など——が公式発表（tier1）で確認できる日は、その材料を
+    part1_headlineの主とする。この場合、(1)の指標の材料はpart1_pointsの1番目に置く。
+(3) 手続き的な発表: 暗号通貨との関係が薄い個別の申請の承認、意見募集期間の延長
+    など手続き的な発表は、use:trueにしてもpart1_headlineの主題にしない
+    （part1_pointsに載せる）。
+(1)〜(3)に当てはまる材料が無い日は、暗号通貨市場への関わりの大きい材料を主とする。
 
 ### ②（(i)なし・(ii)あり）の詳細
 
@@ -1361,6 +1388,21 @@ def _reconstruct_audit_ledger(llm_entries: Any, id_to_candidate: dict[int, dict]
     return reconstructed
 
 
+def _flag_scheduled_event_matches(candidates: list[dict], scheduled_events: Any) -> list[dict]:
+    """v1.93（オーナー承認・案2）: 当日の候補のうち、その日のHigh米指標（scheduled_events）に対応しうる
+    ものに、機械的な目印 `scheduled_event_match`（例: 「雇用統計（Non-Farm Employment Change）」）を付ける。
+    対象はtier1〜3（tier4は候補発見のみで採否の対象外）。キーワード照合による目印にすぎず、事実の根拠でも
+    採否の根拠でもない。指標日でない日（Highの米指標が無い日）は何も付けない。元の候補は変更しない。"""
+    families = indicator_events.high_us_event_families(scheduled_events)
+    if not families:
+        return candidates
+    out = []
+    for c in candidates:
+        label = indicator_events.match_label(c.get("title", ""), families) if c.get("tier") in (1, 2, 3) else ""
+        out.append({**c, "scheduled_event_match": label} if label else c)
+    return out
+
+
 def _build_call_a_user_content(daily_data: dict, news_today: dict, news_yesterday: dict | None,
                                 pair_overlap_threshold: float = PAIR_OVERLAP_THRESHOLD_DEFAULT,
                                 previous_posts: list[dict] | None = None
@@ -1374,7 +1416,9 @@ def _build_call_a_user_content(daily_data: dict, news_today: dict, news_yesterda
         "target_date_jst": daily_data.get("target_date_jst", ""),
         "weekday_jp": daily_data.get("weekday_jp", ""),
         "daily_data": daily_data,
-        "news_candidates_today": _label_eligibility(selected_today),
+        # v1.93: 指標日は、その日のHigh米指標に対応しうる候補にscheduled_event_matchの目印を付ける
+        "news_candidates_today": _label_eligibility(
+            _flag_scheduled_event_matches(selected_today, daily_data.get("scheduled_events"))),
         "news_candidates_yesterday": _label_eligibility(selected_yesterday),
         # v1.92（オーナー承認）: 前日以前の投稿本文（reusable_for_summaryの「前日以前の投稿本文で扱った
         # 材料」の比較対象）。news_candidates_yesterdayは本番では常に空だったため、この項目を追加した。

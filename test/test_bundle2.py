@@ -24,6 +24,19 @@ import collect_news  # noqa: E402
 import fetch_data  # noqa: E402
 import compose_numeric  # noqa: E402
 import repair_post  # noqa: E402
+import indicator_events  # noqa: E402
+
+
+# 警告の種類別件数の期待文字列を、登録簿（verify_post.WARNING_KINDS）から作る（警告の種類が増えてもテストが壊れないように）。
+# 例: _wk(direction=1) → 「向きの食い違い1・見出しのタグ0・指標日の見出し0…」
+_WK_SHORT = {"direction": "W_direction_mismatch", "hashtag": "W_headline_hashtag", "indicator": "W_indicator_headline",
+             "flow": "W_flow_format", "media": "W_media_mismatch"}
+
+
+def _wk(**counts):
+    ids = {_WK_SHORT[k]: v for k, v in counts.items()}
+    return "・".join(f"{label}{ids.get(wid, 0)}" for wid, label in verify_post.WARNING_KINDS)
+
 
 PASS = []
 FAIL = []
@@ -3759,7 +3772,7 @@ check("repair_post.main(): 修正対象が無い日（PASS）でもGENERATION_ST
       "（見出しは実際に評価したチェックから作る。v1.85: C12〜C24・C26〜C28・計17項目）",
       "本文機械監査（C12〜C24・C26〜C28・計17項目）: overall=PASS" in _status_e2e_text, _status_e2e_text)
 check("repair_post.main(): 警告が無い日はファイル先頭に警告ブロックを置かず、「警告なし」と1行で示す（v1.85）",
-      _status_e2e_text.startswith("level: L0") and "向きの食い違い・その他の警告チェック（警告のみ・FAILにしない）: 警告なし（向きの食い違い0・見出しのタグ0）" in _status_e2e_text,
+      _status_e2e_text.startswith("level: L0") and "向きの食い違い・その他の警告チェック（警告のみ・FAILにしない）: 警告なし（" + _wk() + "）" in _status_e2e_text,
       _status_e2e_text)
 
 print("=== generate_post: 呼び出しBへのdaily_data除外（v1.82・オーナー承認） ===")
@@ -4839,14 +4852,14 @@ _REPAIR_RES = {"final_failing_checks": [], "final_failing_check_details": [], "c
                "warnings": _au_dir.warnings}
 _blk = repair_post.render_warning_block(_REPAIR_RES)
 check("警告ブロック: 先頭に「⚠⚠ 警告」・件数・FAILではない旨・警告の内容を含み、警告が無ければ空文字列",
-      _blk.startswith("⚠⚠ 警告1件（向きの食い違い1・見出しのタグ0） — FAILではありません") and "投稿前に本文を見直してください" in _blk
+      _blk.startswith("⚠⚠ 警告1件（" + _wk(direction=1) + "） — FAILではありません") and "投稿前に本文を見直してください" in _blk
       and "⚠ [向きの食い違い] " in _blk and "向きが食い違っています" in _blk and repair_post.render_warning_block({**_REPAIR_RES, "warnings": []}) == "", _blk)
 check("警告ブロック: コスト記録のステップが抽出する「input=」「output=」の文字列を含まない（daily.ymlのgrep -oPを壊さない）",
       "input=" not in _blk and "output=" not in _blk)
 _note = repair_post.render_final_audit_note(_REPAIR_RES)
 check("最終監査の表記: 見出しは実際に評価したチェックのID（C12〜C24・C26〜C28・計17項目）から作り、警告の件数とファイル先頭に表示する旨を示す",
       "本文機械監査（C12〜C24・C26〜C28・計17項目）: overall=PASS" in _note
-      and "警告1件（向きの食い違い1・見出しのタグ0）（ファイル先頭に表示）" in _note, _note)
+      and "警告1件（" + _wk(direction=1) + "）（ファイル先頭に表示）" in _note, _note)
 check("最終監査の表記: 古い固定文言（C12〜C24のみ）が残っていない／結果dictにchecked_idsが無い旧形式でも例外にならない",
       "（C12〜C24）" not in _note
       and "本文機械監査（C12〜C24）" in repair_post.render_final_audit_note({"final_failing_checks": [], "final_failing_check_details": []}))
@@ -4867,8 +4880,8 @@ finally:
     repair_post.anthropic.Anthropic = _orig_anthropic_client
 _status_w = _status_w_path.read_text(encoding="utf-8")
 check("repair_post.main(): 警告がある日はGENERATION_STATUS.mdの先頭に警告ブロックを置き、最終監査の記録（警告N件）も追記する",
-      _status_w.startswith("⚠⚠ 警告1件（向きの食い違い1・見出しのタグ0）") and "level: L0" in _status_w
-      and "向きの食い違い・その他の警告チェック（警告のみ・FAILにしない）: 警告1件（向きの食い違い1・見出しのタグ0）" in _status_w, _status_w[:400])
+      _status_w.startswith("⚠⚠ 警告1件（" + _wk(direction=1) + "）") and "level: L0" in _status_w
+      and "向きの食い違い・その他の警告チェック（警告のみ・FAILにしない）: 警告1件（" + _wk(direction=1) + "）" in _status_w, _status_w[:400])
 check("repair_post.main(): 警告ブロックを先頭に置いても、コスト記録の抽出（grep -oP '(?<=input=)[0-9]+' | head -1）は従来どおり12345・678",
       __import__("re").findall(r"(?<=input=)[0-9]+", _status_w)[0] == "12345"
       and __import__("re").findall(r"(?<=output=)[0-9]+", _status_w)[0] == "678", _status_w[:300])
@@ -5355,7 +5368,7 @@ check("render_final_audit_note: check_countsが無い旧形式の入力では従
 _orig_checks_note = repair_post.render_final_audit_note(_res_cnt)
 check("render_final_audit_note: 件数の併記は表示のみ（FAILしたチェックの詳細行・警告行は従来どおり）",
       "FAILしたチェックはありません。" in _orig_checks_note
-      and "向きの食い違い・その他の警告チェック（警告のみ・FAILにしない）: 警告なし（向きの食い違い0・見出しのタグ0）" in _orig_checks_note)
+      and "向きの食い違い・その他の警告チェック（警告のみ・FAILにしない）: 警告なし（" + _wk() + "）" in _orig_checks_note)
 # repair()の結果にも件数が入る（実際のrun_allの結果から）。L1の本文でrepair()を通す
 _REPAIR_CNT_DATE = "2026-08-17"
 Path(f"outputs/{_REPAIR_CNT_DATE}/draft").mkdir(parents=True, exist_ok=True)
@@ -5662,19 +5675,19 @@ _hb3 = json.loads(json.dumps(_hb2)); _hb3["sections"]["part2_flow"] = "①【出
 check("見出しのタグのWARN: 市場のフローの連鎖末尾のタグは対象外（従来どおり許容）",
       not [w for w in verify_post.run_all(_hb3, DAILY_DATA).warnings if w["id"] == "W_headline_hashtag"])
 check("format_warning_counts: 登録済みの種類は0件でも毎回表示し、未登録IDは「その他」にまとめる（0件なら出さない）",
-      verify_post.format_warning_counts([]) == "向きの食い違い0・見出しのタグ0"
+      verify_post.format_warning_counts([]) == _wk()
       and verify_post.format_warning_counts([{"id": "W_headline_hashtag"}, {"id": "W_direction_mismatch"}, {"id": "W_direction_mismatch"}])
-      == "向きの食い違い2・見出しのタグ1"
-      and verify_post.format_warning_counts([{"id": "W_unknown"}]) == "向きの食い違い0・見出しのタグ0・その他1"
-      and verify_post.format_warning_counts(None) == "向きの食い違い0・見出しのタグ0")
+      == _wk(direction=2, hashtag=1)
+      and verify_post.format_warning_counts([{"id": "W_unknown"}]) == _wk() + "・その他1"
+      and verify_post.format_warning_counts(None) == _wk())
 _res_two = {"final_failing_checks": [], "final_failing_check_details": [], "checked_ids": "C12〜C24・C26〜C28・計17項目",
             "warnings": _au_dir.warnings + _hw}
 _blk2 = repair_post.render_warning_block(_res_two)
 check("警告ブロック: 種類別の件数が見出しに出て、各警告の先頭に種類名が付く（向きの食い違いと見出しのタグが同じ欄に並ぶ）。input=／output=は含まない",
-      _blk2.startswith("⚠⚠ 警告2件（向きの食い違い1・見出しのタグ1）") and "⚠ [向きの食い違い] " in _blk2
+      _blk2.startswith("⚠⚠ 警告2件（" + _wk(direction=1, hashtag=1) + "）") and "⚠ [向きの食い違い] " in _blk2
       and "⚠ [見出しのタグ] ヘッドラインにハッシュタグ（#BTC #ETH）" in _blk2 and "input=" not in _blk2 and "output=" not in _blk2, _blk2)
 check("最終監査の表記: 警告の種類別件数が1行に出る（件数0の種類も表示）",
-      "向きの食い違い・その他の警告チェック（警告のみ・FAILにしない）: 警告2件（向きの食い違い1・見出しのタグ1）（ファイル先頭に表示）"
+      "向きの食い違い・その他の警告チェック（警告のみ・FAILにしない）: 警告2件（" + _wk(direction=1, hashtag=1) + "）（ファイル先頭に表示）"
       in repair_post.render_final_audit_note(_res_two), repair_post.render_final_audit_note(_res_two))
 # 実データ（本番にコミット済みのbundle）: v1.70（9/8）より前の日はタグ無しで警告なし、タグ付きの日は警告になる（読み取りのみ）
 _tag_days, _pre_days = [], []
@@ -5880,6 +5893,134 @@ for _bp in sorted((REPO / "outputs").glob("2026-*/draft/post_bundle.json")):
             _kept_items += 1
 check("実データ: 過去のreusable_for_summary（当日の材料が大半）に機械フィルタを当てはめると、保持されるのは2割未満（試算で50件中4件）",
       _tot_items >= 48 and _kept_items / _tot_items < 0.2, f"{_kept_items}/{_tot_items}")
+
+print("=== v1.93（オーナー承認）: 指標日の見出しの規則（プロンプト）・候補への目印（scheduled_event_match）・指標日の見出しのWARN ===")
+_SE_JOBS = [{"title": "Non-Farm Employment Change", "country": "USD", "impact": "High"},
+            {"title": "Unemployment Rate", "country": "USD", "impact": "High"},
+            {"title": "Average Hourly Earnings m/m", "country": "USD", "impact": "High"},
+            {"title": "BOJ Press Conference", "country": "JPY", "impact": "High"},
+            {"title": "CPI m/m", "country": "USD", "impact": "Medium"}]
+_fam_jobs = indicator_events.high_us_event_families(_SE_JOBS)
+check("indicator_events: 重要度High・米国（USD）の指標だけを指標ファミリーにまとめる（他国・Medium・形式不正は対象外）",
+      [f["family"]["key"] for f in _fam_jobs] == ["jobs"] and len(_fam_jobs[0]["events"]) == 3
+      and indicator_events.high_us_event_families(None) == [] and indicator_events.high_us_event_families("x") == []
+      and indicator_events.high_us_event_families([{"title": 1}, "a", None]) == []
+      and [f["family"]["key"] for f in indicator_events.high_us_event_families(
+          [{"title": "Core PCE Price Index m/m", "country": "USD", "impact": "High"},
+           {"title": "Final GDP q/q", "country": "USD", "impact": "High"},
+           {"title": "FOMC Statement", "country": "USD", "impact": "High"},
+           {"title": "Federal Funds Rate", "country": "USD", "impact": "High"},
+           {"title": "ISM Manufacturing PMI", "country": "USD", "impact": "High"}])] == ["pce", "gdp", "fomc", "ism"])
+check("indicator_events: 候補のtitle（英語）が指標に対応するときだけ目印の文字列を返す（雇用統計・PCE等の実際の過去日の候補）",
+      indicator_events.match_label("US job growth undershoots expectations in September, but labor market remains stable", _fam_jobs)
+      == "雇用統計（Non-Farm Employment Change／Unemployment Rate／Average Hourly Earnings m/m）"
+      and indicator_events.match_label("Bitcoin briefly hits $87K as weak US jobs data sends bond yields lower", _fam_jobs) != ""
+      and indicator_events.match_label("FRB approves Fleur Capital application", _fam_jobs) == ""
+      and indicator_events.match_label(None, _fam_jobs) == "" and indicator_events.match_label("jobs", []) == "")
+check("indicator_events: 見出し（日本語）が指標に触れているかを判定する",
+      indicator_events.headline_mentions("米国の9月の雇用統計が予想を下回りました。", _fam_jobs[0]["family"])
+      and not indicator_events.headline_mentions("FRBがFleur Capitalの申請承認を発表しました。", _fam_jobs[0]["family"])
+      and not indicator_events.headline_mentions(None, _fam_jobs[0]["family"]))
+_cands = [{"candidate_id": 1, "tier": 2, "source": "Reuters", "title": "US job growth undershoots expectations"},
+          {"candidate_id": 2, "tier": 1, "source": "FRB", "title": "Federal Reserve Board approves application by Fleur"},
+          {"candidate_id": 3, "tier": 3, "source": "CoinDesk", "title": "Weak US jobs data sends Bitcoin lower"},
+          {"candidate_id": 4, "tier": 4, "source": "Google News", "title": "US jobs report preview"}]
+_fl = generate_post._flag_scheduled_event_matches(_cands, _SE_JOBS)
+check("scheduled_event_match: 指標日は、対応しうるtier1〜3の候補にだけ目印が付く（無関係な候補・tier4には付かない）。元の候補は変更しない",
+      _fl[0].get("scheduled_event_match", "").startswith("雇用統計（") and "scheduled_event_match" not in _fl[1]
+      and _fl[2].get("scheduled_event_match", "").startswith("雇用統計（") and "scheduled_event_match" not in _fl[3]
+      and all("scheduled_event_match" not in c for c in _cands), str(_fl))
+check("scheduled_event_match: 指標日でない日（Highの米指標が無い・scheduled_eventsが無い）は何も付けない",
+      generate_post._flag_scheduled_event_matches(_cands, []) == _cands
+      and generate_post._flag_scheduled_event_matches(_cands, None) == _cands
+      and generate_post._flag_scheduled_event_matches(_cands, [{"title": "CPI m/m", "country": "USD", "impact": "Low"}]) == _cands)
+_dd_ind = json.loads(json.dumps(DAILY_DATA)); _dd_ind["scheduled_events"] = _SE_JOBS
+_news_ind = {"candidates": [{"tier": 2, "source": "Reuters", "title": "US job growth undershoots expectations", "summary": "x",
+                             "url": "https://e/1", "published_at": "2026-10-02T01:00:00+09:00"},
+                            {"tier": 1, "source": "FRB", "title": "Fed approves Fleur", "summary": "y", "url": "https://e/2",
+                             "published_at": "2026-10-02T02:00:00+09:00"}], "source_status": {}}
+_uc_ind, _, _id_ind = generate_post._build_call_a_user_content(_dd_ind, _news_ind, None)
+_pl_ind = json.loads(_uc_ind)["news_candidates_today"]
+check("call_Aのpayload: 指標日は対応候補にscheduled_event_matchが付く。台帳復元に使う候補（id_to_candidate）は目印で変わらない",
+      sum(1 for c in _pl_ind if c.get("scheduled_event_match")) == 1
+      and all("scheduled_event_match" not in c for c in _id_ind.values()), str(_pl_ind))
+
+# 指標日の見出しのWARN
+_led_jobs = [{"source": "Reuters", "title": "US job growth undershoots expectations in September", "decision": "採用", "reason": "x", "verified_by": "", "url": "", "published_at": ""},
+             {"source": "FRB", "title": "Federal Reserve Board approves application by Fleur", "decision": "採用", "reason": "x", "verified_by": "", "url": "", "published_at": ""}]
+
+
+def _ind_warn(headline, points, ledger=_led_jobs, se=_SE_JOBS):
+    au = verify_post.Audit()
+    verify_post.check_indicator_headline_warn(au, {"part1_headline": headline, "part1_points": points}, ledger, se)
+    return au
+
+
+_au_i = _ind_warn("FRBがFleur Capitalの申請の承認を発表しました。", "・FRBは承認を発表しました。\n・米国の9月の雇用統計は予想を下回りました。")
+check("指標日の見出しのWARN: 指標に対応する採用済みの材料があるのに見出しがその指標に触れていない日は警告（10/2型）。FAILにはならない",
+      len(_au_i.warnings) == 1 and _au_i.warnings[0]["id"] == "W_indicator_headline" and _au_i.warnings[0]["family"] == "jobs"
+      and "雇用統計に触れていません" in _au_i.warnings[0]["detail"] and "指標日（雇用統計: " in _au_i.warnings[0]["detail"]
+      and "US job growth undershoots" in _au_i.warnings[0]["detail"] and _au_i.failed == 0, str(_au_i.warnings))
+check("指標日の見出しのWARN: 警告に「主要なポイントの1番目が指標に触れているか」を添える（例外（2）に従った日かをオーナーが目視で判断できる）",
+      "主要なポイントの1番目は触れていません" in _au_i.warnings[0]["detail"] and _au_i.warnings[0]["points_first_mentions"] is False
+      and "目視で確認してください" in _au_i.warnings[0]["detail"])
+_au_exc = _ind_warn("SECが暗号資産の規則案を公表しました。", "・米国の9月の雇用統計は予想を下回りました。\n・FRBは承認を発表しました。")
+check("指標日の見出しのWARN: 例外（2）の形（見出しは制度材料・指標は主要なポイントの1番目）でも警告は出る（目視用）が、「1番目は触れています」と示す",
+      len(_au_exc.warnings) == 1 and "主要なポイントの1番目は触れています" in _au_exc.warnings[0]["detail"]
+      and _au_exc.warnings[0]["points_first_mentions"] is True)
+check("指標日の見出しのWARN: 見出しが指標に触れていれば警告なし",
+      _ind_warn("米国の9月の雇用統計が市場予想を下回りました。", "・x").warnings == [])
+check("指標日の見出しのWARN: 採用されていない（不採用）対応候補・対応候補が無い日・指標日でない日・定型文の見出しは警告なし",
+      _ind_warn("FRBが承認を発表しました。", "・x", ledger=[{**_led_jobs[0], "decision": "不採用"}, _led_jobs[1]]).warnings == []
+      and _ind_warn("FRBが承認を発表しました。", "・x", ledger=[_led_jobs[1]]).warnings == []
+      and _ind_warn("FRBが承認を発表しました。", "・x", se=[]).warnings == []
+      and _ind_warn("FRBが承認を発表しました。", "・x", se=None).warnings == []
+      and _ind_warn(generate_post.FIXED_HEADLINE, "・x").warnings == []
+      and _ind_warn("", "・x").warnings == [] and _ind_warn("FRBが承認を発表しました。", "・x", ledger=None).warnings == [])
+check("指標日の見出しのWARN: 独立2ソース採用（decision=採用（独立2ソース））も対応材料として数える／指標が複数なら指標ごとに1件",
+      len(_ind_warn("FRBが発表しました。", "・x", ledger=[{**_led_jobs[0], "decision": "採用（独立2ソース）"}]).warnings) == 1
+      and len(_ind_warn("FRBが発表しました。", "・x",
+                        ledger=[{**_led_jobs[0], "title": "US PCE inflation rises; payrolls too", "decision": "採用"}],
+                        se=_SE_JOBS + [{"title": "Core PCE Price Index m/m", "country": "USD", "impact": "High"}]).warnings) == 2)
+check("指標日の見出しのWARN: 警告の種類は登録簿に登録済みで、種類別件数・警告ブロックに「指標日の見出し」として出る",
+      "W_indicator_headline" in dict(verify_post.WARNING_KINDS)
+      and verify_post.warning_kind_label("W_indicator_headline") == "指標日の見出し"
+      and "指標日の見出し1" in verify_post.format_warning_counts(_au_i.warnings)
+      and "⚠ [指標日の見出し] 指標日（雇用統計" in repair_post.render_warning_block(
+          {"warnings": _au_i.warnings, "final_failing_checks": [], "final_failing_check_details": []}))
+check("run_all: 指標日の見出しの警告は、他の監査項目の結果（failed）を変えない（FAILにしない）",
+      verify_post.run_all(json.loads(json.dumps(_b_dir)), _dd_ind).failed == verify_post.run_all(json.loads(json.dumps(_b_dir)), DAILY_DATA).failed)
+# 実データ: 本番にコミット済みの過去の投稿で、警告が出る日（読み取りのみ）
+_ind_days = {}
+for _bp in sorted((REPO / "outputs").glob("2026-*/draft/post_bundle.json")):
+    _day = _bp.parent.parent.name
+    _bb = json.loads(_bp.read_text(encoding="utf-8"))
+    _ddp = _bp.parent.parent / "daily_data.json"
+    if not _ddp.exists():
+        continue
+    _dd_real = json.loads(_ddp.read_text(encoding="utf-8"))
+    _au_real = verify_post.Audit()
+    verify_post.check_indicator_headline_warn(_au_real, _bb["sections"], _bb.get("audit_ledger"), _dd_real.get("scheduled_events"))
+    _ind_days[_day] = [w["family"] for w in _au_real.warnings]
+check("実データ: 指標日（9/1 ISM・9/4 雇用統計・9/10 PPI・9/30 PCE/GDP・10/2 雇用統計）のうち、警告が出るのは10/2（雇用統計）だけ",
+      _ind_days.get("2026-10-02") == ["jobs"]
+      and all(not _ind_days.get(d) for d in ("2026-09-01", "2026-09-04", "2026-09-10", "2026-09-30")), str(_ind_days))
+
+# プロンプト（規則(1)(2)(3)）
+_A93 = generate_post.SYSTEM_A
+check("v1.93のプロンプト: ①の中での主題の選び方の規則(1)（指標日は対応材料が採用済みなら原則としてそれを見出しの主にする）が入っている（A/Bラベル・tierの違いでは決めない）",
+      "### ①の中での主題の選び方（v1.93・オーナー指示）" in _A93
+      and "A/B/Cの分類やtierの違い（tier1かtier2か）では決めない" in _A93
+      and "重要度High・米国（USD）の" in _A93 and "原則としてその材料をpart1_headlineの主とする" in _A93)
+check("v1.93のプロンプト: 規則(2)例外（暗号通貨に直接関わる大型の制度材料が公式発表で確認できる日は、それを見出しにし指標は主要なポイントの1番目）が入っている",
+      "SEC・CFTC等の規則案・最終規則・\n    登録承認、ETFの承認など" in _A93 and "公式発表（tier1）で確認できる日" in _A93
+      and "(1)の指標の材料はpart1_pointsの1番目に置く" in _A93)
+check("v1.93のプロンプト: 規則(3)（暗号通貨と関係の薄い個別の申請承認・意見募集期間の延長など手続き的な発表は見出しにしない）が入っている",
+      "個別の申請の承認、意見募集期間の延長" in _A93 and "part1_headlineの主題にしない" in _A93)
+check("v1.93のプロンプト: scheduled_event_matchは機械的な目印であり事実・採否の根拠ではない旨をSCHEDULED_EVENTS_GUIDANCEが明記し、SYSTEM_Aに含まれる",
+      "`scheduled_event_match`" in generate_post.SCHEDULED_EVENTS_GUIDANCE
+      and "事実の根拠でも採否の根拠でもありません" in generate_post.SCHEDULED_EVENTS_GUIDANCE
+      and generate_post.SCHEDULED_EVENTS_GUIDANCE in _A93)
 
 print()
 print(f"PASS: {len(PASS)}  FAIL: {len(FAIL)}")

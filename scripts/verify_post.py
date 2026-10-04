@@ -24,6 +24,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 import collect_news  # noqa: E402
 import generate_post  # noqa: E402
+import indicator_events  # noqa: E402
 from compose_lp_comment import FIXED_2, FIXED_4, FIXED_5, compose_lp_comment  # noqa: E402
 from compose_numeric import (  # noqa: E402
     compose_part0_target_date,
@@ -970,6 +971,7 @@ def check_c28(au: Audit, part1_headline, part1_points, daily_data: dict) -> None
 WARNING_KINDS: "tuple[tuple[str, str], ...]" = (
     ("W_direction_mismatch", "向きの食い違い"),
     ("W_headline_hashtag", "見出しのタグ"),
+    ("W_indicator_headline", "指標日の見出し"),
 )
 
 
@@ -1134,6 +1136,43 @@ def check_hashtag_warn(au: Audit, sections: dict) -> None:
                 f"ヘッドラインにハッシュタグ（{' '.join(tags)}）が付いています（オーナー指示: 見出しにタグは付けない）。"
                 f" ヘッドライン: 「{_clip_sentence(headline, 100)}」",
                 tags=tags, section="ヘッドライン", sentence=str(headline))
+
+
+# --- 指標日の見出しの警告（WARN。FAILではない。v1.93・オーナー承認・案3）---
+#
+# 背景: 2026-10-02分（米雇用統計の日）で、雇用統計（Reuters・tier2）が台帳で採用されていたのに、ヘッドラインは
+# FRBの個別の申請承認（Fleur Capital）で、雇用統計は主要なポイントの4番目だった。C22は「その日の台帳にtier1/2の採用が
+# 1件でもあるか」しか見ず、見出しの内容との対応は見ない。オーナー判断（10/4）: 指標日（scheduled_eventsで重要度Highの米指標）に
+# 対応する材料が採用済みなら、原則としてそれを見出しの主にする。ただし暗号通貨に直接関わる大型の制度材料が公式発表で確認できる日は
+# それを見出しにし、指標は主要なポイントの1番目に置く（この例外の日に出る警告は、オーナーが目視で判断する）。
+# この警告は、その規則から外れた日（指標に対応する採用済みの材料があるのに、見出しがその指標に触れていない日）を示す。
+# 照合はキーワード（indicator_events.py）で、意味の判定ではない。警告の中に「主要なポイントの1番目が指標に触れているか」を
+# 添えて、例外（2）に従った日かどうかを目視で判断しやすくする。
+def check_indicator_headline_warn(au: Audit, sections: dict, audit_ledger, scheduled_events) -> None:
+    """指標日の見出しの警告をau.warningsへ追加する（FAILにしない。上のコメント参照）。"""
+    families = indicator_events.high_us_event_families(scheduled_events)
+    headline = str(sections.get("part1_headline") or "")
+    if not families or not headline.strip() or headline.strip() == generate_post.FIXED_HEADLINE:
+        return
+    adopted = [e for e in (audit_ledger if isinstance(audit_ledger, list) else [])
+               if isinstance(e, dict) and str(e.get("decision", "")).startswith("採用")]
+    first_point = next((ln for ln in str(sections.get("part1_points") or "").split("\n") if ln.strip()), "")
+    for f in families:
+        fam = f["family"]
+        matched = [e for e in adopted if indicator_events.candidate_family_keys(e.get("title"), [f])]
+        if not matched or indicator_events.headline_mentions(headline, fam):
+            continue
+        first = "触れています" if indicator_events.headline_mentions(first_point, fam) else "触れていません"
+        ex = matched[0]
+        au.warn("W_indicator_headline",
+                f"指標日（{fam['label']}: {' / '.join(f['events'])}）に対応しうる材料が採用されていますが、ヘッドラインは"
+                f"{fam['label']}に触れていません（主要なポイントの1番目は{first}）。"
+                f" 採用された対応候補: 「{_clip_sentence(str(ex.get('title', '')), 80)}」［{ex.get('source', '')}］"
+                f"（計{len(matched)}件）／ヘッドライン: 「{_clip_sentence(headline, 80)}」。"
+                "暗号通貨に直接関わる大型の制度材料が公式発表で確認できる日（見出しはその材料、指標は主要なポイントの1番目）は"
+                "規則どおりです。目視で確認してください。",
+                family=fam["key"], events=f["events"], matched_titles=[str(e.get("title", "")) for e in matched],
+                points_first_mentions=first == "触れています")
 
 
 def summarize_check_ids(checks: "list[dict]") -> str:
@@ -1375,6 +1414,8 @@ def run_all(bundle: dict, daily_data: dict) -> Audit:
     for _label, _fn in (
         ("向きの食い違い", lambda: check_direction_warn(au, sections, headline_for_image)),
         ("見出しのタグ", lambda: check_hashtag_warn(au, sections)),
+        ("指標日の見出し", lambda: check_indicator_headline_warn(
+            au, sections, bundle.get("audit_ledger"), daily_data.get("scheduled_events"))),
     ):
         try:
             _fn()
