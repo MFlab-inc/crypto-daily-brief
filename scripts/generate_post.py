@@ -404,9 +404,10 @@ tier 3: CoinDesk・Cointelegraph等の暗号通貨特化メディアRSS。統合
         ことと「audit_ledgerでuse:trueにする」ことは別であり、前者だけを
         理由にuse:trueにしないこと（下記「audit_ledger」参照）。
 tier 4: Google News経由の候補発見のみの結果（見出し・URLのみで、内容の
-        裏取りをしていない）。単独では事実の根拠にしない。継続監視の
-        対象として reusable_for_summary に記すにとどめ、【ヘッドライン】
-        【主要なポイント】の記述根拠には使わない。
+        裏取りをしていない）。単独では事実の根拠にしない。audit_ledger上は
+        常に不採用とし、【ヘッドライン】【主要なポイント】【総括】のいずれにも
+        書かない（reusable_for_summaryにも書かない。v1.92・オーナー指示:
+        tier4を総括に残すと情報源の規律の抜け道になるため）。
 
 ### 情報源規律と項目数の優先順位（v1.29・オーナー指示）
 
@@ -451,10 +452,12 @@ part1_headline・headline_for_imageの決定手順は下記
 「part1_headline・part1_pointsの決定」の①〜③を参照。
 - 数値・固有名詞・日時はsummary・titleの記載と一致させる。候補に無い情報を
   推測で補わない（確認できないものは掲載しない）。
-- news_candidates_yesterday に同一の法案・政策・企業動向の候補が含まれる
-  場合、summaryの内容が前日から更新されているときのみ【ヘッドライン】
-  【主要なポイント】へ再掲載する。更新がなければ、その旨を
-  reusable_for_summary に記し、本文には書かない。
+- 入力の previous_posts（前日以前の投稿本文。ヘッドライン・主要なポイント）で
+  既に扱った法案・政策・企業動向について、当日の候補のsummaryに新しい動きが
+  ある場合のみ【ヘッドライン】【主要なポイント】へ再掲載する。新しい動きが
+  なければ本文には書かず、reusable_for_summary に記す（v1.92・オーナー指示。
+  従来の news_candidates_yesterday は本番では常に空だったため、比較対象を
+  previous_posts に改めた）。
 - 十分な材料がない日は項目数を埋めない。確認できた事実と、確認できなかった
   範囲を明記する。"""
 
@@ -530,7 +533,10 @@ headline_for_imageも同様にこの材料の内容を反映してよい（但�
   または併せて）。材料も notable_move も無い場合は、daily_data.json内の
   BTC・ETHのdirection（up/down）に基づく短い定性的な見出しにとどめる
   （例:「BTC・ETHともに上昇基調」）。`#`は使わず全角40字以内。
-- reusable_for_summary: tier 4等の継続監視材料があれば記す。無ければ空配列。
+- reusable_for_summary: 前日以前の投稿本文（previous_posts）で扱った材料のうち、
+  当日になっても新しい動きがないものだけを記す。該当が無ければ空配列
+  （空配列が通常の状態である）。当日の候補・tier4・当日初出の材料は書かない。
+  書式は下記「あなたが書くもの」を参照。
 
 ### ヘッドラインの構成要件（v1.70・オーナー指示。v1.82・v1.91改定）
 
@@ -575,8 +581,8 @@ pairs_with_candidate_id・verified_by・reason のみを書く（v1.48・v1.53
   ことと「useをtrueにする」ことは別であり、混同しないこと（v1.53
   フォローアップ・オーナー指示。上記NEWS_SELECTIONのtier3の節も参照）。
   tier4の候補は候補発見専用の位置づけのため、useの値に関わらず
-  audit_ledger上は常に不採用として扱われる（継続監視の言及は
-  audit_ledgerではなくreusable_for_summaryに記す）。
+  audit_ledger上は常に不採用として扱われる（tier4の候補は本文・総括の
+  どこにも書かない。reusable_for_summaryにも書かない。v1.92・オーナー指示）。
 - pairs_with_candidate_id: tier3でuse:trueの候補のうち、上記
   「独立2ソース規定」に該当すると判断したものにのみ、同一事実を
   報じている相手（別sourceのtier3候補）のcandidate_idを記す
@@ -630,7 +636,19 @@ WRITES_A = """## あなたが書くもの
   use:trueかつ独立2ソース規定該当時のみ）・verified_by・reason のみを
   書く（source・url・title・published_at・decisionは書かない。詳細は
   上記「part1_headline・part1_pointsの決定」内のaudit_ledgerの節を参照）。
-- reusable_for_summary: 継続材料で本文に載せなかったものの1行要約（0〜2件）。"""
+- reusable_for_summary（v1.92・オーナー指示）: 前日以前の投稿本文（入力の
+  previous_posts）で既に扱った材料のうち、当日になっても新しい動きがない
+  ものだけを、総括用の1行要約として書く（0〜2件。該当が無ければ空配列）。
+  次は書かない: 当日の候補（採用・不採用を問わず）、tier4、当日初出の材料。
+  各要素は {"text": 1行要約（です・ます調。末尾に（媒体名、掲載日）を付す）,
+  "carried_from": その材料を扱った投稿の日付（previous_postsのdate。YYYY-MM-DD）,
+  "candidate_ids": 当日の候補のうち同じ話題のcandidate_id（無ければ[]）}。
+  この形式でない項目、carried_fromがprevious_postsの日付に無い項目、
+  前日以前の本文と題材が対応しない項目は、システムが機械的に除外する。
+- 採用（use:true）した材料はすべて part1_headline・part1_points に載せる
+  （reusable_for_summaryに回さない）。載せない材料は use:false にする。
+  part1_pointsの項目は、ヘッドラインの繰り返しにしない（同じ材料を重ねて
+  項目枠を使わない）。"""
 
 OUTPUT_FORMAT_A = """## 出力形式
 
@@ -640,7 +658,9 @@ OUTPUT_FORMAT_A = """## 出力形式
   "headline_for_image": "...",
   "part1_headline": "...",
   "part1_points": ["...", "..."],
-  "reusable_for_summary": ["..."],
+  "reusable_for_summary": [
+    { "text": "...", "carried_from": "YYYY-MM-DD", "candidate_ids": [] }
+  ],
   "audit_ledger": [
     { "candidate_id": 1, "use": true, "pairs_with_candidate_id": null,
       "verified_by": "", "reason": "" }
@@ -679,8 +699,8 @@ part1_points）と文体を揃えること。
 - part2_flow: 統合運用基準§3.3の書式だけを使った条件付き仮説連鎖
   （v1.82・オーナー承認）。ここで扱う材料は、呼び出しAのpart1_headline・
   part1_pointsに既に掲載されている材料に限る。reusable_for_summary
-  （継続監視材料。part2_summaryでの1行言及にのみ使う）や、part1_headline・
-  part1_pointsに書かれていない新規の材料をpart2_flowで持ち出さない
+  （前日以前の投稿で扱った継続材料。part2_summaryでの1行言及にのみ使う）や、
+  part1_headline・part1_pointsに書かれていない新規の材料をpart2_flowで持ち出さない
   （v1.56・オーナー指示）。part2_flowは「意識された可能性」という因果連鎖を
   組む分、part2_summaryの1行言及より踏み込んだ主張になるため、根拠の基準も
   掲載済み材料に厳格化する——tier1・tier2裏付けまたは独立2ソースの採否規律を
@@ -718,13 +738,16 @@ part1_points）と文体を揃えること。
   等の限定を必ず置く。
 - part2_summary: 総括。地合い・不確実性・今後の確認事項のみ、1〜2文に
   収める（3文以上は機械監査でFAILとなる）。ニュースの再説明をしない。
-  reusable_for_summary があれば1行だけ言及する。価格・24時間比・
+  reusable_for_summary（前日以前の投稿で扱った継続材料。システムが検証済みで、
+  空配列の日が通常である）があれば1行だけ言及してよい。空配列の日は、前編に
+  無い材料への言及を総括に書かない（v1.92・オーナー指示）。価格・24時間比・
   Fear & Greed・DEX・APR・LP助言には触れない（統合運用基準§3.1）。
   地合いは「改善」「悪化」「不透明」等の定性的な表現にとどめ、指数や
   数値を根拠に挙げない。
   対象日の翌日が土日の場合は「翌日」ではなく「今後」「週明け」と書く。
   総括で言及してよい固有名詞・材料は、part1_headline・part1_points に
-  掲載済みのもの、または reusable_for_summary に渡された継続材料に限る
+  掲載済みのもの、または reusable_for_summary に渡された継続材料（前日以前の
+  投稿で扱ったもの）に限る
   （v1.35・オーナー指示。v1.82・オーナー承認でヘッドラインを追加）。
   本文（part1_headline・part1_points）で扱っていない新規の固有名詞・
   材料を総括で初めて持ち出さない——読者が文脈を追えないため。
@@ -773,6 +796,9 @@ class CallOutcome:
         # 試行の分しか残らない（試行ごとにclear）ため、1・2試行目の理由が消えていた。
         # 各要素: {"attempt", "force_drop", "unresolved": [...], "rejected_pairs": [...]}。
         self.attempt_diagnostics = attempt_diagnostics or []
+        # v1.92（オーナー承認・R2）: reusable_for_summaryの機械フィルタで除外した項目
+        # （{"text","reason"}。GENERATION_STATUS.mdへ記録する）。
+        self.reusable_dropped: list[dict] = []
 
     def to_dict(self) -> dict:
         return {"ok": self.ok, "attempts": self.attempts, "error": self.error,
@@ -781,7 +807,8 @@ class CallOutcome:
                 "audit_ledger_auto_filled_count": self.audit_ledger_auto_filled_count,
                 "rejected_pairs": self.rejected_pairs,
                 "force_dropped_candidates": self.force_dropped_candidates,
-                "attempt_diagnostics": self.attempt_diagnostics}
+                "attempt_diagnostics": self.attempt_diagnostics,
+                "reusable_dropped": self.reusable_dropped}
 
 
 def _extract_text(response: Any) -> str:
@@ -1255,7 +1282,8 @@ def _reconstruct_audit_ledger(llm_entries: Any, id_to_candidate: dict[int, dict]
                                rejected_pairs: list[dict] | None = None,
                                force_drop_unresolved: bool = False,
                                force_dropped: list[dict] | None = None,
-                               diagnostics: dict | None = None) -> list[dict]:
+                               diagnostics: dict | None = None,
+                               decisions_out: dict[int, str] | None = None) -> list[dict]:
     """LLMが出力した candidate_id・use・pairs_with_candidate_id・
     verified_by・reason のみのaudit_ledgerを、候補データのsource/url/
     title/published_atで補完し、decisionをコード側で導出した完全な形へ
@@ -1325,11 +1353,17 @@ def _reconstruct_audit_ledger(llm_entries: Any, id_to_candidate: dict[int, dict]
         reconstructed.append(entry)
     if stats is not None:
         stats["audit_ledger_auto_filled_count"] = auto_filled
+    if decisions_out is not None:
+        # v1.92: 候補IDごとのdecision（採用／採用（独立2ソース）／不採用）を呼び出し元へ返す
+        # （reusable_for_summaryの機械フィルタが「当日採用済みの材料」を判定するため）。
+        decisions_out.clear()
+        decisions_out.update({e["candidate_id"]: decisions[e["candidate_id"]] for e in parsed})
     return reconstructed
 
 
 def _build_call_a_user_content(daily_data: dict, news_today: dict, news_yesterday: dict | None,
-                                pair_overlap_threshold: float = PAIR_OVERLAP_THRESHOLD_DEFAULT
+                                pair_overlap_threshold: float = PAIR_OVERLAP_THRESHOLD_DEFAULT,
+                                previous_posts: list[dict] | None = None
                                 ) -> tuple[str, dict, dict[int, dict]]:
     selected_today, stats = _select_candidates_for_call_a(news_today.get("candidates", []), pair_overlap_threshold)
     selected_today = _assign_candidate_ids(selected_today)
@@ -1342,6 +1376,9 @@ def _build_call_a_user_content(daily_data: dict, news_today: dict, news_yesterda
         "daily_data": daily_data,
         "news_candidates_today": _label_eligibility(selected_today),
         "news_candidates_yesterday": _label_eligibility(selected_yesterday),
+        # v1.92（オーナー承認）: 前日以前の投稿本文（reusable_for_summaryの「前日以前の投稿本文で扱った
+        # 材料」の比較対象）。news_candidates_yesterdayは本番では常に空だったため、この項目を追加した。
+        "previous_posts": previous_posts or [],
     }
     return json.dumps(payload, ensure_ascii=False, indent=2), stats, id_to_candidate
 
@@ -1398,6 +1435,134 @@ def _build_call_b_user_content(daily_data: dict, call_a_data: dict | None) -> st
     return json.dumps(payload, ensure_ascii=False, indent=2)
 
 
+# --- v1.92（オーナー承認）: reusable_for_summaryを「前日以前の投稿本文で扱った材料のうち、新しい動きが
+# ないものだけ」に限る（R1: プロンプト／R2: 機械フィルタ）---
+#
+# 背景: 2026-10-02分で、当日初報（台帳では採用）のBlastが主要なポイントに載らないまま
+# reusable_for_summary経由で総括にだけ出た。調査（L0の24日・48項目）で、reusable_for_summaryの
+# 98%（47件）が当日の材料で、前日から続く材料はわずか1件だった。「前日から更新がない材料は
+# reusable_for_summaryへ」という従来の指示は、比較対象（news_candidates_yesterday）が本番では
+# 常に空だったため（news_candidates.jsonはCI成果物でコミットされず、前日分が存在しない）、
+# そもそも働いていなかった。オーナー判断（10/4）: reusable_for_summaryは「前日以前の投稿本文で
+# 扱った材料のうち、新しい動きがないものだけ」。当日の候補・tier4は書かない（tier4を残すと
+# 情報源規律の抜け道になるため）。採用したのに本文に載らない材料は主要なポイントへ回す。
+#
+# 実装:
+#  (R1) プロンプトで上記を指示し、比較対象として前日以前の投稿本文（コミット済みの
+#       outputs/<日付>/draft/post_bundle.jsonのヘッドライン・主要なポイント）をpayloadの
+#       previous_posts（直近3件・7日以内）として渡す。
+#  (R2) call_Aの出力のreusable_for_summaryは {"text","carried_from","candidate_ids"} 形式。コードが
+#       次を満たさない項目を機械的に除外する（除外内容はGENERATION_STATUS.mdに記録）:
+#       ①carried_fromがprevious_postsの日付のいずれか ②textの語が、その日の投稿本文と対応する
+#       （固有名詞等の特徴語が2つ以上、または7文字以上の特徴語が1つ共通） ③candidate_idsに
+#       tier4の候補・当日採用済みの候補を含まない ④最大2件。文字列だけの旧形式は除外する。
+#       ②は「前日以前の投稿で扱った」との自己申告を裏付ける最低限の照合で、意味の同一性までは
+#       保証しない（過去50項目の試算では4件だけが通り、いずれも前日以前の本文と題材が同じだった）。
+PREVIOUS_POSTS_MAX = 3
+PREVIOUS_POSTS_WINDOW_DAYS = 7
+REUSABLE_MAX_ITEMS = 2
+_REUSABLE_TOKEN_RE = re.compile(r"[A-Za-z][A-Za-z0-9&.\-]{3,}|[一-龥ァ-ヶー][一-龥ァ-ヶー0-9]{4,}")
+# 媒体名・汎用語は「同じ題材」の根拠にならないため、特徴語から除く
+_REUSABLE_NON_DISTINCTIVE = frozenset({
+    "coindesk", "cointelegraph", "reuters", "bloomberg", "block", "theblock", "tier1", "tier2", "tier3", "tier4",
+    "ethereum", "bitcoin", "crypto", "ビットコイン", "イーサリアム", "ステーブルコイン", "暗号通貨", "暗号資産",
+    "公式発表", "継続監視", "直接因果", "未確認", "報じられ", "確認できません", "確認できない",
+})
+
+
+def _is_fixed_post(headline: str, points: str) -> bool:
+    return headline.strip().startswith(FIXED_HEADLINE.rstrip("。")) and points.strip().startswith(FIXED_POINTS.rstrip("。"))
+
+
+def _load_previous_posts(target_date: str, outputs_root: Path | None = None) -> list[dict]:
+    """対象日より前の、コミット済みの投稿本文（ヘッドライン・主要なポイント）を新しい順に最大
+    PREVIOUS_POSTS_MAX件、PREVIOUS_POSTS_WINDOW_DAYS日以内から集める（v1.92）。
+    ファイルが無い・壊れている日、定型文だけの日（材料なし）は飛ばす。失敗しても例外にしない。
+    各要素: {"date", "part1_headline", "part1_points"（「・」で始まる行のリスト）}。"""
+    root = outputs_root or Path("outputs")
+    result: list[dict] = []
+    try:
+        base = date.fromisoformat(target_date)
+    except ValueError:
+        return result
+    for i in range(1, PREVIOUS_POSTS_WINDOW_DAYS + 1):
+        d = (base - timedelta(days=i)).isoformat()
+        bundle = _load_json_or(root / d / "draft" / "post_bundle.json", default=None)
+        sections = bundle.get("sections") if isinstance(bundle, dict) else None
+        if not isinstance(sections, dict):
+            continue
+        headline, points = sections.get("part1_headline"), sections.get("part1_points")
+        if not isinstance(headline, str) or not isinstance(points, str) or _is_fixed_post(headline, points):
+            continue
+        result.append({"date": d, "part1_headline": headline,
+                       "part1_points": [ln.strip() for ln in points.split("\n") if ln.strip()]})
+        if len(result) >= PREVIOUS_POSTS_MAX:
+            break
+    return result
+
+
+def _reusable_distinctive_tokens(text: str) -> set[str]:
+    text = re.sub(r"（[^（）]*）", "", str(text or ""))  # （媒体名、日付）は照合に使わない
+    return {m.group(0).lower() for m in _REUSABLE_TOKEN_RE.finditer(text)
+            if m.group(0).lower() not in _REUSABLE_NON_DISTINCTIVE}
+
+
+def _reusable_grounded_in(text: str, body: str) -> list[str]:
+    """textの特徴語のうち、bodyに含まれるもの（共通語）。2語以上、または7文字以上の1語があれば
+    「その投稿本文と同じ題材」とみなす（呼び出し元の判定）。"""
+    body_l = body.lower()
+    return sorted(t for t in _reusable_distinctive_tokens(text) if t in body_l)
+
+
+def _normalize_reusable_for_summary(raw: Any, previous_posts: list[dict] | None,
+                                    id_to_candidate: dict[int, dict] | None = None,
+                                    decisions: dict[int, str] | None = None) -> tuple[list[str], list[dict]]:
+    """reusable_for_summaryを検証し、(保持するtextのリスト, 除外した項目の記録) を返す（v1.92・R2）。
+    例外は送出しない（形式不正の項目は除外として記録する。試行のやり直しを起こさない）。"""
+    prev_by_date = {p["date"]: p for p in (previous_posts or [])}
+    id_to_candidate = id_to_candidate or {}
+    decisions = decisions or {}
+    items = raw if isinstance(raw, list) else []
+    kept: list[str] = []
+    dropped: list[dict] = []
+
+    def drop(item: Any, reason: str) -> None:
+        text = item.get("text") if isinstance(item, dict) else item
+        dropped.append({"text": str(text or ""), "reason": reason})
+
+    for item in items:
+        if not isinstance(item, dict):
+            drop(item, "形式不正（文字列。carried_fromが無く、前日以前の投稿で扱った材料と確認できない）")
+            continue
+        text = item.get("text")
+        if not isinstance(text, str) or not text.strip():
+            drop(item, "形式不正（textが空）")
+            continue
+        carried = item.get("carried_from")
+        if carried not in prev_by_date:
+            drop(item, f"carried_from（{carried!r}）が、渡した前日以前の投稿の日付"
+                       f"（{'・'.join(sorted(prev_by_date)) or 'なし'}）に無い")
+            continue
+        body = prev_by_date[carried]["part1_headline"] + "\n" + "\n".join(prev_by_date[carried]["part1_points"])
+        shared = _reusable_grounded_in(text, body)
+        if not (len(shared) >= 2 or any(len(t) >= 7 for t in shared)):
+            drop(item, f"{carried}の投稿本文と対応する語が見つからない（当日初出の材料の可能性。共通語: {shared or 'なし'}）")
+            continue
+        cids = item.get("candidate_ids")
+        cids = [c for c in cids if isinstance(c, int) and not isinstance(c, bool)] if isinstance(cids, list) else []
+        if any(id_to_candidate.get(c, {}).get("tier") == 4 for c in cids):
+            drop(item, "tier4（候補発見のみ）の候補を含む（tier4は本文・総括のどこにも書かない）")
+            continue
+        if any(str(decisions.get(c, "")).startswith("採用") for c in cids):
+            drop(item, "当日の候補で採用済みの材料を含む（採用した材料は主要なポイントへ載せる）")
+            continue
+        if len(kept) >= REUSABLE_MAX_ITEMS:
+            drop(item, f"上限{REUSABLE_MAX_ITEMS}件を超過")
+            continue
+        kept.append(text.strip())
+    return kept, dropped
+
+
 def _build_call_a_retry_note(exc: Exception) -> str | None:
     """call_a()のbuild_retry_note（v1.66・オーナー承認）。
     AuditLedgerReconstructionError（tier3の独立2ソースペア申告が
@@ -1426,7 +1591,8 @@ def _build_call_a_retry_note(exc: Exception) -> str | None:
 
 
 def call_a(client: "anthropic.Anthropic", daily_data: dict, news_today: dict,
-           news_yesterday: dict | None, pair_overlap_threshold: float | None = None) -> CallOutcome:
+           news_yesterday: dict | None, pair_overlap_threshold: float | None = None,
+           previous_posts: list[dict] | None = None) -> CallOutcome:
     """pair_overlap_threshold省略時はconfig/pair_overlap.jsonから読む。run()は
     news_candidate_count集計用の候補選定（下記）とここで同一の値を使う必要が
     あるため、run()側で読み込んだ値を明示的に渡す（v1.53フォローアップ・
@@ -1435,7 +1601,7 @@ def call_a(client: "anthropic.Anthropic", daily_data: dict, news_today: dict,
     if pair_overlap_threshold is None:
         pair_overlap_threshold = load_pair_overlap_threshold()
     user_content, truncation_stats, id_to_candidate = _build_call_a_user_content(
-        daily_data, news_today, news_yesterday, pair_overlap_threshold)
+        daily_data, news_today, news_yesterday, pair_overlap_threshold, previous_posts)
 
     audit_ledger_stats: dict[str, int] = {}
     # v1.79（オーナー承認）: rejected_pairs_stats・force_dropped_statsは
@@ -1448,10 +1614,14 @@ def call_a(client: "anthropic.Anthropic", daily_data: dict, news_today: dict,
     # v1.86（オーナー承認・案G）: 上の2つと異なり試行をまたいで蓄積する（1・2試行目の
     # 「相方が成立しなかった候補と理由」を、最終的な成否によらず残すため）。
     attempt_diagnostics: list[dict] = []
+    # v1.92: reusable_for_summaryの機械フィルタ（R2）で除外した項目（試行ごとにリセット）
+    reusable_dropped_stats: list[dict] = []
+    decisions_by_id: dict[int, str] = {}
 
     def _rebuild_audit_ledger(data: dict, attempt: int) -> dict:
         rejected_pairs_stats.clear()
         force_dropped_stats.clear()
+        reusable_dropped_stats.clear()
         # v1.79（オーナー承認）: 最終試行でも独立2ソースの相方が解消しない
         # tier3候補は、従来はAuditLedgerReconstructionErrorで例外化し
         # MAX_ATTEMPTS回リトライしてもなお解消しない場合そのままcall_a失敗
@@ -1466,12 +1636,17 @@ def call_a(client: "anthropic.Anthropic", daily_data: dict, news_today: dict,
             data["audit_ledger"] = _reconstruct_audit_ledger(
                 data.get("audit_ledger"), id_to_candidate, pair_overlap_threshold, audit_ledger_stats,
                 rejected_pairs=rejected_pairs_stats, force_drop_unresolved=force_drop,
-                force_dropped=force_dropped_stats, diagnostics=diag)
+                force_dropped=force_dropped_stats, diagnostics=diag, decisions_out=decisions_by_id)
         finally:
             if diag.get("unresolved"):
                 attempt_diagnostics.append({
                     "attempt": attempt, "force_drop": force_drop, "unresolved": diag["unresolved"],
                     "rejected_pairs": list(rejected_pairs_stats)})
+        # v1.92（オーナー承認・R2）: reusable_for_summaryを機械フィルタにかけ、前日以前の投稿本文で
+        # 扱った材料だけを文字列のリストとして残す（以降のcall_B・bundle・C23は従来どおり文字列を扱う）。
+        data["reusable_for_summary"], dropped = _normalize_reusable_for_summary(
+            data.get("reusable_for_summary"), previous_posts, id_to_candidate, decisions_by_id)
+        reusable_dropped_stats.extend(dropped)
         return data
 
     outcome = _call_json(
@@ -1488,6 +1663,7 @@ def call_a(client: "anthropic.Anthropic", daily_data: dict, news_today: dict,
     outcome.rejected_pairs = list(rejected_pairs_stats)
     outcome.force_dropped_candidates = list(force_dropped_stats)
     outcome.attempt_diagnostics = list(attempt_diagnostics)
+    outcome.reusable_dropped = list(reusable_dropped_stats)
     return outcome
 
 
@@ -1605,7 +1781,8 @@ def run(target_date: str, *, client: "anthropic.Anthropic | None" = None) -> dic
     news_yesterday = _load_json_or(Path(f"outputs/{prev_date}/news_candidates.json"), default=None)
 
     pair_overlap_threshold = load_pair_overlap_threshold()
-    a = call_a(client, daily_data, news_today, news_yesterday, pair_overlap_threshold)
+    previous_posts = _load_previous_posts(target_date)  # v1.92: 前日以前の投稿本文（コミット済みのdraft/）
+    a = call_a(client, daily_data, news_today, news_yesterday, pair_overlap_threshold, previous_posts)
     b = call_b(client, daily_data, a.data if a.ok else None)
 
     failed_count = (0 if a.ok else 1) + (0 if b.ok else 1)
@@ -1628,6 +1805,7 @@ def run(target_date: str, *, client: "anthropic.Anthropic | None" = None) -> dic
         "call_b": b.to_dict(),
         "news_source_status": news_today.get("source_status", {}),
         "news_candidate_count": len(selected_today),
+        "previous_posts_dates": [p["date"] for p in previous_posts],
         "total_usage": _add_usage(a.usage, b.usage),
     }
 

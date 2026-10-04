@@ -705,7 +705,7 @@ check("CALL_B_INSTRUCTIONSに総括で言及してよい範囲がpart1_headline�
       "reusable_for_summaryの継続材料に限る旨が明記されている（v1.82でヘッドラインを追加・オーナー承認）",
       "part1_headline・part1_points に" in generate_post.CALL_B_INSTRUCTIONS.replace("\n  ", "")
       and "掲載済みのもの" in generate_post.CALL_B_INSTRUCTIONS
-      and "reusable_for_summary に渡された継続材料に限る" in generate_post.CALL_B_INSTRUCTIONS.replace("\n  ", ""))
+      and "reusable_for_summary に渡された継続材料（前日以前の投稿で扱ったもの）に限る" in generate_post.CALL_B_INSTRUCTIONS.replace("\n  ", ""))
 check("CALL_B_INSTRUCTIONSに本文で扱っていない新規の固有名詞を総括で持ち出さない旨が明記されている",
       "本文（part1_headline・part1_points）で扱っていない新規の固有名詞・" in generate_post.CALL_B_INSTRUCTIONS
       and "材料を総括で初めて持ち出さない" in generate_post.CALL_B_INSTRUCTIONS)
@@ -725,7 +725,7 @@ check("CALL_B_INSTRUCTIONSにreusable_for_summaryをpart2_flowで使わない旨
       "（reusable_for_summaryはpart2_summaryの1行言及にのみ使う）",
       "part1_pointsに書かれていない新規の材料をpart2_flowで持ち出さない" in generate_post.CALL_B_INSTRUCTIONS
       and "（v1.56・オーナー指示）" in generate_post.CALL_B_INSTRUCTIONS
-      and "reusable_for_summary\n  （継続監視材料。part2_summaryでの1行言及にのみ使う）"
+      and "reusable_for_summary\n  （前日以前の投稿で扱った継続材料。part2_summaryでの1行言及にのみ使う）"
       in generate_post.CALL_B_INSTRUCTIONS)
 
 print("=== generate_post.py: ETF資金フローの土日表記（v1.56・オーナー指示） ===")
@@ -5685,6 +5685,198 @@ for _bp in sorted((REPO / "outputs").glob("2026-*/draft/post_bundle.json")):
     (_tag_days if _has else _pre_days).append(_day)
 check("実データ: タグ付きの見出しの日（9/8以降の材料つき日・10/2を含む）が警告対象になり、9/8より前の日は1日も対象にならない",
       len(_tag_days) >= 14 and "2026-10-02" in _tag_days and all(d >= "2026-09-08" for d in _tag_days), str(_tag_days))
+
+print("=== v1.92（オーナー承認）: reusable_for_summaryを「前日以前の投稿本文で扱った材料のうち、新しい動きがないもの」だけにする（R1プロンプト＋R2機械フィルタ） ===")
+_PR = Path("prev_posts_outputs")
+
+
+def _write_post(day, headline, points, level="L0"):
+    d = _PR / day / "draft"
+    d.mkdir(parents=True, exist_ok=True)
+    (d / "post_bundle.json").write_text(json.dumps({"level": level, "sections": {
+        "part1_headline": headline, "part1_points": points}}, ensure_ascii=False), encoding="utf-8")
+
+
+_write_post("2026-09-25", "FRBがFleur Capitalの申請を承認しました。", "・FRBはFleur Capital Corporationによる申請を承認したと発表しました（FRB、9月25日）。")
+_write_post("2026-09-26", generate_post.FIXED_HEADLINE, generate_post.FIXED_POINTS)  # 定型文だけの日（材料なし）→飛ばす
+# 2026-09-27: ファイル無し
+(_PR / "2026-09-28" / "draft").mkdir(parents=True, exist_ok=True)
+(_PR / "2026-09-28" / "draft" / "post_bundle.json").write_text("{broken", encoding="utf-8")  # 壊れたファイル→飛ばす
+_write_post("2026-09-29", "米ホワイトハウスがStablecoin Clarity法案への支持を表明しました。",
+            "・Hana Bank（韓国）がEuroclearの基盤でデジタル債券を発行しました（CoinDesk、9月29日）。\n・Tetherを巡るイラン関連資金の報告書が公表されました（Reuters、9月29日）。")
+_write_post("2026-09-30", "G7が備蓄放出に合意しました。", "・原油価格が低下しました（Reuters、9月30日）。")
+_write_post("2026-10-01", "SECがトークン化株式の免除を公表しました。", "・SECの発表を受け市場が反応しました（SEC、10月1日）。")
+_write_post("2026-09-20", "古い投稿（7日より前）です。", "・古い項目です（CoinDesk、9月20日）。")
+_pp = generate_post._load_previous_posts("2026-10-02", outputs_root=_PR)
+check("_load_previous_posts: 対象日より前の投稿を新しい順に最大3件、7日以内から集める（定型文だけ・ファイル無し・壊れたファイルの日は飛ばす）",
+      [p["date"] for p in _pp] == ["2026-10-01", "2026-09-30", "2026-09-29"], str([p["date"] for p in _pp]))
+check("_load_previous_posts: 各要素はdate・part1_headline・part1_points（「・」始まりの行のリスト）",
+      _pp[2]["part1_headline"].startswith("米ホワイトハウス") and len(_pp[2]["part1_points"]) == 2
+      and _pp[2]["part1_points"][0].startswith("・Hana Bank"))
+check("_load_previous_posts: 7日より前の投稿・対象日以降は含めない／不正な日付・存在しないディレクトリは空（例外にしない）",
+      all(p["date"] >= "2026-09-25" for p in generate_post._load_previous_posts("2026-10-02", outputs_root=_PR))
+      and generate_post._load_previous_posts("2026-10-02", outputs_root=Path("no_such")) == []
+      and generate_post._load_previous_posts("not-a-date", outputs_root=_PR) == []
+      and [p["date"] for p in generate_post._load_previous_posts("2026-09-26", outputs_root=_PR)] == ["2026-09-25", "2026-09-20"]
+      and [p["date"] for p in generate_post._load_previous_posts("2026-09-28", outputs_root=_PR)] == ["2026-09-25"])
+
+_norm = generate_post._normalize_reusable_for_summary
+_pp_norm = [{"date": "2026-10-01", "part1_headline": "CircleがTazapayを買収しました。",
+             "part1_points": ["・Hana Bank（韓国）がEuroclearの基盤でデジタル債券を発行しました（CoinDesk、10月1日）。"]},
+            {"date": "2026-09-30", "part1_headline": "G7が備蓄放出に合意しました。", "part1_points": ["・原油価格が低下しました（Reuters、9月30日）。"]}]
+_ok_item = {"text": "Hana Bank（韓国）のEuroclearを用いたデジタル債券発行は新しい動きがありません（CoinDesk、10月1日）。",
+            "carried_from": "2026-10-01", "candidate_ids": []}
+_k, _d = _norm([_ok_item], _pp_norm)
+check("R2: 前日以前の投稿本文と題材が対応する（特徴語が2つ以上共通）項目は保持される",
+      _k == [_ok_item["text"]] and _d == [], str((_k, _d)))
+_k, _d = _norm(["Hana Bankのデジタル債券は継続監視（CoinDesk）"], _pp_norm)
+check("R2: 文字列だけの旧形式（carried_fromが無い）は除外される（理由に形式不正を記録）",
+      _k == [] and len(_d) == 1 and "形式不正" in _d[0]["reason"], str(_d))
+_k, _d = _norm([{**_ok_item, "carried_from": "2026-09-15"}], _pp_norm)
+check("R2: carried_fromが、渡した前日以前の投稿の日付に無い項目は除外される",
+      _k == [] and "carried_from" in _d[0]["reason"] and "2026-10-01" in _d[0]["reason"], str(_d))
+_k, _d = _norm([{"text": "イーサリアムのレイヤー2「Blast」が撤退を発表したと報じられています（CoinDesk、10月2日）。",
+                 "carried_from": "2026-10-01", "candidate_ids": []}], _pp_norm)
+check("R2（10/2のBlast型）: 前日以前の投稿本文に対応する語が無い当日初出の材料は、carried_fromを付けても除外される",
+      _k == [] and "対応する語が見つからない" in _d[0]["reason"], str(_d))
+_k, _d = _norm([{"text": "ビットコインについてCoinDeskが報じています。", "carried_from": "2026-10-01"}],
+               [{"date": "2026-10-01", "part1_headline": "ビットコインが話題でCoinDeskも報じました。", "part1_points": []}])
+check("R2: 媒体名（CoinDesk等）・汎用語（ビットコイン等）だけの共通は「同じ題材」の根拠にならず除外される",
+      _k == [] and len(_d) == 1, str(_d))
+_k, _d = _norm([{"text": "トークン化証券ロードマップは新しい動きがありません。", "carried_from": "2026-10-01"}],
+               [{"date": "2026-10-01", "part1_headline": "韓国がトークン化証券ロードマップを発表しました。", "part1_points": []}])
+check("R2: 共通の特徴語が1つでも7文字以上（トークン化証券ロードマップ）なら保持される",
+      len(_k) == 1 and _d == [], str((_k, _d)))
+_ic = {1: {"tier": 1}, 2: {"tier": 3}, 3: {"tier": 4}}
+_dec = {1: "採用", 2: "不採用", 3: "不採用"}
+_k, _d = _norm([{**_ok_item, "candidate_ids": [3]}], _pp_norm, _ic, _dec)
+check("R2: candidate_idsにtier4の候補を含む項目は除外される（tier4は本文・総括のどこにも書かない）",
+      _k == [] and "tier4" in _d[0]["reason"], str(_d))
+_k, _d = _norm([{**_ok_item, "candidate_ids": [1]}], _pp_norm, _ic, _dec)
+check("R2: candidate_idsに当日採用済みの候補を含む項目は除外される（採用した材料は主要なポイントへ載せる）",
+      _k == [] and "採用済み" in _d[0]["reason"], str(_d))
+_k, _d = _norm([{**_ok_item, "candidate_ids": [2, 99, True, "x"]}], _pp_norm, _ic, _dec)
+check("R2: 当日の不採用候補・存在しないID・不正な型のIDは除外理由にならない（前日以前の投稿と対応していれば保持）",
+      len(_k) == 1 and _d == [], str((_k, _d)))
+_many = [{**_ok_item, "text": f"Hana Bank（韓国）のEuroclearのデジタル債券は継続（{i}）"} for i in range(4)]
+_k, _d = _norm(_many, _pp_norm)
+check("R2: 保持は最大2件（超過分は除外として記録）", len(_k) == 2 and len(_d) == 2 and "上限2件" in _d[0]["reason"], str((_k, _d)))
+check("R2: 想定外の入力（None・dict・数値・None要素）でも例外を出さず、すべて除外または空になる",
+      _norm(None, _pp_norm) == ([], []) and _norm({"a": 1}, _pp_norm) == ([], [])
+      and _norm([1, None, 2.5], _pp_norm)[0] == [] and len(_norm([1, None, 2.5], _pp_norm)[1]) == 3
+      and _norm([_ok_item], None)[0] == [] and _norm([_ok_item], [])[0] == [])
+
+# call_aの結合: previous_postsがpayloadに入り、出力のreusable_for_summaryが機械フィルタを通って文字列のリストになる
+_news_r = {"candidates": [
+    {"tier": 1, "source": "FRB", "title": "Fed approves Fleur", "summary": "x", "url": "https://e/1", "published_at": "2026-10-02T01:00:00+09:00"},
+    {"tier": 3, "source": "CoinDesk", "title": "Blast to wind down", "summary": "y", "url": "https://e/2", "published_at": "2026-10-02T02:00:00+09:00"},
+], "source_status": {}}
+
+
+def _client_reusable(items):
+    def fn(kw, n):
+        ledger = [{"candidate_id": c["candidate_id"], "use": c.get("tier") == 1, "verified_by": "", "reason": "x"}
+                  for c in _parse_leading_json(kw["messages"][0]["content"]).get("news_candidates_today", [])]
+        return json_response({**CALL_A_DATA, "reusable_for_summary": items, "audit_ledger": ledger})
+    return FakeClient(fn)
+
+
+_good = {"text": "Hana Bank（韓国）のEuroclearを用いたデジタル債券は新しい動きがありません（CoinDesk、10月1日）。",
+         "carried_from": "2026-10-01", "candidate_ids": []}
+_bad_new = {"text": "イーサリアムのレイヤー2「Blast」が撤退を発表したと報じられています（CoinDesk、10月2日）。",
+            "carried_from": "2026-10-01", "candidate_ids": [2]}
+_c_r = _client_reusable([_good, _bad_new, "文字列だけの旧形式"])
+_out_r = generate_post.call_a(_c_r, DAILY_DATA, _news_r, None, previous_posts=_pp_norm)
+_sent = _parse_leading_json(_c_r.messages.calls[0]["messages"][0]["content"])
+check("call_a: previous_postsがcall_Aのpayloadに入る", _sent["previous_posts"] == _pp_norm)
+check("call_a: 出力のreusable_for_summaryは機械フィルタを通った文字列のリストになる（当日初出のBlast・旧形式の文字列は除外）",
+      _out_r.ok and _out_r.data["reusable_for_summary"] == [_good["text"]], str(_out_r.data and _out_r.data["reusable_for_summary"]))
+check("call_a: 除外した項目と理由がoutcome.reusable_droppedとto_dict()に残る",
+      len(_out_r.reusable_dropped) == 2 and _out_r.to_dict()["reusable_dropped"] == _out_r.reusable_dropped
+      and any("Blast" in d["text"] for d in _out_r.reusable_dropped), str(_out_r.reusable_dropped))
+_c_r2 = _client_reusable([_good])
+check("call_a: previous_postsを渡さない呼び出し（従来の呼び出し形式）でも動き、reusable_for_summaryは空になる（すべて除外）",
+      generate_post.call_a(_c_r2, DAILY_DATA, _news_r, None).data["reusable_for_summary"] == [])
+_payload_default, _, _ = generate_post._build_call_a_user_content(DAILY_DATA, _news_r, None)
+check("_build_call_a_user_content: previous_postsを省略するとpayloadのprevious_postsは空配列",
+      json.loads(_payload_default)["previous_posts"] == [])
+# 採用済み材料（Blast相当がuse:trueで採用）を参照するreusableは、採用ラベルを見て除外される
+_news_adopt = {"candidates": [{"tier": 1, "source": "FRB", "title": "Hana Bank issues bond", "summary": "x", "url": "https://e/1",
+                               "published_at": "2026-10-02T01:00:00+09:00"}], "source_status": {}}
+_out_adopt = generate_post.call_a(_client_reusable([{**_good, "candidate_ids": [1]}]), DAILY_DATA, _news_adopt, None, previous_posts=_pp_norm)
+check("call_a: reusable項目がcandidate_idsで当日の採用済み候補を指す場合は除外される（decisionはコード導出の採用）",
+      _out_adopt.ok and _out_adopt.data["reusable_for_summary"] == [] and "採用済み" in _out_adopt.reusable_dropped[0]["reason"],
+      str(_out_adopt.reusable_dropped))
+
+# run(): 前日以前の投稿（コミット済みdraft）をpreviousとして渡し、結果にprevious_posts_datesを残す
+os.makedirs("outputs/2026-08-31", exist_ok=True)
+Path("outputs/2026-08-31/daily_data.json").write_text(json.dumps(DAILY_DATA, ensure_ascii=False), encoding="utf-8")
+for _day, _h in (("2026-08-30", "SECが規則案を公表しました。"), ("2026-08-29", "FRBが利上げを決定しました。")):
+    os.makedirs(f"outputs/{_day}/draft", exist_ok=True)
+    Path(f"outputs/{_day}/draft/post_bundle.json").write_text(json.dumps({"level": "L0", "sections": {
+        "part1_headline": _h, "part1_points": "・項目です（Reuters、8月30日）。"}}, ensure_ascii=False), encoding="utf-8")
+_res_prev = generate_post.run("2026-08-31", client=_make_run_client_tolerant(True, True))
+check("run(): 前日以前の投稿本文（outputs/<日付>/draft/post_bundle.json）をcall_Aへ渡し、結果にprevious_posts_datesを残す",
+      _res_prev["previous_posts_dates"] == ["2026-08-30", "2026-08-29"], str(_res_prev.get("previous_posts_dates")))
+check("run(): call_aの結果にreusable_droppedが含まれる（STATUS用）", "reusable_dropped" in _res_prev["call_a"])
+
+# プロンプト（R1）
+_A = generate_post.SYSTEM_A
+check("R1: WRITES_Aのreusable_for_summaryは「前日以前の投稿本文（previous_posts）で扱った材料のうち、新しい動きがないものだけ」と定義し、"
+      "当日の候補・tier4・当日初出の材料は書かないと明記している（v1.92・オーナー指示）",
+      "前日以前の投稿本文（入力の\n  previous_posts）で既に扱った材料のうち、当日になっても新しい動きがない" in _A
+      and "次は書かない: 当日の候補（採用・不採用を問わず）、tier4、当日初出の材料。" in _A)
+check("R1: 出力形式は {text, carried_from, candidate_ids} 形式で、形式外・前日以前の本文と対応しない項目は機械的に除外される旨を明記している",
+      '{ "text": "...", "carried_from": "YYYY-MM-DD", "candidate_ids": [] }' in _A
+      and "システムが機械的に除外する" in _A)
+check("R1: 採用（use:true）した材料はすべて主要なポイントへ載せる／載せない材料はuse:false／ヘッドラインの繰り返しにしない（オーナー指示）",
+      "採用（use:true）した材料はすべて part1_headline・part1_points に載せる" in _A
+      and "載せない材料は use:false にする" in _A and "ヘッドラインの繰り返しにしない" in _A)
+check("R1: tier4はreusable_for_summaryを含め本文・総括のどこにも書かない（情報源規律の抜け道を残さない）。旧指示（継続監視の対象としてreusableに記す）は残っていない",
+      "reusable_for_summaryにも書かない" in _A
+      and "継続監視の対象として reusable_for_summary に記す" not in _A
+      and "audit_ledgerではなくreusable_for_summaryに記す" not in _A
+      and "tier 4等の継続監視材料があれば記す" not in _A)
+check("R1: 前日以前の投稿本文（previous_posts）で既に扱った材料に新しい動きがなければ、本文には書かずreusable_for_summaryに記す（news_candidates_yesterdayは本番で常に空だったため比較対象を置き換え）",
+      "入力の previous_posts（前日以前の投稿本文" in _A and "news_candidates_yesterday に同一の" not in _A)
+_B = generate_post.CALL_B_INSTRUCTIONS
+check("CALL_B指示: reusable_for_summaryは前日以前の投稿で扱った継続材料（システムが検証済み・空配列が通常）。空配列の日は前編に無い材料を総括に書かない",
+      "前日以前の投稿で扱った継続材料。システムが検証済みで、" in _B and "空配列の日は、前編に" in _B
+      and "無い材料への言及を総括に書かない" in _B and "（継続監視材料。part2_summary" not in _B)
+
+# STATUS表示
+_gen_rs = json.loads(json.dumps(_g_gen))
+_gen_rs["call_a"]["reusable_dropped"] = [{"text": "イーサリアムのレイヤー2「Blast」が撤退を発表したと報じられています", "reason": "対応する語が見つからない"}]
+_gen_rs["call_a"]["data"]["reusable_for_summary"] = ["Hana Bankのデジタル債券は継続監視（CoinDesk、10月1日）"]
+_gen_rs["previous_posts_dates"] = ["2026-10-01", "2026-09-30"]
+_st_rs = compose_post.render_generation_status(_gen_rs, DAILY_DATA)
+check("STATUS: reusable_for_summaryの保持・除外が記録される（件数・渡した前日以前の投稿の日付・除外理由）",
+      "reusable_for_summary（前日以前の投稿で扱った継続材料のみ。v1.92）: 保持1件／除外1件（call_Aへ渡した前日以前の投稿: 2026-10-01・2026-09-30）" in _st_rs
+      and "  - 保持: 「Hana Bankのデジタル債券は継続監視" in _st_rs and "  - 除外: 「イーサリアムのレイヤー2「Blast」" in _st_rs
+      and "— 対応する語が見つからない" in _st_rs, _st_rs[:900])
+_gen_old = json.loads(json.dumps(_g_gen))
+check("STATUS: 旧形式のgen（reusable_droppedも前日以前の投稿の日付も無い）でも例外にならず、「記録なし」と表示する",
+      "保持" in compose_post.render_generation_status(_gen_old, DAILY_DATA)
+      and "前日以前の投稿: 記録なし" in compose_post.render_generation_status(_gen_old, DAILY_DATA))
+_gen_fail = json.loads(json.dumps(_g_gen)); _gen_fail["call_a"]["ok"] = False
+check("STATUS: call_Aが失敗した日はreusable_for_summaryの行を出さない",
+      "reusable_for_summary（前日以前" not in compose_post.render_generation_status(_gen_fail, DAILY_DATA))
+
+# 実データ（本番にコミット済みの過去の投稿・読み取りのみ）: 過去のreusable_for_summaryの項目（当日の材料が98%）に
+# 前日以前の投稿との対応確認を当てはめると、ほぼすべて除外される
+_tot_items = _kept_items = 0
+for _bp in sorted((REPO / "outputs").glob("2026-*/draft/post_bundle.json")):
+    _bb = json.loads(_bp.read_text(encoding="utf-8"))
+    _items = _bb.get("reusable_for_summary") or []
+    if not _items:
+        continue
+    _pps = generate_post._load_previous_posts(_bp.parent.parent.name, outputs_root=REPO / "outputs")
+    for _it in _items:
+        _tot_items += 1
+        if any(_norm([{"text": _it, "carried_from": p["date"], "candidate_ids": []}], _pps)[0] for p in _pps):
+            _kept_items += 1
+check("実データ: 過去のreusable_for_summary（当日の材料が大半）に機械フィルタを当てはめると、保持されるのは2割未満（試算で50件中4件）",
+      _tot_items >= 48 and _kept_items / _tot_items < 0.2, f"{_kept_items}/{_tot_items}")
 
 print()
 print(f"PASS: {len(PASS)}  FAIL: {len(FAIL)}")

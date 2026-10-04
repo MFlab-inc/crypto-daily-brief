@@ -348,6 +348,25 @@ def _render_news_source_lines(news_status: dict[str, Any],
     return lines
 
 
+def _render_reusable_lines(gen: dict[str, Any], a: dict[str, Any]) -> list[str]:
+    """reusable_for_summary（総括用の1行言及の材料）の保持・除外の記録（v1.92・オーナー承認・R2）。
+    保持＝「前日以前の投稿本文で扱った材料のうち、新しい動きがないもの」と機械フィルタが確認したもの。
+    除外＝形式不正・前日以前の投稿と対応しない（当日初出の可能性）・tier4・当日採用済み・上限超過。
+    call_Aが失敗した日は出さない。"""
+    if not a.get("ok"):
+        return []
+    kept = [str(x) for x in ((a.get("data") or {}).get("reusable_for_summary") or [])]
+    dropped = a.get("reusable_dropped") or []
+    dates = gen.get("previous_posts_dates")
+    prev = f"call_Aへ渡した前日以前の投稿: {'・'.join(dates) if dates else 'なし'}" if dates is not None else "前日以前の投稿: 記録なし"
+    lines = [f"reusable_for_summary（前日以前の投稿で扱った継続材料のみ。v1.92）: 保持{len(kept)}件／除外{len(dropped)}件（{prev}）"]
+    for t in kept:
+        lines.append(f"  - 保持: 「{_clip(t, 80)}」")
+    for d in dropped:
+        lines.append(f"  - 除外: 「{_clip(d.get('text'), 60)}」— {d.get('reason', '')}")
+    return lines
+
+
 def _inconsistent_symbols(daily_data: dict) -> list[str]:
     return [sym for sym, d in daily_data.get("intraday_range", {}).items()
             if isinstance(d, dict) and d.get("inconsistent")]
@@ -567,6 +586,7 @@ def render_generation_status(gen: dict[str, Any], daily_data: dict | None = None
         f"news_candidates_today: {gen.get('news_candidate_count', 0)}件 / audit_ledger: {ledger_len}件"
         "（候補があるのにaudit_ledgerが0件の場合はC19がFAILする想定。要目視確認）",
     ]
+    lines += _render_reusable_lines(gen, a)
     ts = a.get("truncation_stats", {})
     if ts.get("tier3_dropped", 0) > 0:
         lines.append(
