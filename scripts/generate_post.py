@@ -1079,7 +1079,13 @@ class AuditLedgerReconstructionError(ValueError):
     """LLMのaudit_ledger出力が候補一覧と整合しない場合に送出する（v1.48・
     v1.53フォローアップで対象を拡張）。_call_json()の広いexceptで捕捉され、
     他の解析失敗と同様にリトライされる。
+
+    unresolved_details（v1.96・オーナー承認）: 独立2ソースの相方が成立しなかった候補ごとの
+    理由（_explain_unresolvedの出力。重なり係数・閾値を含む）。リトライ指示
+    （_build_call_a_retry_note）が、なぜ成立しなかったかをモデルへ伝えるために使う。
     """
+
+    unresolved_details: "list[dict] | None" = None
 
 
 def _pair_claim_detail(claimant_id: int, target_id: int, id_to_candidate: dict[int, dict],
@@ -1289,8 +1295,12 @@ def _derive_decisions(llm_entries: list[dict], id_to_candidate: dict[int, dict],
             diagnostics["unresolved"] = _explain_unresolved(
                 unresolved, claim_by_id, id_to_candidate, use_by_id, pair_overlap_threshold)
         if not force_drop_unresolved:
-            raise AuditLedgerReconstructionError(
+            err = AuditLedgerReconstructionError(
                 f"tier3のuse:trueだが独立2ソースの相方が成立しない候補ID: {sorted(unresolved)}")
+            # v1.96: リトライ指示へ重なり係数・閾値を伝えるため、理由を例外に添える（診断の有無によらない）
+            err.unresolved_details = _explain_unresolved(
+                unresolved, claim_by_id, id_to_candidate, use_by_id, pair_overlap_threshold)
+            raise err
         for cid in unresolved:
             decisions[cid] = "不採用"
             if force_dropped is not None:
@@ -1616,6 +1626,23 @@ def _normalize_reusable_for_summary(raw: Any, previous_posts: list[dict] | None,
     return kept, dropped
 
 
+def _describe_pair_reason(r: dict) -> str:
+    """相方不成立の理由1件（_explain_unresolvedのreasons要素）を、リトライ指示用の1文にする（v1.96）。
+    タイトルの重なり係数が閾値に届かなかった場合は、その係数と閾値を明記する。"""
+    code = r.get("code") or "no_claim"
+    label = PAIR_REJECT_REASON_LABELS.get(code, str(code))
+    if code == "overlap_below_threshold" and r.get("overlap") is not None:
+        label = f"タイトルの重なり係数{r['overlap']:.2f}が閾値{r.get('threshold')}に届かない"
+    other = ""
+    if r.get("other_id") is not None:
+        other = f"ID{r['other_id']}（{r.get('other_source', '')}「{str(r.get('other_title', ''))[:60]}」）"
+    if r.get("role") == "incoming_claim":
+        return f"{other}からの申告: {label}"
+    if code == "no_claim":
+        return f"自身の申告: {label}"
+    return f"自身の申告→{other}: {label}"
+
+
 def _build_call_a_retry_note(exc: Exception) -> str | None:
     """call_a()のbuild_retry_note（v1.66・オーナー承認）。
     AuditLedgerReconstructionError（tier3の独立2ソースペア申告が
@@ -1631,9 +1658,24 @@ def _build_call_a_retry_note(exc: Exception) -> str | None:
     """
     if not isinstance(exc, AuditLedgerReconstructionError):
         return None
+    detail_lines = ""
+    details = getattr(exc, "unresolved_details", None) or []
+    if details:
+        # v1.96（オーナー承認）: 成立しなかった理由（重なり係数・閾値を含む）を伝える。
+        # 閾値そのものはconfig/pair_overlap.jsonの値（据え置き）で、変更はしない。
+        detail_lines = (
+            "システムが判定した、相方が成立しなかった理由は次のとおりです（重なり係数は、2つのタイトルの"
+            "英数字の語の重なり＝共通語数÷語数の少ない方、です。閾値以上でないと同じニュースでも"
+            "独立2ソースとして成立しません）:\n"
+            + "\n".join(
+                f"- 候補ID{d['candidate_id']}（{d.get('source', '')}「{str(d.get('title', ''))[:60]}」）: "
+                + "／".join(_describe_pair_reason(r) for r in d.get("reasons", []))
+                for d in details)
+            + "\n\n")
     return (
         "### 直前の試行への修正指示（自動リトライ）\n\n"
         f"直前の試行は次のエラーで失敗しました: {exc}\n\n"
+        f"{detail_lines}"
         "このエラーで名指しされた候補IDについてのみ、pairs_with_candidate_idが"
         "「独立2ソース規定」の条件（相手もtier3・use:true・情報源が異なる・"
         "タイトルの内容が十分類似）を満たすか再確認してください。満たす場合は"

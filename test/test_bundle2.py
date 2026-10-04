@@ -6167,6 +6167,57 @@ check("実データ: 過去のL0日で警告が出るのは、台帳で採用の
       and all(v == 0 for d, v in _mm_days.items() if d not in ("2026-09-07", "2026-09-22") and d <= "2026-10-03"),
       str({d: v for d, v in _mm_days.items() if v}))
 
+print("=== v1.96（オーナー承認・5C）: リトライ指示に、相方が成立しなかった理由（タイトルの重なり係数と閾値）を明記する。閾値0.4は据え置き ===")
+check("閾値: config/pair_overlap.jsonの閾値は据え置き（0.4）。コードのデフォルト値も0.4のまま",
+      generate_post.load_pair_overlap_threshold() == 0.4 and generate_post.PAIR_OVERLAP_THRESHOLD_DEFAULT == 0.4)
+_NEWS_BLAST = {"collected_at": "2026-10-02T09:00:00+09:00", "target_date_jst": "2026-10-02", "source_status": {}, "candidates": [
+    {"title": "Once a $2 billion Ethereum layer-2, Blast is shutting down after assets plunge 98%", "url": "https://e/cd",
+     "source": "CoinDesk", "published_at": "Fri, 02 Oct 2026 10:00:00 GMT", "summary": "...", "kind": "supplementary", "tier": 3},
+    {"title": "Paradigm-backed Layer 2 Blast to wind down network as costs exceed revenue", "url": "https://e/tb",
+     "source": "The Block", "published_at": "Fri, 02 Oct 2026 09:30:00 GMT", "summary": "...", "kind": "supplementary", "tier": 3}]}
+_c_blast = FakeClient(lambda kw, n: json_response(_pair_claim_response(kw)))
+_out_blast = generate_post.call_a(_c_blast, DAILY_DATA, _NEWS_BLAST, None)
+_note_blast = _c_blast.messages.calls[1]["messages"][0]["content"]
+check("リトライ指示（10/2のBlast型）: 2試行目のuser_contentに、成立しなかった理由として重なり係数（0.31）と閾値（0.4）が明記される（自身の申告と相手からの申告の両方）",
+      "システムが判定した、相方が成立しなかった理由は次のとおりです" in _note_blast
+      and "タイトルの重なり係数0.31が閾値0.4に届かない" in _note_blast
+      and "自身の申告→ID2（The Block「Paradigm-backed Layer 2 Blast to wind down" in _note_blast
+      and "ID1（CoinDesk「Once a $2 billion Ethereum layer-2, Blast" in _note_blast and "からの申告" in _note_blast, _note_blast[-900:])
+check("リトライ指示: 重なり係数の説明（共通語数÷語数の少ない方）と、閾値以上でないと同じニュースでも成立しない旨を添える。従来の限定的な文言（名指しされた候補IDのみ・他は変更しない）も維持される",
+      "共通語数÷語数の少ない方" in _note_blast and "独立2ソースとして成立しません" in _note_blast
+      and "候補IDについてのみ" in _note_blast and "名指しされていない他の候補" in _note_blast and "変更しないでください" in _note_blast)
+check("リトライ指示: 1試行目のuser_contentには含まれない（修正指示は2回目以降だけ）。3試行目も直前（2回目）の理由に更新される",
+      "システムが判定した" not in _c_blast.messages.calls[0]["messages"][0]["content"]
+      and "システムが判定した" in _c_blast.messages.calls[2]["messages"][0]["content"])
+_pc = generate_post.call_a(FakeClient(lambda kw, n: json_response(_pair_claim_response(kw))), DAILY_DATA, NEWS_PAIR_CANDIDATES, None, 0.6)
+_c_p6 = FakeClient(lambda kw, n: json_response(_pair_claim_response(kw)))
+generate_post.call_a(_c_p6, DAILY_DATA, NEWS_PAIR_CANDIDATES, None, 0.6)
+check("リトライ指示: 閾値は呼び出しに使った値（0.6）がそのまま出る（重なり係数0.50が閾値0.6に届かない）",
+      "タイトルの重なり係数0.50が閾値0.6に届かない" in _c_p6.messages.calls[1]["messages"][0]["content"])
+_err_nodetail = generate_post.AuditLedgerReconstructionError("tier3のuse:trueだが独立2ソースの相方が成立しない候補ID: [3]")
+_n0 = generate_post._build_call_a_retry_note(_err_nodetail)
+check("リトライ指示: 理由の詳細が無い例外（従来の形）は、従来どおりの指示文（重なり係数の行なし）。他の例外はNone（無変更で再送）",
+      "直前の試行への修正指示" in _n0 and "システムが判定した" not in _n0 and "候補IDについてのみ" in _n0
+      and generate_post._build_call_a_retry_note(ValueError("x")) is None)
+_err_other = generate_post.AuditLedgerReconstructionError("x")
+_err_other.unresolved_details = [{"candidate_id": 5, "source": "CoinDesk", "title": "T", "reasons": [
+    {"role": "own_claim", "code": "same_source", "other_id": 6, "other_title": "U", "other_source": "CoinDesk"},
+    {"role": "own_claim", "code": "no_claim"}]}]
+_n1 = generate_post._build_call_a_retry_note(_err_other)
+check("リトライ指示: 重なり係数以外の理由（同じ媒体・申告なし）も、理由の名称で伝える",
+      "候補ID5（CoinDesk「T」）: 自身の申告→ID6（CoinDesk「U」）: 申告先が同じ媒体／自身の申告: 相方の申告なし" in _n1, _n1)
+_ic_t = {1: {"tier": 3, "source": "A", "title": "alpha beta gamma delta"}, 2: {"tier": 3, "source": "B", "title": "alpha epsilon zeta eta"}}
+try:
+    generate_post._derive_decisions([{"candidate_id": 1, "use": True, "pairs_with_candidate_id": 2},
+                                     {"candidate_id": 2, "use": True}], _ic_t, 0.4)
+    _raised = None
+except generate_post.AuditLedgerReconstructionError as _e:
+    _raised = _e
+check("_derive_decisions: 相方が成立しない場合の例外に、理由の詳細（unresolved_details。重なり係数・閾値・両側のタイトル）が添えられる（診断を渡さなくても）",
+      _raised is not None and _raised.unresolved_details and _raised.unresolved_details[0]["candidate_id"] == 1
+      and any(r.get("code") == "overlap_below_threshold" and r.get("overlap") == 0.25 and r.get("threshold") == 0.4
+              for d in _raised.unresolved_details for r in d["reasons"]), str(getattr(_raised, "unresolved_details", None)))
+
 print()
 print(f"PASS: {len(PASS)}  FAIL: {len(FAIL)}")
 if FAIL:
