@@ -38,7 +38,7 @@ import json
 import re
 import sys
 import time
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Callable
 
@@ -838,6 +838,9 @@ class CallOutcome:
         # v1.92（オーナー承認・R2）: reusable_for_summaryの機械フィルタで除外した項目
         # （{"text","reason"}。GENERATION_STATUS.mdへ記録する）。
         self.reusable_dropped: list[dict] = []
+        # v1.97（オーナー承認・案1）: 候補IDごとの{"decision","use","reason"}（候補の記録用。
+        # 呼び出しAが成功した場合のみ。to_dict()には含めない）。
+        self.candidate_decisions: dict[int, dict] = {}
 
     def to_dict(self) -> dict:
         return {"ok": self.ok, "attempts": self.attempts, "error": self.error,
@@ -979,6 +982,15 @@ def _call_json(
 def _select_candidates_for_call_a(
         candidates: list[dict],
         pair_overlap_threshold: float = PAIR_OVERLAP_THRESHOLD_DEFAULT) -> tuple[list[dict], dict[str, int]]:
+    """選定の本体は_select_candidates_detail（v1.97でdetailを返す形に分離。戻り値・挙動は従来どおり）。"""
+    selected, stats, _detail = _select_candidates_detail(candidates, pair_overlap_threshold)
+    return selected, stats
+
+
+def _select_candidates_detail(
+        candidates: list[dict],
+        pair_overlap_threshold: float = PAIR_OVERLAP_THRESHOLD_DEFAULT
+) -> tuple[list[dict], dict[str, int], dict[str, Any]]:
     """呼び出しAへ渡す候補を選ぶ（v1.21・v1.39フォローアップでペア救済を追加・
     v1.51でtier4上限を追加・v1.59でtier2上限を追加）。
     tier 1（公式発表）は全件、tier 3（CoinDesk・Cointelegraph等）は公開日時の
@@ -1053,7 +1065,11 @@ def _select_candidates_for_call_a(
         "tier4_selected": len(others_selected),
         "tier4_dropped": len(others) - len(others_selected),
     }
-    return tier1 + tier2_selected + tier3_selected + others_selected, stats
+    # v1.97（オーナー承認・案1）: 候補の記録（build_candidate_selection_report）が、実際の選定と
+    # 同じ並べ替え結果・救済結果を参照できるように返す（選定ロジックを二重に持たない）。
+    detail = {"tier1": tier1, "tier2_sorted": tier2_sorted, "tier3_sorted": tier3_sorted,
+              "others_sorted": others_sorted, "rescued_ids": rescued_ids}
+    return tier1 + tier2_selected + tier3_selected + others_selected, stats, detail
 
 
 # v1.29（オーナー指示・修正2）: tier1が薄い日にpart1_pointsの項目数を
@@ -1082,6 +1098,83 @@ def _assign_candidate_ids(candidates: list[dict]) -> list[dict]:
     published_atを転記せず、このIDだけで候補を参照できるようにするため。
     """
     return [{**c, "candidate_id": i} for i, c in enumerate(candidates, start=1)]
+
+
+# --- v1.97（オーナー承認・案1）: 候補の記録 ---
+#
+# 背景（2026-10-04の調査）: tier2（Reuters）は新しい順で上位TIER2_CANDIDATE_LIMIT件に絞るため、
+# 件数上限で落ちた記事は、どこにも記録が残らなかった（news_candidates.jsonはCI成果物でコミット
+# されず、audit_ledgerは渡した候補の分しか記録しない）。どの記事が上限で落ちたか、その時刻範囲は
+# いつ・どの日にどの程度落ちているかを、事後に確認できるようにする。
+# 全候補（選定・救済・除外）について、tier・媒体・題名・公開時刻（UTC）・選定状態・tier内の新しい順の
+# 順位・呼び出しAの採否と理由を記録する。選定ロジックは_select_candidates_detail()をそのまま使う
+# （二重に持たない）。ここは記録のみで、選定・採否には一切影響しない。
+CANDIDATE_LOG_SUMMARY_HEAD_CHARS = 120
+
+
+def _iso_utc_minute(raw: Any) -> str | None:
+    """RSSのpubDate（RFC 822）をUTCの'YYYY-MM-DDTHH:MMZ'へ。解釈できなければNone。"""
+    dt = collect_news.parse_pubdate_jst(raw if isinstance(raw, str) else "")
+    return dt.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%MZ") if dt is not None else None
+
+
+def build_candidate_selection_report(target_date: str, news_today: Any,
+                                      pair_overlap_threshold: float = PAIR_OVERLAP_THRESHOLD_DEFAULT,
+                                      decisions: dict[int, dict] | None = None) -> dict:
+    """当日の全候補（news_candidates.json）について、呼び出しAへ渡したか・落としたかを記録する。
+
+    candidate_idは_assign_candidate_ids()が実際に振る番号と同じ（選定結果の並びの1始まり）。
+    落とした候補（status="dropped"）にはcandidate_idが無い（呼び出しAには渡していない）。
+    status: "selected"（上限内）／"rescued"（tier3の独立2媒体ペア救済で上限外から追加）／
+    "dropped"（件数上限により除外）。recency_rankはtier内の新しい順の順位（1が最新。tier1は無し）。
+    decisions: {candidate_id: {"decision","use","reason"}}（呼び出しAが成功した場合のみ）。
+    入力が不正でも例外にしない（記録は本文生成の成否に影響させない）。
+    """
+    candidates = news_today.get("candidates", []) if isinstance(news_today, dict) else []
+    candidates = [c for c in candidates if isinstance(c, dict)]
+    selected, stats, detail = _select_candidates_detail(candidates, pair_overlap_threshold)
+    id_by_obj = {id(c): i for i, c in enumerate(selected, start=1)}
+    rescued_ids = detail["rescued_ids"]
+
+    def entry(c: dict, rank: int | None) -> dict:
+        cid = id_by_obj.get(id(c))
+        status = "dropped" if cid is None else ("rescued" if id(c) in rescued_ids else "selected")
+        e: dict[str, Any] = {
+            "candidate_id": cid, "tier": c.get("tier"), "source": c.get("source", ""),
+            "title": c.get("title", ""), "published_at_utc": _iso_utc_minute(c.get("published_at")),
+            "status": status, "recency_rank": rank, "url": c.get("url", ""),
+            "summary_head": str(c.get("summary", ""))[:CANDIDATE_LOG_SUMMARY_HEAD_CHARS],
+        }
+        d = (decisions or {}).get(cid) if cid is not None else None
+        if isinstance(d, dict):
+            e["decision"] = d.get("decision")
+            e["use"] = d.get("use")
+            e["reason"] = d.get("reason", "")
+        return e
+
+    entries = [entry(c, None) for c in detail["tier1"]]
+    for key in ("tier2_sorted", "tier3_sorted", "others_sorted"):
+        entries += [entry(c, rank) for rank, c in enumerate(detail[key], start=1)]
+
+    window = None
+    try:
+        w_start, w_end = collect_news.collection_window_ny(date.fromisoformat(target_date))
+        window = {"start_utc": w_start.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%MZ"),
+                  "end_utc": w_end.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%MZ")}
+    except (TypeError, ValueError):
+        pass
+    return {
+        "target_date_jst": target_date,
+        "collected_at": news_today.get("collected_at") if isinstance(news_today, dict) else None,
+        "window": window,
+        "source_status": news_today.get("source_status", {}) if isinstance(news_today, dict) else {},
+        "limits": {"tier2": TIER2_CANDIDATE_LIMIT, "tier3": TIER3_CANDIDATE_LIMIT,
+                   "tier4": TIER4_CANDIDATE_LIMIT, "pair_rescue_max_pairs": PAIR_RESCUE_MAX_PAIRS,
+                   "raw_item_limit": collect_news.RAW_ITEM_LIMIT},
+        "stats": stats,
+        "call_a_decisions_recorded": decisions is not None,
+        "candidates": entries,
+    }
 
 
 _AUDIT_LEDGER_STATIC_FIELDS = ("source", "url", "title", "published_at")
@@ -1729,11 +1822,15 @@ def call_a(client: "anthropic.Anthropic", daily_data: dict, news_today: dict,
     # v1.92: reusable_for_summaryの機械フィルタ（R2）で除外した項目（試行ごとにリセット）
     reusable_dropped_stats: list[dict] = []
     decisions_by_id: dict[int, str] = {}
+    # v1.97: 候補IDごとの採否・理由（試行ごとにリセット。最終的に成功した試行の値だけが残る）
+    candidate_decisions_stats: dict[int, dict] = {}
 
     def _rebuild_audit_ledger(data: dict, attempt: int) -> dict:
         rejected_pairs_stats.clear()
         force_dropped_stats.clear()
         reusable_dropped_stats.clear()
+        candidate_decisions_stats.clear()
+        llm_entries = data.get("audit_ledger")
         # v1.79（オーナー承認）: 最終試行でも独立2ソースの相方が解消しない
         # tier3候補は、従来はAuditLedgerReconstructionErrorで例外化し
         # MAX_ATTEMPTS回リトライしてもなお解消しない場合そのままcall_a失敗
@@ -1754,6 +1851,13 @@ def call_a(client: "anthropic.Anthropic", daily_data: dict, news_today: dict,
                 attempt_diagnostics.append({
                     "attempt": attempt, "force_drop": force_drop, "unresolved": diag["unresolved"],
                     "rejected_pairs": list(rejected_pairs_stats)})
+        # v1.97: 再構成が成功した（＝上のtryが例外にならなかった）場合だけ、候補IDごとの採否・理由を残す。
+        # 再構成の成功時、llm_entriesは「全要素がdictで、candidate_idが過不足なく一致」と検証済み。
+        for e in llm_entries:
+            cid = e["candidate_id"]
+            candidate_decisions_stats[cid] = {
+                "decision": decisions_by_id.get(cid), "use": bool(e.get("use")),
+                "reason": str(e.get("reason", ""))}
         # v1.92（オーナー承認・R2）: reusable_for_summaryを機械フィルタにかけ、前日以前の投稿本文で
         # 扱った材料だけを文字列のリストとして残す（以降のcall_B・bundle・C23は従来どおり文字列を扱う）。
         try:
@@ -1780,6 +1884,7 @@ def call_a(client: "anthropic.Anthropic", daily_data: dict, news_today: dict,
     outcome.force_dropped_candidates = list(force_dropped_stats)
     outcome.attempt_diagnostics = list(attempt_diagnostics)
     outcome.reusable_dropped = list(reusable_dropped_stats)
+    outcome.candidate_decisions = dict(candidate_decisions_stats)
     return outcome
 
 
@@ -1914,6 +2019,14 @@ def run(target_date: str, *, client: "anthropic.Anthropic | None" = None) -> dic
     # の実件数と一致しなくなりC19が誤って発火しうる。
     selected_today, _ = _select_candidates_for_call_a(news_today.get("candidates", []), pair_overlap_threshold)
 
+    # v1.97（オーナー承認・案1）: 全候補の選定状態と呼び出しAの採否の記録（記録のみ。例外でも本文生成は続行）。
+    try:
+        candidate_selection = build_candidate_selection_report(
+            target_date, news_today, pair_overlap_threshold,
+            decisions=a.candidate_decisions if a.ok else None)
+    except Exception as e:  # noqa: BLE001 — 記録の失敗で本文生成を止めない
+        candidate_selection = {"error": f"{type(e).__name__}: {e}"}
+
     return {
         "target_date_jst": target_date,
         "level": level,
@@ -1921,6 +2034,7 @@ def run(target_date: str, *, client: "anthropic.Anthropic | None" = None) -> dic
         "call_b": b.to_dict(),
         "news_source_status": news_today.get("source_status", {}),
         "news_candidate_count": len(selected_today),
+        "candidate_selection": candidate_selection,
         "previous_posts_dates": [p["date"] for p in previous_posts],
         "total_usage": _add_usage(a.usage, b.usage),
     }

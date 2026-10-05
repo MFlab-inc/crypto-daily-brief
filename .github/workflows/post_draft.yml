@@ -122,6 +122,10 @@ jobs:
           git config user.name "crypto-daily-bot"
           git config user.email "actions@users.noreply.github.com"
           git add "$TARGET_DIR/draft" "$TARGET_DIR/GENERATION_STATUS.md"
+          # v1.97（オーナー承認・案1）: 全候補の選定状態・採否の記録（compose_post.pyが生成した場合のみ）
+          if [ -f "$TARGET_DIR/candidates_log.json" ]; then
+            git add "$TARGET_DIR/candidates_log.json"
+          fi
           git commit -m "post-draft: ${TARGET_DATE} (manual trial run)" || echo "no changes"
           git pull --rebase origin "${GITHUB_REF_NAME}" || true
           git push

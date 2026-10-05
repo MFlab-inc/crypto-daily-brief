@@ -6318,6 +6318,206 @@ _c22_old = next(c for c in verify_post.run_all(_b_fl_old, DAILY_DATA).checks if 
 check("対照: 手続き的な発表をuse:trueにしたまま定型文の見出しにするとC22はFAIL（だからuse:falseにする）。実文言の見出し（従来の10/2型）ならPASS（この扱いは今回やめる）",
       _c22_bad["result"] == "FAIL" and _c22_old["result"] == "PASS", f"{_c22_bad['result']} / {_c22_old['result']}")
 
+print("=== v1.97（オーナー承認・案1）: 候補の記録（candidates_log.json）と、STATUSのtier2除外件数・時刻範囲（記録のみ。選定・採否は変えない） ===")
+from datetime import datetime as _dt97, timedelta as _td97, timezone as _tz97
+from email.utils import format_datetime as _fmtdt97
+
+_END97 = _dt97(2026, 10, 4, 21, 0, tzinfo=_tz97.utc)  # 2026-10-04の収集窓の終端（NY 17:00・夏時間=21:00 GMT）
+
+
+def _pub97(minutes_before_end):
+    return _fmtdt97(_END97 - _td97(minutes=minutes_before_end))
+
+
+def _cand97(tier, source, title, minutes, summary="見出しだけの要約"):
+    return {"tier": tier, "source": source, "title": title, "url": f"https://e/{title.replace(' ', '_')}",
+            "published_at": _pub97(minutes), "summary": summary, "kind": "k"}
+
+
+_in97 = [_cand97(1, "FRB", "official one", 300), _cand97(1, "SEC", "official two", 200)]
+_in97 += [_cand97(2, "Reuters", f"reuters story {i}", 30 * i + 10) for i in range(18)]  # 新しい順にi=0が最新。i=15..17が上限外
+_in97 += [_cand97(3, "Cointelegraph", "alpha beta gamma delta zeta", 100)]                # 最新側（上限内）
+_in97 += [_cand97(3, "CoinDesk", f"filler {i}", 101 + i) for i in range(14)]
+_in97 += [_cand97(3, "CoinDesk", "alpha beta gamma delta epsilon", 400)]                  # 16位（上限外）→ペア救済
+_in97 += [_cand97(4, "Google News", f"discovery {i}", 50 + i) for i in range(12)]          # 上限10件→2件除外
+_in97.append({**_cand97(4, "Google News", "undated discovery", 0), "published_at": "garbage"})  # 公開時刻を解釈できない
+_in97_snapshot = json.dumps(_in97, sort_keys=True)
+_news97 = {"collected_at": "2026-10-05T07:38:00+09:00", "target_date_jst": "2026-10-04",
+           "source_status": {"Google News": {"status": "ok", "raw_count": 50, "kept_count": 31},
+                             "Reuters-RSS": {"status": "failed", "detail": "HTTP 410"}},
+           "candidates": _in97}
+_rep97 = generate_post.build_candidate_selection_report("2026-10-04", _news97)
+_ents97 = _rep97["candidates"]
+_sel97, _stats97 = generate_post._select_candidates_for_call_a(_in97)
+_assigned97 = generate_post._assign_candidate_ids(_sel97)
+
+check("v1.97 記録: 全候補（選定・救済・除外）が1件ずつ記録される", len(_ents97) == len(_in97), f"{len(_ents97)} vs {len(_in97)}")
+check("v1.97 記録: 入力の候補は変更しない（記録のみ）", json.dumps(_in97, sort_keys=True) == _in97_snapshot)
+check("v1.97 記録: 渡した候補のcandidate_id・題名は、実際に呼び出しAへ振る番号（_assign_candidate_ids）と完全に一致する",
+      sorted((e["candidate_id"], e["title"]) for e in _ents97 if e["candidate_id"] is not None)
+      == sorted((c["candidate_id"], c["title"]) for c in _assigned97), "")
+check("v1.97 記録: 件数上限で落とした候補にはcandidate_idが無く、statusはdropped（呼び出しAには渡していない）",
+      all(e["candidate_id"] is None for e in _ents97 if e["status"] == "dropped")
+      and sum(1 for e in _ents97 if e["status"] == "dropped") == _stats97["tier2_dropped"] + _stats97["tier3_dropped"] + _stats97["tier4_dropped"], "")
+check("v1.97 記録: 統計（stats）は従来の選定の統計（_select_candidates_for_call_a）と同一",
+      _rep97["stats"] == _stats97, str(_rep97["stats"]))
+_t2_97 = [e for e in _ents97 if e["tier"] == 2]
+_t2_drop97 = [e for e in _t2_97 if e["status"] == "dropped"]
+check("v1.97 記録: tier2は18件中15件を選定・3件を除外（上限外は新しい順で見て16〜18位＝最も古い3件）",
+      len(_t2_97) == 18 and len(_t2_drop97) == 3
+      and sorted(e["title"] for e in _t2_drop97) == ["reuters story 15", "reuters story 16", "reuters story 17"]
+      and [e["recency_rank"] for e in _t2_97][:3] == [1, 2, 3], str([e["title"] for e in _t2_drop97]))
+check("v1.97 記録: 公開時刻はUTC（分まで）で記録される（最新のtier2＝窓の終端の10分前＝20:50Z）",
+      _t2_97[0]["published_at_utc"] == "2026-10-04T20:50Z", str(_t2_97[0]["published_at_utc"]))
+check("v1.97 記録: tier1は全件選定・順位なし。ペア救済されたtier3はstatus=rescuedでcandidate_idを持つ",
+      all(e["status"] == "selected" and e["recency_rank"] is None for e in _ents97 if e["tier"] == 1)
+      and [e["status"] for e in _ents97 if e["title"] == "alpha beta gamma delta epsilon"] == ["rescued"]
+      and [e["candidate_id"] is not None for e in _ents97 if e["title"] == "alpha beta gamma delta epsilon"] == [True], "")
+check("v1.97 記録: tier4は上限10件を超えた分が除外され、公開時刻を解釈できない候補はpublished_at_utc=Noneで最後尾（記録は落とさない）",
+      sum(1 for e in _ents97 if e["tier"] == 4 and e["status"] == "dropped") == 3
+      and [e for e in _ents97 if e["title"] == "undated discovery"][0]["published_at_utc"] is None
+      and [e for e in _ents97 if e["title"] == "undated discovery"][0]["status"] == "dropped", "")
+check("v1.97 記録: 要約は先頭120字だけ残す（容量の抑制）",
+      all(len(e["summary_head"]) <= generate_post.CANDIDATE_LOG_SUMMARY_HEAD_CHARS for e in _ents97)
+      and generate_post.build_candidate_selection_report(
+          "2026-10-04", {"candidates": [_cand97(2, "Reuters", "long", 10, summary="あ" * 500)]}
+      )["candidates"][0]["summary_head"] == "あ" * generate_post.CANDIDATE_LOG_SUMMARY_HEAD_CHARS, "")
+check("v1.97 記録: 収集窓は夏時間（10/4: 前日21:00Z〜当日21:00Z）、冬時間への切替日（11/1: 21:00Z〜22:00Zの25時間）も実際の時刻で記録される",
+      _rep97["window"] == {"start_utc": "2026-10-03T21:00Z", "end_utc": "2026-10-04T21:00Z"}
+      and generate_post.build_candidate_selection_report("2026-11-01", {})["window"]
+      == {"start_utc": "2026-10-31T21:00Z", "end_utc": "2026-11-01T22:00Z"}, str(_rep97["window"]))
+check("v1.97 記録: 取得上限・各情報源の取得状況（source_status）・上限値（limits）も記録される",
+      _rep97["source_status"]["Google News"]["raw_count"] == 50 and _rep97["limits"]["tier2"] == generate_post.TIER2_CANDIDATE_LIMIT
+      and _rep97["limits"]["raw_item_limit"] == collect_news.RAW_ITEM_LIMIT and _rep97["collected_at"] == "2026-10-05T07:38:00+09:00", str(_rep97["limits"]))
+check("v1.97 記録: 呼び出しAの結果が無い（失敗・未実行）ときは採否を書かない（call_a_decisions_recordedがFalse）",
+      _rep97["call_a_decisions_recorded"] is False and all("decision" not in e for e in _ents97), "")
+_dec97 = {1: {"decision": "採用", "use": True, "reason": "A: 公式発表"}, 5: {"decision": "不採用", "use": False, "reason": "C: 波及経路を説明できない"}}
+_repd97 = generate_post.build_candidate_selection_report("2026-10-04", _news97, decisions=_dec97)
+check("v1.97 記録: 採否・理由は、渡した候補（candidate_idあり）にだけ付く。落とした候補には付かない",
+      _repd97["call_a_decisions_recorded"] is True
+      and [(e["decision"], e["use"], e["reason"]) for e in _repd97["candidates"] if e["candidate_id"] == 1] == [("採用", True, "A: 公式発表")]
+      and [e["decision"] for e in _repd97["candidates"] if e["candidate_id"] == 5] == ["不採用"]
+      and all("decision" not in e for e in _repd97["candidates"] if e["status"] == "dropped"), "")
+check("v1.97 記録: 候補が無い・入力が不正（None・dictでない要素）でも例外にならず、記録は空",
+      generate_post.build_candidate_selection_report("2026-10-04", None)["candidates"] == []
+      and generate_post.build_candidate_selection_report("2026-10-04", {"candidates": [1, "x", None]})["candidates"] == []
+      and generate_post.build_candidate_selection_report("not-a-date", {})["window"] is None, "")
+
+print("=== v1.97: call_a() が候補IDごとの採否・理由を残す／run()が記録を返す ===")
+_ids97 = {}
+
+
+def _client97(kw, n):
+    ids = [(c["candidate_id"], c["tier"]) for c in _parse_leading_json(kw["messages"][0]["content"]).get("news_candidates_today", [])]
+    if kw.get("system") == generate_post.SYSTEM_A:
+        return json_response({"headline_for_image": "x", "part1_headline": generate_post.FIXED_HEADLINE,
+                              "part1_points": [generate_post.FIXED_POINTS], "reusable_for_summary": [],
+                              "audit_ledger": [{"candidate_id": i, "use": t == 1 and i == 1, "verified_by": "RSS summary" if t == 1 and i == 1 else "",
+                                                "reason": f"理由{i}"} for i, t in ids]})
+    return json_response(CALL_B_DATA)
+
+
+Path("outputs/2026-10-04").mkdir(parents=True, exist_ok=True)
+Path("outputs/2026-10-04/daily_data.json").write_text(json.dumps({**DAILY_DATA, "target_date_jst": "2026-10-04"}, ensure_ascii=False), encoding="utf-8")
+Path("outputs/2026-10-04/news_candidates.json").write_text(json.dumps(_news97, ensure_ascii=False), encoding="utf-8")
+_run97 = generate_post.run("2026-10-04", client=FakeClient(_client97))
+_cs97 = _run97["candidate_selection"]
+_by_id97 = {e["candidate_id"]: e for e in _cs97["candidates"] if e["candidate_id"] is not None}
+check("v1.97 run(): 結果にcandidate_selectionが含まれ、call_Aの採否・理由が候補IDで対応付く（use:trueのtier1は採用、他は不採用）",
+      _cs97["call_a_decisions_recorded"] is True and _by_id97[1]["decision"] == "採用" and _by_id97[1]["reason"] == "理由1"
+      and _by_id97[2]["decision"] == "不採用" and _by_id97[2]["reason"] == "理由2", str(_by_id97.get(1)))
+check("v1.97 run(): 渡した候補の数（news_candidate_count）と、記録の中の渡した候補の数が一致する",
+      _run97["news_candidate_count"] == len(_by_id97), f"{_run97['news_candidate_count']} vs {len(_by_id97)}")
+check("v1.97 run(): 従来のキーは変わらない（call_a.truncation_statsは従来と同じ内容）",
+      _run97["call_a"]["truncation_stats"] == _stats97 and "candidate_decisions" not in _run97["call_a"], "")
+_bad97 = generate_post.run("2026-10-04", client=FakeClient(lambda kw, n: FakeResponse([FakeTextBlock("bad")])))
+check("v1.97 run(): call_Aが失敗した日（L1/L2）も記録は残り、採否だけが無い",
+      _bad97["call_a"]["ok"] is False and _bad97["candidate_selection"]["call_a_decisions_recorded"] is False
+      and len(_bad97["candidate_selection"]["candidates"]) == len(_in97), "")
+
+print("=== v1.97: STATUS（tier2の除外件数・時刻範囲・収集窓・取得上限・記録の所在）と candidates_log.json ===")
+_t2lines97, _tail97 = compose_post._render_candidate_selection_lines(_rep97, "2026-10-04")
+check("v1.97 STATUS: tier2は「収集窓内18件 → 15件を選定・3件を件数上限（15件）により除外」と表示する",
+      _t2lines97[0] == "tier2候補（Reuters）: 収集窓内18件 → 15件を選定・3件を件数上限（15件）により除外", _t2lines97[0])
+check("v1.97 STATUS: 選定した記事・除外した記事の公開時刻の範囲をGMTとJSTで表示する（選定=窓終端の430〜10分前、除外=最も古い3件＝窓終端の520〜460分前）",
+      _t2lines97[1] == "  選定した記事の公開時刻: GMT 10/04 13:50〜10/04 20:50（JST 10/04 22:50〜10/05 05:50）"
+      and _t2lines97[2] == "  除外した記事の公開時刻: GMT 10/04 12:20〜10/04 13:20（JST 10/04 21:20〜10/04 22:20）", str(_t2lines97))
+check("v1.97 STATUS: 収集窓（GMT・JST）・取得上限に達した情報源（Google News raw_count=50）・記録ファイルの所在を表示する",
+      any(l.startswith("収集窓: GMT 10/03 21:00〜10/04 21:00（JST 10/04 06:00〜10/05 06:00）") for l in _tail97)
+      and any("取得上限（50件）に達した情報源: Google News" in l for l in _tail97)
+      and any(l.startswith("候補の記録: outputs/2026-10-04/candidates_log.json（全") for l in _tail97), str(_tail97))
+check("v1.97 STATUS: 取得に失敗した情報源は「取得上限に達した」に含めない",
+      not any("Reuters-RSS" in l for l in _tail97), str(_tail97))
+_t2none97, _ = compose_post._render_candidate_selection_lines(
+    generate_post.build_candidate_selection_report("2026-10-04", {"candidates": [_cand97(1, "FRB", "x", 5)]}), "2026-10-04")
+check("v1.97 STATUS: tier2が0件の日は「収集窓内0件」と明示する（表示が無い＝0件、と区別できる）",
+      _t2none97 == ["tier2候補（Reuters）: 収集窓内0件"], str(_t2none97))
+check("v1.97 STATUS: 記録が無い・失敗した場合は、行を出さない／失敗の旨だけ書く（本文生成には影響しない）",
+      compose_post._render_candidate_selection_lines(None, "2026-10-04") == ([], [])
+      and compose_post._render_candidate_selection_lines({"error": "ValueError: x"}, "2026-10-04")[1][0].startswith("候補の記録: 作成に失敗"), "")
+_log97 = compose_post.render_candidates_log(_rep97, final_level="L0", final_call_a_ok=True)
+_log97_obj = json.loads(_log97)
+check("v1.97 candidates_log.json: 有効なJSONで、候補は1件1行（差分・grepしやすい）。メタ情報（窓・上限・最終level）を含む",
+      _log97_obj["candidates"] == _rep97["candidates"] and _log97_obj["final_level"] == "L0" and _log97_obj["final_call_a_ok"] is True
+      and sum(1 for l in _log97.splitlines() if l.startswith('    {"candidate_id"')) == len(_in97)
+      and _log97_obj["window"] == _rep97["window"] and _log97.endswith("}\n"), _log97[:300])
+check("v1.97 candidates_log.json: 候補が0件でも有効なJSON",
+      json.loads(compose_post.render_candidates_log(generate_post.build_candidate_selection_report("2026-10-04", {}),
+                                                    final_level="L1", final_call_a_ok=False))["candidates"] == [], "")
+
+# compose_post.main(): L0でも、L1フォールバックでも、candidates_log.jsonとSTATUS行が出る
+_g_gen97 = json.loads(json.dumps(_g_gen_nofd))
+_g_gen97["candidate_selection"] = json.loads(json.dumps(_rep97))
+_g_gen97["target_date_jst"] = _G_DATE
+
+
+def _run_main97(gen):
+    _d = Path(f"outputs/{_G_DATE}")
+    _shutil.rmtree(_d / "draft", ignore_errors=True)
+    (_d / "candidates_log.json").unlink(missing_ok=True)
+    _o_run, _o_anth = generate_post.run, generate_post.anthropic.Anthropic
+    generate_post.run = lambda target_date, **kw: gen
+    generate_post.anthropic.Anthropic = lambda: FakeClient(lambda kw, n: json_response(CALL_B_DATA))
+    _argv = sys.argv
+    sys.argv = ["compose_post.py", _G_DATE]
+    try:
+        compose_post.main()
+    finally:
+        sys.argv = _argv
+        generate_post.run, generate_post.anthropic.Anthropic = _o_run, _o_anth
+    _lp = _d / "candidates_log.json"
+    return (_lp.read_text(encoding="utf-8") if _lp.exists() else None), (_d / "GENERATION_STATUS.md").read_text(encoding="utf-8")
+
+
+_logtxt97, _st97 = _run_main97(_g_gen97)
+check("v1.97 main(): candidates_log.jsonをoutputs/<日付>/に書く（全候補・最終level・call_Aの成否）",
+      _logtxt97 is not None and json.loads(_logtxt97)["final_level"] == "L0" and json.loads(_logtxt97)["final_call_a_ok"] is True
+      and len(json.loads(_logtxt97)["candidates"]) == len(_in97), str(_logtxt97)[:200])
+check("v1.97 main(): GENERATION_STATUS.mdにtier2の除外件数・時刻範囲・記録の所在が出る",
+      "tier2候補（Reuters）: 収集窓内18件 → 15件を選定・3件を件数上限（15件）により除外" in _st97
+      and "  除外した記事の公開時刻: GMT 10/04 12:20〜10/04 13:20" in _st97
+      and f"候補の記録: outputs/{_G_DATE}/candidates_log.json（全" in _st97, _st97[:400])
+check("v1.97 main(): 記録が無いgen（旧形式）では従来どおり動き、candidates_log.jsonは書かない・STATUSにtier2行は出ない",
+      (lambda r: r[0] is None and "tier2候補" not in r[1])(_run_main97(_g_gen_nofd)), "")
+_g_gen97_fail = json.loads(json.dumps(_g_gen97))
+_g_gen97_fail["candidate_selection"] = {"error": "ValueError: boom"}
+_lt_f, _st_f = _run_main97(_g_gen97_fail)
+check("v1.97 main(): 記録の作成が失敗した（errorのみ）日は、ファイルを書かず、STATUSに失敗の旨だけ書く（本文生成は成功）",
+      _lt_f is None and "候補の記録: 作成に失敗（ValueError: boom）" in _st_f and _st_f.startswith("level: L0"), _st_f[:200])
+
+print("=== v1.97: workflowがcandidates_log.jsonをコミットする（STATUSと同じく、フェイルクローズ時も） ===")
+_daily_yml97 = (REPO / ".github" / "workflows" / "daily.yml").read_text(encoding="utf-8")
+_status_step97 = _daily_yml97[_daily_yml97.index("STATUSコミット（常に"):_daily_yml97.index("本文コミット（draft/のみ")]
+check("daily.yml: STATUSコミットのステップがcandidates_log.jsonを（存在する場合に）git addする。そのステップはalways()で実行される",
+      'git add "$TARGET_DIR/candidates_log.json"' in _status_step97 and 'if [ -f "$TARGET_DIR/candidates_log.json" ]' in _status_step97
+      and "if: always()" in _status_step97, _status_step97[:300])
+_pd_yml97 = (REPO / ".github" / "workflows" / "post_draft.yml").read_text(encoding="utf-8")
+check("post_draft.yml: 手動試行でも、存在する場合はcandidates_log.jsonをコミット対象にする",
+      'git add "$TARGET_DIR/candidates_log.json"' in _pd_yml97 and 'if [ -f "$TARGET_DIR/candidates_log.json" ]' in _pd_yml97, "")
+check("daily.yml: candidates_log.jsonは既存のCI成果物（news_candidates.json等）の扱いを変えない（news_candidates.jsonは引き続き成果物のみ）",
+      "outputs/${{ steps.target.outputs.date }}/news_candidates.json" in _daily_yml97
+      and 'git add "$TARGET_DIR/news_candidates.json"' not in _daily_yml97, "")
+
 print()
 print(f"PASS: {len(PASS)}  FAIL: {len(FAIL)}")
 if FAIL:

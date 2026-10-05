@@ -280,6 +280,10 @@ jobs:
           git config user.name "crypto-daily-bot"
           git config user.email "actions@users.noreply.github.com"
           git add "$STATUS"
+          # v1.97（オーナー承認・案1）: 全候補の選定状態・採否の記録も、STATUSと同じくフェイルクローズ時でもコミットする
+          if [ -f "$TARGET_DIR/candidates_log.json" ]; then
+            git add "$TARGET_DIR/candidates_log.json"
+          fi
           git commit -m "status: ${TARGET_DATE} (auto)" || echo "no changes"
           git pull --rebase origin "${GITHUB_REF_NAME}" || true
           git push

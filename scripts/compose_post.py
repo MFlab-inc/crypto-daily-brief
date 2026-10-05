@@ -33,7 +33,7 @@ import copy
 import json
 import re
 import sys
-from datetime import date
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
@@ -348,6 +348,82 @@ def _render_news_source_lines(news_status: dict[str, Any],
     return lines
 
 
+# --- v1.97（オーナー承認・案1）: 候補の記録（candidates_log.json）とSTATUSのtier2表示 ---
+_UTC_MIN_FMT = "%Y-%m-%dT%H:%MZ"
+_JST_OFFSET = timedelta(hours=9)
+
+
+def _fmt_utc_jst_range(isos: list[str]) -> str:
+    """'YYYY-MM-DDTHH:MMZ'の一覧から、最も古い〜最も新しい公開時刻を「GMT …（JST …）」で返す。"""
+    times = []
+    for x in isos:
+        try:
+            times.append(datetime.strptime(x, _UTC_MIN_FMT).replace(tzinfo=timezone.utc))
+        except (TypeError, ValueError):
+            continue
+    if not times:
+        return "時刻不明"
+    lo, hi = min(times), max(times)
+
+    def f(dt: datetime, off: timedelta = timedelta(0)) -> str:
+        return (dt + off).strftime("%m/%d %H:%M")
+
+    return f"GMT {f(lo)}〜{f(hi)}（JST {f(lo, _JST_OFFSET)}〜{f(hi, _JST_OFFSET)}）"
+
+
+def _render_candidate_selection_lines(report: Any, target_date: str) -> tuple[list[str], list[str]]:
+    """候補の記録（generate_post.build_candidate_selection_report）からSTATUSの行を作る。
+    戻り値は (tier2の行, 収集窓・取得上限・記録の所在の行)。reportが無い・不正なら空（行を出さない）。"""
+    if not isinstance(report, dict):
+        return [], []
+    if "error" in report:
+        return [], [f"候補の記録: 作成に失敗（{report['error']}）。本文生成には影響しません。"]
+    cands = report.get("candidates")
+    if not isinstance(cands, list):
+        return [], []
+    lim = report.get("limits", {})
+    tier2 = [c for c in cands if c.get("tier") == 2]
+    sel = [c for c in tier2 if c.get("status") != "dropped"]
+    drop = [c for c in tier2 if c.get("status") == "dropped"]
+    t2: list[str] = []
+    if not tier2:
+        t2.append("tier2候補（Reuters）: 収集窓内0件")
+    else:
+        t2.append(f"tier2候補（Reuters）: 収集窓内{len(tier2)}件 → {len(sel)}件を選定・"
+                  f"{len(drop)}件を件数上限（{lim.get('tier2', generate_post.TIER2_CANDIDATE_LIMIT)}件）により除外")
+        t2.append(f"  選定した記事の公開時刻: {_fmt_utc_jst_range([c.get('published_at_utc') for c in sel])}")
+        if drop:
+            t2.append(f"  除外した記事の公開時刻: {_fmt_utc_jst_range([c.get('published_at_utc') for c in drop])}")
+    tail: list[str] = []
+    w = report.get("window")
+    if isinstance(w, dict) and w.get("start_utc") and w.get("end_utc"):
+        tail.append(f"収集窓: {_fmt_utc_jst_range([w['start_utc'], w['end_utc']])}（NY 17:00基準・半開区間）")
+    raw_limit = lim.get("raw_item_limit")
+    capped = [n for n, st in (report.get("source_status") or {}).items()
+              if isinstance(st, dict) and st.get("status") == "ok" and raw_limit
+              and st.get("raw_count", 0) >= raw_limit]
+    if capped:
+        tail.append(f"取得上限（{raw_limit}件）に達した情報源: {'・'.join(capped)}"
+                    "（上限を超える分は取得していないため、窓内の記事を取りこぼしている可能性があります）")
+    tail.append(f"候補の記録: outputs/{target_date}/candidates_log.json"
+                f"（全{len(cands)}件の選定状態・公開時刻・呼び出しAの採否と理由）")
+    return t2, tail
+
+
+def render_candidates_log(report: dict, *, final_level: str, final_call_a_ok: bool) -> str:
+    """candidates_log.jsonの本文。メタ情報は通常のインデント、候補は1件1行（差分・目視・grepしやすい形）。"""
+    meta = {k: v for k, v in report.items() if k != "candidates"}
+    meta["final_level"] = final_level
+    meta["final_call_a_ok"] = final_call_a_ok
+    parts = [f"  {json.dumps(k, ensure_ascii=False)}: {json.dumps(v, ensure_ascii=False)}," for k, v in meta.items()]
+    cands = report.get("candidates", [])
+    parts.append('  "candidates": [')
+    parts += [f"    {json.dumps(c, ensure_ascii=False)}" + ("," if i < len(cands) - 1 else "")
+              for i, c in enumerate(cands)]
+    parts.append("  ]")
+    return "{\n" + "\n".join(parts) + "\n}\n"
+
+
 def _render_reusable_lines(gen: dict[str, Any], a: dict[str, Any]) -> list[str]:
     """reusable_for_summary（総括用の1行言及の材料）の保持・除外の記録（v1.92・オーナー承認・R2）。
     保持＝「前日以前の投稿本文で扱った材料のうち、新しい動きがないもの」と機械フィルタが確認したもの。
@@ -588,6 +664,9 @@ def render_generation_status(gen: dict[str, Any], daily_data: dict | None = None
     ]
     lines += _render_reusable_lines(gen, a)
     ts = a.get("truncation_stats", {})
+    tier2_lines, selection_tail_lines = _render_candidate_selection_lines(
+        gen.get("candidate_selection"), gen.get("target_date_jst", ""))
+    lines += tier2_lines
     if ts.get("tier3_dropped", 0) > 0:
         lines.append(
             f"tier3候補 {ts['tier3_total']}件中 {ts['tier3_selected']}件を選定"
@@ -607,6 +686,7 @@ def render_generation_status(gen: dict[str, Any], daily_data: dict | None = None
             f"tier4候補 {ts['tier4_total']}件中 {ts['tier4_selected']}件を選定"
             f"（{ts['tier4_dropped']}件を件数上限により除外）"
         )
+    lines += selection_tail_lines
     auto_filled = a.get("audit_ledger_auto_filled_count", 0)
     if auto_filled > 0:
         # v1.54フォローアップ（オーナー指示）: audit_ledgerのdecision/reasonが
@@ -805,6 +885,18 @@ def main() -> int:
     if failed_attempt is not None:
         (out_dir / "failed_attempt.json").write_text(
             json.dumps(failed_attempt, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    # v1.97（オーナー承認・案1）: 全候補の選定状態・採否の記録。GENERATION_STATUS.mdと並べてコミットする
+    # （daily.yml）。件数上限で落ちた候補がどこにも残らなかった問題（10/4の調査）への対処。
+    # 記録の失敗で本文生成を止めない。
+    candidate_selection = gen.get("candidate_selection")
+    if isinstance(candidate_selection, dict) and "candidates" in candidate_selection:
+        try:
+            (out_dir / "candidates_log.json").write_text(
+                render_candidates_log(candidate_selection, final_level=gen["level"],
+                                      final_call_a_ok=bool(gen["call_a"]["ok"])), encoding="utf-8")
+        except OSError as e:
+            print(f"WARN: candidates_log.jsonの書き込みに失敗: {e}", file=sys.stderr)
 
     status_path = out_dir / "GENERATION_STATUS.md"
     status_text = render_generation_status(

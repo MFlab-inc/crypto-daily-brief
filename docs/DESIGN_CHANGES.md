@@ -7,6 +7,40 @@
 
 ---
 
+## v1.97 — 2026-10-05（オーナー承認・案1：全候補の選定状態と採否の記録〔candidates_log.json〕をリポジトリに残し、STATUSにtier2の除外件数・時刻範囲を出す）
+
+2026-10-04分の調査で、tier2（Reuters）は新しい順で上位15件に絞るため、**件数上限で落ちた記事がどこにも記録されない**ことが分かった（`news_candidates.json`はCI成果物でコミットされず、
+`audit_ledger`は呼び出しAへ渡した候補の分しか記録しない）。どの記事がいつ上限で落ちたかを事後に確認できるようにする。**記録と表示のみ**で、候補の選定・採否・本文は一切変えない。
+過去の`outputs/`は書き換えていない（記録は今後の日から残る）。
+
+### 変更点
+
+- **`outputs/<日付>/candidates_log.json`（新規・コミット対象）**：その日の全候補（tier1〜4）について、tier・媒体・題名・URL・公開時刻（UTC・分まで）・選定状態
+  （`selected`＝上限内／`rescued`＝tier3の独立2媒体ペア救済／`dropped`＝件数上限により除外）・tier内の新しい順の順位（`recency_rank`。1が最新）・要約の先頭120字・
+  呼び出しAの採否（`decision`・`use`・`reason`。呼び出しAが成功した日の、渡した候補のみ）を1件1行で記録する。メタ情報として、収集窓（UTC）・収集時刻・各情報源の取得状況
+  （`source_status`の`raw_count`・`kept_count`）・上限値（tier2/3/4・ペア救済・RSS取得上限）・選定の統計・最終level・call_Aの成否を持つ。
+  `candidate_id`は呼び出しAへ実際に振る番号（`_assign_candidate_ids`）と同一。落とした候補にはcandidate_idが無い（渡していない）。
+- `generate_post._select_candidates_for_call_a`の本体を`_select_candidates_detail`へ分離（戻り値・挙動は従来どおり。並べ替え後の一覧と救済結果を追加で返す）。
+  記録（`build_candidate_selection_report`）は同じ関数の結果をそのまま使うため、**選定ロジックを二重に持たない**（実際の選定と記録がずれない）。
+- `call_a()`：成功した試行の候補IDごとの`{decision, use, reason}`を`CallOutcome.candidate_decisions`に残す（`to_dict()`には含めない）。`run()`の結果に`candidate_selection`を追加
+  （記録の作成が例外になっても本文生成は続行し、`{"error": …}`を返す）。
+- `compose_post.main()`：`candidates_log.json`を書く（L1フォールバック・L1/L2の日も書く。書き込み失敗でも本文生成は続行）。
+- **GENERATION_STATUS.md**：「tier2候補（Reuters）: 収集窓内N件 → K件を選定・M件を件数上限（15件）により除外」と、選定した記事・除外した記事の公開時刻の範囲を
+  GMTとJSTで表示する（0件の日は「収集窓内0件」）。あわせて、収集窓（GMT・JST。NY 17:00基準）、取得上限（RSSの50件）に達した情報源、記録ファイルの所在を表示する。
+  上限（50件）に達した情報源は「上限を超える分は取得していないため窓内の記事を取りこぼしている可能性」があることを明記する（上限に達したこと自体は事実、取りこぼしの有無は不明）。
+- `.github/workflows/daily.yml`：STATUSコミットのステップ（`always()`。フェイルクローズでも実行）が、存在する場合に`candidates_log.json`も`git add`する。`post_draft.yml`（手動試行）も同様。
+  `news_candidates.json`はこれまでどおりCI成果物のみ（コミットしない）。
+
+### 検証
+
+- テスト：`test/test_bundle2.py` 1059項目すべてPASS（1025→1059）。全候補の記録・candidate_idが実際の振り番と一致・tier2は18件中15件選定/3件除外（最も古い3件）・ペア救済・tier4と公開時刻不明の扱い・
+  要約の切り詰め・収集窓（夏時間と、冬時間への切替日11/1の25時間窓）・採否の付与範囲・不正入力・`call_a`/`run()`の採否の対応付けと従来キーの不変・call_A失敗日の記録・STATUSの各行・
+  `compose_post.main()`でのファイル出力とSTATUS・旧形式のgenで従来どおり・記録失敗時・workflowのコミット対象。
+- 限界：①記録は**今後の日から**残る（過去日は`news_candidates.json`が存在しないため復元できない）。②`reason`はモデルの自由記述で、記録は事実の裏付けではない。③1日あたりの追加容量は
+  候補数（実績は数十件）×約400バイトと見込む（実測は初回の本番実行後に確認）。④Google NewsのURLはリダイレクトで、記事そのものへ直接到達できない場合がある。
+
+---
+
 ## v1.96 — 2026-10-04（オーナー承認・5C：リトライ指示に、相方が成立しなかった理由〔タイトルの重なり係数と閾値〕を明記。閾値0.4は据え置き）
 
 2026-10-02分で、CoinDesk（ID39）とThe Block（ID42）の同じBlastのニュースが、タイトルの重なり係数0.31＜閾値0.4で相方不成立になった。リトライの修正指示は、
