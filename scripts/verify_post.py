@@ -1439,6 +1439,7 @@ def check_geo_rejected_warn(au: Audit, sections: dict, audit_ledger,
     au.warn("W_geo_rejected_fixed",
             f"【ヘッドライン】が定型文（材料なし）のまま、呼び出しAが波及経路のある材料（B）と判定した地政学・エネルギー関連の候補が"
             f"{len(hits)}件、不採用になっています（「内容が薄い」「単独報道」だけで不採用にしていないか要確認。"
+            "解説・論評・人事など、優先の対象外として不採用にした妥当なものも含まれえます。"
             "題名の語による目印で、記事の内容は見ていません）。" + listed + more,
             count=len(hits), entries=[{k: h[k] for k in ("source", "tier", "title", "topic", "reason")} for h in hits])
 
