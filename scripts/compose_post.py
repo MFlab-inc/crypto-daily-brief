@@ -664,8 +664,11 @@ def render_generation_status(gen: dict[str, Any], daily_data: dict | None = None
     ]
     lines += _render_reusable_lines(gen, a)
     ts = a.get("truncation_stats", {})
-    tier2_lines, selection_tail_lines = _render_candidate_selection_lines(
-        gen.get("candidate_selection"), gen.get("target_date_jst", ""))
+    try:
+        tier2_lines, selection_tail_lines = _render_candidate_selection_lines(
+            gen.get("candidate_selection"), gen.get("target_date_jst", ""))
+    except Exception as e:  # noqa: BLE001 — 記録の表示の失敗でSTATUS（フェイルクローズの記録）を止めない
+        tier2_lines, selection_tail_lines = [], [f"候補の記録: 表示に失敗（{type(e).__name__}: {e}）。本文生成には影響しません。"]
     lines += tier2_lines
     if ts.get("tier3_dropped", 0) > 0:
         lines.append(
@@ -895,8 +898,8 @@ def main() -> int:
             (out_dir / "candidates_log.json").write_text(
                 render_candidates_log(candidate_selection, final_level=gen["level"],
                                       final_call_a_ok=bool(gen["call_a"]["ok"])), encoding="utf-8")
-        except OSError as e:
-            print(f"WARN: candidates_log.jsonの書き込みに失敗: {e}", file=sys.stderr)
+        except Exception as e:  # noqa: BLE001 — 記録の失敗で本文生成（フェイルクローズの記録を含む）を止めない
+            print(f"WARN: candidates_log.jsonの書き込みに失敗: {type(e).__name__}: {e}", file=sys.stderr)
 
     status_path = out_dir / "GENERATION_STATUS.md"
     status_text = render_generation_status(

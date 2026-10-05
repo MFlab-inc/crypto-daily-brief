@@ -6505,6 +6505,12 @@ _lt_f, _st_f = _run_main97(_g_gen97_fail)
 check("v1.97 main(): 記録の作成が失敗した（errorのみ）日は、ファイルを書かず、STATUSに失敗の旨だけ書く（本文生成は成功）",
       _lt_f is None and "候補の記録: 作成に失敗（ValueError: boom）" in _st_f and _st_f.startswith("level: L0"), _st_f[:200])
 
+_g_gen97_bad = json.loads(json.dumps(_g_gen97))
+_g_gen97_bad["candidate_selection"] = {"candidates": [1, 2], "limits": {}}  # 想定外の形（要素がdictでない）
+_lt_b, _st_b = _run_main97(_g_gen97_bad)
+check("v1.97 main(): 記録の中身が想定外の形でも、STATUS・本文生成は止まらず、表示に失敗した旨だけ書く（記録がフェイルクローズの記録を壊さない）",
+      _st_b.startswith("level: L0") and "候補の記録: 表示に失敗（" in _st_b and (Path(f"outputs/{_G_DATE}/draft/part1.md")).exists(), _st_b[:300])
+
 print("=== v1.97: workflowがcandidates_log.jsonをコミットする（STATUSと同じく、フェイルクローズ時も） ===")
 _daily_yml97 = (REPO / ".github" / "workflows" / "daily.yml").read_text(encoding="utf-8")
 _status_step97 = _daily_yml97[_daily_yml97.index("STATUSコミット（常に"):_daily_yml97.index("本文コミット（draft/のみ")]
