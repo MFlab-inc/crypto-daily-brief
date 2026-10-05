@@ -6663,6 +6663,82 @@ for _f98 in sorted((REPO / "outputs").glob("*/draft/post_bundle.json")):
 check("v1.98 実データ（10/4までの本番出力）: 警告が出る日は8/29・9/5・9/6・9/20・10/4の5日（いずれも見出しが定型文で、B判定の地政学・エネルギー材料を不採用にした日）",
       _geo_days98 == ["2026-08-29", "2026-09-05", "2026-09-06", "2026-09-20", "2026-10-04"], str(_geo_days98))
 
+print("=== v1.99（オーナー承認・案4）: Bの扱いの基準の明確化（当事者の主張・見出し程度の情報・定型文より優先するB・不採用理由の禁止・数を埋めない）===")
+_SA99 = generate_post.SYSTEM_A
+_NS99 = generate_post.NEWS_SELECTION
+_sec99 = _NS99[_NS99.index("### Bの扱いの基準（v1.99・オーナー指示）"):_NS99.index("### 情報源規律と項目数の優先順位")]
+check("v1.99: 呼び出しAのプロンプトに「Bの扱いの基準」の節が1つだけ入り、呼び出しB（SYSTEM_B）には入らない",
+      _SA99.count("### Bの扱いの基準（v1.99・オーナー指示）") == 1 and "Bの扱いの基準" not in generate_post.SYSTEM_B)
+check("v1.99 (1) 当事者の主張: 「〜と主張」の帰属と「被害・影響は確認できていません」の限定を付ければBとして掲載してよい。主張であることだけを理由に不採用にしない。【ヘッドライン】にも帰属を付ける",
+      "1. 当事者の主張" in _sec99 and "「〜と主張」「〜と述べた」等で、誰の主張かを明示する" in _sec99
+      and "【ヘッドライン】に\n       書く場合にも付ける" in _sec99 and "「被害・影響は確認できていません」等" in _sec99
+      and "主張であることだけを理由に不採用にしない" in _sec99)
+check("v1.99 (1) 例は固有名詞を使わないプレースホルダー（〇〇・△△）で、事実として流用しないよう明記（実在の固有名詞をプロンプトに入れない）",
+      "「〇〇（当事者）が△△（施設）を攻撃したと主張」" in _sec99 and "事実として流用しないこと" in _sec99
+      and not any(w in _SA99 for w in ("フーシ", "アラムコ", "Houthi", "Aramco", "リヤド", "クライス")))
+check("v1.99 (2) 見出し程度の情報: 「誰が・何を・どこで」がtitle・summaryの記載だけで書けるならBとして掲載してよい。書ける事実はtier 1・tier 2のsummaryの範囲に限る（現行のまま）。書けなければ掲載しない",
+      "2. 見出し程度の情報" in _sec99 and "「誰が・何を・どこで」を\n   候補のtitle・summaryの記載だけで書けるなら" in _sec99
+      and "tier 1・tier 2のsummaryに記載されている範囲に限る（これまでと同じ" in _sec99
+      and "書けない場合は掲載しない" in _sec99)
+check("v1.99 (3) 定型文より優先して掲載するBは、原油や金利への波及経路がはっきりしたもの（施設への攻撃・被害／主要な海上輸送路の封鎖・攻撃／国家間の軍事行動・停戦の成立・破綻／主要国の制裁・石油備蓄の放出）に限る",
+      "3. 定型文（材料なし）より優先して掲載するB" in _sec99 and "原油や金利への波及経路がはっきりした" in _sec99
+      and all(t in _sec99 for t in ("産油・精製・輸送施設（油田・製油所・パイプライン・タンカー・港湾等）への攻撃・被害",
+                                    "ホルムズ海峡・紅海など主要な海上輸送路の封鎖・攻撃", "国家間の軍事行動、停戦の成立・破綻",
+                                    "主要国の制裁、石油備蓄の放出")))
+check("v1.99 (3) 解説記事・論評・人事（要人の辞任・任命等）は優先の対象外。優先の対象に当たるtier1・tier2はuse:trueにする。tier3は独立2ソース規定のまま、tier4は掲載不可のまま",
+      "解説記事・論評・人事（要人の辞任・任命等）は、この優先の対象外とする" in _sec99
+      and "上記に当たるtier 1・tier 2の候補は、use:trueにして本文に掲載する" in _sec99
+      and "tier 3は「独立2ソース規定」" in _sec99 and "tier 4は掲載不可のまま" in _sec99)
+check("v1.99 (4) 「内容が薄い」「情報が少ない」「単独報道」だけを理由にuse:falseにしない。tier2（Reuters等）は単独で採用できる（現行のtier 2の規定と矛盾しない）",
+      "4. 不採用の理由にしてはならないもの" in _sec99
+      and "「内容が薄い」「情報が少ない」「単独報道」\n   だけを理由にuse:falseにしてはならない" in _sec99
+      and "tier 2（Reuters等）は、上記tier 2の規定の\n   とおり単独で採用できる" in _sec99
+      and "tier 2: 優先度2：Reuters等の独立報道。単独で採用可能" in _NS99)
+check("v1.99 (4) use:falseにしてよい具体的な理由（誰が・何を・どこでを書けない／優先の対象外／手続き的な発表／tier・eligibility）を列挙し、「具体的な理由がある場合に限る」とする",
+      all(t in _sec99 for t in ("上記2で「誰が・何を・どこで」を\n   書けない場合", "reasonに「優先する\n   対象外」と書く", "手続き的な発表の場合（下記「①の中での主題の選び方」(3)）",
+                                "tier・eligibilityを満たさない場合", "具体的な理由がある場合に限る")))
+check("v1.99 (5) 数を埋めるためのBは不要: 優先の対象に当たるBが無い日に、項目数を増やすため・定型文を避けるためにBを採用しない。「根拠が少ない日は数を埋めない」を維持（情報源規律の節も従来どおり）",
+      "5. 数を埋めるためのBは不要" in _sec99 and "定型文を避けるためにBを採用しない" in _sec99 and "根拠が少ない日は数を埋めない" in _sec99
+      and "根拠が少ない日は数を埋めず、確認できる材料と限界を明記する" in _NS99 and "十分な材料がない日は項目数を埋めない" in _NS99)
+check("v1.99: audit_ledgerのreasonの見本（旧「B: 波及経路は説明できるが、内容が薄く参考材料としても不十分」）を差し替えた。旧見本は残っていない。新しい見本はB判定の不採用の具体的な理由を示す",
+      "内容が薄く参考" not in _SA99 and "材料としても不十分" not in _SA99
+      and all(t in generate_post.NO_CANDIDATES_FALLBACK for t in (
+          "「B: 論評で、定型文より優先する対象（施設への攻撃・\n海上輸送路・軍事行動・制裁等）外」", "「B: 人事（要人の辞任）で、優先する対象外」",
+          "「B: 見出しだけでは、誰が・何を・どこでかを書けない」")))
+check("v1.99: reasonの見本はいずれも全角60字以内（use:falseのreasonの上限と整合）",
+      all(len(x) <= 60 for x in ("B: 論評で、定型文より優先する対象（施設への攻撃・海上輸送路・軍事行動・制裁等）外", "B: 人事（要人の辞任）で、優先する対象外",
+                                  "B: 見出しだけでは、誰が・何を・どこでかを書けない",
+                                  "C: 自動車産業の国内回帰に関する内容で、金利・為替・流動性等への波及経路を説明できない")))
+check("v1.99: reasonで「内容が薄い」「情報が少ない」「単独報道」だけを理由にuse:falseにしてはならない旨が、reasonの書き方の節にも入っている（直接因果未確認の禁止と並べて）",
+      "同様に、「内容が薄い」\n「情報が少ない」「単独報道」だけを理由にuse:falseとしてはならない" in generate_post.NO_CANDIDATES_FALLBACK
+      and "「暗号通貨価格への直接因果が未確認」であること" in generate_post.NO_CANDIDATES_FALLBACK)
+check("v1.99: 定型文の判定（(i)(ii)）の前に、優先して掲載するBに当たるtier1・tier2の候補が無いかを確認する指示が入り、当たればuse:true→(i)あり→定型文は使わない。(i)(ii)の定義は従来のまま",
+      "(i)を判断する前に、上記NEWS_SELECTION「Bの扱いの基準」3の" in generate_post.NO_CANDIDATES_FALLBACK
+      and "use:trueにすれば(i)は「あり」になり、定型文は使わない" in generate_post.NO_CANDIDATES_FALLBACK
+      and "(i)   tier1またはtier2の候補でuse:trueと判断したものがあるか" in generate_post.NO_CANDIDATES_FALLBACK
+      and "定型文を使うのは、(i)(ii)の両方が「なし」の場合に限る" in generate_post.NO_CANDIDATES_FALLBACK)
+check("v1.99: 主要なポイントの書き方（WRITES_A）に、当事者の主張を掲載する場合の帰属と限定の指示が入る。従来の「直接因果は未確認」の限定表現の指示も残る",
+      "当事者の主張を掲載する場合は、「〜と主張」の帰属と" in generate_post.WRITES_A and "「被害・影響は確認できていません」等の限定を含める" in generate_post.WRITES_A
+      and "暗号通貨価格への直接因果は未確認" in generate_post.WRITES_A)
+check("v1.99: 変更していないもの——手続き的な発表（v1.93追補）は従来どおりuse:falseで定型文・A/B/C分類の定義と【厳守】・tier規律（tier3は独立2ソース／tier4は常に不採用）",
+      "手続き的な発表: 暗号通貨との関係が薄い個別の申請の承認" in generate_post.NO_CANDIDATES_FALLBACK
+      and "B：明確な波及経路があるマクロ・地政学材料" in _NS99 and "不採用の理由としてはならない" in _NS99
+      and "tier 4: Google News経由の候補発見のみの結果" in _NS99 and "audit_ledger上は\n        常に不採用とし" in _NS99)
+
+# 機械監査との整合: プロンプトの基準（当事者の主張＋限定）どおりに書いた本文が、既存の機械監査（C12〜C28）でFAILにならない。
+# 優先対象のBを採用して定型文を使うと、C22がFAILになる（だから定型文は使えない＝基準どおり採用して実文言の見出しを書く）。
+_claim_head99 = "イエメンの武装勢力が、サウジアラムコの施設を攻撃したと主張しました。被害・影響は確認できていません。"
+_claim_pt99 = ["武装勢力は施設を攻撃したと主張したと報じられています。被害・影響は確認できていません（Reuters、2026-10-04）。"]
+_b_claim99 = _geo_gen98("B: 施設への攻撃の主張。当事者の主張として帰属と限定を付けて掲載", headline=_claim_head99, points=_claim_pt99, use=True)
+_au_claim99 = verify_post.run_all(_b_claim99, DAILY_DATA)
+check("v1.99 整合: 基準どおり（当事者の主張の帰属＋「被害・影響は確認できていません」）に書いた見出し・主要なポイントは、機械監査（C12〜C28）でFAILにならず、C22もPASS。地政学の不採用の警告も出ない（採用したため）",
+      _au_claim99.failed == 0 and next(c for c in _au_claim99.checks if c["id"].startswith("C22"))["result"] == "PASS"
+      and not any(w["id"] == "W_geo_rejected_fixed" for w in _au_claim99.warnings),
+      f"{[c['id'] for c in _au_claim99.checks if c['result'] == 'FAIL']} {_au_claim99.warnings}")
+_au_fixed_adopt99 = verify_post.run_all(_geo_gen98("B: 優先対象を採用", headline=generate_post.FIXED_HEADLINE, points=[generate_post.FIXED_POINTS], use=True), DAILY_DATA)
+check("v1.99 整合: 対照——優先対象のBをuse:trueにしたのに定型文のままにすると、C22がFAILになる（採用したなら定型文は使えない。プロンプトの「定型文を使う前に確認する」と整合）",
+      next(c for c in _au_fixed_adopt99.checks if c["id"].startswith("C22"))["result"] == "FAIL")
+
 print()
 print(f"PASS: {len(PASS)}  FAIL: {len(FAIL)}")
 if FAIL:
