@@ -1150,6 +1150,8 @@ def build_candidate_selection_report(target_date: str, news_today: Any,
             e["decision"] = d.get("decision")
             e["use"] = d.get("use")
             e["reason"] = d.get("reason", "")
+            if d.get("force_dropped"):
+                e["force_dropped"] = True
         return e
 
     entries = [entry(c, None) for c in detail["tier1"]]
@@ -1853,11 +1855,17 @@ def call_a(client: "anthropic.Anthropic", daily_data: dict, news_today: dict,
                     "rejected_pairs": list(rejected_pairs_stats)})
         # v1.97: 再構成が成功した（＝上のtryが例外にならなかった）場合だけ、候補IDごとの採否・理由を残す。
         # 再構成の成功時、llm_entriesは「全要素がdictで、candidate_idが過不足なく一致」と検証済み。
-        for e in llm_entries:
-            cid = e["candidate_id"]
-            candidate_decisions_stats[cid] = {
-                "decision": decisions_by_id.get(cid), "use": bool(e.get("use")),
-                "reason": str(e.get("reason", ""))}
+        try:
+            forced_ids = {d.get("candidate_id") for d in force_dropped_stats}
+            for e in llm_entries:
+                cid = e["candidate_id"]
+                candidate_decisions_stats[cid] = {
+                    "decision": decisions_by_id.get(cid), "use": bool(e.get("use")),
+                    "reason": str(e.get("reason", ""))}
+                if cid in forced_ids:
+                    candidate_decisions_stats[cid]["force_dropped"] = True  # 最終試行でも相方が成立せず強制的に不採用にした
+        except Exception:  # noqa: BLE001 — 記録の失敗で試行（リトライ・採否）を変えない
+            candidate_decisions_stats.clear()
         # v1.92（オーナー承認・R2）: reusable_for_summaryを機械フィルタにかけ、前日以前の投稿本文で
         # 扱った材料だけを文字列のリストとして残す（以降のcall_B・bundle・C23は従来どおり文字列を扱う）。
         try:

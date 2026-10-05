@@ -371,7 +371,8 @@ def _fmt_utc_jst_range(isos: list[str]) -> str:
     return f"GMT {f(lo)}〜{f(hi)}（JST {f(lo, _JST_OFFSET)}〜{f(hi, _JST_OFFSET)}）"
 
 
-def _render_candidate_selection_lines(report: Any, target_date: str) -> tuple[list[str], list[str]]:
+def _render_candidate_selection_lines(report: Any, target_date: str,
+                                      log_written: bool = True) -> tuple[list[str], list[str]]:
     """候補の記録（generate_post.build_candidate_selection_report）からSTATUSの行を作る。
     戻り値は (tier2の行, 収集窓・取得上限・記録の所在の行)。reportが無い・不正なら空（行を出さない）。"""
     if not isinstance(report, dict):
@@ -405,16 +406,23 @@ def _render_candidate_selection_lines(report: Any, target_date: str) -> tuple[li
     if capped:
         tail.append(f"取得上限（{raw_limit}件）に達した情報源: {'・'.join(capped)}"
                     "（上限を超える分は取得していないため、窓内の記事を取りこぼしている可能性があります）")
-    tail.append(f"候補の記録: outputs/{target_date}/candidates_log.json"
-                f"（全{len(cands)}件の選定状態・公開時刻・呼び出しAの採否と理由）")
+    if log_written:
+        tail.append(f"候補の記録: outputs/{target_date}/candidates_log.json"
+                    f"（全{len(cands)}件の選定状態・公開時刻・呼び出しAの採否と理由）")
+    else:
+        tail.append("候補の記録: candidates_log.jsonの書き込みに失敗しました（本文生成には影響しません）。")
     return t2, tail
 
 
 def render_candidates_log(report: dict, *, final_level: str, final_call_a_ok: bool) -> str:
-    """candidates_log.jsonの本文。メタ情報は通常のインデント、候補は1件1行（差分・目視・grepしやすい形）。"""
+    """candidates_log.jsonの本文。メタ情報は1項目1行、候補は1件1行（差分・目視・grepしやすい形）。
+    call_Aの結果が最終的に採用されなかった日（final_call_a_okがFalse。強制不採用後の再監査FAILでL1へ
+    フォールバックした日を含む）は、記録されている採否・理由が「本文に使われなかった」ことを
+    call_a_decisions_discardedで示す。"""
     meta = {k: v for k, v in report.items() if k != "candidates"}
     meta["final_level"] = final_level
     meta["final_call_a_ok"] = final_call_a_ok
+    meta["call_a_decisions_discarded"] = bool(report.get("call_a_decisions_recorded")) and not final_call_a_ok
     parts = [f"  {json.dumps(k, ensure_ascii=False)}: {json.dumps(v, ensure_ascii=False)}," for k, v in meta.items()]
     cands = report.get("candidates", [])
     parts.append('  "candidates": [')
@@ -627,7 +635,8 @@ def render_generation_status(gen: dict[str, Any], daily_data: dict | None = None
                               l1_fallback_failing_checks: list[str] | None = None,
                               l1_fallback_details: list[dict] | None = None,
                               force_drop_repair: dict | None = None,
-                              news_streaks: dict[str, tuple[int, bool]] | None = None) -> str:
+                              news_streaks: dict[str, tuple[int, bool]] | None = None,
+                              candidate_log_written: bool = True) -> str:
     a, b = gen["call_a"], gen["call_b"]
     news_status = gen.get("news_source_status", {})
     attention, auto = _attention_and_auto_lists(gen)
@@ -666,7 +675,7 @@ def render_generation_status(gen: dict[str, Any], daily_data: dict | None = None
     ts = a.get("truncation_stats", {})
     try:
         tier2_lines, selection_tail_lines = _render_candidate_selection_lines(
-            gen.get("candidate_selection"), gen.get("target_date_jst", ""))
+            gen.get("candidate_selection"), gen.get("target_date_jst", ""), candidate_log_written)
     except Exception as e:  # noqa: BLE001 — 記録の表示の失敗でSTATUS（フェイルクローズの記録）を止めない
         tier2_lines, selection_tail_lines = [], [f"候補の記録: 表示に失敗（{type(e).__name__}: {e}）。本文生成には影響しません。"]
     lines += tier2_lines
@@ -893,19 +902,22 @@ def main() -> int:
     # （daily.yml）。件数上限で落ちた候補がどこにも残らなかった問題（10/4の調査）への対処。
     # 記録の失敗で本文生成を止めない。
     candidate_selection = gen.get("candidate_selection")
+    candidate_log_written = True
     if isinstance(candidate_selection, dict) and "candidates" in candidate_selection:
         try:
             (out_dir / "candidates_log.json").write_text(
                 render_candidates_log(candidate_selection, final_level=gen["level"],
                                       final_call_a_ok=bool(gen["call_a"]["ok"])), encoding="utf-8")
         except Exception as e:  # noqa: BLE001 — 記録の失敗で本文生成（フェイルクローズの記録を含む）を止めない
+            candidate_log_written = False
             print(f"WARN: candidates_log.jsonの書き込みに失敗: {type(e).__name__}: {e}", file=sys.stderr)
 
     status_path = out_dir / "GENERATION_STATUS.md"
     status_text = render_generation_status(
         gen, daily_data, force_dropped=force_dropped, l1_fallback_failing_checks=l1_fallback_failing_checks,
         l1_fallback_details=l1_fallback_details, force_drop_repair=force_drop_repair,
-        news_streaks=_news_failure_streaks(target_date, gen.get("news_source_status", {})))
+        news_streaks=_news_failure_streaks(target_date, gen.get("news_source_status", {})),
+        candidate_log_written=candidate_log_written)
     status_path.write_text(status_text, encoding="utf-8")
 
     print(f"OK: level={gen['level']} → {draft_dir}/part1.md, part2.md, numeric_record.md, "

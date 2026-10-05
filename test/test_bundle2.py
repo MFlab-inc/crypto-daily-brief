@@ -6511,6 +6511,47 @@ _lt_b, _st_b = _run_main97(_g_gen97_bad)
 check("v1.97 main(): 記録の中身が想定外の形でも、STATUS・本文生成は止まらず、表示に失敗した旨だけ書く（記録がフェイルクローズの記録を壊さない）",
       _st_b.startswith("level: L0") and "候補の記録: 表示に失敗（" in _st_b and (Path(f"outputs/{_G_DATE}/draft/part1.md")).exists(), _st_b[:300])
 
+# 独立レビュー（v1.97）の指摘への対処: ①L1フォールバック日の採否は「本文に使われなかった」旨を示す ②強制不採用の印 ③書き込み失敗の表示
+check("v1.97 レビュー対応: call_Aの結果が最終的に使われなかった日（final_call_a_ok=False。強制不採用後の再監査FAILでL1へ落ちた日を含む）は、"
+      "記録した採否が使われなかった旨（call_a_decisions_discarded）を示す。使われた日・採否が無い日はFalse",
+      json.loads(compose_post.render_candidates_log(_repd97, final_level="L1", final_call_a_ok=False))["call_a_decisions_discarded"] is True
+      and json.loads(compose_post.render_candidates_log(_repd97, final_level="L0", final_call_a_ok=True))["call_a_decisions_discarded"] is False
+      and json.loads(compose_post.render_candidates_log(_rep97, final_level="L1", final_call_a_ok=False))["call_a_decisions_discarded"] is False, "")
+_news_fd97 = {"collected_at": "x", "target_date_jst": "2026-10-04", "source_status": {}, "candidates": [
+    {"tier": 1, "source": "SEC", "title": "Regulator announces new rule", "url": "u1", "published_at": _pub97(60), "summary": "s", "kind": "k"},
+    {"tier": 3, "source": "CoinDesk", "title": "Company A files BTC ETF approval", "url": "u2", "published_at": _pub97(50), "summary": "s", "kind": "k"},
+    {"tier": 3, "source": "Cointelegraph", "title": "Totally different unrelated story here", "url": "u3", "published_at": _pub97(40), "summary": "s", "kind": "k"}]}
+
+
+def _fn_fd97(kw, n):
+    ids = [c["candidate_id"] for c in _parse_leading_json(kw["messages"][0]["content"]).get("news_candidates_today", [])]
+    return json_response({"headline_for_image": "x", "part1_headline": "SECが新規則を発表しました。", "part1_points": ["SECが新規則を発表しました（SEC、2026-10-04）。"],
+                          "reusable_for_summary": [], "audit_ledger": [{"candidate_id": i, "use": True, "verified_by": "RSS summary", "reason": f"r{i}"} for i in ids]})
+
+
+_out_fd97 = generate_post.call_a(FakeClient(_fn_fd97), DAILY_DATA, _news_fd97, None)
+_dec_fd97 = _out_fd97.candidate_decisions
+check("v1.97 レビュー対応: 最終試行の強制不採用で続行した日は、強制不採用にした候補に force_dropped の印が付き、採否は「不採用」・useはTrueのまま記録される（他の候補には印が付かない）",
+      _out_fd97.ok and _out_fd97.attempts == generate_post.MAX_ATTEMPTS
+      and sorted(i for i, d in _dec_fd97.items() if d.get("force_dropped")) == sorted(d["candidate_id"] for d in _out_fd97.force_dropped_candidates)
+      and len(_dec_fd97) == 3 and all(d["decision"] == "不採用" and d["use"] is True for d in _dec_fd97.values() if d.get("force_dropped"))
+      and any(d["decision"] == "採用" and not d.get("force_dropped") for d in _dec_fd97.values()), str(_dec_fd97))
+_rep_fd97 = generate_post.build_candidate_selection_report("2026-10-04", _news_fd97, decisions=_dec_fd97)
+check("v1.97 レビュー対応: 強制不採用の印は候補の記録（candidates_log.json）にも入る",
+      sorted(e["candidate_id"] for e in _rep_fd97["candidates"] if e.get("force_dropped")) == sorted(i for i, d in _dec_fd97.items() if d.get("force_dropped")), "")
+check("v1.97 レビュー対応: 記録ファイルの書き込みに失敗した日は、STATUSの「候補の記録: outputs/…」の所在行を出さず、書き込み失敗の旨を書く",
+      compose_post._render_candidate_selection_lines(_rep97, "2026-10-04", log_written=False)[1][-1].startswith("候補の記録: candidates_log.jsonの書き込みに失敗しました")
+      and not any("outputs/2026-10-04/candidates_log.json" in l for l in compose_post._render_candidate_selection_lines(_rep97, "2026-10-04", log_written=False)[1]), "")
+_o_rcl97 = compose_post.render_candidates_log
+compose_post.render_candidates_log = lambda *a, **k: (_ for _ in ()).throw(OSError("disk full"))
+try:
+    _lt_w, _st_w = _run_main97(_g_gen97)
+finally:
+    compose_post.render_candidates_log = _o_rcl97
+check("v1.97 レビュー対応: 書き込みが失敗しても本文生成・STATUSは成功し、STATUSに書き込み失敗の旨が出る（所在行は出ない）",
+      _lt_w is None and _st_w.startswith("level: L0") and "candidates_log.jsonの書き込みに失敗しました" in _st_w
+      and f"候補の記録: outputs/{_G_DATE}/candidates_log.json" not in _st_w, _st_w[:300])
+
 print("=== v1.97: workflowがcandidates_log.jsonをコミットする（STATUSと同じく、フェイルクローズ時も） ===")
 _daily_yml97 = (REPO / ".github" / "workflows" / "daily.yml").read_text(encoding="utf-8")
 _status_step97 = _daily_yml97[_daily_yml97.index("STATUSコミット（常に"):_daily_yml97.index("本文コミット（draft/のみ")]
