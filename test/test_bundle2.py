@@ -33,7 +33,7 @@ generate_post.RETRY_DELAYS_SEC = (0, 0)
 # 警告の種類別件数の期待文字列を、登録簿（verify_post.WARNING_KINDS）から作る（警告の種類が増えてもテストが壊れないように）。
 # 例: _wk(direction=1) → 「向きの食い違い1・見出しのタグ0・指標日の見出し0…」
 _WK_SHORT = {"direction": "W_direction_mismatch", "hashtag": "W_headline_hashtag", "indicator": "W_indicator_headline",
-             "flow": "W_flow_format", "media": "W_media_mismatch"}
+             "flow": "W_flow_format", "media": "W_media_mismatch", "geo": "W_geo_rejected_fixed"}
 
 
 def _wk(**counts):
@@ -6523,6 +6523,104 @@ check("post_draft.yml: 手動試行でも、存在する場合はcandidates_log.
 check("daily.yml: candidates_log.jsonは既存のCI成果物（news_candidates.json等）の扱いを変えない（news_candidates.jsonは引き続き成果物のみ）",
       "outputs/${{ steps.target.outputs.date }}/news_candidates.json" in _daily_yml97
       and 'git add "$TARGET_DIR/news_candidates.json"' not in _daily_yml97, "")
+
+print("=== v1.98（オーナー承認・案2）: 見出しが定型文の日に、B判定の地政学・エネルギー材料を不採用にしていたら警告（WARN。FAILにしない）===")
+_FIX98 = generate_post.FIXED_HEADLINE
+_tm98 = {"FRB": 1, "Reuters": 2, "CoinDesk": 3, "Google News (Reuters検索)": 4}
+
+
+def _led98(title, source="Reuters", decision="不採用", reason="B: 地政学的緊張に関する内容だが、情報が薄く原油・リスク選好への波及を具体的に説明できない"):
+    return {"source": source, "url": "https://e", "title": title, "published_at": "2026-10-04", "verified_by": "", "decision": decision, "reason": reason}
+
+
+_g98 = verify_post.find_geo_rejected_under_fixed_headline
+_s_fix = {"part1_headline": _FIX98}
+_h98 = _g98(_s_fix, [_led98("Yemeni government launches offensive to seize all areas from Iran-backed Houthis - Reuters"),
+                     _led98("Iran's oil minister resigns for personal reasons, state media reports - Reuters")], _tm98)
+check("v1.98: 見出しが定型文の日、B判定（理由が「B:」始まり）で不採用の地政学・エネルギーの候補（tier2）を検知する（10/4型）。題名の語の区分（エネルギー・地政学）も返す",
+      len(_h98) == 2 and _h98[0]["topic"] == ["地政学"] and _h98[1]["topic"] == ["エネルギー", "地政学"] and _h98[0]["tier"] == 2, str(_h98))
+check("v1.98: 日本語の題名・全角コロン「B：」・先頭の空白でも検知する",
+      len(_g98(_s_fix, [_led98("イランの石油相が辞任", reason="  B：情報が薄い")], _tm98)) == 1)
+check("v1.98: 見出しが定型文でない日は対象外（採用した材料がある日・通常の日）",
+      _g98({"part1_headline": "FRBが利下げを決定しました。"}, [_led98("Iran oil strike")], _tm98) == [] and _g98({}, [_led98("Iran oil strike")], _tm98) == [])
+check("v1.98: 理由がB以外（C:・A:・無し）の不採用は対象外（Cは「波及経路を説明できない」ため原則不採用の扱い）",
+      _g98(_s_fix, [_led98("Iran oil strike", reason="C: 波及経路を説明できない"), _led98("Iran oil strike", reason="A: x"),
+                    _led98("Iran oil strike", reason=""), _led98("Iran oil strike", reason="理由B: x")], _tm98) == [])
+check("v1.98: 採用・採用（独立2ソース）の候補は対象外／tier4（Google News・候補発見専用でもともと採用できない）・tier不明の情報源は対象外／tier1・tier3は対象",
+      _g98(_s_fix, [_led98("Iran oil strike", decision="採用"), _led98("Iran oil strike", decision="採用（独立2ソース）"),
+                    _led98("Iran oil strike", source="Google News (Reuters検索)"), _led98("Iran oil strike", source="Unknown")], _tm98) == []
+      and [h["tier"] for h in _g98(_s_fix, [_led98("Iran oil strike", source="FRB"), _led98("Iran oil strike", source="CoinDesk")], _tm98)] == [1, 3])
+check("v1.98: B判定でも題名に地政学・エネルギーの語が無い候補（日銀の統計・半導体決算・関税・ECBのデジタルユーロ）は対象外",
+      _g98(_s_fix, [_led98("営業毎旬報告（8月20日現在）", source="FRB"), _led98("Nvidia shares rise after earnings top estimates", source="CoinDesk"),
+                    _led98("President Trump Is Finally Ending Canada’s Free Ride", source="FRB"),
+                    _led98("ECB defends digital euro privacy as CBDCs face global scrutiny", source="CoinDesk")], _tm98) == [])
+check("v1.98: 台帳が無い・不正（None・空・dictでない要素・tier_map未指定）でも例外にならず空",
+      _g98(_s_fix, None, _tm98) == [] and _g98(_s_fix, [], _tm98) == [] and _g98(_s_fix, ["x", None, 3], _tm98) == []
+      and _g98(_s_fix, [_led98("Iran oil strike")], None) == [] and _g98(None, [_led98("Iran oil strike")], _tm98) == [])
+
+_au98 = verify_post.Audit()
+verify_post.check_geo_rejected_warn(_au98, _s_fix, [_led98("Iran oil strike %d" % i) for i in range(7)], _tm98)
+check("v1.98: 警告はその日に1件（種類W_geo_rejected_fixed）。件数・一覧（最大5件）・ほかN件・「題名の語による目印」の限定を詳細に書く。checks・failedには影響しない",
+      len(_au98.warnings) == 1 and _au98.warnings[0]["id"] == "W_geo_rejected_fixed" and _au98.warnings[0]["count"] == 7
+      and "7件、不採用になっています" in _au98.warnings[0]["detail"] and "Iran oil strike 4" in _au98.warnings[0]["detail"]
+      and "Iran oil strike 5" not in _au98.warnings[0]["detail"] and "ほか2件" in _au98.warnings[0]["detail"]
+      and "題名の語による目印" in _au98.warnings[0]["detail"] and "定型文（材料なし）" in _au98.warnings[0]["detail"]
+      and len(_au98.warnings[0]["entries"]) == 7 and _au98.failed == 0 and _au98.checks == [], str(_au98.warnings))
+_au98b = verify_post.Audit()
+verify_post.check_geo_rejected_warn(_au98b, _s_fix, [_led98("営業毎旬報告", source="FRB")], _tm98)
+check("v1.98: 該当が無ければ警告なし", _au98b.warnings == [])
+check("v1.98: 警告の種類が登録され、種類別の件数に出る（0件でも表示）。ラベルは「地政学の不採用」",
+      ("W_geo_rejected_fixed", "地政学の不採用") in verify_post.WARNING_KINDS
+      and "地政学の不採用1" in verify_post.format_warning_counts(_au98.warnings)
+      and "地政学の不採用0" in verify_post.format_warning_counts([]) and verify_post.warning_kind_label("W_geo_rejected_fixed") == "地政学の不採用")
+_blk98 = repair_post.render_warning_block({"warnings": _au98.warnings})
+check("v1.98: STATUSの先頭の警告ブロックに「⚠ [地政学の不採用]」として詳細が出る（FAILではない旨つき）",
+      "⚠ [地政学の不採用] 【ヘッドライン】が定型文（材料なし）のまま" in _blk98 and "FAILではありません" in _blk98, _blk98[:300])
+
+# 結合: 実際のcall_A→compose→run_allで、定型文の日にB判定の不採用があれば警告が出て、FAILにはならない（10/4型）
+_news_geo98 = {"collected_at": "2026-10-04T09:00:00+09:00", "target_date_jst": "2026-10-04", "source_status": {}, "candidates": [
+    {"title": "Yemeni government launches offensive to seize all areas from Iran-backed Houthis - Reuters", "url": "https://e/g1",
+     "source": "Reuters", "published_at": "Sun, 04 Oct 2026 10:00:00 GMT", "summary": "Yemeni government launches offensive", "kind": "independent_report", "tier": 2}]}
+
+
+def _geo_gen98(reason, headline=generate_post.FIXED_HEADLINE, points=None, use=False):
+    def fn(kw, n):
+        ids = [c["candidate_id"] for c in _parse_leading_json(kw["messages"][0]["content"]).get("news_candidates_today", [])]
+        return json_response({"headline_for_image": "市場全体は様子見", "part1_headline": headline,
+                              "part1_points": points or [generate_post.FIXED_POINTS], "reusable_for_summary": [],
+                              "audit_ledger": [{"candidate_id": i, "use": use, "verified_by": "RSS summary" if use else "", "reason": reason} for i in ids]})
+    out = generate_post.call_a(FakeClient(fn), DAILY_DATA, _news_geo98, None)
+    g = json.loads(json.dumps(_g_gen))
+    g["level"] = "L0"; g["news_candidate_count"] = 1
+    g["call_a"] = out.to_dict()
+    g["call_b"] = {"ok": True, "attempts": 1, "error": None, "usage": {"input_tokens": 0, "output_tokens": 0}, "attempt_errors": [],
+                   "data": {"part2_flow": [generate_post.FIXED_FLOW], "part2_summary": "地合いは不透明で、今後の確認が必要です。"}}
+    return compose_post.compose(DAILY_DATA, g)
+
+
+_b_geo98 = _geo_gen98("B: 地政学的緊張に関する内容だが、情報が薄く波及経路を具体的に説明できない")
+_au_geo98 = verify_post.run_all(_b_geo98, DAILY_DATA)
+check("v1.98 結合: 定型文の日にB判定の地政学材料（tier2のReuters）を不採用にしていると、警告が1件出る。機械監査はFAILにならない（C22はSKIP）",
+      [w["id"] for w in _au_geo98.warnings] == ["W_geo_rejected_fixed"] and _au_geo98.failed == 0
+      and next(c for c in _au_geo98.checks if c["id"].startswith("C22"))["result"] == "SKIP", str(_au_geo98.warnings))
+_au_geo98c = verify_post.run_all(_geo_gen98("C: 波及経路を説明できない"), DAILY_DATA)
+check("v1.98 結合: 同じ材料でも理由がCなら警告なし（Cは原則不採用）", _au_geo98c.warnings == [] and _au_geo98c.failed == 0, str(_au_geo98c.warnings))
+_au_geo98d = verify_post.run_all(_geo_gen98("B: 波及経路あり。承認", headline="イエメン政府がフーシ派への攻勢を開始したと報じられました（Reuters）。",
+                                            points=["イエメン政府がフーシ派への攻勢を開始したと報じられました（Reuters、2026-10-04）。"], use=True), DAILY_DATA)
+check("v1.98 結合: 同じ材料を採用して見出しに書いた日（見出しが定型文でない）は警告なし",
+      not any(w["id"] == "W_geo_rejected_fixed" for w in _au_geo98d.warnings), str(_au_geo98d.warnings))
+
+# 実データ: 本番にコミット済みの10/4までの出力（38日分）で、警告が出る日を確認する（見出しが定型文だった16日のうち5日）
+_geo_days98 = []
+_tm_real98 = verify_post._load_source_tier_map()
+for _f98 in sorted((REPO / "outputs").glob("*/draft/post_bundle.json")):
+    if _f98.parent.parent.name > "2026-10-04":
+        continue
+    _bd98 = json.loads(_f98.read_text(encoding="utf-8"))
+    if verify_post.find_geo_rejected_under_fixed_headline(_bd98.get("sections") or {}, _bd98.get("audit_ledger"), _tm_real98):
+        _geo_days98.append(_f98.parent.parent.name)
+check("v1.98 実データ（10/4までの本番出力）: 警告が出る日は8/29・9/5・9/6・9/20・10/4の5日（いずれも見出しが定型文で、B判定の地政学・エネルギー材料を不採用にした日）",
+      _geo_days98 == ["2026-08-29", "2026-09-05", "2026-09-06", "2026-09-20", "2026-10-04"], str(_geo_days98))
 
 print()
 print(f"PASS: {len(PASS)}  FAIL: {len(FAIL)}")

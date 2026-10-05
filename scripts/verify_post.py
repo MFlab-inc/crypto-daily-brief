@@ -974,6 +974,7 @@ WARNING_KINDS: "tuple[tuple[str, str], ...]" = (
     ("W_indicator_headline", "指標日の見出し"),
     ("W_flow_format", "フロー書式"),
     ("W_media_mismatch", "媒体名照合"),
+    ("W_geo_rejected_fixed", "地政学の不採用"),
 )
 
 
@@ -1359,6 +1360,89 @@ def check_media_warn(au: Audit, sections: dict, audit_ledger, tier_map: "dict[st
                 section=h["section"], media=h["media"], sentence=h["sentence"], adopted_sources=h["adopted_sources"])
 
 
+# --- 地政学・エネルギーの材料を不採用にして、見出しが定型文になった日の警告（WARN。FAILではない。v1.98・オーナー承認・案2）---
+#
+# 背景: 2026-10-04分で、見出し・主要なポイントが定型文（材料なし）になった。同じ日の台帳には、地政学・エネルギーの
+# 材料（イエメン政府のフーシ派への攻勢・イラン石油相の辞任）が「B: …情報が薄く波及経路を具体的に説明できない」として
+# 不採用で記録されていた。過去の本番出力（38日分）では、見出しが定型文だった16日のうち5日（8/29・9/5・9/6・9/20・10/4）で、
+# 同種のB判定の不採用があった。これらは「波及経路はあるが、内容が薄いので不採用」という判断で、掲載の可否の基準が
+# プロンプトに明確でなかった（v1.99で基準を明確化）。基準を変えたあとも、この種の不採用がどれだけ起きるかを毎朝の
+# STATUSで確認できるようにする。
+#
+# 判定（すべて満たす日に1件の警告）:
+#  ①【ヘッドライン】が定型文（generate_post.FIXED_HEADLINE。C22と同じ完全一致）。
+#  ②台帳に、decision=不採用・情報源のtierが1〜3（tier4は候補発見専用で、もともと採用できないため除く。tier不明も除く）・
+#    理由が「B:」で始まる（呼び出しAが「波及経路のある材料」と判定したもの）・題名が地政学またはエネルギーの語を含む、
+#    の候補が1件以上ある。
+# 警告は、不採用にした候補を一覧し（最大5件）、見直すべきかの判断材料にするためのもので、不採用が誤りだとは断定しない
+# （題名の語による機械的な目印で、記事の内容は見ていない）。
+# 限界: ①理由の先頭の「B:」はモデルの自由記述の慣習（プロンプトの指示）に依存し、付かなければ検知できない。②題名の語の
+# 一覧に無い材料・題名に語が無い材料は検知できない（見逃し）。③「地政学・エネルギー」の語（原油・イラン・ロシア等）を含む
+# 題名であれば、市況の話題（株価・ガソリン価格）も対象になる（誤検知。WARNなので許容）。④見出しが定型文でない日、
+# 呼び出しAが失敗した日（台帳なし）は対象外。
+_GEO_B_LABEL_RE = re.compile(r"^\s*B\s*[:：]")
+_GEO_ENERGY_TERMS = (
+    r"\b(?:oil|crude|brent|wti|opec\+?|petroleum|gasoline|gas prices?|fuel|diesel|refiner(?:y|ies)|pipelines?|lng|tankers?|"
+    r"aramco|energy|strategic (?:petroleum )?(?:reserve|stockpile)s?|spr)\b"
+    r"|原油|石油|燃料|ガソリン|軽油|製油|油田|パイプライン|タンカー|アラムコ|エネルギー|備蓄"
+)
+_GEO_POLITICS_TERMS = (
+    r"\b(?:hormuz|red sea|suez|strait|houthis?|yemen\w*|iran\w*|iraq\w*|saudi|gulf|qatar\w*|uae|israel\w*|gaza|hezbollah|"
+    r"lebanon|syria\w*|russia\w*|ukrain\w*|kyiv|middle east|ceasefire|cease-fire|truce|sanctions?|embargo|missiles?|drones?|"
+    r"air ?strikes?|military|invasion|invad\w+)\b"
+    r"|ホルムズ|紅海|スエズ|フーシ|イエメン|イラン|イラク|サウジ|湾岸|カタール|イスラエル|ガザ|中東|ロシア|ウクライナ|"
+    r"制裁|停戦|休戦|ミサイル|ドローン|空爆|軍事|侵攻"
+)
+_GEO_TOPIC_GROUPS = (("エネルギー", re.compile(_GEO_ENERGY_TERMS, re.I)), ("地政学", re.compile(_GEO_POLITICS_TERMS, re.I)))
+_GEO_WARN_MAX_LISTED = 5
+_GEO_REASON_CHARS = 70
+
+
+def find_geo_rejected_under_fixed_headline(sections: dict, audit_ledger,
+                                            tier_map: "dict[str, int] | None" = None) -> "list[dict]":
+    """見出しが定型文の日に、B判定（理由が「B:」始まり）の地政学・エネルギーの候補を不採用にした台帳の項目を返す
+    （題名の語による目印。tier1〜3のみ）。見出しが定型文でない・台帳が無い日は空。"""
+    headline = (sections.get("part1_headline") or "").strip() if isinstance(sections, dict) else ""
+    if headline != generate_post.FIXED_HEADLINE or not isinstance(audit_ledger, list):
+        return []
+    tmap = tier_map if tier_map is not None else {}
+    hits = []
+    for e in audit_ledger:
+        if not isinstance(e, dict) or e.get("decision") != "不採用":
+            continue
+        tier = tmap.get(e.get("source"))
+        if tier not in (1, 2, 3):
+            continue
+        reason = str(e.get("reason", ""))
+        if not _GEO_B_LABEL_RE.match(reason):
+            continue
+        title = str(e.get("title", ""))
+        groups = [name for name, rx in _GEO_TOPIC_GROUPS if rx.search(title)]
+        if groups:
+            hits.append({"title": title, "source": e.get("source", ""), "tier": tier,
+                         "topic": groups, "reason": reason})
+    return hits
+
+
+def check_geo_rejected_warn(au: Audit, sections: dict, audit_ledger,
+                            tier_map: "dict[str, int] | None" = None) -> None:
+    """見出しが定型文の日に、B判定の地政学・エネルギー材料の不採用があれば、その日に1件の警告をau.warningsへ追加する
+    （FAILにしない）。"""
+    hits = find_geo_rejected_under_fixed_headline(sections, audit_ledger, tier_map)
+    if not hits:
+        return
+    listed = "".join(
+        f" ・{h['source']}「{_clip_sentence(h['title'], 80)}」［{'・'.join(h['topic'])}］"
+        f"（理由: {_clip_sentence(h['reason'], _GEO_REASON_CHARS)}）"
+        for h in hits[:_GEO_WARN_MAX_LISTED])
+    more = f" ほか{len(hits) - _GEO_WARN_MAX_LISTED}件" if len(hits) > _GEO_WARN_MAX_LISTED else ""
+    au.warn("W_geo_rejected_fixed",
+            f"【ヘッドライン】が定型文（材料なし）のまま、呼び出しAが波及経路のある材料（B）と判定した地政学・エネルギー関連の候補が"
+            f"{len(hits)}件、不採用になっています（「内容が薄い」「単独報道」だけで不採用にしていないか要確認。"
+            "題名の語による目印で、記事の内容は見ていません）。" + listed + more,
+            count=len(hits), entries=[{k: h[k] for k in ("source", "tier", "title", "topic", "reason")} for h in hits])
+
+
 def summarize_check_ids(checks: "list[dict]") -> str:
     """実際に評価したチェックのID要約（例: 「C12〜C24・C26〜C28・計17項目」）。
     GENERATION_STATUS.mdの監査表記を、固定文言ではなく実際の評価対象から作る（v1.85）。
@@ -1602,6 +1686,7 @@ def run_all(bundle: dict, daily_data: dict) -> Audit:
             au, sections, bundle.get("audit_ledger"), daily_data.get("scheduled_events"))),
         ("フロー書式", lambda: check_flow_format_warn(au, sections)),
         ("媒体名照合", lambda: check_media_warn(au, sections, bundle.get("audit_ledger"), tier_map)),
+        ("地政学の不採用", lambda: check_geo_rejected_warn(au, sections, bundle.get("audit_ledger"), tier_map)),
     ):
         try:
             _fn()
