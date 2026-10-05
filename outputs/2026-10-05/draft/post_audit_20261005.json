@@ -1,0 +1,121 @@
+{
+  "overall": "PASS",
+  "failed": 0,
+  "level": "L0",
+  "checks": [
+    {
+      "id": "C12_banned_terms",
+      "result": "PASS",
+      "detail": "禁止語なし",
+      "terms": []
+    },
+    {
+      "id": "C13_hashtag_boundary",
+      "result": "PASS",
+      "detail": "境界違反なし"
+    },
+    {
+      "id": "C14_no_table",
+      "result": "PASS",
+      "detail": "表形式なし"
+    },
+    {
+      "id": "C15_heading_order",
+      "result": "PASS",
+      "detail": "見出し順序OK"
+    },
+    {
+      "id": "C16_numeric_match",
+      "result": "PASS",
+      "detail": "テンプレート一致"
+    },
+    {
+      "id": "C16b_transcription_scan",
+      "result": "PASS",
+      "detail": "転記検知なし",
+      "hits": []
+    },
+    {
+      "id": "C17_lp_disclaimers",
+      "result": "PASS",
+      "detail": "定型文完全一致"
+    },
+    {
+      "id": "C18_causal_assertion",
+      "result": "PASS",
+      "detail": "断定表現なし"
+    },
+    {
+      "id": "C19_audit_ledger",
+      "result": "PASS",
+      "detail": "48件・全フィールド充足・渡した候補数と一致"
+    },
+    {
+      "id": "C20_image_headline",
+      "result": "PASS",
+      "detail": "全角換算15.0字・#なし"
+    },
+    {
+      "id": "C21_decision_tier_consistency",
+      "result": "PASS",
+      "detail": "48件・整合性OK"
+    },
+    {
+      "id": "C22_headline_tier1_basis",
+      "result": "PASS",
+      "detail": "tier1・tier2由来の採用が存在"
+    },
+    {
+      "id": "C23_summary_no_new_entities",
+      "result": "PASS",
+      "detail": "固有名詞候補2件・すべてpart1_headline/part1_points/reusable_for_summaryに存在"
+    },
+    {
+      "id": "C24_flow_no_unadopted_material",
+      "result": "PASS",
+      "detail": "固有名詞候補6件・すべてpart1_headline・part1_pointsに存在"
+    },
+    {
+      "id": "C26_flow_role_separation",
+      "result": "PASS",
+      "detail": "役割分離の禁止語句なし",
+      "patterns": []
+    },
+    {
+      "id": "C27_summary_role_separation",
+      "result": "PASS",
+      "detail": "役割分離OK",
+      "patterns": [],
+      "prices": []
+    },
+    {
+      "id": "C28_headline_points_role_separation",
+      "result": "PASS",
+      "detail": "役割分離OK"
+    }
+  ],
+  "warnings": [
+    {
+      "id": "W_flow_format",
+      "detail": "市場のフローの1本目が書式（統合運用基準§3.3）から外れています: 【出来事・ニュース】が無い・【出来事・ニュース】で始まっていない・「→」の直後がラベルでない。 連鎖: 「①CFTCが商品取引法に基づく暗号資産取引・市場の規制枠組み整備に向けた事前規則制定案を発表し、意見募集を開始したと公式に表明しました（CFTC、Reuters、10月5日） → 【地政学・マクロの変…」",
+      "chain_no": 1,
+      "reasons": [
+        "no_event_label",
+        "not_start_event",
+        "arrow_label_mismatch"
+      ],
+      "sentence": "①CFTCが商品取引法に基づく暗号資産取引・市場の規制枠組み整備に向けた事前規則制定案を発表し、意見募集を開始したと公式に表明しました（CFTC、Reuters、10月5日） → 【地政学・マクロの変化】レバレッジ型の個人向け暗号資産取引を含む包括的な規制整備に向けた動きとして、市場で制度設計の方向性が意識された可能性があります → 【暗号通貨価格】BTC・ETHはともにおおむね横ばい圏の値動きにとどまりましたが、因果は未確認です。 #BTC #ETH"
+    },
+    {
+      "id": "W_flow_format",
+      "detail": "市場のフローの2本目が書式（統合運用基準§3.3）から外れています: 【出来事・ニュース】が無い・【出来事・ニュース】で始まっていない・「→」の直後がラベルでない。 連鎖: 「②FinCENが暗号資産ミキシングサービスを主要なマネーロンダリング上の懸念と指定する規則案等を撤回したと複数の専門媒体が報じました（The Block、Cointelegraph、10月5日） → …」",
+      "chain_no": 2,
+      "reasons": [
+        "no_event_label",
+        "not_start_event",
+        "arrow_label_mismatch"
+      ],
+      "sentence": "②FinCENが暗号資産ミキシングサービスを主要なマネーロンダリング上の懸念と指定する規則案等を撤回したと複数の専門媒体が報じました（The Block、Cointelegraph、10月5日） → 【地政学・マクロの変化】「正当な活動への萎縮効果」への懸念を理由とした撤回であり、規制環境の緩和方向が意識された可能性があります → 【暗号通貨価格】BTC・ETHは同時期に目立った反応を見せず、ともに小幅な下落にとどまりましたが、因果は未確認です。 #BTC #ETH"
+    }
+  ]
+}
