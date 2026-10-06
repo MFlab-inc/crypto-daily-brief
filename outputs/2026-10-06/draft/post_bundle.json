@@ -1,0 +1,589 @@
+{
+  "target_date_jst": "2026-10-06",
+  "level": "L0",
+  "sections": {
+    "part0_target_date": "2026年10月6日（火）",
+    "part1_headline": "FRBのボウマン理事が銀行監督の枠組み見直しについて講演し、Reutersによると監督業務の再編を検討していると報じられました。",
+    "part1_points": "・Reutersによると、FRBのボウマン理事（銀行監督担当副議長）は講演で、銀行監督の責任体制を見直す方針を示したと報じられています。金融機関への監督枠組みの変化は市場の規制環境認識に影響し得る材料ですが、暗号通貨価格への直接因果は未確認です（Reuters、10月6日）。\n・Reutersによると、米国株式市場でS&P500・ナスダックが最高値を更新し、原油価格の落ち着きや国債利回りの低下も重なったと報じられています。リスク選好の高まりは暗号通貨市場にも波及し得る材料ですが、暗号通貨価格への直接因果は未確認です（Reuters、10月6日）。\n・Reutersによると、米国のEIA（エネルギー情報局）はイラン情勢による世界的な備蓄減少を理由に原油価格見通しを再度引き上げたと報じられています。原油価格の上振れはインフレ・金利観測を通じて暗号通貨市場にも波及し得る材料ですが、暗号通貨価格への直接因果は未確認です（Reuters、10月6日）。\n・Winklevoss兄弟系列の企業がZcash（ZEC）の現物ETFをSECに申請したと複数の暗号通貨専門媒体が報じました。公式発表での確認は取れていませんが、CointelegraphとThe Blockの2媒体が同一の申請事実を報じています（Cointelegraph、The Block、10月6日）。暗号資産ETFの裾野拡大を示す材料ですが、暗号通貨価格への直接因果は未確認です。",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.912兆（¥460.1兆）｜24時間取引高 $728.7億（¥11.51兆）\n・ #BTC：$85,520（約1,351.1万円）｜24時間比 -0.51%\n　（24時間レンジ $85,100〜$86,698）\n・ #ETH：$2,696（約42.6万円）｜24時間比 -0.76%\n　（24時間レンジ $2,683〜$2,725）\n・ #BNB：$780（約12.3万円）｜24時間比 -1.11%\n・市場心理：Fear & Greed 67（Greed、CoinMarketCap API）\n・ドミナンス：BTC 59.01%｜ETH 11.30%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年10月7日07:37 JST、USD/JPY ¥157.98",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $4.72M vs Base上ETH/USDC $42.82M｜参考：Base上DEX全体 $13.059億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $64.34億（¥1.02兆）｜24時間比 -0.20%｜USDCドミナンス 85.0%\n・ ETH/USDC（Base）参考APR：0.05% 16.42%（TVL $10.12M／24h出来高 $9.10M）｜0.3% 22.51%（TVL $164.03M／24h出来高 $33.71M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年10月7日07:37 JST",
+    "part2_flow": "①【出来事・ニュース】FRBのボウマン理事が講演で銀行監督の責任体制見直しの方針を示したと報じられました（Reuters、10月6日） → 【地政学・マクロの変化】金融機関への監督枠組みの変化が市場の規制環境認識に影響し得る変化として意識された可能性があります → 【暗号通貨価格】BTC・ETHともに同時期はやや軟調な推移でしたが、因果は未確認です。 #BTC #ETH\n②【出来事・ニュース】米国株式市場でS&P500・ナスダックが最高値を更新し、原油価格の落ち着きや国債利回りの低下も重なったと報じられました（Reuters、10月6日） → 【中間市場指標・市場心理】株価の最高値更新や利回り低下がリスク選好の高まりとして意識された可能性があります → 【暗号通貨価格】BTC・ETHは同時期にやや軟調に推移しましたが、因果は未確認です。 #BTC #ETH\n③【出来事・ニュース】米EIAがイラン情勢による世界的な備蓄減少を理由に原油価格見通しを再度引き上げたと報じられました（Reuters、10月6日） → 【地政学・マクロの変化】中東の地政学リスクが意識された可能性があります → 【中間市場指標・市場心理】原油価格の上振れがインフレ・金利観測を通じてリスク回避の心理につながった可能性があります → 【暗号通貨価格】BTCは同時期にやや下落方向で推移しましたが、因果は未確認です。 #BTC",
+    "lp_comment": "参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは25.55%→16.42%へ低下しました（24時間出来高 -35.60%、TVL +0.21%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは37.64%→22.51%へ低下しました（24時間出来高 -39.96%、TVL +0.41%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比-0.76%と下落中のため、ETH偏り・下限側レンジ外・下落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "米国株式市場の最高値更新や原油価格見通しの引き上げなど、マクロ要因が交錯するなかで暗号通貨市場は方向感に乏しい展開でした。規制面ではCFTCの規則制定に向けた意見募集開始など、制度整備の動きが引き続き注目されています。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "BTC・ETHともにやや軟調",
+  "audit_ledger": [
+    {
+      "source": "SEC",
+      "url": "https://www.sec.gov/newsroom/press-releases/2026-103-sec-seeks-final-judgment-against-former-western-asset-co-cio-ken-leech-cherry-picking-case",
+      "title": "SEC Seeks Final Judgment Against Former Western Asset Co-CIO Ken Leech in Cherry Picking Case",
+      "published_at": "Tue, 06 Oct 2026 16:30:24 -0400",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 投資顧問会社元幹部への民事司法判断の案件で、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "SEC",
+      "url": "https://www.sec.gov/newsroom/press-releases/2026-102-sec-host-virtual-national-compliance-outreach-seminar-investment-companies-investment-advisers",
+      "title": "SEC to Host Virtual National Compliance Outreach Seminar for Investment Companies and Investment Advisers",
+      "published_at": "Tue, 06 Oct 2026 10:37:55 -0400",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: コンプライアンス向けセミナー開催告知で、波及経路を説明できない"
+    },
+    {
+      "source": "FRB（speeches）",
+      "url": "https://www.federalreserve.gov/newsevents/speech/bowman20261006a.htm",
+      "title": "Bowman, Modernizing the Regulatory and Supervisory Landscape",
+      "published_at": "Tue, 6 Oct 2026 14:45:00 GMT",
+      "verified_by": "FRB公式speeches",
+      "decision": "採用",
+      "reason": "B: 銀行監督の枠組み見直しに関するFRB高官講演。Reuters報道と同一事実のため両者をuseにして1項目にまとめた"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/finsys/intlact_fs/kisei/kis261006a.htm",
+      "title": "バーゼル銀行監督委員会による議事要旨の公表について",
+      "published_at": "Tue, 06 Oct 2026 17:00:00 +0900",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: バーゼル委の議事要旨で、暗号資産エクスポージャー規制レビューに触れるが手続き的な発表のため不採用"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/about/press/koen_2026/ko261006a.htm",
+      "title": "【挨拶】植田総裁（全国証券大会）",
+      "published_at": "Tue, 06 Oct 2026 15:35:00 +0900",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 日銀総裁の挨拶で本文（summary）が確認できず、誰が・何をを具体的に書けない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/briefings-statements/2026/10/presidential-message-on-german-american-day/",
+      "title": "Presidential Message on German American Day",
+      "published_at": "Tue, 06 Oct 2026 20:43:50 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 独日関係を称える式典メッセージで、波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/releases/2026/10/what-they-are-saying-president-trump-delivers-immediate-diesel-relief-saving-americans-up-to-100-per-fill/",
+      "title": "WHAT THEY ARE SAYING: President Trump Delivers Immediate Diesel Relief, Saving Americans Up to $100 Per Fill",
+      "published_at": "Tue, 06 Oct 2026 16:22:32 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ディーゼル減税の反応集で、候補8と重複（内容は候補8を参照）"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/10/emergency-tax-relief-on-diesel-fuel/",
+      "title": "Emergency Tax Relief on Diesel Fuel",
+      "published_at": "Tue, 06 Oct 2026 01:13:53 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 上限4項目のため見送り（優先順位の低い材料）"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/briefings-statements/2026/10/presidential-message-on-child-health-day-c67c/",
+      "title": "Presidential Message on Child Health Day",
+      "published_at": "Tue, 06 Oct 2026 01:04:09 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 児童の健康に関する啓発メッセージで、波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/briefings-statements/2026/10/presidential-message-on-fire-prevention-week/",
+      "title": "Presidential Message on Fire Prevention Week",
+      "published_at": "Tue, 06 Oct 2026 01:02:35 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 防火週間の啓発メッセージで、波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/releases/2026/10/president-trump-takes-decisive-action-to-lower-diesel-costs-for-american-truckers-farmers/",
+      "title": "President Trump Takes Decisive Action to Lower Diesel Costs for American Truckers, Farmers",
+      "published_at": "Tue, 06 Oct 2026 00:20:07 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 候補8と同じ事実の重複記事（同じtierの候補8を採用対象として検討）"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/fact-sheets/2026/10/fact-sheet-president-donald-j-trump-promotes-diesel-affordability/",
+      "title": "Fact Sheet: President Donald J. Trump Promotes Diesel Affordability",
+      "published_at": "Tue, 06 Oct 2026 00:07:38 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 候補8と同じ事実の重複記事（同じtierの候補8を採用対象として検討）"
+    },
+    {
+      "source": "ホワイトハウス（大統領令等）",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/10/emergency-tax-relief-on-diesel-fuel/",
+      "title": "Emergency Tax Relief on Diesel Fuel",
+      "published_at": "Tue, 06 Oct 2026 01:13:53 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 候補8と同じ事実の重複記事（同じtierの候補8を採用対象として検討）"
+    },
+    {
+      "source": "ADP",
+      "url": "https://mediacenter.adp.com/2026-10-06-ADP-Lyric-HCM-Is-Now-Accessible-to-Companies-across-Key-European-Markets",
+      "title": "ADP Lyric HCM Is Now Accessible to Companies across Key European Markets",
+      "published_at": "Tue, 06 Oct 2026 10:47:00 -0400",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 人事・給与管理ソフトの欧州展開告知で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxPZ0p5VWxQQ0ZmUUI0Vk5wRUVjTUJhZjZGUlZjU2tWU1AtOEdqYjZ0OFRtRXNrUVdrTFlNZjVWdzluRjUyaWhHTlYxMG5Yc21pMHFubTdiX1RIRTRUSnB4UTZPckRMZTlzTHBEbkZKU1ROMTZpWE9lMXhPQkhyQmhBV3JNdkFrQVk?oc=5",
+      "title": "S&P 500, Nasdaq reach record closing highs as focus pivots to earnings - Reuters",
+      "published_at": "Tue, 06 Oct 2026 20:47:55 GMT",
+      "verified_by": "Reuters報道",
+      "decision": "採用",
+      "reason": "B: 米国株式市場の最高値更新。リスク選好を通じた波及経路があるため掲載"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxNZlMwQU1nbHRaZ2dnOUVOM1c1LXBxNXhWUTNzS1ROWDZyODk1NldRTHB2ODNKbnI0am5tUUcwMU9YekUxMWtLOFVGMFczTU12cHpCclQ1cnhDRzBMVGRBWTYwRjZPVUZidVFlT1FMZGdUcnR6MENjNXVMUXRzTlVzdVJkSQ?oc=5",
+      "title": "Wall Street shares notch records as oil prices stabilize, bond yields retreat - Reuters",
+      "published_at": "Tue, 06 Oct 2026 20:42:27 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 候補15と同じ事実の重複記事（同じtierの候補15を採用）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxNLV9ETnBfeTNDYXoxZkRqdWhEMklGNklyZGYwVV9wTk1BcVVPT2FjQTJiUWl3Q2FJelZkMGR2ZXVZYlVFZFVNejFIYklDOHllaWQ2OTdBTC11VHdMUTRrRTdjTTBnSVV0RUpjZzFrdmxZVVI3cThnUWU5MDVVd2pNNW5KbFVjOXN2SWVsSmY1bEJOOW9vUTB6dmc3ei1hUTBqZ3FUNExtTXpfU2ZqZWd3alNLeWlfNy0wMWY5RWEtVVhWTVY1REZYYw?oc=5",
+      "title": "Nigeria's Dangote refinery aims to draw more retail investors than Aramco IPO, CEO says - Reuters",
+      "published_at": "Tue, 06 Oct 2026 19:08:34 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ダンゴテ製油所IPOに関する記事で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxQdU9Xd2FrT1FUSDBZejhlZFZrbnVMMVVWWklYSkhkTFN1YUh3ZTFMWUhrdjJPbGxTX1lxbHY2MkV1d3VqU0FZdnNJdWhiZkE4NVI5VmRDQ2F0M2xZOHhFNm1tQjJnTlZJbUJ3OXBPZ0Z1UnBQbDduX2Fwamp0aGNxaFgzNW45SjhSU2JDMl9OQ0V1Q01ZWHk0Z1RUSEl4OU5wb3R3c09lUmRIV1Q3ZXc?oc=5",
+      "title": "Becton Dickinson pledges $19 billion US investment in deal with government - Reuters",
+      "published_at": "Tue, 06 Oct 2026 19:03:43 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 医療機器企業の投資表明で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQeXUxU2F5X1UwSTZreDdOc3FaTDdsWVBreUNYY3U1WVlpZXVUNGM1UE8tLU50eUU1UTlzVHRPVlhOTlBmemF5ZTJGY3lNa2Njc1NwaFNkWG04OVdTbkUxVGd4d1E1WkFkVkpXdmFoVkEyUHFkX24tSUlMTkZaS3FUYy1pQzJfQ1Nldy10bDhwdEhoOHg5eHFpVDFMWDJ6bkcyT1F3R0tDaWhFSU4tb0RHeUVYNFVSUHJT?oc=5",
+      "title": "Fed plans to overhaul bank supervision responsibilities, Bowman says - Reuters",
+      "published_at": "Tue, 06 Oct 2026 18:15:37 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 候補3と同じ事実の重複記事（同じ内容の候補3を採用）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxNSjNTOThyMXhvc1UzM1A2TVVrak53cDQ2d2h5dElha3lIWVU1NXVVbjhpRHhCejJldi1IS04tOVpBNzR1eDFGeGthX0F3TUNmSXljbkhaWnR6X0xIRmtMNUZtbW5KeG9nQ0NTMXFsdE9rdmdlTjE5dlFOR3JfbFJiWGJUU1pBUTd3RE8wNHgtcVowX1NlWUxRM3VESDM3d1NYRFFJdUJEeGR0eGd3blZtZnhKRDZpTlR3bE1fMEtKS25NS0l0OFVvVw?oc=5",
+      "title": "Northeast Democrats urge Trump administration action as heating oil costs surge - Reuters",
+      "published_at": "Tue, 06 Oct 2026 17:52:48 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 暖房油価格を巡る議員の要望記事で、誰が・何を・どこでは書けるが上限4項目のため見送り"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxQZk8xUmkwZm83ZUdaTWpWaEVibFZzckNxOVFNOG9OTjlWdzJBdXRqWk5GUUFoME5DWXJmNThNRlIzdVBxUXNfeGd5cTFFNjlVZmg1VkFwVXdONzVLNGh0RVF5S203NlRieWFBNEY3b0dnZlZ3MERxUGlYWTRDaGwzYUJaYWJxWjI1WTlJbDNfMFJ0TVlqSjdFNnl6SVF6UVhmQlhNM2pRUnltSDVMMXNmS21JZkMySWNFVjhtbXVSMUw?oc=5",
+      "title": "US EIA hikes oil price forecasts again as Iran war drains global stockpile - Reuters",
+      "published_at": "Tue, 06 Oct 2026 17:39:05 GMT",
+      "verified_by": "Reuters報道",
+      "decision": "採用",
+      "reason": "B: EIAの原油価格見通し引き上げ。原油価格の変動は金利・インフレ観測への波及経路があるため掲載"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxQTDR0Q2ZrRW1NUW9NNU13Q0hldFhocVBkZTJrRHpicldtQXRjNEp3akpjaEI3NUtESWJqT0EwS2kwaXg4c21iQTg5Yy0xX3Q0aVNhTXg4dHRCNmZYU1N3aWZWN3JjZGR0WHBrNzFJZkhXNnBPVzltUHp1U0U4Q0E2MEtQa1prMDMzSHBoQlE5RlZiQ29zTmZvbWhVM3JPOURSN3htdFdCZ3FfVlowQ1FmRC1IWWVYUnVrandwcThELWQxdGpoeXc?oc=5",
+      "title": "From just-in-time to just-in-case: oil executives say world needs more export routes - Reuters",
+      "published_at": "Tue, 06 Oct 2026 17:35:28 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 石油輸出ルートに関する経営者発言の解説記事で、優先して掲載する対象に当たらない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxON1IxdUZmenNPcXZRSTEwWDdEUVJNdjBnSEFlYm5JLWRsZm1EaE9iVmV1bGhZLU5Pb3BlRVQwbFZHT2dDbEppNkN6REZZd0JkeXFUbEt4Ync5RW5qREFscFZNVHA1RjdKVjRRcmZPb1ZyaDFhdnVKM2prcHRYd0NUQVVYdHRMdU9lakVQc0NocERlU0JRMDU1V19oMA?oc=5",
+      "title": "US trade balance sinks deeper into the red as imports hit record high despite tariffs - Reuters",
+      "published_at": "Tue, 06 Oct 2026 17:29:09 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 米国貿易赤字拡大の記事で、上限4項目のため見送り"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxPRXpPa01RZzZ1ZlNmZS1XU1FlVnlKbTNhblkyVFU1dkttNzY2WllwRXNVdHVSNlBkV21wQi05d3NQdTFQcjQ1Vm5CcG1XQ1gtaDdZUmZiZXZaVVA1ZXBIcEpoOHBIZ0k1RnpKWXpsOVBjWWhrQzlWNW53SFM2dm5LeWJFVThkLUNHMzY2VFN1cFl0QXpqc2U5T2FvM1M1TmQyRjUwTDBBTFJ3NkRLS0ZENmY4cDNPam13OG9pRUFZUGw?oc=5",
+      "title": "The world has nearly burned through its oil stockpile buffer, executives say - Reuters",
+      "published_at": "Tue, 06 Oct 2026 17:27:44 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 候補21と同じ事実の重複記事（同じtierの候補21を採用）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxOcWJxRGxvRk5YTXVKbjZPSndYMTdEa3dlZjByT3dFN1k0dXZ1NWdiNVBGUVlDVEt5akxfckFZYUJHOV9sUDMwVnlpWVR0MG5mNGtacnhfVW80azQwUU1jVzR5NlhYNXRzX0p5TUdQQXVVeGF0OUFvd3VMR2ZXcFhpa3RYTkJTeXVzR2hrYWFTcTRhaVdrTmlNRFd0ckNiTURRaHQ1Ny05TzctaThrQ1RXSzlGQUVkTzBpeEZz?oc=5",
+      "title": "EU to delay methane emissions rules for one year and no more, energy chief says - Reuters",
+      "published_at": "Tue, 06 Oct 2026 17:01:53 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: EUのメタン排出規制延期に関する記事で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxOS1NIR0txbU9OM3c1aUhGM2doeVltazU2U2YyOHV2YVR4R2lkRG5FUXp2N0VnaVdLVlRCV1BUMXBJWUpBUmVTZTlMQXV2VU1KOXhocElZNGEzYWFnS2xGQ2hCTlRPbzJjN0J5Ty1neVBpdU1UV0JxRlFRTDNjOEk1QjhXQ1otdkhOTG8zLW5QLTRxQVc5dE5KeVNURTlXYWU4Unh4eg?oc=5",
+      "title": "Fed's Daly: need for more hikes hinges on what happens with shocks - Reuters",
+      "published_at": "Tue, 06 Oct 2026 16:59:53 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: FRB高官発言だが候補3と重複する金融政策材料のため、上限4項目の関係で見送り"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxQQXotNFg0SW5LTUZxQ09TWjlDNGdtWnNvckU2dW4tZ0xKakxEYXBZb0ltblA3MHZzMXlSanh4TThxSktldmpTQ0Z2UmZUQWE3d0Q3YjRJMGhkVGJnbllyWXZUbzRXWmIyNjkydVVCTFJaMEZKOTh3bFVGZE9zQm9feU80LV9BYlpfaUxBZl80bU9tTnNudGRkRERHY2pLLXhPMVA5bGJsRl9uWG1sQzl4aVNfbGtBVHlyYXFkN1VaR1hMMl9XNXFN?oc=5",
+      "title": "South Korea exports eased Russia fuel crisis caused by drone strikes, Ukraine says - Reuters",
+      "published_at": "Tue, 06 Oct 2026 16:22:45 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ロシア・ウクライナの一般的な戦況に関する記事で、優先して掲載する対象に当たらない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxQWmVRdHA4bVRsVmVyUThxTVdUb3AzNklqYnNDS2JvVVVEa2hnbk1qaHVWcHBnN1Bya2piTTM3eEkxRWxrZVE4WDRidzAyZGFocEFVYjN6RENUWm9rbFBKQ1hQRlM5Qi12eTFKV2dxNF80MHF1Xy12NkR6SG9kcllSR2JlalFQZXdPYUtOeXhfMHlwdGdZbEZXTk96ZzhPS3MtUjFfRkNXNzFiWkJzTFNLTVJVQk8?oc=5",
+      "title": "US Treasury yields are \"screaming good value\" says PIMCO senior advisor - Reuters",
+      "published_at": "Tue, 06 Oct 2026 16:15:50 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 米国債利回りに関する投資顧問の見解記事で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxNSzh2RWtVenBUZmhPWExwdWdmTjlkMmhiSS12TGRobzUxNWlVdFRHWDAxaFhackxjZEI0WHJjOGF0TURrVFJsWWhjQXk1M29CV195NG54MlhZd1RXVC1XYlZ5VDZ3YTNSMEZpdVlNYi1LeUVmOGUwQUdSZndkTjZwcVZiMFZWSWdpOHpGTDI5MmZ0c3diaXFxbmdBUUt4MWNYQUR3cVZ4aVY1N1VSME1faG9xYU9Mc3djcFlPMDREYw?oc=5",
+      "title": "London stocks gain on softer oil, easing gilt yields; Defence shares fall - Reuters",
+      "published_at": "Tue, 06 Oct 2026 16:09:23 GMT",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ロンドン株式市場の動向記事で、候補15・21と重複する内容のため上限4項目で見送り"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/winklevoss-backed-zcash-etf-files-with-sec-for-nasdaq-listing?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Winklevoss-backed Zcash ETF files with SEC for Nasdaq listing",
+      "published_at": "Tue, 06 Oct 2026 20:53:19 +0000",
+      "verified_by": "Cointelegraph・The Block 2媒体による独立報道の確認",
+      "decision": "採用（独立2ソース）",
+      "reason": "独立2ソース規定に該当。Zcash ETF申請について2媒体が同一事実を報じている"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/what-happened-in-crypto-today?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Here’s what happened in crypto today",
+      "published_at": "Tue, 06 Oct 2026 20:48:12 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 日次まとめ記事で、個別の事実根拠にならない"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/ecosystems/2026-10-06-abstract-ethereum-layer-2-shutting-down-pudgy-penguins-igloo-417855",
+      "title": "Pudgy Penguins-backed Ethereum L2 Abstract to shut down after losing ‘tens of millions’",
+      "published_at": "Tue, 06 Oct 2026 20:11:30 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 単独報道のみで独立2ソースの相手が確認できない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/uk-taps-6-banks-to-lead-first-digitally-native-government-bond?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "UK names 6 banks to lead first digitally native government bond",
+      "published_at": "Tue, 06 Oct 2026 19:19:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 単独報道のみで独立2ソースの相手が確認できない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/russia-digital-ruble-adoption-brics-cbdc-payments?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Russia’s digital ruble accounts top 220K in first month, nearly 4X central bank forecast",
+      "published_at": "Tue, 06 Oct 2026 18:19:35 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 単独報道のみで独立2ソースの相手が確認できない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/law-congress-betting-elections-prediction-markets?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bill aims at stopping US lawmaker bets on their own elections ahead of midterms",
+      "published_at": "Tue, 06 Oct 2026 17:59:32 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 単独報道のみで独立2ソースの相手が確認できない"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/regulation/2026-10-06-conduit-sues-tether-usdt-freeze-417831",
+      "title": "Conduit sues Tether over $2.76 million freeze, says it has ‘no legal entitlement’ to funds",
+      "published_at": "Tue, 06 Oct 2026 17:54:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 単独報道のみで独立2ソースの相手が確認できない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/majority-of-affluent-investors-across-7-countries-own-crypto-survey?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Affluent investors seen boosting crypto exposure: Survey",
+      "published_at": "Tue, 06 Oct 2026 17:30:18 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 単独報道のみで独立2ソースの相手が確認できない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/markets/bitcoin-grinds-toward-87k-as-us-equities-hit-new-record-highs?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bitcoin grinds toward $87K as US equities hit new record highs",
+      "published_at": "Tue, 06 Oct 2026 17:19:58 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 単独報道のみで独立2ソースの相手が確認できない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/securitize-lg-cns-south-korea-tokenized-assets?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Securitize stock jumps 8% amid South Korea tokenization push",
+      "published_at": "Tue, 06 Oct 2026 17:04:41 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 単独報道のみで独立2ソースの相手が確認できない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/10/06/peter-thiel-backed-founders-fund-leads-a-usd5-million-token-buy-in-crypto-collateral-protocol-anvil",
+      "title": "Peter Thiel-backed Founders Fund leads a $5 million token buy in crypto collateral protocol Anvil",
+      "published_at": "Tue, 06 Oct 2026 17:00:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 単独報道のみで独立2ソースの相手が確認できない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/opinion/2026/10/06/crypto-is-expanding-the-boundaries-of-what-can-be-priced",
+      "title": "Crypto is expanding the boundaries of what can be priced",
+      "published_at": "Tue, 06 Oct 2026 16:50:26 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 意見記事（論評）のため不採用"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/markets/2026-10-06-winklevoss-files-spot-zcash-etf-wink-417826",
+      "title": "Winklevoss group seeks to launch Zcash ETF with 0.25% fee, proposed WINK ticker",
+      "published_at": "Tue, 06 Oct 2026 16:43:41 +0000",
+      "verified_by": "Cointelegraph・The Block 2媒体による独立報道の確認",
+      "decision": "採用（独立2ソース）",
+      "reason": "独立2ソース規定に該当。候補30と同一事実"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/european-central-bank-fragmentation-digital-euro?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "ECB policymaker warns of fragmentation without digital euro",
+      "published_at": "Tue, 06 Oct 2026 16:32:57 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 単独報道のみで独立2ソースの相手が確認できない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/ripple-expands-brevan-howard-deal-with-prime-brokerage-services?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Ripple expands Brevan Howard deal with prime brokerage services",
+      "published_at": "Tue, 06 Oct 2026 15:24:51 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 独立2ソースに該当するが、暗号通貨価格への波及経路が薄く上限4項目のため見送り"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/business/2026-10-06-ripple-prime-brevan-howard-prime-brokerage-clearing-financing-417801",
+      "title": "Brevan Howard to use Ripple Prime for multi-asset brokerage, clearing and financing",
+      "published_at": "Tue, 06 Oct 2026 14:36:08 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 独立2ソースに該当するが、暗号通貨価格への波及経路が薄く上限4項目のため見送り"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/10/05/arbitrum-joins-paxos-led-stablecoin-group-global-dollar-to-capture-digital-dollar-growth",
+      "title": "Arbitrum joins Paxos-led stablecoin group Global Dollar to capture digital dollar growth",
+      "published_at": "Tue, 06 Oct 2026 13:02:33 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 独立2ソースに該当するが上限4項目のため見送り（優先順位の低い材料）"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/paxos-3b-usdg-stablecoin-launches-arbitrum?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Paxos’ $3B USDG stablecoin launches on Arbitrum",
+      "published_at": "Tue, 06 Oct 2026 13:00:00 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 独立2ソースに該当するが上限4項目のため見送り（優先順位の低い材料）"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/business/2026-10-06-ondo-launches-onchain-private-company-exposure-starting-with-ai-417762",
+      "title": "Ondo launches onchain private-company exposure, starting with AI",
+      "published_at": "Tue, 06 Oct 2026 09:38:28 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 独立2ソースに該当するが上限4項目のため見送り（優先順位の低い材料）"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/ondo-private-markets-tokenized-pre-ipo-ai?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Ondo opens private markets with tokenized pre-IPO AI exposure",
+      "published_at": "Tue, 06 Oct 2026 09:21:38 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 独立2ソースに該当するが上限4項目のため見送り（優先順位の低い材料）"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/solana-foundation-settlement-seconds-dvp?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Solana Foundation targets settlement in seconds with DvP launch",
+      "published_at": "Tue, 06 Oct 2026 09:11:26 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 独立2ソースに該当するが上限4項目のため見送り（優先順位の低い材料）"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/10/06/solana-foundation-unveils-a-program-to-settle-institutional-trades-in-seconds-with-jpmorgan-s-inputs",
+      "title": "Solana Foundation unveils a program to settle institutional trades in seconds. JPMorgan gave input",
+      "published_at": "Tue, 06 Oct 2026 04:23:45 +0000",
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 独立2ソースに該当するが上限4項目のため見送り（優先順位の低い材料）"
+    }
+  ],
+  "reusable_for_summary": [
+    "CFTCが暗号資産取引・市場の規則制定に向けた意見募集を開始したと発表しており、規制の枠組み整備が引き続き注目されています（CFTC、10月5日）。",
+    "米地域銀行団体がOCCを提訴し、暗号通貨企業への信託銀行免許付与の是非を巡る争いが続いています（CoinDesk、10月3日）。"
+  ],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 2
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 0
+    },
+    "FRB（speeches）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 1
+    },
+    "FRB（testimony）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 2
+    },
+    "米財務省": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "USTR": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "ホワイトハウス": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 7
+    },
+    "ホワイトハウス（大統領令等）": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 1
+    },
+    "ADP": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 1
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 15
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 27
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "The Block": {
+      "status": "ok",
+      "raw_count": 19,
+      "kept_count": 11
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 48
+    }
+  },
+  "news_candidate_count": 51,
+  "format_normalized": {
+    "part1_points": 0,
+    "part2_flow": 0
+  },
+  "part1_md": "【対象日】2026年10月6日（火）\n\n【ヘッドライン】\nFRBのボウマン理事が銀行監督の枠組み見直しについて講演し、Reutersによると監督業務の再編を検討していると報じられました。\n\n【主要なポイント】\n・Reutersによると、FRBのボウマン理事（銀行監督担当副議長）は講演で、銀行監督の責任体制を見直す方針を示したと報じられています。金融機関への監督枠組みの変化は市場の規制環境認識に影響し得る材料ですが、暗号通貨価格への直接因果は未確認です（Reuters、10月6日）。\n・Reutersによると、米国株式市場でS&P500・ナスダックが最高値を更新し、原油価格の落ち着きや国債利回りの低下も重なったと報じられています。リスク選好の高まりは暗号通貨市場にも波及し得る材料ですが、暗号通貨価格への直接因果は未確認です（Reuters、10月6日）。\n・Reutersによると、米国のEIA（エネルギー情報局）はイラン情勢による世界的な備蓄減少を理由に原油価格見通しを再度引き上げたと報じられています。原油価格の上振れはインフレ・金利観測を通じて暗号通貨市場にも波及し得る材料ですが、暗号通貨価格への直接因果は未確認です（Reuters、10月6日）。\n・Winklevoss兄弟系列の企業がZcash（ZEC）の現物ETFをSECに申請したと複数の暗号通貨専門媒体が報じました。公式発表での確認は取れていませんが、CointelegraphとThe Blockの2媒体が同一の申請事実を報じています（Cointelegraph、The Block、10月6日）。暗号資産ETFの裾野拡大を示す材料ですが、暗号通貨価格への直接因果は未確認です。\n",
+  "part2_md": "【市場のフロー】\n①【出来事・ニュース】FRBのボウマン理事が講演で銀行監督の責任体制見直しの方針を示したと報じられました（Reuters、10月6日） → 【地政学・マクロの変化】金融機関への監督枠組みの変化が市場の規制環境認識に影響し得る変化として意識された可能性があります → 【暗号通貨価格】BTC・ETHともに同時期はやや軟調な推移でしたが、因果は未確認です。 #BTC #ETH\n②【出来事・ニュース】米国株式市場でS&P500・ナスダックが最高値を更新し、原油価格の落ち着きや国債利回りの低下も重なったと報じられました（Reuters、10月6日） → 【中間市場指標・市場心理】株価の最高値更新や利回り低下がリスク選好の高まりとして意識された可能性があります → 【暗号通貨価格】BTC・ETHは同時期にやや軟調に推移しましたが、因果は未確認です。 #BTC #ETH\n③【出来事・ニュース】米EIAがイラン情勢による世界的な備蓄減少を理由に原油価格見通しを再度引き上げたと報じられました（Reuters、10月6日） → 【地政学・マクロの変化】中東の地政学リスクが意識された可能性があります → 【中間市場指標・市場心理】原油価格の上振れがインフレ・金利観測を通じてリスク回避の心理につながった可能性があります → 【暗号通貨価格】BTCは同時期にやや下落方向で推移しましたが、因果は未確認です。 #BTC\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは25.55%→16.42%へ低下しました（24時間出来高 -35.60%、TVL +0.21%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは37.64%→22.51%へ低下しました（24時間出来高 -39.96%、TVL +0.41%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比-0.76%と下落中のため、ETH偏り・下限側レンジ外・下落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\n米国株式市場の最高値更新や原油価格見通しの引き上げなど、マクロ要因が交錯するなかで暗号通貨市場は方向感に乏しい展開でした。規制面ではCFTCの規則制定に向けた意見募集開始など、制度整備の動きが引き続き注目されています。\n",
+  "numeric_record_md": "【対象日】2026年10月6日（火）\n\n【主要指標】\n・市場全体：時価総額 $2.912兆（¥460.1兆）｜24時間取引高 $728.7億（¥11.51兆）\n・ #BTC：$85,520（約1,351.1万円）｜24時間比 -0.51%\n　（24時間レンジ $85,100〜$86,698）\n・ #ETH：$2,696（約42.6万円）｜24時間比 -0.76%\n　（24時間レンジ $2,683〜$2,725）\n・ #BNB：$780（約12.3万円）｜24時間比 -1.11%\n・市場心理：Fear & Greed 67（Greed、CoinMarketCap API）\n・ドミナンス：BTC 59.01%｜ETH 11.30%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年10月7日07:37 JST、USD/JPY ¥157.98\n\n【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $4.72M vs Base上ETH/USDC $42.82M｜参考：Base上DEX全体 $13.059億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $64.34億（¥1.02兆）｜24時間比 -0.20%｜USDCドミナンス 85.0%\n・ ETH/USDC（Base）参考APR：0.05% 16.42%（TVL $10.12M／24h出来高 $9.10M）｜0.3% 22.51%（TVL $164.03M／24h出来高 $33.71M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年10月7日07:37 JST\n"
+}
