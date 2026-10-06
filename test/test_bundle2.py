@@ -7556,9 +7556,10 @@ for _bf in sorted((REPO / "outputs").glob("*/draft/post_bundle.json")):
     _h = _f106(json.loads(_bf.read_text(encoding="utf-8")).get("audit_ledger"), _tmr106)
     if _h:
         _days106[_bf.parent.parent.name] = [x["title"][:30] for x in _h]
-check("v1.106 実データ（10/5までの本番出力）: 警告が出る日は10/5だけで、候補19（US services sector cools…）と候補22（US dollar strength to fizzle…）の2件。v1.99より前の34日は0件（誤検知なし）",
-      list(_days106) == ["2026-10-05"] and len(_days106["2026-10-05"]) == 2 and any(t.startswith("US services sector") for t in _days106["2026-10-05"])
-      and any(t.startswith("US dollar strength") for t in _days106["2026-10-05"]), str(_days106))
+check("v1.106追補 実データ（10/5までの本番出力35日分）: 警告が出る日は9/2と10/5の2日だけ。10/5は候補19（US services sector cools…）と候補22（US dollar strength to fizzle…）の2件、9/2はReutersの債券利回り記事3件（reason「他の採用材料と内容が重複し独立項目としては不要」＝重複先を示さない重複）。残りの33日は0件（誤検知なし）",
+      sorted(_days106) == ["2026-09-02", "2026-10-05"] and len(_days106["2026-10-05"]) == 2 and any(t.startswith("US services sector") for t in _days106["2026-10-05"])
+      and any(t.startswith("US dollar strength") for t in _days106["2026-10-05"]) and len(_days106["2026-09-02"]) == 3
+      and any(t.startswith("UK bond yields") for t in _days106["2026-09-02"]), str(_days106))
 # 結合: call_A→compose→run_allで、警告が出てもFAILにならない
 _news_h106 = {"collected_at": "x", "target_date_jst": "2026-10-05", "source_status": {}, "candidates": [
     {"tier": 1, "source": "SEC", "title": "Regulator announces new rule", "url": "u1", "published_at": _pub97(60), "summary": "s", "kind": "k"},
@@ -7579,6 +7580,19 @@ _g_h106["news_candidate_count"] = 2
 _au_h106 = verify_post.run_all(compose_post.compose(DAILY_DATA, _g_h106), DAILY_DATA)
 check("v1.106 結合: call_A→compose→run_allで、見出し理由の不採用の警告が1件出る。機械監査（C12〜C28）はFAILにならない",
       [w["id"] for w in _au_h106.warnings if w["id"] == "W_headline_reason"] == ["W_headline_reason"] and _au_h106.failed == 0, str([c["id"] for c in _au_h106.checks if c["result"] == "FAIL"]))
+
+print("=== v1.106 追補（独立レビューへの対処）: 「上限」は除外／「同一」「重複」は重複先の候補を名指ししているときだけ除外／見本をプロンプト本文から取り出して検査 ===")
+check("v1.106追補 除外「上限」: 「上限4項目のため見送り（ヘッドラインは別の材料）」のように上限4項目のための見送りは、ヘッドラインの語を含んでも検知しない",
+      _f106([_l106("B: 上限4項目のため見送り（ヘッドラインは別の材料）"), _l106("B: 上限4項目のため見送り（優先順位の低い材料）")], _tm106) == [])
+check("v1.106追補 重複: 重複先の候補を名指ししていない「他の採用材料と内容が重複し独立項目としては不要」型は検知する（9/2型）。「候補12」「ID12」「候補ID12」と名指ししていれば除外する。手続き的な発表は名指し不要",
+      len(_f106([_l106("B: 米国債利回り上昇に関する記事だが、他の採用材料と内容が重複し独立項目としては不要")], _tm106)) == 1
+      and len(_f106([_l106("B: 重複記事のため不採用（ヘッドラインの材料と同じ）")], _tm106)) == 1
+      and _f106([_l106("B: 候補12と同じ事実の重複記事（同じtierの候補12を採用）"), _l106("B: ヘッドラインと同一の事実（ID12を採用）"), _l106("B: 同一事実の重複（候補ID12を採用）"),
+                 _l106("B: 同一の事実の重複（候補１２を採用）"), _l106("手続き的な発表のため不採用（ヘッドラインにしない）")], _tm106) == [])
+# プロンプトのreason見本（NO_CANDIDATES_FALLBACKの「」内のB:・C:）を、本文から取り出して検査する（見本の写しをテストに持たない）
+_ex106 = [x.replace("\n", "") for x in __import__("re").findall(r"「([BC]: .*?)」(?=[\n「）等])", generate_post.NO_CANDIDATES_FALLBACK, __import__("re").S)]
+check("v1.106追補 見本の検査（プロンプト本文から取り出す）: v1.104のreason見本7本はすべて、この警告に当たらない（見本どおりに書けば警告は出ない）。プロンプトを直して見本が変わっても、この検査が追従する",
+      len(_ex106) == 7 and _f106([_l106(x) for x in _ex106], _tm106) == [], str([x for x in _ex106 if _f106([_l106(x)], _tm106)]))
 
 print()
 print(f"PASS: {len(PASS)}  FAIL: {len(FAIL)}")

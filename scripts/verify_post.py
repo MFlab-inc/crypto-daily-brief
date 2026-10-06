@@ -1474,14 +1474,19 @@ def check_bullet_normalized_warn(au: Audit, normalized: "dict | None") -> None:
 #
 # 背景: 2026-10-05分で、tier2（Reuters）の候補19・22が、reasonに「B: …他の採用材料がありヘッドラインには採らない」と書かれて不採用になった。
 # 「ヘッドラインの主題にするか」と「主要なポイントに載せるか」は別の判断（Bの扱いの基準の6）のため、ヘッドラインに採らない・他に採用材料があることだけを
-# 理由にした不採用は、載せるべき材料を落としている可能性がある。過去の本番出力（10/4までの34日分のledger）では該当が0件で、10/5の2件だけが該当した。
+# 理由にした不採用は、載せるべき材料を落としている可能性がある。過去の本番出力（10/5までの35日分のledger）で該当したのは、9/2の3件（重複先を示さない「他の採用材料と内容が重複し独立項目としては不要」型。v1.106追補で除外条件を狭めた）と10/5の2件だけだった。
 # 判定（その日に1件の警告）: 台帳に、decision=不採用・情報源のtierが1または2（tier3・tier4は、tier規律で「ヘッドラインの根拠にしない」と書くのが正当なため除く）・
 # reasonが次のいずれかを含む候補がある: 「ヘッドライン」「他の採用材料」「他に採用」「見出し」（ただし「見出しだけ」「見出しのみ」「見出し程度」〔見出しだけでは誰が・何をを書けない等、内容が見出し程度という理由〕は除く）。
-# 正当な理由（「手続き的」「同一」「重複」を含む＝手続き的な発表・同一事実の重複）は除く。
+# 正当な理由は除く（「手続き的」「上限」を含む＝手続き的な発表・上限4項目のための見送り／「同一」「重複」を含み、かつ重複先の候補を「候補12」等と名指ししている＝同一事実の重複）。
 # 限界: ①理由の言い回しに依存する（モデルが別の言い回し〔例:「見送り」のみ〕に変えると見逃す）。②「優先して掲載する対象に当たらない」型の不採用
 # （従来のBに使うと誤り）は、この警告の対象外（語が違う）。③警告は「見直す材料」で、不採用が誤りだとは断定しない。
 _HEADLINE_REASON_RE = re.compile(r"ヘッドライン|他の採用材料|他に採用|見出し(?!だけ|のみ|程度)")
-_HEADLINE_REASON_EXEMPT = ("手続き的", "同一", "重複")
+# 除外する正当な理由: 「手続き的」（手続き的な発表）・「上限」（上限4項目のための見送り）は常に除く。「同一」「重複」（同一事実の重複）は、
+# 重複先の候補を「候補12」「ID12」のように名指ししている場合だけ除く（v1.106追補: 重複先を示さない「他の採用材料と内容が重複し独立項目としては不要」
+# 型の理由は、ヘッドラインに採らない・他に採用材料があることを理由にした不採用と区別できないため、除外しない）。
+_HEADLINE_REASON_EXEMPT = ("手続き的", "上限")
+_HEADLINE_REASON_EXEMPT_IF_CITED = ("同一", "重複")
+_CANDIDATE_REF_RE = re.compile(r"候補\s*(?:ID\s*)?[0-9０-９]+|ID\s*[0-9０-９]+")
 _HEADLINE_WARN_MAX_LISTED = 5
 
 
@@ -1494,7 +1499,8 @@ def find_headline_reason_rejections(audit_ledger, tier_map: "dict[str, int] | No
         if not isinstance(e, dict) or e.get("decision") != "不採用" or tmap.get(e.get("source")) not in (1, 2):
             continue
         reason = str(e.get("reason", ""))
-        if _HEADLINE_REASON_RE.search(reason) and not any(w in reason for w in _HEADLINE_REASON_EXEMPT):
+        if (_HEADLINE_REASON_RE.search(reason) and not any(w in reason for w in _HEADLINE_REASON_EXEMPT)
+                and not (any(w in reason for w in _HEADLINE_REASON_EXEMPT_IF_CITED) and _CANDIDATE_REF_RE.search(reason))):
             hits.append({"source": e.get("source", ""), "tier": tmap.get(e.get("source")), "title": str(e.get("title", "")), "reason": reason})
     return hits
 
