@@ -33,7 +33,8 @@ generate_post.RETRY_DELAYS_SEC = (0, 0)
 # 警告の種類別件数の期待文字列を、登録簿（verify_post.WARNING_KINDS）から作る（警告の種類が増えてもテストが壊れないように）。
 # 例: _wk(direction=1) → 「向きの食い違い1・見出しのタグ0・指標日の見出し0…」
 _WK_SHORT = {"direction": "W_direction_mismatch", "hashtag": "W_headline_hashtag", "indicator": "W_indicator_headline",
-             "flow": "W_flow_format", "media": "W_media_mismatch", "geo": "W_geo_rejected_fixed"}
+             "flow": "W_flow_format", "media": "W_media_mismatch", "geo": "W_geo_rejected_fixed",
+             "bullet": "W_bullet_normalized"}
 
 
 def _wk(**counts):
@@ -5734,9 +5735,9 @@ check("_load_previous_posts: 過去の見出しに残るハッシュタグ（v1.
       _pp[0]["part1_headline"] == "SECがトークン化株式の免除を公表しました。" and "#" not in json.dumps(_pp, ensure_ascii=False), str(_pp[0]))
 check("_load_previous_posts: 対象日より前の投稿を新しい順に最大3件、7日以内から集める（定型文だけ・ファイル無し・壊れたファイルの日は飛ばす）",
       [p["date"] for p in _pp] == ["2026-10-01", "2026-09-30", "2026-09-29"], str([p["date"] for p in _pp]))
-check("_load_previous_posts: 各要素はdate・part1_headline・part1_points（「・」始まりの行のリスト）",
+check("_load_previous_posts: 各要素はdate・part1_headline・part1_points（項目のリスト。v1.102から先頭の「・」は除く）",
       _pp[2]["part1_headline"].startswith("米ホワイトハウス") and len(_pp[2]["part1_points"]) == 2
-      and _pp[2]["part1_points"][0].startswith("・Hana Bank"))
+      and _pp[2]["part1_points"][0].startswith("Hana Bank"))
 check("_load_previous_posts: 7日より前の投稿・対象日以降は含めない／不正な日付・存在しないディレクトリは空（例外にしない）",
       all(p["date"] >= "2026-09-25" for p in generate_post._load_previous_posts("2026-10-02", outputs_root=_PR))
       and generate_post._load_previous_posts("2026-10-02", outputs_root=Path("no_such")) == []
@@ -7048,6 +7049,142 @@ _out_m = _re101.search(r"(?<=output=)[0-9]+", _fin1)
 check("v1.101 追補7: コスト記録（daily.ymlがSTATUS全体から最初の「input=」「output=」の数値を抽出）は、再生成分を含む合計（400・90）を取る。再生成の行に「input=」「output=」が混じらない",
       _in_m and _out_m and _in_m.group(0) == "400" and _out_m.group(0) == "90"
       and len(_re101.findall(r"input=", _fin1)) == 1 and len(_re101.findall(r"output=", _fin1)) == 1, f"{_in_m} {_out_m}")
+
+print("=== v1.102（オーナー承認）: 項目の先頭の行頭記号・空白の整形（呼び出しA・Bの出力直後／前日以前の投稿の読み込み時／描画）・件数を警告欄に表示・整形前の項目を診断用に保存 ===")
+_nh = generate_post.normalize_item_head
+check("v1.102 normalize_item_head: 行頭の記号（・ ･ • · ‧ ● ■ 等）と空白（半角・全角）を何重でも除く。「・ ・A」「・（空白2つ）Fed」も直る",
+      all(_nh(x) == y for x, y in (("・A", "A"), ("・・A", "A"), ("･A", "A"), ("• A", "A"), ("  A", "A"), ("　A", "A"), ("・ ・A", "A"),
+                                   ("・  Fed", "Fed"), ("●A", "A"), ("■ A", "A"), ("", ""))))
+check("v1.102 normalize_item_head: ダッシュ類は直後が空白のときだけ記号とみなす（「-5%」「−0.3%」で始まる項目・「「引用」」・①②③・（注）・文中の「・」は変えない）",
+      all(_nh(x) == y for x, y in (("- A", "A"), ("* A", "A"), ("— A", "A"), ("-5%", "-5%"), ("−0.3%", "−0.3%"), ("「引用」", "「引用」"),
+                                   ("①A", "①A"), ("（注）x", "（注）x"), ("A・B", "A・B"), ("・①A", "①A"))))
+check("v1.102 normalize_item_head・normalize_items: 冪等・文字列でない要素はそのまま・件数は変更した要素だけ・リストでなければそのまま（0件）",
+      _nh(_nh("・・A")) == "A" and _nh(None) is None and _nh(3) == 3
+      and generate_post.normalize_items(["・A", "B", 3, None, " C"]) == (["A", "B", 3, None, "C"], 2)
+      and generate_post.normalize_items("x") == ("x", 0))
+
+# 呼び出しA: 出力直後に主要なポイントを整形し、整形前と件数を記録。to_dictにも入る
+_news_n102 = {"collected_at": "x", "target_date_jst": "2026-10-05", "source_status": {}, "candidates": [
+    {"tier": 1, "source": "SEC", "title": "Regulator announces new rule", "url": "u1", "published_at": _pub97(60), "summary": "s", "kind": "k"}]}
+
+
+def _fn_a102(points):
+    def fn(kw, n):
+        ids = [c["candidate_id"] for c in _parse_leading_json(kw["messages"][0]["content"]).get("news_candidates_today", [])]
+        return json_response({"headline_for_image": "x", "part1_headline": "SECが新規則を発表しました。", "part1_points": points,
+                              "reusable_for_summary": [], "audit_ledger": [{"candidate_id": i, "use": True, "verified_by": "RSS summary", "reason": "A: 直接材料"} for i in ids]})
+    return fn
+
+
+_oa102 = generate_post.call_a(FakeClient(_fn_a102(["・SECが新規則を発表しました（SEC、2026-10-05）。", "・・二重の項目です（SEC、2026-10-05）。", "整形不要の項目です（SEC、2026-10-05）。"])),
+                              DAILY_DATA, _news_n102, None)
+check("v1.102 call_a: 主要なポイントの項目の先頭の記号（「・」「・・」）を、受け取った直後に整形する（audit_ledger・呼び出しBの入力・描画がすべて整形後を使う）",
+      _oa102.ok and _oa102.data["part1_points"] == ["SECが新規則を発表しました（SEC、2026-10-05）。", "二重の項目です（SEC、2026-10-05）。", "整形不要の項目です（SEC、2026-10-05）。"],
+      str(_oa102.data["part1_points"]))
+check("v1.102 call_a: 整形前の項目と整形した件数（2件）を記録し、to_dict()にも入る（診断用）。整形が無ければ0件",
+      _oa102.format_normalization["part1_points_changed"] == 2 and _oa102.format_normalization["part1_points_raw"][1].startswith("・・二重")
+      and _oa102.to_dict()["format_normalization"] == _oa102.format_normalization
+      and generate_post.call_a(FakeClient(_fn_a102(["きれいな項目です（SEC、2026-10-05）。"])), DAILY_DATA, _news_n102, None).format_normalization["part1_points_changed"] == 0)
+check("v1.102 call_a: 定型文に「・」が付いて返っても、整形後は定型文（材料なし）として扱う（_has_adopted_materialが材料ありと誤判定しない）。「・」付きの通常の項目は材料あり",
+      not generate_post._has_adopted_material({"part1_headline": generate_post.FIXED_HEADLINE, "part1_points": ["・" + generate_post.FIXED_POINTS]})
+      and generate_post._has_adopted_material({"part1_headline": generate_post.FIXED_HEADLINE, "part1_points": ["・SECが発表しました。"]}))
+
+# 呼び出しB: part2_flowの連鎖の先頭の記号を整形（①②③で始まる連鎖は①②③が先頭になる）。材料なしの日は定型文
+_ob102 = generate_post.call_b(FakeClient(lambda kw, n: json_response({"part2_flow": ["・①" + _GOOD_FLOW101, "・・②" + _GOOD_FLOW101, "・" + _GOOD_FLOW101],
+                                                                       "part2_summary": _SUMMARY101})), DAILY_DATA, CALL_A_DATA)
+check("v1.102 call_b: part2_flowの連鎖の先頭の記号（「・①」「・・②」「・」）を整形し、整形前と件数（3件）を記録する",
+      _ob102.ok and _ob102.data["part2_flow"] == ["①" + _GOOD_FLOW101, "②" + _GOOD_FLOW101, _GOOD_FLOW101]
+      and _ob102.format_normalization["part2_flow_changed"] == 3 and _ob102.format_normalization["part2_flow_raw"][0].startswith("・①"), str(_ob102.format_normalization.get("part2_flow_changed")))
+_ob102b = generate_post.call_b(FakeClient(lambda kw, n: json_response({"part2_flow": ["・" + generate_post.FIXED_FLOW], "part2_summary": _SUMMARY101})), DAILY_DATA,
+                               {"part1_headline": generate_post.FIXED_HEADLINE, "part1_points": ["・" + generate_post.FIXED_POINTS]})
+check("v1.102 call_b: 材料なしの日（呼び出しAの定型文に「・」が付いていても）は、part2_flowは定型文1件に確定する（定型文固定が効く）",
+      _ob102b.data["part2_flow"] == [generate_post.FIXED_FLOW])
+
+# 描画: 二重の防御（整形を通らないgenでも「・・」にならない）。定型文は記号なし
+check("v1.102 描画: _render_bulletsは先頭の記号を除いてから「・」を1つ付ける。_render_flowは①②③で始まる連鎖に「・」を付けず、他は1つ付ける（「・①」「・・B」も直る）。定型文1件は記号なし",
+      compose_post._render_bullets(["・A", "・・B", "C"]) == "・A\n・B\n・C"
+      and compose_post._render_flow(["・①A", " ②B", "・・C", "D"]) == "①A\n②B\n・C\n・D"
+      and compose_post._render_flow(["・" + generate_post.FIXED_FLOW]) == generate_post.FIXED_FLOW)
+
+# 回帰: コミット済みの本番出力（10/5まで）から項目を復元して描画し直すと、9/2（「・」の後ろに空白2つ）と10/5（「・・」）以外は一字一句同じ
+_diff102, _n102 = [], 0
+for _bf in sorted((REPO / "outputs").glob("*/draft/post_bundle.json")):
+    _day = _bf.parent.parent.name
+    if _day > "2026-10-05":
+        continue
+    _sec = json.loads(_bf.read_text(encoding="utf-8")).get("sections", {})
+    _pts, _flow = _sec.get("part1_points", ""), _sec.get("part2_flow", "")
+    _n102 += 1
+    if _pts != generate_post.FIXED_POINTS:
+        _items = [ln[1:] if ln.startswith("・") else ln for ln in _pts.split("\n") if ln.strip()]
+        if compose_post._render_bullets(_items) != _pts:
+            _diff102.append((_day, "part1_points"))
+    _fitems = [ln for ln in _flow.split("\n") if ln.strip()]
+    if _flow != generate_post.FIXED_FLOW and compose_post._render_flow([ln[1:] if ln.startswith("・") else ln for ln in _fitems]) != _flow:
+        _diff102.append((_day, "part2_flow"))
+check("v1.102 回帰（実データ）: コミット済みの本番出力から項目を復元して描画し直すと、変わるのは9/2と10/5の主要なポイントだけ（それ以外は一字一句同じ）",
+      sorted(_diff102) == [("2026-09-02", "part1_points"), ("2026-10-05", "part1_points")] and _n102 >= 30, f"{_diff102} {_n102}")
+_pts105 = json.loads((REPO / "outputs/2026-10-05/draft/post_bundle.json").read_text(encoding="utf-8"))["sections"]["part1_points"]
+check("v1.102 回帰（実データ）: 10/5の「・・」の2行は、整形すると「・」1つになる（本文の内容は変わらない）",
+      all(ln.startswith("・・") for ln in _pts105.split("\n")) and all(not ln.startswith("・・") for ln in compose_post._render_bullets(
+          [ln[1:] for ln in _pts105.split("\n")]).split("\n")), "")
+
+# 前日以前の投稿の読み込み: 先頭の記号を除く（モデルが真似ないように）。読み込むだけでファイルは書き換えない
+_PR102 = Path("prev102_outputs")
+_shutil.rmtree(_PR102, ignore_errors=True)
+for _d102, _pts in (("2026-10-04", "・・二重の項目です（SEC、10月4日）。\n・  空白つきの項目です（FRB、10月4日）。"), ("2026-10-03", "・通常の項目です（CoinDesk、10月3日）。")):
+    (_PR102 / _d102 / "draft").mkdir(parents=True, exist_ok=True)
+    (_PR102 / _d102 / "draft" / "post_bundle.json").write_text(json.dumps({"sections": {"part1_headline": "見出しです。", "part1_points": _pts}}, ensure_ascii=False), encoding="utf-8")
+_before102 = (_PR102 / "2026-10-04/draft/post_bundle.json").read_text(encoding="utf-8")
+_pp102 = generate_post._load_previous_posts("2026-10-05", outputs_root=_PR102)
+check("v1.102 _load_previous_posts: 項目の先頭の記号・空白（「・・」「・」＋空白）を除いて返す（入力に「・」が無いので、モデルが真似て出力に付けない）。コミット済みのファイルは書き換えない",
+      _pp102[0]["part1_points"] == ["二重の項目です（SEC、10月4日）。", "空白つきの項目です（FRB、10月4日）。"] and _pp102[1]["part1_points"] == ["通常の項目です（CoinDesk、10月3日）。"]
+      and (_PR102 / "2026-10-04/draft/post_bundle.json").read_text(encoding="utf-8") == _before102
+      and not any(x.startswith("・") for p in _pp102 for x in p["part1_points"]), str(_pp102))
+check("v1.102 _load_previous_posts: 定型文の日の判定（_is_fixed_post）と、reusable_for_summaryの照合（前日以前の本文との共通語）は従来どおり働く",
+      generate_post._is_fixed_post(generate_post.FIXED_HEADLINE, "・" + generate_post.FIXED_POINTS)
+      and generate_post._reusable_grounded_in("二重の項目です（SEC、10月4日）", "\n".join(_pp102[0]["part1_points"])) is not None)
+
+# bundleの件数・警告欄・診断用ファイル
+_g102 = _gen101([_GOOD_FLOW101])
+_g102["call_a"]["format_normalization"] = {"part1_points_raw": ["・・A", "B"], "part1_points_changed": 1}
+_g102["call_b"]["format_normalization"] = {"part2_flow_raw": ["・①X", "・Y"], "part2_flow_changed": 2}
+_bd102 = compose_post.compose(DAILY_DATA, _g102)
+_au102 = verify_post.run_all(_bd102, DAILY_DATA)
+check("v1.102 bundle: format_normalizedに、整形した件数（主要なポイント・市場のフロー）が入る。整形が無い日は0・0",
+      _bd102["format_normalized"] == {"part1_points": 1, "part2_flow": 2}
+      and compose_post.compose(DAILY_DATA, _gen101([_GOOD_FLOW101]))["format_normalized"] == {"part1_points": 0, "part2_flow": 0})
+_w102 = [w for w in _au102.warnings if w["id"] == "W_bullet_normalized"]
+check("v1.102 警告: 整形した日は、警告「行頭の記号」が1件（主要なポイントN項目・市場のフローM連鎖）。FAILにはならず、整形が無い日は出ない。種類は登録簿に載る（0件でも件数表示）",
+      len(_w102) == 1 and "主要なポイント1項目・市場のフロー2連鎖" in _w102[0]["detail"] and "確認は不要です" in _w102[0]["detail"]
+      and _au102.failed == 0 and ("W_bullet_normalized", "行頭の記号") in verify_post.WARNING_KINDS
+      and not [w for w in verify_post.run_all(compose_post.compose(DAILY_DATA, _gen101([_GOOD_FLOW101])), DAILY_DATA).warnings if w["id"] == "W_bullet_normalized"]
+      and "行頭の記号0" in verify_post.format_warning_counts([]) and "行頭の記号1" in verify_post.format_warning_counts(_w102), str(_w102))
+_o_run102, _o_anth102 = generate_post.run, generate_post.anthropic.Anthropic
+generate_post.run = lambda target_date, **kw: _g102
+generate_post.anthropic.Anthropic = lambda: FakeClient(lambda kw, n: json_response(CALL_B_DATA))
+_argv102 = sys.argv
+sys.argv = ["compose_post.py", _G_DATE]
+try:
+    _shutil.rmtree(Path(f"outputs/{_G_DATE}/draft"), ignore_errors=True)
+    compose_post.main()
+finally:
+    sys.argv = _argv102
+    generate_post.run, generate_post.anthropic.Anthropic = _o_run102, _o_anth102
+_ad102 = json.loads((Path(f"outputs/{_G_DATE}") / "attempt_diagnostics.json").read_text(encoding="utf-8"))
+check("v1.102 診断用保存: attempt_diagnostics.json（コミットしないCI成果物）に、整形前の項目（呼び出しAのpart1_points・呼び出しBのpart2_flow）と件数が入る",
+      _ad102["format_normalization"]["call_a"] == {"part1_points_raw": ["・・A", "B"], "part1_points_changed": 1}
+      and _ad102["format_normalization"]["call_b"]["part2_flow_raw"] == ["・①X", "・Y"], str(_ad102.get("format_normalization")))
+_fin102 = _run_repair101()
+check("v1.102 STATUS: repair_postを通した最終のSTATUSの先頭の警告ブロックに「行頭の記号」が出る（FAILではない旨つき）。警告欄の種類別件数に「行頭の記号1」",
+      _fin102.startswith("⚠⚠ 警告1件") and "行頭の記号1" in _fin102 and "⚠ [行頭の記号] モデルの出力の行頭に余分な記号・空白" in _fin102 and "FAILではありません" in _fin102, _fin102[:300])
+
+# プロンプト: 行頭に記号を付けない旨の1行（呼び出しA・B）
+check("v1.102 プロンプト: 呼び出しA（出力形式）とB（出力形式）に、項目の先頭に「・」などの行頭記号や空白を付けない旨の指示が入る（①②③は付けてよい）。呼び出しAは前日以前の投稿の項目に記号が無い旨も伝える",
+      "part1_pointsの各項目は、本文だけを書く。先頭に「・」などの行頭記号や空白を付けない" in generate_post.OUTPUT_FORMAT_A
+      and "付けると「・・」と二重になる" in generate_post.OUTPUT_FORMAT_A and "previous_postsの項目にも先頭の記号は付いていない" in generate_post.OUTPUT_FORMAT_A
+      and "part2_flowの各連鎖は、本文だけを書く。先頭に「・」などの行頭記号や空白を付けない" in generate_post.CALL_B_INSTRUCTIONS
+      and "①②③は付けてよい" in generate_post.CALL_B_INSTRUCTIONS and generate_post.OUTPUT_FORMAT_A in generate_post.SYSTEM_A)
 
 print()
 print(f"PASS: {len(PASS)}  FAIL: {len(FAIL)}")

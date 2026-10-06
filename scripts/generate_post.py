@@ -773,7 +773,10 @@ OUTPUT_FORMAT_A = """## 出力形式
     { "candidate_id": 1, "use": true, "pairs_with_candidate_id": null,
       "verified_by": "", "reason": "" }
   ]
-}"""
+}
+
+part1_pointsの各項目は、本文だけを書く。先頭に「・」などの行頭記号や空白を付けない（システムが「・」を付けて
+箇条書きにするため、付けると「・・」と二重になる。入力のprevious_postsの項目にも先頭の記号は付いていない）。"""
 
 SYSTEM_A = "\n\n".join([
     ROLE_INTRO, RULES_ABSOLUTE, RULES_HASHTAG, NEWS_SELECTION, NO_CANDIDATES_FALLBACK,
@@ -880,12 +883,43 @@ part1_points）と文体を揃えること。
   材料を総括で初めて持ち出さない——読者が文脈を追えないため。
 
 出力形式（JSONのみ）:
-{{ "part2_flow": ["...", "..."], "part2_summary": "..." }}"""
+{{ "part2_flow": ["...", "..."], "part2_summary": "..." }}
+
+part2_flowの各連鎖は、本文だけを書く。先頭に「・」などの行頭記号や空白を付けない（システムが必要に応じて
+「・」を付ける。①②③は付けてよい）。"""
 
 SYSTEM_B = "\n\n".join([
     ROLE_INTRO, RULES_ABSOLUTE, RULES_HASHTAG, RULES_CAUSAL, INTRADAY_MOVE_GUIDANCE,
     ETF_WEEKEND_GUIDANCE, CALL_B_INSTRUCTIONS,
 ])
+
+
+# --- v1.102（オーナー承認）: 項目の先頭の記号・空白の整形 ---
+#
+# 背景: 2026-10-05分の主要なポイントの行頭が「・・」と二重になった（システムが各項目の先頭に「・」を付ける〔compose_post.
+# _render_bullets〕のに対し、呼び出しAの出力の項目がすでに「・」で始まっていた）。【市場のフロー】にも同じ穴があった。
+# 過去39日で二重は10/5の2行だけ、ほかに9/2に「・」の後ろに空白が2つ付いた行が1行。呼び出しAに渡す前日以前の投稿
+# （previous_posts）の項目が「・」付きだったことが原因の可能性が高いが、モデルの出力は保存されておらず推定にとどまる。
+# 対処: 呼び出しA・Bの出力を受け取った直後に、項目（part1_points・part2_flow）の先頭の行頭記号・空白を機械的に除去し、
+# 除去した件数をbundleに記録して警告欄に表示する（モデルが指示を守らなかった頻度の追跡）。整形前の項目は診断用に保存する。
+_HEAD_GLYPHS = "・･•·‧∙◦▪●○■□◆◇‣⁃"
+_HEAD_RE = re.compile(r"^(?:[\s\u3000" + re.escape(_HEAD_GLYPHS) + r"]|[-*–—−‐＊](?=\s))+")
+
+
+def normalize_item_head(text: Any) -> Any:
+    """項目の先頭の行頭記号（・ ･ • · 等）と空白を除く。ダッシュ類（- * – —等）は直後が空白のときだけ記号とみなす
+    （「-5%」「−0.3%」で始まる項目を壊さない）。文字列でないものはそのまま返す。冪等。"""
+    if not isinstance(text, str):
+        return text
+    return _HEAD_RE.sub("", text)
+
+
+def normalize_items(items: Any) -> tuple[Any, int]:
+    """項目のリストの各要素を整形し、(整形後のリスト, 変更した件数) を返す。リストでなければそのまま（0件）。"""
+    if not isinstance(items, list):
+        return items, 0
+    out = [normalize_item_head(x) for x in items]
+    return out, sum(1 for a, b in zip(items, out) if a != b)
 
 
 class CallOutcome:
@@ -929,6 +963,9 @@ class CallOutcome:
         # v1.97（オーナー承認・案1）: 候補IDごとの{"decision","use","reason"}（候補の記録用。
         # 呼び出しAが成功した場合のみ。to_dict()には含めない）。
         self.candidate_decisions: dict[int, dict] = {}
+        # v1.102（オーナー承認）: 項目の先頭の記号・空白を整形した記録（{"<キー>_raw": 整形前のリスト, "<キー>_changed": 件数}）。
+        # 整形前の項目を診断用（attempt_diagnostics.json。コミットしない）に残すため。
+        self.format_normalization: dict[str, Any] = {}
 
     def to_dict(self) -> dict:
         return {"ok": self.ok, "attempts": self.attempts, "error": self.error,
@@ -938,7 +975,8 @@ class CallOutcome:
                 "rejected_pairs": self.rejected_pairs,
                 "force_dropped_candidates": self.force_dropped_candidates,
                 "attempt_diagnostics": self.attempt_diagnostics,
-                "reusable_dropped": self.reusable_dropped}
+                "reusable_dropped": self.reusable_dropped,
+                "format_normalization": self.format_normalization}
 
 
 def _extract_text(response: Any) -> str:
@@ -1737,7 +1775,7 @@ def _load_previous_posts(target_date: str, outputs_root: Path | None = None) -> 
     """対象日より前の、コミット済みの投稿本文（ヘッドライン・主要なポイント）を新しい順に最大
     PREVIOUS_POSTS_MAX件、PREVIOUS_POSTS_WINDOW_DAYS日以内から集める（v1.92）。
     ファイルが無い・壊れている日、定型文だけの日（材料なし）は飛ばす。失敗しても例外にしない。
-    各要素: {"date", "part1_headline", "part1_points"（「・」で始まる行のリスト）}。"""
+    各要素: {"date", "part1_headline", "part1_points"（項目のリスト。v1.102から先頭の「・」等は除く）}。"""
     root = outputs_root or Path("outputs")
     result: list[dict] = []
     try:
@@ -1756,7 +1794,9 @@ def _load_previous_posts(target_date: str, outputs_root: Path | None = None) -> 
         # 過去の見出しには、v1.91より前の指示で付いたハッシュタグ（「 #BTC #ETH」）が残っている。
         # モデルが前日以前の見出しの形を真似てタグを付けないよう、payloadからはタグを除く。
         result.append({"date": d, "part1_headline": _strip_hashtags(headline),
-                       "part1_points": [_strip_hashtags(ln) for ln in points.split("\n") if ln.strip()]})
+                       # v1.102: 先頭の行頭記号（「・」「・・」等）と空白も除く（モデルが入力の「・」を真似て出力に付けないように）
+                       "part1_points": [x for x in (normalize_item_head(_strip_hashtags(ln)) for ln in points.split("\n"))
+                                        if x.strip()]})
         if len(result) >= PREVIOUS_POSTS_MAX:
             break
     return result
@@ -1914,12 +1954,24 @@ def call_a(client: "anthropic.Anthropic", daily_data: dict, news_today: dict,
     decisions_by_id: dict[int, str] = {}
     # v1.97: 候補IDごとの採否・理由（試行ごとにリセット。最終的に成功した試行の値だけが残る）
     candidate_decisions_stats: dict[int, dict] = {}
+    # v1.102: 項目の先頭の記号・空白の整形の記録（試行ごとにリセット）
+    format_norm_stats: dict[str, Any] = {}
 
     def _rebuild_audit_ledger(data: dict, attempt: int) -> dict:
         rejected_pairs_stats.clear()
         force_dropped_stats.clear()
         reusable_dropped_stats.clear()
         candidate_decisions_stats.clear()
+        format_norm_stats.clear()
+        # v1.102（オーナー承認）: 主要なポイントの項目の先頭の記号・空白を、受け取った直後に整形する
+        # （以降の監査・呼び出しBの入力・描画がすべて整形後の項目を使う）。整形前は診断用に残す。
+        try:
+            raw_points = list(data.get("part1_points")) if isinstance(data.get("part1_points"), list) else None
+            data["part1_points"], n_changed = normalize_items(data.get("part1_points"))
+            if raw_points is not None:
+                format_norm_stats.update(part1_points_raw=raw_points, part1_points_changed=n_changed)
+        except Exception:  # noqa: BLE001 — 整形の失敗で試行（リトライ・採否）を変えない
+            format_norm_stats.clear()
         llm_entries = data.get("audit_ledger")
         # v1.79（オーナー承認）: 最終試行でも独立2ソースの相方が解消しない
         # tier3候補は、従来はAuditLedgerReconstructionErrorで例外化し
@@ -1981,6 +2033,7 @@ def call_a(client: "anthropic.Anthropic", daily_data: dict, news_today: dict,
     outcome.attempt_diagnostics = list(attempt_diagnostics)
     outcome.reusable_dropped = list(reusable_dropped_stats)
     outcome.candidate_decisions = dict(candidate_decisions_stats)
+    outcome.format_normalization = dict(format_norm_stats)
     return outcome
 
 
@@ -2034,14 +2087,18 @@ def regenerate_call_b_for_flow_format(daily_data: dict, call_a_data: dict | None
     user_content = _build_call_b_user_content(daily_data, call_a_data) + "\n\n" + _build_flow_regen_note(
         previous_flow, violations, previous_summary)
     has_material = _has_adopted_material(call_a_data)
+    format_norm_stats: dict[str, Any] = {}
 
     def _enforce_fixed_flow(data: dict, attempt: int) -> dict:
         if not has_material:
             data["part2_flow"] = [FIXED_FLOW]
+        _normalize_flow_items(data, format_norm_stats)  # v1.102
         return data
 
-    return _call_json(client, system=SYSTEM_B, user_content=user_content, max_tokens=CALL_B_MAX_TOKENS,
-                      required_keys=REQUIRED_KEYS_B, post_process=_enforce_fixed_flow)
+    outcome = _call_json(client, system=SYSTEM_B, user_content=user_content, max_tokens=CALL_B_MAX_TOKENS,
+                         required_keys=REQUIRED_KEYS_B, post_process=_enforce_fixed_flow)
+    outcome.format_normalization = dict(format_norm_stats)
+    return outcome
 
 
 def _has_adopted_material(call_a_data: dict | None) -> bool:
@@ -2054,12 +2111,28 @@ def _has_adopted_material(call_a_data: dict | None) -> bool:
     if isinstance(headline, str) and headline.strip() and headline.strip() != FIXED_HEADLINE:
         return True
     points = call_a_data.get("part1_points") or []
-    return any(isinstance(p, str) and p.strip() and p.strip() != FIXED_POINTS for p in points)
+    # v1.102: 先頭の行頭記号・空白を除いて比べる（「・補足できる検証済み材料は確認できない。」を材料ありと誤判定しない）
+    return any(isinstance(p, str) and normalize_item_head(p).strip()
+               and normalize_item_head(p).strip() != FIXED_POINTS for p in points)
+
+
+def _normalize_flow_items(data: dict, stats: dict[str, Any]) -> None:
+    """v1.102: part2_flowの連鎖の先頭の記号・空白を整形し、整形前と件数をstatsへ記録する（試行ごとに上書き）。
+    ①②③で始まる連鎖は、先頭の「・」を除くと①②③が先頭になる（描画で「・」を付けない）。"""
+    stats.clear()
+    try:
+        raw = list(data.get("part2_flow")) if isinstance(data.get("part2_flow"), list) else None
+        data["part2_flow"], n_changed = normalize_items(data.get("part2_flow"))
+        if raw is not None:
+            stats.update(part2_flow_raw=raw, part2_flow_changed=n_changed)
+    except Exception:  # noqa: BLE001 — 整形の失敗で試行を変えない
+        stats.clear()
 
 
 def call_b(client: "anthropic.Anthropic", daily_data: dict, call_a_data: dict | None) -> CallOutcome:
     user_content = _build_call_b_user_content(daily_data, call_a_data)
     has_material = _has_adopted_material(call_a_data)
+    format_norm_stats: dict[str, Any] = {}
 
     def _enforce_fixed_flow(data: dict, attempt: int) -> dict:
         # v1.82（オーナー承認）: 材料が無い日（呼び出しA失敗を含む）の
@@ -2069,13 +2142,16 @@ def call_b(client: "anthropic.Anthropic", daily_data: dict, call_a_data: dict | 
         # 確定させる——プロンプトの遵守状況に依存しない。
         if not has_material:
             data["part2_flow"] = [FIXED_FLOW]
+        _normalize_flow_items(data, format_norm_stats)  # v1.102
         return data
 
-    return _call_json(
+    outcome = _call_json(
         client, system=SYSTEM_B, user_content=user_content,
         max_tokens=CALL_B_MAX_TOKENS, required_keys=REQUIRED_KEYS_B,
         post_process=_enforce_fixed_flow,
     )
+    outcome.format_normalization = dict(format_norm_stats)
+    return outcome
 
 
 # v1.76（オーナー承認・2026-09-16）: C18（断定表現）局所修正用の呼び出し

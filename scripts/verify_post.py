@@ -975,6 +975,7 @@ WARNING_KINDS: "tuple[tuple[str, str], ...]" = (
     ("W_flow_format", "フロー書式"),
     ("W_media_mismatch", "媒体名照合"),
     ("W_geo_rejected_fixed", "地政学の不採用"),
+    ("W_bullet_normalized", "行頭の記号"),
 )
 
 
@@ -1444,6 +1445,26 @@ def check_geo_rejected_warn(au: Audit, sections: dict, audit_ledger,
             count=len(hits), entries=[{k: h[k] for k in ("source", "tier", "title", "topic", "reason")} for h in hits])
 
 
+# --- 行頭の記号の整形の警告（v1.102・オーナー承認。FAILではない）---
+#
+# 背景: 2026-10-05分の主要なポイントの行頭が「・・」と二重になった（呼び出しAの項目がすでに「・」で始まっていた）。
+# 呼び出しA・Bの出力の項目の先頭の行頭記号・空白は、受け取った直後に機械的に整形する（generate_post.normalize_item_head）。
+# 整形は確実に直るため本文の確認は要らない。この警告は、モデルが指示（行頭に記号を付けない）を守らなかった頻度を、
+# 毎朝の警告欄で追跡するための表示（整形前の項目は診断用のattempt_diagnostics.jsonに保存）。
+def check_bullet_normalized_warn(au: Audit, normalized: "dict | None") -> None:
+    if not isinstance(normalized, dict):
+        return
+    n_points = int(normalized.get("part1_points", 0) or 0)
+    n_flow = int(normalized.get("part2_flow", 0) or 0)
+    if n_points + n_flow <= 0:
+        return
+    parts = ([f"主要なポイント{n_points}項目"] if n_points else []) + ([f"市場のフロー{n_flow}連鎖"] if n_flow else [])
+    au.warn("W_bullet_normalized",
+            "モデルの出力の行頭に余分な記号・空白（「・・」等）があったため、機械的に整形しました（" + "・".join(parts) + "）。"
+            "本文は整形後で、確認は不要です（モデルが指示を守らなかった頻度の記録。整形前の項目は診断用ファイルに保存）。",
+            part1_points=n_points, part2_flow=n_flow)
+
+
 def summarize_check_ids(checks: "list[dict]") -> str:
     """実際に評価したチェックのID要約（例: 「C12〜C24・C26〜C28・計17項目」）。
     GENERATION_STATUS.mdの監査表記を、固定文言ではなく実際の評価対象から作る（v1.85）。
@@ -1688,6 +1709,7 @@ def run_all(bundle: dict, daily_data: dict) -> Audit:
         ("フロー書式", lambda: check_flow_format_warn(au, sections)),
         ("媒体名照合", lambda: check_media_warn(au, sections, bundle.get("audit_ledger"), tier_map)),
         ("地政学の不採用", lambda: check_geo_rejected_warn(au, sections, bundle.get("audit_ledger"), tier_map)),
+        ("行頭の記号", lambda: check_bullet_normalized_warn(au, bundle.get("format_normalized"))),
     ):
         try:
             _fn()

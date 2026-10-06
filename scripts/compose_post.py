@@ -89,7 +89,9 @@ def _mechanical_headline_for_image(daily_data: dict) -> str:
 
 
 def _render_bullets(items: list[str]) -> str:
-    return "\n".join(f"・{p}" for p in items)
+    # v1.102: 項目の先頭の行頭記号・空白を除いてから「・」を付ける（呼び出しAの出力の整形〔generate_post.call_a〕を
+    # 通らないgenでも「・・」にならない二重の防御。冪等）。
+    return "\n".join(f"・{generate_post.normalize_item_head(p)}" for p in items)
 
 
 _FLOW_NUMBER_PREFIXES = ("①", "②", "③")
@@ -102,12 +104,12 @@ def _render_flow(items: list[str]) -> str:
     定型文1件のみ（generate_post.FIXED_FLOW）は、L1/L2の縮退時と同じく
     箇条書き記号なしの定型文そのものとして描画する。
     """
-    if len(items) == 1 and str(items[0]).strip() == FIXED_FLOW:
+    items = [generate_post.normalize_item_head(str(i)) for i in items]  # v1.102: 先頭の行頭記号・空白を除く（冪等）
+    if len(items) == 1 and items[0].strip() == FIXED_FLOW:
         return FIXED_FLOW
     lines = []
-    for item in items:
-        text = str(item)
-        lines.append(text if text.lstrip().startswith(_FLOW_NUMBER_PREFIXES) else f"・{text}")
+    for text in items:
+        lines.append(text if text.startswith(_FLOW_NUMBER_PREFIXES) else f"・{text}")
     return "\n".join(lines)
 
 
@@ -229,6 +231,11 @@ def compose(daily_data: dict, gen: dict[str, Any]) -> dict[str, Any]:
         # 同じセンチネルに揃え、genが不完全な状態でcompose()が単体呼び出し
         # された場合でも「0件」と誤認しないようにする（独立レビュー指摘）。
         "news_candidate_count": gen.get("news_candidate_count", -1),
+        # v1.102（オーナー承認）: 呼び出しA・Bの出力の項目の先頭の行頭記号・空白を整形した件数（警告欄に表示する。
+        # 整形前の項目は診断用のattempt_diagnostics.jsonに保存）。
+        "format_normalized": {
+            "part1_points": int((call_a.get("format_normalization") or {}).get("part1_points_changed", 0) or 0),
+            "part2_flow": int((call_b.get("format_normalization") or {}).get("part2_flow_changed", 0) or 0)},
         "part1_md": part1_md,
         "part2_md": part2_md,
         # v1.81（オーナー承認・運用上の変更）: 投稿本文から外した数値2見出しの
@@ -1029,6 +1036,10 @@ def main() -> int:
         "attempt_errors": gen["call_a"].get("attempt_errors", []),
         "attempt_diagnostics": gen["call_a"].get("attempt_diagnostics", []),
         "force_dropped_candidates": force_dropped,
+        # v1.102: 項目の先頭の行頭記号・空白を整形する前の項目（呼び出しAのpart1_points・呼び出しBのpart2_flow）と件数。
+        # モデルが前日以前の投稿の「・」を真似たという推定の検証や、指示を守らなかった頻度の追跡に使う。
+        "format_normalization": {"call_a": gen["call_a"].get("format_normalization", {}),
+                                 "call_b": gen["call_b"].get("format_normalization", {})},
     }, ensure_ascii=False, indent=2), encoding="utf-8")
     if failed_attempt is not None:
         (out_dir / "failed_attempt.json").write_text(
