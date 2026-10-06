@@ -872,7 +872,7 @@ check("NO_CANDIDATES_FALLBACKにverified_byはuse:trueの場合のみ書く旨�
       and "use:falseの場合は空文字でよい" in generate_post.NO_CANDIDATES_FALLBACK)
 check("NO_CANDIDATES_FALLBACKにpairs_with_candidate_idの妥当性確認条件が明記されている"
       "（v1.53フォローアップ・オーナー指示）",
-      "相互に指し合う必要はなく" in generate_post.NO_CANDIDATES_FALLBACK
+      "（相互に指し合う必要はない）が、相手もuse:trueにすること" in generate_post.NO_CANDIDATES_FALLBACK
       and "妥当性が確認できない" in generate_post.NO_CANDIDATES_FALLBACK)
 check("NO_CANDIDATES_FALLBACKに「tier1裏取りで言及したtier3はuse:falseのまま」の"
       "区別が明記されている（v1.53フォローアップ・実データ検証で判明した"
@@ -7185,6 +7185,121 @@ check("v1.102 プロンプト: 呼び出しA（出力形式）とB（出力形�
       and "付けると「・・」と二重になる" in generate_post.OUTPUT_FORMAT_A and "previous_postsの項目にも先頭の記号は付いていない" in generate_post.OUTPUT_FORMAT_A
       and "part2_flowの各連鎖は、本文だけを書く。先頭に「・」などの行頭記号や空白を付けない" in generate_post.CALL_B_INSTRUCTIONS
       and "①②③は付けてよい" in generate_post.CALL_B_INSTRUCTIONS and generate_post.OUTPUT_FORMAT_A in generate_post.SYSTEM_A)
+
+print("=== v1.103（オーナー承認・調査2の案1）: 独立2ソースの相方の目印（machine_pair_hint）／「ペアは両方use:true」の命令形／リトライ注記に「相方もtrueにする」 ===")
+_P103 = [{"tier": 3, "source": "CoinDesk", "title": f"filler story number {i} xq{i}", "published_at": f"Mon, 17 Aug 2026 12:{10 + i:02d}:00 GMT", "url": f"f{i}"} for i in range(16)]
+_pa = {"tier": 3, "source": "Cointelegraph", "title": "alpha beta gamma delta zeta", "published_at": "Mon, 17 Aug 2026 13:50:00 GMT", "url": "a"}   # 最新（上限内）
+_pb = {"tier": 3, "source": "CoinDesk", "title": "alpha beta gamma delta epsilon", "published_at": "Mon, 17 Aug 2026 11:00:00 GMT", "url": "b"}   # 上限外→ペア救済
+_pc = {"tier": 3, "source": "The Block", "title": "unique topic one two three", "published_at": "Mon, 17 Aug 2026 13:40:00 GMT", "url": "c"}     # 相方なし
+_t1 = {"tier": 1, "source": "SEC", "title": "alpha beta gamma delta zeta", "published_at": "Mon, 17 Aug 2026 13:00:00 GMT", "url": "t1", "summary": "s"}  # tier1は対象外
+_pool103 = [_pa, _pb, _pc, _t1] + _P103
+_dd103 = {**DAILY_DATA, "target_date_jst": "2026-08-17"}
+_uc103, _st103, _idmap103 = generate_post._build_call_a_user_content(_dd103, {"candidates": json.loads(json.dumps(_pool103))}, None, 0.4, [])
+_cands103 = json.loads(_uc103)["news_candidates_today"]
+_by103 = {c["title"]: c for c in _cands103}
+_ha, _hb = _by103["alpha beta gamma delta zeta"] if _by103["alpha beta gamma delta zeta"]["tier"] == 3 else None, _by103["alpha beta gamma delta epsilon"]
+_ca = [c for c in _cands103 if c["tier"] == 3 and c["title"] == "alpha beta gamma delta zeta"][0]
+check("v1.103 目印: 救済されたペア（上限外から追加された相方）も、上位に入った側も、双方の候補に相方のcandidate_idと重なり係数（0.8）が付く",
+      _ca["machine_pair_hint"]["candidate_id"] == _hb["candidate_id"] and _hb["machine_pair_hint"]["candidate_id"] == _ca["candidate_id"]
+      and _ca["machine_pair_hint"]["title_overlap"] == 0.8 == _hb["machine_pair_hint"]["title_overlap"], str(_ca.get("machine_pair_hint")))
+check("v1.103 目印: すべての目印に「同一事実でなければ無視してよい」を添える（偽ペアはモデルが題名・要約を読んで無視してよい）",
+      all("同一事実でなければ無視してよい" in c["machine_pair_hint"]["note"] for c in _cands103 if "machine_pair_hint" in c)
+      and generate_post.MACHINE_PAIR_HINT_NOTE == "機械検出（題名の語の重なり）。同一事実でなければ無視してよい")
+check("v1.103 目印: 相方の無い候補・tier1（題名が同じでもtier3どうしのペアではない）・上位に入った無関係の候補には付かない。付くのはペアの双方だけ（2件）",
+      "machine_pair_hint" not in _by103["unique topic one two three"] and all("machine_pair_hint" not in c for c in _cands103 if c["tier"] != 3)
+      and sum(1 for c in _cands103 if "machine_pair_hint" in c) == 2, str([c["title"] for c in _cands103 if "machine_pair_hint" in c]))
+check("v1.103 目印: 候補のキーは、付いた2件だけが1つ増える（目印以外のキー・eligibility・candidate_idは従来どおり）。呼び出しAへ渡す候補の数・truncation_statsは従来の選定と同一",
+      set(_ca.keys()) - {"machine_pair_hint"} == set(_by103["unique topic one two three"].keys())
+      and "eligibility" in _ca and "candidate_id" in _ca and "machine_pair_hint" in _ca
+      and "machine_pair_hint" not in _by103["unique topic one two three"] and _st103 == generate_post._select_candidates_for_call_a(json.loads(json.dumps(_pool103)))[1]
+      and len(_cands103) == len(generate_post._select_candidates_for_call_a(json.loads(json.dumps(_pool103)))[0]), "")
+_hints_u = generate_post._build_machine_pair_hints([(_pa, _pb)], {id(_pa): 1})
+check("v1.103 目印: 片方が呼び出しAへ渡す候補に入っていないペアには、目印を付けない（存在しない相方のIDを示さない）",
+      _hints_u == {} and set(generate_post._build_machine_pair_hints([(_pa, _pb)], {id(_pa): 1, id(_pb): 5})) == {1, 5})
+
+# 実データ（10/5。candidates_logの題名）: 救済4組と自然ペア2組の目印
+_L103 = json.loads((REPO / "outputs/2026-10-05/candidates_log.json").read_text(encoding="utf-8"))
+from email.utils import format_datetime as _fd103
+from datetime import datetime as _dt103, timezone as _tz103
+_news103 = {"source_status": {}, "candidates": [
+    {"title": c["title"], "url": c["url"], "source": c["source"], "published_at": _fd103(_dt103.strptime(c["published_at_utc"], "%Y-%m-%dT%H:%MZ").replace(tzinfo=_tz103.utc)),
+     "summary": c["summary_head"], "kind": "k", "tier": c["tier"]} for c in _L103["candidates"]]}
+_uc105, _st105, _ = generate_post._build_call_a_user_content({**DAILY_DATA, "target_date_jst": "2026-10-05"}, _news103, None, 0.4, [])
+_c105 = json.loads(_uc105)["news_candidates_today"]
+_h105 = {c["candidate_id"]: c["machine_pair_hint"]["candidate_id"] for c in _c105 if "machine_pair_hint" in c}
+check("v1.103 実データ（10/5）: 救済された4組（41/42・43/44・45/46・47/48）と、上位に入っていた自然ペア（26/33）の双方に、相方のIDが付く（偽ペアになりうる41/42にも付くが、「同一事実でなければ無視してよい」を添える）",
+      all(_h105.get(a) == b and _h105.get(b) == a for a, b in ((41, 42), (43, 44), (45, 46), (47, 48), (26, 33)))
+      and _st105["tier3_pairs_rescued"] == 4, str(sorted(_h105.items())))
+_m4142 = [c for c in _c105 if c["candidate_id"] == 41][0]["machine_pair_hint"]
+check("v1.103 実データ（10/5）: 偽ペアになりうる41/42（Metaplanet）は重なり係数が低め（0.44）として示される（モデルが係数と題名・要約から同一事実かを判断できる）。43/44は0.64",
+      _m4142["title_overlap"] == 0.44 and [c for c in _c105 if c["candidate_id"] == 43][0]["machine_pair_hint"]["title_overlap"] == 0.64, str(_m4142))
+
+# プロンプト: 命令形（独立2ソース規定の1か所）・machine_pair_hintの説明・audit_ledgerの記述・補強との区別
+_NS103 = generate_post.NEWS_SELECTION
+_sec103 = _NS103[_NS103.index("### 独立2ソース規定"):_NS103.index("### ヘッドラインの判定手順")]
+check("v1.103 プロンプト: 独立2ソース規定に「組になる2件（以上）のtier3候補を、すべてuse:trueにする。片方だけuse:trueにすると必ず失敗する」を命令形で書く（pairs_with_candidate_idの申告は片方でよい）",
+      "**組になる2件（以上）のtier3候補を、すべてaudit_ledgerで\nuse:trueにする**" in _sec103 and "片方だけuse:trueにすると、システムの確認で必ず失敗してやり直しになる" in _sec103
+      and "どちらか片方に書けば足りる（相互に書く必要はない" in _sec103)
+check("v1.103 プロンプト: tier1・tier2の裏付けがある材料を補強するtier3は従来どおりuse:falseのまま、という区別を同じ箇所に書く（補強規則との混同の対策）",
+      "tier1・tier2の裏付けがある材料を補強するtier3は、従来どおりuse:falseのままにする" in _sec103
+      and "tier1・tier2の裏付けが無く、tier3だけで報じられた材料の組についての扱い" in _sec103)
+check("v1.103 プロンプト: machine_pair_hintの説明（機械検出・同一事実かはあなたが判断・同一事実でなければ無視してよい・目印が無くても同一事実なら同様）",
+      "machine_pair_hint が付いている場合は" in _sec103 and "同一事実かどうかは、\nあなたがtitle・summaryを読んで判断する。同一事実でなければ無視してよい" in _sec103
+      and "目印が付いていない候補どうしでも" in _sec103)
+check("v1.103 プロンプト: audit_ledgerの節は「申告は片方に書けば成立するが、相手もuse:trueにすること」と、独立2ソース規定への参照で書く（命令の記述を1か所に集約し、分散させない）。旧「片方が指せば成立する」の単独の文は残らない",
+      "申告は片方に書けば成立する" in generate_post.NO_CANDIDATES_FALLBACK and "相手もuse:trueにすること（上記" in generate_post.NO_CANDIDATES_FALLBACK
+      and "相互に指し合う必要はなく、\n  片方が指せば成立する" not in generate_post.NO_CANDIDATES_FALLBACK
+      and generate_post.SYSTEM_A.count("組になる2件（以上）のtier3候補を") == 1)
+
+# リトライ注記: 相方もtrueにする選択肢（名指しされた候補の相方に限る）
+_exc103 = generate_post.AuditLedgerReconstructionError("tier3のuse:trueだが独立2ソースの相方が成立しない候補ID: [43]")
+_exc103.unresolved_details = [{"candidate_id": 43, "source": "CoinDesk", "title": "Kraken operator Payward and Singapore Gulf Bank partner",
+                               "reasons": [{"code": "target_use_false", "role": "claim", "other_id": 44, "other_source": "Cointelegraph",
+                                            "other_title": "Kraken parent adds 24/7 dollar settlement with Singapore Gulf Bank"}]}]
+_note103 = generate_post._build_call_a_retry_note(_exc103)
+check("v1.103 リトライ注記: 相方がuse:falseだったことが理由のとき、「相方もuse:trueに変更する（独立2ソースは両方use:trueで成立）」を選択肢に入れる。理由の行に相方のIDと「申告先もuse:trueにすれば成立する」を示す",
+      "相方がuse:falseになっているときは相方もuse:trueに変更してください" in _note103 and "両方をuse:trueにして成立します" in _note103
+      and "ID44（Cointelegraph" in _note103 and "申告先がuse:false（不採用）。同一事実の独立2ソースなら、申告先もuse:trueにすれば成立する" in _note103, _note103[:900])
+check("v1.103 リトライ注記: 変更してよい範囲は、名指しされた候補と「その相方」に限る。従来の限定（名指しされた候補IDについてのみ・名指しされていない他の候補は変更しない）は維持する。満たさない場合はuseをfalseに",
+      "名指しされた候補IDについてのみ" in _note103 and "相方をuse:trueにする修正は、名指しされた候補の相方に限って" in _note103
+      and "名指しされていない他の候補（上記の相方を除く）のuse・pairs_with_candidate_idは変更しないでください" in _note103
+      and "その候補のuseをfalseに変更してください" in _note103)
+
+# 結合: 10/5型（1試行目は43だけtrue・相方44はfalse）。注記を受けた2試行目で両方trueにすると、成立して「採用（独立2ソース）」になる
+_news_i103 = {"collected_at": "x", "target_date_jst": "2026-10-05", "source_status": {}, "candidates": [
+    {"tier": 1, "source": "SEC", "title": "Regulator announces new rule", "url": "u1", "published_at": _pub97(60), "summary": "s", "kind": "k"},
+    {"tier": 3, "source": "CoinDesk", "title": "Kraken operator Payward and Singapore Gulf Bank partner for 24/7 institutional crypto settlement", "url": "u2", "published_at": _pub97(50), "summary": "s", "kind": "k"},
+    {"tier": 3, "source": "Cointelegraph", "title": "Kraken parent adds 24/7 dollar settlement with Singapore Gulf Bank", "url": "u3", "published_at": _pub97(40), "summary": "s", "kind": "k"}]}
+_contents103 = []
+
+
+def _fn_i103(kw, n):
+    content = kw["messages"][0]["content"]
+    _contents103.append(content)
+    cands = _parse_leading_json(content)["news_candidates_today"]
+    ids = {c["candidate_id"]: c for c in cands}
+    t3 = sorted(i for i, c in ids.items() if c["tier"] == 3)
+    first_try = len(_contents103) == 1
+    led = []
+    for i, c in sorted(ids.items()):
+        if c["tier"] == 1:
+            led.append({"candidate_id": i, "use": True, "verified_by": "RSS summary", "reason": "A: 直接材料"})
+        elif i == t3[0]:
+            led.append({"candidate_id": i, "use": True, "pairs_with_candidate_id": t3[1], "verified_by": "RSS summary", "reason": "A: 独立2ソース"})
+        else:
+            led.append({"candidate_id": i, "use": (not first_try), "verified_by": "RSS summary" if not first_try else "", "reason": "A: 独立2ソース" if not first_try else "C: 単独報道のみ"})
+    return json_response({"headline_for_image": "x", "part1_headline": "SECが新規則を発表しました。", "part1_points": ["SECが新規則を発表しました（SEC、2026-10-05）。", "Krakenの運営会社が決済の提携を発表したと2媒体が報じました（CoinDesk、Cointelegraph、2026-10-05）。"],
+                          "reusable_for_summary": [], "audit_ledger": led})
+
+
+_out_i103 = generate_post.call_a(FakeClient(_fn_i103), DAILY_DATA, _news_i103, None)
+_p1_103 = _parse_leading_json(_contents103[0])["news_candidates_today"]
+check("v1.103 結合: 1試行目の入力に、ペア双方の目印（相方のID・「同一事実でなければ無視してよい」）が入る。1試行目は片方だけtrueで失敗→注記つきの2試行目で両方trueにすると成立し、双方「採用（独立2ソース）」になる",
+      _out_i103.ok and _out_i103.attempts == 2 and len(_contents103) == 2
+      and [c["machine_pair_hint"]["candidate_id"] for c in _p1_103 if c["tier"] == 3] == [3, 2]
+      and all("同一事実でなければ無視してよい" in c["machine_pair_hint"]["note"] for c in _p1_103 if c["tier"] == 3)
+      and sorted(e["decision"] for e in _out_i103.data["audit_ledger"]) == ["採用", "採用（独立2ソース）", "採用（独立2ソース）"]
+      and "相方もuse:trueに変更してください" in _contents103[1] and "target_use_false" not in _contents103[1], _contents103[1][-700:])
 
 print()
 print(f"PASS: {len(PASS)}  FAIL: {len(FAIL)}")

@@ -500,9 +500,16 @@ tier3のみで報じられた材料であっても、次の3条件をすべて�
      用いること。例:「公式発表での確認は取れていません」）
 上記に該当しない場合は従来どおりtier1・tier2の裏付けを必要とする。
 
-この規定に該当すると判断したtier3候補は、audit_ledgerでuse:trueとし、
-相手候補（同一事実を報じている別sourceのtier3候補）のcandidate_idを
-pairs_with_candidate_idに記す（下記「audit_ledger」参照）。
+この規定に該当すると判断した場合は、**組になる2件（以上）のtier3候補を、すべてaudit_ledgerで
+use:trueにする**（片方だけuse:trueにすると、システムの確認で必ず失敗してやり直しになる）。
+pairs_with_candidate_idには、同一事実を報じている相手（別sourceのtier3候補）のcandidate_idを、
+どちらか片方に書けば足りる（相互に書く必要はない。下記「audit_ledger」参照）。
+なお、tier1・tier2の裏付けがある材料を補強するtier3は、従来どおりuse:falseのままにする（上記tier 3の節）。
+この規定は、tier1・tier2の裏付けが無く、tier3だけで報じられた材料の組についての扱いである。
+候補に machine_pair_hint が付いている場合は、システムが題名の語の重なりから「同一事実の可能性がある
+別媒体のtier3候補」として機械的に検出した相手のcandidate_idと重なり係数である。同一事実かどうかは、
+あなたがtitle・summaryを読んで判断する。同一事実でなければ無視してよい（目印が付いていない候補どうしでも、
+同一事実なら同様に扱ってよい）。
 "採用"／"採用（独立2ソース）"／"不採用"という記録文言自体はあなたが
 書かず、tier・use・pairs_with_candidate_idの妥当性からシステム側が
 機械的に確定する（v1.53フォローアップ・オーナー指示。単独ソースを
@@ -684,8 +691,9 @@ pairs_with_candidate_id・verified_by・reason のみを書く（v1.48・v1.53
 - pairs_with_candidate_id: tier3でuse:trueの候補のうち、上記
   「独立2ソース規定」に該当すると判断したものにのみ、同一事実を
   報じている相手（別sourceのtier3候補）のcandidate_idを記す
-  （該当しなければ省略、またはnull）。相互に指し合う必要はなく、
-  片方が指せば成立する。この申告はシステム側が機械的に妥当性を
+  （該当しなければ省略、またはnull）。申告は片方に書けば成立する
+  （相互に指し合う必要はない）が、相手もuse:trueにすること（上記
+  「独立2ソース規定」参照）。この申告はシステム側が機械的に妥当性を
   確認したうえで"採用（独立2ソース）"の記録に反映される（相手が
   実在しtier3・use:trueであること、sourceが異なること、タイトルの
   内容が実際に重なっていることを確認する）。妥当性が確認できない
@@ -1162,7 +1170,8 @@ def _select_candidates_detail(
     rescued: list[dict] = []
     rescued_ids: set[int] = set()
     pairs_rescued = 0
-    for a, b in _find_independent_pairs(tier3_sorted, pair_overlap_threshold):
+    all_pairs = _find_independent_pairs(tier3_sorted, pair_overlap_threshold)
+    for a, b in all_pairs:
         if pairs_rescued >= PAIR_RESCUE_MAX_PAIRS:
             break
         missing = [c for c in (a, b) if id(c) not in top_ids and id(c) not in rescued_ids]
@@ -1194,7 +1203,7 @@ def _select_candidates_detail(
     # v1.97（オーナー承認・案1）: 候補の記録（build_candidate_selection_report）が、実際の選定と
     # 同じ並べ替え結果・救済結果を参照できるように返す（選定ロジックを二重に持たない）。
     detail = {"tier1": tier1, "tier2_sorted": tier2_sorted, "tier3_sorted": tier3_sorted,
-              "others_sorted": others_sorted, "rescued_ids": rescued_ids}
+              "others_sorted": others_sorted, "rescued_ids": rescued_ids, "pairs": all_pairs}
     return tier1 + tier2_selected + tier3_selected + others_selected, stats, detail
 
 
@@ -1391,7 +1400,7 @@ PAIR_REJECT_REASON_LABELS = {
     "target_not_found": "申告先の候補IDが存在しない",
     "self_reference": "自分自身を申告している",
     "target_not_tier3": "申告先がtier3でない",
-    "target_use_false": "申告先がuse:false（不採用）",
+    "target_use_false": "申告先がuse:false（不採用）。同一事実の独立2ソースなら、申告先もuse:trueにすれば成立する",
     "same_source": "申告先が同じ媒体",
     "overlap_below_threshold": "タイトルの重なり係数が閾値未満",
     "no_claim": "相方の申告なし（pairs_with_candidate_id=null）",
@@ -1646,12 +1655,43 @@ def _flag_scheduled_event_matches(candidates: list[dict], scheduled_events: Any)
     return out
 
 
+# --- v1.103（オーナー承認・調査2の案1）: 独立2ソースの相方の目印（machine_pair_hint）---
+#
+# 背景: 2026-10-05に、独立2媒体ペア救済で追加した4組（ID 41/42・43/44・45/46・47/48）がすべて不採用になった。
+# 救済したペア（および自然に上位に入ったペア）の相方は、入力（news_candidates_today）のどこにも示されておらず、
+# モデルが約23件のtier3から相方を自分で探す必要があった（候補のキーはtitle・url・source・published_at・summary・kind・tier・
+# candidate_id・eligibilityの9個だけ）。1・2試行目の失敗は、ペアの片方だけをuse:trueにしたことが原因だった。
+# 対処: システムが検出したペア（_find_independent_pairs。題名の語の重なり係数が閾値以上・別媒体）のうち、両方が呼び出しAへ
+# 渡す候補に入っているものについて、双方の候補に相方のcandidate_idと重なり係数を目印として付ける。目印は題名の語の重なりだけで
+# 機械的に付くため、同一事実でない偽ペア（10/5のMetaplanet 41/42のように、別の話で語が重なっただけの組）も含みうる。
+# そのため、目印には必ず「同一事実でなければ無視してよい」を添える（判断はモデルが題名・要約を読んで行う）。
+MACHINE_PAIR_HINT_NOTE = "機械検出（題名の語の重なり）。同一事実でなければ無視してよい"
+
+
+def _build_machine_pair_hints(pairs: list[tuple[dict, dict]], id_of: dict[int, int]) -> dict[int, dict]:
+    """{candidate_id: {"candidate_id": 相方のID, "title_overlap": 重なり係数, "note": …}}。
+    id_ofは候補オブジェクトのid()→candidate_id。両方が渡す候補に入っているペアだけが対象（片方が渡されていなければ目印は付けない）。"""
+    hints: dict[int, dict] = {}
+    for a, b in pairs:
+        ia, ib = id_of.get(id(a)), id_of.get(id(b))
+        if ia is None or ib is None:
+            continue
+        overlap = round(_overlap_coefficient(_tokenize_title(a.get("title", "")), _tokenize_title(b.get("title", ""))), 2)
+        hints[ia] = {"candidate_id": ib, "title_overlap": overlap, "note": MACHINE_PAIR_HINT_NOTE}
+        hints[ib] = {"candidate_id": ia, "title_overlap": overlap, "note": MACHINE_PAIR_HINT_NOTE}
+    return hints
+
+
 def _build_call_a_user_content(daily_data: dict, news_today: dict, news_yesterday: dict | None,
                                 pair_overlap_threshold: float = PAIR_OVERLAP_THRESHOLD_DEFAULT,
                                 previous_posts: list[dict] | None = None
                                 ) -> tuple[str, dict, dict[int, dict]]:
-    selected_today, stats = _select_candidates_for_call_a(news_today.get("candidates", []), pair_overlap_threshold)
-    selected_today = _assign_candidate_ids(selected_today)
+    selected_objs, stats, detail = _select_candidates_detail(news_today.get("candidates", []), pair_overlap_threshold)
+    selected_today = _assign_candidate_ids(selected_objs)
+    # v1.103: 独立2ソースの相方の目印（machine_pair_hint）。candidate_idは_assign_candidate_idsと同じ番号（選定結果の並びの1始まり）。
+    hints = _build_machine_pair_hints(detail["pairs"], {id(c): i for i, c in enumerate(selected_objs, start=1)})
+    selected_today = [{**c, "machine_pair_hint": hints[c["candidate_id"]]} if c["candidate_id"] in hints else c
+                      for c in selected_today]
     id_to_candidate = {c["candidate_id"]: c for c in selected_today}
     selected_yesterday, _ = _select_candidates_for_call_a(
         (news_yesterday or {}).get("candidates", []), pair_overlap_threshold)
@@ -1919,8 +1959,11 @@ def _build_call_a_retry_note(exc: Exception) -> str | None:
         "このエラーで名指しされた候補IDについてのみ、pairs_with_candidate_idが"
         "「独立2ソース規定」の条件（相手もtier3・use:true・情報源が異なる・"
         "タイトルの内容が十分類似）を満たすか再確認してください。満たす場合は"
-        "pairs_with_candidate_idを正しい相方の候補IDへ修正し、満たさない場合は"
-        "その候補のuseをfalseに変更してください。名指しされていない他の候補の"
+        "pairs_with_candidate_idを正しい相方の候補IDへ修正し、相方がuse:falseに"
+        "なっているときは相方もuse:trueに変更してください（同一事実を報じた独立2ソースは、"
+        "両方をuse:trueにして成立します。相方をuse:trueにする修正は、名指しされた候補の相方に限って"
+        "かまいません）。満たさない場合は"
+        "その候補のuseをfalseに変更してください。名指しされていない他の候補（上記の相方を除く）の"
         "use・pairs_with_candidate_idは変更しないでください。"
     )
 
