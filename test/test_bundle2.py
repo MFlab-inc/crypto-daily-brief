@@ -6931,6 +6931,7 @@ _o_rg2 = generate_post.regenerate_call_b_for_flow_format
 generate_post.regenerate_call_b_for_flow_format = lambda *a, **k: type("O", (), {
     "ok": True, "usage": {"input_tokens": 1, "output_tokens": 1}, "error": None,
     "data": {"part2_flow": [_GOOD_FLOW101], "part2_summary": "別の総括です。"},
+    "format_normalization": {"part2_flow_raw": ["・" + _GOOD_FLOW101], "part2_flow_changed": 1},
     "to_dict": lambda self: {"ok": True, "attempts": 1, "error": None, "usage": {"input_tokens": 1, "output_tokens": 1},
                              "data": {"part2_flow": [_GOOD_FLOW101], "part2_summary": _SUMMARY101}}})()
 try:
@@ -7064,14 +7065,18 @@ print("=== v1.102（オーナー承認）: 項目の先頭の行頭記号・空�
 _nh = generate_post.normalize_item_head
 check("v1.102 normalize_item_head: 行頭の記号（・ ･ • · ‧ ● ■ 等）と空白（半角・全角）を何重でも除く。「・ ・A」「・（空白2つ）Fed」も直る",
       all(_nh(x) == y for x, y in (("・A", "A"), ("・・A", "A"), ("･A", "A"), ("• A", "A"), ("  A", "A"), ("　A", "A"), ("・ ・A", "A"),
-                                   ("・  Fed", "Fed"), ("●A", "A"), ("■ A", "A"), ("", ""))))
+                                   ("・  Fed", "Fed"), ("● A", "A"), ("■ A", "A"), ("", ""))))
 check("v1.102 normalize_item_head: ダッシュ類は直後が空白のときだけ記号とみなす（「-5%」「−0.3%」で始まる項目・「「引用」」・①②③・（注）・文中の「・」は変えない）",
-      all(_nh(x) == y for x, y in (("- A", "A"), ("* A", "A"), ("— A", "A"), ("-5%", "-5%"), ("−0.3%", "−0.3%"), ("「引用」", "「引用」"),
+      all(_nh(x) == y for x, y in (("- A", "A"), ("* A", "A"), ("— A", "A"), ("－ A", "A"), ("-5%", "-5%"), ("−0.3%", "−0.3%"), ("「引用」", "「引用」"),
                                    ("①A", "①A"), ("（注）x", "（注）x"), ("A・B", "A・B"), ("・①A", "①A"))))
 check("v1.102 normalize_item_head・normalize_items: 冪等・文字列でない要素はそのまま・件数は変更した要素だけ・リストでなければそのまま（0件）",
       _nh(_nh("・・A")) == "A" and _nh(None) is None and _nh(3) == 3
       and generate_post.normalize_items(["・A", "B", 3, None, " C"]) == (["A", "B", 3, None, "C"], 2)
       and generate_post.normalize_items("x") == ("x", 0))
+check("v1.102追補 normalize_item_head: 「- 5%」「− 0.3%」（記号の直後が空白でも後が数字）は符号を落とさない。「○○社が…」「●●銀行」「●A」「＊A」は先頭を壊さない（●○■□◆◇は直後が空白のときだけ記号とみなす）",
+      all(_nh(x) == x for x in ("- 5%", "− 0.3%", "-5%", "○○社が発表しました。", "●●銀行が発表しました。", "●A", "＊A", "◆注目点")) and _nh("● A") == "A" and _nh("◆ 注目点") == "注目点")
+check("v1.102追補 normalize_items: 整形後に空になる項目（「・」だけ・空白だけ・元から空）は除外し、件数に含める（描画で「・」だけの行を出さない）",
+      generate_post.normalize_items(["・", "・ A", "B", "", "  "]) == (["A", "B"], 4))
 
 # 呼び出しA: 出力直後に主要なポイントを整形し、整形前と件数を記録。to_dictにも入る
 _news_n102 = {"collected_at": "x", "target_date_jst": "2026-10-05", "source_status": {}, "candidates": [
@@ -7349,6 +7354,64 @@ check("v1.104: 変更していないもの——Bの扱いの基準の1（当事
       all(t in _sec104 for t in ("1. 当事者の主張", "2. 見出し程度の情報", "- 産油・精製・輸送施設", "- 停戦の成立・破綻", "5. 数を埋めるためのBは不要"))
       and "定型文を使うのは、(i)(ii)の両方が「なし」の場合に限る" in generate_post.NO_CANDIDATES_FALLBACK and "B：明確な波及経路があるマクロ・地政学材料" in _NS104
       and "use:false のreasonは全角60字以内に収める" in generate_post.NO_CANDIDATES_FALLBACK)
+
+print("=== v1.102 追補（独立レビューへの対処）: 失敗したcall_Aの件数を数えない／再生成採用時の整形記録／整形済みだけの警告ブロックの見出し／呼び出しBの入力 ===")
+_g_f102 = _gen101([_GOOD_FLOW101])
+_g_f102["call_a"] = {**_g_f102["call_a"], "ok": False, "data": None, "format_normalization": {"part1_points_raw": ["・・A"], "part1_points_changed": 1}}
+_bd_f102 = compose_post.compose(DAILY_DATA, _g_f102)
+check("v1.102追補1: 呼び出しAが失敗した日（本文は定型文）は、整形前の記録が残っていても、bundleのformat_normalizedは0（警告「行頭の記号」を出さない）。呼び出しBが失敗した日も同様",
+      _bd_f102["format_normalized"] == {"part1_points": 0, "part2_flow": 0}
+      and not [w for w in verify_post.run_all(_bd_f102, DAILY_DATA).warnings if w["id"] == "W_bullet_normalized"]
+      and compose_post.compose(DAILY_DATA, {**_g102, "call_b": {**_g102["call_b"], "ok": False, "data": None}})["format_normalized"] == {"part1_points": 1, "part2_flow": 0})
+_g_l1_102 = compose_post._fallback_to_true_l1(DAILY_DATA, _g102, ["C18_causal_assertion"], client=FakeClient(lambda kw, n: json_response(CALL_B_DATA)))
+check("v1.102追補1: 強制不採用後の再監査FAILでL1へ差し戻した日（呼び出しAを失敗扱い）も、呼び出しAの整形の件数は数えない",
+      compose_post.compose(DAILY_DATA, _g_l1_102)["format_normalized"]["part1_points"] == 0)
+
+_g_r102 = _gen101(["・" + _BAD_FLOW101])
+_g_r102["call_b"]["format_normalization"] = {"part2_flow_raw": ["・" + _BAD_FLOW101], "part2_flow_changed": 1}
+_bd_r102 = compose_post.compose(DAILY_DATA, _g_r102)
+_o_rg3 = generate_post.regenerate_call_b_for_flow_format
+generate_post.regenerate_call_b_for_flow_format = lambda *a, **k: type("O", (), {
+    "ok": True, "usage": {"input_tokens": 1, "output_tokens": 1}, "error": None,
+    "data": {"part2_flow": [_GOOD_FLOW101], "part2_summary": "別の総括です。"}, "format_normalization": {"part2_flow_raw": [_GOOD_FLOW101], "part2_flow_changed": 0},
+    "to_dict": lambda self: {}})()
+try:
+    _g_ro, _bd_ro, _info_ro = compose_post._regenerate_flow_if_needed(_g_r102, _bd_r102, DAILY_DATA)
+finally:
+    generate_post.regenerate_call_b_for_flow_format = _o_rg3
+check("v1.102追補2: 再生成後の連鎖を採用したら、format_normalizedのpart2_flowは再生成後の件数（0）になり、元の呼び出しの整形前の項目はoriginal_call_bに残る（警告と表示される連鎖が食い違わない）",
+      _info_ro["adopted"] == "regenerated" and _bd_r102["format_normalized"]["part2_flow"] == 1 and _bd_ro["format_normalized"]["part2_flow"] == 0
+      and _g_ro["call_b"]["format_normalization"]["original_call_b"]["part2_flow_changed"] == 1
+      and _g_ro["call_b"]["format_normalization"]["part2_flow_raw"] == [_GOOD_FLOW101], str(_info_ro.get("reason")))
+
+_blk_b102 = repair_post.render_warning_block({"warnings": _w102})
+_blk_m102 = repair_post.render_warning_block({"warnings": _w102 + [{"id": "W_flow_format", "detail": "市場のフローの1本目が書式から外れています"}]})
+check("v1.102追補3: 警告が「行頭の記号」だけの日は、警告ブロックの見出しが「機械的に整形済みの記録で、本文の見直しは不要です」。他の警告が混じる日は従来どおり「投稿前に本文を見直してください」",
+      "本文の見直しは不要です" in _blk_b102.splitlines()[0] and "投稿前に本文を見直してください" not in _blk_b102
+      and "投稿前に本文を見直してください" in _blk_m102.splitlines()[0] and "W_bullet_normalized" in verify_post.INFORMATIONAL_WARNING_IDS)
+
+check("v1.102追補: v1.101の再生成の採否の比較（_audit_state）は、整形した記録だけの警告「行頭の記号」を悪化として数えない（再生成後の連鎖の整形でフロー書式の修正が阻まれない）",
+      compose_post._audit_state(compose_post.compose(DAILY_DATA, _g102), DAILY_DATA)[1] == {} and "W_flow_format" not in compose_post._audit_state(_bd102, DAILY_DATA)[1])
+
+_calls_b102 = []
+
+
+def _fn_run102(kw, n):
+    if kw.get("system") == generate_post.SYSTEM_A:
+        ids = [c["candidate_id"] for c in _parse_leading_json(kw["messages"][0]["content"]).get("news_candidates_today", [])]
+        return json_response({"headline_for_image": "x", "part1_headline": "SECが新規則を発表しました。",
+                              "part1_points": ["・SECが新規則を発表しました（SEC、2026-08-20）。", "・"], "reusable_for_summary": [],
+                              "audit_ledger": [{"candidate_id": i, "use": True, "verified_by": "RSS summary", "reason": "A: 直接材料"} for i in ids]})
+    _calls_b102.append(kw["messages"][0]["content"])
+    return json_response({"part2_flow": ["・" + _GOOD_FLOW101], "part2_summary": _SUMMARY101})
+
+
+_res102 = generate_post.run("2026-08-20", client=FakeClient(_fn_run102))
+_bin102 = json.loads(_calls_b102[0])["news_from_call_a"]["part1_points"]
+check("v1.102追補6: 呼び出しBの入力（news_from_call_aのpart1_points）は整形後の項目（先頭の「・」が無く、「・」だけの項目は除外）。run()の結果のcall_a・call_bにも整形の記録（整形前・件数）が入る",
+      _bin102 == ["SECが新規則を発表しました（SEC、2026-08-20）。"]
+      and _res102["call_a"]["format_normalization"]["part1_points_changed"] == 2 and _res102["call_a"]["format_normalization"]["part1_points_raw"][1] == "・"
+      and _res102["call_b"]["format_normalization"]["part2_flow_changed"] == 1 and _res102["call_b"]["data"]["part2_flow"] == [_GOOD_FLOW101], str(_bin102))
 
 print()
 print(f"PASS: {len(PASS)}  FAIL: {len(FAIL)}")

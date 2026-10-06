@@ -979,6 +979,10 @@ WARNING_KINDS: "tuple[tuple[str, str], ...]" = (
 )
 
 
+# 本文の確認が要らない（機械的に整形した記録だけの）警告の種類。STATUS先頭の警告ブロックの見出しに使う。
+INFORMATIONAL_WARNING_IDS = frozenset({"W_bullet_normalized"})
+
+
 def warning_kind_label(wid: str) -> str:
     return dict(WARNING_KINDS).get(wid, "その他")
 

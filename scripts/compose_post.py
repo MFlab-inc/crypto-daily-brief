@@ -233,9 +233,10 @@ def compose(daily_data: dict, gen: dict[str, Any]) -> dict[str, Any]:
         "news_candidate_count": gen.get("news_candidate_count", -1),
         # v1.102（オーナー承認）: 呼び出しA・Bの出力の項目の先頭の行頭記号・空白を整形した件数（警告欄に表示する。
         # 整形前の項目は診断用のattempt_diagnostics.jsonに保存）。
+        # 呼び出しが失敗した（L1/L2・強制不採用後のL1差し戻しを含む）場合は、その出力は本文に使われないため数えない。
         "format_normalized": {
-            "part1_points": int((call_a.get("format_normalization") or {}).get("part1_points_changed", 0) or 0),
-            "part2_flow": int((call_b.get("format_normalization") or {}).get("part2_flow_changed", 0) or 0)},
+            "part1_points": int((call_a.get("format_normalization") or {}).get("part1_points_changed", 0) or 0) if a_ok else 0,
+            "part2_flow": int((call_b.get("format_normalization") or {}).get("part2_flow_changed", 0) or 0) if b_ok else 0},
         "part1_md": part1_md,
         "part2_md": part2_md,
         # v1.81（オーナー承認・運用上の変更）: 投稿本文から外した数値2見出しの
@@ -369,12 +370,13 @@ def _flow_violation_score(violations: list[dict]) -> tuple[int, int]:
 
 
 def _audit_state(bundle: dict[str, Any], daily_data: dict) -> tuple[set[str], dict[str, int]]:
-    """機械監査（C12〜C28）でFAILしたチェックのID集合と、フロー書式以外の警告の種類別件数。"""
+    """機械監査（C12〜C28）でFAILしたチェックのID集合と、フロー書式・整形した記録だけの警告を除く警告の種類別件数。"""
     au = verify_post.run_all(bundle, daily_data)
     fails = {c["id"] for c in au.checks if c["result"] == "FAIL"}
     warns: dict[str, int] = {}
     for w in au.warnings:
-        if w.get("id") != "W_flow_format":
+        # フロー書式の警告（比較の対象そのもの）と、整形した記録だけの警告（INFORMATIONAL_WARNING_IDS）は、悪化の判定に含めない
+        if w.get("id") != "W_flow_format" and w.get("id") not in verify_post.INFORMATIONAL_WARNING_IDS:
             warns[w.get("id")] = warns.get(w.get("id"), 0) + 1
     return fails, warns
 
@@ -421,10 +423,14 @@ def _regenerate_flow_if_needed(gen: dict[str, Any], bundle: dict[str, Any], dail
     try:
         new_flow = list((b2.data or {}).get("part2_flow") or [])
         # 採用するのはフローだけ（総括・call_Bの試行履歴と使用量は元のまま）。
-        gen2 = {**gen_keep, "call_b": {**gen["call_b"], "data": {**gen["call_b"]["data"], "part2_flow": new_flow}}}
+        # v1.102: 採用する連鎖の整形の記録（件数・整形前の項目）も再生成後のものに差し替える（元の呼び出し分は残す）。
+        norm2 = {**(b2.format_normalization or {}), "original_call_b": gen["call_b"].get("format_normalization") or {}}
+        gen2 = {**gen_keep, "call_b": {**gen["call_b"], "data": {**gen["call_b"]["data"], "part2_flow": new_flow},
+                                       "format_normalization": norm2}}
         fresh = compose(daily_data, gen2)
         bundle2 = {**bundle, "sections": {**bundle["sections"], "part2_flow": fresh["sections"]["part2_flow"]},
-                   "part2_md": fresh["part2_md"]}
+                   "part2_md": fresh["part2_md"],
+                   "format_normalized": {**bundle.get("format_normalized", {}), "part2_flow": fresh["format_normalized"]["part2_flow"]}}
         after_lines = _flow_lines(bundle2["sections"].get("part2_flow"))
         v2 = verify_post.find_flow_format_violations(bundle2["sections"].get("part2_flow"))
         info.update(after_flow=bundle2["sections"].get("part2_flow", ""), after_violations=v2)

@@ -273,8 +273,12 @@ def render_warning_block(result: dict[str, Any]) -> str:
     warnings = result.get("warnings") or []
     if not warnings:
         return ""
-    lines = [f"⚠⚠ 警告{len(warnings)}件（{verify_post.format_warning_counts(warnings)}）"
-             " — FAILではありません（機械監査の合否には影響しません）。投稿前に本文を見直してください。"]
+    if all(w.get("id") in verify_post.INFORMATIONAL_WARNING_IDS for w in warnings):
+        # 整形済みの記録だけの日（行頭の記号）は、本文の見直しは要らない（警告の文面と矛盾させない）
+        tail = " — FAILではありません（機械監査の合否には影響しません）。機械的に整形済みの記録で、本文の見直しは不要です。"
+    else:
+        tail = " — FAILではありません（機械監査の合否には影響しません）。投稿前に本文を見直してください。"
+    lines = [f"⚠⚠ 警告{len(warnings)}件（{verify_post.format_warning_counts(warnings)}）" + tail]
     for w in warnings:
         lines.append(f"  ⚠ [{verify_post.warning_kind_label(w.get('id'))}] {w['detail']}")
     lines.append("")

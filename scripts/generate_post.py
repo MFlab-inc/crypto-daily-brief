@@ -933,8 +933,10 @@ SYSTEM_B = "\n\n".join([
 # （previous_posts）の項目が「・」付きだったことが原因の可能性が高いが、モデルの出力は保存されておらず推定にとどまる。
 # 対処: 呼び出しA・Bの出力を受け取った直後に、項目（part1_points・part2_flow）の先頭の行頭記号・空白を機械的に除去し、
 # 除去した件数をbundleに記録して警告欄に表示する（モデルが指示を守らなかった頻度の追跡）。整形前の項目は診断用に保存する。
-_HEAD_GLYPHS = "・･•·‧∙◦▪●○■□◆◇‣⁃"
-_HEAD_RE = re.compile(r"^(?:[\s\u3000" + re.escape(_HEAD_GLYPHS) + r"]|[-*–—−‐＊](?=\s))+")
+# 行頭記号として除くもの: 中点・黒点の類（・ ･ • · ‧ ∙ ◦ ▪ ‣ ⁃）と空白は常に除く。●○■□◆◇は直後が空白のときだけ
+# （「○○社が…」「●●銀行」の先頭を壊さない）。ダッシュ類（- * – — − ‐ ＊ －）は直後が空白で、その後が数字でないときだけ
+# （「-5%」「- 5%」「−0.3%」で始まる項目の符号を落とさない）。
+_HEAD_RE = re.compile(r"^(?:[\s\u3000・･•·‧∙◦▪‣⁃]|[●○■□◆◇](?=\s)|[-*–—−‐＊－](?=\s+(?!\d)))+")
 
 
 def normalize_item_head(text: Any) -> Any:
@@ -946,11 +948,15 @@ def normalize_item_head(text: Any) -> Any:
 
 
 def normalize_items(items: Any) -> tuple[Any, int]:
-    """項目のリストの各要素を整形し、(整形後のリスト, 変更した件数) を返す。リストでなければそのまま（0件）。"""
+    """項目のリストの各要素を整形し、(整形後のリスト, 変更した件数) を返す。リストでなければそのまま（0件）。
+    整形（または元から）空になった文字列の項目は除外し、件数に含める（「・」だけの行を出さない）。"""
     if not isinstance(items, list):
         return items, 0
-    out = [normalize_item_head(x) for x in items]
-    return out, sum(1 for a, b in zip(items, out) if a != b)
+    normalized = [normalize_item_head(x) for x in items]
+    changed = sum(1 for a, b in zip(items, normalized) if a != b)
+    kept = [x for x in normalized if not (isinstance(x, str) and not x.strip())]
+    dropped_orig_empty = sum(1 for a, b in zip(items, normalized) if a == b and isinstance(b, str) and not b.strip())
+    return kept, changed + dropped_orig_empty
 
 
 class CallOutcome:
