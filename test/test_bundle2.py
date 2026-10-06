@@ -34,7 +34,7 @@ generate_post.RETRY_DELAYS_SEC = (0, 0)
 # 例: _wk(direction=1) → 「向きの食い違い1・見出しのタグ0・指標日の見出し0…」
 _WK_SHORT = {"direction": "W_direction_mismatch", "hashtag": "W_headline_hashtag", "indicator": "W_indicator_headline",
              "flow": "W_flow_format", "media": "W_media_mismatch", "geo": "W_geo_rejected_fixed",
-             "bullet": "W_bullet_normalized"}
+             "bullet": "W_bullet_normalized", "headline": "W_headline_reason"}
 
 
 def _wk(**counts):
@@ -7440,6 +7440,74 @@ check("v1.105: 上限4項目に収まらないときのuse:falseの対象は「�
       and "重要度は、下記「あなたが書くもの」のpart1_pointsの優先順位による" in generate_post.NEWS_SELECTION.replace("\n       ", ""))
 check("v1.105: 順位の本体は呼び出しAのWRITES_Aの1か所だけ（NEWS_SELECTION・NO_CANDIDATES_FALLBACKには重複して書かない）。呼び出しB（SYSTEM_B）には入らない",
       generate_post.SYSTEM_A.count("(5) ETF・資金フロー") == 1 and "(5) ETF・資金フロー" not in generate_post.SYSTEM_B and "【項目の並べ方と、4項目を超えるときの残し方（v1.105・オーナー指示）】" in _W105)
+
+print("=== v1.106（オーナー承認・調査3の案D）: 見出し・他の採用材料を理由にした不採用の警告（WARN。FAILにしない）===")
+_tm106 = {"FRB": 1, "Reuters": 2, "CoinDesk": 3, "Google News (Reuters検索)": 4}
+
+
+def _l106(reason, source="Reuters", decision="不採用", title="US services sector cools in September"):
+    return {"source": source, "url": "u", "title": title, "published_at": "2026-10-05", "verified_by": "", "decision": decision, "reason": reason}
+
+
+_f106 = verify_post.find_headline_reason_rejections
+check("v1.106 検知: tier1・tier2の不採用で、reasonに「ヘッドライン」「他の採用材料」「他に採用」「見出し」を含むものを検知する（10/5の候補19・22型）",
+      len(_f106([_l106("B: サービス業景況感で波及経路はあるが、他の採用材料がありヘッドラインには採らない")], _tm106)) == 1
+      and len(_f106([_l106("B: ドル相場見通しの調査記事で、他の採用材料がありヘッドラインには採らない", source="FRB")], _tm106)) == 1
+      and len(_f106([_l106("B: 他に採用する材料があるため見送り")], _tm106)) == 1 and len(_f106([_l106("B: 見出しの主題にしないため不採用")], _tm106)) == 1
+      and len(_f106([_l106("C: ヘッドラインの根拠にならない")], _tm106)) == 1)
+check("v1.106 除外: 正当な理由（手続き的な発表・同一事実の重複・「見出しだけ／見出しのみ／見出し程度」で書けない）は検知しない。採用の候補・tier3・tier4・tier不明も対象外",
+      _f106([_l106("手続き的な発表のため不採用（ヘッドラインにしない）"), _l106("B: ヘッドラインと同一の事実の重複（候補5を採用）"), _l106("B: 候補5と重複。ヘッドラインは候補5"),
+             _l106("B: 見出しだけでは「誰が・何を・どこで」を書けない"), _l106("C: 市況コラムの見出しのみで具体的な波及経路を説明できる内容が確認できない"), _l106("B: 見出し程度の情報で書けない")], _tm106) == []
+      and _f106([_l106("ヘッドラインには採らない", decision="採用"), _l106("ヘッドラインには採らない", source="CoinDesk"), _l106("ヘッドラインには採らない", source="Google News (Reuters検索)"),
+                 _l106("ヘッドラインには採らない", source="Unknown")], _tm106) == [], "")
+check("v1.106 検知しない: v1.104のreason見本（「上限4項目のため見送り」「候補5と同一の事実の重複」「見出しだけでは…」「優先して掲載する対象に当たらない」）は、この警告に当たらない（見本どおりに書けば警告は出ない）",
+      _f106([_l106("B: 上限4項目のため、優先順位の低い材料として見送り"), _l106("B: 候補5と同一の事実の重複（候補5を採用）"), _l106("B: 見出しだけでは「誰が・何を・どこで」を書けない"),
+             _l106("B: 地政学の論評のため、優先して掲載する対象に当たらない"), _l106("C: 自動車産業の国内回帰に関する内容で、金利・為替・流動性等への波及経路を説明できない")], _tm106) == [])
+check("v1.106 不正入力: 台帳が無い・不正・tier_map未指定でも例外にならず空", _f106(None, _tm106) == [] and _f106([], _tm106) == [] and _f106(["x", None], _tm106) == [] and _f106([_l106("ヘッドラインに採らない")], None) == [])
+_au106 = verify_post.Audit()
+verify_post.check_headline_reason_warn(_au106, [_l106("B: 他の採用材料がありヘッドラインには採らない", title="T%d" % i) for i in range(7)], _tm106)
+check("v1.106 警告: その日に1件（種類W_headline_reason）。件数・一覧（最大5件）・ほかN件・「Bの扱いの基準の6」への参照・「不採用が誤りだとは断定しない」を詳細に書く。checks・failedには影響しない。該当が無い日は出ない",
+      len(_au106.warnings) == 1 and _au106.warnings[0]["id"] == "W_headline_reason" and _au106.warnings[0]["count"] == 7 and "7件あります" in _au106.warnings[0]["detail"]
+      and "T4" in _au106.warnings[0]["detail"] and "T5" not in _au106.warnings[0]["detail"] and "ほか2件" in _au106.warnings[0]["detail"]
+      and "Bの扱いの基準の6" in _au106.warnings[0]["detail"] and "断定しません" in _au106.warnings[0]["detail"] and _au106.failed == 0 and _au106.checks == []
+      and not [w for w in verify_post.run_all(compose_post.compose(DAILY_DATA, _gen101([_GOOD_FLOW101])), DAILY_DATA).warnings if w["id"] == "W_headline_reason"])
+check("v1.106 登録: 警告の種類「見出し理由の不採用」が登録簿に載り、種類別件数に出る（0件でも表示）。STATUS先頭の警告ブロックに詳細が出る（本文の見直しを促す通常の見出し）",
+      ("W_headline_reason", "見出し理由の不採用") in verify_post.WARNING_KINDS and "見出し理由の不採用1" in verify_post.format_warning_counts(_au106.warnings) and "見出し理由の不採用0" in verify_post.format_warning_counts([])
+      and "⚠ [見出し理由の不採用] ヘッドラインにしないこと" in repair_post.render_warning_block({"warnings": _au106.warnings})
+      and "投稿前に本文を見直してください" in repair_post.render_warning_block({"warnings": _au106.warnings}).splitlines()[0]
+      and "W_headline_reason" not in verify_post.INFORMATIONAL_WARNING_IDS)
+# 実データ（10/5まで）: 該当は10/5の候補19・22だけ
+_days106 = {}
+_tmr106 = verify_post._load_source_tier_map()
+for _bf in sorted((REPO / "outputs").glob("*/draft/post_bundle.json")):
+    if _bf.parent.parent.name > "2026-10-05":
+        continue
+    _h = _f106(json.loads(_bf.read_text(encoding="utf-8")).get("audit_ledger"), _tmr106)
+    if _h:
+        _days106[_bf.parent.parent.name] = [x["title"][:30] for x in _h]
+check("v1.106 実データ（10/5までの本番出力）: 警告が出る日は10/5だけで、候補19（US services sector cools…）と候補22（US dollar strength to fizzle…）の2件。v1.99より前の34日は0件（誤検知なし）",
+      list(_days106) == ["2026-10-05"] and len(_days106["2026-10-05"]) == 2 and any(t.startswith("US services sector") for t in _days106["2026-10-05"])
+      and any(t.startswith("US dollar strength") for t in _days106["2026-10-05"]), str(_days106))
+# 結合: call_A→compose→run_allで、警告が出てもFAILにならない
+_news_h106 = {"collected_at": "x", "target_date_jst": "2026-10-05", "source_status": {}, "candidates": [
+    {"tier": 1, "source": "SEC", "title": "Regulator announces new rule", "url": "u1", "published_at": _pub97(60), "summary": "s", "kind": "k"},
+    {"tier": 2, "source": "Reuters", "title": "US services sector cools in September, price pressures building - Reuters", "url": "u2", "published_at": _pub97(50), "summary": "s", "kind": "k"}]}
+
+
+def _fn_h106(kw, n):
+    ids = {c["candidate_id"]: c for c in _parse_leading_json(kw["messages"][0]["content"])["news_candidates_today"]}
+    return json_response({"headline_for_image": "x", "part1_headline": "SECが新規則を発表しました。", "part1_points": ["SECが新規則を発表しました（SEC、2026-10-05）。"], "reusable_for_summary": [],
+                          "audit_ledger": [{"candidate_id": i, "use": c["tier"] == 1, "verified_by": "RSS summary" if c["tier"] == 1 else "",
+                                            "reason": "A: 直接材料" if c["tier"] == 1 else "B: サービス業景況感で波及経路はあるが、他の採用材料がありヘッドラインには採らない"} for i, c in ids.items()]})
+
+
+_out_h106 = generate_post.call_a(FakeClient(_fn_h106), DAILY_DATA, _news_h106, None)
+_g_h106 = _gen101([_GOOD_FLOW101])
+_g_h106["call_a"] = {**_g_h106["call_a"], **_out_h106.to_dict()}
+_g_h106["news_candidate_count"] = 2
+_au_h106 = verify_post.run_all(compose_post.compose(DAILY_DATA, _g_h106), DAILY_DATA)
+check("v1.106 結合: call_A→compose→run_allで、見出し理由の不採用の警告が1件出る。機械監査（C12〜C28）はFAILにならない",
+      [w["id"] for w in _au_h106.warnings if w["id"] == "W_headline_reason"] == ["W_headline_reason"] and _au_h106.failed == 0, str([c["id"] for c in _au_h106.checks if c["result"] == "FAIL"]))
 
 print()
 print(f"PASS: {len(PASS)}  FAIL: {len(FAIL)}")

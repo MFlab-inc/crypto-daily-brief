@@ -976,6 +976,7 @@ WARNING_KINDS: "tuple[tuple[str, str], ...]" = (
     ("W_media_mismatch", "媒体名照合"),
     ("W_geo_rejected_fixed", "地政学の不採用"),
     ("W_bullet_normalized", "行頭の記号"),
+    ("W_headline_reason", "見出し理由の不採用"),
 )
 
 
@@ -1469,6 +1470,48 @@ def check_bullet_normalized_warn(au: Audit, normalized: "dict | None") -> None:
             part1_points=n_points, part2_flow=n_flow)
 
 
+# --- 見出し・他の採用材料を理由にした不採用の警告（WARN。FAILではない。v1.106・オーナー承認・調査3の案D）---
+#
+# 背景: 2026-10-05分で、tier2（Reuters）の候補19・22が、reasonに「B: …他の採用材料がありヘッドラインには採らない」と書かれて不採用になった。
+# 「ヘッドラインの主題にするか」と「主要なポイントに載せるか」は別の判断（Bの扱いの基準の6）のため、ヘッドラインに採らない・他に採用材料があることだけを
+# 理由にした不採用は、載せるべき材料を落としている可能性がある。過去の本番出力（10/4までの34日分のledger）では該当が0件で、10/5の2件だけが該当した。
+# 判定（その日に1件の警告）: 台帳に、decision=不採用・情報源のtierが1または2（tier3・tier4は、tier規律で「ヘッドラインの根拠にしない」と書くのが正当なため除く）・
+# reasonが次のいずれかを含む候補がある: 「ヘッドライン」「他の採用材料」「他に採用」「見出し」（ただし「見出しだけ」「見出しのみ」「見出し程度」〔見出しだけでは誰が・何をを書けない等、内容が見出し程度という理由〕は除く）。
+# 正当な理由（「手続き的」「同一」「重複」を含む＝手続き的な発表・同一事実の重複）は除く。
+# 限界: ①理由の言い回しに依存する（モデルが別の言い回し〔例:「見送り」のみ〕に変えると見逃す）。②「優先して掲載する対象に当たらない」型の不採用
+# （従来のBに使うと誤り）は、この警告の対象外（語が違う）。③警告は「見直す材料」で、不採用が誤りだとは断定しない。
+_HEADLINE_REASON_RE = re.compile(r"ヘッドライン|他の採用材料|他に採用|見出し(?!だけ|のみ|程度)")
+_HEADLINE_REASON_EXEMPT = ("手続き的", "同一", "重複")
+_HEADLINE_WARN_MAX_LISTED = 5
+
+
+def find_headline_reason_rejections(audit_ledger, tier_map: "dict[str, int] | None" = None) -> "list[dict]":
+    if not isinstance(audit_ledger, list):
+        return []
+    tmap = tier_map if tier_map is not None else {}
+    hits = []
+    for e in audit_ledger:
+        if not isinstance(e, dict) or e.get("decision") != "不採用" or tmap.get(e.get("source")) not in (1, 2):
+            continue
+        reason = str(e.get("reason", ""))
+        if _HEADLINE_REASON_RE.search(reason) and not any(w in reason for w in _HEADLINE_REASON_EXEMPT):
+            hits.append({"source": e.get("source", ""), "tier": tmap.get(e.get("source")), "title": str(e.get("title", "")), "reason": reason})
+    return hits
+
+
+def check_headline_reason_warn(au: Audit, audit_ledger, tier_map: "dict[str, int] | None" = None) -> None:
+    hits = find_headline_reason_rejections(audit_ledger, tier_map)
+    if not hits:
+        return
+    listed = "".join(f" ・{h['source']}「{_clip_sentence(h['title'], 80)}」（理由: {_clip_sentence(h['reason'], 70)}）" for h in hits[:_HEADLINE_WARN_MAX_LISTED])
+    more = f" ほか{len(hits) - _HEADLINE_WARN_MAX_LISTED}件" if len(hits) > _HEADLINE_WARN_MAX_LISTED else ""
+    au.warn("W_headline_reason",
+            f"ヘッドラインにしないこと（または他に採用する材料があること）を理由に不採用にした候補が{len(hits)}件あります。"
+            "見出しの主題にするかと、主要なポイントに載せるかは別の判断です（Bの扱いの基準の6）。主要なポイントに載せる判断を確認してください"
+            "（理由の言い回しによる検知で、不採用が誤りだとは断定しません）。" + listed + more,
+            count=len(hits), entries=hits)
+
+
 def summarize_check_ids(checks: "list[dict]") -> str:
     """実際に評価したチェックのID要約（例: 「C12〜C24・C26〜C28・計17項目」）。
     GENERATION_STATUS.mdの監査表記を、固定文言ではなく実際の評価対象から作る（v1.85）。
@@ -1714,6 +1757,7 @@ def run_all(bundle: dict, daily_data: dict) -> Audit:
         ("媒体名照合", lambda: check_media_warn(au, sections, bundle.get("audit_ledger"), tier_map)),
         ("地政学の不採用", lambda: check_geo_rejected_warn(au, sections, bundle.get("audit_ledger"), tier_map)),
         ("行頭の記号", lambda: check_bullet_normalized_warn(au, bundle.get("format_normalized"))),
+        ("見出し理由の不採用", lambda: check_headline_reason_warn(au, bundle.get("audit_ledger"), tier_map)),
     ):
         try:
             _fn()
