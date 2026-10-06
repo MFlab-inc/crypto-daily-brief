@@ -525,9 +525,10 @@ pairs_with_candidate_idには、同一事実を報じている相手（別source
 なお、tier1・tier2の裏付けがある材料を補強するtier3は、従来どおりuse:falseのままにする（上記tier 3の節）。
 この規定は、tier1・tier2の裏付けが無く、tier3だけで報じられた材料の組についての扱いである。
 候補に machine_pair_hint が付いている場合は、システムが題名の語の重なりから「同一事実の可能性がある
-別媒体のtier3候補」として機械的に検出した相手のcandidate_idと重なり係数である。同一事実かどうかは、
-あなたがtitle・summaryを読んで判断する。同一事実でなければ無視してよい（目印が付いていない候補どうしでも、
-同一事実なら同様に扱ってよい）。
+別媒体のtier3候補」として機械的に検出した相手（partners。candidate_idと重なり係数。重なりの高い順に最大3件）
+である。同一事実かどうかは、あなたがtitle・summaryを読んで判断する。同一事実でなければ無視してよい
+（目印が付いていない候補どうしでも、同一事実なら同様に扱ってよい）。tier1・tier2が同じ事実を報じている
+場合は、tier3どうしの組でも、上記のとおりtier3はuse:falseのままにする。
 "採用"／"採用（独立2ソース）"／"不採用"という記録文言自体はあなたが
 書かず、tier・use・pairs_with_candidate_idの妥当性からシステム側が
 機械的に確定する（v1.53フォローアップ・オーナー指示。単独ソースを
@@ -1711,20 +1712,38 @@ def _flag_scheduled_event_matches(candidates: list[dict], scheduled_events: Any)
 # 渡す候補に入っているものについて、双方の候補に相方のcandidate_idと重なり係数を目印として付ける。目印は題名の語の重なりだけで
 # 機械的に付くため、同一事実でない偽ペア（10/5のMetaplanet 41/42のように、別の話で語が重なっただけの組）も含みうる。
 # そのため、目印には必ず「同一事実でなければ無視してよい」を添える（判断はモデルが題名・要約を読んで行う）。
-MACHINE_PAIR_HINT_NOTE = "機械検出（題名の語の重なり）。同一事実でなければ無視してよい"
+MACHINE_PAIR_HINT_NOTE = ("機械検出（題名の語の重なり）。同一事実でなければ無視してよい。"
+                          "tier1・tier2が同じ事実を報じているなら、tier3はuse:falseのまま")
+MACHINE_PAIR_HINT_MAX_PARTNERS = 3
 
 
-def _build_machine_pair_hints(pairs: list[tuple[dict, dict]], id_of: dict[int, int]) -> dict[int, dict]:
-    """{candidate_id: {"candidate_id": 相方のID, "title_overlap": 重なり係数, "note": …}}。
-    id_ofは候補オブジェクトのid()→candidate_id。両方が渡す候補に入っているペアだけが対象（片方が渡されていなければ目印は付けない）。"""
+def _build_machine_pair_hints(selected: list[dict], id_of: dict[int, int],
+                              threshold: float = PAIR_OVERLAP_THRESHOLD_DEFAULT) -> dict[int, dict]:
+    """{candidate_id: {"partners": [{"candidate_id": 相方のID, "title_overlap": 重なり係数}, ...], "note": …}}。
+    呼び出しAへ渡す候補（selected。id_ofは候補オブジェクトのid()→candidate_id）のうち、tier3どうし・別媒体・題名の
+    重なり係数が閾値以上の組すべてについて、双方に相方（重なり係数の高い順に最大MACHINE_PAIR_HINT_MAX_PARTNERS件）を示す。
+    ペアの成立条件（_pair_claim_detail：別媒体・tier3・重なり係数≥閾値）と同じ条件なので、示した相方は申告すれば成立しうる。
+    救済・選定に使う貪欲なペア検出（_find_independent_pairs。ペアが確定した記事は以降の走査から除く）とは別に、全組を示す
+    （貪欲法では、同じ話題を報じた3媒体のうち1組にしか目印が付かず、10/5の28↔38のように別の話の組が残る一方、
+    32↔38のような本来の組に付かない場合があったため。v1.103追補）。"""
+    tier3 = [c for c in selected if c.get("tier") == 3 and id(c) in id_of]
+    tokens = {id(c): _tokenize_title(c.get("title", "")) for c in tier3}
+    partners: dict[int, list[tuple[float, int]]] = {}
+    for i, a in enumerate(tier3):
+        for b in tier3[i + 1:]:
+            if a.get("source") == b.get("source"):
+                continue
+            overlap = _overlap_coefficient(tokens[id(a)], tokens[id(b)])
+            if overlap >= threshold:
+                ia, ib = id_of[id(a)], id_of[id(b)]
+                partners.setdefault(ia, []).append((overlap, ib))
+                partners.setdefault(ib, []).append((overlap, ia))
     hints: dict[int, dict] = {}
-    for a, b in pairs:
-        ia, ib = id_of.get(id(a)), id_of.get(id(b))
-        if ia is None or ib is None:
-            continue
-        overlap = round(_overlap_coefficient(_tokenize_title(a.get("title", "")), _tokenize_title(b.get("title", ""))), 2)
-        hints[ia] = {"candidate_id": ib, "title_overlap": overlap, "note": MACHINE_PAIR_HINT_NOTE}
-        hints[ib] = {"candidate_id": ia, "title_overlap": overlap, "note": MACHINE_PAIR_HINT_NOTE}
+    for cid, lst in partners.items():
+        lst.sort(key=lambda x: (-x[0], x[1]))
+        hints[cid] = {"partners": [{"candidate_id": pid, "title_overlap": round(ov, 2)}
+                                   for ov, pid in lst[:MACHINE_PAIR_HINT_MAX_PARTNERS]],
+                      "note": MACHINE_PAIR_HINT_NOTE}
     return hints
 
 
@@ -1735,7 +1754,8 @@ def _build_call_a_user_content(daily_data: dict, news_today: dict, news_yesterda
     selected_objs, stats, detail = _select_candidates_detail(news_today.get("candidates", []), pair_overlap_threshold)
     selected_today = _assign_candidate_ids(selected_objs)
     # v1.103: 独立2ソースの相方の目印（machine_pair_hint）。candidate_idは_assign_candidate_idsと同じ番号（選定結果の並びの1始まり）。
-    hints = _build_machine_pair_hints(detail["pairs"], {id(c): i for i, c in enumerate(selected_objs, start=1)})
+    hints = _build_machine_pair_hints(selected_objs, {id(c): i for i, c in enumerate(selected_objs, start=1)},
+                                      pair_overlap_threshold)
     selected_today = [{**c, "machine_pair_hint": hints[c["candidate_id"]]} if c["candidate_id"] in hints else c
                       for c in selected_today]
     id_to_candidate = {c["candidate_id"]: c for c in selected_today}

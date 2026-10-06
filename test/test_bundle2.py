@@ -7215,11 +7215,12 @@ _by103 = {c["title"]: c for c in _cands103}
 _ha, _hb = _by103["alpha beta gamma delta zeta"] if _by103["alpha beta gamma delta zeta"]["tier"] == 3 else None, _by103["alpha beta gamma delta epsilon"]
 _ca = [c for c in _cands103 if c["tier"] == 3 and c["title"] == "alpha beta gamma delta zeta"][0]
 check("v1.103 目印: 救済されたペア（上限外から追加された相方）も、上位に入った側も、双方の候補に相方のcandidate_idと重なり係数（0.8）が付く",
-      _ca["machine_pair_hint"]["candidate_id"] == _hb["candidate_id"] and _hb["machine_pair_hint"]["candidate_id"] == _ca["candidate_id"]
-      and _ca["machine_pair_hint"]["title_overlap"] == 0.8 == _hb["machine_pair_hint"]["title_overlap"], str(_ca.get("machine_pair_hint")))
+      _ca["machine_pair_hint"]["partners"] == [{"candidate_id": _hb["candidate_id"], "title_overlap": 0.8}]
+      and _hb["machine_pair_hint"]["partners"] == [{"candidate_id": _ca["candidate_id"], "title_overlap": 0.8}], str(_ca.get("machine_pair_hint")))
 check("v1.103 目印: すべての目印に「同一事実でなければ無視してよい」を添える（偽ペアはモデルが題名・要約を読んで無視してよい）",
       all("同一事実でなければ無視してよい" in c["machine_pair_hint"]["note"] for c in _cands103 if "machine_pair_hint" in c)
-      and generate_post.MACHINE_PAIR_HINT_NOTE == "機械検出（題名の語の重なり）。同一事実でなければ無視してよい")
+      and generate_post.MACHINE_PAIR_HINT_NOTE.startswith("機械検出（題名の語の重なり）。同一事実でなければ無視してよい。")
+      and "tier1・tier2が同じ事実を報じているなら、tier3はuse:falseのまま" in generate_post.MACHINE_PAIR_HINT_NOTE)
 check("v1.103 目印: 相方の無い候補・tier1（題名が同じでもtier3どうしのペアではない）・上位に入った無関係の候補には付かない。付くのはペアの双方だけ（2件）",
       "machine_pair_hint" not in _by103["unique topic one two three"] and all("machine_pair_hint" not in c for c in _cands103 if c["tier"] != 3)
       and sum(1 for c in _cands103 if "machine_pair_hint" in c) == 2, str([c["title"] for c in _cands103 if "machine_pair_hint" in c]))
@@ -7228,9 +7229,23 @@ check("v1.103 目印: 候補のキーは、付いた2件だけが1つ増える�
       and "eligibility" in _ca and "candidate_id" in _ca and "machine_pair_hint" in _ca
       and "machine_pair_hint" not in _by103["unique topic one two three"] and _st103 == generate_post._select_candidates_for_call_a(json.loads(json.dumps(_pool103)))[1]
       and len(_cands103) == len(generate_post._select_candidates_for_call_a(json.loads(json.dumps(_pool103)))[0]), "")
-_hints_u = generate_post._build_machine_pair_hints([(_pa, _pb)], {id(_pa): 1})
-check("v1.103 目印: 片方が呼び出しAへ渡す候補に入っていないペアには、目印を付けない（存在しない相方のIDを示さない）",
-      _hints_u == {} and set(generate_post._build_machine_pair_hints([(_pa, _pb)], {id(_pa): 1, id(_pb): 5})) == {1, 5})
+_hints_u = generate_post._build_machine_pair_hints([_pa, _pb], {id(_pa): 1})
+check("v1.103 目印: 片方が呼び出しAへ渡す候補に入っていないペアには、目印を付けない（存在しない相方のIDを示さない）。両方が入っていれば双方に付く",
+      _hints_u == {} and set(generate_post._build_machine_pair_hints([_pa, _pb], {id(_pa): 1, id(_pb): 5}, 0.4)) == {1, 5})
+# v1.103追補: 貪欲なペア検出ではなく、閾値以上の相方すべて（最大3件・重なりの高い順・同一媒体は除く）
+_ta = {"tier": 3, "source": "A", "title": "alpha beta gamma delta"}
+_tb = {"tier": 3, "source": "B", "title": "alpha beta gamma epsilon"}       # ta: 3/4=0.75
+_tc = {"tier": 3, "source": "C", "title": "alpha beta zeta eta"}            # ta: 2/4=0.5
+_td = {"tier": 3, "source": "D", "title": "alpha beta theta iota"}          # ta: 0.5
+_te = {"tier": 3, "source": "E", "title": "alpha beta kappa lambda"}        # ta: 0.5
+_tf = {"tier": 3, "source": "A", "title": "alpha beta gamma delta"}         # 同一媒体（taと）→相方にしない
+_t1x = {"tier": 1, "source": "SEC", "title": "alpha beta gamma delta"}      # tier1は対象外
+_h_g = generate_post._build_machine_pair_hints([_ta, _tb, _tc, _td, _te, _tf, _t1x],
+                                               {id(_ta): 1, id(_tb): 2, id(_tc): 3, id(_td): 4, id(_te): 5, id(_tf): 6, id(_t1x): 7}, 0.4)
+check("v1.103追補 目印: 1件が複数の相方を持つとき、閾値以上の相方を重なりの高い順（同じなら若いID順）に最大3件示す。同一媒体・tier1は相方にしない",
+      [p["candidate_id"] for p in _h_g[1]["partners"]] == [2, 3, 4] and _h_g[1]["partners"][0]["title_overlap"] == 0.75
+      and 7 not in _h_g and all(p["candidate_id"] != 6 for p in _h_g[1]["partners"]) and _h_g[2]["partners"][0]["candidate_id"] == 1
+      and len(_h_g[1]["partners"]) == generate_post.MACHINE_PAIR_HINT_MAX_PARTNERS == 3, str(_h_g.get(1)))
 
 # 実データ（10/5。candidates_logの題名）: 救済4組と自然ペア2組の目印
 _L103 = json.loads((REPO / "outputs/2026-10-05/candidates_log.json").read_text(encoding="utf-8"))
@@ -7241,13 +7256,17 @@ _news103 = {"source_status": {}, "candidates": [
      "summary": c["summary_head"], "kind": "k", "tier": c["tier"]} for c in _L103["candidates"]]}
 _uc105, _st105, _ = generate_post._build_call_a_user_content({**DAILY_DATA, "target_date_jst": "2026-10-05"}, _news103, None, 0.4, [])
 _c105 = json.loads(_uc105)["news_candidates_today"]
-_h105 = {c["candidate_id"]: c["machine_pair_hint"]["candidate_id"] for c in _c105 if "machine_pair_hint" in c}
+_h105 = {c["candidate_id"]: [p["candidate_id"] for p in c["machine_pair_hint"]["partners"]] for c in _c105 if "machine_pair_hint" in c}
+_o105 = {c["candidate_id"]: {p["candidate_id"]: p["title_overlap"] for p in c["machine_pair_hint"]["partners"]} for c in _c105 if "machine_pair_hint" in c}
 check("v1.103 実データ（10/5）: 救済された4組（41/42・43/44・45/46・47/48）と、上位に入っていた自然ペア（26/33）の双方に、相方のIDが付く（偽ペアになりうる41/42にも付くが、「同一事実でなければ無視してよい」を添える）",
-      all(_h105.get(a) == b and _h105.get(b) == a for a, b in ((41, 42), (43, 44), (45, 46), (47, 48), (26, 33)))
+      all(b in _h105.get(a, []) and a in _h105.get(b, []) for a, b in ((41, 42), (43, 44), (45, 46), (47, 48), (26, 33)))
       and _st105["tier3_pairs_rescued"] == 4, str(sorted(_h105.items())))
 _m4142 = [c for c in _c105 if c["candidate_id"] == 41][0]["machine_pair_hint"]
 check("v1.103 実データ（10/5）: 偽ペアになりうる41/42（Metaplanet）は重なり係数が低め（0.44）として示される（モデルが係数と題名・要約から同一事実かを判断できる）。43/44は0.64",
-      _m4142["title_overlap"] == 0.44 and [c for c in _c105 if c["candidate_id"] == 43][0]["machine_pair_hint"]["title_overlap"] == 0.64, str(_m4142))
+      _o105[41][42] == 0.44 and _o105[43][44] == 0.64, str(_m4142))
+check("v1.103追補 実データ（10/5）: 貪欲法では漏れた本来の組32↔38（0.55）に目印が付き、別の話の28↔38（0.43）は、38の相方の2番目（低い係数）として示される。26↔33は0.8・45↔46は0.64・47↔48は0.5",
+      _o105.get(32) == {38: 0.55} and list(_o105.get(38, {}).items()) == [(32, 0.55), (28, 0.43)] and _o105.get(28) == {38: 0.43}
+      and _o105[26][33] == 0.8 and _o105[45][46] == 0.64 and _o105[47][48] == 0.5, str(sorted(_o105.items())))
 
 # プロンプト: 命令形（独立2ソース規定の1か所）・machine_pair_hintの説明・audit_ledgerの記述・補強との区別
 _NS103 = generate_post.NEWS_SELECTION
@@ -7259,7 +7278,8 @@ check("v1.103 プロンプト: tier1・tier2の裏付けがある材料を補強
       "tier1・tier2の裏付けがある材料を補強するtier3は、従来どおりuse:falseのままにする" in _sec103
       and "tier1・tier2の裏付けが無く、tier3だけで報じられた材料の組についての扱い" in _sec103)
 check("v1.103 プロンプト: machine_pair_hintの説明（機械検出・同一事実かはあなたが判断・同一事実でなければ無視してよい・目印が無くても同一事実なら同様）",
-      "machine_pair_hint が付いている場合は" in _sec103 and "同一事実かどうかは、\nあなたがtitle・summaryを読んで判断する。同一事実でなければ無視してよい" in _sec103
+      "machine_pair_hint が付いている場合は" in _sec103 and "同一事実かどうかは、あなたがtitle・summaryを読んで判断する。同一事実でなければ無視してよい" in _sec103
+      and "partners" in _sec103 and "最大3件" in _sec103 and "tier3はuse:falseのままにする" in _sec103
       and "目印が付いていない候補どうしでも" in _sec103)
 check("v1.103 プロンプト: audit_ledgerの節は「申告は片方に書けば成立するが、相手もuse:trueにすること」と、独立2ソース規定への参照で書く（命令の記述を1か所に集約し、分散させない）。旧「片方が指せば成立する」の単独の文は残らない",
       "申告は片方に書けば成立する" in generate_post.NO_CANDIDATES_FALLBACK and "相手もuse:trueにすること（上記" in generate_post.NO_CANDIDATES_FALLBACK
@@ -7311,7 +7331,7 @@ _out_i103 = generate_post.call_a(FakeClient(_fn_i103), DAILY_DATA, _news_i103, N
 _p1_103 = _parse_leading_json(_contents103[0])["news_candidates_today"]
 check("v1.103 結合: 1試行目の入力に、ペア双方の目印（相方のID・「同一事実でなければ無視してよい」）が入る。1試行目は片方だけtrueで失敗→注記つきの2試行目で両方trueにすると成立し、双方「採用（独立2ソース）」になる",
       _out_i103.ok and _out_i103.attempts == 2 and len(_contents103) == 2
-      and [c["machine_pair_hint"]["candidate_id"] for c in _p1_103 if c["tier"] == 3] == [3, 2]
+      and [[p["candidate_id"] for p in c["machine_pair_hint"]["partners"]] for c in _p1_103 if c["tier"] == 3] == [[3], [2]]
       and all("同一事実でなければ無視してよい" in c["machine_pair_hint"]["note"] for c in _p1_103 if c["tier"] == 3)
       and sorted(e["decision"] for e in _out_i103.data["audit_ledger"]) == ["採用", "採用（独立2ソース）", "採用（独立2ソース）"]
       and "相方もuse:trueに変更してください" in _contents103[1] and "target_use_false" not in _contents103[1], _contents103[1][-700:])
