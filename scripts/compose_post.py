@@ -348,6 +348,97 @@ def _render_news_source_lines(news_status: dict[str, Any],
     return lines
 
 
+# --- v1.101（オーナー承認）: フロー書式のWARNが出たら、call_Bを1回だけ再生成する ---
+#
+# 背景: 【市場のフロー】の書式（統合運用基準§3.3）のWARN（v1.94）が、材料のあるL0の日で続いた（10/2・10/3・10/5）。
+# 10/5は、連鎖の先頭に【出来事・ニュース】のラベルが無かった。
+# 方針（オーナー承認）: WARNが出たらcall_Bを1回だけ再生成する。再生成後もWARNなら現行どおりWARNのまま出力する。
+# 再生成した場合は、STATUSにその旨と再生成前後の連鎖を記録する。
+# 実装上の判断: 再生成後の版は、元の版より書式違反が減り、かつ機械監査（C12〜C28）のFAILが増えない場合に限って採用する
+# （採用すると別のチェックでFAILし、元の版なら出力できた本文が出なくなる退行を防ぐため）。それ以外は元の版のまま出力する。
+# 再生成の使用量はtoken_usageに含める。再生成の失敗・例外は握り、元の版のまま続行する（本文生成・STATUSを止めない）。
+def _flow_violation_score(violations: list[dict]) -> tuple[int, int]:
+    return (len(violations), sum(len(v.get("reasons", [])) for v in violations))
+
+
+def _failing_check_ids(bundle: dict[str, Any], daily_data: dict) -> set[str]:
+    au = verify_post.run_all(bundle, daily_data)
+    return {c["id"] for c in au.checks if c["result"] == "FAIL"}
+
+
+def _regenerate_flow_if_needed(gen: dict[str, Any], bundle: dict[str, Any], daily_data: dict,
+                               client: "anthropic.Anthropic | None" = None
+                               ) -> tuple[dict[str, Any], dict[str, Any], dict | None]:
+    """戻り値は (gen, bundle, 再生成の記録)。再生成しなかった日（書式違反なし・材料なしの定型文・
+    call_AまたはBが失敗）は記録がNone。記録: before/after_flow（描画後の【市場のフロー】）・
+    before/after_violations・adopted（"regenerated"/"original"）・reason・usage。"""
+    if not (gen["call_a"].get("ok") and gen["call_b"].get("ok")):
+        return gen, bundle, None
+    violations = verify_post.find_flow_format_violations(bundle["sections"].get("part2_flow"))
+    if not violations:
+        return gen, bundle, None
+
+    previous_flow = list(gen["call_b"].get("data", {}).get("part2_flow") or [])
+    info: dict[str, Any] = {"before_flow": bundle["sections"].get("part2_flow", ""), "before_violations": violations}
+    b2 = generate_post.regenerate_call_b_for_flow_format(
+        daily_data, gen["call_a"].get("data"), previous_flow, violations, client=client)
+    total = generate_post._add_usage(gen["total_usage"], b2.usage)
+    info["usage"] = b2.usage
+    if not b2.ok:
+        info.update(adopted="original", reason=f"再生成の呼び出しが失敗したため（{b2.error}）", after_flow=None, after_violations=None)
+        return {**gen, "total_usage": total}, bundle, info
+
+    gen2 = {**gen, "call_b": b2.to_dict(), "total_usage": total}
+    fresh = compose(daily_data, gen2)
+    # 前編（局所修正済みの場合を含む）は変えず、後編のうち呼び出しB由来の部分（フロー・総括）だけを差し替える。
+    bundle2 = {**bundle, "sections": {**bundle["sections"], "part2_flow": fresh["sections"]["part2_flow"],
+                                      "part2_summary": fresh["sections"]["part2_summary"]},
+               "part2_md": fresh["part2_md"]}
+    v2 = verify_post.find_flow_format_violations(bundle2["sections"].get("part2_flow"))
+    info.update(after_flow=bundle2["sections"].get("part2_flow", ""), after_violations=v2)
+    new_fails = sorted(_failing_check_ids(bundle2, daily_data) - _failing_check_ids(bundle, daily_data))
+    if new_fails:
+        info.update(adopted="original", reason=f"再生成後の本文は、機械監査で新たにFAILするチェックがあるため（{new_fails}）")
+        return {**gen, "total_usage": total}, bundle, info
+    if not _flow_violation_score(v2) < _flow_violation_score(violations):
+        info.update(adopted="original", reason="再生成後も書式違反が減らなかったため（現行どおり元の版をWARNのまま出力）")
+        return {**gen, "total_usage": total}, bundle, info
+    info.update(adopted="regenerated", reason=("再生成後は書式違反が解消しました" if not v2 else "再生成後は書式違反が減りました（残りはWARNのまま出力）"))
+    return gen2, bundle2, info
+
+
+def _render_flow_regen_lines(info: Any) -> list[str]:
+    """STATUSの再生成の記録（v1.101）。「input=」「output=」の文字列は、コスト記録が数値の抽出に使うため書かない。"""
+    if not isinstance(info, dict):
+        return []
+    if "error" in info and "before_violations" not in info:
+        return [f"call_B フロー書式の再生成: 実行中に例外が発生したため元の版のまま出力しました（{info['error']}）。本文生成には影響しません。"]
+    bv = info.get("before_violations") or []
+    adopted = {"regenerated": "再生成後の版", "original": "元の版"}.get(info.get("adopted"), "元の版")
+    lines = [f"call_B フロー書式の再生成（v1.101）: 【市場のフロー】の書式のWARNが{len(bv)}本出たため、call_Bを1回再生成しました。"
+             f"採用: {adopted}（{info.get('reason', '')}）。"]
+    labels = verify_post.FLOW_FORMAT_REASON_LABELS
+    lines.append("  再生成前の連鎖（WARN" + f"{len(bv)}件）:")
+    for ln in str(info.get("before_flow", "")).split("\n"):
+        if ln.strip():
+            lines.append(f"    {ln.strip()}")
+    for v in bv:
+        lines.append(f"    ↳ {v['chain_no']}本目の違反: " + "・".join(labels.get(c, c) for c in v.get("reasons", [])))
+    av = info.get("after_violations")
+    if info.get("after_flow") is None:
+        lines.append("  再生成後の連鎖: （再生成が失敗したため無し）")
+    else:
+        lines.append("  再生成後の連鎖（WARN" + f"{len(av or [])}件）:")
+        for ln in str(info.get("after_flow", "")).split("\n"):
+            if ln.strip():
+                lines.append(f"    {ln.strip()}")
+        for v in av or []:
+            lines.append(f"    ↳ {v['chain_no']}本目の違反: " + "・".join(labels.get(c, c) for c in v.get("reasons", [])))
+    u = info.get("usage") or {}
+    lines.append(f"  再生成の使用量は、token_usageの合計に含まれています（再生成分: 入力{u.get('input_tokens', 0)}・出力{u.get('output_tokens', 0)}トークン）。")
+    return lines
+
+
 # --- v1.97（オーナー承認・案1）: 候補の記録（candidates_log.json）とSTATUSのtier2表示 ---
 _UTC_MIN_FMT = "%Y-%m-%dT%H:%MZ"
 _JST_OFFSET = timedelta(hours=9)
@@ -636,7 +727,8 @@ def render_generation_status(gen: dict[str, Any], daily_data: dict | None = None
                               l1_fallback_details: list[dict] | None = None,
                               force_drop_repair: dict | None = None,
                               news_streaks: dict[str, tuple[int, bool]] | None = None,
-                              candidate_log_written: bool = True) -> str:
+                              candidate_log_written: bool = True,
+                              flow_regen: dict | None = None) -> str:
     a, b = gen["call_a"], gen["call_b"]
     news_status = gen.get("news_source_status", {})
     attention, auto = _attention_and_auto_lists(gen)
@@ -657,6 +749,7 @@ def render_generation_status(gen: dict[str, Any], daily_data: dict | None = None
         + (f" ({b['error']} / {b['attempts']}回試行)" if not b["ok"] else f"（{b['attempts']}回試行）")
     )
     lines += _render_attempt_errors("call_B", b)
+    lines += _render_flow_regen_lines(flow_regen)
     lines += [
         "token_usage（実消費量）: "
         f"input={gen['total_usage']['input_tokens']}, output={gen['total_usage']['output_tokens']} "
@@ -866,6 +959,13 @@ def main() -> int:
             gen = _fallback_to_true_l1(daily_data, gen, failing)
             bundle = compose(daily_data, gen)
 
+    # v1.101（オーナー承認）: フロー書式のWARNが出たら、call_Bを1回だけ再生成する（再生成後もWARNなら現行どおり出力）。
+    flow_regen: dict | None = None
+    try:
+        gen, bundle, flow_regen = _regenerate_flow_if_needed(gen, bundle, daily_data)
+    except Exception as e:  # noqa: BLE001 — 再生成の失敗で本文生成・STATUS（フェイルクローズの記録）を止めない
+        flow_regen = {"error": f"{type(e).__name__}: {e}"}
+
     draft_dir = Path(f"outputs/{target_date}/draft")
     draft_dir.mkdir(parents=True, exist_ok=True)
     (draft_dir / "part1.md").write_text(bundle["part1_md"], encoding="utf-8")
@@ -917,7 +1017,7 @@ def main() -> int:
         gen, daily_data, force_dropped=force_dropped, l1_fallback_failing_checks=l1_fallback_failing_checks,
         l1_fallback_details=l1_fallback_details, force_drop_repair=force_drop_repair,
         news_streaks=_news_failure_streaks(target_date, gen.get("news_source_status", {})),
-        candidate_log_written=candidate_log_written)
+        candidate_log_written=candidate_log_written, flow_regen=flow_regen)
     status_path.write_text(status_text, encoding="utf-8")
 
     print(f"OK: level={gen['level']} → {draft_dir}/part1.md, part2.md, numeric_record.md, "

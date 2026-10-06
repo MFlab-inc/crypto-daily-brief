@@ -837,6 +837,22 @@ part1_points）と文体を揃えること。
     として限定して扱う。
   根拠のある段階のみを書き（統合運用基準§3.1「根拠のない段階」は書かない）、
   段階の順序は変えない。【出来事・ニュース】と【暗号通貨価格】は必ず置く。
+
+  【ラベルの使い分け（v1.101・オーナー指示）】
+  - 各連鎖は、必ず先頭を「【出来事・ニュース】」のラベルで書き始める（①②③を付ける
+    場合は「①【出来事・ニュース】…」の形）。ラベルの語は一字一句そのまま書き、省略
+    しない。
+  - 【地政学・マクロの変化】は、金利・金融政策・為替・原油・物価・通商・地政学情勢
+    など、マクロの変化に限って使う。制度・政策（SEC・CFTC・FinCEN等の規則案・
+    承認・訴訟）や、企業財務・資金調達・市場構造（取引所・上場・提携・資金調達等）の
+    材料には、このラベルを使わない。そうした材料で、報道で確認できたマクロの変化が
+    無いときは、この段階を書かず（根拠のない段階は書かない）、「【出来事・ニュース】…
+    → 【暗号通貨価格】…」の2段階でよい。報道で確認できた指標・心理があれば
+    【中間市場指標・市場心理】を置く。
+  書式の例（〇〇・△△は例示用のプレースホルダーであり、この内容を事実として流用
+  しないこと。連鎖が1本の日は①を付けない）:
+  「【出来事・ニュース】〇〇が△△を発表しました（媒体名、日付） → 【暗号通貨価格】
+  BTC・ETHは同時期におおむね横ばいでしたが、因果は未確認です。 #BTC #ETH」
   ハッシュタグ規則に従い、【暗号通貨価格】では銘柄名を平文（BTC・ETH）で
   述べ、ハッシュタグを付す場合は連鎖の末尾（句点の後に半角スペースを空けて）
   にまとめて置く。
@@ -1977,6 +1993,52 @@ def regenerate_call_b_as_l1(daily_data: dict, client: "anthropic.Anthropic | Non
     call_b()をそのまま再利用できる。
     """
     return call_b(client or anthropic.Anthropic(), daily_data, None)
+
+
+# v1.101（オーナー承認）: 【市場のフロー】の書式のWARN（verify_post.find_flow_format_violations）が出たとき、
+# call_Bを1回だけ再生成する。10/2・10/3・10/5と、材料のあるL0の日でWARNが続いたため。
+# 再生成の要否判定・採用の判断・STATUSへの記録はcompose_post.pyが行い、ここは再生成の呼び出しだけを担う
+# （regenerate_call_b_as_l1と同じ位置づけ）。再生成しても書式が直らない場合は元の版のまま出力する（WARNのまま）。
+def _build_flow_regen_note(previous_flow: list, violations: list[dict]) -> str:
+    """直前のpart2_flowと、機械チェックが検出した違反を伝え、書式だけを直させる追記テキスト。"""
+    import verify_post  # 循環importを避けるため遅延（verify_postはこのモジュールをimportする）
+    lines = []
+    for v in violations:
+        labels = "・".join(verify_post.FLOW_FORMAT_REASON_LABELS.get(c, c) for c in v.get("reasons", []))
+        lines.append(f"- {v.get('chain_no')}本目: 「{v.get('text', '')}」 → 検出された違反: {labels}")
+    return (
+        "### 直前の生成への修正指示（自動再生成・v1.101）\n\n"
+        "直前の生成の【市場のフロー】は、統合運用基準§3.3の書式から外れていると機械チェックが検出しました。\n"
+        "検出された連鎖と違反:\n" + "\n".join(lines) + "\n\n"
+        "part2_flowとpart2_summaryを、次の点だけを直して出力し直してください。\n"
+        "- 取り上げる材料・事実・媒体名・限定表現の趣旨は変えない（呼び出しAのpart1に掲載済みの材料だけを使う）。\n"
+        "- 各連鎖は、必ず先頭を「【出来事・ニュース】」のラベルで書き始める（①②③を付ける場合は「①【出来事・ニュース】…」）。"
+        "「→」の直後は必ずラベル。ラベルの語は一字一句そのまま。\n"
+        "- ラベルの使い分けは上記の指示のとおり（【地政学・マクロの変化】はマクロの変化に限る。制度・政策や企業財務・市場構造の"
+        "材料にはこのラベルを使わず、根拠のない段階は書かない）。\n"
+        "- 1連鎖は1文（句点は末尾に1つだけ）。ハッシュタグは句点の後。末尾に「可能性」「因果は未確認」等の限定を置く。\n"
+        "- part2_summaryは、直前と同じ趣旨でよい。\n\n"
+        "直前のpart2_flow:\n" + json.dumps(previous_flow, ensure_ascii=False, indent=2)
+    )
+
+
+def regenerate_call_b_for_flow_format(daily_data: dict, call_a_data: dict | None, previous_flow: list,
+                                       violations: list[dict],
+                                       client: "anthropic.Anthropic | None" = None) -> CallOutcome:
+    """フロー書式のWARNが出たときの、呼び出しBの1回だけの再生成（v1.101）。通常のuser_contentに、
+    直前の連鎖と検出された違反を伝える追記を付けて送る。JSON不正等の技術的な失敗は_call_json()が従来どおり
+    再試行する（再生成の「1回」は、書式を直すためのやり直しの回数）。"""
+    client = client or anthropic.Anthropic()
+    user_content = _build_call_b_user_content(daily_data, call_a_data) + "\n\n" + _build_flow_regen_note(previous_flow, violations)
+    has_material = _has_adopted_material(call_a_data)
+
+    def _enforce_fixed_flow(data: dict, attempt: int) -> dict:
+        if not has_material:
+            data["part2_flow"] = [FIXED_FLOW]
+        return data
+
+    return _call_json(client, system=SYSTEM_B, user_content=user_content, max_tokens=CALL_B_MAX_TOKENS,
+                      required_keys=REQUIRED_KEYS_B, post_process=_enforce_fixed_flow)
 
 
 def _has_adopted_material(call_a_data: dict | None) -> bool:
