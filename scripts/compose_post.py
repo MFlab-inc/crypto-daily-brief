@@ -361,9 +361,19 @@ def _flow_violation_score(violations: list[dict]) -> tuple[int, int]:
     return (len(violations), sum(len(v.get("reasons", [])) for v in violations))
 
 
-def _failing_check_ids(bundle: dict[str, Any], daily_data: dict) -> set[str]:
+def _audit_state(bundle: dict[str, Any], daily_data: dict) -> tuple[set[str], dict[str, int]]:
+    """機械監査（C12〜C28）でFAILしたチェックのID集合と、フロー書式以外の警告の種類別件数。"""
     au = verify_post.run_all(bundle, daily_data)
-    return {c["id"] for c in au.checks if c["result"] == "FAIL"}
+    fails = {c["id"] for c in au.checks if c["result"] == "FAIL"}
+    warns: dict[str, int] = {}
+    for w in au.warnings:
+        if w.get("id") != "W_flow_format":
+            warns[w.get("id")] = warns.get(w.get("id"), 0) + 1
+    return fails, warns
+
+
+def _flow_lines(flow_text: Any) -> list[str]:
+    return [re.sub(r"^・", "", ln.strip()) for ln in str(flow_text or "").split("\n") if ln.strip()]
 
 
 def _regenerate_flow_if_needed(gen: dict[str, Any], bundle: dict[str, Any], daily_data: dict,
@@ -371,38 +381,64 @@ def _regenerate_flow_if_needed(gen: dict[str, Any], bundle: dict[str, Any], dail
                                ) -> tuple[dict[str, Any], dict[str, Any], dict | None]:
     """戻り値は (gen, bundle, 再生成の記録)。再生成しなかった日（書式違反なし・材料なしの定型文・
     call_AまたはBが失敗）は記録がNone。記録: before/after_flow（描画後の【市場のフロー】）・
-    before/after_violations・adopted（"regenerated"/"original"）・reason・usage。"""
+    before/after_violations・adopted（"regenerated"/"original"）・reason・usage。
+
+    採用の条件（すべて満たす場合だけ再生成後の版を採用。それ以外は元の版のままWARNで出力）:
+    ①フローが空でなく、材料のある日に定型文（FIXED_FLOW）でない ②連鎖の本数が元より減らない（材料の脱落を防ぐ）
+    ③機械監査（C12〜C28）で、元の版にないFAILが増えない ④フロー書式以外の警告の件数が増えない
+    ⑤書式違反が減る（連鎖の本数、同数なら違反の理由の数）。
+    採用するのは【市場のフロー】だけで、【総括】は元のまま（再生成で総括が変わって別のチェックでFAILし、
+    フローの修正まで巻き戻るのを防ぐ）。前編・call_Bの試行履歴・使用量（元の呼び出し分）も変えない。
+    再生成の使用量は、採否によらずtotal_usageに加える（再生成後の評価で例外になった場合も）。"""
     if not (gen["call_a"].get("ok") and gen["call_b"].get("ok")):
         return gen, bundle, None
     violations = verify_post.find_flow_format_violations(bundle["sections"].get("part2_flow"))
     if not violations:
         return gen, bundle, None
 
-    previous_flow = list(gen["call_b"].get("data", {}).get("part2_flow") or [])
+    before_lines = _flow_lines(bundle["sections"].get("part2_flow"))
     info: dict[str, Any] = {"before_flow": bundle["sections"].get("part2_flow", ""), "before_violations": violations}
     b2 = generate_post.regenerate_call_b_for_flow_format(
-        daily_data, gen["call_a"].get("data"), previous_flow, violations, client=client)
+        daily_data, gen["call_a"].get("data"), before_lines, violations,
+        previous_summary=str(bundle["sections"].get("part2_summary", "")), client=client)
     total = generate_post._add_usage(gen["total_usage"], b2.usage)
     info["usage"] = b2.usage
-    if not b2.ok:
-        info.update(adopted="original", reason=f"再生成の呼び出しが失敗したため（{b2.error}）", after_flow=None, after_violations=None)
-        return {**gen, "total_usage": total}, bundle, info
+    gen_keep = {**gen, "total_usage": total}
 
-    gen2 = {**gen, "call_b": b2.to_dict(), "total_usage": total}
-    fresh = compose(daily_data, gen2)
-    # 前編（局所修正済みの場合を含む）は変えず、後編のうち呼び出しB由来の部分（フロー・総括）だけを差し替える。
-    bundle2 = {**bundle, "sections": {**bundle["sections"], "part2_flow": fresh["sections"]["part2_flow"],
-                                      "part2_summary": fresh["sections"]["part2_summary"]},
-               "part2_md": fresh["part2_md"]}
-    v2 = verify_post.find_flow_format_violations(bundle2["sections"].get("part2_flow"))
-    info.update(after_flow=bundle2["sections"].get("part2_flow", ""), after_violations=v2)
-    new_fails = sorted(_failing_check_ids(bundle2, daily_data) - _failing_check_ids(bundle, daily_data))
-    if new_fails:
-        info.update(adopted="original", reason=f"再生成後の本文は、機械監査で新たにFAILするチェックがあるため（{new_fails}）")
-        return {**gen, "total_usage": total}, bundle, info
-    if not _flow_violation_score(v2) < _flow_violation_score(violations):
-        info.update(adopted="original", reason="再生成後も書式違反が減らなかったため（現行どおり元の版をWARNのまま出力）")
-        return {**gen, "total_usage": total}, bundle, info
+    def keep_original(reason: str, **extra: Any) -> tuple[dict[str, Any], dict[str, Any], dict]:
+        info.update(adopted="original", reason=reason, **extra)
+        return gen_keep, bundle, info
+
+    if not b2.ok:
+        return keep_original(f"再生成の呼び出しが失敗したため（{b2.error}）", after_flow=None, after_violations=None)
+    try:
+        new_flow = list((b2.data or {}).get("part2_flow") or [])
+        # 採用するのはフローだけ（総括・call_Bの試行履歴と使用量は元のまま）。
+        gen2 = {**gen_keep, "call_b": {**gen["call_b"], "data": {**gen["call_b"]["data"], "part2_flow": new_flow}}}
+        fresh = compose(daily_data, gen2)
+        bundle2 = {**bundle, "sections": {**bundle["sections"], "part2_flow": fresh["sections"]["part2_flow"]},
+                   "part2_md": fresh["part2_md"]}
+        after_lines = _flow_lines(bundle2["sections"].get("part2_flow"))
+        v2 = verify_post.find_flow_format_violations(bundle2["sections"].get("part2_flow"))
+        info.update(after_flow=bundle2["sections"].get("part2_flow", ""), after_violations=v2)
+        if not after_lines or not any(ln.strip() for ln in new_flow if isinstance(ln, str)):
+            return keep_original("再生成後のフローが空だったため")
+        if any(ln.startswith(generate_post.FIXED_FLOW.rstrip("。")) for ln in after_lines):
+            return keep_original("材料のある日なのに、再生成後のフローが定型文（材料なし）だったため")
+        if len(after_lines) < len(before_lines):
+            return keep_original(f"再生成後は連鎖の本数が減った（{len(before_lines)}本→{len(after_lines)}本。材料の脱落の疑い）ため")
+        fails1, warns1 = _audit_state(bundle, daily_data)
+        fails2, warns2 = _audit_state(bundle2, daily_data)
+        new_fails = sorted(fails2 - fails1)
+        if new_fails:
+            return keep_original(f"再生成後の本文は、機械監査で新たにFAILするチェックがあるため（{new_fails}）")
+        worse_warns = sorted(k for k, n in warns2.items() if n > warns1.get(k, 0))
+        if worse_warns:
+            return keep_original(f"再生成後は、フロー書式以外の警告が増えるため（{worse_warns}）")
+        if not _flow_violation_score(v2) < _flow_violation_score(violations):
+            return keep_original("再生成後も書式違反が減らなかったため（現行どおり元の版をWARNのまま出力）")
+    except Exception as e:  # noqa: BLE001 — 再生成後の評価の失敗で元の版・使用量の記録を失わない
+        return keep_original(f"再生成後の評価で例外が発生したため（{type(e).__name__}: {e}）")
     info.update(adopted="regenerated", reason=("再生成後は書式違反が解消しました" if not v2 else "再生成後は書式違反が減りました（残りはWARNのまま出力）"))
     return gen2, bundle2, info
 

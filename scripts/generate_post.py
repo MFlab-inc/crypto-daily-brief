@@ -842,8 +842,9 @@ part1_points）と文体を揃えること。
   - 各連鎖は、必ず先頭を「【出来事・ニュース】」のラベルで書き始める（①②③を付ける
     場合は「①【出来事・ニュース】…」の形）。ラベルの語は一字一句そのまま書き、省略
     しない。
-  - 【地政学・マクロの変化】は、金利・金融政策・為替・原油・物価・通商・地政学情勢
-    など、マクロの変化に限って使う。制度・政策（SEC・CFTC・FinCEN等の規則案・
+  - 【地政学・マクロの変化】は、金融政策・通商政策・財政・物価統計・地政学情勢など、
+    マクロの政策・情勢の変化に限って使う（金利・為替・原油・株価などの指標の動きそのもの
+    は【中間市場指標・市場心理】に置く）。制度・政策（SEC・CFTC・FinCEN等の規則案・
     承認・訴訟）や、企業財務・資金調達・市場構造（取引所・上場・提携・資金調達等）の
     材料には、このラベルを使わない。そうした材料で、報道で確認できたマクロの変化が
     無いときは、この段階を書かず（根拠のない段階は書かない）、「【出来事・ニュース】…
@@ -852,7 +853,7 @@ part1_points）と文体を揃えること。
   書式の例（〇〇・△△は例示用のプレースホルダーであり、この内容を事実として流用
   しないこと。連鎖が1本の日は①を付けない）:
   「【出来事・ニュース】〇〇が△△を発表しました（媒体名、日付） → 【暗号通貨価格】
-  BTC・ETHは同時期におおむね横ばいでしたが、因果は未確認です。 #BTC #ETH」
+  □□（銘柄）は同時期に◇◇（値動きの形状）でしたが、因果は未確認です。 #BTC #ETH」
   ハッシュタグ規則に従い、【暗号通貨価格】では銘柄名を平文（BTC・ETH）で
   述べ、ハッシュタグを付す場合は連鎖の末尾（句点の後に半角スペースを空けて）
   にまとめて置く。
@@ -1999,7 +2000,7 @@ def regenerate_call_b_as_l1(daily_data: dict, client: "anthropic.Anthropic | Non
 # call_Bを1回だけ再生成する。10/2・10/3・10/5と、材料のあるL0の日でWARNが続いたため。
 # 再生成の要否判定・採用の判断・STATUSへの記録はcompose_post.pyが行い、ここは再生成の呼び出しだけを担う
 # （regenerate_call_b_as_l1と同じ位置づけ）。再生成しても書式が直らない場合は元の版のまま出力する（WARNのまま）。
-def _build_flow_regen_note(previous_flow: list, violations: list[dict]) -> str:
+def _build_flow_regen_note(previous_flow: list, violations: list[dict], previous_summary: str = "") -> str:
     """直前のpart2_flowと、機械チェックが検出した違反を伝え、書式だけを直させる追記テキスト。"""
     import verify_post  # 循環importを避けるため遅延（verify_postはこのモジュールをimportする）
     lines = []
@@ -2017,19 +2018,21 @@ def _build_flow_regen_note(previous_flow: list, violations: list[dict]) -> str:
         "- ラベルの使い分けは上記の指示のとおり（【地政学・マクロの変化】はマクロの変化に限る。制度・政策や企業財務・市場構造の"
         "材料にはこのラベルを使わず、根拠のない段階は書かない）。\n"
         "- 1連鎖は1文（句点は末尾に1つだけ）。ハッシュタグは句点の後。末尾に「可能性」「因果は未確認」等の限定を置く。\n"
-        "- part2_summaryは、直前と同じ趣旨でよい。\n\n"
+        "- part2_summaryは、直前の文をそのまま出力する（システムは元の総括を使うため、変えない）。\n\n"
         "直前のpart2_flow:\n" + json.dumps(previous_flow, ensure_ascii=False, indent=2)
+        + "\n\n直前のpart2_summary:\n" + json.dumps(str(previous_summary or ""), ensure_ascii=False)
     )
 
 
 def regenerate_call_b_for_flow_format(daily_data: dict, call_a_data: dict | None, previous_flow: list,
-                                       violations: list[dict],
+                                       violations: list[dict], previous_summary: str = "",
                                        client: "anthropic.Anthropic | None" = None) -> CallOutcome:
     """フロー書式のWARNが出たときの、呼び出しBの1回だけの再生成（v1.101）。通常のuser_contentに、
     直前の連鎖と検出された違反を伝える追記を付けて送る。JSON不正等の技術的な失敗は_call_json()が従来どおり
     再試行する（再生成の「1回」は、書式を直すためのやり直しの回数）。"""
     client = client or anthropic.Anthropic()
-    user_content = _build_call_b_user_content(daily_data, call_a_data) + "\n\n" + _build_flow_regen_note(previous_flow, violations)
+    user_content = _build_call_b_user_content(daily_data, call_a_data) + "\n\n" + _build_flow_regen_note(
+        previous_flow, violations, previous_summary)
     has_material = _has_adopted_material(call_a_data)
 
     def _enforce_fixed_flow(data: dict, attempt: int) -> dict:
