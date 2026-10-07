@@ -1665,11 +1665,17 @@ def check_headline_repeat_warn(au: Audit, sections: dict) -> None:
 # （10/6の記録で、重複の主張9件のうち3件が該当し、うち2件が別の材料の疑い・1件が実際の重複）。②同じ語を共有する別の事実は拾えない。
 # 精度は10/10までの記録で見直す（オーナー指示）。
 _DUP_REASON_RE = re.compile(r"重複|同じ事実|同一の事実|同一事実")
-_DUP_REF_RE = re.compile(r"(?:候補|ID)\s*(?:ID\s*)?([0-9０-９]+)")
+_DUP_REF_RE = re.compile(r"(?:候補|ID|id|candidate_id)\s*(?:ID\s*)?([0-9０-９]+)")
+# 題名の語: 英数字の連なり、カタカナ・漢字の2字以上の連なり（日本語の題名〔金融庁・日本銀行・Cointelegraph Japan〕を空集合にしない）。
+_DUP_TOKEN_RE = re.compile(r"[a-z0-9]+|[ァ-ヴー]{2,}|[一-龥]{2,}")
 _DUP_TITLE_STOP = frozenset({
     "reuters", "the", "a", "an", "and", "or", "for", "with", "in", "on", "at", "to", "of", "from", "by", "after", "over", "as", "is", "are",
-    "its", "it", "says", "say", "new", "coindesk", "cointelegraph", "block", "-",
+    "its", "it", "says", "say", "new", "coindesk", "cointelegraph", "block", "-", "us",
 })
+
+
+def _dup_title_tokens(title) -> "set[str]":
+    return set(_DUP_TOKEN_RE.findall(str(title or "").lower())) - _DUP_TITLE_STOP
 _DUP_WARN_MAX_LISTED = 5
 
 
@@ -1688,9 +1694,14 @@ def find_weak_duplicate_claims(audit_ledger) -> "list[dict]":
         if not refs:
             out.append({"candidate_id": cid, "code": "no_ref", "refs": [], "title": str(e.get("title", "")), "reason": reason})
             continue
-        mine = generate_post._tokenize_title(e.get("title", "")) - _DUP_TITLE_STOP
         known = [r for r in refs if r in by_id]
-        if known and all(not (mine & (generate_post._tokenize_title(by_id[r].get("title", "")) - _DUP_TITLE_STOP)) for r in known):
+        if not known:  # 書かれた候補IDが台帳に無い（存在しない候補を重複先にしている）
+            out.append({"candidate_id": cid, "code": "bad_ref", "refs": refs, "title": str(e.get("title", "")), "reason": reason})
+            continue
+        mine = _dup_title_tokens(e.get("title", ""))
+        ref_tokens = [_dup_title_tokens(by_id[r].get("title", "")) for r in known]
+        # 題名から語が取れない（題名が空・語が全て一般語）場合は判定しない
+        if mine and all(ref_tokens) and all(not (mine & rt) for rt in ref_tokens):
             out.append({"candidate_id": cid, "code": "no_shared", "refs": known, "title": str(e.get("title", "")), "reason": reason,
                         "ref_titles": [str(by_id[r].get("title", "")) for r in known]})
     return out
@@ -1700,7 +1711,8 @@ def check_dup_weak_warn(au: Audit, audit_ledger) -> None:
     hits = find_weak_duplicate_claims(audit_ledger)
     if not hits:
         return
-    labels = {"no_ref": "重複先の候補IDが書かれていない", "no_shared": "重複先の候補と題名に共通する語が無い"}
+    labels = {"no_ref": "重複先の候補IDが書かれていない", "no_shared": "重複先の候補と題名に共通する語が無い",
+              "bad_ref": "書かれた重複先の候補IDが台帳に無い"}
     listed = "".join(f" ・候補{h['candidate_id']}「{_clip_sentence(h['title'], 60)}」（{labels[h['code']]}"
                      + (f"。重複先: 候補{'・'.join(str(r) for r in h['refs'])}「{_clip_sentence(h['ref_titles'][0], 50)}」" if h.get("ref_titles") else "")
                      + f"。理由: {_clip_sentence(h['reason'], 60)}）" for h in hits[:_DUP_WARN_MAX_LISTED])

@@ -6723,7 +6723,7 @@ check("v1.99→v1.104: audit_ledgerのreasonの見本（旧「B: 波及経路は
       "内容が薄く参考" not in _SA99 and "材料としても不十分" not in _SA99
       and all(t in _NF99 for t in ("「B: 地政学の論評のため、優先して掲載する対象に当たらない」", "「B: 地政学・エネルギーの人事のため、優先して掲載する対象に当たらない」",
                                    "「B: ロシア・ウクライナの一般的な戦況の記事で、優先して掲載する対象に当たらない」",
-                                   "「B: 見出しだけでは「誰が・何を・どこで」を書けない」", "「B: 候補12と同じ事実の重複記事（同じtierの候補12を採用）」",
+                                   "「B: 見出しだけでは「誰が・何を・どこで」を書けない」", "「B: 同じtierの候補12と同じ事実（〇〇の△△）の重複」",
                                    "「B: 主要なポイントの順位により上限4項目に入らない（順位外）」"))
       and "「B: 論評のため、優先して掲載する対象に当たらない」" not in _NF99)
 check("v1.99: reasonの見本はいずれも全角60字以内（use:falseのreasonの上限と整合）",
@@ -6795,7 +6795,7 @@ check("v1.100→v1.104: 一般的な戦況の記事・挙げた種類以外の�
       "挙げた種類以外の地政学・\n       エネルギー材料、一般的な戦況の記事、解説・論評・人事" in _sec100
       and "「B: ロシア・ウクライナの一般的な戦況の記事で、優先して掲載する対象に当たらない」" in _NF99
       and all(len(x) <= 60 for x in ("B: 地政学の論評のため、優先して掲載する対象に当たらない", "B: 地政学・エネルギーの人事のため、優先して掲載する対象に当たらない",
-                                      "B: ロシア・ウクライナの一般的な戦況の記事で、優先して掲載する対象に当たらない", "B: 候補12と同じ事実の重複記事（同じtierの候補12を採用）",
+                                      "B: ロシア・ウクライナの一般的な戦況の記事で、優先して掲載する対象に当たらない", "B: 同じtierの候補12と同じ事実（〇〇の△△）の重複",
                                       "B: 主要なポイントの順位により上限4項目に入らない（順位外）")))
 check("v1.100: 呼び出しBの1文（主張の帰属を確認済み事実に書き直さない・オーナー承認）は残っている",
       "確認済み事実\n    に書き直さず、「〜と主張しました」の帰属と「未確認」の限定を保つ" in generate_post.SYSTEM_B)
@@ -7372,7 +7372,7 @@ check("v1.104 WRITES_A: 「載せない材料はuse:falseにする」の直後�
       "載せない材料は use:false にする\n  （use:falseにしてよい理由は、上記「Bの扱いの基準」の4に限る。ヘッドラインの主題に\n  しないことは理由にならない）" in generate_post.WRITES_A
       and generate_post.SYSTEM_A.count("use:falseにしてよいのは、次の場合に限る") == 1)
 check("v1.104 reason見本: 「波及経路はあるが載せない」ための見本（重複〈重複先のIDを書く〉・上限4項目のため見送り）を復活し、地政学・エネルギーの見本は「地政学の」「地政学・エネルギーの」「ロシア・ウクライナの」と明記する。理由は(a)〜(g)のどれに当たるかが分かるように書く旨も入る",
-      "「B: 候補12と同じ事実の重複記事（同じtierの候補12を採用）」" in generate_post.NO_CANDIDATES_FALLBACK and "「B: 主要なポイントの順位により上限4項目に入らない（順位外）」" in generate_post.NO_CANDIDATES_FALLBACK
+      "「B: 同じtierの候補12と同じ事実（〇〇の△△）の重複」" in generate_post.NO_CANDIDATES_FALLBACK and "「B: 主要なポイントの順位により上限4項目に入らない（順位外）」" in generate_post.NO_CANDIDATES_FALLBACK
       and "「B: 地政学の論評のため、優先して掲載する対象に当たらない」" in generate_post.NO_CANDIDATES_FALLBACK
       and "「Bの扱いの基準」の4の(a)〜(g)のどれに当たるかが分かるように書く" in generate_post.NO_CANDIDATES_FALLBACK.replace("\n", ""))
 check("v1.104: 変更していないもの——Bの扱いの基準の1（当事者の主張）・2（見出し程度の情報）・3の優先の対象5種類・5（数を埋めない）、(i)(ii)と定型文の規則、A/B/Cの定義と【厳守】、use:falseのreasonの全角60字以内の規定",
@@ -7459,7 +7459,7 @@ check("v1.104追補 5: 「数を埋めるためのB」の対象は、本節の4�
 _NF104b = generate_post.NO_CANDIDATES_FALLBACK
 _ex104 = [x.replace("\n", "") for x in __import__("re").findall(r"「([BC]: .*?)」(?=[\n「）等])", _NF104b, __import__("re").S)]
 check("v1.104追補→v1.109 reason見本: 見本は7本（C1・B6）で、すべて全角60字以内。重複の見本は「同じtierの候補」と明記し（tier1・tier2の同一事実を不採用に誘導しない）、上限の見本は文言「主要なポイントの順位により上限4項目に入らない」を含む（(d)・WRITES_Aの指示と文言が一致）。旧見本（候補5・「として見送り」）は残らない",
-      len(_ex104) == 7 and all(len(x) <= 60 for x in _ex104) and any("同じtierの候補12を採用" in x for x in _ex104)
+      len(_ex104) == 7 and all(len(x) <= 60 for x in _ex104) and any("同じtierの候補12と同じ事実（〇〇の△△）" in x for x in _ex104)
       and any("主要なポイントの順位により上限4項目に入らない" in x for x in _ex104) and "候補5と同一の事実の重複" not in _NF104b and "優先順位の低い材料として見送り" not in _NF104b
       and "主要なポイントの順位により上限4項目に入らない" in generate_post.WRITES_A.replace("\n", "").replace(" ", "") and "主要なポイントの順位により上限4項目に入らない" in _flat104b, str(_ex104))
 
@@ -7594,7 +7594,7 @@ check("v1.106追補 除外「上限」: 「上限4項目のため見送り（ヘ
 check("v1.106追補 重複: 重複先の候補を名指ししていない「他の採用材料と内容が重複し独立項目としては不要」型は検知する（9/2型）。「候補12」「ID12」「候補ID12」と名指ししていれば除外する。手続き的な発表は名指し不要",
       len(_f106([_l106("B: 米国債利回り上昇に関する記事だが、他の採用材料と内容が重複し独立項目としては不要")], _tm106)) == 1
       and len(_f106([_l106("B: 重複記事のため不採用（ヘッドラインの材料と同じ）")], _tm106)) == 1
-      and _f106([_l106("B: 候補12と同じ事実の重複記事（同じtierの候補12を採用）"), _l106("B: ヘッドラインと同一の事実（ID12を採用）"), _l106("B: 同一事実の重複（候補ID12を採用）"),
+      and _f106([_l106("B: 同じtierの候補12と同じ事実（〇〇の△△）の重複"), _l106("B: ヘッドラインと同一の事実（ID12を採用）"), _l106("B: 同一事実の重複（候補ID12を採用）"),
                  _l106("B: 同一の事実の重複（候補１２を採用）"), _l106("手続き的な発表のため不採用（ヘッドラインにしない）")], _tm106) == [])
 # プロンプトのreason見本（NO_CANDIDATES_FALLBACKの「」内のB:・C:）を、本文から取り出して検査する（見本の写しをテストに持たない）
 _ex106 = [x.replace("\n", "") for x in __import__("re").findall(r"「([BC]: .*?)」(?=[\n「）等])", generate_post.NO_CANDIDATES_FALLBACK, __import__("re").S)]
@@ -7778,10 +7778,13 @@ _L109 = [
 _w109 = verify_post.find_weak_duplicate_claims(_L109)
 check("v1.109 検知: 「重複」を理由にした不採用で、①重複先の候補IDが無い（no_ref）、②重複先の題名と共通する語が無い（no_shared。Daly発言→ボウマン講演）ものを拾う。共通語がある実際の重複（候補19→3：bowman）・採用・無関係な理由は拾わない",
       {(h["candidate_id"], h["code"]) for h in _w109} == {(26, "no_shared"), (30, "no_ref"), (31, "no_shared")}, str([(h["candidate_id"], h["code"]) for h in _w109]))
-check("v1.109 検知の対象外: candidate_idの無い台帳（v1.109より前のbundle）・空・重複先が台帳に無い場合は判定しない（例外にしない）。自分自身だけを重複先にした理由は、重複先の無い理由（no_ref）として拾う",
+check("v1.109 検知の対象外: candidate_idの無い台帳（v1.109より前のbundle）・空は判定しない（例外にしない）。重複先の候補IDが台帳に無い（候補99）は「bad_ref」、自分自身だけを重複先にした理由は「no_ref」として拾う。題名から語が取れない候補は判定しない",
       verify_post.find_weak_duplicate_claims([{k: v for k, v in e.items() if k != "candidate_id"} for e in _L109]) == []
       and verify_post.find_weak_duplicate_claims(None) == [] and verify_post.find_weak_duplicate_claims([]) == [] and verify_post.find_weak_duplicate_claims(["x", None]) == []
-      and verify_post.find_weak_duplicate_claims([_E109(5, "Some title here", "B: 候補99と同じ事実の重複記事")]) == []
+      and [h["code"] for h in verify_post.find_weak_duplicate_claims([_E109(5, "Some title here", "B: 候補99と同じ事実の重複記事"), _E109(7, "Some title here too", "B: 候補3と重複"), _E109(3, "Some title here", "A", "採用")])] == ["bad_ref"]
+      and verify_post.find_weak_duplicate_claims([_E109(7, "金融庁、暗号資産の法案を公表 - 日経", "B: candidate_id 3と同じ事実の重複"), _E109(3, "金融庁、暗号資産に関する法案を公表", "A", "採用")]) == []
+      and [h["code"] for h in verify_post.find_weak_duplicate_claims([_E109(7, "日本銀行、金融政策決定会合の結果を発表", "B: 候補3と同じ事実の重複"), _E109(3, "金融庁、暗号資産に関する法案を公表", "A", "採用")])] == ["no_shared"]
+      and verify_post.find_weak_duplicate_claims([_E109(7, "!!!", "B: 候補3と同じ事実の重複"), _E109(3, "Some title", "A", "採用")]) == []
       and [h["code"] for h in verify_post.find_weak_duplicate_claims([_E109(6, "Another title", "B: 候補6と重複")])] == ["no_ref"])
 _au109 = verify_post.Audit()
 verify_post.check_dup_weak_warn(_au109, _L109)
@@ -7817,7 +7820,7 @@ check("v1.109 プロンプト(d): 正式な理由「主要なポイントの順�
 check("v1.109 プロンプト（順位）: 株式市場の最高値更新・原油価格の見通し（EIA等）・為替・通商政策は順位外。4項目の枠は(1)→(2)→(3)→(4)→(5)→順位外の順に埋め、(1)〜(5)に当たる採用候補（独立2ソースのtier3の組を含む）がある間は順位外を先に載せない。(1)〜(5)の材料は価格への波及経路が薄いことを理由に見送らない",
       "株式市場の最高値更新・原油価格の見通し（EIA等）・為替・通商政策は、(1)〜(5)のどれにも当たらない（順位外）。4項目の枠は、(1)→(2)→(3)→(4)→(5)→順位外の順に埋める" in _WA109
       and "(1)〜(5)に当たる採用候補（独立2ソースのtier3の組を含む）がある間は、順位外の材料を先に載せない" in _WA109
-      and "(1)〜(5)に当たる材料は、価格への波及経路が薄いことを理由に見送らない（見送る理由は、順位の低さによる枠の不足だけ）" in _WA109
+      and "(1)(4)(5)に当たる材料（暗号通貨への直接材料＝A）は、価格への波及経路が薄いことを理由に見送らない（見送る理由は、順位の低さによる枠の不足だけ）。(2)(3)に当たる材料は、Bの判定（波及経路を説明できるか）を従来どおり行う" in _WA109
       and generate_post.SYSTEM_A.count("(5) ETF・資金フロー") == 1 and "(5) ETF・資金フロー" not in generate_post.SYSTEM_B)
 
 print("=== v1.110（オーナー承認・調査3の(1)）: 【市場のフロー】の【暗号通貨価格】にシステムが「 #BTC -0.51%、 #ETH -0.76%（24時間比）」を差し込む／C16bの除外／フロー書式⑥・ハッシュタグ規則 ===")
