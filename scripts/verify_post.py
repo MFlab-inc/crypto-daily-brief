@@ -929,6 +929,33 @@ def _find_headline_symbol_move_sentences(headline: str, allowlist: set[str]) -> 
     return hits
 
 
+# v1.107（オーナー承認）: 表示値の再掲の判定を、文字列の部分一致から「数字・小数点に隣接しない一致」に改める。
+# 背景: Fear & Greedの値（例: 26）は、ヘッドライン末尾の出典の括弧の日付（「2026年10月6日」の「2026」の中の「26」）や、
+# 「10月」「6日」の数字と部分一致してC28がFAIL（致命的。下書きが縮退する）になる。過去57日のFear & Greedは36〜82で衝突は0日だったが、
+# 20台以前の局面（値が20・26・10・6など）では起きる。日付の式（年・月・日・ISO形式）は、判定の前に取り除く
+# （出典の括弧の日付は市場データの再掲ではない）。判定の趣旨（価格・24時間比・Fear & Greedの値の再掲を検知する）は変えない。
+# C16bの_find_transcriptionsと同じ規則（前後の文字が数字・小数点でないとき一致とみなす）。
+_C28_DATE_EXPR_RE = re.compile(r"\d{4}-\d{1,2}-\d{1,2}|\d{4}年|\d{1,2}月|\d{1,2}日")
+
+
+def _contains_standalone_value(text: str, value: str) -> bool:
+    start = 0
+    while True:
+        idx = text.find(value, start)
+        if idx == -1:
+            return False
+        before = text[idx - 1] if idx > 0 else ""
+        after = text[idx + len(value)] if idx + len(value) < len(text) else ""
+        if not _is_digit_or_dot(before) and not _is_digit_or_dot(after):
+            return True
+        start = idx + 1
+
+
+def _find_display_value_hits(text: str, display_values: "set[str]") -> "list[str]":
+    masked = _C28_DATE_EXPR_RE.sub(" ", text)
+    return sorted(v for v in display_values if _contains_standalone_value(masked, v))
+
+
 def check_c28(au: Audit, part1_headline, part1_points, daily_data: dict) -> None:
     headline = part1_headline if isinstance(part1_headline, str) else ""
     points = part1_points if isinstance(part1_points, str) else ""
@@ -944,7 +971,7 @@ def check_c28(au: Audit, part1_headline, part1_points, daily_data: dict) -> None
             continue
         if "24時間比" in text:
             reasons.append(f"{label}に「24時間比」の文字列を検出")
-        value_hits = sorted(v for v in display_values if v in text)
+        value_hits = _find_display_value_hits(text, display_values)
         if value_hits:
             reasons.append(f"{label}にdaily_data.jsonの表示値の再掲を検出: {value_hits}")
     if headline.strip():

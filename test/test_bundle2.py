@@ -619,16 +619,18 @@ check("v1.82: ヘッドライン・主要なポイントは材料の有無・not
       and "定型文を使うかどうかも(i)(ii)のみで決める" in generate_post.NO_CANDIDATES_FALLBACK
       and "headline_for_image（呼び出しA）と【市場のフロー】の最終段階" in generate_post.NO_CANDIDATES_FALLBACK)
 check("②は独立2ソース材料単独でpart1_headlineの根拠になる（v1.44新設）。公式発表未確認の"
-      "旨はpart1_headlineではなくpart1_pointsに明記する（v1.70・オーナー指示・9/7手直しへの対処）",
+      "旨はpart1_headline末尾の出典の括弧に書く（v1.107・オーナー指示。v1.70の「ヘッドラインに書かない」を改めた）",
       "②（(i)なし・(ii)あり）の詳細" in generate_post.NO_CANDIDATES_FALLBACK
       and "独立2ソース材料の内容に基づき、part1_headlineに実文言を書く" in generate_post.NO_CANDIDATES_FALLBACK
-      and "「公式発表での確認が取れていない」旨の但し書きはpart1_headlineに" in generate_post.NO_CANDIDATES_FALLBACK
-      and "書かず、part1_pointsの該当項目に明記する" in generate_post.NO_CANDIDATES_FALLBACK)
+      and "ヘッドラインの末尾に出典の括弧を付け、その中に、独立2ソース規定に該当した" in generate_post.NO_CANDIDATES_FALLBACK
+      and "「公式発表は未確認」を書く（v1.107・オーナー指示。" in generate_post.NO_CANDIDATES_FALLBACK
+      and "「（The Block、Cointelegraph、10月6日。公式発表は未確認）」" in generate_post.NO_CANDIDATES_FALLBACK
+      and "「公式発表での確認が取れていない」旨の但し書きはpart1_headlineに" not in generate_post.NO_CANDIDATES_FALLBACK)
 check("②: 「一次情報」を内部用語として使わせない指示は維持されている（v1.64・オーナー指示）",
       "一次情報での確認ができていない旨を明記する" not in generate_post.NO_CANDIDATES_FALLBACK
-      and "「一次情報」等の内部用語は使わず、読者向けの平易な表現を用いること" in generate_post.NO_CANDIDATES_FALLBACK)
-check("②: headline_for_imageにも但し書きを含めない旨が明記されている（v1.70・オーナー指示）",
-      "headline_for_imageも同様にこの材料の内容を反映してよい（但し書きは" in generate_post.NO_CANDIDATES_FALLBACK)
+      and "「一次情報」等の内部用語は使わず、読者向けの平易な表現を用いること" in generate_post.NO_CANDIDATES_FALLBACK.replace("\n", ""))
+check("②: headline_for_imageには括弧・但し書きを含めない旨が明記されている（v1.70・v1.107）",
+      "headline_for_imageも同様にこの材料の内容を反映してよい（括弧・但し書きは" in generate_post.NO_CANDIDATES_FALLBACK)
 
 print("=== generate_post.py: ヘッドラインの構成要件（v1.70・オーナー指示・9/7手直しへの対処） ===")
 check("NO_CANDIDATES_FALLBACKにヘッドラインの構成要件の見出しがある",
@@ -637,9 +639,9 @@ check("v1.91（オーナー指示）: ヘッドラインの構成要件はハッ
       "ハッシュタグ（`#`）は付けない（v1.91・オーナー指示: 見出しにタグは不要。" in generate_post.NO_CANDIDATES_FALLBACK
       and "主要銘柄（BTC・ETH・BNB等）に言及する場合は" not in generate_post.NO_CANDIDATES_FALLBACK
       and "主要銘柄（BTC・ETH・BNB等）に言及する場合は" not in generate_post.SYSTEM_A)
-check("ヘッドラインの構成要件: 公式発表未確認の但し書きをヘッドラインに書かない旨を指示している",
-      "「公式発表での確認が取れていない」旨の但し書きをpart1_headlineに"
-      in generate_post.NO_CANDIDATES_FALLBACK)
+check("ヘッドラインの構成要件（v1.107）: 独立2ソース材料をヘッドラインに書くときは、末尾の出典の括弧に断り書きを入れる。tier1の公式発表で裏付けがある材料には付けない",
+      "独立2ソース材料（tier3の2媒体以上）をヘッドラインに書くときは、末尾の出典の括弧" in generate_post.NO_CANDIDATES_FALLBACK
+      and "tier1の公式発表で裏付けがある材料には付けない" in generate_post.NO_CANDIDATES_FALLBACK)
 check("ヘッドラインの構成要件: 対象日の日付をヘッドライン冒頭に書かない旨を指示している",
       "対象日の日付をヘッドライン冒頭に書かない" in generate_post.NO_CANDIDATES_FALLBACK)
 check("ヘッドラインの構成要件: 日付書き出しの禁止例と代替の書き出し例を具体的に示している"
@@ -653,7 +655,7 @@ check("v1.82・修正2: 書き出し例文は「〇〇（発表主体）が△�
       and "24時間比で下落しました" not in generate_post.NO_CANDIDATES_FALLBACK
       and "値動きや材料の内容から書き始めること" not in generate_post.NO_CANDIDATES_FALLBACK)
 check("v1.82: ヘッドラインの構成要件に1〜2文・価格/24時間比/値動き等の禁止が明記されている（統合運用基準§3.1）",
-      "1〜2文にとどめる（統合運用基準§3.1）" in generate_post.NO_CANDIDATES_FALLBACK
+      "1〜2文にとどめる（統合運用基準§3.1。" in generate_post.NO_CANDIDATES_FALLBACK
       and "価格・24時間比・値動き・Fear & Greed・相対強弱・DEX・APR・LP助言を" in generate_post.NO_CANDIDATES_FALLBACK)
 check("ヘッドラインの構成要件がSYSTEM_Aに含まれる（NO_CANDIDATES_FALLBACK経由）",
       "### ヘッドラインの構成要件（v1.70・オーナー指示。v1.82・v1.91改定）" in generate_post.SYSTEM_A)
@@ -5856,8 +5858,8 @@ check("R1: 出力形式は {text, carried_from, candidate_ids} 形式で、形�
       and "システムが機械的に除外する" in _A)
 check("R1: 採用（use:true）した材料はすべて主要なポイントへ載せる／載せない材料はuse:false／ヘッドラインの繰り返しにしない（オーナー指示）",
       "採用（use:true）した材料はすべて part1_headline・part1_points に載せる" in _A
-      and "載せない材料は use:false にする" in _A and "ヘッドラインの主題と同じ\n  材料を繰り返さない" in _A
-      and "採用した材料がヘッドライン\n  の1件だけの日は、従来どおり1項目とする" in _A
+      and "載せない材料は use:false にする" in _A and "ヘッドラインの主題と同じ材料を繰り返さない" in _A
+      and "採用した材料がヘッドラインの1件だけの日は、主要なポイントを定型文\n  とする（上記）" in _A
       and "上限4項目に収まらない場合は、関連する材料を1項目に" in _A and "重要度の低い（上記の優先順位で後ろの区分の）\n  材料を use:false にする" in _A)
 check("R1: tier4はreusable_for_summaryを含め本文・総括のどこにも書かない（情報源規律の抜け道を残さない）。旧指示（継続監視の対象としてreusableに記す）は残っていない",
       "reusable_for_summaryにも書かない" in _A
@@ -6268,9 +6270,9 @@ check("プロンプト（v1.93追補・オーナー指示）: 手続き的な発
       and "より「主要材料は確認できない」と書くほうが趣旨に合う" in generate_post.SYSTEM_A
       and "手続き的な発表のため\n    不採用」と書く" in generate_post.SYSTEM_A
       and "その材料を\n    ヘッドラインにしてよい" not in generate_post.SYSTEM_A)
-check("プロンプト（レビュー指摘4b）: 採用材料がヘッドラインの1件だけの日は従来どおり主要なポイントを1項目とする（ヘッドラインの繰り返しを禁じるのは採用材料が複数の日だけ）",
-      "採用した材料が複数ある日は、part1_pointsの項目でヘッドラインの主題と同じ" in generate_post.SYSTEM_A
-      and "採用した材料がヘッドライン\n  の1件だけの日は、従来どおり1項目とする" in generate_post.SYSTEM_A)
+check("プロンプト（レビュー指摘4b→v1.107）: 採用材料がヘッドラインの1件だけの日は、主要なポイントを定型文「補足できる検証済み材料は確認できない。」とする（ヘッドラインの材料を繰り返さない。v1.105の「1項目」を改めた）",
+      "part1_pointsの項目でヘッドラインの主題と同じ材料を繰り返さない" in generate_post.SYSTEM_A
+      and "採用した材料がヘッドラインの1件だけの日は、主要なポイントを定型文\n  とする（上記）" in generate_post.SYSTEM_A)
 check("プロンプト（レビュー指摘4c）: (1)〜(3)に当てはまらない日は、①の「重要度の高い方」（暗号通貨市場への関わりの大きい材料）で決める",
       "上記①の「重要度の高い方」（暗号通貨市場への" in generate_post.SYSTEM_A)
 check("プロンプト（レビュー指摘・指標日）: 指標の結果が候補に書かれていない場合（発表前の予想記事など）は規則(1)を適用しない（結果を推測で書かない）",
@@ -7470,15 +7472,15 @@ check("v1.105: 4項目を超えるときの残し方も同じ順（まず関連�
       and "reasonに「上限4項目のため見送り」と書く" in _pf105 and "上記(1)〜(5)に当たらない材料（通商政策・為替・株式など。" in _pf105 and "(5)の後ろに置き、4項目に収まる場合だけ載せる" in _pf105
       and "同じ区分の中では、新しい材料を先にする" in _pf105)
 check("v1.105: ヘッドラインの主題と同じ材料（ヘッドラインの詳細）は主要なポイントの項目にしない（採用した材料がヘッドラインの1件だけの日を除く）。「ヘッドラインと重複しない補足」を「ヘッドラインの主題以外の材料（ヘッドラインの詳細ではなく、別の材料）」に言い換えた",
-      "ヘッドラインの主題と同じ材料（ヘッドラインの詳細。ヘッドラインに従として併記した材料も同じ）は、採用した材料がヘッドラインの1件だけの日を除き、項目にしない" in _pf105
+      "ヘッドラインの主題と同じ材料（ヘッドラインの詳細。ヘッドラインに従として併記した材料も同じ）は、項目にしない（採用した材料がヘッドラインの1件だけの日も同じ）" in _pf105
       and "ヘッドラインの主題以外の材料（ヘッドラインの詳細ではなく、別の材料）を載せる" in _pf105 and "ヘッドラインと重複しない補足" not in _W105)
 check("v1.105: 「材料の件数がそのまま項目数になる」を、「ヘッドラインの主題にした材料は数えない」「ヘッドラインの1件だけの日は1項目」に直した（10/5のように、採用材料が2件でヘッドラインと同じ材料が1項目目に入る衝突を解消）",
-      "ヘッドラインの主題にした材料を除いた件数が項目数になる" in _pf105 and "採用した材料がヘッドラインの1件だけの日は、その材料を1項目として載せる" in _pf105
-      and "採用した材料が全体で0件の日だけ、0項目で定型文を使う" in _pf105 and "0件なら0項目で定型文" not in _pf105
+      "ヘッドラインに載せた材料を除いた件数が項目数になる" in _pf105 and "採用した材料がヘッドラインの1件だけの日）は、主要なポイントを定型文「補足できる検証済み材料は確認できない。」の1件とする" in _pf105
+      and "採用した材料が全体で0件の日は、ヘッドラインも主要なポイントも定型文を使う" in _pf105 and "0件なら0項目で定型文" not in _pf105
       and "材料の件数がそのまま項目数になる" not in _W105)
 check("v1.105: 指標日の規則（「①の中での主題の選び方」(2)で指標の材料を1番目に置く）は、順位より優先する。従来の1件だけの日の1項目の規定・「項目数を埋めるためにtier3単独ソースを採用しない」・Bの限定表現の指示は残る",
       "指標日の規則（「①の中での主題の選び方」(2)）で指標の材料を1番目に置く場合は、それを優先する" in _pf105
-      and "採用した材料がヘッドライン\n  の1件だけの日は、従来どおり1項目とする" in _W105 and "項目数を埋めるためにtier3単独ソースを採用しない" in _pf105
+      and "採用した材料がヘッドラインの1件だけの日は、主要なポイントを定型文\n  とする（上記）" in _W105 and "項目数を埋めるためにtier3単独ソースを採用しない" in _pf105
       and "暗号通貨価格への直接因果は未確認" in _p105 and generate_post.NO_CANDIDATES_FALLBACK.count("指標の材料はpart1_pointsの1番目に置く") == 1)
 check("v1.105: 上限4項目に収まらないときのuse:falseの対象は「重要度の低い（上記の優先順位で後ろの区分の）材料」。Bの扱いの基準4(d)の「重要度」も、この優先順位によると書く（見送りのreasonは「上限4項目のため見送り」）",
       "重要度の低い（上記の優先順位で後ろの区分の）\n  材料を use:false にする" in _W105
@@ -7493,13 +7495,14 @@ check("v1.105追補 順位外の材料: (1)〜(5)に当たらない材料（通�
 check("v1.105追補 区分の境界: 規制当局の決定・訴訟・規則・法制化（ETFの承認可否を含む）は(1)、取引所・企業・プロトコルの動き・セキュリティ事故は(4)、ETFの資金流入・流出の動向は(5)。「①の中での主題の選び方」(2)のETFの承認＝制度材料の扱いと整合する",
       "区分の境界:SEC・CFTC等の規制当局の決定・訴訟・規則・法制化（ETFの承認可否を含む）は(1)、取引所・企業・プロトコルの動きやハッキング等のセキュリティ事故は(4)、ETFの資金流入・流出の動向（金額・方向）は(5)とする" in _pf105
       and "SEC・CFTC等の規則案・最終規則・登録承認、ETFの承認など" in generate_post.NO_CANDIDATES_FALLBACK.replace("\n", "").replace(" ", ""))
-check("v1.105追補 0項目の条件: 「採用した材料が全体で0件の日だけ0項目で定型文」。ヘッドライン1件だけの日は1項目（ヘッドラインの主題を数えない規則で0項目と読めてしまう衝突を避ける）",
-      "採用した材料が全体で0件の日だけ、0項目で定型文を使う" in _pf105 and "ヘッドラインの1件だけの日は、その材料を1項目として載せる" in _pf105)
-check("v1.105追補 帰属の例外: ヘッドラインの主題が独立2ソースのtier3材料のときは、但し書き（ヘッドラインには書かない：v1.70の②の詳細）と媒体名を書く場所が主要なポイントしか無いので1項目として載せる（件数にも数える）。tier2の報道がヘッドラインの主題なら、帰属（「Reutersによると」等）をヘッドライン自体に書く。ヘッドラインに従として併記した材料も「ヘッドラインの材料」",
-      "ヘッドラインの主題が独立2ソース規定のtier3材料のとき:「公式発表での確認が取れていない」旨の但し書きはヘッドラインに書かない（上記「②の詳細」）ので、その材料も主要なポイントの1項目として、媒体名と但し書きを付けて載せる（件数にも数える）" in _pf105
+check("v1.105追補→v1.107 0項目の条件: 採用した材料が全体で0件の日はヘッドラインも主要なポイントも定型文。ヘッドラインの1件だけの日は主要なポイントを定型文1件にする（v1.107・オーナー指示。繰り返さない）",
+      "採用した材料が全体で0件の日は、ヘッドラインも主要なポイントも定型文を使う" in _pf105
+      and "（採用した材料がヘッドラインの1件だけの日）は、主要なポイントを定型文「補足できる検証済み材料は確認できない。」の1件とする" in _pf105)
+check("v1.105追補→v1.107 帰属の例外: ヘッドラインの主題が独立2ソースのtier3材料のときは、媒体名と「公式発表は未確認」をヘッドライン末尾の出典の括弧に書き、主要なポイントでは繰り返さない（項目数にも数えない）。tier2の報道がヘッドラインの主題なら、帰属（「Reutersによると」等）をヘッドライン自体に書く。ヘッドラインに従として併記した材料も「ヘッドラインの材料」",
+      "ヘッドラインの主題が独立2ソース規定のtier3材料のとき:媒体名と「公式発表は未確認」を、ヘッドライン末尾の出典の括弧に書く（上記「②の詳細」）。主要なポイントでは繰り返さない（項目数にも数えない）。tier1の公式発表で裏付けがある日は断り書き不要" in _pf105
       and "ヘッドラインの主題がtier2の報道のとき:「Reutersによると」等の帰属をpart1_headline自体に書く（主要なポイントで繰り返さないため）" in _pf105
       and "ヘッドラインに従として併記した材料も同じ" in _pf105
-      and "公式発表での確認が取れていない」旨の但し書きはpart1_headlineに\n書かず、part1_pointsの該当項目に明記する" in generate_post.NO_CANDIDATES_FALLBACK)
+      and "公式発表での確認が取れていない」旨の但し書きはpart1_headlineに\n書かず" not in generate_post.NO_CANDIDATES_FALLBACK)
 check("v1.105追補 C18の補強: Bの限定表現は、因果を示す語と価格の語を含む文と同じ文の中に書く。別の文に書いてもC18では限定にならない（verify_postのC18は文単位で、限定語が同じ文に無いとFAIL）",
       "限定表現（未確認・可能性・とみられる等）もその同じ文の中に書く（別の文に書いても、システムの確認C18では限定にならない）" in _pf105
       and all(w in verify_post.LIMITING_EXPRESSIONS for w in ("未確認", "可能性", "とみられる")))
@@ -7593,6 +7596,129 @@ check("v1.106追補 重複: 重複先の候補を名指ししていない「他�
 _ex106 = [x.replace("\n", "") for x in __import__("re").findall(r"「([BC]: .*?)」(?=[\n「）等])", generate_post.NO_CANDIDATES_FALLBACK, __import__("re").S)]
 check("v1.106追補 見本の検査（プロンプト本文から取り出す）: v1.104のreason見本7本はすべて、この警告に当たらない（見本どおりに書けば警告は出ない）。プロンプトを直して見本が変わっても、この検査が追従する",
       len(_ex106) == 7 and _f106([_l106(x) for x in _ex106], _tm106) == [], str([x for x in _ex106 if _f106([_l106(x)], _tm106)]))
+
+print("=== v1.107（オーナー承認）: 独立2ソース材料が見出しの主題の日の断り書き（見出し末尾の出典の括弧）／主要なポイントで繰り返さない／材料1件だけの日は定型文／C28の境界つき照合 ===")
+_B107 = json.loads((REPO / "outputs/2026-10-06/draft/post_bundle.json").read_text(encoding="utf-8"))
+_D107 = json.loads((REPO / "outputs/2026-10-06/daily_data.json").read_text(encoding="utf-8"))
+_CAV107 = "（The Block、Cointelegraph、10月6日。公式発表は未確認）"
+_H107 = "Winklevoss系の企業がZcashの現物ETFをSECに申請したと2媒体が報じました" + _CAV107 + "。"
+_FP107 = "・" + generate_post.FIXED_POINTS
+
+
+_FLOW107 = ("・【出来事・ニュース】Winklevoss系の企業がZcashの現物ETFをSECに申請したと報じられました（The Block、Cointelegraph、10月6日） → "
+            "【暗号通貨価格】BTC・ETHは同時期にやや軟調に推移しましたが、因果は未確認です。 #BTC #ETH")
+
+
+def _run107(headline, points=None, fg=None, flow=None):
+    """10/6のコミット済みのbundleの見出し・主要なポイント・フローだけを差し替えて機械監査を回す。数値テンプレート（C16の対象）は、
+    差し替え後のdaily_dataから再計算する（C16が検査するのは「テンプレートの再計算との一致」で、見出しの変更とは無関係なため）。"""
+    b = json.loads(json.dumps(_B107))
+    d = json.loads(json.dumps(_D107))
+    if fg is not None:
+        d["market"]["fear_greed"]["value"] = fg
+    s = b["sections"]
+    s["part1_headline"] = headline
+    if points is not None:
+        s["part1_points"] = points
+    if flow is not None:
+        s["part2_flow"] = flow
+    s["part0_target_date"] = compose_numeric.compose_part0_target_date(d)
+    s["part1_numeric"] = compose_numeric.compose_part1_numeric(d)
+    s["part2_numeric"] = compose_numeric.compose_part2_numeric(d)
+    s["lp_comment"] = compose_post.compose_lp_comment(d) if hasattr(compose_post, "compose_lp_comment") else verify_post.compose_lp_comment(d)
+    b["part1_md"], b["part2_md"] = compose_post.render_markdown(s, b["level"])
+    return verify_post.run_all(b, d)
+
+
+def _failed107(au):
+    return [c["id"] for c in au.checks if c["result"] == "FAIL"]
+
+
+_base107 = _run107(_B107["sections"]["part1_headline"])
+check("v1.107 前提: 10/6のコミット済みの本文は、現行の機械監査でFAILなし・警告なし（以降の比較の基準）",
+      _failed107(_base107) == [] and len(_base107.warnings) == 0, str(_failed107(_base107)))
+_res107 = {fg: _failed107(_run107(_H107, _FP107, fg, _FLOW107)) for fg in (26, 20, 10, 6, 67, 45)}
+check("v1.107 C28: 見出し末尾の出典の括弧（「10月6日」）と、Fear & Greedの値が20・26・10・6など日付の数字と同じ日でも、機械監査（C12〜C28）はFAILしない（修正前は部分一致でFAIL）。残る限界: 値が1桁（本文の「2媒体」等の件数と一致しうる）の日は従来どおり一致しうる（過去57日の最小は36）",
+      all(v == [] for v in _res107.values()), str(_res107))
+_res107y = {fg: _failed107(_run107(_H107.replace("10月6日", "2026年10月6日"), _FP107, fg, _FLOW107)) for fg in (26, 20, 10, 6)}
+check("v1.107 C28: 年つきの日付（「2026年10月6日」）でも、Fear & Greedの値が日付の数字と同じ日にFAILしない（日付の式を判定の前に取り除く）",
+      all(v == [] for v in _res107y.values()), str(_res107y))
+_dv107 = verify_post._daily_data_display_values(_D107)
+check("v1.107 C28の判定: 日付の式（年・月・日・ISO形式）を取り除き、数字・小数点に隣接しない一致だけを再掲とみなす。「2026年10月6日」の中の26・20・10・6は再掲でない／「1,067」の中の67も再掲でない",
+      verify_post._find_display_value_hits("（The Block、2026年10月6日）と2026-10-06", {"26", "20", "10", "6", "2"}) == []
+      and verify_post._find_display_value_hits("1,067件", {"67"}) == [] and verify_post._find_display_value_hits("2067", {"67"}) == []
+      and any(v in ("-0.76%", "-0.51%", "-1.11%") for v in _dv107))
+check("v1.107 C28は本来の検知を維持する: 主要なポイントにFear & Greedの値（67）・価格（$85,520）・24時間比の表示値（-0.76%）が単独で書かれれば従来どおりFAIL",
+      all("C28_headline_points_role_separation" in _failed107(_run107(_H107, pts, None, _FLOW107)) for pts in (
+          "・市場心理は67まで改善しました。", "・BTCは$85,520でした。", "・ETHは-0.76%でした。")))
+_old107 = lambda text, dv: sorted(v for v in dv if v in text)  # 修正前の部分一致（比較用）
+check("v1.107 C28の回帰: 修正前の部分一致では、見出しの「2026年10月6日」とFear & Greed=26が衝突していた（このテストが衝突を検出できる前提の確認）",
+      _old107(_H107.replace("10月6日", "2026年10月6日"), {"26"}) == ["26"]
+      and verify_post._find_display_value_hits(_H107.replace("10月6日", "2026年10月6日"), {"26"}) == [])
+_days107, _diff107 = 0, []
+for _d in sorted((REPO / "outputs").glob("2026-*")):
+    _bf, _df = _d / "draft" / "post_bundle.json", _d / "daily_data.json"
+    if not (_bf.exists() and _df.exists()):
+        continue
+    _bb, _dd = json.loads(_bf.read_text(encoding="utf-8")), json.loads(_df.read_text(encoding="utf-8"))
+    _dvv = verify_post._daily_data_display_values(_dd)
+    for _k in ("part1_headline", "part1_points"):
+        _tx = _bb["sections"].get(_k) or ""
+        _days107 += 1
+        if bool(_old107(_tx, _dvv)) != bool(verify_post._find_display_value_hits(_tx, _dvv)):
+            _diff107.append((_d.name, _k))
+check("v1.107 C28の回帰（実データ）: コミット済みの全日分のヘッドライン・主要なポイントで、修正前（部分一致）と修正後の判定が一致する（相違0件）",
+      _days107 >= 60 and _diff107 == [], f"{_days107} {_diff107}")
+
+# 見出し末尾の出典の括弧と、他の検査・警告との関係
+check("v1.107 他の検査: 断り書きつきの見出し＋定型文の主要なポイント（10/6の台帳でTheBlock・Cointelegraphが独立2ソースで採用）は、機械監査C12〜C28がすべてPASSで、警告もない（媒体名照合は見出しの括弧の媒体を台帳と照合し、一致する）",
+      _failed107(_run107(_H107, _FP107, None, _FLOW107)) == [] and len(_run107(_H107, _FP107, None, _FLOW107).warnings) == 0,
+      str([w["id"] for w in _run107(_H107, _FP107, None, _FLOW107).warnings]) + str(_failed107(_run107(_H107, _FP107, None, _FLOW107))))
+check("v1.107 媒体名照合: 見出し末尾の括弧から媒体名（The Block・Cointelegraph）を取り出す（日付・「。公式発表は未確認」は媒体名にしない）。台帳で採用されていない媒体を見出しが引用していれば警告する",
+      verify_post.item_media_names(_H107) == ["The Block", "Cointelegraph"]
+      and verify_post.find_media_mismatches({"part1_headline": _H107, "part1_points": _FP107}, _B107["audit_ledger"], verify_post._load_source_tier_map()) == []
+      and len(verify_post.find_media_mismatches({"part1_headline": _H107.replace("The Block、Cointelegraph", "CoinDesk"), "part1_points": _FP107},
+                                                [e for e in _B107["audit_ledger"] if e["source"] != "CoinDesk"] + [{"source": "CoinDesk", "decision": "不採用", "title": "t", "reason": "r"}],
+                                                verify_post._load_source_tier_map())) == 1)
+_cv107 = verify_post._find_c18_violations({"part1_headline": "金利上昇のため市場が動きました" + _CAV107 + "。"}, ["part1_headline"], set())
+_cok107 = verify_post._find_c18_violations({"part1_headline": "金利上昇のため市場が動いた可能性があります" + _CAV107 + "。"}, ["part1_headline"], set())
+check("v1.107 C18との関係: 括弧内の「。」で文が分かれるため、断り書きの「未確認」は本文側の断定を救済しない（本文側に限定表現が無ければ従来どおり検出）／本文側に限定表現があれば検出しない",
+      len(_cv107) == 1 and _cv107[0]["sentence"].startswith("金利上昇のため") and _cok107 == [])
+
+# プロンプト
+_NF107 = generate_post.NO_CANDIDATES_FALLBACK
+_sec107 = _NF107[_NF107.index("### ②（(i)なし・(ii)あり）の詳細"):_NF107.index("### ③（(i)なし・(ii)なし）の詳細")]
+check("v1.107 プロンプト②: 独立2ソース材料がヘッドラインの主題の日は、末尾の出典の括弧に媒体名（すべて）・日付（「10月6日」の形で年なし）・「公式発表は未確認」を書く。括弧内の「。」は文に数えない。tier1の公式発表で裏付けがある日は付けない。主要なポイントでは繰り返さない。headline_for_imageには含めない。①で従として併記する場合も同じ",
+      "「（The Block、Cointelegraph、10月6日。公式発表は未確認）」" in _sec107 and "日付は「10月6日」の形で年を付けない" in _sec107.replace("\n", "")
+      and "括弧の中の「。」は\n文の区切りとして数えず" in _sec107 and "tier1の公式発表で同じ事実の裏付けがある日は、この断り書きは付けない" in _sec107
+      and "この材料は【主要なポイント】で繰り返さない（項目数にも数えない" in _sec107 and "（括弧・但し書きは\n含めない）" in _sec107
+      and "①で独立2ソース材料を従として\n併記する場合も" in _sec107 and "2026年10月6日" not in _sec107)
+check("v1.107 プロンプト: 独立2ソース規定の(c)に、ヘッドラインに書く場合は見出し末尾の括弧に書き、書かない材料は従来どおり主要なポイントの項目の中に書く旨を追記（旧例「公式発表での確認は取れていません」は維持）",
+      "ヘッドラインに書く\n     場合は、ヘッドライン末尾の出典の括弧「（媒体名、媒体名、10月6日。公式発表は\n     未確認）」に書く" in generate_post.NEWS_SELECTION
+      and "ヘッドラインに書かない材料は、従来どおり\n     【主要なポイント】の項目の中に書く" in generate_post.NEWS_SELECTION
+      and "例:「公式発表での確認は取れていません」" in generate_post.NEWS_SELECTION)
+check("v1.107 プロンプト: 材料がヘッドラインの1件だけの日は、主要なポイントを定型文「補足できる検証済み材料は確認できない。」1件とする節（②③の後）が1つだけあり、定型文の本文が入っている。旧「1項目として載せる」「従来どおり1項目とする」は残っていない",
+      generate_post.SYSTEM_A.count("### 材料がヘッドラインの1件だけの日（v1.107・オーナー指示）") == 1
+      and "指定文言「" + generate_post.FIXED_POINTS + "」1件とする" in generate_post.SYSTEM_A
+      and "その材料を1項目として載せる" not in generate_post.SYSTEM_A and "従来どおり1項目とする" not in generate_post.SYSTEM_A
+      and generate_post.FIXED_POINTS in generate_post.WRITES_A.replace("\n", "").replace(" ", ""))
+check("v1.107 プロンプト: ヘッドラインの構成要件は、断り書きの括弧を書く旨に改め（旧「書かない」は削除）、括弧内の日付は冒頭禁止の例外とし、情報源規律の節（1件だけならヘッドライン＋定型文）と整合する",
+      "独立2ソース材料（tier3の2媒体以上）をヘッドラインに書くときは、末尾の出典の括弧" in _NF107
+      and "（出典の括弧の中の日付は書く）" in _NF107.replace("\n", "").replace(" ", "")
+      and "その材料は\npart1_headlineに書き、part1_pointsは定型文とする" in generate_post.NEWS_SELECTION)
+# 前日以前の投稿の読み込み: 定型文の項目（材料がヘッドラインの1件だけの日）は除く
+import tempfile as _tf107
+_root107 = Path(_tf107.mkdtemp())
+(_root107 / "2026-10-08" / "draft").mkdir(parents=True)
+(_root107 / "2026-10-08" / "draft" / "post_bundle.json").write_text(json.dumps({"level": "L0", "sections": {
+    "part1_headline": _H107, "part1_points": _FP107}}, ensure_ascii=False), encoding="utf-8")
+_pp107 = generate_post._load_previous_posts("2026-10-09", outputs_root=_root107)
+check("v1.107 前日以前の投稿: ヘッドラインが実文言で主要なポイントが定型文の日は、見出しは読み込み、定型文の項目は除く（モデルが定型文を前日の材料と誤解しない）",
+      len(_pp107) == 1 and _pp107[0]["part1_headline"] == _H107 and _pp107[0]["part1_points"] == [], str(_pp107))
+check("v1.107 call_Aの後処理: 主要なポイントが定型文の1件でも、行頭記号の整形・採用材料の判定は壊れない（ヘッドラインが実文言なら採用材料あり）",
+      generate_post.normalize_items([generate_post.FIXED_POINTS]) == ([generate_post.FIXED_POINTS], 0)
+      and generate_post._has_adopted_material({"part1_headline": _H107, "part1_points": [generate_post.FIXED_POINTS]}) is True
+      and generate_post._has_adopted_material({"part1_headline": generate_post.FIXED_HEADLINE, "part1_points": [generate_post.FIXED_POINTS]}) is False)
 
 print()
 print(f"PASS: {len(PASS)}  FAIL: {len(FAIL)}")
