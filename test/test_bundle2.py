@@ -7664,7 +7664,7 @@ check("v1.107 C28の回帰: 修正前の部分一致では、見出しの「2026
 _days107, _diff107 = 0, []
 for _d in sorted((REPO / "outputs").glob("2026-*")):
     _bf, _df = _d / "draft" / "post_bundle.json", _d / "daily_data.json"
-    if not (_bf.exists() and _df.exists()):
+    if not (_bf.exists() and _df.exists()) or _d.name > "2026-10-06":  # v1.110以降の本文（差し込み後のフロー）を含めない・日数に依存しない
         continue
     _bb, _dd = json.loads(_bf.read_text(encoding="utf-8")), json.loads(_df.read_text(encoding="utf-8"))
     _dvv = verify_post._daily_data_display_values(_dd)
@@ -7752,7 +7752,7 @@ check("v1.108 登録簿・STATUS: 警告の種類「見出しの繰り返し」�
 _days108 = {}
 for _d in sorted((REPO / "outputs").glob("2026-*")):
     _bf = _d / "draft" / "post_bundle.json"
-    if _bf.exists():
+    if _bf.exists() and _d.name <= "2026-10-06":  # 日次コミットで増える日数に依存しないよう、10/6までに固定（v1.108追補）
         _bb = json.loads(_bf.read_text(encoding="utf-8"))
         _days108[_d.name] = (_bb["sections"]["part1_headline"] == generate_post.FIXED_HEADLINE, [h["item_no"] for h in verify_post.find_headline_repeats(_bb["sections"])])
 check("v1.108 実データ（コミット済みの全日分）: 定型文の見出しの日は警告が出ない。見出しの材料が主要なポイントの1番目に繰り返されていた日（9/17・9/24・10/2・10/5・10/6）は警告が出る。見出しが実文言の24日中14日で出る（v1.107より前の「1件だけの日は1項目」の運用による繰り返しも含む）",
@@ -7887,7 +7887,7 @@ check("v1.110 再生成: call_Bの再生成（v1.101）に渡す「直前の連�
 _hist110 = []
 for _d in sorted((REPO / "outputs").glob("2026-*")):
     _bf, _df = _d / "draft" / "post_bundle.json", _d / "daily_data.json"
-    if not (_bf.exists() and _df.exists()):
+    if not (_bf.exists() and _df.exists()) or _d.name > "2026-10-06":  # 日次コミットで増える日数に依存しないよう、10/6までに固定（v1.110追補）
         continue
     _fl = json.loads(_bf.read_text(encoding="utf-8"))["sections"].get("part2_flow") or ""
     _dd = json.loads(_df.read_text(encoding="utf-8"))
@@ -7922,7 +7922,7 @@ check("v1.107追補 C16b（端の値）: 本文の先頭・末尾（headline_for
 _bad_c16b = []
 for _d in sorted((REPO / "outputs").glob("2026-*")):
     _bf, _df = _d / "draft" / "post_bundle.json", _d / "daily_data.json"
-    if _bf.exists() and _df.exists():
+    if _bf.exists() and _df.exists() and _d.name <= "2026-10-06":  # v1.110以降はフローにシステムの差し込み（数値）が入るため、10/6までに固定
         _bb, _dd = json.loads(_bf.read_text(encoding="utf-8")), json.loads(_df.read_text(encoding="utf-8"))
         _llm = "\n".join(_bb["sections"].get(k, "") for k in _bb["llm_section_keys"]) + "\n" + (_bb.get("headline_for_image") or "")
         if verify_post._find_transcriptions(_dd, _llm, verify_post._load_allowlist(_d.name, "c16b_allowlist.json")):
