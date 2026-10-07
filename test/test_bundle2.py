@@ -34,7 +34,7 @@ generate_post.RETRY_DELAYS_SEC = (0, 0)
 # 例: _wk(direction=1) → 「向きの食い違い1・見出しのタグ0・指標日の見出し0…」
 _WK_SHORT = {"direction": "W_direction_mismatch", "hashtag": "W_headline_hashtag", "indicator": "W_indicator_headline",
              "flow": "W_flow_format", "media": "W_media_mismatch", "geo": "W_geo_rejected_fixed",
-             "bullet": "W_bullet_normalized", "headline": "W_headline_reason"}
+             "bullet": "W_bullet_normalized", "headline": "W_headline_reason", "repeat": "W_headline_repeat"}
 
 
 def _wk(**counts):
@@ -5857,7 +5857,7 @@ check("R1: 出力形式は {text, carried_from, candidate_ids} 形式で、形�
       '{ "text": "...", "carried_from": "YYYY-MM-DD", "candidate_ids": [] }' in _A
       and "システムが機械的に除外する" in _A)
 check("R1: 採用（use:true）した材料はすべて主要なポイントへ載せる／載せない材料はuse:false／ヘッドラインの繰り返しにしない（オーナー指示）",
-      "採用（use:true）した材料はすべて part1_headline・part1_points に載せる" in _A
+      "採用（use:true）した材料はすべて part1_headline・part1_points のどちらか1か所に載せる" in _A
       and "載せない材料は use:false にする" in _A and "ヘッドラインの主題と同じ材料を繰り返さない" in _A
       and "採用した材料がヘッドラインの1件だけの日は、主要なポイントを定型文\n  とする（上記）" in _A
       and "上限4項目に収まらない場合は、関連する材料を1項目に" in _A and "重要度の低い（上記の優先順位で後ろの区分の）\n  材料を use:false にする" in _A)
@@ -7440,10 +7440,12 @@ print("=== v1.104 追補（独立レビューへの対処）: (c)の重複はtie
 _NS104b = generate_post.NEWS_SELECTION
 _sec104b = _NS104b[_NS104b.index("### Bの扱いの基準（v1.99・オーナー指示）"):_NS104b.index("### 情報源規律と項目数の優先順位")]
 _flat104b = _sec104b.replace("\n", "").replace(" ", "")
-check("v1.104追補 (c): 重複で不採用にするのは「同じtierの採用済みの候補」と同一の事実の場合。tier1とtier2が同一の事実を報じるときは(c)に当たらず、両方use:trueで1項目にまとめ、媒体名を併記する（tier3は従来どおり）",
+check("v1.104追補→v1.108 (c): 重複で不採用にするのは「同じtierの採用済みの候補」と同一の事実の場合。tier1とtier2が同一の事実を報じるときは(c)に当たらず、tier2を「重複」でuse:falseにせず、両方use:trueにして1か所にまとめる（ヘッドラインの主題ならヘッドラインの1つの記述に、そうでなければ主要なポイントの1項目に。両方には書かない）（tier3は従来どおり）",
       "(c)同じtierの採用済みの候補と同一の事実を報じている重複（reasonに重複先のcandidate_idを書く）" in _flat104b
-      and "ただし、tier1とtier2が同一の事実を報じているときは(c)に当たらない。両方をuse:trueにして1項目にまとめ、媒体名を併記する" in _flat104b
-      and "tier3の扱いは上記tier3・独立2ソース規定のとおり" in _flat104b)
+      and "ただし、tier1とtier2が同一の事実を報じているときは(c)に当たらない。tier2を「重複」を理由にuse:falseにしない。両方をuse:trueにして、1か所にまとめて書く" in _flat104b
+      and "その材料がヘッドラインの主題なら【ヘッドライン】の1つの記述に（「Reutersによると」等の帰属を同じ記述に書く）、そうでなければ【主要なポイント】の1項目に（媒体名を併記する）" in _flat104b
+      and "ヘッドラインと主要なポイントの両方には書かない（tier3の扱いは上記tier3・独立2ソース規定のとおり）" in _flat104b
+      and "1項目にまとめ、媒体名を併記する" not in _flat104b)
 check("v1.104追補 (g): 「use:falseにして『よい』のであって、必ず落とすという意味ではない」。他に採用する材料がある日の補足は従来のB／Cの判定、4項目超は(d)。reasonに書く語・地政学・エネルギー材料にだけ使う旨は維持",
       "use:falseにして「よい」のであって、必ず落とすという意味ではない" in _flat104b
       and "他に採用する材料がある日に補足として載せるかは、本節の3のとおり従来どおりB／Cの判定による（4項目を超えるときは(d)で見送る）" in _flat104b
@@ -7635,8 +7637,8 @@ def _failed107(au):
 
 
 _base107 = _run107(_B107["sections"]["part1_headline"])
-check("v1.107 前提: 10/6のコミット済みの本文は、現行の機械監査でFAILなし・警告なし（以降の比較の基準）",
-      _failed107(_base107) == [] and len(_base107.warnings) == 0, str(_failed107(_base107)))
+check("v1.107 前提: 10/6のコミット済みの本文は、現行の機械監査でFAILなし・警告は「見出しの繰り返し」1件だけ（v1.108で追加。ボウマン講演が見出しと主要なポイントの1番目に出る）（以降の比較の基準）",
+      _failed107(_base107) == [] and [w["id"] for w in _base107.warnings] == ["W_headline_repeat"], str(_failed107(_base107)))
 _res107 = {fg: _failed107(_run107(_H107, _FP107, fg, _FLOW107)) for fg in (26, 20, 10, 6, 67, 45)}
 check("v1.107 C28: 見出し末尾の出典の括弧（「10月6日」）と、Fear & Greedの値が20・26・10・6など日付の数字と同じ日でも、機械監査（C12〜C28）はFAILしない（修正前は部分一致でFAIL）。残る限界: 値が1桁（本文の「2媒体」等の件数と一致しうる）の日は従来どおり一致しうる（過去57日の最小は36）",
       all(v == [] for v in _res107.values()), str(_res107))
@@ -7719,6 +7721,44 @@ check("v1.107 call_Aの後処理: 主要なポイントが定型文の1件でも
       generate_post.normalize_items([generate_post.FIXED_POINTS]) == ([generate_post.FIXED_POINTS], 0)
       and generate_post._has_adopted_material({"part1_headline": _H107, "part1_points": [generate_post.FIXED_POINTS]}) is True
       and generate_post._has_adopted_material({"part1_headline": generate_post.FIXED_HEADLINE, "part1_points": [generate_post.FIXED_POINTS]}) is False)
+
+print("=== v1.108（オーナー承認・調査1）: tier1+tier2の同一事実は1か所にまとめる／警告「見出しの繰り返し」 ===")
+_S108 = json.loads(json.dumps(_B107["sections"]))
+_r108 = verify_post.find_headline_repeats(_S108)
+check("v1.108 検知（実データ10/6）: ヘッドライン（FRBボウマン理事の銀行監督の講演）と同じ材料が主要なポイントの1番目で繰り返されているのを拾う。共通語にボウマン・銀行監督が入る。S&P最高値・EIA・Zcash ETFの項目は拾わない",
+      [h["item_no"] for h in _r108] == [1] and {"ボウマン", "銀行監督"} <= set(_r108[0]["shared"]) and len(_r108[0]["shared"]) >= 3, str(_r108))
+check("v1.108 対象外: ヘッドラインが定型文の日・主要なポイントが定型文の日（v1.107の材料1件だけの日）・空は警告しない",
+      verify_post.find_headline_repeats({"part1_headline": generate_post.FIXED_HEADLINE, "part1_points": "・" + generate_post.FIXED_POINTS}) == []
+      and verify_post.find_headline_repeats({"part1_headline": _H107, "part1_points": "・" + generate_post.FIXED_POINTS}) == []
+      and verify_post.find_headline_repeats({"part1_headline": _H107, "part1_points": ""}) == []
+      and verify_post.find_headline_repeats({}) == [])
+_hh108 = "Winklevoss系の企業がZcashの現物ETFをSECに申請したと報じられました" + _CAV107 + "。"
+check("v1.108 誤検知の抑制: 括弧書き（媒体名・日付・断り書き）・媒体名・一般的な語は比べない／共通語が2語だけなら警告しない（同じ機関名だけを共有する別の材料）",
+      verify_post.find_headline_repeats({"part1_headline": _hh108, "part1_points": "・Reutersによると、米国株式市場でS&P500が最高値を更新しました（The Block、Cointelegraph、10月6日。公式発表は未確認）。暗号通貨価格への直接因果は未確認です。"}) == []
+      and verify_post.find_headline_repeats({"part1_headline": "SECがトークン化株式の免除を発表しました。", "part1_points": "・SECは暗号資産取引の規則案への意見募集を開始しました（SEC、10月6日）。"}) == []
+      and len(verify_post.find_headline_repeats({"part1_headline": "SECがトークン化株式の免除を発表しました。",
+                                                 "part1_points": "・SECがトークン化株式の免除を発表し、適用除外の対象を広げました（SEC、10月6日）。"})) == 1)
+check("v1.108 登録簿・STATUS: 警告の種類「見出しの繰り返し」（W_headline_repeat）が登録簿の末尾にあり、種類別の件数に0件の日も出る。10/6の本文では1件（FAILにはしない）",
+      verify_post.WARNING_KINDS[-1] == ("W_headline_repeat", "見出しの繰り返し")
+      and verify_post.format_warning_counts([]).endswith("見出し理由の不採用0・見出しの繰り返し0")
+      and verify_post.format_warning_counts(_base107.warnings) == _wk(repeat=1)
+      and _base107.warnings[0]["item_no"] == 1 and "ヘッドラインと同じ材料の繰り返しの可能性" in _base107.warnings[0]["detail"]
+      and "共通語:" in _base107.warnings[0]["detail"] and _failed107(_base107) == [], str(_base107.warnings[0]["detail"][:150]))
+_days108 = {}
+for _d in sorted((REPO / "outputs").glob("2026-*")):
+    _bf = _d / "draft" / "post_bundle.json"
+    if _bf.exists():
+        _bb = json.loads(_bf.read_text(encoding="utf-8"))
+        _days108[_d.name] = (_bb["sections"]["part1_headline"] == generate_post.FIXED_HEADLINE, [h["item_no"] for h in verify_post.find_headline_repeats(_bb["sections"])])
+check("v1.108 実データ（コミット済みの全日分）: 定型文の見出しの日は警告が出ない。見出しの材料が主要なポイントの1番目に繰り返されていた日（9/17・9/24・10/2・10/5・10/6）は警告が出る。見出しが実文言の24日中14日で出る（v1.107より前の「1件だけの日は1項目」の運用による繰り返しも含む）",
+      all(v[1] == [] for v in _days108.values() if v[0])
+      and all(1 in _days108[d][1] for d in ("2026-09-17", "2026-09-24", "2026-10-02", "2026-10-05", "2026-10-06"))
+      and sum(1 for v in _days108.values() if not v[0]) == 24 and sum(1 for v in _days108.values() if not v[0] and v[1]) == 14,
+      str({d: v for d, v in _days108.items() if v[1]}))
+_NS108 = generate_post.NEWS_SELECTION
+check("v1.108 プロンプト: 「採用（use:true）した材料はすべてheadline・pointsのどちらか1か所に載せる（同じ材料を両方に載せない）」に改めた。旧「part1_headline・part1_points に載せる」の曖昧な読み（両方に載せる）は残らない",
+      "part1_headline・part1_points のどちらか1か所に載せる\n  （同じ材料を両方に載せない。reusable_for_summaryに回さない）" in generate_post.WRITES_A
+      and "part1_headline・part1_points に載せる" not in generate_post.SYSTEM_A.replace("のどちらか1か所に載せる", ""), "")
 
 print()
 print(f"PASS: {len(PASS)}  FAIL: {len(FAIL)}")

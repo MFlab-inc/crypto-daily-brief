@@ -1004,6 +1004,7 @@ WARNING_KINDS: "tuple[tuple[str, str], ...]" = (
     ("W_geo_rejected_fixed", "地政学の不採用"),
     ("W_bullet_normalized", "行頭の記号"),
     ("W_headline_reason", "見出し理由の不採用"),
+    ("W_headline_repeat", "見出しの繰り返し"),
 )
 
 
@@ -1545,6 +1546,59 @@ def check_headline_reason_warn(au: Audit, audit_ledger, tier_map: "dict[str, int
             count=len(hits), entries=hits)
 
 
+# --- 見出しの繰り返しの警告（WARN。FAILではない。v1.108・オーナー承認・調査1）---
+#
+# 背景: 2026-10-06分で、ヘッドラインの主題（FRBボウマン理事の講演・候補3と19）が、主要なポイントの1番目で繰り返された。v1.105で
+# 「ヘッドラインと同じ材料は主要なポイントで繰り返さない」と書いたが、台帳の理由文（「Reuters報道と同一事実のため両者をuseにして1項目にまとめた」）から、
+# v1.104追補の「tier1とtier2が同一の事実のときは両方use:trueにして1項目にまとめる」（どこに載せるかを書いていなかった）を適用した可能性が高い。
+# 繰り返しはv1.105より前（9/17・9/24・10/2・10/5など）からあり、機械的な検知は無かった。
+# 判定（主要なポイントの項目ごとに1件）: ヘッドラインと主要なポイントの項目に、固有の語（英字3字以上・カタカナ3字以上・漢字3字以上の連なり。
+# 括弧書き・媒体名・一般的な語を除く）が3語以上共通していれば警告する。定型文の項目・定型文のヘッドラインは対象外。
+# 追跡用（オーナー指示: 毎日出てもよい）。限界: 語の重なりによる近似で、①同じ機関・人物の別の材料（同じ人物の別の発言）も共通語が多ければ拾う
+# ②言い換えで共通語が少ない繰り返しは見逃す。過去分（〜10/6）では、v1.107より前の「1件だけの日は1項目」の運用による繰り返しも拾う。
+_REPEAT_TOKEN_RE = re.compile(r"[A-Za-z][A-Za-z0-9&\-\.]{2,}|[ァ-ヴー]{3,}|[一-龥]{3,}")
+_REPEAT_STOP = frozenset({
+    "reuters", "coindesk", "cointelegraph", "block", "btc", "eth", "bnb", "usdc", "the", "and", "for", "with",
+    "暗号通貨", "暗号資産", "暗号通貨市場", "暗号通貨専門", "専門メディア", "公式発表", "直接因果", "未確認", "可能性", "意識された",
+    "市場", "影響", "材料", "報道", "報じられ", "発表", "確認", "媒体", "複数", "同一", "関わる", "関する", "ついて",
+})
+_REPEAT_MIN_SHARED = 3
+_REPEAT_MAX_LISTED = 6
+
+
+def _repeat_tokens(text: str) -> "set[str]":
+    text = re.sub(r"（[^（）]*）", "", str(text or ""))  # （媒体名、日付）・断り書きの括弧は比べない
+    return {m.group(0) for m in _REPEAT_TOKEN_RE.finditer(text) if m.group(0).lower() not in _REPEAT_STOP}
+
+
+def find_headline_repeats(sections: dict) -> "list[dict]":
+    """主要なポイントの項目のうち、ヘッドラインと固有の語が{_REPEAT_MIN_SHARED}語以上共通するものを返す。
+    各要素: {"item_no"（1始まり）, "shared"（共通語。ソート済み）, "text"（項目）}。"""
+    headline = str((sections or {}).get("part1_headline") or "").strip()
+    if not headline or headline == generate_post.FIXED_HEADLINE:
+        return []
+    htoks = _repeat_tokens(headline)
+    out = []
+    items = [re.sub(r"^・", "", ln.strip()) for ln in str((sections or {}).get("part1_points") or "").split("\n") if ln.strip()]
+    for i, it in enumerate(items, start=1):
+        if it.strip() == generate_post.FIXED_POINTS:
+            continue
+        shared = sorted(htoks & _repeat_tokens(it))
+        if len(shared) >= _REPEAT_MIN_SHARED:
+            out.append({"item_no": i, "shared": shared, "text": it})
+    return out
+
+
+def check_headline_repeat_warn(au: Audit, sections: dict) -> None:
+    for h in find_headline_repeats(sections):
+        au.warn("W_headline_repeat",
+                f"主要なポイントの{h['item_no']}番目が、ヘッドラインと同じ材料の繰り返しの可能性があります"
+                f"（共通語: {'・'.join(h['shared'][:_REPEAT_MAX_LISTED])}）。ヘッドラインに載せた材料は主要なポイントでは繰り返さない規則です"
+                "（v1.105・v1.107。語の重なりによる検知で、別の材料の可能性もあります）。"
+                f" 項目: 「{_clip_sentence(h['text'], 100)}」",
+                item_no=h["item_no"], shared=h["shared"], sentence=h["text"])
+
+
 def summarize_check_ids(checks: "list[dict]") -> str:
     """実際に評価したチェックのID要約（例: 「C12〜C24・C26〜C28・計17項目」）。
     GENERATION_STATUS.mdの監査表記を、固定文言ではなく実際の評価対象から作る（v1.85）。
@@ -1791,6 +1845,7 @@ def run_all(bundle: dict, daily_data: dict) -> Audit:
         ("地政学の不採用", lambda: check_geo_rejected_warn(au, sections, bundle.get("audit_ledger"), tier_map)),
         ("行頭の記号", lambda: check_bullet_normalized_warn(au, bundle.get("format_normalized"))),
         ("見出し理由の不採用", lambda: check_headline_reason_warn(au, bundle.get("audit_ledger"), tier_map)),
+        ("見出しの繰り返し", lambda: check_headline_repeat_warn(au, sections)),
     ):
         try:
             _fn()
