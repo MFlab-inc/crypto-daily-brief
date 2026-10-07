@@ -1005,6 +1005,7 @@ WARNING_KINDS: "tuple[tuple[str, str], ...]" = (
     ("W_bullet_normalized", "行頭の記号"),
     ("W_headline_reason", "見出し理由の不採用"),
     ("W_headline_repeat", "見出しの繰り返し"),
+    ("W_dup_weak", "重複の根拠が弱い"),
 )
 
 
@@ -1599,6 +1600,67 @@ def check_headline_repeat_warn(au: Audit, sections: dict) -> None:
                 item_no=h["item_no"], shared=h["shared"], sentence=h["text"])
 
 
+# --- 重複の根拠が弱い不採用の警告（WARN。FAILではない。v1.109・オーナー承認・調査2）---
+#
+# 背景: 2026-10-06分で、Reuters「Fed's Daly: need for more hikes hinges on what happens with shocks」（候補26。金融政策の発言）が、
+# 「FRB高官発言だが候補3と重複する金融政策材料のため、上限4項目の関係で見送り」として不採用になった。候補3はボウマン理事の銀行監督の講演で、
+# 別の事実。v1.104で`use:false`にしてよい理由を限定した結果、枠の都合で落とす理由として「重複」が使われた可能性がある。
+# 判定（不採用の候補ごとに1件）: reasonに「重複」「同じ事実」「同一の事実」「同一事実」があり、
+#   ①重複先の候補ID（「候補3」「ID3」）が書かれていない（no_ref）、または
+#   ②書かれた重複先の候補の題名と、この候補の題名に、固有の語（英語の一般的な語・媒体名を除く）が1語も共通していない（no_shared）
+# とき警告する。重複先がtier違い・別の事実でも、題名の語が共通していれば拾わない（同じ人物・出来事なら題名に同じ語が出る）。
+# 台帳の候補IDは、v1.109以降の台帳の`candidate_id`を使う（それ以前の台帳には無いため、その日は判定しない）。
+# 限界: ①題名の語の重なりによる近似で、言い換え（Wall Street shares notch records／S&P 500, Nasdaq reach record highs）の実際の重複を拾う
+# （10/6の記録で、重複の主張9件のうち3件が該当し、うち2件が別の材料の疑い・1件が実際の重複）。②同じ語を共有する別の事実は拾えない。
+# 精度は10/10までの記録で見直す（オーナー指示）。
+_DUP_REASON_RE = re.compile(r"重複|同じ事実|同一の事実|同一事実")
+_DUP_REF_RE = re.compile(r"(?:候補|ID)\s*(?:ID\s*)?([0-9０-９]+)")
+_DUP_TITLE_STOP = frozenset({
+    "reuters", "the", "a", "an", "and", "or", "for", "with", "in", "on", "at", "to", "of", "from", "by", "after", "over", "as", "is", "are",
+    "its", "it", "says", "say", "new", "coindesk", "cointelegraph", "block", "-",
+})
+_DUP_WARN_MAX_LISTED = 5
+
+
+def find_weak_duplicate_claims(audit_ledger) -> "list[dict]":
+    ledger = [e for e in (audit_ledger if isinstance(audit_ledger, list) else []) if isinstance(e, dict)]
+    by_id = {e["candidate_id"]: e for e in ledger if isinstance(e.get("candidate_id"), int) and not isinstance(e.get("candidate_id"), bool)}
+    if not by_id:
+        return []
+    out = []
+    for e in ledger:
+        cid = e.get("candidate_id")
+        reason = str(e.get("reason", ""))
+        if e.get("decision") != "不採用" or not isinstance(cid, int) or not _DUP_REASON_RE.search(reason):
+            continue
+        refs = sorted({int(x.translate(str.maketrans("０１２３４５６７８９", "0123456789"))) for x in _DUP_REF_RE.findall(reason)} - {cid})
+        if not refs:
+            out.append({"candidate_id": cid, "code": "no_ref", "refs": [], "title": str(e.get("title", "")), "reason": reason})
+            continue
+        mine = generate_post._tokenize_title(e.get("title", "")) - _DUP_TITLE_STOP
+        known = [r for r in refs if r in by_id]
+        if known and all(not (mine & (generate_post._tokenize_title(by_id[r].get("title", "")) - _DUP_TITLE_STOP)) for r in known):
+            out.append({"candidate_id": cid, "code": "no_shared", "refs": known, "title": str(e.get("title", "")), "reason": reason,
+                        "ref_titles": [str(by_id[r].get("title", "")) for r in known]})
+    return out
+
+
+def check_dup_weak_warn(au: Audit, audit_ledger) -> None:
+    hits = find_weak_duplicate_claims(audit_ledger)
+    if not hits:
+        return
+    labels = {"no_ref": "重複先の候補IDが書かれていない", "no_shared": "重複先の候補と題名に共通する語が無い"}
+    listed = "".join(f" ・候補{h['candidate_id']}「{_clip_sentence(h['title'], 60)}」（{labels[h['code']]}"
+                     + (f"。重複先: 候補{'・'.join(str(r) for r in h['refs'])}「{_clip_sentence(h['ref_titles'][0], 50)}」" if h.get("ref_titles") else "")
+                     + f"。理由: {_clip_sentence(h['reason'], 60)}）" for h in hits[:_DUP_WARN_MAX_LISTED])
+    more = f" ほか{len(hits) - _DUP_WARN_MAX_LISTED}件" if len(hits) > _DUP_WARN_MAX_LISTED else ""
+    au.warn("W_dup_weak",
+            f"「重複」を理由に不採用にした候補のうち、根拠が弱いものが{len(hits)}件あります。同じ区分でも発言者や内容が違えば別の事実です"
+            "（Bの扱いの基準の4(c)）。重複先と同じ事実かを確認してください（題名の語の重なりによる検知で、実際の重複でも言い換えで拾うことがあります）。"
+            + listed + more,
+            count=len(hits), entries=[{k: v for k, v in h.items() if k != "reason"} for h in hits])
+
+
 def summarize_check_ids(checks: "list[dict]") -> str:
     """実際に評価したチェックのID要約（例: 「C12〜C24・C26〜C28・計17項目」）。
     GENERATION_STATUS.mdの監査表記を、固定文言ではなく実際の評価対象から作る（v1.85）。
@@ -1846,6 +1908,7 @@ def run_all(bundle: dict, daily_data: dict) -> Audit:
         ("行頭の記号", lambda: check_bullet_normalized_warn(au, bundle.get("format_normalized"))),
         ("見出し理由の不採用", lambda: check_headline_reason_warn(au, bundle.get("audit_ledger"), tier_map)),
         ("見出しの繰り返し", lambda: check_headline_repeat_warn(au, sections)),
+        ("重複の根拠が弱い", lambda: check_dup_weak_warn(au, bundle.get("audit_ledger"))),
     ):
         try:
             _fn()
