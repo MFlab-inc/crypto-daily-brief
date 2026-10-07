@@ -7903,16 +7903,49 @@ check("v1.110 実データ（【暗号通貨価格】がある過去4日分）: 
       len(_hist110) == 4 and all(a and b for _, a, b in _hist110), str(_hist110))
 # プロンプト
 _cbf110 = generate_post.CALL_B_INSTRUCTIONS.replace("\n", "").replace(" ", "")
-check("v1.110 プロンプト（呼び出しB）: 【暗号通貨価格】はシステムが「 #BTC -0.51%、 #ETH -0.76%（24時間比）で、」を差し込む。モデルは数値・ハッシュタグ・「24時間比」を書かず、続きの句（形状と限定）だけを書く。連鎖の末尾にもタグを書かない。旧「数値は書かない」の単独の指示は、差し込みの説明に置き換わった",
-      "ラベルの直後に、システムが「#BTC-0.51%、#ETH-0.76%（24時間比）で、」の形で、BTC・ETHの24時間比（daily_dataの値そのもの）を機械的に差し込む" in _cbf110
-      and "あなたは数値・ハッシュタグ・「24時間比」の語を書かず、差し込みに続く句として、同時期の値動きの形状（やや軟調・小幅な上昇など）と限定を書く" in _cbf110
+check("v1.110 プロンプト（呼び出しB）: 【暗号通貨価格】はシステムが「 #BTC ±x.xx%、 #ETH ±x.xx%（24時間比）で、」を差し込む（実際の数値は例に使わず±x.xx%のプレースホルダー。v1.110追補）。モデルは数値・ハッシュタグを書かず、続きの句（形状と限定）だけを書く。連鎖の末尾にもタグを書かない。旧「数値は書かない」の単独の指示は、差し込みの説明に置き換わった",
+      "ラベルの直後に、システムが「#BTC±x.xx%、#ETH±x.xx%（24時間比）で、」の形で、BTC・ETHの24時間比（daily_dataの値そのもの）を機械的に差し込む" in _cbf110
+      and "あなたは数値とハッシュタグを書かず（「24時間比」の表記は差し込み部分に入る）、差し込みに続く句として、同時期の値動きの形状（やや軟調・小幅な上昇など）と限定を書く" in _cbf110
+      and "「【暗号通貨価格】同時期は◇◇（値動きの形状）でしたが、因果は未確認です。」" in _cbf110 and "やや軟調に推移しましたが、因果は未確認です。」" not in _cbf110
+      and "-0.51%" not in generate_post.CALL_B_INSTRUCTIONS and "-0.76%" not in generate_post.CALL_B_INSTRUCTIONS and "-0.51%" not in generate_post.RULES_HASHTAG
       and "あなたは、本文にも連鎖の末尾にもハッシュタグを書かない（v1.110）" in _cbf110 and "形状のみ記述する（数値は書かない）" not in _cbf110
       and "ハッシュタグを付す場合は連鎖の末尾" not in _cbf110)
 check("v1.110 プロンプト（ハッシュタグ規則）: タグを付けてよいのは【市場のフロー】だけで、そのタグはシステムの差し込み部分に付く。呼び出しBは本文にも連鎖の末尾にもタグを書かない。ヘッドライン等には付けない（v1.91）は維持。位置の規則（#の直前・直後）はシステムの差し込みも守る",
-      "システムが【暗号通貨価格】の段階の冒頭に差し込む「 #BTC -0.51%、 #ETH -0.76%（24時間比）」" in generate_post.RULES_HASHTAG.replace("\n  ", "")
+      "システムが【暗号通貨価格】の段階の冒頭に差し込む「 #BTC ±x.xx%、 #ETH ±x.xx%（24時間比）」" in generate_post.RULES_HASHTAG.replace("\n  ", "")
       and "呼び出しBは、本文にも連鎖の末尾にもタグを書かない" in generate_post.RULES_HASHTAG.replace("\n  ", "")
       and "付けない（v1.91・オーナー指示: 見出しにタグは不要）" in generate_post.RULES_HASHTAG
       and _FR110.startswith(" #BTC ") and "、 #ETH " in _FR110 and verify_post._hashtag_violations(" #BTC -0.51%、 #ETH -0.76%（24時間比）で、") == [])
+
+print("=== v1.110 追補（独立レビューへの対処）: モデルが書いた差し込み風の文字列の置換・検知（H1）／再生成の指示と末尾タグ（M2）／ラベル直後の空白・コロン（L4）／プロンプトの例（L2） ===")
+_fake110 = "【出来事・ニュース】〇〇が発表しました（媒体名、日付） → 【暗号通貨価格】 #BTC -9.99%、 #ETH -8.88%（24時間比）で、同時期は横ばいでしたが、因果は未確認です。"
+_fix110 = generate_post.insert_flow_price_fragment([_fake110], _D107)[0]
+check("v1.110追補 H1（差し込み）: モデルが書いた差し込み風の文字列（daily_dataに無い偽の数値）は、先に取り除いてから、daily_dataの値そのもので差し込み直す（偽の数値が検査をすり抜けて本文に残らない）。冪等",
+      _FR110 in _fix110 and "-9.99%" not in _fix110 and "-8.88%" not in _fix110 and _fix110.count("#BTC") == 1 and _fix110.count("（24時間比）") == 1
+      and _fix110.endswith("（24時間比）で、同時期は横ばいでしたが、因果は未確認です。") and generate_post.insert_flow_price_fragment([_fix110], _D107) == [_fix110]
+      and generate_post.strip_flow_price_fragment(_fake110) == "【出来事・ニュース】〇〇が発表しました（媒体名、日付） → 【暗号通貨価格】同時期は横ばいでしたが、因果は未確認です。")
+_s16d = {**_B107["sections"], "part2_flow": _fake110}
+_au16d = verify_post.Audit(); verify_post.check_c16b(_au16d, _D107, _s16d, ["part1_headline", "part1_points", "part2_flow", "part2_summary"], set(), "")
+_s16e = {**_B107["sections"], "part2_flow": _fix110}
+_au16e = verify_post.Audit(); verify_post.check_c16b(_au16e, _D107, _s16e, ["part1_headline", "part1_points", "part2_flow", "part2_summary"], set(), "")
+_au16f = verify_post.Audit(); verify_post.check_c16b(_au16f, _dd110(BTC="未確認", ETH="未確認") , _s16d, ["part1_headline", "part1_points", "part2_flow", "part2_summary"], set(), "")
+check("v1.110追補 H1（C16b）: BTC・ETHの両方の数値がdaily_dataに無い偽の値（-9.99%・-8.88%）の差し込み風の文字列も、FAIL（修正前は転記検知にかからず素通りした）。差し込み直した後の本文はPASS。差し込めない日（数値が無い日）に書かれた差し込み風の文字列もFAIL",
+      [c["result"] for c in _au16d.checks] == ["FAIL"] and [c["result"] for c in _au16e.checks] == ["PASS"] and [c["result"] for c in _au16f.checks] == ["FAIL"]
+      and "差し込み風の文字列" in _au16d.checks[0]["detail"], str([c["detail"][:100] for c in _au16d.checks]))
+_ins110b = lambda t: generate_post.insert_flow_price_fragment([t], _D107)[0]
+check("v1.110追補 M2（末尾のタグ）: モデルが続きの句の末尾に書いた「 #BTC #ETH」（旧書式の名残）は、差し込みのある連鎖では取り除く（タグが重ねて付かない）。ラベルの無い連鎖は変えない",
+      _ins110b("【暗号通貨価格】同時期は横ばいでしたが、因果は未確認です。 #BTC #ETH") == "【暗号通貨価格】" + _FR110 + "で、同時期は横ばいでしたが、因果は未確認です。"
+      and _ins110b("【暗号通貨価格】同時期は横ばいでしたが、因果は未確認です。 #BTC").endswith("因果は未確認です。")
+      and _ins110b("【出来事・ニュース】材料のみ 。 #BTC #ETH") == "【出来事・ニュース】材料のみ 。 #BTC #ETH")
+check("v1.110追補 M2（再生成の指示）: 書式違反の再生成（v1.101）の指示は「ハッシュタグは書かない（システムが差し込む）」。旧「ハッシュタグは句点の後」は無い",
+      "ハッシュタグは書かない（【暗号通貨価格】の数値部分はシステムが差し込む）" in generate_post._build_flow_regen_note(["x"], [{"chain_no": 1, "text": "x", "reasons": ["sentences"]}], "")
+      and "ハッシュタグは句点の後" not in generate_post._build_flow_regen_note(["x"], [{"chain_no": 1, "text": "x", "reasons": ["sentences"]}], ""))
+check("v1.110追補 L4（ラベル直後の空白・コロン）: 【暗号通貨価格】の直後の空白・「：」「:」は取り除いてから差し込む（「【暗号通貨価格】 #BTC … で、 ：同時期」のような崩れを防ぐ）",
+      _ins110b("【暗号通貨価格】：同時期は横ばいでしたが、因果は未確認です。") == "【暗号通貨価格】" + _FR110 + "で、同時期は横ばいでしたが、因果は未確認です。"
+      and _ins110b("【暗号通貨価格】　 同時期は横ばいでしたが、因果は未確認です。") == "【暗号通貨価格】" + _FR110 + "で、同時期は横ばいでしたが、因果は未確認です。"
+      and _ins110b("【暗号通貨価格】: で、同時期は横ばいでしたが、因果は未確認です。") == "【暗号通貨価格】" + _FR110 + "で、同時期は横ばいでしたが、因果は未確認です。")
+check("v1.110追補 L2（プロンプトの例）: 呼び出しBの指示と規則の例に、実際の数値（-0.51%・-0.76%）や実際の値動きの表現を書かない（プレースホルダー±x.xx%・◇◇）。「24時間比」の語を書かないという絶対規則との矛盾は、差し込み部分に入る表記として整理した",
+      "-0.51%" not in generate_post.CALL_B_INSTRUCTIONS and "-0.51%" not in generate_post.RULES_HASHTAG and "±x.xx%" in generate_post.RULES_HASHTAG
+      and "（「24時間比」の表記は差し込み部分に入る）" in generate_post.CALL_B_INSTRUCTIONS.replace("\n", "").replace(" ", ""))
 
 print("=== v1.107 追補（独立レビューへの対処）: C28・C16bの端の値の見逃し／材料1件だけの日の向きの警告／C18の括弧内の「。」／プロンプトの例のプレースホルダー ===")
 check("v1.107追補 C28（端の値）: 文頭・文末の値も再掲として検知する（修正前は、隣の文字が無い＝空文字を「数字・小数点に隣接」と誤判定して見逃した）。数字・小数点に隣接する一致は従来どおり除く",

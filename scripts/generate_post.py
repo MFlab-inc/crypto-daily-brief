@@ -221,7 +221,7 @@ RULES_ABSOLUTE = """## 絶対規則
 RULES_HASHTAG = """## ハッシュタグ規則（X投稿本文のみ）
 
 - ハッシュタグを付けてよいのは【市場のフロー】（呼び出しB）だけとする。そのタグは、
-  システムが【暗号通貨価格】の段階の冒頭に差し込む「 #BTC -0.51%、 #ETH -0.76%（24時間比）」
+  システムが【暗号通貨価格】の段階の冒頭に差し込む「 #BTC ±x.xx%、 #ETH ±x.xx%（24時間比）」
   の部分に付く（v1.110・オーナー指示）。呼び出しBは、本文にも連鎖の末尾にもタグを書かない。
   前編の【ヘッドライン】【主要なポイント】・【総括】・`headline_for_image` には
   付けない（v1.91・オーナー指示: 見出しにタグは不要）。銘柄名に言及する場合も
@@ -945,11 +945,11 @@ part1_points）と文体を揃えること。
   - 【地政学・マクロの変化】: 市場で意識された可能性がある変化。断定しない。
   - 【中間市場指標・市場心理】: 報道で確認できた金利・原油・為替・株価等の
     指標や、それに伴うリスク選好・回避の心理。Fear & Greed指数には触れない。
-  - 【暗号通貨価格】: ラベルの直後に、システムが「 #BTC -0.51%、 #ETH -0.76%（24時間比）で、」
+  - 【暗号通貨価格】: ラベルの直後に、システムが「 #BTC ±x.xx%、 #ETH ±x.xx%（24時間比）で、」
     の形で、BTC・ETHの24時間比（daily_dataの値そのもの）を機械的に差し込む（v1.110・
-    オーナー指示）。あなたは数値・ハッシュタグ・「24時間比」の語を書かず、差し込みに続く句として、
-    同時期の値動きの形状（やや軟調・小幅な上昇など）と限定を書く。例:
-    「【暗号通貨価格】同時期はやや軟調に推移しましたが、因果は未確認です。」。
+    オーナー指示）。あなたは数値とハッシュタグを書かず（「24時間比」の表記は差し込み部分に入る）、
+    差し込みに続く句として、同時期の値動きの形状（やや軟調・小幅な上昇など）と限定を書く。例:
+    「【暗号通貨価格】同時期は◇◇（値動きの形状）でしたが、因果は未確認です。」。
     intraday_rangeにnotable_move: trueの銘柄があれば、その値動きの形状を反映してよい
     （上記「24時間の値動き（notable_move）」参照）。価格因果は断定せず、報道事実は
     「同時期の材料」として限定して扱う。
@@ -1888,7 +1888,10 @@ FLOW_PRICE_LABEL = "【暗号通貨価格】"
 FLOW_PRICE_JOINER = "で、"
 _FLOW_CHANGE_VALUE_RE = re.compile(r"^[+\-−±]?\d+(?:\.\d+)?%$")
 # 差し込み部分（と直後の「で、」）を見つける正規表現。数値は任意（検査側が、数値の中身ではなく形を見るため）。
-FLOW_PRICE_FRAGMENT_RE = re.compile(r"\s#BTC\s[+\-−±]?\d+(?:\.\d+)?%、\s#ETH\s[+\-−±]?\d+(?:\.\d+)?%（24時間比）(?:で、)?")
+FLOW_PRICE_CORE_RE = re.compile(r"\s#BTC\s[+\-−±]?\d+(?:\.\d+)?%、\s#ETH\s[+\-−±]?\d+(?:\.\d+)?%（24時間比）")
+FLOW_PRICE_FRAGMENT_RE = re.compile(FLOW_PRICE_CORE_RE.pattern + "(?:で、)?")
+# モデルが続きの句の末尾に書いた「 #BTC #ETH」（旧書式の名残）。差し込みがある連鎖では、重ねて付かないよう取り除く。
+_FLOW_TRAILING_TAGS_RE = re.compile(r"(?:\s+#(?:BTC|ETH))+\s*$")
 
 
 def build_flow_price_fragment(daily_data: Any) -> str | None:
@@ -1906,17 +1909,22 @@ def build_flow_price_fragment(daily_data: Any) -> str | None:
 
 
 def insert_flow_price_fragment(items: list[str], daily_data: Any) -> list[str]:
-    """【暗号通貨価格】を含む各連鎖の、ラベルの直後に差し込み部分と「で、」を足す（既に入っている連鎖・ラベルの無い連鎖は変えない）。
-    モデルの続きの句が「で、」「、」で始まっていたら、重ならないよう取り除く。差し込めない日（BTC・ETHの数値が無い）は変えない。"""
+    """【暗号通貨価格】を含む各連鎖の、ラベルの直後に差し込み部分と「で、」を足す（ラベルの無い連鎖は変えない）。
+    v1.110追補: モデルが書いた差し込み風の文字列（数値が違うものを含む）は、必ず先に取り除いてから、daily_dataの値そのもので差し込み直す
+    （冪等。モデルが偽の数値を書いても、差し込み部分は常にdaily_dataの値になる）。ラベルの直後の空白・「：」、モデルの続きの句の頭の「で、」「、」、
+    続きの句の末尾の「 #BTC #ETH」は、重ならないよう取り除く。差し込めない日（BTC・ETHの数値が無い）は変えない。"""
     fragment = build_flow_price_fragment(daily_data)
     if not fragment:
         return list(items)
     out = []
     for text in items:
         text = str(text)
-        if FLOW_PRICE_LABEL in text and not FLOW_PRICE_FRAGMENT_RE.search(text):
+        if FLOW_PRICE_LABEL in text:
+            text = strip_flow_price_fragment(text)
             head, _, rest = text.partition(FLOW_PRICE_LABEL)
-            rest = re.sub(r"^\s*(?:で、|、)", "", rest)
+            rest = re.sub(r"^[\s\u3000]*[:：]?[\s\u3000]*", "", rest)
+            rest = re.sub(r"^(?:で、|、)", "", rest)
+            rest = _FLOW_TRAILING_TAGS_RE.sub("", rest)
             text = head + FLOW_PRICE_LABEL + fragment + FLOW_PRICE_JOINER + rest
         out.append(text)
     return out
@@ -2297,7 +2305,7 @@ def _build_flow_regen_note(previous_flow: list, violations: list[dict], previous
         "「→」の直後は必ずラベル。ラベルの語は一字一句そのまま。\n"
         "- ラベルの使い分けは上記の指示のとおり（【地政学・マクロの変化】はマクロの変化に限る。制度・政策や企業財務・市場構造の"
         "材料にはこのラベルを使わず、根拠のない段階は書かない）。\n"
-        "- 1連鎖は1文（句点は末尾に1つだけ）。ハッシュタグは句点の後。末尾に「可能性」「因果は未確認」等の限定を置く。\n"
+        "- 1連鎖は1文（句点は末尾に1つだけ）。ハッシュタグは書かない（【暗号通貨価格】の数値部分はシステムが差し込む）。末尾に「可能性」「因果は未確認」等の限定を置く。\n"
         "- part2_summaryは、直前の文をそのまま出力する（システムは元の総括を使うため、変えない）。\n\n"
         "直前のpart2_flow:\n" + json.dumps(previous_flow, ensure_ascii=False, indent=2)
         + "\n\n直前のpart2_summary:\n" + json.dumps(str(previous_summary or ""), ensure_ascii=False)

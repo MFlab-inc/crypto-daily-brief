@@ -248,6 +248,11 @@ def check_c16b(au: Audit, daily_data: dict, sections: dict, llm_section_keys: li
 
     llm_text = "\n".join(_scan_text(k) for k in llm_section_keys) + "\n" + headline_for_image
     hits = _find_transcriptions(daily_data, llm_text, allowlist)
+    # v1.110追補: 差し込み部分を除いた後に「 #BTC ○%、 #ETH ○%（24時間比）」の形が残っていたら、daily_dataの値と違う差し込み風の文字列
+    # （モデルが書いた偽の数値。daily_dataに無い数値は上の転記検知にかからない）として検知する。差し込めない日（BTC・ETHの数値が無い日）に書かれた場合も同じ。
+    flow_text = _scan_text("part2_flow") if "part2_flow" in llm_section_keys else ""
+    for m in generate_post.FLOW_PRICE_CORE_RE.finditer(flow_text if isinstance(flow_text, str) else ""):
+        hits.append("差し込み風の文字列（daily_dataの値と異なる）:" + m.group(0).strip())
     detail = (f"検知網ヒット（限界あり・要人手確認。誤爆時は config/c16b_allowlist.json へ登録）: {hits}"
               if hits else "転記検知なし")
     au.add("C16b_transcription_scan", not hits, detail, hits=list(hits))
