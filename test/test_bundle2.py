@@ -667,7 +667,7 @@ check("RULES_HASHTAGがタグ名の直後に助詞・読点が続く書き方を
       "#BTCは下落し、#ETHは" in generate_post.RULES_HASHTAG)
 check("RULES_HASHTAGが文中主語ではなく連鎖の末尾にまとめて置く代替パターンを具体例で示している（v1.91: 【市場のフロー】の例に整理）",
       "【市場のフロー】で銘柄を文中の主語にする場合は" in generate_post.RULES_HASHTAG
-      and "前編には使わない" in generate_post.RULES_HASHTAG
+      and "（タグはシステムの差し込み部分に付く）" in generate_post.RULES_HASHTAG
       and "BTC・ETHは24時間比でそれぞれ下落・" not in generate_post.RULES_HASHTAG)
 check("v1.91（オーナー指示）: RULES_HASHTAGは、タグを付けてよいのは【市場のフロー】の連鎖末尾だけで、ヘッドライン・主要なポイント・総括・headline_for_imageには付けない旨を先頭に明記し、SYSTEM_A・SYSTEM_Bの両方に入る",
       generate_post.RULES_HASHTAG.split("\n- `#` は行頭")[0].count("【市場のフロー】") >= 1
@@ -6807,6 +6807,7 @@ print("=== v1.101（オーナー承認）: フロー書式のWARNが出たらcal
 _BAD_FLOW101 = "規制当局が発言した → 【地政学・マクロの変化】好感された可能性 → 【暗号通貨価格】主要銘柄の上昇が同時期に確認されたが、因果は未確認です。"
 _GOOD_FLOW101 = CALL_B_DATA["part2_flow"][0]
 _SUMMARY101 = "地合いは総じて改善。継続的な確認が必要。"
+_PF = lambda s: generate_post.insert_flow_price_fragment([s], DAILY_DATA)[0]  # v1.110: 【暗号通貨価格】にシステムが差し込む数値部分つきの連鎖
 
 
 def _gen101(flow_items):
@@ -6862,15 +6863,15 @@ check("v1.101 前提: 検出される書式違反（先頭に【出来事・ニ�
 # T1: 再生成で直る → 再生成後の版を採用。再生成は1回だけ
 _rc1, _st1, _b1, _calls1 = _run_main101([_BAD_FLOW101], _resp101([_GOOD_FLOW101]))
 check("v1.101 T1: 書式のWARNが出たらcall_Bを1回だけ再生成し、書式が直れば再生成後の版を採用する（フローは正しい書式・WARNなし）",
-      _rc1 == 0 and len(_calls1) == 1 and _b1["sections"]["part2_flow"] == "・" + _GOOD_FLOW101
+      _rc1 == 0 and len(_calls1) == 1 and _b1["sections"]["part2_flow"] == "・" + _PF(_GOOD_FLOW101)
       and verify_post.find_flow_format_violations(_b1["sections"]["part2_flow"]) == [], f"{len(_calls1)} {_b1['sections']['part2_flow'][:80]}")
 check("v1.101 T1: 再生成の呼び出し内容は、通常のcall_Bの入力に、直前の連鎖と検出された違反の追記が付いた形",
       _calls1[0].lstrip().startswith("{") and "### 直前の生成への修正指示（自動再生成・v1.101）" in _calls1[0]
       and _BAD_FLOW101 in _calls1[0] and "【出来事・ニュース】が無い" in _calls1[0] and '"news_from_call_a"' in _calls1[0])
 check("v1.101 T1: STATUSに、再生成した旨・採用した版・再生成前後の連鎖（違反の理由つき）が記録される",
       "call_B フロー書式の再生成（v1.101）: 【市場のフロー】の書式のWARNが1本出たため、call_Bを1回再生成しました。採用: 再生成後の版（再生成後は書式違反が解消しました）。" in _st1
-      and "再生成前の連鎖（WARN1件）:" in _st1 and _BAD_FLOW101 in _st1 and "↳ 1本目の違反: 【出来事・ニュース】が無い・【出来事・ニュース】で始まっていない" in _st1
-      and "再生成後の連鎖（WARN0件）:" in _st1 and _GOOD_FLOW101 in _st1, _st1[:1200])
+      and "再生成前の連鎖（WARN1件）:" in _st1 and _PF(_BAD_FLOW101) in _st1 and "↳ 1本目の違反: 【出来事・ニュース】が無い・【出来事・ニュース】で始まっていない" in _st1
+      and "再生成後の連鎖（WARN0件）:" in _st1 and _PF(_GOOD_FLOW101) in _st1, _st1[:1200])
 check("v1.101 T1: 再生成の使用量はtoken_usageの合計に加わる（入力100+300・出力50+40）。再生成の行に「input=」「output=」の文字列は書かない（コスト記録の抽出を壊さない）",
       "token_usage（実消費量）: input=400, output=90" in _st1
       and not any(("input=" in l or "output=" in l) for l in _st1.split("\n") if "フロー書式の再生成" in l or "再生成の使用量" in l), "")
@@ -6879,11 +6880,11 @@ check("v1.101 T1: 再生成の使用量はtoken_usageの合計に加わる（入
 _BAD_FLOW101B = "別の材料が確認された → 【地政学・マクロの変化】意識された可能性 → 【暗号通貨価格】同時期に横ばいでしたが、因果は未確認です。"
 _rc2, _st2, _b2, _calls2 = _run_main101([_BAD_FLOW101], _resp101([_BAD_FLOW101B]))
 check("v1.101 T2: 再生成後も書式違反が減らないときは、現行どおり元の版をWARNのまま出力する。再生成は1回だけ（再度の再生成はしない）",
-      _rc2 == 0 and len(_calls2) == 1 and _b2["sections"]["part2_flow"] == "・" + _BAD_FLOW101
+      _rc2 == 0 and len(_calls2) == 1 and _b2["sections"]["part2_flow"] == "・" + _PF(_BAD_FLOW101)
       and len(verify_post.find_flow_format_violations(_b2["sections"]["part2_flow"])) == 1, f"{len(_calls2)}")
 check("v1.101 T2: STATUSに「採用: 元の版」と理由、再生成前後の連鎖（再生成後も違反）が記録される",
       "採用: 元の版（再生成後も書式違反が減らなかったため（現行どおり元の版をWARNのまま出力））" in _st2
-      and "再生成後の連鎖（WARN1件）:" in _st2 and _BAD_FLOW101B in _st2 and _BAD_FLOW101 in _st2, _st2[:800])
+      and "再生成後の連鎖（WARN1件）:" in _st2 and _PF(_BAD_FLOW101B) in _st2 and _PF(_BAD_FLOW101) in _st2, _st2[:800])
 
 # T3: 違反が減る（2本→1本）→ 再生成後の版を採用（残りはWARNのまま）
 _rc3, _st3, _b3, _calls3 = _run_main101(["①" + _BAD_FLOW101, "②" + _BAD_FLOW101B], _resp101(["①" + _GOOD_FLOW101, "②" + _BAD_FLOW101B]))
@@ -6895,7 +6896,7 @@ check("v1.101 T3: 再生成で書式違反が2本から1本に減れば、再生
 # T4: 再生成の呼び出しが失敗 → 元の版のまま。STATUSに失敗を記録。本文生成は成功
 _rc4, _st4, _b4, _calls4 = _run_main101([_BAD_FLOW101], lambda kw, n: FakeResponse([FakeTextBlock("bad")]))
 check("v1.101 T4: 再生成の呼び出しが失敗（JSON不正が続く）しても、元の版のまま本文生成は成功し、STATUSに失敗を記録する",
-      _rc4 == 0 and _b4["sections"]["part2_flow"] == "・" + _BAD_FLOW101 and "採用: 元の版（再生成の呼び出しが失敗したため" in _st4
+      _rc4 == 0 and _b4["sections"]["part2_flow"] == "・" + _PF(_BAD_FLOW101) and "採用: 元の版（再生成の呼び出しが失敗したため" in _st4
       and "再生成後の連鎖: （再生成が失敗したため無し）" in _st4 and _b4["level"] == "L0", _st4[:500])
 
 # T5: 再生成後の版が機械監査で新たにFAILするなら、元の版を使う（FAILで本文が出なくなる退行を防ぐ）
@@ -6906,12 +6907,12 @@ _rc5, _st5, _b5, _calls5 = _run_main101([_BAD_FLOW101], _resp101([_PRICE_FLOW101
 check("v1.101 T5（前提）: 書式は正しいが§3.1がフローに書かせない語（Fear & Greed）を含む再生成後の連鎖は、機械監査（C26）でFAILになる（この後のテストの前提）",
       _au_price.failed >= 1, str([c["id"] for c in _au_price.checks if c["result"] == "FAIL"]))
 check("v1.101 T5: 再生成後の本文が機械監査で新たにFAILするときは、書式が直っていても元の版を使い、STATUSに理由（FAILするチェック）を記録する",
-      _b5["sections"]["part2_flow"] == "・" + _BAD_FLOW101 and "採用: 元の版（再生成後の本文は、機械監査で新たにFAILするチェックがあるため（['C" in _st5, _st5[:700])
+      _b5["sections"]["part2_flow"] == "・" + _PF(_BAD_FLOW101) and "採用: 元の版（再生成後の本文は、機械監査で新たにFAILするチェックがあるため（['C" in _st5, _st5[:700])
 
 # T6: 書式違反が無い日・材料なしの定型文の日は再生成しない
 _rc6, _st6, _b6, _calls6 = _run_main101([_GOOD_FLOW101], _resp101([_GOOD_FLOW101]))
 check("v1.101 T6: 書式違反が無い日は再生成しない（呼び出し0回・STATUSに再生成の行なし）",
-      len(_calls6) == 0 and "フロー書式の再生成" not in _st6 and _b6["sections"]["part2_flow"] == "・" + _GOOD_FLOW101, str(len(_calls6)))
+      len(_calls6) == 0 and "フロー書式の再生成" not in _st6 and _b6["sections"]["part2_flow"] == "・" + _PF(_GOOD_FLOW101), str(len(_calls6)))
 _rc6b, _st6b, _b6b, _calls6b = _run_main101([generate_post.FIXED_FLOW], _resp101([_GOOD_FLOW101]))
 check("v1.101 T6: 材料なしの定型文のフローの日は再生成しない", len(_calls6b) == 0 and "フロー書式の再生成" not in _st6b)
 
@@ -6924,7 +6925,7 @@ def _boom101(*a, **k):
 
 _rc7, _st7, _b7, _calls7 = _run_main101([_BAD_FLOW101], _resp101([_GOOD_FLOW101]), patch_regen=_boom101)
 check("v1.101 T7: 再生成の処理が例外になっても、元の版のまま本文生成は成功し、STATUSに例外を記録する",
-      _rc7 == 0 and _b7["sections"]["part2_flow"] == "・" + _BAD_FLOW101
+      _rc7 == 0 and _b7["sections"]["part2_flow"] == "・" + _PF(_BAD_FLOW101)
       and "call_B フロー書式の再生成: 実行中に例外が発生したため元の版のまま出力しました（RuntimeError: boom）" in _st7, _st7[:400])
 
 # 単体: 前編の局所修正済みの本文（bundle）を壊さない（後編のフロー・総括だけを差し替える）
@@ -6943,8 +6944,8 @@ try:
 finally:
     generate_post.regenerate_call_b_for_flow_format = _o_rg2
 check("v1.101 単体: 再生成で差し替えるのは後編のフロー（とpart2_md）だけで、前編（局所修正済みの項目）・総括は変えない",
-      _bd_o["sections"]["part1_points"] == "・局所修正済みの項目です（SEC、2026-08-17）。" and _bd_o["sections"]["part2_flow"] == "・" + _GOOD_FLOW101
-      and "・" + _GOOD_FLOW101 in _bd_o["part2_md"] and _bd_o["sections"]["part2_summary"] == _SUMMARY101 and _info_o["adopted"] == "regenerated"
+      _bd_o["sections"]["part1_points"] == "・局所修正済みの項目です（SEC、2026-08-17）。" and _bd_o["sections"]["part2_flow"] == "・" + _PF(_GOOD_FLOW101)
+      and "・" + _PF(_GOOD_FLOW101) in _bd_o["part2_md"] and _bd_o["sections"]["part2_summary"] == _SUMMARY101 and _info_o["adopted"] == "regenerated"
       and _g_o["total_usage"] == {"input_tokens": 101, "output_tokens": 51}, str(_info_o.get("adopted")) + str(_info_o.get("reason")))
 check("v1.101 単体: call_A・call_Bが失敗している日（L1/L2）は再生成の対象外（記録None・gen/bundle不変）",
       compose_post._regenerate_flow_if_needed({**_g_u, "call_b": {**_g_u["call_b"], "ok": False}}, _bd_u, DAILY_DATA)[2] is None
@@ -6962,10 +6963,10 @@ check("v1.101 プロンプト: 【地政学・マクロの変化】は金利・�
 check("v1.101 プロンプト: マクロの変化が確認できない制度・政策等の材料は、その段階を書かず「【出来事・ニュース】→【暗号通貨価格】」の2段階でよい（根拠のない段階は書かない）。指標・心理があれば【中間市場指標・市場心理】",
       "そうした材料で、報道で確認できたマクロの変化が無いときは、この段階を書かず（根拠のない段階は書かない）" in _cbf and "「【出来事・ニュース】…→【暗号通貨価格】…」の2段階でよい" in _cbf
       and "報道で確認できた指標・心理があれば【中間市場指標・市場心理】を置く" in _cbf)
-_ex101 = "【出来事・ニュース】〇〇が△△を発表しました（媒体名、日付） → 【暗号通貨価格】□□（銘柄）は同時期に◇◇（値動きの形状）でしたが、因果は未確認です。 #BTC #ETH"
+_ex101 = "【出来事・ニュース】〇〇が△△を発表しました（媒体名、日付） → 【暗号通貨価格】同時期は◇◇（値動きの形状）でしたが、因果は未確認です。"
 check("v1.101 プロンプト: 書式の例（プレースホルダー）が入り、その例自体が機械チェックの書式に適合する（誤った見本を示さない）。2段階（地政学・マクロの変化なし）の連鎖はWARNにならない",
       "書式の例（〇〇・△△は例示用のプレースホルダーであり" in _cbf and "【出来事・ニュース】〇〇が△△を発表しました（媒体名、日付）→【暗号通貨価格】" in _cbf
-      and "□□（銘柄）は同時期に◇◇（値動きの形状）でしたが" in _cbf and "おおむね横ばい" not in _cbf
+      and "同時期は◇◇（値動きの形状）でしたが" in _cbf and "おおむね横ばい" not in _cbf
       and verify_post.find_flow_format_violations(_ex101) == []
       and verify_post.find_flow_format_violations("①" + _ex101 + "\n②" + _ex101) == [], "")
 check("v1.101 プロンプト: 変更していないもの——材料が無い日の定型文・「【出来事・ニュース】と【暗号通貨価格】は必ず置く」・限定表現の指示・①②③の指示・呼び出しBへの主張の帰属の1文（v1.99）",
@@ -6982,10 +6983,10 @@ _cb_attempts101 = "call_B: OK（1回試行）"
 # 退化した再生成（空・定型文・連鎖の脱落）は、違反0でも採用しない
 _rc8, _st8, _b8, _ = _run_main101([_BAD_FLOW101], _resp101([]))
 check("v1.101 追補1: 再生成後のフローが空なら、違反0でも採用せず元の版を使う（【市場のフロー】が空になる退化を防ぐ）",
-      _b8["sections"]["part2_flow"] == "・" + _BAD_FLOW101 and "採用: 元の版（再生成後のフローが空だったため）" in _st8, _st8[:500])
+      _b8["sections"]["part2_flow"] == "・" + _PF(_BAD_FLOW101) and "採用: 元の版（再生成後のフローが空だったため）" in _st8, _st8[:500])
 _rc9, _st9, _b9, _ = _run_main101([_BAD_FLOW101], _resp101([generate_post.FIXED_FLOW]))
 check("v1.101 追補1: 材料のある日に再生成後のフローが定型文（材料なし）なら、採用せず元の版を使う",
-      _b9["sections"]["part2_flow"] == "・" + _BAD_FLOW101 and "再生成後のフローが定型文（材料なし）だったため" in _st9, _st9[:500])
+      _b9["sections"]["part2_flow"] == "・" + _PF(_BAD_FLOW101) and "再生成後のフローが定型文（材料なし）だったため" in _st9, _st9[:500])
 _rc10, _st10, _b10, _ = _run_main101(["①" + _BAD_FLOW101, "②" + _BAD_FLOW101B], _resp101([_GOOD_FLOW101]))
 check("v1.101 追補1: 連鎖が2本から1本に減った（材料の脱落）再生成後の版は、違反が減っていても採用せず元の版を使う",
       _b10["sections"]["part2_flow"].count("\n") == 1 and "連鎖の本数が減った（2本→1本。材料の脱落の疑い）" in _st10, _st10[:600])
@@ -6993,7 +6994,7 @@ check("v1.101 追補1: 連鎖が2本から1本に減った（材料の脱落）�
 # 総括は元のまま（フローだけ採用）。call_Bの試行履歴・使用量（元の呼び出し分）は変えない
 _rc11, _st11, _b11, _ = _run_main101([_BAD_FLOW101], lambda kw, n: _usage_resp({"part2_flow": [_GOOD_FLOW101], "part2_summary": "再生成で変わった総括です。"}, 300, 40))
 check("v1.101 追補3: 再生成後の版を採用しても、【総括】は元のまま（フローだけを差し替える）。part2_mdも整合する",
-      _b11["sections"]["part2_summary"] == _SUMMARY101 and _b11["sections"]["part2_flow"] == "・" + _GOOD_FLOW101
+      _b11["sections"]["part2_summary"] == _SUMMARY101 and _b11["sections"]["part2_flow"] == "・" + _PF(_GOOD_FLOW101)
       and _SUMMARY101 in _b11["part2_md"] and "再生成で変わった総括" not in _b11["part2_md"] and "再生成後の版（再生成後は書式違反が解消しました）" in _st11)
 check("v1.101 追補4: 採用しても、STATUSのcall_Bの行（試行回数・使用量の内訳）は元の呼び出しのまま。再生成分は再生成の行と合計に出る",
       "call_B: OK（1回試行）" in _st11 and "call_B: in=10 out=10)" in _st11 and "token_usage（実消費量）: input=400, output=90" in _st11
@@ -7007,7 +7008,7 @@ try:
 finally:
     compose_post._audit_state = _o_as
 check("v1.101 追補2: 再生成のAPI呼び出し後の評価で例外になっても、使った分のトークンはtoken_usageの合計に入る（入力400・出力90）。元の版で続行し、STATUSに記録する",
-      _b12["sections"]["part2_flow"] == "・" + _BAD_FLOW101 and "token_usage（実消費量）: input=400, output=90" in _st12
+      _b12["sections"]["part2_flow"] == "・" + _PF(_BAD_FLOW101) and "token_usage（実消費量）: input=400, output=90" in _st12
       and "再生成後の評価で例外が発生したため（RuntimeError: eval boom）" in _st12, _st12[:700])
 
 # フロー書式以外の警告が増える再生成後の版は採用しない
@@ -7025,7 +7026,7 @@ try:
 finally:
     compose_post._audit_state = _o_as
 check("v1.101 追補5: フロー書式以外の警告（向きの食い違い等）が増える再生成後の版は、書式が直っていても採用せず元の版を使う",
-      _b13["sections"]["part2_flow"] == "・" + _BAD_FLOW101 and "再生成後は、フロー書式以外の警告が増えるため（['W_direction_mismatch']）" in _st13, _st13[:500])
+      _b13["sections"]["part2_flow"] == "・" + _PF(_BAD_FLOW101) and "再生成後は、フロー書式以外の警告が増えるため（['W_direction_mismatch']）" in _st13, _st13[:500])
 _fs, _ws = compose_post._audit_state(compose_post.compose(DAILY_DATA, _gen101([_BAD_FLOW101])), DAILY_DATA)
 check("v1.101 追補5: _audit_stateは、FAILしたチェックのID集合と、フロー書式を除く警告の種類別件数を返す（フロー書式の警告は含めない）",
       isinstance(_fs, set) and "W_flow_format" not in _ws and _fs == set(), f"{_fs} {_ws}")
@@ -7817,6 +7818,97 @@ check("v1.109 プロンプト（順位）: 株式市場の最高値更新・原�
       and "(1)〜(5)に当たる採用候補（独立2ソースのtier3の組を含む）がある間は、順位外の材料を先に載せない" in _WA109
       and "(1)〜(5)に当たる材料は、価格への波及経路が薄いことを理由に見送らない（見送る理由は、順位の低さによる枠の不足だけ）" in _WA109
       and generate_post.SYSTEM_A.count("(5) ETF・資金フロー") == 1 and "(5) ETF・資金フロー" not in generate_post.SYSTEM_B)
+
+print("=== v1.110（オーナー承認・調査3の(1)）: 【市場のフロー】の【暗号通貨価格】にシステムが「 #BTC -0.51%、 #ETH -0.76%（24時間比）」を差し込む／C16bの除外／フロー書式⑥・ハッシュタグ規則 ===")
+_FR110 = generate_post.build_flow_price_fragment(_D107)
+check("v1.110 差し込み部分: daily_dataのBTC・ETHの24時間比（符号つき）を、オーナー指定の形「 #BTC -0.51%、 #ETH -0.76%（24時間比）」（各ハッシュタグの前後に半角スペース）で作る。BNBは入れない。正の値は「+」つきのまま",
+      _FR110 == " #BTC -0.51%、 #ETH -0.76%（24時間比）"
+      and generate_post.build_flow_price_fragment(DAILY_DATA) == " #BTC +2.43%、 #ETH +1.65%（24時間比）" and "BNB" not in _FR110)
+_dd110 = lambda **kw: {"assets": [{"asset": a, "change_24h": v} for a, v in kw.items()]}
+check("v1.110 差し込み部分: BTC・ETHのどちらかが無い・数値として読めない（「未確認」・None・数値でない）日は作らない（片方だけの数値を出さない）。不正な入力でも例外にしない",
+      generate_post.build_flow_price_fragment(_dd110(BTC="-0.51%")) is None and generate_post.build_flow_price_fragment(_dd110(BTC="-0.51%", ETH="未確認")) is None
+      and generate_post.build_flow_price_fragment(_dd110(BTC=None, ETH="-0.76%")) is None and generate_post.build_flow_price_fragment({"assets": "x"}) is None
+      and generate_post.build_flow_price_fragment({}) is None and generate_post.build_flow_price_fragment(None) is None
+      and generate_post.build_flow_price_fragment(_dd110(BTC="+0.00%", ETH="-12.50%")) == " #BTC +0.00%、 #ETH -12.50%（24時間比）")
+_ins110 = generate_post.insert_flow_price_fragment(["【出来事・ニュース】〇〇が発表しました（媒体名、日付） → 【暗号通貨価格】同時期はやや軟調に推移しましたが、因果は未確認です。", "【出来事・ニュース】材料のみ（ラベル無し）"], _D107)
+check("v1.110 差し込み: 【暗号通貨価格】の直後に差し込み部分と「で、」を足す（1文のまま・句点は末尾の1つ）。ラベルの無い連鎖は変えない。既に入っている連鎖には重ねない（冪等）。モデルの続きが「で、」「、」で始まるときは重ねない。数値が無い日は変えない",
+      _ins110[0] == "【出来事・ニュース】〇〇が発表しました（媒体名、日付） → 【暗号通貨価格】 #BTC -0.51%、 #ETH -0.76%（24時間比）で、同時期はやや軟調に推移しましたが、因果は未確認です。"
+      and _ins110[1] == "【出来事・ニュース】材料のみ（ラベル無し）"
+      and generate_post.insert_flow_price_fragment(_ins110, _D107) == _ins110
+      and generate_post.insert_flow_price_fragment(["【暗号通貨価格】で、同時期は横ばいでしたが、因果は未確認です。"], _D107)[0] == "【暗号通貨価格】 #BTC -0.51%、 #ETH -0.76%（24時間比）で、同時期は横ばいでしたが、因果は未確認です。"
+      and generate_post.insert_flow_price_fragment(["【暗号通貨価格】、同時期は横ばいでしたが、因果は未確認です。"], _D107)[0].endswith("（24時間比）で、同時期は横ばいでしたが、因果は未確認です。")
+      and generate_post.insert_flow_price_fragment(["【暗号通貨価格】同時期は横ばい。"], _dd110(BTC="-0.51%")) == ["【暗号通貨価格】同時期は横ばい。"]
+      and generate_post.strip_flow_price_fragment(_ins110[0]) == "【出来事・ニュース】〇〇が発表しました（媒体名、日付） → 【暗号通貨価格】同時期はやや軟調に推移しましたが、因果は未確認です。")
+check("v1.110 描画: compose_post._render_flowは差し込む。材料なしの定型文だけの日は差し込まない（定型文のまま）。daily_dataを渡さない呼び出し（従来）は変えない",
+      compose_post._render_flow([_GOOD_FLOW101], _D107).startswith("・") and _FR110 in compose_post._render_flow([_GOOD_FLOW101], _D107)
+      and compose_post._render_flow([generate_post.FIXED_FLOW], _D107) == generate_post.FIXED_FLOW and compose_post._render_flow([_GOOD_FLOW101]) == "・" + _GOOD_FLOW101)
+_gen110 = _gen101([_GOOD_FLOW101])
+_bd110 = compose_post.compose(DAILY_DATA, _gen110)
+_bdF110 = compose_post.compose(DAILY_DATA, _gen101([generate_post.FIXED_FLOW]))
+_g110b = _gen101([_GOOD_FLOW101]); _g110b["call_b"]["ok"] = False
+check("v1.110 compose: bundleの【市場のフロー】に差し込みが入り、bundleに差し込み部分（flow_price_fragment）を記録する。定型文の日・call_B失敗（縮退）の日はNone",
+      generate_post.build_flow_price_fragment(DAILY_DATA) in _bd110["sections"]["part2_flow"] and _bd110["flow_price_fragment"] == " #BTC +2.43%、 #ETH +1.65%（24時間比）"
+      and _bdF110["flow_price_fragment"] is None and compose_post.compose(DAILY_DATA, _g110b)["flow_price_fragment"] is None)
+# C16b
+_s16 = {**_B107["sections"], "part2_flow": _ins110[0]}
+_au16 = verify_post.Audit(); verify_post.check_c16b(_au16, _D107, _s16, ["part1_headline", "part1_points", "part2_flow", "part2_summary"], set(), "")
+_s16b = {**_B107["sections"], "part2_flow": _ins110[0].replace("やや軟調に", "-0.51%と")}
+_au16b = verify_post.Audit(); verify_post.check_c16b(_au16b, _D107, _s16b, ["part1_headline", "part1_points", "part2_flow", "part2_summary"], set(), "")
+_s16c = {**_B107["sections"], "part2_flow": _ins110[0].replace(" #BTC -0.51%、 #ETH -0.76%（24時間比）", " #BTC -0.50%、 #ETH -0.76%（24時間比）")}
+_au16c = verify_post.Audit(); verify_post.check_c16b(_au16c, _D107, _s16c, ["part1_headline", "part1_points", "part2_flow", "part2_summary"], set(), "")
+check("v1.110 C16b: システムが差し込んだ部分（daily_dataの値そのもの）は転記として検知しない。モデルが差し込み以外の場所に書いた数値（-0.51%）や、daily_dataと値が違う差し込み風の文字列は、従来どおり検知する（モデルが数値を書けないことは維持）",
+      [c["result"] for c in _au16.checks] == ["PASS"] and [c["result"] for c in _au16b.checks] == ["FAIL"] and [c["result"] for c in _au16c.checks] == ["FAIL"],
+      str([c["detail"][:80] for c in _au16b.checks]))
+# フロー書式
+_v110 = lambda flow, req=False: [v["reasons"] for v in verify_post.find_flow_format_violations(flow, req)]
+_mid = "【出来事・ニュース】〇〇が発表しました（媒体名、日付） → 【暗号通貨価格】同時期は #BTC に限って横ばいでしたが、因果は未確認です。"
+check("v1.110 フロー書式⑥: システムが差し込む数値部分のハッシュタグは「途中のタグ」とみなさない。それ以外の連鎖の途中のタグは従来どおりtag_in_body。連鎖の末尾のタグ（句点の後）は従来どおり許す",
+      _v110(_ins110[0]) == [] and _v110(_mid) == [["tag_in_body"]] and _v110(_ins110[0] + " #BTC #ETH") == [])
+check("v1.110 フロー書式（差し込み漏れ）: 差し込みがあるはずの日（bundleにflow_price_fragmentがある）は、【暗号通貨価格】に数値が無い連鎖を警告（no_price_number）する。既定（差し込みの無い従来のbundle）では警告しない",
+      _v110(_GOOD_FLOW101, True) == [["no_price_number"]] and _v110(_GOOD_FLOW101, False) == [] and _v110(_ins110[0], True) == []
+      and "no_price_number" in verify_post.FLOW_FORMAT_REASON_LABELS and "差し込み漏れ" in verify_post.FLOW_FORMAT_REASON_LABELS["no_price_number"])
+# 実データ（10/6のフロー）に差し込んで機械監査
+_items110 = [__import__("re").sub(r"^・", "", l) for l in _B107["sections"]["part2_flow"].split("\n")]
+_flow110 = compose_post._render_flow(_items110, _D107)
+_b110 = json.loads(json.dumps(_B107))
+_b110["flow_price_fragment"] = _FR110
+_r110 = _run107(_B107["sections"]["part1_headline"], None, None, _flow110, None)
+_b110x = compose_post.render_markdown({**_b110["sections"], "part2_flow": _flow110}, _b110["level"])
+check("v1.110 実データ（10/6のフロー3連鎖）: 各連鎖に差し込みが入り（3か所）、機械監査（C12〜C28。C13のハッシュタグ境界・C16b・C24・C26を含む）はFAILなし。フロー書式の警告もない",
+      _flow110.count(_FR110) == 3 and _failed107(_r110) == [] and not any(w["id"] == "W_flow_format" for w in _r110.warnings), str(_failed107(_r110)))
+_r110b = _run107(_B107["sections"]["part1_headline"], None, None, "\n".join("・" + x for x in _items110), None)
+check("v1.110 実データ: 差し込み前のフロー（数値なし）は、flow_price_fragmentの無いbundleでは従来どおり警告なし（従来のbundle・L1/L2の互換）",
+      not any(w["id"] == "W_flow_format" for w in _r110b.warnings) and _failed107(_r110b) == [])
+# 再生成の修正指示には、モデルが書いた形（差し込みを除いた形）の直前の連鎖を見せる
+check("v1.110 再生成: call_Bの再生成（v1.101）に渡す「直前の連鎖」は、システムが差し込んだ数値部分を除いた形。モデルが差し込み部分（数値・タグ）を真似て書かないため",
+      _BAD_FLOW101 in _calls1[0] and generate_post.build_flow_price_fragment(DAILY_DATA) not in _calls1[0].split("### 直前の生成への修正指示")[1])
+# 過去の実データ: 差し込んでも、書式違反の理由は変わらない
+_hist110 = []
+for _d in sorted((REPO / "outputs").glob("2026-*")):
+    _bf, _df = _d / "draft" / "post_bundle.json", _d / "daily_data.json"
+    if not (_bf.exists() and _df.exists()):
+        continue
+    _fl = json.loads(_bf.read_text(encoding="utf-8"))["sections"].get("part2_flow") or ""
+    _dd = json.loads(_df.read_text(encoding="utf-8"))
+    if "【暗号通貨価格】" not in _fl:
+        continue
+    _its = [__import__("re").sub(r"^・", "", l) for l in _fl.split("\n") if l.strip()]
+    _after = compose_post._render_flow(_its, _dd)
+    _hist110.append((_d.name, _v110(_fl) == _v110(_after, True), generate_post.build_flow_price_fragment(_dd) is not None))
+check("v1.110 実データ（【暗号通貨価格】がある過去4日分）: 差し込んでも書式違反の理由は変わらず（差し込み漏れ・途中のタグの警告が増えない）、4日ともBTC・ETHの数値が取れて差し込める",
+      len(_hist110) == 4 and all(a and b for _, a, b in _hist110), str(_hist110))
+# プロンプト
+_cbf110 = generate_post.CALL_B_INSTRUCTIONS.replace("\n", "").replace(" ", "")
+check("v1.110 プロンプト（呼び出しB）: 【暗号通貨価格】はシステムが「 #BTC -0.51%、 #ETH -0.76%（24時間比）で、」を差し込む。モデルは数値・ハッシュタグ・「24時間比」を書かず、続きの句（形状と限定）だけを書く。連鎖の末尾にもタグを書かない。旧「数値は書かない」の単独の指示は、差し込みの説明に置き換わった",
+      "ラベルの直後に、システムが「#BTC-0.51%、#ETH-0.76%（24時間比）で、」の形で、BTC・ETHの24時間比（daily_dataの値そのもの）を機械的に差し込む" in _cbf110
+      and "あなたは数値・ハッシュタグ・「24時間比」の語を書かず、差し込みに続く句として、同時期の値動きの形状（やや軟調・小幅な上昇など）と限定を書く" in _cbf110
+      and "あなたは、本文にも連鎖の末尾にもハッシュタグを書かない（v1.110）" in _cbf110 and "形状のみ記述する（数値は書かない）" not in _cbf110
+      and "ハッシュタグを付す場合は連鎖の末尾" not in _cbf110)
+check("v1.110 プロンプト（ハッシュタグ規則）: タグを付けてよいのは【市場のフロー】だけで、そのタグはシステムの差し込み部分に付く。呼び出しBは本文にも連鎖の末尾にもタグを書かない。ヘッドライン等には付けない（v1.91）は維持。位置の規則（#の直前・直後）はシステムの差し込みも守る",
+      "システムが【暗号通貨価格】の段階の冒頭に差し込む「 #BTC -0.51%、 #ETH -0.76%（24時間比）」" in generate_post.RULES_HASHTAG.replace("\n  ", "")
+      and "呼び出しBは、本文にも連鎖の末尾にもタグを書かない" in generate_post.RULES_HASHTAG.replace("\n  ", "")
+      and "付けない（v1.91・オーナー指示: 見出しにタグは不要）" in generate_post.RULES_HASHTAG
+      and _FR110.startswith(" #BTC ") and "、 #ETH " in _FR110 and verify_post._hashtag_violations(" #BTC -0.51%、 #ETH -0.76%（24時間比）で、") == [])
 
 print()
 print(f"PASS: {len(PASS)}  FAIL: {len(FAIL)}")

@@ -236,7 +236,15 @@ def check_c16b(au: Audit, daily_data: dict, sections: dict, llm_section_keys: li
                allowlist: set[str], headline_for_image: str = "") -> None:
     # v1.20: headline_for_imageもLLM生成物であり、独立レビューで走査対象外
     # （図版下部帯に焼き込まれる文言が無検査）と指摘されたため対象に含める。
-    llm_text = "\n".join(sections.get(k, "") for k in llm_section_keys) + "\n" + headline_for_image
+    # v1.110: 【市場のフロー】の【暗号通貨価格】にシステムが差し込む「 #BTC -0.51%、 #ETH -0.76%（24時間比）」は、daily_dataの値そのもの
+    # （転記ではなく機械的な差し込み）なので、走査から除く。モデルが書いた数値（差し込みと同じ文字列でない部分）は従来どおり検知する。
+    fragment = generate_post.build_flow_price_fragment(daily_data)
+
+    def _scan_text(k: str) -> str:
+        v = sections.get(k, "")
+        return v.replace(fragment, "") if fragment and k == "part2_flow" and isinstance(v, str) else v
+
+    llm_text = "\n".join(_scan_text(k) for k in llm_section_keys) + "\n" + headline_for_image
     hits = _find_transcriptions(daily_data, llm_text, allowlist)
     detail = (f"検知網ヒット（限界あり・要人手確認。誤爆時は config/c16b_allowlist.json へ登録）: {hits}"
               if hits else "転記検知なし")
@@ -1241,15 +1249,16 @@ FLOW_FORMAT_REASON_LABELS = {
     "arrows": "「→」が足りない",
     "no_arrows": "「→」が無い",
     "sentences": "1文でない（句点が末尾の1つだけでない。全角括弧内は除く）",
-    "tag_in_body": "ハッシュタグが連鎖の途中にある",
+    "tag_in_body": "ハッシュタグが連鎖の途中にある（システムが差し込む【暗号通貨価格】の数値部分を除く）",
     "tag_not_after_period": "ハッシュタグが句点の後に無い",
     "numbering": "①②③の付け方が違う（複数なら①から連番、1本なら付けない）",
     "too_many_chains": "連鎖が4本以上ある（最大3本）",
     "no_limit_at_end": "末尾に限定表現（可能性・未確認等）が無い",
+    "no_price_number": "【暗号通貨価格】に「 #BTC ±x.xx%、 #ETH ±x.xx%（24時間比）」の数値が無い（システムの差し込み漏れ）",
 }
 
 
-def _flow_chain_violations(raw: str, idx: int, n: int) -> "list[str]":
+def _flow_chain_violations(raw: str, idx: int, n: int, require_price_fragment: bool = False) -> "list[str]":
     s = raw.strip()
     m = re.match(r"^([①②③])\s*", s)
     num = m.group(1) if m else None
@@ -1257,7 +1266,8 @@ def _flow_chain_violations(raw: str, idx: int, n: int) -> "list[str]":
     tm = re.search(r"((?:\s#[A-Za-z]+)+)\s*$", body)
     core = body[:tm.start()] if tm else body
     r: "list[str]" = []
-    if "#" in core:
+    # v1.110: システムが【暗号通貨価格】に差し込む「 #BTC -0.51%、 #ETH -0.76%（24時間比）で、」のハッシュタグは、途中のタグとみなさない
+    if "#" in generate_post.FLOW_PRICE_FRAGMENT_RE.sub("", core):
         r.append("tag_in_body")
     if tm and not core.rstrip().endswith("。"):
         r.append("tag_not_after_period")
@@ -1289,10 +1299,12 @@ def _flow_chain_violations(raw: str, idx: int, n: int) -> "list[str]":
     last = core.rstrip().rstrip("。")
     if not any(w in last[-45:] for w in _FLOW_LIMITING_STEMS):
         r.append("no_limit_at_end")
+    if require_price_fragment and _FLOW_LABELS[3] in core and not generate_post.FLOW_PRICE_FRAGMENT_RE.search(core):
+        r.append("no_price_number")
     return r
 
 
-def find_flow_format_violations(part2_flow) -> "list[dict]":
+def find_flow_format_violations(part2_flow, require_price_fragment: bool = False) -> "list[dict]":
     """市場のフロー（レンダリング済みの文字列）の書式違反を連鎖ごとに返す。各要素:
     {"chain_no"（1始まり）, "text"（連鎖）, "reasons"（FLOW_FORMAT_REASON_LABELSのコード）}。
     定型文（FIXED_FLOW）1件のみ・空の場合は対象外（空リスト）。"""
@@ -1302,15 +1314,16 @@ def find_flow_format_violations(part2_flow) -> "list[dict]":
         return []
     out = []
     for i, it in enumerate(items):
-        reasons = _flow_chain_violations(it, i, len(items))
+        reasons = _flow_chain_violations(it, i, len(items), require_price_fragment)
         if reasons:
             out.append({"chain_no": i + 1, "text": it, "reasons": reasons})
     return out
 
 
-def check_flow_format_warn(au: Audit, sections: dict) -> None:
-    """市場のフローの書式違反をau.warningsへ追加する（連鎖ごとに1件。FAILにしない。上のコメント参照）。"""
-    for v in find_flow_format_violations(sections.get("part2_flow")):
+def check_flow_format_warn(au: Audit, sections: dict, require_price_fragment: bool = False) -> None:
+    """市場のフローの書式違反をau.warningsへ追加する（連鎖ごとに1件。FAILにしない。上のコメント参照）。
+    require_price_fragment（v1.110）: bundleに差し込み部分があるべき日（compose_postが差し込んだ日）は、各連鎖の【暗号通貨価格】に数値が入っているかも見る。"""
+    for v in find_flow_format_violations(sections.get("part2_flow"), require_price_fragment):
         labels = "・".join(FLOW_FORMAT_REASON_LABELS.get(c, c) for c in v["reasons"])
         au.warn("W_flow_format",
                 f"市場のフローの{v['chain_no']}本目が書式（統合運用基準§3.3）から外れています: {labels}。"
@@ -1902,7 +1915,7 @@ def run_all(bundle: dict, daily_data: dict) -> Audit:
         ("見出しのタグ", lambda: check_hashtag_warn(au, sections)),
         ("指標日の見出し", lambda: check_indicator_headline_warn(
             au, sections, bundle.get("audit_ledger"), daily_data.get("scheduled_events"))),
-        ("フロー書式", lambda: check_flow_format_warn(au, sections)),
+        ("フロー書式", lambda: check_flow_format_warn(au, sections, bool(bundle.get("flow_price_fragment")))),
         ("媒体名照合", lambda: check_media_warn(au, sections, bundle.get("audit_ledger"), tier_map)),
         ("地政学の不採用", lambda: check_geo_rejected_warn(au, sections, bundle.get("audit_ledger"), tier_map)),
         ("行頭の記号", lambda: check_bullet_normalized_warn(au, bundle.get("format_normalized"))),

@@ -97,7 +97,7 @@ def _render_bullets(items: list[str]) -> str:
 _FLOW_NUMBER_PREFIXES = ("①", "②", "③")
 
 
-def _render_flow(items: list[str]) -> str:
+def _render_flow(items: list[str], daily_data: Any = None) -> str:
     """【市場のフロー】の描画（v1.82・オーナー承認）。統合運用基準§3.3は複数の
     仮説連鎖を①②③で区切ると定めているため、①②③で始まる連鎖には箇条書き記号
     「・」を付けない（付けると「・①…」になり区切りが二重になる）。材料が無い日の
@@ -107,6 +107,8 @@ def _render_flow(items: list[str]) -> str:
     items = [generate_post.normalize_item_head(str(i)) for i in items]  # v1.102: 先頭の行頭記号・空白を除く（冪等）
     if len(items) == 1 and items[0].strip() == FIXED_FLOW:
         return FIXED_FLOW
+    # v1.110: 【暗号通貨価格】に、daily_dataの24時間比を「 #BTC -0.51%、 #ETH -0.76%（24時間比）で、」の形で差し込む
+    items = generate_post.insert_flow_price_fragment(items, daily_data) if daily_data is not None else items
     lines = []
     for text in items:
         lines.append(text if text.startswith(_FLOW_NUMBER_PREFIXES) else f"・{text}")
@@ -190,7 +192,7 @@ def compose(daily_data: dict, gen: dict[str, Any]) -> dict[str, Any]:
         part1_points_text = generate_post.FIXED_POINTS
 
     if b_ok:
-        part2_flow_text = _render_flow(call_b["data"]["part2_flow"])
+        part2_flow_text = _render_flow(call_b["data"]["part2_flow"], daily_data)
         part2_summary = call_b["data"]["part2_summary"]
     else:
         part2_flow_text = FIXED_FLOW
@@ -237,6 +239,10 @@ def compose(daily_data: dict, gen: dict[str, Any]) -> dict[str, Any]:
         "format_normalized": {
             "part1_points": int((call_a.get("format_normalization") or {}).get("part1_points_changed", 0) or 0) if a_ok else 0,
             "part2_flow": int((call_b.get("format_normalization") or {}).get("part2_flow_changed", 0) or 0) if b_ok else 0},
+        # v1.110: 【市場のフロー】の【暗号通貨価格】に差し込んだ数値部分（差し込まなかった日・縮退の日はNone）。
+        # 検査（フロー書式の警告）が「差し込みが入っているべき日」を知るために使う（C16bの除外は、daily_dataから同じ値を作って行う）。
+        "flow_price_fragment": (generate_post.build_flow_price_fragment(daily_data)
+                                if b_ok and part2_flow_text != FIXED_FLOW else None),
         "part1_md": part1_md,
         "part2_md": part2_md,
         # v1.81（オーナー承認・運用上の変更）: 投稿本文から外した数値2見出しの
@@ -401,14 +407,17 @@ def _regenerate_flow_if_needed(gen: dict[str, Any], bundle: dict[str, Any], dail
     再生成の使用量は、採否によらずtotal_usageに加える（再生成後の評価で例外になった場合も）。"""
     if not (gen["call_a"].get("ok") and gen["call_b"].get("ok")):
         return gen, bundle, None
-    violations = verify_post.find_flow_format_violations(bundle["sections"].get("part2_flow"))
+    violations = verify_post.find_flow_format_violations(bundle["sections"].get("part2_flow"), bool(bundle.get("flow_price_fragment")))
     if not violations:
         return gen, bundle, None
 
-    before_lines = _flow_lines(bundle["sections"].get("part2_flow"))
+    # v1.110: モデルに見せる「直前の連鎖」は、システムが差し込んだ数値部分を除いた形（モデルが書いた形）にする
+    before_lines = [generate_post.strip_flow_price_fragment(x) for x in _flow_lines(bundle["sections"].get("part2_flow"))]
     info: dict[str, Any] = {"before_flow": bundle["sections"].get("part2_flow", ""), "before_violations": violations}
+    # 検出された違反の連鎖の文面も、差し込み部分を除いた形（モデルが書いた形）で渡す
+    violations_for_model = [{**v, "text": generate_post.strip_flow_price_fragment(v.get("text", ""))} for v in violations]
     b2 = generate_post.regenerate_call_b_for_flow_format(
-        daily_data, gen["call_a"].get("data"), before_lines, violations,
+        daily_data, gen["call_a"].get("data"), before_lines, violations_for_model,
         previous_summary=str(bundle["sections"].get("part2_summary", "")), client=client)
     total = generate_post._add_usage(gen["total_usage"], b2.usage)
     info["usage"] = b2.usage
@@ -432,7 +441,7 @@ def _regenerate_flow_if_needed(gen: dict[str, Any], bundle: dict[str, Any], dail
                    "part2_md": fresh["part2_md"],
                    "format_normalized": {**bundle.get("format_normalized", {}), "part2_flow": fresh["format_normalized"]["part2_flow"]}}
         after_lines = _flow_lines(bundle2["sections"].get("part2_flow"))
-        v2 = verify_post.find_flow_format_violations(bundle2["sections"].get("part2_flow"))
+        v2 = verify_post.find_flow_format_violations(bundle2["sections"].get("part2_flow"), bool(bundle2.get("flow_price_fragment")))
         info.update(after_flow=bundle2["sections"].get("part2_flow", ""), after_violations=v2)
         if not after_lines or not any(ln.strip() for ln in new_flow if isinstance(ln, str)):
             return keep_original("再生成後のフローが空だったため")
