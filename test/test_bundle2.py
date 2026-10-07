@@ -625,7 +625,7 @@ check("②は独立2ソース材料単独でpart1_headlineの根拠になる（v
       and "独立2ソース材料の内容に基づき、part1_headlineに実文言を書く" in generate_post.NO_CANDIDATES_FALLBACK
       and "ヘッドラインの末尾に出典の括弧を付け、その中に、独立2ソース規定に該当した" in generate_post.NO_CANDIDATES_FALLBACK
       and "「公式発表は未確認」を書く（v1.107・オーナー指示。" in generate_post.NO_CANDIDATES_FALLBACK
-      and "「（The Block、Cointelegraph、10月6日。公式発表は未確認）」" in generate_post.NO_CANDIDATES_FALLBACK
+      and "「（媒体名、媒体名、○月○日。公式発表は未確認）」" in generate_post.NO_CANDIDATES_FALLBACK
       and "「公式発表での確認が取れていない」旨の但し書きはpart1_headlineに" not in generate_post.NO_CANDIDATES_FALLBACK)
 check("②: 「一次情報」を内部用語として使わせない指示は維持されている（v1.64・オーナー指示）",
       "一次情報での確認ができていない旨を明記する" not in generate_post.NO_CANDIDATES_FALLBACK
@@ -7695,12 +7695,13 @@ check("v1.107 C18との関係: 括弧内の「。」で文が分かれるため�
 _NF107 = generate_post.NO_CANDIDATES_FALLBACK
 _sec107 = _NF107[_NF107.index("### ②（(i)なし・(ii)あり）の詳細"):_NF107.index("### ③（(i)なし・(ii)なし）の詳細")]
 check("v1.107 プロンプト②: 独立2ソース材料がヘッドラインの主題の日は、末尾の出典の括弧に媒体名（すべて）・日付（「10月6日」の形で年なし）・「公式発表は未確認」を書く。括弧内の「。」は文に数えない。tier1の公式発表で裏付けがある日は付けない。主要なポイントでは繰り返さない。headline_for_imageには含めない。①で従として併記する場合も同じ",
-      "「（The Block、Cointelegraph、10月6日。公式発表は未確認）」" in _sec107 and "日付は「10月6日」の形で年を付けない" in _sec107.replace("\n", "")
+      "「（媒体名、媒体名、○月○日。公式発表は未確認）」" in _sec107 and "日付は「10月6日」のように年を付けない形で書く" in _sec107.replace("\n", "")
+      and "形（○は例示用のプレースホルダー）" in _sec107 and "（例: The Block・Cointelegraph）" in _sec107
       and "括弧の中の「。」は\n文の区切りとして数えず" in _sec107 and "tier1の公式発表で同じ事実の裏付けがある日は、この断り書きは付けない" in _sec107
       and "この材料は【主要なポイント】で繰り返さない（項目数にも数えない" in _sec107 and "（括弧・但し書きは\n含めない）" in _sec107
       and "①で独立2ソース材料を従として\n併記する場合も" in _sec107 and "2026年10月6日" not in _sec107)
 check("v1.107 プロンプト: 独立2ソース規定の(c)に、ヘッドラインに書く場合は見出し末尾の括弧に書き、書かない材料は従来どおり主要なポイントの項目の中に書く旨を追記（旧例「公式発表での確認は取れていません」は維持）",
-      "ヘッドラインに書く\n     場合は、ヘッドライン末尾の出典の括弧「（媒体名、媒体名、10月6日。公式発表は\n     未確認）」に書く" in generate_post.NEWS_SELECTION
+      "ヘッドラインに書く\n     場合は、ヘッドライン末尾の出典の括弧「（媒体名、媒体名、○月○日。公式発表は\n     未確認）」に書く" in generate_post.NEWS_SELECTION
       and "ヘッドラインに書かない材料は、従来どおり\n     【主要なポイント】の項目の中に書く" in generate_post.NEWS_SELECTION
       and "例:「公式発表での確認は取れていません」" in generate_post.NEWS_SELECTION)
 check("v1.107 プロンプト: 材料がヘッドラインの1件だけの日は、主要なポイントを定型文「補足できる検証済み材料は確認できない。」1件とする節（②③の後）が1つだけあり、定型文の本文が入っている。旧「1項目として載せる」「従来どおり1項目とする」は残っていない",
@@ -7909,6 +7910,50 @@ check("v1.110 プロンプト（ハッシュタグ規則）: タグを付けて�
       and "呼び出しBは、本文にも連鎖の末尾にもタグを書かない" in generate_post.RULES_HASHTAG.replace("\n  ", "")
       and "付けない（v1.91・オーナー指示: 見出しにタグは不要）" in generate_post.RULES_HASHTAG
       and _FR110.startswith(" #BTC ") and "、 #ETH " in _FR110 and verify_post._hashtag_violations(" #BTC -0.51%、 #ETH -0.76%（24時間比）で、") == [])
+
+print("=== v1.107 追補（独立レビューへの対処）: C28・C16bの端の値の見逃し／材料1件だけの日の向きの警告／C18の括弧内の「。」／プロンプトの例のプレースホルダー ===")
+check("v1.107追補 C28（端の値）: 文頭・文末の値も再掲として検知する（修正前は、隣の文字が無い＝空文字を「数字・小数点に隣接」と誤判定して見逃した）。数字・小数点に隣接する一致は従来どおり除く",
+      verify_post._find_display_value_hits("・市場心理は67", {"67"}) == ["67"] and verify_post._find_display_value_hits("67まで改善", {"67"}) == ["67"]
+      and verify_post._find_display_value_hits("-0.51%超", {"-0.51%"}) == ["-0.51%"] and verify_post._find_display_value_hits("市場心理は67。", {"67"}) == ["67"]
+      and verify_post._find_display_value_hits("167", {"67"}) == [] and verify_post._find_display_value_hits("67.5", {"67"}) == [] and verify_post._is_digit_or_dot("") is False)
+check("v1.107追補 C16b（端の値）: 本文の先頭・末尾（headline_for_imageが末尾に付く）の値も転記として検知する（体言止めの「BTC続落、24時間で-0.51%」を見逃していた）",
+      verify_post._find_transcriptions(_D107, "BTC続落、24時間で-0.51%", set()) == ["-0.51%"] and verify_post._find_transcriptions(_D107, "-0.51%で推移", set()) == ["-0.51%"]
+      and verify_post._find_transcriptions(_D107, "x\n-0.51%", set()) == ["-0.51%"] and verify_post._find_transcriptions(_D107, "1-0.51%2", set()) == [])
+_bad_c16b = []
+for _d in sorted((REPO / "outputs").glob("2026-*")):
+    _bf, _df = _d / "draft" / "post_bundle.json", _d / "daily_data.json"
+    if _bf.exists() and _df.exists():
+        _bb, _dd = json.loads(_bf.read_text(encoding="utf-8")), json.loads(_df.read_text(encoding="utf-8"))
+        _llm = "\n".join(_bb["sections"].get(k, "") for k in _bb["llm_section_keys"]) + "\n" + (_bb.get("headline_for_image") or "")
+        if verify_post._find_transcriptions(_dd, _llm, verify_post._load_allowlist(_d.name, "c16b_allowlist.json")):
+            _bad_c16b.append(_d.name)
+check("v1.107追補 C16bの回帰（実データ）: 端の値の修正で、コミット済みの全日分のC16bに新たなFAILは出ない", _bad_c16b == [], str(_bad_c16b))
+_sec_dir = {"part1_headline": "WTI原油先物が上昇しました。", "part1_points": "・" + generate_post.FIXED_POINTS,
+            "part2_flow": "【出来事・ニュース】原油が下落した → 【暗号通貨価格】同時期は横ばいでしたが、因果は未確認です。"}
+_au_dir = verify_post.Audit(); verify_post.check_direction_warn(_au_dir, _sec_dir, "原油は下落")
+_au_dir2 = verify_post.Audit(); verify_post.check_direction_warn(_au_dir2, {**_sec_dir, "part1_points": "・WTI原油先物が上昇しました（Reuters、10月6日）。"}, "")
+check("v1.107追補 向きの食い違い: 材料がヘッドラインの1件だけの日（主要なポイントが定型文）は、ヘッドラインを基準にして、市場のフロー・headline_for_imageを照合する（修正前は比較先が無く警告0件）。主要なポイントが実文言の日は従来どおり主要なポイントが基準（ヘッドラインは対象）",
+      len(_au_dir.warnings) == 2 and all("ヘッドラインは「上昇」" in w["detail"] and w["base_name"] == "ヘッドライン" for w in _au_dir.warnings)
+      and {w["section"] for w in _au_dir.warnings} == {"市場のフロー", "headline_for_image"}
+      and len(_au_dir2.warnings) == 1 and "主要なポイントは「上昇」" in _au_dir2.warnings[0]["detail"] and _au_dir2.warnings[0]["base_name"] == "主要なポイント")
+check("v1.107追補 C18の文分割: 全角括弧の中の「。」は区切りにしない。括弧の外は従来の`re.split`と同じ。改行は括弧の中でも区切る（閉じ忘れの括弧が後続の行に及ばない）",
+      verify_post._split_sentences("A。B（x。y）C。D\nE") == ["A", "B（x。y）C", "D", "E"]
+      and verify_post._split_sentences("（未閉じ。a\nB。C") == ["（未閉じ。a", "B", "C"]
+      and all(verify_post._split_sentences(s) == __import__("re").split(r"[。\n]", s) for s in ("X。Y\nZ", "単文", "。。", "A。\n")))
+_hd_bad = "米ドル高を受けてBTCが下落と報じました" + _CAV107 + "。"
+_hd_ok = "米ドル高を受けてBTCが下落した可能性があると報じました" + _CAV107 + "。"
+_v_bad = verify_post._find_c18_violations({"part1_headline": _hd_bad}, ["part1_headline"], set())
+_v_ok = verify_post._find_c18_violations({"part1_headline": _hd_ok}, ["part1_headline"], set())
+_v_par = verify_post._find_c18_violations({"part1_points": "・米雇用統計を受けて金利が上昇しました（因果は未確認）。"}, ["part1_points"], set())
+check("v1.107追補 C18と出典の括弧: 見出し末尾の括弧は1つの文として扱い（「。」で切れない）、括弧内の断り書き「公式発表は未確認」は因果の限定表現と数えない（本文側が断定なら検出）。本文側に限定表現があれば検出しない。それ以外の括弧内の限定表現（「（因果は未確認）」）は従来どおり限定として数える",
+      len(_v_bad) == 1 and _v_bad[0]["sentence"].startswith("米ドル高を受けて") and _v_bad[0]["sentence"].endswith("公式発表は未確認）") and _v_ok == [] and _v_par == [])
+_tg109 = repair_post._find_c18_targets({"target_date_jst": "2026-10-06", "sections": {"part1_headline": _hd_bad}, "llm_section_keys": ["part1_headline"]})
+check("v1.107追補 局所修正（repair_post）: 見出しがC18違反のとき、書き換え対象の文は出典の括弧を最後（「）」）まで含む（括弧が途中で切れて余らない）",
+      len(_tg109) == 1 and _tg109[0]["token"].endswith("公式発表は未確認）") and _tg109[0]["token"] in _hd_bad and _hd_bad.replace(_tg109[0]["token"], "X", 1) == "X。")
+_pr107 = generate_post.NO_CANDIDATES_FALLBACK
+check("v1.107追補 プロンプト: 断り書きの括弧の形はプレースホルダー（「（媒体名、媒体名、○月○日。公式発表は未確認）」。既存の規約: 例示の固有名詞・日付は実在のものを使わない）で示し、実在の媒体名は「例: The Block・Cointelegraph」と別に書く。実日付（10月6日）は形の説明だけに使い、括弧の形そのものには入れない",
+      "「（媒体名、媒体名、○月○日。公式発表は未確認）」" in _pr107 and "（例: The Block・Cointelegraph）" in _pr107
+      and "「（The Block、Cointelegraph、10月6日。公式発表は未確認）」" not in generate_post.SYSTEM_A and "10月6日。公式発表は" not in generate_post.SYSTEM_A)
 
 print()
 print(f"PASS: {len(PASS)}  FAIL: {len(FAIL)}")

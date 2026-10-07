@@ -46,6 +46,7 @@ BANNED_TERMS = ["仮想通貨", "前日比"]
 CAUSAL_MARKERS = ["により", "を受けて", "が原因で", "のため", "によって", "せいで", "を機に"]
 PRICE_MOVEMENT_WORDS = ["上昇", "下落", "高騰", "急落", "暴落", "急騰", "反落"]
 CAUSAL_STANDALONE_PHRASES = ["が牽引した"]
+CITATION_CAVEAT = "公式発表は未確認"  # v1.107: 独立2ソース材料の見出し末尾の出典の括弧に入れる断り書き（限定表現とは数えない）
 # 限定表現（この語が同一文にあれば「断定」ではなく基準が求める正しい書き方と
 # みなしFAILさせない）。「断定」は「断定はできない」等、助詞が挟まる活用差
 # （でき/できない/できません）を吸収するため活用語尾を含めない広い形で採用。
@@ -208,7 +209,8 @@ def _collect_numeric_strings(obj, out: set[str], min_len: int = C16B_MIN_LEN) ->
 
 
 def _is_digit_or_dot(ch: str) -> bool:
-    return ch.isdigit() or ch in ".．"
+    # v1.107追補: 文字列の端（隣の文字が無い＝空文字）は「数字・小数点に隣接」ではない（"" in ".．" はTrueになり、文頭・文末の値を見逃していた）
+    return bool(ch) and (ch.isdigit() or ch in ".．")
 
 
 def _find_transcriptions(daily_data: dict, llm_text: str, allowlist: set[str]) -> list[str]:
@@ -282,7 +284,9 @@ def _causal_violations_in_sentence(sentence: str) -> list[str]:
     hit_standalone = [p for p in CAUSAL_STANDALONE_PHRASES if p in sentence]
     if not (hit_markers and hit_words) and not hit_standalone:
         return []
-    if any(le in sentence for le in LIMITING_EXPRESSIONS):
+    # v1.107追補: 見出し末尾の出典の括弧の断り書き（「公式発表は未確認」）は、因果の断定に対する限定表現ではない（出典の注記）ため、
+    # 限定表現の判定から除く（本文側が断定なら、括弧に「未確認」があっても従来どおり検出する）。
+    if any(le in sentence.replace(CITATION_CAVEAT, "") for le in LIMITING_EXPRESSIONS):
         return []
     hits = []
     if hit_markers and hit_words:
@@ -290,6 +294,31 @@ def _causal_violations_in_sentence(sentence: str) -> list[str]:
     if hit_standalone:
         hits.append(f"断定的表現{hit_standalone}（限定表現なし）")
     return hits
+
+
+def _split_sentences(text: str) -> "list[str]":
+    """「。」と改行で文に分ける（C18用）。全角括弧（）の中の「。」は区切りにしない（v1.107追補: 見出し末尾の出典の括弧
+    「（媒体名、媒体名、10月6日。公式発表は未確認）」が途中で切れ、局所修正〔repair_post〕が括弧を壊すのを防ぐ）。
+    括弧の外では従来の`re.split(r"[。\n]")`と同じ（返す文字列は元のテキストの部分文字列で、区切り文字を含まない）。"""
+    out: "list[str]" = []
+    buf: "list[str]" = []
+    depth = 0
+    for ch in str(text):
+        if ch == "\n":
+            out.append("".join(buf))
+            buf, depth = [], 0
+            continue
+        if ch == "（":
+            depth += 1
+        elif ch == "）":
+            depth = max(0, depth - 1)
+        if ch == "。" and depth == 0:
+            out.append("".join(buf))
+            buf = []
+            continue
+        buf.append(ch)
+    out.append("".join(buf))
+    return out
 
 
 def _find_c18_violations(sections: dict, llm_section_keys: list[str], allowlist: set[str],
@@ -322,7 +351,7 @@ def _find_c18_violations(sections: dict, llm_section_keys: list[str], allowlist:
         text = sections.get(key, "")
         if not isinstance(text, str):
             continue
-        for sentence in re.split(r"[。\n]", text):
+        for sentence in _split_sentences(text):
             if not sentence.strip() or any(s in sentence for s in allowlist):
                 continue
             reasons = _causal_violations_in_sentence(sentence)
@@ -1123,8 +1152,9 @@ def _sentence_with(text: str, term: str, subject_hint: "str | None" = None) -> s
     return ""
 
 
-def find_direction_mismatches(points, targets: "dict[str, str]") -> "list[dict]":
-    """主要なポイント（points）と、各対象（見出し名→本文）の向きの食い違いを返す。"""
+def find_direction_mismatches(points, targets: "dict[str, str]", base_name: str = "主要なポイント") -> "list[dict]":
+    """主要なポイント（points）と、各対象（見出し名→本文）の向きの食い違いを返す。
+    base_name（v1.107追補）: 比較の基準の呼び名（材料がヘッドラインの1件だけの日は、基準がヘッドラインになる）。"""
     pts = points if isinstance(points, str) else ""
     pm = _direction_map(pts)
     hits = []
@@ -1136,7 +1166,7 @@ def find_direction_mismatches(points, targets: "dict[str, str]") -> "list[dict]"
             if pdirs and not (dirs & pdirs):
                 t_term, p_term = sorted(dirs)[0], sorted(pdirs)[0]
                 hits.append({
-                    "section": name, "pair": key[0], "subject": None if key[1] == "-" else key[1],
+                    "section": name, "base_name": base_name, "pair": key[0], "subject": None if key[1] == "-" else key[1],
                     "section_directions": sorted(dirs), "points_directions": sorted(pdirs),
                     "section_sentence": _sentence_with(txt, t_term),
                     "points_sentence": _sentence_with(pts, p_term),
@@ -1149,12 +1179,20 @@ def check_direction_warn(au: Audit, sections: dict, headline_for_image) -> None:
     targets = {"ヘッドライン": sections.get("part1_headline"),
                "市場のフロー": sections.get("part2_flow"),
                "headline_for_image": headline_for_image}
-    for h in find_direction_mismatches(sections.get("part1_points"), targets):
+    points = sections.get("part1_points")
+    base_name = "主要なポイント"
+    # v1.107追補: 材料がヘッドラインの1件だけの日は主要なポイントが定型文になる（比較先が無くなり、警告が事実上無効になる）ため、
+    # その日は、ヘッドラインを基準にして、市場のフローとheadline_for_imageを照合する。
+    if not (isinstance(points, str) and points.strip().lstrip("・").strip() not in ("", generate_post.FIXED_POINTS)):
+        points = sections.get("part1_headline")
+        targets.pop("ヘッドライン")
+        base_name = "ヘッドライン"
+    for h in find_direction_mismatches(points, targets, base_name):
         subj = f"（{h['subject']}）" if h["subject"] else ""
         au.warn("W_direction_mismatch",
-                f"{h['section']}は「{'・'.join(h['section_directions'])}」、主要なポイントは"
+                f"{h['section']}は「{'・'.join(h['section_directions'])}」、{base_name}は"
                 f"「{'・'.join(h['points_directions'])}」と、{h['pair']}{subj}の向きが食い違っています。"
-                f" {h['section']}: 「{h['section_sentence']}」／主要なポイント: 「{h['points_sentence']}」",
+                f" {h['section']}: 「{h['section_sentence']}」／{base_name}: 「{h['points_sentence']}」",
                 **h)
 
 
