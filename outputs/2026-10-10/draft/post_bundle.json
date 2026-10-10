@@ -1,0 +1,438 @@
+{
+  "target_date_jst": "2026-10-10",
+  "level": "L0",
+  "sections": {
+    "part0_target_date": "2026年10月10日（土）",
+    "part1_headline": "インド当局がルピー防衛のためドル需要を抑制する新たな規制を導入したとReutersが報じました。為替・資本規制の強化は市場の流動性やリスク選好を通じて暗号通貨市場にも波及し得る材料ですが、暗号通貨価格への直接因果は未確認です。",
+    "part1_points": "・補足できる検証済み材料は確認できない。",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.805兆（¥444.0兆）｜24時間取引高 $434.4億（¥6.88兆）\n・ #BTC：$82,984（約1,313.5万円）｜24時間比 +0.53%\n　（24時間レンジ $82,358〜$83,093）\n・ #ETH：$2,506（約39.7万円）｜24時間比 +0.74%\n　（24時間レンジ $2,477〜$2,517）\n・ #BNB：$750（約11.9万円）｜24時間比 +1.27%\n・市場心理：Fear & Greed 57（Neutral、CoinMarketCap API）\n・ドミナンス：BTC 59.45%｜ETH 10.91%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年10月11日07:38 JST、USD/JPY ¥158.29",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $1,960,158 vs Base上ETH/USDC $12.57M｜参考：Base上DEX全体 $8.236億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $62.11億（¥9,832億）｜24時間比 +1.10%｜USDCドミナンス 84.6%\n・ ETH/USDC（Base）参考APR：0.05% 5.37%（TVL $9.65M／24h出来高 $2.84M）｜0.3% 7.20%（TVL $148.12M／24h出来高 $9.74M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年10月11日07:38 JST",
+    "part2_flow": "・【出来事・ニュース】インド当局がルピー防衛のためドル需要を抑制する新たな規制を導入したとReutersが報じました → 【地政学・マクロの変化】新興国の為替・資本規制の強化が市場の流動性やリスク選好に影響する可能性が意識された可能性があります → 【暗号通貨価格】 #BTC +0.53%、 #ETH +0.74%（24時間比）で、同時期はいずれも小幅な上昇にとどまりましたが、因果は未確認です。",
+    "lp_comment": "参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは22.55%→5.37%へ低下しました（24時間出来高 -75.73%、TVL +2.01%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは25.79%→7.20%へ低下しました（24時間出来高 -72.03%、TVL +0.20%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+0.74%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "新興国の資本規制強化という地政学・マクロ材料が報じられましたが、暗号通貨価格への直接的な影響は確認できていません。全体として方向感に乏しく、不透明な地合いが続いています。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "BTC・ETHともに上昇基調",
+  "audit_ledger": [
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/research/2026/10/the-state-of-american-manufacturing/",
+      "title": "The State of American Manufacturing",
+      "published_at": "Sat, 10 Oct 2026 20:46:32 +0000",
+      "candidate_id": 1,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 米国製造業の動向に関する内容で、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/briefings-statements/2026/10/presidential-message-on-leif-erikson-day/",
+      "title": "Presidential Message on Leif Erikson Day",
+      "published_at": "Fri, 09 Oct 2026 23:48:59 +0000",
+      "candidate_id": 2,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 記念日に関する大統領声明で、暗号通貨市場との波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxPcThCT2xlTm9fZ1hMODRNcTQ1TjVjOXJYTXlsSDdHOEJLLTdoZG51QlN2aHRVQjJfS1ZRYjQ2ZjBHaWtnN0hhaFR3ZFlHeXFCNUN4dnBzQlhjc3ZHb3BMYjZycGdIVVZKWlVTWFhuQ1dQUlBkb285YzMzdUkxYUNIcUhtUEMwcGNtZlNSSDNEWlR6Q09JZnpwanl4amFaYzM0dzI4ZnNfTV9sWWJ3djIzbmpNVVNOU2tMQkE?oc=5",
+      "title": "Rosatom and Finland's Fennovoima claim different wins after tribunal ruling - Reuters",
+      "published_at": "Sat, 10 Oct 2026 15:13:33 GMT",
+      "candidate_id": 3,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 原子力発電をめぐる仲裁判断の内容で、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxOeG1mcnlsQnJRNG5KbnVpYl9QenRyNWJpTHp1UnRVVTBOcXdCQ1JzQUFIbGVkeDNJblFMMXB1ZTdMLTlsSzZHVFJwWVdBYlBsOFNvNDgyaWI0blA3a21ScFFXYUpsOG1pR21aVU9kNjE3b3JVdi1jNVdBeVgyNXpxLXhFYUNhTzJKT1lMdHhBbnFreDl1OGNxOW9uNVVlaU9kZUh5ekhxMHUyNE1lTGtZcjdoTWNoZkE?oc=5",
+      "title": "EU's Irish presidency wants 8% cut to proposed 2028-2034 budget plan - Reuters",
+      "published_at": "Sat, 10 Oct 2026 14:37:16 GMT",
+      "candidate_id": 4,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: EU予算案の削減方針に関する内容で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMifkFVX3lxTE81UkF6SF9GcTlxM2hkeDdKWldiLWRuV29RNkhqLWd0eEdtc0VCZjNqRDdmeU5mTHl5c1BJRDdZS3gzSV9UQkZoT0Z1YUZJWlZmUmgwOWZYT3NyWGZ0MWs5UUx3NFU2N3B2RzBYYkEzZTY5akNjcWJOZUh5eV9JQQ?oc=5",
+      "title": "VOLVb.SG - | Stock Price & Latest News - Reuters",
+      "published_at": "Sat, 10 Oct 2026 11:53:43 GMT",
+      "candidate_id": 5,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別銘柄の株価情報のみで、内容が確認できず波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxNS3lBZTEwaWVLUXNScDVCZjV1eDRkb3RoWnM2M0ZkOE9DM0ZVMDNPaXA1ZDJXQ0xYZ2JqZm85dm9HbHBOSXNaQmVzUWJQN0xnMXpNR2dENDFoMXItWEQxYlB2WmZGUVVxYU1RX0E0RHNKSWd0RDNkbmk1Ty1MZnlJZFUxR3pjanFwSWZzS3hiZlktMEtTM2psOS12Y2xaMlk1MEc1Nm81NU50WjFKN0ZkY082T0pFVGU3dmd6T3JIckNPcFR0VlM0?oc=5",
+      "title": "Major Saudi conferences to proceed, organisers say, despite deadly airport attack - Reuters",
+      "published_at": "Sat, 10 Oct 2026 11:33:43 GMT",
+      "candidate_id": 6,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 空港攻撃後の会議続行に関する内容で、優先して掲載する対象（産油施設攻撃等）に当たらない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE1GMmJKMWFrUlVEMmxaLXB1d2FsbFVzdWtzRkZlNmMxUDZQcGxsd1UyR1IxclFWRlNENjJWdDNNWjFJSGVIU1NtTUN2aVFPMGJYd2x6VnBtMUpCenlsRk9QdHlHSnN5Zw?oc=5",
+      "title": "Magnitude 7.7 earthquake rocks Panama - Reuters",
+      "published_at": "Sat, 10 Oct 2026 10:29:09 GMT",
+      "candidate_id": 7,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: パナマの地震報道で、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxNWXFuRXk1Sm4ydlg5Tng2TklTSDlLUlhUXy12UldndXpmdWN1cnNYSmhZaFRwRTlSM0pUZWVtZjdicXdNbVlSMUxNYk5YYVhncjczY2FuLThrRlk4MTFPUU8ySVM5bHRlaGdfX19VTHQxQU9ZTXQwazF2MXhKYlUzVTFUMEZ2cjdQSTZGVEN5QWRPMlhPQnZTNElXeTY5QzZJb2NMcENHTUhSUXVVMU1kYjdoN2ZJZGdoTllBMkRvenZ4aU0?oc=5",
+      "title": "Russian attack on Ukrainian city kills 20, a day after Trump eases diesel sanctions on Moscow - Reuters",
+      "published_at": "Sat, 10 Oct 2026 06:39:00 GMT",
+      "candidate_id": 8,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ロシア・ウクライナの一般的な戦況の記事で、優先して掲載する対象に当たらない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTFBtOTBtM2E4bG4yMHE2OWVIc1JuUDRjR1ZCeWpDVGhGa2dLeWVKX2ZwVlNuMWtIc2ZkbFVGSkQ2RThHTWhWd25vRE1UeE5aRzVfSHRVbV9pTzd6Ump1UFlReHNZV3d2dHVxVVFqUHYwbHBjX0VGWFQ4?oc=5",
+      "title": "EPI.AX - | Stock Price & Latest News - Reuters",
+      "published_at": "Sat, 10 Oct 2026 05:34:50 GMT",
+      "candidate_id": 9,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別銘柄の株価情報のみで、内容が確認できず波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxNMjFvblRRazljNE9NQWl2ZUdURUJtOWxtTEI2b2ppZDgzdFBMVXRvZ3dvVm5XZHM2LUlYeDd5RjVvajk1THFoQnlFX2g0TklzTXpPRDlGZ3k2VFJIZGQ3aFkwV2dxclRlWldoXzVrSTdaQnd0bmc3ZFkyaFN6X08zYQ?oc=5",
+      "title": "6GJ.F - | Stock Price & Latest News - Reuters",
+      "published_at": "Sat, 10 Oct 2026 05:30:43 GMT",
+      "candidate_id": 10,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別銘柄の株価情報のみで、内容が確認できず波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxOMjRUX1ByVnc3VTV6cWY5Q05oTUxicmFxeGhvOFZtMThCUElweHRaelNTYVZwLUE1V1FwaEJMbW5IMXRaa0pEOHAzYWJVNDRKZnc4Q0xlQ3NKeTNpUjlwcjdQbW1qZW1BNk1ZTkpQeFBmdFJxa2dwUmY0U3oxdFYzOENkWVRmVFYzWVE?oc=5",
+      "title": "IFSPF.PK - | Stock Price & Latest News - Reuters",
+      "published_at": "Sat, 10 Oct 2026 05:30:17 GMT",
+      "candidate_id": 11,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別銘柄の株価情報のみで、内容が確認できず波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxPVlgzSmdhM2ZnUzdlRTJSWFJSWHdyU180SWpDS0JzM3dvTjAyeGU4ellSZlVlZTBBNWxSS3Q0ZGNuWnlwdUx6YWRoTHl6SFJNZEZOejJkVnJIUlN6cWZrOVhGLW1xbWh2WFpWUVJIVmhaR2IyV2Q3MzFneVczVDlVTF82NGpOZW5aZ2RzaHR5eXlhZw?oc=5",
+      "title": "- Reuters",
+      "published_at": "Sat, 10 Oct 2026 05:17:50 GMT",
+      "candidate_id": 12,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: タイトル・要約ともに内容が確認できず波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxPaEZqS3RTejgzWGZoTl9wdjZrd09PQUJaUW1UT2VOQ2p6bzhvT0MyMjgtelRVVU9IN3E2VFlvNm1iRWp4ZHRNbUcyTkUteFd5Q3dmbnhrSnpiMHFRVFNWNUR3RE1NekRKTVBNeGlKeUNhV3p4ZmJsRzVHNnJHbFJ6N3MwbnA0dklxaDB3?oc=5",
+      "title": "NDADK.CO - Reuters",
+      "published_at": "Sat, 10 Oct 2026 04:30:29 GMT",
+      "candidate_id": 13,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別銘柄の株価情報のみで、内容が確認できず波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTFA1clcwRGJkUW1ReDZzX2E1TjE1X3BEMVJoemZSUklmMWxhY2hJQ3UzNWhCRkVITklWNkJQUmxaQkp0dGlSMkp3YXc2NllEdzNHeVZKV3pfMnNQRGJteW9nMS1iX1NsNmZUY3o3aw?oc=5",
+      "title": "P1I.MU - | Stock Price & Latest News - Reuters",
+      "published_at": "Sat, 10 Oct 2026 04:08:40 GMT",
+      "candidate_id": 14,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別銘柄の株価情報のみで、内容が確認できず波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQdllQdm5CdmlVZXN1TkRYcEd3akdFcFFiMU9xSXJNUnBzbk9HNWFqbTVsYVpXMG03bldVc29lZjVfMk9seFo4LXpadURFdWhmUEVYdWViNjBPNkFiVi1HTkx1clBCc1ZsSGNOdjlweHR3V0JRa0JiRFpEZWNCMHpnTF9GX2RUeWUyTE1oT1VRNjBTSUVZVDBaa0ZkVi0yTFBpRnQ0TlcwM1d2MTc4bVd6U2ZqcDRxUWJESWY4aWpfTmdNeVpB?oc=5",
+      "title": "India unveils tough curbs on dollar demand to defend rupee - Reuters",
+      "published_at": "Sat, 10 Oct 2026 03:34:00 GMT",
+      "candidate_id": 15,
+      "verified_by": "Reutersの報道（単独tier2）",
+      "decision": "採用",
+      "reason": "B: インド当局がルピー防衛のためドル需要抑制策を導入したとの報道。為替・資本規制の強化は市場の流動性を通じて暗号通貨市場にも波及し得る材料だが、直接因果は未確認であることを本文に明記した。"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE9yNVk3ZGx3QlJrLWRIQ0pHeFRuZlpPTTVxUGVuZWFuV1NTOTV6d3lQcWZNVWFaRHZ3MnNxNWw3SDlDVmxGVzZYZlNsTHhhM2lTZkJBV2MzZjhaandEWFNCZzdXRzNja2dWMi12bWxR?oc=5",
+      "title": "36W.F - | Stock Price & Latest News - Reuters",
+      "published_at": "Sat, 10 Oct 2026 03:30:59 GMT",
+      "candidate_id": 16,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別銘柄の株価情報のみで、内容が確認できず波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTFBiUldMTVVXMUJNdXlGNm5Sa1o2NzFFMjhvVVJkYUVsY21xUFNRS19GWHhYVnZQLU1IQ29ObHIyb1otNXdmRjFmM25kN2pnMTdKYWNQck0tQkFFdE43VFNaUkw5WWhwWlpqdk9ZMjQ1eG5KMm5vUm96ZA?oc=5",
+      "title": "PEGA.SG - | Stock Price & Latest News - Reuters",
+      "published_at": "Sat, 10 Oct 2026 03:25:37 GMT",
+      "candidate_id": 17,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別銘柄の株価情報のみで、内容が確認できず波及経路を説明できない"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/regulation/2026-10-10-kalshi-is-investigating-bets-on-trumps-press-secretary-pick-placed-before-announcement-wsj-418222",
+      "title": "Kalshi is investigating bets on Trump’s press secretary pick placed before announcement: WSJ",
+      "published_at": "Sat, 10 Oct 2026 18:35:25 +0000",
+      "candidate_id": 18,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f) tier3単独ソースであり、独立2ソース規定に該当する相手候補が無い"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/markets/2026-10-10-ether-etfs-extend-outflow-streak-to-nine-days-as-solana-funds-snap-record-14-week-inflow-run-418215",
+      "title": "Ether ETFs extend outflow streak to nine days as Solana funds snap record 14-week inflow run",
+      "published_at": "Sat, 10 Oct 2026 15:10:37 +0000",
+      "candidate_id": 19,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f) tier3単独ソースであり、独立2ソース規定に該当する相手候補が無い"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/what-happened-in-crypto-today?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Here’s what happened in crypto today",
+      "published_at": "Sat, 10 Oct 2026 12:30:00 +0000",
+      "candidate_id": 20,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f) tier3単独ソース（包括的なダイジェスト記事）で、独立2ソース規定に該当しない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/10/10/one-year-after-10-10-bitcoin-and-ether-liquidity-have-rebuilt-but-other-altcoins-still-face-risks",
+      "title": "One year after 10/10 flash crash, bitcoin and ether liquidity have rebuilt, but altcoins still face risks",
+      "published_at": "Sat, 10 Oct 2026 12:00:00 +0000",
+      "candidate_id": 21,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f) tier3単独ソースであり、独立2ソース規定に該当する相手候補が無い（同一媒体の関連記事のみ）"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/10/05/tokenized-commodities-look-beyond-gold-as-lending-and-oil-open-new-markets",
+      "title": "Tokenized commodities look beyond gold as lending and oil open new markets",
+      "published_at": "Sat, 10 Oct 2026 12:00:00 +0000",
+      "candidate_id": 22,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f) tier3単独ソースであり、独立2ソース規定に該当する相手候補が無い"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/justin-sun-says-trons-post-quantum-cryptography-has-gone-live-on-testnet?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Justin Sun says Tron’s post-quantum cryptography has gone live on testnet",
+      "published_at": "Sat, 10 Oct 2026 11:52:14 +0000",
+      "candidate_id": 23,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f) tier3単独ソースであり、独立2ソース規定に該当する相手候補が無い"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/10/10/bitcoin-s-usd19-billion-wake-up-call-one-year-later-has-crypto-learned-anything",
+      "title": "Bitcoin's $19 billion wake-up call: One-year after flash crash, has crypto learned anything?",
+      "published_at": "Sat, 10 Oct 2026 11:00:00 +0000",
+      "candidate_id": 24,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f) tier3単独ソースであり、独立2ソース規定に該当する相手候補が無い（同一媒体の関連記事のみ）"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/tech-chief-says-eu-can-fend-off-rogue-ai-risk-report?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Tech chief says EU can fend off rogue AI risk: Report",
+      "published_at": "Sat, 10 Oct 2026 08:41:06 +0000",
+      "candidate_id": 25,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: AIリスクに関する内容で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/sam-altman-backed-bitcoin-life-insurer-meanwhile-raises-more-funds?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Sam Altman-backed Bitcoin life insurer, Meanwhile, raises more funds",
+      "published_at": "Sat, 10 Oct 2026 07:10:43 +0000",
+      "candidate_id": 26,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f) tier3単独ソースであり、独立2ソース規定に該当する相手候補が無い"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/10/09/bitcoin-s-volatility-has-plunged-but-extreme-price-swings-are-more-frequent-than-in-2018",
+      "title": "Bitcoin's volatility has plunged, but extreme price swings are more frequent than in 2018",
+      "published_at": "Sat, 10 Oct 2026 05:43:00 +0000",
+      "candidate_id": 27,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f) tier3単独ソースであり、独立2ソース規定に該当する相手候補が無い（同一媒体の関連記事のみ）"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/10/10/robinhood-chain-slowdown-spreads-from-fees-to-trading-as-transactions-fall-more-than-40",
+      "title": "Robinhood Chain slowdown spreads from fees to trading as transactions fall more than 40%",
+      "published_at": "Sat, 10 Oct 2026 04:44:35 +0000",
+      "candidate_id": 28,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f) tier3単独ソースであり、独立2ソース規定に該当する相手候補が無い"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/tech/2026/10/10/xrp-ledger-patched-decade-old-bug-that-could-create-billions-of-dollars-in-xrp-from-nothing",
+      "title": "XRP Ledger patched decade-old bug that could create billions of dollars in XRP from nothing",
+      "published_at": "Sat, 10 Oct 2026 04:20:07 +0000",
+      "candidate_id": 29,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f) tier3単独ソースであり、独立2ソース規定に該当する相手候補が無い"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/10/05/1-2-billion-apac-consumers-could-adopt-stablecoins-by-2031-according-to-visa",
+      "title": "Visa survey says nearly half of APAC consumers open to using stablecoins by 2031",
+      "published_at": "Sat, 10 Oct 2026 03:00:00 +0000",
+      "candidate_id": 30,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f) tier3単独ソースであり、独立2ソース規定に該当する相手候補が無い"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/10/09/u-s-cftc-moves-to-fold-event-contracts-into-swaps-regulations-as-legal-fight-rages",
+      "title": "U.S. CFTC moves to fold event contracts into swaps regulations as legal fight rages",
+      "published_at": "Fri, 09 Oct 2026 21:21:54 +0000",
+      "candidate_id": 31,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f) tier3単独ソースであり、独立2ソース規定に該当する相手候補が無い"
+    }
+  ],
+  "reusable_for_summary": [],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 0
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 0
+    },
+    "FRB（speeches）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "FRB（testimony）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 0
+    },
+    "米財務省": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "USTR": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "ホワイトハウス": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 2
+    },
+    "ホワイトハウス（大統領令等）": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 0
+    },
+    "ADP": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 8
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 4
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "The Block": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 2
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 49
+    }
+  },
+  "news_candidate_count": 31,
+  "format_normalized": {
+    "part1_points": 0,
+    "part2_flow": 0
+  },
+  "flow_price_fragment": " #BTC +0.53%、 #ETH +0.74%（24時間比）",
+  "part1_md": "【対象日】2026年10月10日（土）\n\n【ヘッドライン】\nインド当局がルピー防衛のためドル需要を抑制する新たな規制を導入したとReutersが報じました。為替・資本規制の強化は市場の流動性やリスク選好を通じて暗号通貨市場にも波及し得る材料ですが、暗号通貨価格への直接因果は未確認です。\n\n【主要なポイント】\n・補足できる検証済み材料は確認できない。\n",
+  "part2_md": "【市場のフロー】\n・【出来事・ニュース】インド当局がルピー防衛のためドル需要を抑制する新たな規制を導入したとReutersが報じました → 【地政学・マクロの変化】新興国の為替・資本規制の強化が市場の流動性やリスク選好に影響する可能性が意識された可能性があります → 【暗号通貨価格】 #BTC +0.53%、 #ETH +0.74%（24時間比）で、同時期はいずれも小幅な上昇にとどまりましたが、因果は未確認です。\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは22.55%→5.37%へ低下しました（24時間出来高 -75.73%、TVL +2.01%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは25.79%→7.20%へ低下しました（24時間出来高 -72.03%、TVL +0.20%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+0.74%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\n新興国の資本規制強化という地政学・マクロ材料が報じられましたが、暗号通貨価格への直接的な影響は確認できていません。全体として方向感に乏しく、不透明な地合いが続いています。\n",
+  "numeric_record_md": "【対象日】2026年10月10日（土）\n\n【主要指標】\n・市場全体：時価総額 $2.805兆（¥444.0兆）｜24時間取引高 $434.4億（¥6.88兆）\n・ #BTC：$82,984（約1,313.5万円）｜24時間比 +0.53%\n　（24時間レンジ $82,358〜$83,093）\n・ #ETH：$2,506（約39.7万円）｜24時間比 +0.74%\n　（24時間レンジ $2,477〜$2,517）\n・ #BNB：$750（約11.9万円）｜24時間比 +1.27%\n・市場心理：Fear & Greed 57（Neutral、CoinMarketCap API）\n・ドミナンス：BTC 59.45%｜ETH 10.91%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年10月11日07:38 JST、USD/JPY ¥158.29\n\n【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $1,960,158 vs Base上ETH/USDC $12.57M｜参考：Base上DEX全体 $8.236億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $62.11億（¥9,832億）｜24時間比 +1.10%｜USDCドミナンス 84.6%\n・ ETH/USDC（Base）参考APR：0.05% 5.37%（TVL $9.65M／24h出来高 $2.84M）｜0.3% 7.20%（TVL $148.12M／24h出来高 $9.74M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年10月11日07:38 JST\n"
+}
