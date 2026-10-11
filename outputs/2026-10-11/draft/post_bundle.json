@@ -1,0 +1,378 @@
+{
+  "target_date_jst": "2026-10-11",
+  "level": "L0",
+  "sections": {
+    "part0_target_date": "2026年10月11日（日）",
+    "part1_headline": "トランプ米大統領は、ロシアとウクライナがエネルギー関連施設を対象とした停戦に達したと発言したとReutersが報じました。原油供給やエネルギー価格の見通しを通じて市場心理に波及し得る材料ですが、暗号通貨価格への直接因果は未確認です。",
+    "part1_points": "・サウジアラビア当局は、13人が死亡した攻撃の翌日にリヤド空港で新たな攻撃があり負傷者が出たと報告したとReutersが報じました。産油地域での軍事行動は原油供給やリスク選好を通じて暗号通貨市場にも波及し得る材料ですが、暗号通貨価格への直接因果は未確認です（Reuters、10月11日）。\n・イラン当局は、ホルムズ海峡再開に関する自国提案への米国の回答が「不十分」であったと主張したとReutersが報じました。主要な海上輸送路を巡る緊張は原油供給や物流コストを通じて暗号通貨市場にも波及し得る材料ですが、具体的な封鎖・被害の有無は未確認です（Reuters、10月11日）。",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.826兆（¥447.3兆）｜24時間取引高 $487.9億（¥7.72兆）\n・ #BTC：$83,572（約1,322.8万円）｜24時間比 +0.71%\n　（24時間レンジ $82,714〜$84,111）\n・ #ETH：$2,531（約40.1万円）｜24時間比 +1.03%\n　（24時間レンジ $2,495〜$2,552）\n・ #BNB：$752（約11.9万円）｜24時間比 +0.28%\n・市場心理：Fear & Greed 58（Neutral、CoinMarketCap API）\n・ドミナンス：BTC 59.43%｜ETH 10.94%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年10月12日07:37 JST、USD/JPY ¥158.29",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $2.80M vs Base上ETH/USDC $32.99M｜参考：Base上DEX全体 $5.691億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $62.52億（¥9,896億）｜24時間比 +0.65%｜USDCドミナンス 84.6%\n・ ETH/USDC（Base）参考APR：0.05% 14.06%（TVL $9.62M／24h出来高 $7.41M）｜0.3% 18.74%（TVL $149.50M／24h出来高 $25.58M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年10月12日07:37 JST",
+    "part2_flow": "①【出来事・ニュース】トランプ米大統領は、ロシアとウクライナがエネルギー関連施設を対象とした停戦に達したと発言したとReutersが報じました → 【地政学・マクロの変化】地政学リスクの後退が市場で意識された可能性があります → 【中間市場指標・市場心理】原油供給やエネルギー価格見通しを巡るリスク選好の変化が意識された可能性があります → 【暗号通貨価格】 #BTC +0.71%、 #ETH +1.03%（24時間比）で、同時期はやや強含みの動きでしたが、因果は未確認です。\n②【出来事・ニュース】サウジアラビア当局がリヤド空港での新たな攻撃と負傷者発生を報告し、イラン当局がホルムズ海峡再開提案への米国回答を「不十分」と主張したとReutersが報じました → 【地政学・マクロの変化】産油地域や主要海上輸送路を巡る緊張の高まりが市場で意識された可能性があります → 【中間市場指標・市場心理】原油供給懸念や物流コストを通じたリスク回避の心理が意識された可能性があります → 【暗号通貨価格】 #BTC +0.71%、 #ETH +1.03%（24時間比）で、同時期は小幅な上昇にとどまる値動きでしたが、因果は未確認です。",
+    "lp_comment": "参考APRは両プールとも前日から上昇しました。\nBase 0.05%プールの参考APRは5.37%→14.06%へ上昇しました（24時間出来高 +161.17%、TVL -0.33%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは7.20%→18.74%へ上昇しました（24時間出来高 +162.77%、TVL +0.93%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+1.03%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "中東情勢を巡る報道が交錯する中、地政学リスクの方向感が定まらず、市場心理は不透明な状況が続いています。原油供給や海上輸送路を巡る動向が今後も注視される見通しです。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "ロシア・ウクライナがエネルギー停戦に合意と報道",
+  "audit_ledger": [
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxPcDdtenR1Q0JlMzNKUUlHb0ROcUkwZHVpRlQ4ZDFDT2d2WlJndmVVMldTdC1EZkp6TUhSSHNNOWU3SFh3YnJVVk1wTFZIRl9nQTh5OEhHaGtUd1ZOUmJyaGtUOFJIZkFOb2E2N1VtREhDVEZFaHVPMXdaM3pRYlVLWUxTUW45WEllbmNVQ3RQTjZBSDltRXJIbUtJVHJGcU9lVEtNMTgtT0l5VWh2Tk5YQWdma0piSGhMWDQyYkhtc0tkZ2tNelE?oc=5",
+      "title": "US Republicans, Democrats want Trump to reverse course on Russia diesel - Reuters",
+      "published_at": "Sun, 11 Oct 2026 20:33:32 GMT",
+      "candidate_id": 1,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ロシアのディーゼル輸入規制を巡る米議会の意見で、波及経路が間接的かつ主要なポイントの順位により上限4項目に入らない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE93NzNNcW1TS1FJSnhWTklXWWtCVkdtMGdSZ2N1TlFLbFgwZ0RuWVVaWmJNWEdCNmdxdWFVVnVkUHkxVm1KaWMxRThUS1liZW1aSU9qZlk2eGU5OHQ5RE4xY2F0OFVaYUJLNV9CN0FTRQ?oc=5",
+      "title": "SKYD.N - | Stock Price & Latest News - Reuters",
+      "published_at": "Sun, 11 Oct 2026 20:29:26 GMT",
+      "candidate_id": 2,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別株の株価情報のみで、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxQSEo0VkFTZkY2VzMzeFV0OVRVbWN4aHFzaXFjV0FBN05uaEFONHhQVTN2a3JJM09NdFBzY1R3MnRrUFZOeFZfUDItOUd1NkxiT3dfOWduTHJKTlBzSGsyN3VCYTNkWG1ZTWlZMUpzbDdrc1dOZUs3VDRwa0lHN21tNnFNdFhQYUxoNmdfN1Zyb3FMRm04RzRVei0zY3FKN0FoY2JYTGFodjYtemdITVpKVXk3NlR2QXFIMU9YMnUtX004QW1GZ0UzZA?oc=5",
+      "title": "Saudi Arabia reports injuries in new attack at Riyadh airport, day after strike kills 13 - Reuters",
+      "published_at": "Sun, 11 Oct 2026 20:06:08 GMT",
+      "candidate_id": 3,
+      "verified_by": "",
+      "decision": "採用",
+      "reason": "B: 産油国サウジアラビアの空港での新たな攻撃による負傷者発生をReutersが報道、産油地域の軍事行動として優先対象に該当"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxOWWV5d3JyTHZnTzJMQk5Dbm5fQ0tBb1hnOUhJc3hhNDJqb3NMSTFaTWNVelN6Z1FXdWpJSHBpOU1icE95Z1hKcEJJQmRkWXdtWGRBSkpBVVZ5aENPaEZWNnJPaVppYjBCVzFQS1FMYlhQZHFsZTQ1V25MMnVKQjNKVl90TENLSXFYUkstblpkZkFtWGtUU0t3Y1NR?oc=5",
+      "title": "Russian attacks kill six people in two Ukrainian cities - Reuters",
+      "published_at": "Sun, 11 Oct 2026 19:05:43 GMT",
+      "candidate_id": 4,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ロシア・ウクライナの一般的な戦況の記事で、優先して掲載する対象に当たらない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxPaUx0a0pvZmw1VkxoRkUyc1VTemRoQV9zWEFZMmpFd3ozM0Ytdy1QMnM1Rjg1Z0FnaklEZlktUWI3Z05mMlVYQmx0c3h3X29aMUIwN01ETml6cDVhNi1TUmVWMHZicnlHdHhHc0xXZ0Z6M0QwUEJEeE1ld3BWWHI2VlpRY2Z1QW44U0xnNTVXYVJBdkxGbThsWkVqVHdXbUxmNTI5NjZKaEpteDBYTlNkbmRSMA?oc=5",
+      "title": "US threatens to block arms for Ukraine over refinery attacks, FT reports - Reuters",
+      "published_at": "Sun, 11 Oct 2026 18:23:43 GMT",
+      "candidate_id": 5,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 米国の武器供与停止検討に関する報道で、主要なポイントの順位により上限4項目に入らない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxNZTR1Z25uRUdFdldVQ2h6clhMSlEyZVB4cHJ6QTlsNlpIM0Qzbi0zOXlFZFk5MjFCcVV6RnFrV0JmY2RfRlQ0bzhwQ1ZkMUxaTDl4SGR0VWtFZWQtQ2FxdjZocnNDMEMyTjZtTnNWdmhGc0o0ZlJCYmRaSzF1LVg2NUNOMlc2ZDVidWlxS0VYZ1NZMzVLdG9ZNlBVZU9mT2REdzM0SmR6ZlBXdzdTVTRsYjlhb1ZqSW80bjhEc24xRWNaNjZUbUlrQw?oc=5",
+      "title": "Ukraine awaits details of ceasefire proposals from US, Russia maintains attacks, Zelenskiy says - Reuters",
+      "published_at": "Sun, 11 Oct 2026 18:22:07 GMT",
+      "candidate_id": 6,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 停戦提案の詳細待ちという内容で、候補10と同種のため主要なポイントの順位により上限4項目に入らない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxOaDM4RVFjdmpFdUszUHFFbm5tWGM1R21NMEI2aFNqN2NOUGZPZzVPQ3d6QnUwY3VkWm96Q0tXQVFfTFF6c21hYzgzQWwyQVhJam0zZW45cGNuc282RkYzVEIyOEJlTkljM0l5MkdTRHRzRE1rdExZV2o4aFBiTURQMXd0UlFsTVlLdVlwVDZJcGpBNWZkb0RhalloX21XclFXTWJnN3pTSzZPNy1tS1o0SDNjLVlmZ2ZkVldj?oc=5",
+      "title": "Iran says US response to its proposal to reopen Hormuz was 'insufficient' - Reuters",
+      "published_at": "Sun, 11 Oct 2026 17:11:12 GMT",
+      "candidate_id": 7,
+      "verified_by": "",
+      "decision": "採用",
+      "reason": "B: イランがホルムズ海峡再開提案への米回答を「不十分」と主張したとReutersが報道、海上輸送路を巡る緊張として優先対象に該当"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE43WE5ON3hhRTlrLWpLckI2d1o0VGt4cXFFajBON2VkTFZfV2J1azJLUUZDWVFNaUVNT0tLeVEtY2d6U3hLTnBiM1VPSjFSd0pQc2RvRFp6ZElGemtRdWNON0ZicVZrS1U?oc=5",
+      "title": "Houthis renew warning to avoid Saudi airports after deadly Riyadh attack - Reuters",
+      "published_at": "Sun, 11 Oct 2026 15:34:19 GMT",
+      "candidate_id": 8,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: フーシ派による警告の報道で、主要なポイントの順位により上限4項目に入らない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxNbHBvR1Y0bmdYLTV0NHhWQXE1MFFTMHlvYmZRYnRILVMxM3JiSnJaSVBmbUkzVmN6VXptNnBsNDhXRXZEX2hBS1FOZGhyc3Zid3poMksyLUVLNHZkTGNUekxjWUlyejF6N3hpVDdQcFE4OG92REpjamxKSzV0YURObE9xV1FwYlJ5TVUwZjB5N3hSYzJLTUJuV0c0VG1TZ29jMlN0dDQyOTNDR2tBR1dRRS1jWmloaGVTbU9LOEN2ZnBFZFlmdHJn?oc=5",
+      "title": "Ukraine's Zelenskiy tells ABC he will organize elections if Russia agrees to 60-day ceasefire - Reuters",
+      "published_at": "Sun, 11 Oct 2026 15:27:56 GMT",
+      "candidate_id": 9,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ゼレンスキー氏の選挙組織発言に関する内容で、主要なポイントの順位により上限4項目に入らない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxObGthQXk1OHFPRzlYcjNKVnk4R1pDQXIyTExXMk02TUU3Qy1WbkFxTFhjRXc2MlpmM0s0bDdwQ1Y5V0JDWHpCdGpfRGxzWFlrU3F0d3FBSjY0X25udzkwVkxBamdoS2xLUE0wWHdVTy1RY0N6dnRmd0dnMnJtU2FQNGpaazRqSU1zcWhPV201ajliQmJPcmZ3ZWZUaXNEWTVx?oc=5",
+      "title": "Trump says Russia and Ukraine reached 'energy ceasefire' - Reuters",
+      "published_at": "Sun, 11 Oct 2026 14:31:48 GMT",
+      "candidate_id": 10,
+      "verified_by": "",
+      "decision": "採用",
+      "reason": "B: トランプ米大統領がロシア・ウクライナ間のエネルギー停戦成立を発言とReutersが報道、停戦の成立として優先対象に該当しヘッドライン主題とした"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxOOEliNzFKYlR3T0NNakk4TWxXWGJ0UlJfQ0JLdFVIRnlESENoRW4zdjNSWW02UjFJOFozRmlZdVZ2ZlFaOTFSdEc5RGd6QWVVaFFMNi1QRTdMSVg2dFQxaHROcjhjbnI4ekhnZUZVbXlmYVBQaDZ3TG1pcFQ5RnFaVXpfYUxWRG1acC1mYnR6d3ZtdXpxbTBBUFJkcU9ock1wbXc?oc=5",
+      "title": "Most Gulf stocks in red after attack on Riyadh airport - Reuters",
+      "published_at": "Sun, 11 Oct 2026 13:19:13 GMT",
+      "candidate_id": 11,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 湾岸株式市場の反応に関する記事で、主要なポイントの順位により上限4項目に入らない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE1JaDhKZjVaZDVVYWJtQ2w5clNVeERjMVNKVXR6WkN0TTZib1VIVjhwVElnd1F3b2JCaWhqN3ZwRzhwalBBZmtQZl9VRUl6cF83SlFnV01INWhUVHNSNDMtcFpsWUdBUVU?oc=5",
+      "title": "Trump calls for Ukraine election to out Zelenskiy after oil attacks - Reuters",
+      "published_at": "Sun, 11 Oct 2026 13:05:54 GMT",
+      "candidate_id": 12,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: トランプ氏のウクライナ選挙要求発言で、解説的要素が強く優先して掲載する対象に当たらない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxQa2lQSWVCZ0RHVC1TSmJMNVJsQXBpQkxEc0I2R2NCTENjb0JHWm92RmkxMHJsTFlYdGJmLVFYeldvRnNlbEQwWE5saXpDalJSY19wcGduTWdzUEhmTEZ1c1JVcTdPazBvOUM1VG5UNmx3WW15Y1VLN243UXo2UmZKN1lDUzhuOHRHb2wzSDI4SktxUGNQd3dLQUVFYnAtelU0NWpoWnEtZWJJdlV4aHZOa3dXM1ZKaENjZUVCd0xaNjAxcVBxTUUtWXBGaWN3d0dRQVQwTmtR?oc=5",
+      "title": "Ukraine will halt strikes on refineries if Russia stops energy attacks, Zelenskiy says - Reuters",
+      "published_at": "Sun, 11 Oct 2026 09:47:15 GMT",
+      "candidate_id": 13,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 候補10と同種のエネルギー停戦条件に関する内容で、主要なポイントの順位により上限4項目に入らない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxQWlZqTVZkYlUxR2xKODRtSHFhLUI5ZVk4MWlwUURPZTRJSy1UYjdKak1ZbzdGMG80dmNOTVlVbUtvbW1zUU9hWE5QeU9xc19wWE50TnR4M05sQ0c0aFI0ZmYtTGN6Q0hwanJUajNzSlRfaVBQNXdPMUlfQlpfb1JHTGlQWkg5aVdOTE5SZ29NRXZLSW85enZHa2dCOVFSWmFpUEptcWMxa1JxVW15ZGhLLTRRcDEyeXBEWkw0RnJR?oc=5",
+      "title": "Middle East war, high debt levels to dominate IMF-World Bank meetings in Bangkok - Reuters",
+      "published_at": "Sun, 11 Oct 2026 04:03:00 GMT",
+      "candidate_id": 14,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: IMF世銀会合の議題紹介記事で、波及経路が間接的かつ主要なポイントの順位により上限4項目に入らない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxPV2Nqd2RXZnpaY3lzeHVxN2Y0VC1ZZEpTSlFVeFpYbW1nQUZqRE5kSGt1NXo0TTFQQmtLSnFFX045Qk1pc2lpMWxXaGxfVkxxazIwNVdVYl82TWJZa2VURkhNWllYX1I1Vk00OFZoNzNNRmRQLURKVFpKbVVaVzZ4SjloWnB0SE1WTi1MWEp3TWttQ1h3MkpDcktydGU4MzdvVDlJS0V3Zk8xRkpp?oc=5",
+      "title": "US military says it disabled cargo vessel trying to run Iran blockade - Reuters",
+      "published_at": "Sun, 11 Oct 2026 01:35:00 GMT",
+      "candidate_id": 15,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 米軍のイラン封鎖関連の貨物船対応で、主要なポイントの順位により上限4項目に入らない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/10/11/everyone-wants-scotus-to-take-up-prediction-markets-state-of-crypto",
+      "title": "Everyone wants SCOTUS to take up prediction markets: State of Crypto",
+      "published_at": "Sun, 11 Oct 2026 18:30:00 +0000",
+      "candidate_id": 16,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): tier3単独で、同一事実を報じる独立したtier3媒体が確認できない"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/ecosystems/2026-10-11-xrp-ledger-patches-decade-old-bug-that-could-have-minted-trillions-of-xrp-418230",
+      "title": "XRP Ledger patches decade-old bug that could have minted trillions of XRP",
+      "published_at": "Sun, 11 Oct 2026 18:07:41 +0000",
+      "candidate_id": 17,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): tier3単独で、同一事実を報じる独立したtier3媒体が確認できない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/saylors-teases-strategy-bitcoin-buying-after-ending-september-with-strc-buybacks?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Saylor teases Strategy Bitcoin buying after ending September with STRC buybacks",
+      "published_at": "Sun, 11 Oct 2026 17:11:00 +0000",
+      "candidate_id": 18,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): tier3単独で、同一事実を報じる独立したtier3媒体が確認できない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/10/11/clarity-s-failure-could-speed-crypto-innovation-while-shielding-incumbents",
+      "title": "Clarity's failure could speed crypto innovation while shielding incumbents",
+      "published_at": "Sun, 11 Oct 2026 16:00:00 +0000",
+      "candidate_id": 19,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): tier3単独の論評記事で、同一事実を報じる独立したtier3媒体が確認できない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/10/11/president-trump-declares-energy-ceasefire-between-russia-and-ukraine",
+      "title": "President Trump declares 'energy ceasefire' between Russia and Ukraine",
+      "published_at": "Sun, 11 Oct 2026 15:40:47 +0000",
+      "candidate_id": 20,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3だがtier2候補10が同一事実（エネルギー停戦）を報道済みのため、裏取りとしてのみ扱いuseはfalseのまま"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/10/11/imf-finds-demand-for-tokenized-stocks-says-the-market-is-still-volatile-illiquid",
+      "title": "IMF finds demand for tokenized stocks, says the market is still volatile, illiquid",
+      "published_at": "Sun, 11 Oct 2026 13:00:00 +0000",
+      "candidate_id": 21,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): tier3単独で、同一事実を報じる独立したtier3媒体が確認できない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/what-happened-in-crypto-today?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Here’s what happened in crypto today",
+      "published_at": "Sun, 11 Oct 2026 12:59:00 +0000",
+      "candidate_id": 22,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): tier3の総括記事で個別の事実根拠として扱えず、独立2ソースにも該当しない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/coldcard-says-its-investigating-how-phishing-link-appeared-on-its-x-account?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Coldcard says it’s investigating how phishing link appeared on its X account",
+      "published_at": "Sun, 11 Oct 2026 10:40:00 +0000",
+      "candidate_id": 23,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): tier3単独で、同一事実を報じる独立したtier3媒体が確認できない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/ledger-confirms-unauthorized-hardware-implant-losses-may-exceed-86m?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Ledger confirms unauthorized hardware implant, says losses may exceed $86M",
+      "published_at": "Sun, 11 Oct 2026 09:05:00 +0000",
+      "candidate_id": 24,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): tier3単独で、同一事実を報じる独立したtier3媒体が確認できない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/cftc-proposals-aimed-at-separating-prediction-markets-from-casino-gambling?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "CFTC proposals aimed at separating prediction markets from casino gambling",
+      "published_at": "Sun, 11 Oct 2026 07:50:00 +0000",
+      "candidate_id": 25,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): tier3単独で、候補16とは別の規制提案の事実のため独立2ソースに該当しない"
+    }
+  ],
+  "reusable_for_summary": [],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 0
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 0
+    },
+    "FRB（speeches）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "FRB（testimony）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 0
+    },
+    "米財務省": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "USTR": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "ホワイトハウス": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 0
+    },
+    "ホワイトハウス（大統領令等）": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 0
+    },
+    "ADP": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 4
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 5
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "The Block": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 1
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 48
+    }
+  },
+  "news_candidate_count": 25,
+  "format_normalized": {
+    "part1_points": 0,
+    "part2_flow": 0
+  },
+  "flow_price_fragment": " #BTC +0.71%、 #ETH +1.03%（24時間比）",
+  "part1_md": "【対象日】2026年10月11日（日）\n\n【ヘッドライン】\nトランプ米大統領は、ロシアとウクライナがエネルギー関連施設を対象とした停戦に達したと発言したとReutersが報じました。原油供給やエネルギー価格の見通しを通じて市場心理に波及し得る材料ですが、暗号通貨価格への直接因果は未確認です。\n\n【主要なポイント】\n・サウジアラビア当局は、13人が死亡した攻撃の翌日にリヤド空港で新たな攻撃があり負傷者が出たと報告したとReutersが報じました。産油地域での軍事行動は原油供給やリスク選好を通じて暗号通貨市場にも波及し得る材料ですが、暗号通貨価格への直接因果は未確認です（Reuters、10月11日）。\n・イラン当局は、ホルムズ海峡再開に関する自国提案への米国の回答が「不十分」であったと主張したとReutersが報じました。主要な海上輸送路を巡る緊張は原油供給や物流コストを通じて暗号通貨市場にも波及し得る材料ですが、具体的な封鎖・被害の有無は未確認です（Reuters、10月11日）。\n",
+  "part2_md": "【市場のフロー】\n①【出来事・ニュース】トランプ米大統領は、ロシアとウクライナがエネルギー関連施設を対象とした停戦に達したと発言したとReutersが報じました → 【地政学・マクロの変化】地政学リスクの後退が市場で意識された可能性があります → 【中間市場指標・市場心理】原油供給やエネルギー価格見通しを巡るリスク選好の変化が意識された可能性があります → 【暗号通貨価格】 #BTC +0.71%、 #ETH +1.03%（24時間比）で、同時期はやや強含みの動きでしたが、因果は未確認です。\n②【出来事・ニュース】サウジアラビア当局がリヤド空港での新たな攻撃と負傷者発生を報告し、イラン当局がホルムズ海峡再開提案への米国回答を「不十分」と主張したとReutersが報じました → 【地政学・マクロの変化】産油地域や主要海上輸送路を巡る緊張の高まりが市場で意識された可能性があります → 【中間市場指標・市場心理】原油供給懸念や物流コストを通じたリスク回避の心理が意識された可能性があります → 【暗号通貨価格】 #BTC +0.71%、 #ETH +1.03%（24時間比）で、同時期は小幅な上昇にとどまる値動きでしたが、因果は未確認です。\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から上昇しました。\nBase 0.05%プールの参考APRは5.37%→14.06%へ上昇しました（24時間出来高 +161.17%、TVL -0.33%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは7.20%→18.74%へ上昇しました（24時間出来高 +162.77%、TVL +0.93%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+1.03%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\n中東情勢を巡る報道が交錯する中、地政学リスクの方向感が定まらず、市場心理は不透明な状況が続いています。原油供給や海上輸送路を巡る動向が今後も注視される見通しです。\n",
+  "numeric_record_md": "【対象日】2026年10月11日（日）\n\n【主要指標】\n・市場全体：時価総額 $2.826兆（¥447.3兆）｜24時間取引高 $487.9億（¥7.72兆）\n・ #BTC：$83,572（約1,322.8万円）｜24時間比 +0.71%\n　（24時間レンジ $82,714〜$84,111）\n・ #ETH：$2,531（約40.1万円）｜24時間比 +1.03%\n　（24時間レンジ $2,495〜$2,552）\n・ #BNB：$752（約11.9万円）｜24時間比 +0.28%\n・市場心理：Fear & Greed 58（Neutral、CoinMarketCap API）\n・ドミナンス：BTC 59.43%｜ETH 10.94%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年10月12日07:37 JST、USD/JPY ¥158.29\n\n【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $2.80M vs Base上ETH/USDC $32.99M｜参考：Base上DEX全体 $5.691億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $62.52億（¥9,896億）｜24時間比 +0.65%｜USDCドミナンス 84.6%\n・ ETH/USDC（Base）参考APR：0.05% 14.06%（TVL $9.62M／24h出来高 $7.41M）｜0.3% 18.74%（TVL $149.50M／24h出来高 $25.58M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年10月12日07:37 JST\n"
+}
