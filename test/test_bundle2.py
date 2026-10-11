@@ -8169,6 +8169,79 @@ check("v1.112 STATUSの自動補完の行: 先頭の「audit_ledger自動補完:
       "audit_ledger自動補完: 2件" in _gen_fill_status and "reason＝理由が空だったため定型文で補完。再試行しても空だった分、または再試行がすべて失敗したため空のまま採用した分。" in _gen_fill_status
       and "decision/reasonが空" not in _gen_fill_status, _gen_fill_status[:300])
 
+# --- 独立レビュー（v1.112 追補）への対処 ---
+_tp_ok = generate_post._call_json(
+    FakeClient(lambda kw, n: FakeResponse([FakeTextBlock('{"k": 1}')], stop_reason="max_tokens")),
+    system="s", user_content="u", max_tokens=100, required_keys=["k"])
+check("v1.112追補 _call_json: stop_reasonがmax_tokensでも、JSONとして読めて必須キーがそろっていれば従来どおり受け入れる（打ち切りの例外にしない）",
+      _tp_ok.ok is True and _tp_ok.attempts == 1 and _tp_ok.attempt_errors == [], str(_tp_ok.attempt_errors))
+_tp_empty = generate_post._call_json(
+    FakeClient(lambda kw, n: FakeResponse([FakeTextBlock("")], stop_reason="max_tokens")),
+    system="s", user_content="u", max_tokens=100, required_keys=["k"])
+check("v1.112追補 _call_json: max_tokensで本文が空なら、空応答ではなく打ち切りとして記録する",
+      _tp_empty.ok is False and all(e.startswith("OutputTruncatedError") for e in _tp_empty.attempt_errors), str(_tp_empty.attempt_errors))
+
+def _blank_only_then_errors(kw, n):
+    if n == 1:
+        resp = _call_a_response(kw)
+        return json_response({**resp, "audit_ledger": [{**e, "reason": ""} if e["use"] else e for e in resp["audit_ledger"]]})
+    return FakeResponse([FakeTextBlock("not json{{{")])
+_fbk_out = generate_post.call_a(FakeClient(_blank_only_then_errors), DAILY_DATA, NEWS_TODAY, None)
+check("v1.112追補 call_a: 1回目がreasonだけ空で、2・3回目がJSON不正なら、1回目を補完した結果で成功する（L1に落とさない）。fallback_noteに経緯が残る",
+      _fbk_out.ok and _fbk_out.attempts == 3 and _fbk_out.audit_ledger_auto_filled_count == 1
+      and _fbk_out.data["audit_ledger"][0]["reason"] == "理由が記載されませんでした（自動補完）"
+      and _fbk_out.fallback_note and _fbk_out.fallback_note.startswith("1試行目の応答（reasonだけが空）を補完して採用。最終試行は失敗: ")
+      and len(_fbk_out.attempt_errors) == 2 and _fbk_out.to_dict().get("fallback_note") == _fbk_out.fallback_note
+      and "fallback_note" not in generate_post.CallOutcome(True, {}, 1, None).to_dict(),
+      f"{_fbk_out.ok} {_fbk_out.attempts} {_fbk_out.fallback_note} {_fbk_out.attempt_errors}")
+_gen_fbk = json.loads(json.dumps(_gen_not_truncated))
+_gen_fbk["call_a"] = {**_gen_fbk["call_a"], **_fbk_out.to_dict()}
+_gen_fbk_status = compose_post.render_generation_status(_gen_fbk)
+check("v1.112追補 STATUS: 保険で採用した日は「3試行目: 成功」とは書かず、採用した応答と最終試行の失敗を別の行で示す",
+      "3試行目: 成功" not in _gen_fbk_status and "    → 1試行目の応答（reasonだけが空）を補完して採用。最終試行は失敗: " in _gen_fbk_status
+      and "audit_ledger自動補完: 1件" in _gen_fbk_status, _gen_fbk_status[:700])
+
+_FB_NEWS = {
+    "collected_at": "2026-08-17T09:00:00+09:00", "target_date_jst": "2026-08-17", "source_status": {},
+    "candidates": NEWS_PAIR_CANDIDATES["candidates"] + [
+        {"title": "Totally unrelated words appear here", "url": "https://example.com/pc", "source": "The Block",
+         "published_at": "Mon, 17 Aug 2026 09:00:00 GMT", "summary": "...", "kind": "supplementary", "tier": 3}],
+}
+
+def _fb_pair_resp(kw, n):
+    content = _parse_leading_json(kw["messages"][0]["content"])
+    by_src = {c["source"]: c["candidate_id"] for c in content.get("news_candidates_today", [])}
+    a_id, b_id, c_id = by_src["CoinDesk"], by_src["Cointelegraph"], by_src["The Block"]
+    if n == 1:   # 相方は成立するが、採用のreasonが空
+        entries = [{"candidate_id": a_id, "use": True, "pairs_with_candidate_id": b_id, "reason": ""},
+                   {"candidate_id": b_id, "use": True, "reason": "同一事実"},
+                   {"candidate_id": c_id, "use": False, "reason": "C: 対象外"}]
+    else:        # 相方が成立しない（Aの相方に無関係なCを申告）
+        entries = [{"candidate_id": a_id, "use": True, "pairs_with_candidate_id": c_id, "reason": "同一事実"},
+                   {"candidate_id": b_id, "use": True, "reason": "同一事実"},
+                   {"candidate_id": c_id, "use": False, "reason": "C: 対象外"}]
+    return json_response({**CALL_A_DATA, "audit_ledger": entries})
+
+_fbf_out = generate_post.call_a(FakeClient(_fb_pair_resp), DAILY_DATA, _FB_NEWS, None, 0.4)
+check("v1.112追補 call_a: 1回目がreasonだけ空（相方は成立）で、最終試行が相方の不成立で強制不採用になる場合は、強制不採用にした結果ではなく、"
+      "1回目を補完した結果（相方が成立している）を採用する。強制不採用は記録されない",
+      _fbf_out.ok and _fbf_out.attempts == 3 and _fbf_out.force_dropped_candidates == []
+      and [e["decision"] for e in _fbf_out.data["audit_ledger"]] == ["採用（独立2ソース）", "採用（独立2ソース）", "不採用"]
+      and _fbf_out.fallback_note and "強制不採用にしたため採用しなかった" in _fbf_out.fallback_note
+      and _fbf_out.audit_ledger_auto_filled_count == 1 and len(_fbf_out.attempt_errors) == 2,
+      f"{_fbf_out.ok} {_fbf_out.force_dropped_candidates} {_fbf_out.fallback_note} {_fbf_out.attempt_errors}")
+
+def _blank_unused(kw, n):
+    resp = _call_a_response(kw)
+    return json_response({**resp, "audit_ledger": [{**e, "reason": ""} if not e["use"] else e for e in resp["audit_ledger"]]})
+_bu_news = {**NEWS_TODAY, "candidates": NEWS_TODAY["candidates"] + [
+    {"title": "Another filing", "url": "https://example.com/y", "source": "CoinDesk", "published_at": "Mon, 17 Aug 2026 09:00:00 GMT",
+     "summary": "...", "kind": "supplementary", "tier": 4}]}
+_bu_out = generate_post.call_a(FakeClient(_blank_unused), DAILY_DATA, _bu_news, None)
+check("v1.112追補 call_a: 不採用（use:false）のreasonだけが空の場合は再試行せず、従来どおり補完する（再試行は採用のreasonが空の場合だけ）",
+      _bu_out.ok and _bu_out.attempts == 1 and _bu_out.audit_ledger_auto_filled_count >= 1 and _bu_out.attempt_errors == [],
+      f"{_bu_out.ok} {_bu_out.attempts} {_bu_out.audit_ledger_auto_filled_count} {_bu_out.attempt_errors}")
+
 print("=== v1.113: tier2（Reuters）を関連度順（得点の高い順。同点は新しい順）で上位15件選ぶ ===")
 _S = generate_post.tier2_relevance_score
 check("v1.113 得点: オーナー指定の2例（10/6 diesel stocks release・10/9 Houthi strikes on Riyadh airport）が2点以上になる（旧基準では得点0だった）",

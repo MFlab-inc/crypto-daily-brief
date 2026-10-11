@@ -645,7 +645,7 @@ def _render_unresolved_diag(diag: dict | None) -> list[str]:
 
 
 def _render_attempt_errors(label: str, call_result: dict[str, Any],
-                            force_drop_note: str | None = None) -> list[str]:
+                            force_drop_note: str | None = None, fallback_note: str | None = None) -> list[str]:
     """v1.48（オーナー指示）: リトライが発生した場合（最終的に成功した場合を
     含む）、各試行の失敗理由をGENERATION_STATUS.mdへ記録する。従来は成功時に
     それ以前の試行の失敗理由が失われており、リトライの常態化＝劣化の兆候に
@@ -658,14 +658,20 @@ def _render_attempt_errors(label: str, call_result: dict[str, Any],
     """
     errors = call_result.get("attempt_errors") or []
     diags = {d.get("attempt"): d for d in (call_result.get("attempt_diagnostics") or [])}
-    if not errors and not force_drop_note:
+    if not errors and not force_drop_note and not fallback_note:
         return []
     lines = [f"  {label}試行履歴（リトライ発生・劣化の兆候として記録）:"]
     for i, err in enumerate(errors, start=1):
         lines.append(f"    {i}試行目: {err}")
         lines += _render_unresolved_diag(diags.get(i))
     n = call_result.get("attempts")
-    if force_drop_note:
+    if fallback_note:
+        # v1.112: 最後の試行の応答は採用していない（reasonだけが空だった試行の応答を補完して採用した）。「成功」とは書かない。
+        lines.append(f"    → {fallback_note}")
+        lines += _render_unresolved_diag(diags.get(n))
+        if force_drop_note:
+            lines.append(f"    （{force_drop_note}）")
+    elif force_drop_note:
         lines.append(f"    {n}試行目: " + (f"成功（{force_drop_note}）" if call_result.get("ok") else force_drop_note))
         lines += _render_unresolved_diag(diags.get(n))
     elif call_result.get("ok"):
@@ -802,10 +808,8 @@ def render_generation_status(gen: dict[str, Any], daily_data: dict | None = None
         ids = sorted(d.get("candidate_id") for d in force_dropped)
         force_drop_note = f"強制不採用（候補ID {ids}）で続行" + (
             " → 再監査FAILのためL1へフォールバック" if l1_fallback_failing_checks is not None else "")
-    if a.get("fallback_note"):
-        # v1.112: reasonだけが空だった試行の応答を補完して採用した（残りの試行がすべて失敗した）日
-        force_drop_note = f"{force_drop_note}；{a['fallback_note']}" if force_drop_note else a["fallback_note"]
-    lines += _render_attempt_errors("call_A", a, force_drop_note=force_drop_note)
+    # v1.112: reasonだけが空だった試行の応答を補完して採用した日（a["fallback_note"]）は、「N試行目: 成功」とは書かず、別の行で示す
+    lines += _render_attempt_errors("call_A", a, force_drop_note=force_drop_note, fallback_note=a.get("fallback_note"))
     lines.append(
         f"call_B: {'OK' if b['ok'] else 'FAILED'}"
         + (f" ({b['error']} / {b['attempts']}回試行)" if not b["ok"] else f"（{b['attempts']}回試行）")

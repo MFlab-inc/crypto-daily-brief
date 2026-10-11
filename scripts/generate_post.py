@@ -1414,14 +1414,21 @@ def _call_json(
             if response.stop_reason == "refusal":
                 category = getattr(getattr(response, "stop_details", None), "category", None)
                 raise ValueError(f"refusal (category={category})")
-            if getattr(response, "stop_reason", None) == "max_tokens":
-                # v1.112: 出力が上限で打ち切られた場合、従来はJSONDecodeErrorとしか記録されず、原因が分からなかった
-                # （10/8）。打ち切りを別の例外として記録し、リトライ時の追記（_build_call_a_retry_note）で短く書くよう伝える。
-                raise OutputTruncatedError(max_tokens)
+            truncated = getattr(response, "stop_reason", None) == "max_tokens"
             text = _strip_code_fence(_extract_text(response))
             if not text:
+                if truncated:
+                    raise OutputTruncatedError(max_tokens)
                 raise ValueError("空応答")
-            data = json.loads(text)
+            try:
+                data = json.loads(text)
+            except json.JSONDecodeError:
+                # v1.112: 出力が上限で打ち切られてJSONとして読めない場合、従来はJSONDecodeErrorとしか記録されず、原因が分からなかった
+                # （10/8）。打ち切りを別の例外として記録し、リトライ時の追記（_build_call_a_retry_note）で短く書くよう伝える。
+                # 打ち切りの印があっても、JSONとして読めた応答は従来どおり受け入れる（レビュー指摘: 末尾がちょうど上限の場合など）。
+                if truncated:
+                    raise OutputTruncatedError(max_tokens) from None
+                raise
             if not isinstance(data, dict):
                 raise ValueError("JSON応答がオブジェクトでない")
             missing = [k for k in required_keys if k not in data]
@@ -1971,7 +1978,9 @@ def _reconstruct_audit_ledger(llm_entries: Any, id_to_candidate: dict[int, dict]
     if missing:
         raise AuditLedgerReconstructionError(f"audit_ledgerに記録されていない候補ID: {sorted(missing)}")
 
-    blank_ids = sorted(e["candidate_id"] for e in parsed if _is_blank_reason(e.get("reason")))
+    # 再試行させるのは、採用（use:true）のreasonが空の場合だけ。空になったreasonはこれまで13件すべて採用の候補だった
+    # （9/13・9/28・10/8）。不採用（use:false）のreasonが空の場合は、再試行せず、従来どおり補完する（再試行は呼び出し1回分の費用と時間がかかるため）。
+    blank_ids = sorted(e["candidate_id"] for e in parsed if e.get("use") and _is_blank_reason(e.get("reason")))
     try:
         decisions = _derive_decisions(parsed, id_to_candidate, pair_overlap_threshold,
                                        rejected_pairs=rejected_pairs, force_drop_unresolved=force_drop_unresolved,
@@ -2582,14 +2591,24 @@ def call_a(client: "anthropic.Anthropic", daily_data: dict, news_today: dict,
         build_retry_note=_build_call_a_retry_note,
     )
 
-    if not outcome.ok and fallback:
-        # v1.112: 残りの試行がすべて失敗した。reasonが空だった試行の応答を補完した結果を使う（その試行までの失敗は履歴に残す）。
-        _stats_restore(fallback["snapshot"])
+    if fallback and (not outcome.ok or force_dropped_stats):
+        # v1.112: reasonが空だった試行（k試行目）の応答を補完した結果を、保険として使う。使う場合は次の2つ。
+        #  (a) 残りの試行がすべて失敗した（従来なら、k試行目の応答を補完して通していた日がL1へ落ちる）
+        #  (b) 残りの試行の成功が、相方が成立せず候補を強制不採用にした結果だった（k試行目の応答は、相方が成立していた）
+        # どちらも、再試行のせいで、再試行しなかった場合（k試行目の応答を補完して通す、従来の挙動）より悪い結果になるのを避けるため。
         k = fallback["attempt"]
-        last_err = outcome.attempt_errors[-1] if outcome.attempt_errors else str(outcome.error)
+        if outcome.ok:
+            forced_ids = sorted(d.get("candidate_id") for d in force_dropped_stats)
+            why = f"{outcome.attempts}試行目は相方が成立せず候補ID {forced_ids} を強制不採用にしたため採用しなかった"
+            attempt_errors_kept = list(outcome.attempt_errors)
+        else:
+            last_err = outcome.attempt_errors[-1] if outcome.attempt_errors else str(outcome.error)
+            why = f"最終試行は失敗: {last_err}"
+            attempt_errors_kept = list(outcome.attempt_errors[:-1])
+        _stats_restore(fallback["snapshot"])
         outcome = CallOutcome(True, fallback["data"], outcome.attempts, None, outcome.usage,
-                              attempt_errors=list(outcome.attempt_errors[:-1]))
-        outcome.fallback_note = f"{k}試行目の応答（reasonだけが空）を補完して採用。最終試行は失敗: {last_err}"
+                              attempt_errors=attempt_errors_kept)
+        outcome.fallback_note = f"{k}試行目の応答（reasonだけが空）を補完して採用。{why}"
     outcome.truncation_stats = truncation_stats
     # v1.54フォローアップ: post_processは_call_json()内で試行ごとに呼ばれるため、
     # audit_ledger_statsは最終的に成功した（＝outcomeを生んだ）試行の値で
