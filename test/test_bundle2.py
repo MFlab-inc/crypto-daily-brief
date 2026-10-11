@@ -581,10 +581,12 @@ check("NO_CANDIDATES_FALLBACKに直接因果未確認のみを理由にしたuse
       "（v1.53フォローアップでdecision:\"不採用\"からuse:falseへ改定）",
       "「暗号通貨価格への直接因果が未確認」であること" in generate_post.NO_CANDIDATES_FALLBACK
       and "のみを理由にuse:falseとしてはならない" in generate_post.NO_CANDIDATES_FALLBACK)
-check("NO_CANDIDATES_FALLBACKにuse:falseのreason全角60字上限、use:trueは対象外という指示がある"
-      "（v1.47・v1.53フォローアップでdecision文言からuse文言へ改定・オーナー指示）",
+check("NO_CANDIDATES_FALLBACKにuse:falseのreason全角60字上限、use:trueのreasonは必須で全角120字以内という指示がある"
+      "（v1.47・v1.53フォローアップでdecision文言からuse文言へ改定。v1.112でuse:trueのreasonを必須・120字以内に改定・オーナー指示）",
       "use:false のreasonは全角60字以内に収める" in generate_post.NO_CANDIDATES_FALLBACK
-      and "use:trueのreasonにはこの字数制限を適用しない" in generate_post.NO_CANDIDATES_FALLBACK)
+      and "reasonは、use:true・use:falseのどちらでも必ず書く" in generate_post.NO_CANDIDATES_FALLBACK
+      and "全角120字以内で書く" in generate_post.NO_CANDIDATES_FALLBACK
+      and "この字数制限を適用しない" not in generate_post.NO_CANDIDATES_FALLBACK)
 check("WRITES_Aのpart1_pointsがB分類材料に因果未確認の限定表現を含める旨を参照している",
       "重要性判定と因果表現の分離" in generate_post.WRITES_A
       and "暗号通貨価格への直接因果は未確認" in generate_post.WRITES_A)
@@ -6442,8 +6444,8 @@ check("v1.97 run(): call_Aが失敗した日（L1/L2）も記録は残り、採�
 
 print("=== v1.97: STATUS（tier2の除外件数・時刻範囲・収集窓・取得上限・記録の所在）と candidates_log.json ===")
 _t2lines97, _tail97 = compose_post._render_candidate_selection_lines(_rep97, "2026-10-04")
-check("v1.97 STATUS: tier2は「収集窓内18件 → 15件を選定・3件を件数上限（15件）により除外」と表示する",
-      _t2lines97[0] == "tier2候補（Reuters）: 収集窓内18件 → 15件を選定・3件を件数上限（15件）により除外", _t2lines97[0])
+check("v1.97 STATUS: tier2は「収集窓内18件 → 15件を選定（関連度順）・3件を件数上限（15件）により除外」と表示する（v1.113で「（関連度順）」を追記）",
+      _t2lines97[0] == "tier2候補（Reuters）: 収集窓内18件 → 15件を選定（関連度順）・3件を件数上限（15件）により除外", _t2lines97[0])
 check("v1.97 STATUS: 選定した記事・除外した記事の公開時刻の範囲をGMTとJSTで表示する（選定=窓終端の430〜10分前、除外=最も古い3件＝窓終端の520〜460分前）",
       _t2lines97[1] == "  選定した記事の公開時刻: GMT 10/04 13:50〜10/04 20:50（JST 10/04 22:50〜10/05 05:50）"
       and _t2lines97[2] == "  除外した記事の公開時刻: GMT 10/04 12:20〜10/04 13:20（JST 10/04 21:20〜10/04 22:20）", str(_t2lines97))
@@ -6499,7 +6501,7 @@ check("v1.97 main(): candidates_log.jsonをoutputs/<日付>/に書く（全候�
       _logtxt97 is not None and json.loads(_logtxt97)["final_level"] == "L0" and json.loads(_logtxt97)["final_call_a_ok"] is True
       and len(json.loads(_logtxt97)["candidates"]) == len(_in97), str(_logtxt97)[:200])
 check("v1.97 main(): GENERATION_STATUS.mdにtier2の除外件数・時刻範囲・記録の所在が出る",
-      "tier2候補（Reuters）: 収集窓内18件 → 15件を選定・3件を件数上限（15件）により除外" in _st97
+      "tier2候補（Reuters）: 収集窓内18件 → 15件を選定（関連度順）・3件を件数上限（15件）により除外" in _st97
       and "  除外した記事の公開時刻: GMT 10/04 12:20〜10/04 13:20" in _st97
       and f"候補の記録: outputs/{_G_DATE}/candidates_log.json（全" in _st97, _st97[:400])
 check("v1.97 main(): 記録が無いgen（旧形式）では従来どおり動き、candidates_log.jsonは書かない・STATUSにtier2行は出ない",
@@ -8045,6 +8047,265 @@ _pr107 = generate_post.NO_CANDIDATES_FALLBACK
 check("v1.107追補 プロンプト: 断り書きの括弧の形はプレースホルダー（「（媒体名、媒体名、○月○日。公式発表は未確認）」。既存の規約: 例示の固有名詞・日付は実在のものを使わない）で示し、実在の媒体名は「例: The Block・Cointelegraph」と別に書く。実日付（10月6日）は形の説明だけに使い、括弧の形そのものには入れない",
       "「（媒体名、媒体名、○月○日。公式発表は未確認）」" in _pr107 and "（例: The Block・Cointelegraph）" in _pr107
       and "「（The Block、Cointelegraph、10月6日。公式発表は未確認）」" not in generate_post.SYSTEM_A and "10月6日。公式発表は" not in generate_post.SYSTEM_A)
+
+
+# =====================================================================================================================
+# v1.112〜v1.114（オーナー指示・2026-10-11）: (1) audit_ledgerのreason空欄の再試行・打ち切りの検知、(2) tier2を関連度順で選ぶ、
+# (3) 独立2ソースのペア救済から日次まとめ記事・価格記事を外す
+# =====================================================================================================================
+import re as _re112
+from datetime import datetime as _dt112, timezone as _tz112
+
+print("=== v1.112: audit_ledgerのreason空欄（10/8に採用9件すべてで空）— 最終試行より前は再試行、最終試行は従来どおり補完 ===")
+check("v1.112 _is_blank_reason: None・空文字・空白のみ・出力例の見本の文言そのものは空と同じ。実際の理由は空でない",
+      all(generate_post._is_blank_reason(x) for x in (None, "", "  ", "　", generate_post.LEDGER_REASON_PLACEHOLDER, " " + generate_post.LEDGER_REASON_PLACEHOLDER + " "))
+      and not generate_post._is_blank_reason("A: 公式発表") and not generate_post._is_blank_reason("B"))
+_bl_cands = {
+    1: {"source": "SEC", "title": "Regulator announces new rule", "candidate_id": 1, "tier": 1},
+    2: {"source": "SEC", "title": "Another regulator announcement", "candidate_id": 2, "tier": 1},
+}
+_bl_err = None
+try:
+    generate_post._reconstruct_audit_ledger(
+        [{"candidate_id": 1, "use": True, "reason": ""}, {"candidate_id": 2, "use": True, "reason": "A: 公式"}],
+        _bl_cands, generate_post.PAIR_OVERLAP_THRESHOLD_DEFAULT, {}, fail_on_blank_reason=True)
+except generate_post.AuditLedgerBlankReasonError as _e:
+    _bl_err = _e
+check("v1.112 _reconstruct_audit_ledger(fail_on_blank_reason=True): reasonが空の候補があれば補完せず AuditLedgerBlankReasonError（候補IDを持つ）",
+      _bl_err is not None and _bl_err.blank_reason_ids == [1] and "[1]" in str(_bl_err)
+      and isinstance(_bl_err, generate_post.AuditLedgerReconstructionError), str(_bl_err))
+_bl_ok = generate_post._reconstruct_audit_ledger(
+    [{"candidate_id": 1, "use": True, "reason": "A: x"}, {"candidate_id": 2, "use": False, "reason": "C: y"}],
+    _bl_cands, generate_post.PAIR_OVERLAP_THRESHOLD_DEFAULT, {}, fail_on_blank_reason=True)
+check("v1.112 _reconstruct_audit_ledger(fail_on_blank_reason=True): reasonが全件あれば従来どおり復元する（use:falseも含む）",
+      [e["reason"] for e in _bl_ok] == ["A: x", "C: y"], str(_bl_ok))
+_bl_stats: dict = {}
+_bl_diag: dict = {}
+_bl_fill = generate_post._reconstruct_audit_ledger(
+    [{"candidate_id": 1, "use": True, "reason": generate_post.LEDGER_REASON_PLACEHOLDER}, {"candidate_id": 2, "use": True, "reason": None}],
+    _bl_cands, generate_post.PAIR_OVERLAP_THRESHOLD_DEFAULT, _bl_stats, diagnostics=_bl_diag)
+check("v1.112 _reconstruct_audit_ledger(既定=補完): 出力例の見本の文言・null も空として補完し、件数を記録する（最終試行の挙動はv1.54のまま。decisionはコード側の導出なので変わらない）",
+      all(e["reason"] == "理由が記載されませんでした（自動補完）" for e in _bl_fill) and all(e["decision"] == "採用" for e in _bl_fill)
+      and _bl_stats.get("audit_ledger_auto_filled_count") == 2, f"{_bl_fill} {_bl_stats} {_bl_diag}")
+_bl_t3 = {
+    1: {"source": "CoinDesk", "title": "Alpha Beta Gamma Delta Epsilon", "candidate_id": 1, "tier": 3},
+    2: {"source": "Cointelegraph", "title": "Totally unrelated words appear here", "candidate_id": 2, "tier": 3},
+}
+_bl_pair_err = None
+try:
+    generate_post._reconstruct_audit_ledger(
+        [{"candidate_id": 1, "use": True, "pairs_with_candidate_id": 2, "reason": ""},
+         {"candidate_id": 2, "use": True, "reason": "B: x"}],
+        _bl_t3, generate_post.PAIR_OVERLAP_THRESHOLD_DEFAULT, {}, fail_on_blank_reason=True)
+except generate_post.AuditLedgerReconstructionError as _e:
+    _bl_pair_err = _e
+check("v1.112 相方が成立しない誤りとreasonの空欄が同時にあるとき、例外は相方の不成立（従来の例外）で、空欄の候補IDも持つ",
+      _bl_pair_err is not None and not isinstance(_bl_pair_err, generate_post.AuditLedgerBlankReasonError)
+      and _bl_pair_err.blank_reason_ids == [1] and "独立2ソース" in str(_bl_pair_err), str(_bl_pair_err))
+_bl_note_blank = generate_post._build_call_a_retry_note(_bl_err)
+check("v1.112 リトライ指示（reason空欄のみ）: 空の候補IDを伝え、use:trueでも必ず書くよう求め、相方の話は含めない",
+      _bl_note_blank is not None and "reasonが空の候補ID: [1]" in _bl_note_blank and "use:trueは「A: …」" in _bl_note_blank
+      and "pairs_with_candidate_idが" not in _bl_note_blank, str(_bl_note_blank))
+_bl_note_pair = generate_post._build_call_a_retry_note(_bl_pair_err)
+check("v1.112 リトライ指示（相方の不成立＋空欄）: 従来の相方の指示に、空の候補IDの指示が続く。空欄が無い相方の不成立の指示は従来のまま（空欄の文言を含まない）",
+      "pairs_with_candidate_idが" in _bl_note_pair and "reasonが空の候補IDがあります: [1]" in _bl_note_pair
+      and _bl_note_pair.index("pairs_with_candidate_idが") < _bl_note_pair.index("reasonが空の候補IDがあります")
+      and "reasonが空" not in (generate_post._build_call_a_retry_note(generate_post.AuditLedgerReconstructionError("x")) or ""), _bl_note_pair[-200:])
+_bl_note_trunc = generate_post._build_call_a_retry_note(generate_post.OutputTruncatedError(8000))
+check("v1.112 リトライ指示（出力の打ち切り）: 上限を伝え、reasonを短く（false40字・true80字）、空にせず、本文と採否は変えないよう求める",
+      "打ち切られ" in _bl_note_trunc and "8000" in _bl_note_trunc and "全角40字以内" in _bl_note_trunc and "全角80字以内" in _bl_note_trunc
+      and "空にしてはいけません" in _bl_note_trunc and "変えないでください" in _bl_note_trunc, _bl_note_trunc)
+check("v1.112 リトライ指示: 想定外の例外（JSON不正など）は従来どおりNone（user_contentを変えない）",
+      generate_post._build_call_a_retry_note(ValueError("x")) is None)
+
+_tr_client = FakeClient(lambda kw, n: FakeResponse([FakeTextBlock('{"a": 1')], stop_reason="max_tokens"))
+_tr_out = generate_post._call_json(_tr_client, system="s", user_content="u", max_tokens=100, required_keys=[],
+                                   build_retry_note=generate_post._build_call_a_retry_note)
+check("v1.112 _call_json: 出力が上限（stop_reason=max_tokens）で打ち切られたら、JSONDecodeErrorではなくOutputTruncatedErrorとして3回記録し失敗する",
+      _tr_out.ok is False and _tr_out.attempts == 3 and len(_tr_out.attempt_errors) == 3
+      and all(e.startswith("OutputTruncatedError: 出力が上限（max_tokens=100）で打ち切られた") for e in _tr_out.attempt_errors), str(_tr_out.attempt_errors))
+check("v1.112 _call_json: 打ち切りの後の再試行には、reasonを短くする指示が追記される（1回目は元のuser_content）",
+      _tr_client.messages.calls[0]["messages"][0]["content"] == "u"
+      and "打ち切られ" in _tr_client.messages.calls[1]["messages"][0]["content"]
+      and _tr_client.messages.calls[1]["messages"][0]["content"].startswith("u\n\n"), "")
+check("v1.112 _call_json: stop_reasonがend_turnなら従来どおり（打ち切りの例外は出ない）",
+      generate_post._call_json(FakeClient(lambda kw, n: json_response({"k": 1})), system="s", user_content="u", max_tokens=100,
+                               required_keys=["k"]).ok is True)
+
+def _blank_then_filled(kw, n, blanks_until=1):
+    resp = _call_a_response(kw)
+    if n <= blanks_until:
+        resp = {**resp, "audit_ledger": [{**e, "reason": ""} if e["use"] else e for e in resp["audit_ledger"]]}
+    return json_response(resp)
+
+_bf_client = FakeClient(lambda kw, n: _blank_then_filled(kw, n, 1))
+_bf_out = generate_post.call_a(_bf_client, DAILY_DATA, NEWS_TODAY, None)
+check("v1.112 call_a: 1回目に採用のreasonが空なら補完せず再試行し、2回目の正しい理由で成功する（補完0件）",
+      _bf_out.ok and _bf_out.attempts == 2 and _bf_out.audit_ledger_auto_filled_count == 0
+      and _bf_out.data["audit_ledger"][0]["reason"] == "一次情報で確認"
+      and _bf_out.attempt_errors and _bf_out.attempt_errors[0].startswith("AuditLedgerBlankReasonError: audit_ledgerのreasonが空の候補ID: [1]"),
+      f"{_bf_out.attempts} {_bf_out.audit_ledger_auto_filled_count} {_bf_out.attempt_errors}")
+check("v1.112 call_a: 再試行のリクエストには、空の候補IDの指示が追記される（1回目には無い）",
+      "reasonが空の候補ID" not in _bf_client.messages.calls[0]["messages"][0]["content"]
+      and "reasonが空の候補ID: [1]" in _bf_client.messages.calls[1]["messages"][0]["content"], "")
+_bf_client3 = FakeClient(lambda kw, n: _blank_then_filled(kw, n, 3))
+_bf_out3 = generate_post.call_a(_bf_client3, DAILY_DATA, NEWS_TODAY, None)
+check("v1.112 call_a: 3回とも空なら最終試行（3回目）で従来どおり定型文で補完して成功する（v1.54のオーナー判断を維持。止めない）",
+      _bf_out3.ok and _bf_out3.attempts == 3 and _bf_out3.audit_ledger_auto_filled_count == 1
+      and _bf_out3.data["audit_ledger"][0]["reason"] == "理由が記載されませんでした（自動補完）"
+      and len(_bf_out3.attempt_errors) == 2, f"{_bf_out3.attempts} {_bf_out3.audit_ledger_auto_filled_count} {_bf_out3.attempt_errors}")
+check("v1.112 call_a: 空のreasonが無い通常の日は1回で成功し、追記も補完もない（従来どおり）",
+      (lambda c: (lambda o: o.ok and o.attempts == 1 and o.audit_ledger_auto_filled_count == 0
+                  and len(c.messages.calls) == 1)(generate_post.call_a(c, DAILY_DATA, NEWS_TODAY, None)))(
+          FakeClient(lambda kw, n: json_response(_call_a_response(kw)))))
+check("v1.112 プロンプト: 出力形式の例のreasonは見本の文言（空文字でない）で、use:trueでも空にしない旨がある。システムは見本の写しも空として扱う",
+      f'"reason": "{generate_post.LEDGER_REASON_PLACEHOLDER}"' in generate_post.OUTPUT_FORMAT_A
+      and '"reason": "" }' not in generate_post.OUTPUT_FORMAT_A
+      and "audit_ledgerのreasonは、use:true・use:falseのどちらでも空にしない" in generate_post.OUTPUT_FORMAT_A
+      and "reasonが空の候補があると、システムはその呼び出しを最初からやり直させる" in generate_post.NO_CANDIDATES_FALLBACK)
+check("v1.112 CALL_A_MAX_TOKENS: 8000のまま（v1.48でオーナーが引き上げを却下）。呼び出しBの上限も変えない",
+      generate_post.CALL_A_MAX_TOKENS == 8000 and generate_post.CALL_B_MAX_TOKENS == 2000)
+check("v1.112 STATUSの自動補完の行: 先頭の「audit_ledger自動補完: N件」は変えず、補完されるのはreason（理由）であることを正しく書く",
+      "audit_ledger自動補完: 2件" in _gen_fill_status and "reason＝理由が空だったため定型文で補完。再試行しても空だった分、または再試行がすべて失敗したため空のまま採用した分。" in _gen_fill_status
+      and "decision/reasonが空" not in _gen_fill_status, _gen_fill_status[:300])
+
+print("=== v1.113: tier2（Reuters）を関連度順（得点の高い順。同点は新しい順）で上位15件選ぶ ===")
+_S = generate_post.tier2_relevance_score
+check("v1.113 得点: オーナー指定の2例（10/6 diesel stocks release・10/9 Houthi strikes on Riyadh airport）が2点以上になる（旧基準では得点0だった）",
+      _S({"title": "IEA to decide on details of diesel stocks release next week, sources say, as market confusion grows - Reuters"}) >= 4
+      and _S({"title": "Houthi strikes on Riyadh airport killed three Saudis as war escalates - Reuters"}) >= 4)
+check("v1.113 得点: 市況の記事（語が無い株価の最高値）は0。Fed発言は2点以上。oilだけの企業記事は1点（市況の語は1点）",
+      _S({"title": "S&P 500, Nasdaq reach record closing highs as focus pivots to earnings - Reuters"}) == 0
+      and _S({"title": "Fed's Waller: More hikes needed, but there is 'flexibility' about the pace - Reuters"}) >= 3
+      and _S({"title": "Chevron elevates CFO to lead oil and gas operations - Reuters"}) == 1)
+check("v1.113 得点: 同じグループの語が何回出ても、そのグループの点は1回だけ。要約は先頭120字だけ数える",
+      _S({"title": "oil oil oil oil"}) == 1 and _S({"title": "sanctions and more sanctions on sanctioned banks"}) == 2
+      and _S({"title": "Some ordinary market headline today", "summary": "a " * 70 + "Hormuz"}) == 0
+      and _S({"title": "Some ordinary market headline today", "summary": "a " * 50 + "Hormuz"}) == 3)
+check("v1.113 得点: 優先対象（ホルムズ・タンカー攻撃・備蓄放出・制裁・ハリケーンによる生産停止）が検索語どまりの記事より高い",
+      _S({"title": "Attack risks rise for tankers as Iran vows to block more Hormuz routes - Reuters"}) >= 6
+      and _S({"title": "IEA to accelerate oil reserve release, says 100 million barrels still to come - Reuters"}) >= 3
+      and _S({"title": "US imposes fresh sanctions on Iran's shadow fleet - Reuters"}) >= 2
+      and _S({"title": "US Gulf producers shut in more oil and gas as Isaias nears landfall - Reuters"}) >= 3
+      and _S({"title": "Wall Street ends lower, off record highs, as Treasury yields climb - Reuters"}) == 2)
+_mk = lambda i, title: {"tier": 2, "source": "Reuters", "title": title, "summary": "", "published_at": f"Mon, 17 Aug 2026 {23 - i:02d}:00:00 GMT"}
+_t2_20 = [_mk(i, f"Company {i} reports quarterly results - Reuters") for i in range(15)] + [_mk(i, f"Hormuz tanker attack number {i} - Reuters") for i in range(15, 20)]
+_sel20 = generate_post._select_tier2_by_relevance(_t2_20, 15)
+check("v1.113 選定: 新しい15件に語が無く、古い5件に優先対象の語があるとき、古い5件が選ばれ、新しい側から5件が外れる（件数は15）",
+      len(_sel20) == 15 and all(c in _sel20 for c in _t2_20[15:]) and all(c in _sel20 for c in _t2_20[:10]) and not any(c in _sel20 for c in _t2_20[10:15]))
+check("v1.113 選定: 選ばれた記事は、呼び出しAへ渡す並びを従来どおり新しい順にそろえる",
+      _sel20 == [c for c in _t2_20 if c in _sel20])
+_t2_tie = [_mk(i, f"Oil story {i} - Reuters") for i in range(20)]
+check("v1.113 選定: 全件が同点なら、新しい順の上位15件（従来と同じ）。全件が15件以下なら全件",
+      generate_post._select_tier2_by_relevance(_t2_tie, 15) == _t2_tie[:15]
+      and generate_post._select_tier2_by_relevance(_t2_tie[:15], 15) == _t2_tie[:15] and generate_post._select_tier2_by_relevance([], 15) == [])
+_sel_d, _st_d, _det_d = generate_post._select_candidates_detail(_t2_20, generate_post.PAIR_OVERLAP_THRESHOLD_DEFAULT)
+check("v1.113 _select_candidates_detail: tier2は関連度順で15件を選ぶが、detailのtier2_sortedは新しい順のまま（recency_rankの基準）。件数の統計は従来と同じ意味",
+      [c["title"] for c in _det_d["tier2_sorted"]] == [c["title"] for c in _t2_20]
+      and _st_d["tier2_total"] == 20 and _st_d["tier2_selected"] == 15 and _st_d["tier2_dropped"] == 5, str(_st_d))
+_rep_d = generate_post.build_candidate_selection_report("2026-08-17", {"candidates": _t2_20, "source_status": {}})
+_rep_by = {e["title"]: e for e in _rep_d["candidates"]}
+check("v1.113 候補の記録: キーは変わらず（追加なし）、recency_rankは新しい順の順位のまま。関連度で選ばれた古い記事はselected、外れた新しい記事はdropped",
+      _rep_by["Hormuz tanker attack number 19 - Reuters"]["status"] == "selected" and _rep_by["Hormuz tanker attack number 19 - Reuters"]["recency_rank"] == 20
+      and _rep_by["Company 14 reports quarterly results - Reuters"]["status"] == "dropped" and _rep_by["Company 14 reports quarterly results - Reuters"]["recency_rank"] == 15
+      and set(_rep_by["Company 0 reports quarterly results - Reuters"]) == {"candidate_id", "tier", "source", "title", "published_at_utc", "status", "recency_rank", "url", "summary_head"}
+      and set(_rep_d) == {"target_date_jst", "collected_at", "window", "source_status", "limits", "stats", "call_a_decisions_recorded", "candidates"}, str(set(_rep_d)))
+
+def _replay112(day):
+    """candidates_log.jsonの候補を、収集時と同じ形（RFC 822の公開時刻）に戻して、現行の選定にかける（過去のoutputsは読むだけ）。"""
+    log = json.loads((REPO / f"outputs/2026-10-{day}/candidates_log.json").read_text(encoding="utf-8"))
+    cands = []
+    for e in log["candidates"]:
+        pub = _dt112.strptime(e["published_at_utc"], "%Y-%m-%dT%H:%MZ").replace(tzinfo=_tz112.utc).strftime("%a, %d %b %Y %H:%M:%S GMT") if e["published_at_utc"] else ""
+        cands.append({"tier": e["tier"], "source": e["source"], "title": e["title"], "summary": e["summary_head"], "published_at": pub, "url": e["url"], "_rank": e["recency_rank"]})
+    sel, stats, detail = generate_post._select_candidates_detail(cands, 0.4)
+    return log, cands, sel, stats, detail
+_rp6 = _replay112("06"); _rp9 = _replay112("09"); _rp8 = _replay112("08")
+_titles6 = {c["title"] for c in _rp6[2]}; _titles9 = {c["title"] for c in _rp9[2]}
+check("v1.113 実データ再現: 10/6の「IEA to decide on details of diesel stocks release」と10/9の「Houthi strikes on Riyadh airport」が選ばれる（旧: 新しい順で外れていた）",
+      any(t.startswith("IEA to decide on details of diesel stocks release") for t in _titles6)
+      and any(t.startswith("Houthi strikes on Riyadh airport") for t in _titles9))
+check("v1.113 実データ再現: 10/5〜10/9の5日とも tier2は15件を選び、記録された収集（50件・48件・47件・49件・48件）と件数が合う",
+      all(sum(1 for c in _replay112(d)[2] if c["tier"] == 2) == 15 for d in ("05", "06", "07", "08", "09"))
+      and [len([c for c in _replay112(d)[1] if c["tier"] == 2]) for d in ("05", "06", "07", "08", "09")] == [50, 48, 47, 49, 48])
+check("v1.113 実データ再現: 10/8の関連度順の選定で、ホルムズのタンカー攻撃（GMT 13:17）とホルムズ通過の減少（GMT 03:39）が選ばれる（旧: 新しい順の外）",
+      any(c["title"].startswith("Attack risks rise for tankers as Iran vows to block more Hormuz routes") for c in _rp8[2])
+      and any(c["title"].startswith("Hormuz transits at lowest in over two months") for c in _rp8[2]))
+
+print("=== v1.114: 独立2ソースのペア救済から、日次まとめ記事と価格記事を外す ===")
+_rd = generate_post.is_daily_roundup
+_pa = generate_post.is_price_article
+check("v1.114 日次まとめ記事: 「what happened in crypto today」「Live updates:」「Crypto Long & Short」「Crypto for Advisors」「Crypto Biz」「Hodler’s Digest」「Crypto Week Ahead」「Asia Express」は該当する",
+      all(_rd({"title": t}) for t in (
+          "Here’s what happened in crypto today", "Live updates: Bitcoin remains locked in range as stocks notch another new record high",
+          "Crypto Long & Short: Zcash and the case for privacy in the age of AI", "Crypto for Advisors: Digital assets outran stocks and gold in Q3",
+          "Crypto Biz: Wealthy investors are buying crypto, but their advisers aren’t sold",
+          "Former SEC boss made AI Czar, Bitcoin may hit $600K this cycle: Hodler’s Digest",
+          "Technicals signal bitcoin shift, Ethereum gears up for Glamsterdam: Crypto Week Ahead",
+          "China’s P2P stablecoin wallets surge 43x, Korea’s $450B crypto economy: Asia Express")))
+check("v1.114 日次まとめ記事: 個別の出来事の記事は該当しない。ニュースレターの要約（Your day-ahead look）だけでは該当にしない（見出しが出来事の記事を失わない）",
+      not _rd({"title": "SEC approves a 3x fix for bitcoin and ether traders who miss the wild swings", "summary": "Your day-ahead look for Oct. 5, 2026"})
+      and not _rd({"title": "Greece prepares to levy 10% capital gains tax on cryptocurrency"})
+      and not _rd({"title": "UK sanctions three crypto exchanges tied to Russian illicit funds"}))
+check("v1.114 価格記事: 価格の語・清算・価格の水準と値動きの語がある記事は該当する（要約の価格の水準も数える）",
+      all(_pa(c) for c in (
+          {"title": "Bitcoin price fails to break higher after best weekly close in eight months"},
+          {"title": "Bitcoin dips below $84,000 as oil jumps on Iranian tanker attacks"},
+          {"title": "Crypto liquidations hit $550M as Bitcoin price dips below $84K"},
+          {"title": "Liquidations jump to $547 million as oil rally hits crypto market"},
+          {"title": "Bitcoin grinds toward $87K as US equities hit new record highs"},
+          {"title": "Cardano's ADA leads gains in narrow range-bound market"},
+          {"title": "Bitcoin nears 3-week low as oil heads higher on Iran strike woes", "summary": "Bitcoin dipped below $81,000 and oil prices gained"})))
+check("v1.114 価格記事: ETFの資金フロー・企業のビットコイン購入・制度の記事・オンチェーンの記事は該当しない（採用されうるため）",
+      not any(_pa(c) for c in (
+          {"title": "Bitcoin ETFs shed $90M as BTC sits 32% below year-old ATH"},
+          {"title": "Bitcoin ETFs rebound with $119M inflow as Ether extends losses"},
+          {"title": "Bitcoin, Ether ETFs’ October outflows swell toward $1B"},
+          {"title": "U.S. scraps proposed $10,000 reporting rule for for crypto sent to private wallets"},
+          {"title": "Robinhood adds $25 million of bitcoin to its balance sheet"},
+          {"title": "Strategy buys 334 bitcoin for $28.7 million as total holdings top 848,000 BTC", "summary": "Strategy's total holdings account for around 4% of the supply"},
+          {"title": "Binance BTC outflows hit highest since mid-2023 as whales deposit stablecoins"},
+          {"title": "Ethereum’s Glamsterdam test runs near 200 million gas per block after upgrade"},
+          {"title": "Kraken parent adds 24/7 dollar settlement with Singapore Gulf Bank"})))
+check("v1.114 is_excluded_from_pair_rescue: まとめ記事・価格記事のどちらかに当たれば除外。それ以外は除外しない",
+      generate_post.is_excluded_from_pair_rescue({"title": "Here’s what happened in crypto today"})
+      and generate_post.is_excluded_from_pair_rescue({"title": "Bitcoin price drops to $82.7K October low"})
+      and not generate_post.is_excluded_from_pair_rescue({"title": "Greece plans 10% capital gains tax on cryptocurrencies"}))
+
+_pr_mk = lambda i, src, title: {"tier": 3, "source": src, "title": title, "summary": "", "published_at": f"Mon, 17 Aug 2026 {23 - i // 4:02d}:{59 - i % 60:02d}:00 GMT"}
+_pr_items = [_pr_mk(i, "CoinDesk" if i % 2 else "Cointelegraph", f"qq{i}a qq{i}b qq{i}c qq{i}d") for i in range(15)]
+# 上限15件の外（古い側）: まとめ記事の組（最も新しい）→ 本物の組5つ
+_pr_items += [_pr_mk(15, "CoinDesk", "Here’s what happened in crypto today"), _pr_mk(16, "Cointelegraph", "Here’s what happened in crypto today")]
+_real = ["Alpha protocol launches mainnet", "Bravo exchange lists token", "Charlie bank joins stablecoin network", "Delta lender files bankruptcy", "Echo fund opens registration"]
+for k, t in enumerate(_real):
+    _pr_items.append(_pr_mk(17 + 2 * k, "CoinDesk", t + " today"))
+    _pr_items.append(_pr_mk(18 + 2 * k, "The Block", t + " now"))
+_sel_p, _st_p, _det_p = generate_post._select_candidates_detail(_pr_items, generate_post.PAIR_OVERLAP_THRESHOLD_DEFAULT)
+_sel_titles = {c["title"] for c in _sel_p}
+check("v1.114 救済: 上限の外にまとめ記事の組と本物の組5つがあるとき、まとめ記事の組は救済されず、本物の組5つがすべて救済される（最大5組の枠を本物が使う）",
+      _st_p["tier3_pairs_rescued"] == 5 and _st_p["tier3_pair_rescued_articles"] == 10
+      and all(any(c["title"].startswith(t) for c in _sel_p) for t in _real) and "Here’s what happened in crypto today" not in _sel_titles, str(_st_p))
+check("v1.114 救済: 従来のコード（まとめ記事を除外しない）なら、まとめ記事の組が枠の1つを使い、本物の組が1つ見送られる（再現）",
+      (lambda pairs: len(pairs) == 6 and any(a["title"] == "Here’s what happened in crypto today" for a, b in pairs))(
+          generate_post._find_independent_pairs(sorted(_pr_items, key=lambda c: generate_post.collect_news.parse_pubdate_jst(c["published_at"]), reverse=True), generate_post.PAIR_OVERLAP_THRESHOLD_DEFAULT)))
+check("v1.114 救済: 上限15件の中にあるまとめ記事・価格記事は、従来どおり呼び出しAに渡る（選定そのものは変えない）",
+      (lambda sel: any(c["title"] == "Here’s what happened in crypto today" for c in sel))(
+          generate_post._select_candidates_detail([_pr_mk(0, "CoinDesk", "Here’s what happened in crypto today")] + [_pr_mk(i, "CoinDesk", f"zz{i}a zz{i}b zz{i}c") for i in range(1, 6)],
+                                                  generate_post.PAIR_OVERLAP_THRESHOLD_DEFAULT)[0]))
+_rescued8 = {c["title"] for c in _rp8[2] if c["tier"] == 3}
+_rescued9 = {c["title"] for c in _rp9[2] if c["tier"] == 3}
+_rp7 = _replay112("07")
+check("v1.114 実データ再現: 10/8のギリシャの暗号資産課税の組と、10/9のCantor–Tetherの組が、新たに救済される（旧: 救済の最大5組を日次まとめ記事・価格記事の組が使い、見送られた）",
+      {"Greece prepares to levy 10% capital gains tax on cryptocurrency", "Greece plans 10% capital gains tax on cryptocurrencies"} <= _rescued8
+      and {"Cantor Fitzgerald faces Senate Democrat’s questions over Tether ties", "Top Democrat among Senate investigators probes ties between Cantor Fitzgerald, Tether"} <= _rescued9)
+check("v1.114 実データ再現: 日次まとめ記事（10/9）と価格記事（10/7の清算・10/8のBTC安値）の組は、救済されない。救済の組数は最大5組のまま",
+      "Ether bets were wiped out at six times bitcoin’s rate in crypto’s $1 billion flush" not in _rescued9
+      and not any(t.startswith("Crypto liquidations hit $550M") for t in {c["title"] for c in _rp7[2]})
+      and "Bitcoin breaks below $83,000 as oil jumps on Iran strike-plan report" not in _rescued8
+      and all(_replay112(d)[3]["tier3_pairs_rescued"] <= 5 for d in ("05", "06", "07", "08", "09")))
+check("v1.114 実データ再現: 閾値0.4・tier3の上限15・救済の最大5組は変えない",
+      generate_post.PAIR_OVERLAP_THRESHOLD_DEFAULT == 0.4 and generate_post.load_pair_overlap_threshold() == 0.4
+      and generate_post.TIER3_CANDIDATE_LIMIT == 15 and generate_post.PAIR_RESCUE_MAX_PAIRS == 5 and generate_post.TIER2_CANDIDATE_LIMIT == 15)
 
 print()
 print(f"PASS: {len(PASS)}  FAIL: {len(FAIL)}")

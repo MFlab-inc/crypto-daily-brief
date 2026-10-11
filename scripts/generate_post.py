@@ -53,6 +53,11 @@ MODEL = "claude-sonnet-5"
 # 4000トークンに収まらずJSON途中で打ち切られる事象が実測された
 # （DESIGN_CHANGES.md v1.21参照）。候補数上限（TIER3_CANDIDATE_LIMIT）と
 # 併用し、上限を設けてもなお安全余裕を持たせるための引き上げ。
+# v1.112: 上限は8000のまま変えない（v1.48で、オーナーが8000→12000への引き上げを「4度目の対症療法」として明確に却下している。
+# DESIGN_CHANGES.md v1.48・v1.112参照）。10/8は呼び出しAの出力が3試行合計22,900トークン（1試行あたり平均7,600＝上限の95%）、
+# 10/9は6,720トークン（上限の84%）で、余裕は薄い。ただし10/8の2回のJSONDecodeErrorが上限での打ち切りだったとは確認できていない
+# （stop_reasonを記録していなかった）。そこで、上限での打ち切りは_call_jsonがOutputTruncatedErrorとして検知・記録し、
+# 再試行でreasonを短くするよう指示する（原因の切り分けと、打ち切り時の自動対処）。引き上げの要否はIMPROVEMENT_IDEAS.md I-17でオーナー判断。
 CALL_A_MAX_TOKENS = 8000
 CALL_B_MAX_TOKENS = 2000
 MAX_ATTEMPTS = 3  # 初回+リトライ2回（§5.3「リトライ: 各2回まで」）
@@ -78,6 +83,161 @@ TIER3_CANDIDATE_LIMIT = 15
 # 確認済み（DESIGN_CHANGES.md v1.58参照）。tier1同様の無制限扱いは
 # 無関係記事の混入によるトークン消費・選定ノイズの増大を招く。
 TIER2_CANDIDATE_LIMIT = 15
+
+# v1.113（オーナー承認・案3）: tier2（Reuters）の上位TIER2_CANDIDATE_LIMIT件の選び方を、「公開日時の新しい順」から
+# 「関連度順（得点が高い順。同点は新しい順）」へ変える。新しい順では、収集窓24時間のうち最後の約5〜6時間の記事しか
+# 呼び出しAに届かず（10/5〜10/9の5日間、15位の公開時刻はGMT 14:56〜16:09）、日本の朝〜欧州の午前のReuters記事が
+# 毎日まるごと対象外になっていた（DESIGN_CHANGESのv1.113参照）。件数の上限（15）は変えない。
+# 得点＝下の語のグループのうち、題名と要約の冒頭（TIER2_RELEVANCE_SUMMARY_CHARS字）に1つ以上含まれるグループの点の合計
+# （同じグループの語が何回出ても、そのグループの点は1回だけ）。呼び出しAへ渡す順は従来どおり新しい順
+# （選ばれた15件の並びだけを新しい順にそろえる）。
+# 点の付け方（オーナーの「基準B」＋追加語。点は3段階）: 3点＝暗号資産・金融政策・米国の経済指標・優先対象の中でも具体的な語
+# （ホルムズ・紅海・Houthi・タンカー・備蓄の放出・停戦・生産停止など）、2点＝マクロ・制裁・軍事行動・パイプライン・製油所など
+# （一般的な語）、1点＝市況の記事に多い語（oil・yield・Treasury・bond・rates・crude・Iranなど）。単純に語の数だけで数えると、
+# 1語だけ当たる記事どうしが新しい順の同点になり、優先対象の記事（例: 10/9のHouthi strikes on Riyadh airport）が、題名に
+# 「oil」などが1語あるだけの新しい記事に負けたため。3段階でも同点は残るので、その中は新しい順（従来と同じ）。
+# 内容の無い記事（銘柄コードだけの題名: 「VOLVb.SG - | Stock Price & Latest News - Reuters」。土曜の10/10に49件中12件あった）は
+# -1点にして、得点0の本物の記事より後にする。
+# 限界: 英語の題名の語の一致だけで測る（意味は見ない）。要約はReuters検索ではほぼ題名の繰り返し。語が1つも無い記事は
+# 得点0になり、得点0の記事は、得点1以上の記事が15件に満たない日だけ選ばれる（例: 10/6の株価の最高値更新の記事は選ばれなくなった）。
+TIER2_RELEVANCE_SUMMARY_CHARS = 120
+# 米国の経済指標の発表の記事（雇用・物価・GDP・ISM・小売など。indicator_events.FAMILIESと同じ種類。題名に米国を示す語が要る）
+_US_INDICATOR_RE = re.compile(
+    r"(?=.*\b(?:US|U\.S\.|United States)\b)(?=.*(?:payrolls?|non-?farm|\bjobs? (?:report|data|growth|gains|openings)|jobless claims"
+    r"|unemployment rate|\bCPI\b|\bPPI\b|\bPCE\b|\bGDP\b|\bISM\b|retail sales|consumer prices?|producer prices?"
+    r"|consumer (?:sentiment|confidence)|durable goods|housing starts|\bFOMC\b))", re.I | re.S)
+TIER2_RELEVANCE_TERMS: tuple[tuple[str, "re.Pattern[str]", int], ...] = (
+    # (a) 収集時のGoogle Newsの検索語（collect_news.GOOGLE_NEWS_QUERY_KEYWORDS の10語）
+    ("crypto", re.compile(r"crypto\w*", re.I), 3),
+    ("bitcoin", re.compile(r"bitcoin", re.I), 3),
+    ("ethereum", re.compile(r"ethereum", re.I), 3),
+    ("federal reserve", re.compile(r"federal reserve", re.I), 3),
+    ("inflation", re.compile(r"inflation", re.I), 2),
+    ("tariff", re.compile(r"tariffs?", re.I), 2),
+    ("oil", re.compile(r"\boil\b", re.I), 1),
+    ("interest rate", re.compile(r"interest rates?", re.I), 3),
+    ("SEC", re.compile(r"\bSEC\b"), 2),
+    ("stablecoin", re.compile(r"stablecoins?", re.I), 3),
+    # (b) 金融政策・金利の言い換え（基準B。「Fed」「利上げ」「利回り」などは検索語に無く、得点0になっていた）
+    ("Fed", re.compile(r"\bFed(?:['’]s)?\b"), 3),
+    ("rate hike/cut", re.compile(
+        r"\brate[- ]?(?:hikes?|cuts?|rises?|decisions?)\b|\bhike[sd]? (?:the )?(?:key |policy |benchmark )?(?:interest )?rates?\b", re.I), 3),
+    ("rates", re.compile(r"\brates\b", re.I), 1),
+    ("yield", re.compile(r"\byields?\b", re.I), 1),
+    ("Treasury", re.compile(r"treasur(?:y|ies)", re.I), 1),
+    ("central bank", re.compile(r"central banks?|FOMC|monetary", re.I), 3),
+    ("bond", re.compile(r"\bbonds?\b", re.I), 1),
+    ("US indicator", _US_INDICATOR_RE, 3),
+    # (c) 優先対象（地政学・エネルギー。NEWS_SELECTIONの「Bの扱いの基準」3）
+    ("refinery", re.compile(r"refiner(?:y|ies)", re.I), 2),
+    ("pipeline", re.compile(r"pipelines?", re.I), 2),
+    ("tanker", re.compile(r"tankers?", re.I), 3),
+    ("oil facility", re.compile(r"oil ?fields?|oil facilit\w+|oil terminals?|oil depots?", re.I), 3),
+    ("hormuz", re.compile(r"hormuz", re.I), 3),
+    ("red sea", re.compile(r"red sea", re.I), 3),
+    ("ceasefire", re.compile(r"cease-?fire|truce", re.I), 3),
+    ("sanction", re.compile(r"sanction\w*", re.I), 2),
+    ("military", re.compile(
+        r"military|air ?strikes?|(?:drone|missile) strikes?|\bstrikes?\s+(?:on|in|at|against|near|that|which)\b"
+        r"|missiles?|drones?|troops|warships?|naval", re.I), 2),
+    ("attack", re.compile(r"attack\w*", re.I), 2),
+    # (d) v1.113でオーナー指定により追加した語（10/6のdiesel stocks release・10/9のHouthi strikes on Riyadh airport が得点0だった）
+    #     と、同じ見落としを防ぐ近い語（備蓄の放出・生産停止・ハリケーンによる供給停止・原油/燃料・中東の地名）
+    ("houthi", re.compile(r"houthis?", re.I), 3),
+    ("diesel", re.compile(r"\bdiesel\b", re.I), 2),
+    ("stockpile", re.compile(r"stockpil\w*", re.I), 3),
+    ("reserve release", re.compile(
+        r"strategic (?:petroleum )?(?:reserves?|stockpiles?)|\bSPR\b"
+        r"|\b(?:oil|fuel|diesel|crude|emergency|strategic)\s+(?:reserves?|stocks?|stockpiles?|inventories)\s+releases?\b"
+        r"|\b(?:oil|fuel)\s+releases?\b|\breleas\w+\s+(?:of\s+)?(?:up to\s+)?[\d.,]+\s*(?:million|billion)?\s*barrels", re.I), 3),
+    ("supply disruption", re.compile(
+        r"shut[- ]?in|production (?:halt|cuts?|shut\w*)|output cuts?|outages?|hurricane|tropical storm", re.I), 3),
+    ("crude/fuel", re.compile(r"\bcrude\b|gasoline|petrol|\bfuel\b", re.I), 1),
+    ("Middle East", re.compile(r"\biran\b|middle east|\bgulf\b", re.I), 1),
+)
+# 内容の無い記事（銘柄コード・「- Reuters」だけの題名）。英字3字以上の語が、定型の語を除いて1つも無い
+_TIER2_JUNK_STRIP_RE = re.compile(r"stock price & latest news|reuters|transcript", re.I)
+_TIER2_WORD_RE = re.compile(r"[A-Za-z]{3,}")
+
+
+def is_content_free_title(title: Any) -> bool:
+    return not _TIER2_WORD_RE.search(_TIER2_JUNK_STRIP_RE.sub("", str(title or "")))
+
+
+def tier2_relevance_score(candidate: dict) -> int:
+    """tier2候補の関連度の得点（TIER2_RELEVANCE_TERMSのうち、題名と要約の冒頭に含まれるグループの点の合計）。
+    内容の無い題名（銘柄コードだけなど）は-1。"""
+    if is_content_free_title(candidate.get("title", "")):
+        return -1
+    text = f"{candidate.get('title', '')} {str(candidate.get('summary', ''))[:TIER2_RELEVANCE_SUMMARY_CHARS]}"
+    return sum(weight for _name, pattern, weight in TIER2_RELEVANCE_TERMS if pattern.search(text))
+
+
+def _select_tier2_by_relevance(tier2_sorted: list[dict], limit: int) -> list[dict]:
+    """tier2_sorted（公開日時の新しい順）から、得点の高い順（同点は新しい順）に上位limit件を選び、
+    選んだ記事を新しい順の並びのまま返す。全件がlimit以下なら全件。"""
+    if len(tier2_sorted) <= limit:
+        return list(tier2_sorted)
+    ranked = sorted(range(len(tier2_sorted)), key=lambda i: (-tier2_relevance_score(tier2_sorted[i]), i))
+    chosen = set(ranked[:limit])
+    return [c for i, c in enumerate(tier2_sorted) if i in chosen]
+
+
+# v1.114（オーナー承認）: 独立2媒体ペア救済（_find_independent_pairs）の対象から、日次まとめ記事と価格記事を外す。
+# 10/8・10/9に、日次まとめ記事（「Here's what happened in crypto today」と無関係な題名の組）や価格記事の組が救済の枠
+# （最大PAIR_RESCUE_MAX_PAIRS組）を使い、本物の組（ギリシャの暗号資産課税・Cantor–Tether）が見送られた。
+# 日次まとめ記事・価格記事は、本文に値動きを書かない方針（NEWS_SELECTION）のとおり採用されない記事なので、組にする意味が無い。
+# 外すのは「救済の組を探す対象」だけで、上位15件への選定そのものは変えない。判定は題名と要約の冒頭の語による（意味は見ない）。
+# 限界: 語に当たらない価格記事・まとめ記事は外せない（見逃し）。ETFの資金フロー記事（採用されうる）は価格記事に含めない。
+_ROUNDUP_TITLE_RE = re.compile(
+    r"what happened in crypto today|^\s*live updates\b|crypto long\s*&\s*short|crypto for advisors|crypto biz\b"
+    r"|hodler.s digest|crypto week ahead|asia express|daybook|morning briefing|weekly (?:recap|roundup|wrap)", re.I)
+_PRICE_ASSET_RE = re.compile(r"bitcoin|\bbtc\b|\bether\b|ethereum|\beth\b|crypto|altcoins?|solana|\bsol\b|\bxrp\b|dogecoin|cardano|\bada\b", re.I)
+# 「price」は、銘柄名の近く（間に2語まで）にあり、すぐ後に値動きの語が続くときだけ数える
+# （「at an average price of」「price manipulation probe」の法務・購入の話を除く）
+_PRICE_ASSET_PAT = r"(?:bitcoin|\bbtc\b|\bether\b|ethereum|\beth\b|crypto\w*|altcoins?|\bxrp\b|solana|\bsol\b|dogecoin|cardano)"
+_PRICE_VERB_PAT = (r"(?:action|drops?|falls?|dips?|slips?|slides?|tumbles?|plunges?|sinks?|rall(?:y|ies)|surges?|jumps?|soars?"
+                   r"|climbs?|rises?|rebounds?|rejected|stalls?|swings?|fails?|fights?|holds?|hits?|reaches|breaks?)")
+_PRICE_WORD_RE = re.compile(
+    _PRICE_ASSET_PAT + r"\W+(?:\w+\W+){0,2}?prices?\s+(?:\w+\s+){0,2}?" + _PRICE_VERB_PAT + r"\b"
+    r"|\bprices?\s+" + _PRICE_VERB_PAT + r"\b|range-bound|trading range", re.I)
+# 清算は、市場の清算（金額・ロング・ショート・レバレッジ・先物と一緒）に限る（「liquidators」「liquidation trust」の法務・破産の話を除く）
+_PRICE_LIQUIDATION_RE = re.compile(r"\bliquidat(?:ions?|ed)\b", re.I)
+_PRICE_LIQUIDATION_CONTEXT_RE = re.compile(r"\blong\b|\bshort\b|leverag|futures|\$\d+(?:\.\d+)?\s?(?:M|B|million|billion)\b", re.I)
+# 価格の水準（$84,000・$87K・$82.7K。「$28.7 million」「$100M」「$1,200,000」は除く）
+_PRICE_LEVEL_RE = re.compile(r"\$\d{1,3},\d{3}(?!\d)(?!,\d)|\$\d+(?:\.\d+)?\s?K\b")
+_PRICE_MOVE_RE = re.compile(
+    r"\b(?:dips?|dipped|slips?|slipped|slides?|slid|drops?|dropped|falls?|fell|tumbles?|tumbled|plunges?|plunged|sinks?|slumps?"
+    r"|rall(?:y|ies|ied)|rebounds?|rebounded|surges?|surged|jumps?|jumped|soars?|climbs?|rises?|rose|edges?|grinds?"
+    r"|steadies|consolidates?|rejected|breaks?|nears?|zooms?|reverses?|pulls? back|recovers?|reclaims?|stalls?|hovers?|trades?)\b", re.I)
+_ETF_WORD_RE = re.compile(r"\bETFs?\b|\bETPs?\b")
+
+
+def is_daily_roundup(candidate: dict) -> bool:
+    """日次まとめ記事・ニュースレター・ライブブログ（題名が「Here's what happened in crypto today」「Live updates:」
+    「Crypto Long & Short」「Crypto for Advisors」「Hodler's Digest」などで始まる・含む記事）。題名だけで判定する——
+    ニュースレターの要約（「Your day-ahead look for…」）で判定すると、個別の出来事の見出しを持つ記事（例:「SEC approves a 3x fix…」）まで
+    外れて、本物の組を失うため。"""
+    return bool(_ROUNDUP_TITLE_RE.search(str(candidate.get("title", ""))))
+
+
+def is_price_article(candidate: dict) -> bool:
+    """BTC・ETH等の価格・値動き・清算の記事。ETFの記事は含めない（資金フローは採用されうるため）。
+    銘柄名が題名にあり、かつ、①銘柄名の近くの「price」・値動きの語つきの「price」・「range-bound」、②市場の清算（金額・ロング・ショート等と一緒の
+    「liquidations」）、③価格の水準（$84,000・$87K）と値動きの語、のいずれかがある。"""
+    title = str(candidate.get("title", ""))
+    text = f"{title} {str(candidate.get('summary', ''))[:TIER2_RELEVANCE_SUMMARY_CHARS]}"
+    if _ETF_WORD_RE.search(title) or not _PRICE_ASSET_RE.search(title):
+        return False
+    if _PRICE_WORD_RE.search(title):
+        return True
+    if _PRICE_LIQUIDATION_RE.search(text) and _PRICE_LIQUIDATION_CONTEXT_RE.search(text):
+        return True
+    return bool(_PRICE_LEVEL_RE.search(text) and _PRICE_MOVE_RE.search(text))
+
+
+def is_excluded_from_pair_rescue(candidate: dict) -> bool:
+    return is_daily_roundup(candidate) or is_price_article(candidate)
 
 # v1.39フォローアップ（オーナー承認）: 「公開日時の新しい順で上位N件」という
 # 選定方式は、収集ウィンドウ序盤に出た記事を窓終盤の記事群に押しやる構造的な
@@ -786,7 +946,10 @@ NEWS_SELECTION「Bの扱いの基準」の4の(a)〜(g)のどれに当たるか�
 「情報が少ない」「単独報道」だけを理由にuse:falseとしてはならない（上記
 NEWS_SELECTION「Bの扱いの基準」4参照）。
 use:false のreasonは全角60字以内に収める（判定段階＋簡潔な理由のみでよく、
-詳細な論述は不要）。use:trueのreasonにはこの字数制限を適用しない。
+詳細な論述は不要）。
+reasonは、use:true・use:falseのどちらでも必ず書く（空文字・省略は不可。v1.112・オーナー指示）。use:trueのreasonは、
+「A: …」または「B: …」のように判定段階で始め、どの事実を根拠に採用したか（独立2ソース規定に該当した場合はその旨）を、
+全角120字以内で書く。reasonが空の候補があると、システムはその呼び出しを最初からやり直させる。
 verified_byはuse:trueの場合のみ書く（判断に属する情報のため）。
 use:falseの場合は空文字でよい。
 audit_ledgerを空配列 [] にしてよいのは、news_candidates_today が
@@ -917,9 +1080,11 @@ OUTPUT_FORMAT_A = """## 出力形式
   ],
   "audit_ledger": [
     { "candidate_id": 1, "use": true, "pairs_with_candidate_id": null,
-      "verified_by": "", "reason": "" }
+      "verified_by": "", "reason": "判定段階（A・B・C）と理由を書く。use:trueでも空にしない" }
   ]
 }
+
+audit_ledgerのreasonは、use:true・use:falseのどちらでも空にしない（上の例の文言をそのまま写さない）。
 
 part1_pointsの各項目は、本文だけを書く。先頭に「・」などの行頭記号や空白を付けない（システムが「・」を付けて
 箇条書きにするため、付けると「・・」と二重になる。入力のprevious_postsの項目にも先頭の記号は付いていない）。"""
@@ -1120,17 +1285,22 @@ class CallOutcome:
         # v1.102（オーナー承認）: 項目の先頭の記号・空白を整形した記録（{"<キー>_raw": 整形前のリスト, "<キー>_changed": 件数}）。
         # 整形前の項目を診断用（attempt_diagnostics.json。コミットしない）に残すため。
         self.format_normalization: dict[str, Any] = {}
+        # v1.112: reasonだけが空だった試行の応答を補完して採用した（残りの試行がすべて失敗した）場合の説明。通常はNone。
+        self.fallback_note: str | None = None
 
     def to_dict(self) -> dict:
-        return {"ok": self.ok, "attempts": self.attempts, "error": self.error,
-                "usage": self.usage, "data": self.data, "truncation_stats": self.truncation_stats,
-                "attempt_errors": self.attempt_errors,
-                "audit_ledger_auto_filled_count": self.audit_ledger_auto_filled_count,
-                "rejected_pairs": self.rejected_pairs,
-                "force_dropped_candidates": self.force_dropped_candidates,
-                "attempt_diagnostics": self.attempt_diagnostics,
-                "reusable_dropped": self.reusable_dropped,
-                "format_normalization": self.format_normalization}
+        d = {"ok": self.ok, "attempts": self.attempts, "error": self.error,
+             "usage": self.usage, "data": self.data, "truncation_stats": self.truncation_stats,
+             "attempt_errors": self.attempt_errors,
+             "audit_ledger_auto_filled_count": self.audit_ledger_auto_filled_count,
+             "rejected_pairs": self.rejected_pairs,
+             "force_dropped_candidates": self.force_dropped_candidates,
+             "attempt_diagnostics": self.attempt_diagnostics,
+             "reusable_dropped": self.reusable_dropped,
+             "format_normalization": self.format_normalization}
+        if self.fallback_note:
+            d["fallback_note"] = self.fallback_note  # 通常の日は、従来と同じキーのまま
+        return d
 
 
 def _extract_text(response: Any) -> str:
@@ -1176,6 +1346,14 @@ def _extract_usage(response: Any) -> dict[str, int]:
 def _add_usage(a: dict[str, int], b: dict[str, int]) -> dict[str, int]:
     return {"input_tokens": a["input_tokens"] + b["input_tokens"],
             "output_tokens": a["output_tokens"] + b["output_tokens"]}
+
+
+class OutputTruncatedError(ValueError):
+    """モデルの出力が max_tokens で打ち切られた（stop_reason == "max_tokens"）。v1.112。"""
+
+    def __init__(self, max_tokens: int):
+        super().__init__(f"出力が上限（max_tokens={max_tokens}）で打ち切られた")
+        self.max_tokens = max_tokens
 
 
 def _call_json(
@@ -1236,6 +1414,10 @@ def _call_json(
             if response.stop_reason == "refusal":
                 category = getattr(getattr(response, "stop_details", None), "category", None)
                 raise ValueError(f"refusal (category={category})")
+            if getattr(response, "stop_reason", None) == "max_tokens":
+                # v1.112: 出力が上限で打ち切られた場合、従来はJSONDecodeErrorとしか記録されず、原因が分からなかった
+                # （10/8）。打ち切りを別の例外として記録し、リトライ時の追記（_build_call_a_retry_note）で短く書くよう伝える。
+                raise OutputTruncatedError(max_tokens)
             text = _strip_code_fence(_extract_text(response))
             if not text:
                 raise ValueError("空応答")
@@ -1296,6 +1478,10 @@ def _select_candidates_detail(
     Reuters検索クエリが金融・暗号資産に絞られておらず無関係な一般
     ニュースを多く含むため）。tier2は単独採用可能（tier1と同じ位置づけ）
     でありtier3のような独立2ソースのペア救済は不要のため行わない。
+
+    v1.113（オーナー承認・案3）: tier2の上位TIER2_CANDIDATE_LIMIT件は、新しい順ではなく関連度順（tier2_relevance_score。
+    同点は新しい順）で選ぶ。件数の上限は変えない。detailのtier2_sortedは従来どおり新しい順（recency_rankの基準）。
+    v1.114（オーナー承認）: ペア救済で組を探す対象から、日次まとめ記事・価格記事を外す（is_excluded_from_pair_rescue）。
     """
     tier1 = [c for c in candidates if c.get("tier") == 1]
     tier2 = [c for c in candidates if c.get("tier") == 2]
@@ -1307,7 +1493,9 @@ def _select_candidates_detail(
             tzinfo=collect_news.JST)
 
     tier2_sorted = sorted(tier2, key=pub_dt, reverse=True)
-    tier2_selected = tier2_sorted[:TIER2_CANDIDATE_LIMIT]
+    # v1.113: 関連度順（得点が高い順。同点は新しい順）で上位TIER2_CANDIDATE_LIMIT件。tier2_sortedは新しい順のまま
+    # （候補の記録のrecency_rankの基準）。呼び出しAへ渡す並びは、選ばれた記事を新しい順にそろえたもの。
+    tier2_selected = _select_tier2_by_relevance(tier2_sorted, TIER2_CANDIDATE_LIMIT)
 
     tier3_sorted = sorted(tier3, key=pub_dt, reverse=True)
     tier3_top = tier3_sorted[:TIER3_CANDIDATE_LIMIT]
@@ -1316,7 +1504,9 @@ def _select_candidates_detail(
     rescued: list[dict] = []
     rescued_ids: set[int] = set()
     pairs_rescued = 0
-    all_pairs = _find_independent_pairs(tier3_sorted, pair_overlap_threshold)
+    # v1.114: 日次まとめ記事・価格記事は、組を探す対象から外す（外した記事の選定そのものは変えない）
+    pair_pool = [c for c in tier3_sorted if not is_excluded_from_pair_rescue(c)]
+    all_pairs = _find_independent_pairs(pair_pool, pair_overlap_threshold)
     for a, b in all_pairs:
         if pairs_rescued >= PAIR_RESCUE_MAX_PAIRS:
             break
@@ -1474,6 +1664,12 @@ class AuditLedgerReconstructionError(ValueError):
     """
 
     unresolved_details: "list[dict] | None" = None
+    # v1.112: reasonが空だった候補ID（最終試行より前の試行では、空の理由を補完せず再試行する。pair不成立のエラーにも添える）
+    blank_reason_ids: "list[int] | None" = None
+
+
+class AuditLedgerBlankReasonError(AuditLedgerReconstructionError):
+    """audit_ledgerのreasonが空の候補がある（最終試行より前の試行）。v1.112。"""
 
 
 def _pair_claim_detail(claimant_id: int, target_id: int, id_to_candidate: dict[int, dict],
@@ -1701,6 +1897,21 @@ def _derive_decisions(llm_entries: list[dict], id_to_candidate: dict[int, dict],
     return decisions
 
 
+# 出力形式の例（OUTPUT_FORMAT_A）に書いた、reasonの見本の文言。モデルがそのまま写した場合も、空と同じに扱う。
+LEDGER_REASON_PLACEHOLDER = "判定段階（A・B・C）と理由を書く。use:trueでも空にしない"
+
+
+LEDGER_REASON_PLACEHOLDER_CORE = "判定段階（A・B・C）と理由を書く"
+LEDGER_REASON_AUTOFILL = "理由が記載されませんでした（自動補完）"
+
+
+def _is_blank_reason(reason: Any) -> bool:
+    """reasonが空（None・空白のみ・出力例の見本の文言を含むもの）か。見本の文言は、前に「A: 」が付く・語尾が変わるなど
+    少し変えて写された場合も、中身の無い理由として空と同じに扱う（レビュー指摘: 完全一致だけだと見落とす）。"""
+    text = str(reason if reason is not None else "").strip()
+    return not text or LEDGER_REASON_PLACEHOLDER_CORE in text
+
+
 def _reconstruct_audit_ledger(llm_entries: Any, id_to_candidate: dict[int, dict],
                                pair_overlap_threshold: float = PAIR_OVERLAP_THRESHOLD_DEFAULT,
                                stats: dict[str, int] | None = None,
@@ -1708,7 +1919,8 @@ def _reconstruct_audit_ledger(llm_entries: Any, id_to_candidate: dict[int, dict]
                                force_drop_unresolved: bool = False,
                                force_dropped: list[dict] | None = None,
                                diagnostics: dict | None = None,
-                               decisions_out: dict[int, str] | None = None) -> list[dict]:
+                               decisions_out: dict[int, str] | None = None,
+                               fail_on_blank_reason: bool = False) -> list[dict]:
     """LLMが出力した candidate_id・use・pairs_with_candidate_id・
     verified_by・reason のみのaudit_ledgerを、候補データのsource/url/
     title/published_atで補完し、decisionをコード側で導出した完全な形へ
@@ -1735,6 +1947,11 @@ def _reconstruct_audit_ledger(llm_entries: Any, id_to_candidate: dict[int, dict]
     フォールバックとして"不採用"で補完する処理を残す（防御的コード。
     現状の設計では原理的に到達しない想定）。補完件数はstatsへ記録し、
     呼び出し元がGENERATION_STATUS.mdへ記録する。
+
+    v1.112（オーナー指示・10/8の調査）: 空になったreasonはすべて採用（use:true）の候補だった（9/13の2件・9/28の2件・10/8の9件。
+    いずれも採用の全件または一部）。プロンプトが、use:trueのreasonを必須とは書かず、出力例も空文字だったため、とみられる
+    （DESIGN_CHANGES.md v1.112）。fail_on_blank_reason=True（最終試行より前）では、reasonが空の候補があれば補完せず
+    AuditLedgerBlankReasonErrorで再試行させる。最終試行（False）では従来どおり補完して通す（v1.54のオーナー判断を維持）。
     """
     if not isinstance(llm_entries, list):
         raise AuditLedgerReconstructionError("audit_ledgerがリストでない")
@@ -1754,9 +1971,19 @@ def _reconstruct_audit_ledger(llm_entries: Any, id_to_candidate: dict[int, dict]
     if missing:
         raise AuditLedgerReconstructionError(f"audit_ledgerに記録されていない候補ID: {sorted(missing)}")
 
-    decisions = _derive_decisions(parsed, id_to_candidate, pair_overlap_threshold,
-                                   rejected_pairs=rejected_pairs, force_drop_unresolved=force_drop_unresolved,
-                                   force_dropped=force_dropped, diagnostics=diagnostics)
+    blank_ids = sorted(e["candidate_id"] for e in parsed if _is_blank_reason(e.get("reason")))
+    try:
+        decisions = _derive_decisions(parsed, id_to_candidate, pair_overlap_threshold,
+                                       rejected_pairs=rejected_pairs, force_drop_unresolved=force_drop_unresolved,
+                                       force_dropped=force_dropped, diagnostics=diagnostics)
+    except AuditLedgerReconstructionError as exc:
+        if fail_on_blank_reason and blank_ids:
+            exc.blank_reason_ids = blank_ids  # 再試行の追記が、相方の不成立とreasonの欠落の両方を伝えられるように
+        raise
+    if fail_on_blank_reason and blank_ids:
+        err = AuditLedgerBlankReasonError(f"audit_ledgerのreasonが空の候補ID: {blank_ids}")
+        err.blank_reason_ids = blank_ids
+        raise err
 
     reconstructed = []
     auto_filled = 0
@@ -1772,8 +1999,8 @@ def _reconstruct_audit_ledger(llm_entries: Any, id_to_candidate: dict[int, dict]
             decision = "不採用"
             auto_filled += 1
         reason = e.get("reason", "")
-        if not str(reason).strip():
-            reason = "理由が記載されませんでした（自動補完）"
+        if _is_blank_reason(reason):
+            reason = LEDGER_REASON_AUTOFILL
             auto_filled += 1
         entry["decision"] = decision
         entry["reason"] = reason
@@ -2162,8 +2389,33 @@ def _build_call_a_retry_note(exc: Exception) -> str | None:
     変更しない」を明示し、「疑わしければ全て落とす」という広範な誤読を
     防ぐことを狙う（オーナー指示。実装時の確認事項）。
     """
+    if isinstance(exc, OutputTruncatedError):
+        # v1.112: 出力が上限で打ち切られた。同じ長さで書き直すと、同じ所でまた打ち切られるため、reasonを短くさせる。
+        # 本文（ヘッドライン・主要なポイント）と採否（use・pairs）は、短くするために変えさせない。
+        return (
+            "### 直前の試行への修正指示（自動リトライ）\n\n"
+            f"直前の試行は、出力が長すぎて上限（{exc.max_tokens}トークン）で打ち切られ、JSONが完結しませんでした。\n\n"
+            "今回は、audit_ledgerの各reasonを短く書いてください（use:falseは全角40字以内、use:trueは全角80字以内）。"
+            "reasonを空にしてはいけません（use:trueでも必ず書く）。part1_headline・part1_points・"
+            "candidate_id・use・pairs_with_candidate_idの内容は、短くするために変えないでください。"
+        )
     if not isinstance(exc, AuditLedgerReconstructionError):
         return None
+    blank_ids = getattr(exc, "blank_reason_ids", None) or []
+    blank_block = ""
+    if blank_ids:
+        blank_block = (
+            f"また、audit_ledgerのreasonが空の候補IDがあります: {sorted(blank_ids)}。"
+            "use:true・use:falseを問わず、reasonは必ず書いてください（use:trueは「A: …」「B: …」のように判定段階と"
+            "採用の根拠を、use:falseは判定段階と理由を書く）。名指しされていない他の候補のuse・pairs_with_candidate_id・"
+            "reasonは変更しないでください。"
+        )
+    if isinstance(exc, AuditLedgerBlankReasonError):
+        return (
+            "### 直前の試行への修正指示（自動リトライ）\n\n"
+            f"直前の試行は次のエラーで失敗しました: {exc}\n\n"
+            f"{blank_block}"
+        )
     detail_lines = ""
     details = getattr(exc, "unresolved_details", None) or []
     if details:
@@ -2191,6 +2443,7 @@ def _build_call_a_retry_note(exc: Exception) -> str | None:
         "かまいません）。満たさない場合は"
         "その候補のuseをfalseに変更してください。名指しされていない他の候補（上記の相方を除く）の"
         "use・pairs_with_candidate_idは変更しないでください。"
+        + (f"\n\n{blank_block}" if blank_block else "")
     )
 
 
@@ -2226,7 +2479,7 @@ def call_a(client: "anthropic.Anthropic", daily_data: dict, news_today: dict,
     # v1.102: 項目の先頭の記号・空白の整形の記録（試行ごとにリセット）
     format_norm_stats: dict[str, Any] = {}
 
-    def _rebuild_audit_ledger(data: dict, attempt: int) -> dict:
+    def _process_call_a(data: dict, attempt: int, fail_blank: bool) -> dict:
         rejected_pairs_stats.clear()
         force_dropped_stats.clear()
         reusable_dropped_stats.clear()
@@ -2256,7 +2509,9 @@ def call_a(client: "anthropic.Anthropic", daily_data: dict, news_today: dict,
             data["audit_ledger"] = _reconstruct_audit_ledger(
                 data.get("audit_ledger"), id_to_candidate, pair_overlap_threshold, audit_ledger_stats,
                 rejected_pairs=rejected_pairs_stats, force_drop_unresolved=force_drop,
-                force_dropped=force_dropped_stats, diagnostics=diag, decisions_out=decisions_by_id)
+                force_dropped=force_dropped_stats, diagnostics=diag, decisions_out=decisions_by_id,
+                # v1.112: 最終試行より前は、reasonが空なら補完せず再試行。最終試行は従来どおり補完して通す。
+                fail_on_blank_reason=fail_blank)
         finally:
             if diag.get("unresolved"):
                 attempt_diagnostics.append({
@@ -2270,7 +2525,8 @@ def call_a(client: "anthropic.Anthropic", daily_data: dict, news_today: dict,
                 cid = e["candidate_id"]
                 candidate_decisions_stats[cid] = {
                     "decision": decisions_by_id.get(cid), "use": bool(e.get("use")),
-                    "reason": str(e.get("reason", ""))}
+                    # v1.112: 台帳に残る理由（空は定型文で補完した後の文言）。候補の記録（candidates_log.json）と台帳の理由をそろえる
+                    "reason": LEDGER_REASON_AUTOFILL if _is_blank_reason(e.get("reason")) else str(e.get("reason", ""))}
                 if cid in forced_ids:
                     candidate_decisions_stats[cid]["force_dropped"] = True  # 最終試行でも相方が成立せず強制的に不採用にした
         except Exception:  # noqa: BLE001 — 記録の失敗で試行（リトライ・採否）を変えない
@@ -2286,12 +2542,54 @@ def call_a(client: "anthropic.Anthropic", daily_data: dict, news_today: dict,
         reusable_dropped_stats.extend(dropped)
         return data
 
+    # v1.112: reasonが空だけが問題の応答は、最終試行より前は再試行させる。ただし、その応答を補完した結果を保険として残し、
+    # 残りの試行がすべて失敗したときはそれを使う（再試行のせいでL1へ落ちない。v1.54「止めない」を維持）。
+    fallback: dict[str, Any] = {}
+
+    def _stats_snapshot() -> dict[str, Any]:
+        return {"audit_ledger_stats": dict(audit_ledger_stats), "rejected_pairs": list(rejected_pairs_stats),
+                "force_dropped": list(force_dropped_stats), "reusable_dropped": list(reusable_dropped_stats),
+                "candidate_decisions": dict(candidate_decisions_stats), "format_norm": dict(format_norm_stats),
+                "decisions_by_id": dict(decisions_by_id)}
+
+    def _stats_restore(snap: dict[str, Any]) -> None:
+        for target, key in ((audit_ledger_stats, "audit_ledger_stats"), (decisions_by_id, "decisions_by_id"),
+                            (candidate_decisions_stats, "candidate_decisions"), (format_norm_stats, "format_norm")):
+            target.clear()
+            target.update(snap[key])
+        for target, key in ((rejected_pairs_stats, "rejected_pairs"), (force_dropped_stats, "force_dropped"),
+                            (reusable_dropped_stats, "reusable_dropped")):
+            target[:] = snap[key]
+
+    def _rebuild_audit_ledger(data: dict, attempt: int) -> dict:
+        fail_blank = attempt < MAX_ATTEMPTS
+        backup = copy.deepcopy(data) if fail_blank else None
+        try:
+            return _process_call_a(data, attempt, fail_blank)
+        except AuditLedgerBlankReasonError:
+            try:
+                fallback.clear()
+                fallback_data = _process_call_a(backup, attempt, False)
+                fallback.update(data=fallback_data, attempt=attempt, snapshot=_stats_snapshot())
+            except Exception:  # noqa: BLE001 — 保険の作成に失敗しても、再試行そのものは従来どおり行う
+                fallback.clear()
+            raise
+
     outcome = _call_json(
         client, system=SYSTEM_A, user_content=user_content,
         max_tokens=CALL_A_MAX_TOKENS, required_keys=REQUIRED_KEYS_A,
         post_process=_rebuild_audit_ledger,
         build_retry_note=_build_call_a_retry_note,
     )
+
+    if not outcome.ok and fallback:
+        # v1.112: 残りの試行がすべて失敗した。reasonが空だった試行の応答を補完した結果を使う（その試行までの失敗は履歴に残す）。
+        _stats_restore(fallback["snapshot"])
+        k = fallback["attempt"]
+        last_err = outcome.attempt_errors[-1] if outcome.attempt_errors else str(outcome.error)
+        outcome = CallOutcome(True, fallback["data"], outcome.attempts, None, outcome.usage,
+                              attempt_errors=list(outcome.attempt_errors[:-1]))
+        outcome.fallback_note = f"{k}試行目の応答（reasonだけが空）を補完して採用。最終試行は失敗: {last_err}"
     outcome.truncation_stats = truncation_stats
     # v1.54フォローアップ: post_processは_call_json()内で試行ごとに呼ばれるため、
     # audit_ledger_statsは最終的に成功した（＝outcomeを生んだ）試行の値で

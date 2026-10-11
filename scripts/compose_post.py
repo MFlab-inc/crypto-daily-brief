@@ -539,7 +539,8 @@ def _render_candidate_selection_lines(report: Any, target_date: str,
     if not tier2:
         t2.append("tier2候補（Reuters）: 収集窓内0件")
     else:
-        t2.append(f"tier2候補（Reuters）: 収集窓内{len(tier2)}件 → {len(sel)}件を選定・"
+        # v1.113: 選び方は関連度順（得点が高い順。同点は新しい順）。選定と除外の公開時刻の範囲は、重なりうる。
+        t2.append(f"tier2候補（Reuters）: 収集窓内{len(tier2)}件 → {len(sel)}件を選定（関連度順）・"
                   f"{len(drop)}件を件数上限（{lim.get('tier2', generate_post.TIER2_CANDIDATE_LIMIT)}件）により除外")
         t2.append(f"  選定した記事の公開時刻: {_fmt_utc_jst_range([c.get('published_at_utc') for c in sel])}")
         if drop:
@@ -801,6 +802,9 @@ def render_generation_status(gen: dict[str, Any], daily_data: dict | None = None
         ids = sorted(d.get("candidate_id") for d in force_dropped)
         force_drop_note = f"強制不採用（候補ID {ids}）で続行" + (
             " → 再監査FAILのためL1へフォールバック" if l1_fallback_failing_checks is not None else "")
+    if a.get("fallback_note"):
+        # v1.112: reasonだけが空だった試行の応答を補完して採用した（残りの試行がすべて失敗した）日
+        force_drop_note = f"{force_drop_note}；{a['fallback_note']}" if force_drop_note else a["fallback_note"]
     lines += _render_attempt_errors("call_A", a, force_drop_note=force_drop_note)
     lines.append(
         f"call_B: {'OK' if b['ok'] else 'FAILED'}"
@@ -858,8 +862,8 @@ def render_generation_status(gen: dict[str, Any], daily_data: dict | None = None
         # 補完自体は_reconstruct_audit_ledger()側で完結している。
         lines.append(
             f"audit_ledger自動補完: {auto_filled}件"
-            "（decision/reasonが空だったため定型文で補完。C19は空欄検知のため"
-            "PASSする——理由の質は監査対象外）"
+            "（reason＝理由が空だったため定型文で補完。再試行しても空だった分、または再試行がすべて失敗したため空のまま採用した分。"
+            "C19は空欄検知のためPASSする——理由の質は監査対象外）"
         )
     if daily_data is not None:
         inconsistent = _inconsistent_symbols(daily_data)
