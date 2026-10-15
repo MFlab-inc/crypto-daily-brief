@@ -1,0 +1,163 @@
+{
+  "target_date_jst": "2026-10-15",
+  "weekday_jp": "木",
+  "date_title": "2026年10月15日（木）暗号通貨・DEX市場概況",
+  "summary": "（シャドー運用中：ヘッドラインはフェーズ2で生成）",
+  "assets": [
+    {
+      "asset": "BTC",
+      "usd": "$82,381",
+      "jpy": "約1,304.1万円",
+      "change_24h": "+1.08%",
+      "direction": "up"
+    },
+    {
+      "asset": "ETH",
+      "usd": "$2,457",
+      "jpy": "約38.9万円",
+      "change_24h": "+1.82%",
+      "direction": "up"
+    },
+    {
+      "asset": "BNB",
+      "usd": "$730",
+      "jpy": "約11.6万円",
+      "change_24h": "+0.22%",
+      "direction": "up"
+    }
+  ],
+  "intraday_range": {
+    "BTC": {
+      "high": "$82,555",
+      "low": "$79,676",
+      "source": "coinbase",
+      "retrieved_at": "2026-10-16T07:37:49.926072+09:00",
+      "representative": true,
+      "inconsistent": false,
+      "notable_move": false
+    },
+    "ETH": {
+      "high": "$2,463",
+      "low": "$2,313",
+      "source": "coinbase",
+      "retrieved_at": "2026-10-16T07:37:50.004233+09:00",
+      "representative": true,
+      "inconsistent": false,
+      "notable_move": false
+    },
+    "BNB": {
+      "high": "$735",
+      "low": "$709",
+      "source": "coinbase",
+      "retrieved_at": "2026-10-16T07:37:50.069050+09:00",
+      "representative": false,
+      "inconsistent": false
+    }
+  },
+  "scheduled_events": [
+    {
+      "title": "Employment Change",
+      "country": "AUD",
+      "impact": "High",
+      "time_jst": "2026-10-15T09:30:00+09:00"
+    },
+    {
+      "title": "Unemployment Rate",
+      "country": "AUD",
+      "impact": "High",
+      "time_jst": "2026-10-15T09:30:00+09:00"
+    },
+    {
+      "title": "GDP m/m",
+      "country": "GBP",
+      "impact": "High",
+      "time_jst": "2026-10-15T15:00:00+09:00"
+    },
+    {
+      "title": "Core PPI m/m",
+      "country": "USD",
+      "impact": "High",
+      "time_jst": "2026-10-15T21:30:00+09:00"
+    },
+    {
+      "title": "Core Retail Sales m/m",
+      "country": "USD",
+      "impact": "High",
+      "time_jst": "2026-10-15T21:30:00+09:00"
+    },
+    {
+      "title": "PPI m/m",
+      "country": "USD",
+      "impact": "High",
+      "time_jst": "2026-10-15T21:30:00+09:00"
+    },
+    {
+      "title": "Retail Sales m/m",
+      "country": "USD",
+      "impact": "High",
+      "time_jst": "2026-10-15T21:30:00+09:00"
+    }
+  ],
+  "market": {
+    "fear_greed": {
+      "value": 52,
+      "label": "Neutral"
+    },
+    "market_cap": "$2.767兆",
+    "market_cap_jpy": "¥438.1兆",
+    "volume_24h": "$1081.6億",
+    "volume_24h_jpy": "¥17.12兆",
+    "btc_dominance": "59.84%",
+    "eth_dominance": "10.84%"
+  },
+  "base": {
+    "tvl": "$61.83億",
+    "tvl_jpy": "¥9,788億",
+    "tvl_change": "+1.25%",
+    "tvl_direction": "up",
+    "dex_volume": "$13.166億",
+    "dex_volume_jpy": "¥2,084億",
+    "dex_volume_eth_usdc": "$147.79M",
+    "dex_volume_eth_usdc_jpy": "¥234億",
+    "usdc_dominance": "84.5%"
+  },
+  "lp": {
+    "pools": [
+      {
+        "name": "Base 0.05%プール",
+        "apr": "51.61%",
+        "tvl": "$9.16M",
+        "volume_24h": "$25.90M",
+        "change_vs_prev": {
+          "apr_change": "+18.89%",
+          "volume_24h_change": "+18.67%",
+          "tvl_change": "-0.18%"
+        }
+      },
+      {
+        "name": "Base 0.3%プール",
+        "apr": "90.70%",
+        "tvl": "$147.15M",
+        "volume_24h": "$121.89M",
+        "change_vs_prev": {
+          "apr_change": "+18.76%",
+          "volume_24h_change": "+19.09%",
+          "tvl_change": "+0.28%"
+        }
+      }
+    ],
+    "check_message": "#ETHが上昇中。#USDC偏り・上限側レンジ外・反落耐性を確認"
+  },
+  "domestic": {
+    "bitflyer_eth_24h": "4,057.04 ETH",
+    "coincheck_eth_24h": "1,233.48 ETH",
+    "combined_eth": "5,290.51 ETH",
+    "combined_usd": "$13.00M",
+    "retrieved_at": "2026-10-16 07:37 JST"
+  },
+  "footer": {
+    "retrieved_at": "2026-10-16 07:37 JST",
+    "usd_jpy": "¥158.31",
+    "sources": "CoinMarketCap API / GeckoTerminal / DefiLlama / ExchangeRate-API / bitFlyer公式API / Coincheck公式API"
+  }
+}
