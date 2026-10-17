@@ -1,0 +1,428 @@
+{
+  "target_date_jst": "2026-10-17",
+  "level": "L0",
+  "sections": {
+    "part0_target_date": "2026年10月17日（土）",
+    "part1_headline": "イラン革命防衛隊が、タンカー2隻がホルムズ海峡で機雷に接触したと主張したとReutersが報じました。主要な海上輸送路を巡る緊張は原油供給やリスク選好を通じて暗号通貨市場にも波及し得る材料ですが、被害の全容は未確認です。",
+    "part1_points": "・カナダ中銀のマックレム総裁は、原油価格の急騰を受けてインフレ見通しを大幅に上方修正したとReutersが報じたとみられる。主要国の物価・金融政策観測は金利・ドルの動向を通じて暗号通貨市場にも波及し得る材料ですが、直接因果は未確認です（Reuters、10月17日）。\n・トランプ米大統領がロシアへの制裁の一部を国益を理由に適用免除したと表明し、ゼレンスキー大統領はこれを「誤り」と批判したと主張したとReutersが報じました。制裁・地政学を巡る動向は市場心理に波及し得る材料ですが、暗号通貨価格への直接因果は未確認です（Reuters、10月17日）。\n・ウォール街の主要株価指数が、AI関連投資への懸念と原油高を背景に下落して取引を終えたとReutersが報じました。株式市場の軟調はリスク選好を通じて暗号通貨市場にも波及し得る材料ですが、直接因果は未確認です（Reuters、10月17日）。",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.716兆（¥429.1兆）｜24時間取引高 $429.4億（¥6.78兆）\n・ #BTC：$81,211（約1,283.1万円）｜24時間比 -0.57%\n　（24時間レンジ $81,073〜$81,720）\n・ #ETH：$2,389（約37.7万円）｜24時間比 -1.35%\n・ #BNB：$714（約11.3万円）｜24時間比 -1.00%\n・市場心理：Fear & Greed 48（Neutral、CoinMarketCap API）\n・ドミナンス：BTC 60.10%｜ETH 10.74%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年10月18日07:37 JST、USD/JPY ¥157.99",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $2.42M vs Base上ETH/USDC $51.95M｜参考：Base上DEX全体 $9.974億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $61.31億（¥9,687億）｜24時間比 +0.19%｜USDCドミナンス 84.6%\n・ ETH/USDC（Base）参考APR：0.05% 15.97%（TVL $9.02M／24h出来高 $7.89M）｜0.3% 33.15%（TVL $145.56M／24h出来高 $44.07M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年10月18日07:37 JST",
+    "part2_flow": "①【出来事・ニュース】イラン革命防衛隊が、タンカー2隻がホルムズ海峡で機雷に接触したと主張したとReutersが報じました（Reuters、10月17日） → 【地政学・マクロの変化】主要な海上輸送路を巡る緊張の高まりが意識された可能性があります → 【中間市場指標・市場心理】原油価格の上昇とリスク回避の心理が報じられました → 【暗号通貨価格】 #BTC -0.57%、 #ETH -1.35%（24時間比）で、同時期はBTC・ETHともに小幅な下落でしたが、因果は未確認です。\n②【出来事・ニュース】トランプ米大統領がロシアへの制裁の一部を国益を理由に適用免除したと表明し、ゼレンスキー大統領はこれを「誤り」と批判したと主張したとReutersが報じました（Reuters、10月17日） → 【地政学・マクロの変化】制裁・地政学を巡る不確実性が意識された可能性があります → 【暗号通貨価格】 #BTC -0.57%、 #ETH -1.35%（24時間比）で、同時期はBTC・ETHともに弱含みでしたが、因果は未確認です。\n③【出来事・ニュース】ウォール街の主要株価指数が、AI関連投資への懸念と原油高を背景に下落して取引を終えたとReutersが報じました（Reuters、10月17日） → 【中間市場指標・市場心理】株式市場の軟調とリスク回避姿勢が報じられました → 【暗号通貨価格】 #BTC -0.57%、 #ETH -1.35%（24時間比）で、同時期はBTC・ETHともにやや軟調な値動きでしたが、因果は未確認です。",
+    "lp_comment": "参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは34.69%→15.97%へ低下しました（24時間出来高 -54.37%、TVL -0.86%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは75.29%→33.15%へ低下しました（24時間出来高 -56.26%、TVL -0.65%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比-1.35%と下落中のため、ETH偏り・下限側レンジ外・下落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "ホルムズ海峡を巡る地政学的緊張や制裁を巡る動向、株式市場の軟調が重なり、市場心理はやや不透明な状況です。原油価格や地政学情勢の今後の推移が、週明け以降のリスク選好を左右するか注目されます。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "ホルムズ海峡でタンカー被害との主張、原油懸念再燃",
+  "audit_ledger": [
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/10/implementing-the-lindsey-o-graham-sanctioning-russia-and-iran-act-of-2026/",
+      "title": "Implementing the Lindsey O. Graham Sanctioning Russia and Iran Act of 2026",
+      "published_at": "Sat, 17 Oct 2026 00:34:24 +0000",
+      "candidate_id": 1,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 候補2と同じ事実（ロシア・イラン制裁免除の大統領令）の重複。候補2を採用"
+    },
+    {
+      "source": "ホワイトハウス（大統領令等）",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/10/implementing-the-lindsey-o-graham-sanctioning-russia-and-iran-act-of-2026/",
+      "title": "Implementing the Lindsey O. Graham Sanctioning Russia and Iran Act of 2026",
+      "published_at": "Sat, 17 Oct 2026 00:34:24 +0000",
+      "candidate_id": 2,
+      "verified_by": "ホワイトハウス公式発表",
+      "decision": "採用",
+      "reason": "A/B: 制裁の一部適用免除の大統領令で、地政学・市場心理への波及経路を説明できる公式発表"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE9TemJJQXBzeDFDN0FlUmZQTGIyYkUzSkwxUTczaFZGWkRsallCenE3VjlHN3Z1YWw5dVp1N3RaZHF0ZFp2Nk5DaTRpWjlUWWMzcTdjQkstN0Y3VWc3RGg2aW9xRnVROGtXd3JTUjd3?oc=5",
+      "title": "HMSP.MU - Reuters",
+      "published_at": "Sat, 17 Oct 2026 17:48:30 GMT",
+      "candidate_id": 3,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 株式銘柄コードのみの見出しで内容が不明、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxOa3NQRHI0VTRqeGpNXzZSN0hkTU1aOTh3M3BKdHBQVGc1b1pGdmRRVWJ4WTdSbnVaNlJXQXNJeklhMEJlYkhocVVwRGtzcjlISk43UW9tU2RYWXNQR09Wd3k4a2xCQm9Ua1Z4bkY2UlI3NFpzMXZKcHNGTy1PdlJBMkV6YTN0Y210eHJWN0xtbVByX0o1RlV6V2lOVQ?oc=5",
+      "title": "Tens of thousands march in Lisbon over housing and living costs - Reuters",
+      "published_at": "Sat, 17 Oct 2026 17:11:29 GMT",
+      "candidate_id": 4,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: リスボンでの住宅費デモに関する内容で、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxOUTZzMGJpaXBieHFQeHRDYkRPM1BGLUtyVWRUd1UxVDE1TF92ZDZHMXF6WjB0YmhLNlpuZkhhVTN4TGc5MVBCaS1SSmNzTnk1YXhhYTE4NWlmLXU0ejhDUTFtOG9ROTF5Qkl3LUw2bkRnT1p3VlJWbEdfRVZlSGF2dC1RRk9semdrMWtBTEZiUE1kSkFqV2M2R3ByWmZEVHRyOHZiU1FYTW1ZbEdBTWtJZzhhQ19RTmt6XzFaWDBLTE9tZHRrUW5Mb21WMDByaXJm?oc=5",
+      "title": "Kenya confirms four new Ebola cases, bringing total number to seven - Reuters",
+      "published_at": "Sat, 17 Oct 2026 15:21:43 GMT",
+      "candidate_id": 5,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ケニアのエボラ感染確認に関する内容で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE9wVHVLX24zOFM2dHlVTmJRZkdhRjZMR0hwUW9MVjJhVHJEZDl1MHlwTjAzNk9yZWVVbTQ2bW5HY0VtdWxudXcyeEpMb0FRYjNqY2txS0hEdlAzRnRwY2Nnb2I2TDN3YUYxWnBKcGlB?oc=5",
+      "title": "BRBY.MU - Reuters",
+      "published_at": "Sat, 17 Oct 2026 14:53:09 GMT",
+      "candidate_id": 6,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 株式銘柄コードのみの見出しで内容が不明、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxOQ013QTYtQ0JudFVITVllWWh1Y3Y4WXVXOW80UmlXbEw1YXcxSG5RUkc4djV1X255M3BrWFl1ektoZU5vS1pMYzd4MW5jQ19wS3o4NEFDdHEyT3BsdGl6dDRTNXRDTGVKUnFlVkxSamlaVXRRaGhCeTBCblhQaDZUbHh2TlFRbHYzWUQtODRtVDFjdGlyRUxJR3A1OGdXWU1NalRGRnlhTExDbktfdHpWMmpoY1ZpdTlacmtiN0o1TEJaZ28?oc=5",
+      "title": "Egypt's Sisi seeks parliament's backing to help defend Saudi Arabia if asked - Reuters",
+      "published_at": "Sat, 17 Oct 2026 14:23:45 GMT",
+      "candidate_id": 7,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: サウジ防衛を巡るエジプト議会承認の記事で、優先して掲載する対象に当たらない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxQQUdGblRuOW5ZdjFTRUR1WkFYdEZKeDAxbjVscWNybm1RS3ZwelZlT084SVFHOFFRcDY5U1dlNUYtNkJKdHJUZEJITmZBeFBCSEZsR1RfNzdwcTY4ejNON0JycmgxN21xSTRPUjRFM2Uyd1ViNkdaZWdPQUJrUTRZd1dUVWIxOGI0Z1UxYjVkaDlZYUVzN3psc3g0bzF3OGo4MkF0NU9ZTmkzZC1zM0g4SUhRWTRqYUI0NWNaYmljYTFVSHM1eHU3d2pR?oc=5",
+      "title": "Hurricane Trudy threatens western Mexico with heavy rain, coastal flooding - Reuters",
+      "published_at": "Sat, 17 Oct 2026 14:04:09 GMT",
+      "candidate_id": 8,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ハリケーン接近に関する内容で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQWDItdnNRZ1I5TEEtX25aZUpXbENWdE9HZkZKYzJTbVVPcVNWNE9QVjdyajdQOFhiUnd1LXJrSFdjaUdsMi04cGZIVE9sSzNHWnRNcU44Vk1semFiR0ZMcUp5c25xSlU0VFpoSVVuMkNKaDJ5VW5TQ2s5Z0UwODBLcWt6TUZJRGZtdnRlam05LWI2c3JDVXFDUHkwcTRZNjZDR3FONmI0RlRfN2xEcUYxX3FnMkxPckVlUFBERHFwdzFLUQ?oc=5",
+      "title": "Bank of Canada sees sharply higher inflation outlook as oil surges, Macklem says - Reuters",
+      "published_at": "Sat, 17 Oct 2026 14:03:43 GMT",
+      "candidate_id": 9,
+      "verified_by": "Reuters報道",
+      "decision": "採用",
+      "reason": "B: カナダ中銀総裁の原油高によるインフレ見通し上方修正。金利・金融政策観測を通じた波及経路を説明できる"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxPZW5QUTZCMC1GdFZQbXlmYjYxd2RBakU3NjRNZksxLVZHWmEyaFB6QzJFakg1Y1NvbE8wRWhWWGlnRXlxZlFXdEJmbjlPVDViUjNiTU53VEhCenVvaFFQdHhPbnFkVUx0eUVVeGVDckVENE1BbEdNNERseXJyUXctdzBqTUE5c1daQTFZ?oc=5",
+      "title": "Trump drops Russia sanctions, Israeli settlers attack US photojournalist, Oregon police say teacher and parent stopped school shooter - Reuters",
+      "published_at": "Sat, 17 Oct 2026 13:37:00 GMT",
+      "candidate_id": 10,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 候補2・14と重複する制裁免除の話題を含む複合見出しで、個別の事実として採否判断できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxNZWFxZjNZNnY5cVR3VDhKUnNnV1JOcG1vOVB5dEZGdWRybEtqdE9YRWgwY0ZVSXZ0bHYzTWRpX2duSkxpTENtY0s0WW5jMzFUZlZIME16d0FpUXluV2ZGbFJ3alNZaDh0VVVSVFhOMWVIbEZTNVgyTVdwaXNLNXRrMjE4SjZvQXZtblNUNVVHSjFIUmlIaU41TGRHYmIzOUxoa25BODFKaG1FZw?oc=5",
+      "title": "Iran's Guards say two tankers hit mines in Strait of Hormuz - Reuters",
+      "published_at": "Sat, 17 Oct 2026 13:36:11 GMT",
+      "candidate_id": 11,
+      "verified_by": "Reuters報道",
+      "decision": "採用",
+      "reason": "B: イラン革命防衛隊がホルムズ海峡でタンカー2隻が機雷に接触したと主張。主要海上輸送路の攻撃として優先して掲載する対象に該当"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxORnNpbWFQTVJFZTQ1NDEzNVA1QlMyNThGdl8tR19Bd0UtQTAyVnBGRFBldDVOMFFnRHR0WkRHaS1CODVMSUFvSTZJdzN5a2NSbHFLbHA2bnZ0ZVBXYUprYS1oeGN6eF9lakVpVmRTSVB6VkpwUzlOVXZCME5ldGVmNmZPTUtuSGVnRTZzbENrQ1pGcFlScVZ1Sl9rQ1pHWUo1c1l4VUJn?oc=5",
+      "title": "ECB's Lagarde says bond selloff will slow inflation - Reuters",
+      "published_at": "Sat, 17 Oct 2026 08:01:43 GMT",
+      "candidate_id": 12,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（区分2・順位外）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxPdWdXNFVpZFpPVGFROEVHcjFiWGdDU1BQdDlMaTJOLWllcnNNazRiSEx4M0RjZUthU09iQzQ1YTNxckczM0dWYVR0LTJwSFpEU1pzV0EzM0x5X3AzaDJVLTM2VmU1cVZnLUQ1Y1FITGE0aXNZa0N0R2ppMGt3TWUybG15QUZlY2dteFFUemdEbU51M0pIMC05MDQ0X253QXp4bEFOZjJfcW1JaUVkb05KbE1PczdQUTNlcVZR?oc=5",
+      "title": "BOJ may need to tighten faster if inflation beats forecast, IMF says - Reuters",
+      "published_at": "Sat, 17 Oct 2026 04:47:00 GMT",
+      "candidate_id": 13,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（区分2・順位外）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxQUWRsWXNvbUVMb01QdTFTbEhpSGhZLVZYVXZramJkQjg2RXUzbXRaZjZlcnY1QTNoeU1zQzhhOEhwOFZVSkRySFFZNWI3RjZtUHJLaDhybEhWVzFBTF9uVlZjWlNSQk5aX25iZ0EySjRQYjR5aVRiM1VERjVFWmpTOTR0Y1ZhNUtaTHpTaWdZZVRPUmppTUJtYl9IZlhGQnM3WkVSNmRreVBjaDF5anFfSHhqN1ZUc2p3cjRoU0pyUzRkZjlBM05B?oc=5",
+      "title": "Zelenskiy criticizes Trump's waiver of sanctions on Russia as 'wrong' - Reuters",
+      "published_at": "Sat, 17 Oct 2026 01:17:00 GMT",
+      "candidate_id": 14,
+      "verified_by": "Reuters報道",
+      "decision": "採用",
+      "reason": "B: ゼレンスキー氏がトランプ氏の制裁免除を批判したと主張。候補2の制裁免除と合わせ波及経路を説明できる地政学材料"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxQWVhYcEpDM002Y1VwaUFBYktyNFdkVG9XbXZaTU44b3k4ZzZRcmdLR294VXZkMDlYLXg1d0dJbUpoMzg3RHBoNi1qcXh1eU14UjJiSmNhTXdUUFNsakJYZFBrZ1BZVV9rdmQ3bHc5b0QycjZRUHBqcENmak5LclBVNmhWYnhTaVZtQzV4bExZamxKSEtDRllrMkNObjlFd3VoU0VIQkZaS2hpQnAzeGh3dzBqdWVHZm9sVllvQ1BEdw?oc=5",
+      "title": "Anthropic offers Blackstone double-digit yield in chip-financing deal, FT reports - Reuters",
+      "published_at": "Sat, 17 Oct 2026 00:57:00 GMT",
+      "candidate_id": 15,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: AnthropicとBlackstoneのチップ融資契約に関する内容で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE5zNFQ5WTNJaDBidWE3NnZpNVpRdHR0V1hhUFA2MUwyaWY4aUVXOEw1ekZyTUlYb09rRHRITGNGZGI0alpmUWtvcXlEakVMbDNzamRLTE01UUhOb0Q5bHhNSnRlSWlMdFU?oc=5",
+      "title": "Wall Street ends down; worries about AI trade and high oil prices weigh - Reuters",
+      "published_at": "Sat, 17 Oct 2026 00:00:51 GMT",
+      "candidate_id": 16,
+      "verified_by": "Reuters報道",
+      "decision": "採用",
+      "reason": "B: ウォール街がAI投資懸念と原油高で下落。株式市場の軟調はリスク選好を通じた波及経路を説明できる"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxPeEE2eWszelJJRDBCMUQ4Z0lUWi15OWVxcklqY2RGM0dCYUl4MlBPNHowSTcwVGhpcWp5MHdSWktQbTdKTHNCRWNDVnRiNjFIVUR2S2FmRWlSYUt0akxFNmVoRDFORzBDQTB5Yk4wN3U2akxVeGpTZ3o0SXFDaGFUOERvcXNpR1lqQlQ1TzlVZjFwMWU0QzBlcGxqSXBTRDI3X0kwUnJTU0hsM0hDa2hJSDdQdU5FZ0hIWEtZdzNZaDg5akp3Yjdodw?oc=5",
+      "title": "Hurricane Trudy weakens but may regain strength off Mexican coast - Reuters",
+      "published_at": "Fri, 16 Oct 2026 23:01:44 GMT",
+      "candidate_id": 17,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 候補8と同じハリケーン事象の続報で、優先して掲載する対象に当たらない"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/markets/2026-10-17-coreweave-broadcom-verizon-among-nine-companies-objecting-to-tokenized-trading-of-their-shares-on-okxice-418859",
+      "title": "CoreWeave, Broadcom, Verizon among nine companies objecting to tokenized trading of their shares on OKXICE",
+      "published_at": "Sat, 17 Oct 2026 19:56:25 +0000",
+      "candidate_id": 18,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "f: tier3単独で独立2ソース規定に該当する組が確認できない"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/regulation/2026-10-17-turkey-confirms-hex-founder-richard-hearts-arrest-says-police-seized-7-15-million-and-six-cold-wallets-418852",
+      "title": "Turkey confirms Hex founder Richard Heart’s arrest, says police seized $7.15 million and six cold wallets",
+      "published_at": "Sat, 17 Oct 2026 18:14:43 +0000",
+      "candidate_id": 19,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "f: tier3単独で独立2ソース規定に該当する組が確認できない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/10/17/goldman-wells-fargo-morgan-stanley-see-tokenization-as-a-growth-play-not-a-threat",
+      "title": "Goldman, Wells Fargo, Morgan Stanley see tokenization as a growth play, not a threat",
+      "published_at": "Sat, 17 Oct 2026 17:00:00 +0000",
+      "candidate_id": 20,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "f: tier3単独（意見・分析記事）で独立2ソース規定の事実報道要件を満たさない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/10/17/citrini-sees-a-tokenization-boom-the-harder-question-is-who-profits",
+      "title": "Citrini sees a tokenization boom. The harder question is who profits",
+      "published_at": "Sat, 17 Oct 2026 15:00:00 +0000",
+      "candidate_id": 21,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "f: tier3単独（分析記事）で独立2ソース規定の事実報道要件を満たさない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/10/17/polygon-sees-coinme-acquisition-as-entry-to-payments-sector-dominated-by-visa-stripe",
+      "title": "Polygon sees Coinme acquisition as entry to payments sector dominated by Visa, Stripe",
+      "published_at": "Sat, 17 Oct 2026 14:00:00 +0000",
+      "candidate_id": 22,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "f: tier3単独で独立2ソース規定に該当する組が確認できない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/what-happened-in-crypto-today?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Here’s what happened in crypto today",
+      "published_at": "Sat, 17 Oct 2026 13:29:00 +0000",
+      "candidate_id": 23,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "f: tier3の総括記事で単独ソースのため不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/solana-shows-resilience-but-some-areas-need-continued-observation-fidelity-says?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Solana shows resilience, but some areas need continued observation, Fidelity says",
+      "published_at": "Sat, 17 Oct 2026 12:58:03 +0000",
+      "candidate_id": 24,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "f: tier3単独（分析記事）で独立2ソース規定に該当する組が確認できない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/10/14/banks-could-slow-stablecoin-growth-by-paying-savers-more-bis-paper-finds",
+      "title": "Banks could slow stablecoin growth by paying savers more, BIS paper finds",
+      "published_at": "Sat, 17 Oct 2026 12:00:00 +0000",
+      "candidate_id": 25,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "f: tier3単独（調査論文の紹介）で独立2ソース規定に該当する組が確認できない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/circles-allaire-says-stablecoin-issuer-looking-to-enter-40-developing-markets-report?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Circle’s Allaire says stablecoin issuer looking to enter 40 developing markets: Report",
+      "published_at": "Sat, 17 Oct 2026 10:00:07 +0000",
+      "candidate_id": 26,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "f: tier3単独で独立2ソース規定に該当する組が確認できない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/lagarde-says-euro-area-economy-is-resilient-digital-euro-imminent?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Lagarde says euro-area economy is resilient, digital euro imminent",
+      "published_at": "Sat, 17 Oct 2026 08:32:11 +0000",
+      "candidate_id": 27,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "f: tier3単独で独立2ソース規定に該当する組が確認できない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/bitget-to-discontinue-services-for-some-users-in-one-off-exercise?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bitget to discontinue services for some users in one-off exercise",
+      "published_at": "Sat, 17 Oct 2026 07:26:57 +0000",
+      "candidate_id": 28,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "f: tier3単独で独立2ソース規定に該当する組が確認できない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/tech/2026/10/17/wow-it-s-a-real-discovery-claude-cracks-a-25-year-nsa-number-mystery",
+      "title": "‘Wow, it’s a real discovery’: Claude cracks a 25-year NSA number mystery",
+      "published_at": "Sat, 17 Oct 2026 06:39:48 +0000",
+      "candidate_id": 29,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "f: tier3単独（同一ソースCoinDeskの候補30と同系統のため独立2ソースに該当しない）"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/tech/2026/10/16/satoshi-era-bitcoin-faces-a-bigger-quantum-threat-after-google-s-new-willow-breakthrough",
+      "title": "Satoshi-era bitcoin faces a bigger quantum threat after Google’s new Willow breakthrough",
+      "published_at": "Sat, 17 Oct 2026 02:30:00 +0000",
+      "candidate_id": 30,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "f: tier3単独（同一ソースCoinDeskの候補29と同系統のため独立2ソースに該当しない）"
+    }
+  ],
+  "reusable_for_summary": [],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 0
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 0
+    },
+    "FRB（speeches）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "FRB（testimony）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 0
+    },
+    "米財務省": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "USTR": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "ホワイトハウス": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 1
+    },
+    "ホワイトハウス（大統領令等）": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 1
+    },
+    "ADP": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 6
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 5
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "The Block": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 2
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 50
+    }
+  },
+  "news_candidate_count": 30,
+  "format_normalized": {
+    "part1_points": 0,
+    "part2_flow": 0
+  },
+  "flow_price_fragment": " #BTC -0.57%、 #ETH -1.35%（24時間比）",
+  "part1_md": "【対象日】2026年10月17日（土）\n\n【ヘッドライン】\nイラン革命防衛隊が、タンカー2隻がホルムズ海峡で機雷に接触したと主張したとReutersが報じました。主要な海上輸送路を巡る緊張は原油供給やリスク選好を通じて暗号通貨市場にも波及し得る材料ですが、被害の全容は未確認です。\n\n【主要なポイント】\n・カナダ中銀のマックレム総裁は、原油価格の急騰を受けてインフレ見通しを大幅に上方修正したとReutersが報じたとみられる。主要国の物価・金融政策観測は金利・ドルの動向を通じて暗号通貨市場にも波及し得る材料ですが、直接因果は未確認です（Reuters、10月17日）。\n・トランプ米大統領がロシアへの制裁の一部を国益を理由に適用免除したと表明し、ゼレンスキー大統領はこれを「誤り」と批判したと主張したとReutersが報じました。制裁・地政学を巡る動向は市場心理に波及し得る材料ですが、暗号通貨価格への直接因果は未確認です（Reuters、10月17日）。\n・ウォール街の主要株価指数が、AI関連投資への懸念と原油高を背景に下落して取引を終えたとReutersが報じました。株式市場の軟調はリスク選好を通じて暗号通貨市場にも波及し得る材料ですが、直接因果は未確認です（Reuters、10月17日）。\n",
+  "part2_md": "【市場のフロー】\n①【出来事・ニュース】イラン革命防衛隊が、タンカー2隻がホルムズ海峡で機雷に接触したと主張したとReutersが報じました（Reuters、10月17日） → 【地政学・マクロの変化】主要な海上輸送路を巡る緊張の高まりが意識された可能性があります → 【中間市場指標・市場心理】原油価格の上昇とリスク回避の心理が報じられました → 【暗号通貨価格】 #BTC -0.57%、 #ETH -1.35%（24時間比）で、同時期はBTC・ETHともに小幅な下落でしたが、因果は未確認です。\n②【出来事・ニュース】トランプ米大統領がロシアへの制裁の一部を国益を理由に適用免除したと表明し、ゼレンスキー大統領はこれを「誤り」と批判したと主張したとReutersが報じました（Reuters、10月17日） → 【地政学・マクロの変化】制裁・地政学を巡る不確実性が意識された可能性があります → 【暗号通貨価格】 #BTC -0.57%、 #ETH -1.35%（24時間比）で、同時期はBTC・ETHともに弱含みでしたが、因果は未確認です。\n③【出来事・ニュース】ウォール街の主要株価指数が、AI関連投資への懸念と原油高を背景に下落して取引を終えたとReutersが報じました（Reuters、10月17日） → 【中間市場指標・市場心理】株式市場の軟調とリスク回避姿勢が報じられました → 【暗号通貨価格】 #BTC -0.57%、 #ETH -1.35%（24時間比）で、同時期はBTC・ETHともにやや軟調な値動きでしたが、因果は未確認です。\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは34.69%→15.97%へ低下しました（24時間出来高 -54.37%、TVL -0.86%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは75.29%→33.15%へ低下しました（24時間出来高 -56.26%、TVL -0.65%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比-1.35%と下落中のため、ETH偏り・下限側レンジ外・下落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\nホルムズ海峡を巡る地政学的緊張や制裁を巡る動向、株式市場の軟調が重なり、市場心理はやや不透明な状況です。原油価格や地政学情勢の今後の推移が、週明け以降のリスク選好を左右するか注目されます。\n",
+  "numeric_record_md": "【対象日】2026年10月17日（土）\n\n【主要指標】\n・市場全体：時価総額 $2.716兆（¥429.1兆）｜24時間取引高 $429.4億（¥6.78兆）\n・ #BTC：$81,211（約1,283.1万円）｜24時間比 -0.57%\n　（24時間レンジ $81,073〜$81,720）\n・ #ETH：$2,389（約37.7万円）｜24時間比 -1.35%\n・ #BNB：$714（約11.3万円）｜24時間比 -1.00%\n・市場心理：Fear & Greed 48（Neutral、CoinMarketCap API）\n・ドミナンス：BTC 60.10%｜ETH 10.74%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年10月18日07:37 JST、USD/JPY ¥157.99\n\n【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $2.42M vs Base上ETH/USDC $51.95M｜参考：Base上DEX全体 $9.974億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $61.31億（¥9,687億）｜24時間比 +0.19%｜USDCドミナンス 84.6%\n・ ETH/USDC（Base）参考APR：0.05% 15.97%（TVL $9.02M／24h出来高 $7.89M）｜0.3% 33.15%（TVL $145.56M／24h出来高 $44.07M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年10月18日07:37 JST\n"
+}
