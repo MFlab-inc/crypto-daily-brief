@@ -1,0 +1,428 @@
+{
+  "target_date_jst": "2026-10-18",
+  "level": "L0",
+  "sections": {
+    "part0_target_date": "2026年10月18日（日）",
+    "part1_headline": "ウクライナがロシアの石油施設を攻撃し、サンクトペテルブルク上空で炎が確認されたとReutersが報じました。ゼレンスキー大統領はロシアが過去1週間でウクライナのエネルギー部門を76回攻撃したと主張したとも伝えられていますが、被害の全容は未確認です。",
+    "part1_points": "・イランがホルムズ海峡の再開提案を受け入れるよう米国に求めていると主張したとReutersが報じました。主要な海上輸送路を巡る動向は原油供給やリスク選好を通じ暗号通貨市場にも波及し得る材料ですが、直接因果は未確認です（Reuters、10月18日）。\n・ルビオ米国務長官は、トランプ大統領がロシアへの追加制裁を検討するのに最大60日を要する可能性があると述べたとReutersが報じました。主要国の制裁を巡る動向は市場心理に波及し得る材料ですが、暗号通貨価格への直接因果は未確認です（Reuters、10月18日）。\n・原油高を背景にサウジアラビア株式市場が上昇する一方、地域の緊張によりエジプト株式市場が下落したとReutersが報じたとみられる。原油価格の動向は暗号通貨市場にも波及し得る材料ですが、直接因果は未確認です（Reuters、10月18日）。",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.724兆（¥430.3兆）｜24時間取引高 $517.1億（¥8.17兆）\n・ #BTC：$81,474（約1,287.3万円）｜24時間比 +0.33%\n　（24時間レンジ $80,565〜$82,184）\n・ #ETH：$2,387（約37.7万円）｜24時間比 -0.06%\n　（24時間レンジ $2,325〜$2,427）\n・ #BNB：$716（約11.3万円）｜24時間比 +0.27%\n・市場心理：Fear & Greed 49（Neutral、CoinMarketCap API）\n・ドミナンス：BTC 60.19%｜ETH 10.71%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年10月19日07:37 JST、USD/JPY ¥158.00",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $3.06M vs Base上ETH/USDC $77.47M｜参考：Base上DEX全体 $6.255億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $60.32億（¥9,530億）｜24時間比 -1.62%｜USDCドミナンス 84.2%\n・ ETH/USDC（Base）参考APR：0.05% 27.04%（TVL $8.32M／24h出来高 $12.33M）｜0.3% 48.76%（TVL $146.28M／24h出来高 $65.14M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年10月19日07:37 JST",
+    "part2_flow": "①【出来事・ニュース】ウクライナがロシアの石油施設を攻撃し、サンクトペテルブルク上空で炎が確認されたとReutersが報じました（Reuters、10月18日） → 【地政学・マクロの変化】地政学リスクの高まりが市場で意識された可能性があります → 【中間市場指標・市場心理】原油高を背景にサウジアラビア株式市場が上昇する一方、地域の緊張によりエジプト株式市場が下落したとReutersが報じられ、投資家のリスク選好が分かれた可能性があります → 【暗号通貨価格】 #BTC +0.33%、 #ETH -0.06%（24時間比）で、同時期はおおむね横ばいからやや底堅い値動きでしたが、因果は未確認です。\n②【出来事・ニュース】ルビオ米国務長官が、トランプ大統領によるロシアへの追加制裁検討に最大60日を要する可能性があると述べたとReutersが報じました（Reuters、10月18日） → 【地政学・マクロの変化】制裁の発動時期を巡る不確実性が市場で意識された可能性があります → 【暗号通貨価格】 #BTC +0.33%、 #ETH -0.06%（24時間比）で、同時期はBTC・ETHともに小幅な値動きにとどまりましたが、因果は未確認です。",
+    "lp_comment": "参考APRは両プールとも前日から上昇しました。\nBase 0.05%プールの参考APRは15.97%→27.04%へ上昇しました（24時間出来高 +56.26%、TVL -7.71%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは33.15%→48.76%へ上昇しました（24時間出来高 +47.82%、TVL +0.49%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比-0.06%と下落中のため、ETH偏り・下限側レンジ外・下落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "地政学を巡る報道が相次ぐ一方で暗号通貨市場への直接的な影響は限定的であったとみられ、地合いはやや不透明な状態が続いています。今後は制裁や原油市場の動向が市場心理に波及するかどうかが確認事項となります。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "ウクライナがロシア石油施設を攻撃と報道",
+  "audit_ledger": [
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxOWl96bU5yLTB2VVk3N2EyYmRwdDl3ak9nZDVKVXRIS0NPMG96Njc4MWF6VUxYM2ZZY2lRWU5teUxFaGFJSk1wV0h3c0JRekZlZnBPN3lmTmp0dVc1cTFLZ2NyRm9sdGVHWWdjZUxUTWtpZERtMG1GMnZsV09uYlFJaERtWVhEbDBWV00zQkZPb0R2V095eGFqTHJsQXctaGVxd0t5dzlJLWJ6OFVYX080bDJ6UE54QWd5M3pfZGdEZW8wNVNfTkYzbGl3?oc=5",
+      "title": "Kenya confirms eighth Ebola case as regional outbreak spreads - Reuters",
+      "published_at": "Sun, 18 Oct 2026 20:17:30 GMT",
+      "candidate_id": 1,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: エボラ出血熱の感染拡大に関する内容で、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTFBlZlNJSlhkWmpzOGpjaE9HTzRjNkJHekJuMUNwQzVMd1NQTzVXcHJxVkdfcWlfVGgxZnBYTmNNOG9PWDZwdDJiaTlHeHZoRWg1WW93b1pRNmpIVEpsb2UtYXRSQVNpNmtRQ1lud0ZZVWJIQ1BBN2xv?oc=5",
+      "title": "Woman dies as heavy rains hit Spain - Reuters",
+      "published_at": "Sun, 18 Oct 2026 20:14:31 GMT",
+      "candidate_id": 2,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: スペインの豪雨被害に関する内容で、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxQRlNJNGV2RU1JbHotN25MRXNHQVZIeDJJU3I5eGYzT0pkUjdaSnZqbUpNZzRJY1U2cW1yUUViUjVuTVlvb184VjZsaEF5dnNBdEFBTVhtemRBalZRbG1SdlNhdHFoVkZHTHZ3SzlTMTRWaFhJaTMyVzJxc01qWmp6aUlpa2k5dGJuVTNkeU5mWXZUZ1F6SUlrMzlESGJ4cmRkajZwcF8ybEhoZXRITXQyMVFFTkxKdnZjS0t6WFNBSWQ3M0s3WS14VzhObFM?oc=5",
+      "title": "Captain of flydubai plane describes blocking axe blows as co-pilot attacked - Reuters",
+      "published_at": "Sun, 18 Oct 2026 17:21:59 GMT",
+      "candidate_id": 3,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 航空機内の事件に関する内容で、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxORkdkNk9DVENGZU50OHVsbHF4Z3ZWbnBxcHVqaDJSa1JEWXZ5aFVqbTQwWmwzUGpvZUJsTUFzSnZHd2laVHpqd05XaF9KM2YxdUNUSVV0YUp1SFVKbTBRVHNzcVc0ek84cTY5TTVmZGhPbnhzMVJiejFXaDdXV3pBcTZYeEI3QkZrNDlOOWllWFk3ejFfMVdVd3lQUGJMeXBhNW5xTjZJQnBINTVSTjVDUnZKSm1laDdKaEE3eGdoSUtaQQ?oc=5",
+      "title": "One killed, 15 injured in Ukrainian drone attack on St Petersburg and Leningrad region - Reuters",
+      "published_at": "Sun, 18 Oct 2026 16:42:18 GMT",
+      "candidate_id": 4,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ロシア・ウクライナの一般的な戦況の記事で、優先して掲載する対象に当たらない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE05ZUdLTlMzZUFKUENWdTE1NzFEQk92N0FvQmFGaXNfTEUza2wtQXJfNVVZVzVpZUUtRDZVbXdEWHJIS2NqN1N5bnR2Mmc5UzAxSVFSazBMU3ZQRDJ5elBqSm1LallHd0pmQU41V3RObHRBOUJH?oc=5",
+      "title": "Skies over St. Petersburg ignite after Ukraine strikes oil sites - Reuters",
+      "published_at": "Sun, 18 Oct 2026 16:21:40 GMT",
+      "candidate_id": 5,
+      "verified_by": "Reuters",
+      "decision": "採用",
+      "reason": "B: 産油・精製施設（ロシアの石油施設）への攻撃に関する報道で、原油供給への波及経路を説明できる"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxOemk4X2xPTVdPcGIyVGlJTjhxOVE2b1o1Q293MldnX1NPQTdQVzJJc3hqYmVWT0xkMkhaMFF4LTJZY1RNSFZaRmlEMGQtX3d0TmZYdWU1NnMxeWZXZmp6WjByX0xDZEt6Z0dRRjE5eVBLWlByZGgyNHVCMGR0d3FuS2NOWHJodjJJZGYzcXVGaENKc01HaUd0VjlZeENPWjV2bHZBWFA3a1FITGFaMWtXdWNNRmpERmZ1ZFEyOTBEZHE?oc=5",
+      "title": "Hurricane Trudy lashes Mexico's Pacific coast, but is set to weaken tonight - Reuters",
+      "published_at": "Sun, 18 Oct 2026 13:55:43 GMT",
+      "candidate_id": 6,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: メキシコのハリケーンに関する内容で、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxPdkJ2LXpMXzV0dEQ2b1NYcm9XT1FZMTUyZUlVQlZaZ2RYNFhvVFlnVFRJM1RJTU5CNzlDNVdKTmtzX2E0S0xvV2h6UEpOWFJtUlNGczZxeGR4a2NYQlU5NktIN0JQbE54SlRaS3QzRVVvWUdSRGpqWmNYWXlQSWtMbkM2R3lnRWtERTVLcTNadXMwbGxVQm9GXzVLRmVpZDY1OFFDVmI1ZlM3cGVZ?oc=5",
+      "title": "Oil lifts Saudi bourse; Egypt tumbles on regional tensions - Reuters",
+      "published_at": "Sun, 18 Oct 2026 13:51:43 GMT",
+      "candidate_id": 7,
+      "verified_by": "Reuters",
+      "decision": "採用",
+      "reason": "B: 原油価格と地域株式市場の動向に関する報道で、原油を通じた波及経路を説明できる"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxQYjdhZ0V0TGxFRVBoQWVSMVBlOXFvdm1rcFlmWm45dVdYS3FJdm5ZdExGM2xRd3hhb1hvWUJYdnVlRG50bm1CbjJubjRnM2JtVFp3UkdiU0QxcVJEbnZyNC1HSDhOYUM1THhiTm9heG9tTV9FTHpwMW1BOEhxN0Q0WjlocVJMZV9TSUlIN0RMZDdkQmpPQUhUQk40bkNDdzdMSVhEa3U5eUZKd2R1OVBqajZYTDI5cDhTT3FaUk5uZw?oc=5",
+      "title": "Turkey will get some diesel from US-Russia supply deal, energy minister says - Reuters",
+      "published_at": "Sun, 18 Oct 2026 11:51:44 GMT",
+      "candidate_id": 8,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（順位外）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxOcEtubmtfLWRIRC0xYjJxNnpzbkdOSzJPakNObmdUZ1EyRnB4cThXMjdRY3FWb1padzJMVVdoSG80Nk5lTmFMUU56dHdIU3kxcl9BYlVzOUROZzg5Y1lnTTdSS3h1YkJqdzJFaTB6b1JoV2h3dWxiUHRMNU1zMEpfcWx6b2pHQlJVXzJZLU1EdDVXXzd5X19DUW5memxWTHlPdTdqYl9YT0lrWndI?oc=5",
+      "title": "Carney’s pipeline push is unlikely to bring back Canada’s oil jobs boom - Reuters",
+      "published_at": "Sun, 18 Oct 2026 10:54:34 GMT",
+      "candidate_id": 9,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: カナダのパイプライン政策と雇用に関する論評記事で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxOWUh3Z1JyMmU4SkJ4ZXQ4Y0VaN3RMS1Vtcmg4S1lDMGlvUG1GeVY3Q1pkaWltSG5yOWhmcTBnNkk4U0ZiTVREVzd3RVRZNjZJTjhaTkg5bTFGX0J2Q0JzTUI4UlZIWmxHMmRDeVRRODZRYU1mbkNrVzFRX3piTnpDbllfUGc3NnJkSl9hWWRCQzlxZjFBYnE5bXJQMVBjMzNBUFlNcmRtcw?oc=5",
+      "title": "Iran urges US to accept proposal to reopen Strait of Hormuz - Reuters",
+      "published_at": "Sun, 18 Oct 2026 10:29:43 GMT",
+      "candidate_id": 10,
+      "verified_by": "Reuters",
+      "decision": "採用",
+      "reason": "B: イランによるホルムズ海峡再開提案の主張に関する報道で、海上輸送路を通じた波及経路を説明できる"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxONHpkelZ3dVpCdWF5d2JkVGE3TmZGUzJXLUtsQWUxQnZWVXBtNWJQY1dQOVZJakRiaWRrYlZBQVhsX0JJZ2FKM3AtTW0zRWN3TGNtY2NERnRNckJFU2s1LWNVUUVDb1d3XzVFSHJwT0VOMGVieVBiZHhTbk8ta3A0MkFQeUxUeGhtTnU0aHl0OG0taVh0VU45Y25HNkhwQ2RKWGEwa2w5d0o5RVJPNURXUXRoajdReG5ZbG1YbU1hVQ?oc=5",
+      "title": "Zelenskiy says Russia attacked Ukrainian energy sector 76 times in past week - Reuters",
+      "published_at": "Sun, 18 Oct 2026 08:31:43 GMT",
+      "candidate_id": 11,
+      "verified_by": "Reuters",
+      "decision": "採用",
+      "reason": "B: ロシアによるウクライナエネルギー部門への攻撃に関するゼレンスキー氏の主張の報道で、原油供給への波及経路を説明できる"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxNRlRkQlBQYXFvck1VQUYxcVpwM2dEVDMwQThIY3ZHRldBd0M0dmV5NXFnZlBXMnpuUnozQlhLbkg4ZjZCT3kzVW5mcnl3RVEwUXRpdUJsZGViRlE1MFdJbHZWZ3pRTXNOUDQtOTRsQU5nSzd4a3d5Z3c2dTkzZWZSNlZsbXZBamFSMS1qVEVnaHc2MTZJUHZ4YU1zS0hfNVM4eVE?oc=5",
+      "title": "Rubio says Trump to take up to 60 days to weigh Russia sanctions - Reuters",
+      "published_at": "Sun, 18 Oct 2026 03:38:00 GMT",
+      "candidate_id": 12,
+      "verified_by": "Reuters",
+      "decision": "採用",
+      "reason": "B: ロシアへの追加制裁検討に関する報道で、主要国の制裁として波及経路を説明できる"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxOU2FXR2gxVGRZLXlocTZDQnduRHpvT3JVUHotdTZsTmczb1B4TDE0OWktQmlDNm1WcGdqcEE2Zm9HTmtpN19Pb29YNnVyVHI4d1hXUG1lb0U2ejg2cDF4VGE5Wng0TGdrVDRaSU85WnNQVmw2WmpOaHhMNlpnTFo0cC1tRkRjTDZJVllKdDJIaUhmM1laR01KS2FrQTRKb1lpQThJZlRIeVd0OVZQUnlFX2tnamx6bHladV95MWZHNUVsSldx?oc=5",
+      "title": "Deaths confirmed after 'serious incident,' fire at Canada military base in Alberta - Reuters",
+      "published_at": "Sun, 18 Oct 2026 02:13:00 GMT",
+      "candidate_id": 13,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: カナダ軍基地の火災事故に関する内容で、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxQQUdGblRuOW5ZdjFTRUR1WkFYdEZKeDAxbjVscWNybm1RS3ZwelZlT084SVFHOFFRcDY5U1dlNUYtNkJKdHJUZEJITmZBeFBCSEZsR1RfNzdwcTY4ejNON0JycmgxN21xSTRPUjRFM2Uyd1ViNkdaZWdPQUJrUTRZd1dUVWIxOGI0Z1UxYjVkaDlZYUVzN3psc3g0bzF3OGo4MkF0NU9ZTmkzZC1zM0g4SUhRWTRqYUI0NWNaYmljYTFVSHM1eHU3d2pR?oc=5",
+      "title": "Hurricane Trudy gains strength near Mexico's coast, but is expected to weaken by Sunday - Reuters",
+      "published_at": "Sat, 17 Oct 2026 23:33:43 GMT",
+      "candidate_id": 14,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: メキシコのハリケーンに関する内容で、候補6と同じ事実の重複"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxNNjRrMjhGV0NJUjVPZmZUdm1Da3JxcUFDaW9PTTVhVjZqSUszdzlLMGIwdjk4MFc0UXlUU0ZSZ1h4aGNTMmE1V3ZfdGJNcFVIUVIzbGFwTFdjd2xMVWtLWlBlV21QNlNxY0ZBcXVWTS05Z0c5UnY5d0tIWVFXOEdnLUZUTk84UXB1ektOV3A3OHhXSmxVYnhMZktTMl9PZUFaRGdpUkF4VXlGMlBoWVdhclhOa2p0bFExTTljdWtRZGs1bXM?oc=5",
+      "title": "Venezuela expects nearly $76 billion in oil investment over five years, acting president says - Reuters",
+      "published_at": "Sat, 17 Oct 2026 22:53:43 GMT",
+      "candidate_id": 15,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（順位外）"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/regulation/2026-10-18-crypto-com-novig-sue-missouri-over-sports-event-contracts-kalshi-polymarket-robinhood-hold-off-418866",
+      "title": "Crypto.com, Novig sue Missouri over sports event contracts; Kalshi, Polymarket, Robinhood hold off",
+      "published_at": "Sun, 18 Oct 2026 19:50:28 +0000",
+      "candidate_id": 16,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): tier3単独で独立2ソースの相方が無く、単独では掲載不可"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/10/18/the-white-house-s-crypto-chief-departs-state-of-crypto",
+      "title": "The White House's crypto chief departs: State of Crypto",
+      "published_at": "Sun, 18 Oct 2026 18:30:00 +0000",
+      "candidate_id": 17,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): tier3単独で独立2ソースの相方が無く、単独では掲載不可"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/10/18/wall-street-freaked-out-friday-vix-and-bitcoin-say-it-may-not-last",
+      "title": "Wall Street freaked out Friday. VIX and bitcoin say the fear may fade Monday.",
+      "published_at": "Sun, 18 Oct 2026 16:33:00 +0000",
+      "candidate_id": 18,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): tier3単独の市場分析記事で、独立2ソースの相方が無く単独では掲載不可"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/defi/2026-10-18-cysic-suspends-bridge-after-attacker-mints-tokens-and-moves-727000-to-ethereum-418863",
+      "title": "Cysic suspends bridge after attacker mints tokens and moves $727,000 to Ethereum",
+      "published_at": "Sun, 18 Oct 2026 16:07:43 +0000",
+      "candidate_id": 19,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): 候補27との独立2ソース申告がタイトル重なり係数不足で不成立、単独では掲載不可"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/10/18/latvia-eyes-crypto-tax-payments-in-2027-as-parliament-overhauls-crypto-taxation",
+      "title": "Latvia eyes crypto tax payments in 2027 as parliament overhauls crypto taxation",
+      "published_at": "Sun, 18 Oct 2026 16:00:00 +0000",
+      "candidate_id": 20,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): tier3単独で独立2ソースの相方が無く、単独では掲載不可"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/10/18/stablecoin-supply-stalls-but-payments-jump-45-as-visa-mastercard-and-stripe-connect-crypto-to-cash",
+      "title": "Stablecoin supply stalls, but payments jump 45% as Visa, Mastercard and Stripe connect crypto to cash",
+      "published_at": "Sun, 18 Oct 2026 14:00:00 +0000",
+      "candidate_id": 21,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): tier3単独で独立2ソースの相方が無く、単独では掲載不可"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/what-happened-in-crypto-today?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Here’s what happened in crypto today",
+      "published_at": "Sun, 18 Oct 2026 13:54:00 +0000",
+      "candidate_id": 22,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): tier3の日次まとめ記事で、独立2ソースの相方が無く単独では掲載不可"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/most-americans-polled-oppose-betting-on-elections-reuters?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Most Americans polled oppose betting on elections: Reuters",
+      "published_at": "Sun, 18 Oct 2026 13:48:00 +0000",
+      "candidate_id": 23,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): tier3単独で独立2ソースの相方が無く、単独では掲載不可"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/10/18/bitcoin-s-usd100-000-year-end-hope-divides-analysts-as-inflation-clouds-outlook",
+      "title": "Bitcoin’s $100,000 year-end hope divides analysts as inflation clouds outlook",
+      "published_at": "Sun, 18 Oct 2026 13:00:00 +0000",
+      "candidate_id": 24,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): tier3単独の分析記事で、独立2ソースの相方が無く単独では掲載不可"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/tech/2026/10/18/crypto-audits-give-investors-false-sense-of-security-as-q3-hacks-cost-usd1-18-billion-hacken-says",
+      "title": "Crypto audits give investors false sense of security as Q3 hacks cost $1.18 billion, Hacken says",
+      "published_at": "Sun, 18 Oct 2026 13:00:00 +0000",
+      "candidate_id": 25,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): tier3単独で独立2ソースの相方が無く、単独では掲載不可"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/10/14/crypto-exchanges-binance-coinbase-join-west-africa-scam-sweep-that-flagged-usd11-million",
+      "title": "Crypto exchanges Binance, Coinbase join West Africa scam sweep that flagged $11 million",
+      "published_at": "Sun, 18 Oct 2026 12:00:00 +0000",
+      "candidate_id": 26,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): tier3単独で独立2ソースの相方が無く、単独では掲載不可"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/cysic-crypto-bridge-halted-after-unauthorized-mint-of-10m-cys?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Cysic crypto bridge halted after unauthorized mint of 10M CYS",
+      "published_at": "Sun, 18 Oct 2026 10:46:00 +0000",
+      "candidate_id": 27,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): 候補19との独立2ソース申告がタイトル重なり係数不足で不成立、単独では掲載不可"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/chinese-suspect-in-75m-international-crime-network-arrested-in-bangkok?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Chinese suspect in $75M international crime network arrested in Bangkok",
+      "published_at": "Sun, 18 Oct 2026 09:14:26 +0000",
+      "candidate_id": 28,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): tier3単独で独立2ソースの相方が無く、単独では掲載不可"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/10/18/chip-stock-bets-lost-usd52-million-in-10-minutes-with-wall-street-shut",
+      "title": "Chip-stock bets lost $52 million in 10 minutes with Wall Street shut",
+      "published_at": "Sun, 18 Oct 2026 07:13:32 +0000",
+      "candidate_id": 29,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): tier3単独で独立2ソースの相方が無く、単独では掲載不可"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/tether-backs-aisa-as-strategic-investor-completing-seed-extension-round?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Tether backs AIsa as strategic investor, completing seed extension round",
+      "published_at": "Sun, 18 Oct 2026 06:29:00 +0000",
+      "candidate_id": 30,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): tier3単独で独立2ソースの相方が無く、単独では掲載不可"
+    }
+  ],
+  "reusable_for_summary": [],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 0
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 0
+    },
+    "FRB（speeches）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "FRB（testimony）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 0
+    },
+    "米財務省": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "USTR": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "ホワイトハウス": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 0
+    },
+    "ホワイトハウス（大統領令等）": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 0
+    },
+    "ADP": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 9
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 5
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "The Block": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 2
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 45
+    }
+  },
+  "news_candidate_count": 30,
+  "format_normalized": {
+    "part1_points": 0,
+    "part2_flow": 0
+  },
+  "flow_price_fragment": " #BTC +0.33%、 #ETH -0.06%（24時間比）",
+  "part1_md": "【対象日】2026年10月18日（日）\n\n【ヘッドライン】\nウクライナがロシアの石油施設を攻撃し、サンクトペテルブルク上空で炎が確認されたとReutersが報じました。ゼレンスキー大統領はロシアが過去1週間でウクライナのエネルギー部門を76回攻撃したと主張したとも伝えられていますが、被害の全容は未確認です。\n\n【主要なポイント】\n・イランがホルムズ海峡の再開提案を受け入れるよう米国に求めていると主張したとReutersが報じました。主要な海上輸送路を巡る動向は原油供給やリスク選好を通じ暗号通貨市場にも波及し得る材料ですが、直接因果は未確認です（Reuters、10月18日）。\n・ルビオ米国務長官は、トランプ大統領がロシアへの追加制裁を検討するのに最大60日を要する可能性があると述べたとReutersが報じました。主要国の制裁を巡る動向は市場心理に波及し得る材料ですが、暗号通貨価格への直接因果は未確認です（Reuters、10月18日）。\n・原油高を背景にサウジアラビア株式市場が上昇する一方、地域の緊張によりエジプト株式市場が下落したとReutersが報じたとみられる。原油価格の動向は暗号通貨市場にも波及し得る材料ですが、直接因果は未確認です（Reuters、10月18日）。\n",
+  "part2_md": "【市場のフロー】\n①【出来事・ニュース】ウクライナがロシアの石油施設を攻撃し、サンクトペテルブルク上空で炎が確認されたとReutersが報じました（Reuters、10月18日） → 【地政学・マクロの変化】地政学リスクの高まりが市場で意識された可能性があります → 【中間市場指標・市場心理】原油高を背景にサウジアラビア株式市場が上昇する一方、地域の緊張によりエジプト株式市場が下落したとReutersが報じられ、投資家のリスク選好が分かれた可能性があります → 【暗号通貨価格】 #BTC +0.33%、 #ETH -0.06%（24時間比）で、同時期はおおむね横ばいからやや底堅い値動きでしたが、因果は未確認です。\n②【出来事・ニュース】ルビオ米国務長官が、トランプ大統領によるロシアへの追加制裁検討に最大60日を要する可能性があると述べたとReutersが報じました（Reuters、10月18日） → 【地政学・マクロの変化】制裁の発動時期を巡る不確実性が市場で意識された可能性があります → 【暗号通貨価格】 #BTC +0.33%、 #ETH -0.06%（24時間比）で、同時期はBTC・ETHともに小幅な値動きにとどまりましたが、因果は未確認です。\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から上昇しました。\nBase 0.05%プールの参考APRは15.97%→27.04%へ上昇しました（24時間出来高 +56.26%、TVL -7.71%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは33.15%→48.76%へ上昇しました（24時間出来高 +47.82%、TVL +0.49%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比-0.06%と下落中のため、ETH偏り・下限側レンジ外・下落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\n地政学を巡る報道が相次ぐ一方で暗号通貨市場への直接的な影響は限定的であったとみられ、地合いはやや不透明な状態が続いています。今後は制裁や原油市場の動向が市場心理に波及するかどうかが確認事項となります。\n",
+  "numeric_record_md": "【対象日】2026年10月18日（日）\n\n【主要指標】\n・市場全体：時価総額 $2.724兆（¥430.3兆）｜24時間取引高 $517.1億（¥8.17兆）\n・ #BTC：$81,474（約1,287.3万円）｜24時間比 +0.33%\n　（24時間レンジ $80,565〜$82,184）\n・ #ETH：$2,387（約37.7万円）｜24時間比 -0.06%\n　（24時間レンジ $2,325〜$2,427）\n・ #BNB：$716（約11.3万円）｜24時間比 +0.27%\n・市場心理：Fear & Greed 49（Neutral、CoinMarketCap API）\n・ドミナンス：BTC 60.19%｜ETH 10.71%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年10月19日07:37 JST、USD/JPY ¥158.00\n\n【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $3.06M vs Base上ETH/USDC $77.47M｜参考：Base上DEX全体 $6.255億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $60.32億（¥9,530億）｜24時間比 -1.62%｜USDCドミナンス 84.2%\n・ ETH/USDC（Base）参考APR：0.05% 27.04%（TVL $8.32M／24h出来高 $12.33M）｜0.3% 48.76%（TVL $146.28M／24h出来高 $65.14M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年10月19日07:37 JST\n"
+}
