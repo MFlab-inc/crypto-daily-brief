@@ -1,0 +1,580 @@
+{
+  "target_date_jst": "2026-10-19",
+  "level": "L0",
+  "sections": {
+    "part0_target_date": "2026年10月19日（月）",
+    "part1_headline": "FRBがAIブームによる投資拡大がインフレ圧力を強める可能性があると指摘した一方、その負担は他主体が負う可能性もあるとReutersが報じました。金融政策の先行き観測は金利・ドルの動向を通じて暗号通貨市場の投資家心理にも波及し得る材料ですが、暗号通貨価格への直接因果は未確認です。",
+    "part1_points": "・複数の暗号通貨専門媒体によると、ブロードコムやベライゾンなど複数の上場企業がOKXとICEによるトークン化株式計画に異議を唱え、発行体の同意なしにブロックチェーン上で市場を作れるかが問われていると報じられました。公式発表での確認は取れていません（Cointelegraph、CoinDesk、10月18日・19日）。\n・複数の暗号通貨専門媒体によると、MastercardがステーブルコインのリスクをスクリーニングするStablecoin Securityを発表し、北米で先行提供のうえ2027年に世界展開を計画していると報じられました。公式発表での確認は取れていません（Cointelegraph、The Block、10月19日）。\n・複数の暗号通貨専門媒体によると、英フィンテックのRevolutがジブラルタルで暗号通貨関連のライセンスを取得し、国際展開の計画を支える狙いがあると報じられました。公式発表での確認は取れていません（Cointelegraph、The Block、10月19日）。\n・複数の暗号通貨専門媒体によると、ビットコイン保有企業Striveが追加で約1,223BTCを取得し、保有総数が約36,818BTCに達したと報じられました。公式発表での確認は取れていません（Cointelegraph、The Block、10月19日）。",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.740兆（¥432.6兆）｜24時間取引高 $688.8億（¥10.88兆）\n・ #BTC：$81,975（約1,294.5万円）｜24時間比 +0.51%\n　（24時間レンジ $80,808〜$83,076）\n・ #ETH：$2,405（約38.0万円）｜24時間比 +0.93%\n　（24時間レンジ $2,348〜$2,444）\n・ #BNB：$730（約11.5万円）｜24時間比 +1.87%\n・市場心理：Fear & Greed 49（Neutral、CoinMarketCap API）\n・ドミナンス：BTC 60.14%｜ETH 10.72%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年10月20日07:37 JST、USD/JPY ¥157.91",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $4.96M vs Base上ETH/USDC $82.02M｜参考：Base上DEX全体 $7.585億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $61.71億（¥9,745億）｜24時間比 +2.31%｜USDCドミナンス 84.1%\n・ ETH/USDC（Base）参考APR：0.05% 31.21%（TVL $8.36M／24h出来高 $14.30M）｜0.3% 50.59%（TVL $146.57M／24h出来高 $67.72M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年10月20日07:37 JST",
+    "part2_flow": "①【出来事・ニュース】FRBがAIブームによる投資拡大がインフレ圧力を強める可能性があると指摘した一方、その負担は他主体が負う可能性もあるとReutersが報じました → 【地政学・マクロの変化】金融政策の先行き観測が市場で意識された可能性があります → 【暗号通貨価格】 #BTC +0.51%、 #ETH +0.93%（24時間比）で、同時期は小幅な上昇となりましたが、因果は未確認です。\n②【出来事・ニュース】複数の暗号通貨専門媒体によると、ビットコイン保有企業Striveが追加のビットコイン取得を実施し、保有総数が拡大したと報じられました（Cointelegraph、The Block、10月19日） → 【暗号通貨価格】 #BTC +0.51%、 #ETH +0.93%（24時間比）で、同時期は堅調に推移する形となりましたが、因果は未確認です。",
+    "lp_comment": "参考APRは両プールとも前日から上昇しました。\nBase 0.05%プールの参考APRは27.04%→31.21%へ上昇しました（24時間出来高 +15.99%、TVL +0.48%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは48.76%→50.59%へ上昇しました（24時間出来高 +3.96%、TVL +0.20%）。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+0.93%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "FRB高官の発言や企業・制度面の報道が相次ぐ中、地合いはやや不透明な状態が続いています。ウクライナ・ロシア情勢を巡る地政学材料については当日時点で新たな進展は確認できておらず、今後の金融政策や企業動向の続報が注目されます。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "FRB、AIブーム起因のインフレ懸念を指摘",
+  "audit_ledger": [
+    {
+      "source": "SEC",
+      "url": "https://www.sec.gov/newsroom/press-releases/2026-106-sec-announces-roundtable-machine-understandable-data-age-super-intelligence",
+      "title": "SEC Announces Roundtable on Machine-Understandable Data in the Age of Super Intelligence",
+      "published_at": "Mon, 19 Oct 2026 13:19:43 -0400",
+      "candidate_id": 1,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: SECの機械可読データに関するラウンドテーブル開催案内で、暗号通貨価格への波及経路を説明できない"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/paym/intlact_pm/cpss/cpss261019a.htm",
+      "title": "「金融市場インフラ（FMI）によるビジネスリスク・ビジネスロス管理：金融市場インフラのための原則（FMI原則）に関する追加ガイダンス」の公表について",
+      "published_at": "Mon, 19 Oct 2026 12:00:00 +0900",
+      "candidate_id": 2,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 日銀のFMI原則追加ガイダンス公表で、暗号通貨価格への波及経路を説明できない"
+    },
+    {
+      "source": "USTR",
+      "url": "https://ustr.gov/about/policy-offices/press-office/press-releases/2026/october/ambassador-greer-highlights-success-president-trumps-trade-program-fueling-americas-industrial",
+      "title": "Ambassador Greer Highlights the Success of President Trump’s Trade Program in Fueling America’s Industrial Resurgence While Touring Utah Plants",
+      "published_at": "Mon, 19 Oct 2026 20:43:36 +0000",
+      "candidate_id": 3,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: USTR代表のユタ州視察に関する内容で、暗号通貨価格への波及経路を説明できない"
+    },
+    {
+      "source": "USTR",
+      "url": "https://ustr.gov/about/policy-offices/press-office/press-releases/2026/october/united-states-announces-successful-resolution-rapid-response-labor-mechanism-matter-alimentos-grole",
+      "title": "United States Announces Successful Resolution of Rapid Response Labor Mechanism Matter at Alimentos Grole Facility",
+      "published_at": "Mon, 19 Oct 2026 18:41:24 +0000",
+      "candidate_id": 4,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: USMCA労働問題の個別事案解決で、暗号通貨価格への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/releases/2026/10/president-trump-delivers-historic-wins-for-kansas-workers-families-farmers-and-rural-communities/",
+      "title": "President Trump Delivers Historic Wins for Kansas Workers, Families, Farmers, and Rural Communities",
+      "published_at": "Mon, 19 Oct 2026 18:00:25 +0000",
+      "candidate_id": 5,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: カンザス州での政策実績に関する内容で、暗号通貨価格への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/briefings-statements/2026/10/first-lady-melania-trump-champions-new-u-s-womens-health-initiative/",
+      "title": "First Lady Melania Trump Champions New U.S. Women’s Health Initiative",
+      "published_at": "Mon, 19 Oct 2026 15:35:08 +0000",
+      "candidate_id": 6,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 女性の健康施策に関する内容で、暗号通貨価格への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/10/advancing-womens-health-to-improve-outcomes-in-all-phases-of-life/",
+      "title": "Advancing Women’s Health to Improve Outcomes in All Phases of Life",
+      "published_at": "Mon, 19 Oct 2026 15:25:57 +0000",
+      "candidate_id": 7,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 女性の健康に関する大統領令で、暗号通貨価格への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/fact-sheets/2026/10/fact-sheet-president-donald-j-trump-and-first-lady-melania-trump-advance-womens-health-to-improve-outcomes-in-all-phases-of-life/",
+      "title": "Fact Sheet: President Donald J. Trump and First Lady Melania Trump Advance Women’s Health to Improve Outcomes in All Phases of Life",
+      "published_at": "Mon, 19 Oct 2026 15:24:43 +0000",
+      "candidate_id": 8,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 候補7と同じ事実（女性の健康に関する大統領令）のファクトシート、重複"
+    },
+    {
+      "source": "ホワイトハウス（大統領令等）",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/10/advancing-womens-health-to-improve-outcomes-in-all-phases-of-life/",
+      "title": "Advancing Women’s Health to Improve Outcomes in All Phases of Life",
+      "published_at": "Mon, 19 Oct 2026 15:25:57 +0000",
+      "candidate_id": 9,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 候補7と同じ事実（女性の健康に関する大統領令）の重複"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQbWZLVGpmVmN6M1o1UUJnRXhSMmVWdjY2Mm4tR0IyeXk0OHZzOVRPamx6eEdEVjhEUHVXMlkzeFhoWkg4Qnl0a3lYQ0xJdWNzVHcydDA0NFdVb0ctbEVoMExGek50RHoxWF9TRThVMXRENDhWV2RUbVRGOVhvOEtoTmlTS1NlZGk0UldmSEY4N0tRVVRBeWc5SmJqRGlaVWwzeHRPa1hHZDNHZ3UxUjhwZHBGQXo0YlIw?oc=5",
+      "title": "Fed sees AI boom adding to inflation headache, but others may pay for the medicine - Reuters",
+      "published_at": "Mon, 19 Oct 2026 18:39:36 GMT",
+      "candidate_id": 10,
+      "verified_by": "Reuters報道",
+      "decision": "採用",
+      "reason": "B: Reutersによると、FRBがAIブームによるインフレ圧力への懸念を指摘した報道で、金利観測を通じ市場心理に波及し得る材料"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxOa3VLcnQ0WDUxUm5NUTVUU2Frc1NtT0d1WlM2cVY5NVpnY2swR2xLN3FYZzlBb3p5U0RQQk9mcWd2eUswVXQtNk5iVFVfZF9XVDd3ZTJsS0VRaVVrZlpud2tGd0xLeGxWOEpaNUlDY3pZaEhsWXhMNklFeFpTcUhpZkNzYjBrRWs5MU5ELWxETV9xUXMxbDM3ZHZqSUc2YlpZYkRyMEtqU1Qtd2N4Y3o0Sl9IYzdOQQ?oc=5",
+      "title": "Venezuela oilfield hiring picks up as first wave of investment builds - Reuters",
+      "published_at": "Mon, 19 Oct 2026 16:41:20 GMT",
+      "candidate_id": 11,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ベネズエラ油田の雇用増加に関する内容で、優先して掲載する対象に当たらない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxQVEFCaTJXdXlZR1NxZkpndXE3d0hRYWpmRUtBOXpXeTI3M2hUVnFSVVJrQm1NS29LLWlobDd4enF2OWxOY1h1SmJidXVlUksxeDdZdVMyZF9tVklTdWJiQzJZZzRNVnFEX0tMQUdCTW04WHhmdWdhQW42cERybkd1QzBDTHgxMklXU3dvbF9mbUt3a3RSb3NhZlpNbkpWcFNaWXZhMWE5TUkzTTVFMlI1YWV3NXJjb0lSMTRQVFNqbzFsRmZwRmtB?oc=5",
+      "title": "Explainer: What's behind Egypt's move towards possible military involvement in Saudi-Yemen conflict? - Reuters",
+      "published_at": "Mon, 19 Oct 2026 15:53:14 GMT",
+      "candidate_id": 12,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: エジプトの軍事関与可能性に関する解説記事のため、優先して掲載する対象に当たらない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxQc3VaLWlSejhHR19OQW1GMmZqTzFTZEktcUVDQXpLOW1GcjdiLUNqN3VUOHB1b0FaZFBhaUtzOVhqMWRLVkhmZl9HbHVtbXA2aVJ3bHRGR0pUdkt6b0JwQndsR01IMWdoVlZhV0hqSGpxS0pLY1NsLVh3ZVRQTmJMRzVPSmEwM0RtRUZSNkY3ajE2MGVWQWRkYkV0UHVtUDg?oc=5",
+      "title": "Canada's annual inflation rate rose to 3.1% in September - Reuters",
+      "published_at": "Mon, 19 Oct 2026 13:41:06 GMT",
+      "candidate_id": 13,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（カナダCPIは区分順位外）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxQQkZxcExIWnlGa1B2TFhUcjFWNDlzOWxQUUJnZkp3NlpJX3lwZXBvN05BN0xoRzhucmFJTWZwTUpDWUVPTzhpTWNnSGxYMDNCRjdYT0RacU1DWFEyclZHS3I2SDFUdWRkRE0wS0M2N1ZuZ3B6YjBENGlDU2R1R1FrMTdTWnJ1Z2pCUnVnM0FHWVh5X0dpRWxhbjJYS2J4X29CaEtLQWJaNFVWbEdRUG1fMEFRWlp4YmFOM0NDRkRlM0NjaE0?oc=5",
+      "title": "China's central bank studies making overnight rate its main policy rate - Reuters",
+      "published_at": "Mon, 19 Oct 2026 13:28:59 GMT",
+      "candidate_id": 14,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（中国中銀の政策金利検討は区分順位外）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxPX1JDdGd6aEZHMGQ5OXppVnA5d3FlSzNmbDdjOURNajl2Sjg3T0VrRzRLSC1DdVpLekQ5ZHBVdjQ1eV9UcF81anZNVklVYjZnQlNfQUlWRVMtNzEwVVVDQWlYTmQtU29FOU5xTFlGYTFUVV90bXI3dXU5UU5IUG9ZNjNYVHNUdzNjT3JXb244bm84d240TG56ZDVLbXNhMWpucjVTZXdtaTZQYjViOFU3bDZnZlFEQjduUDBfMWdwMVBXUFl3VFRJ?oc=5",
+      "title": "Trump's Russia sanctions waiver eases India's energy woes, lifts trade deal chances - Reuters",
+      "published_at": "Mon, 19 Oct 2026 11:36:11 GMT",
+      "candidate_id": 15,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 制裁免除とインド向けエネルギー・貿易への影響だが、主要なポイントの順位により上限4項目に入らない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxNb0szdXFuMEYyRHpXNHhVcUF1UDhNQVAyWGw3cm9hNUY3RGNyOVQyN3k3TWJFd0JEWXd0YS13TzFjMGpPZ1FSbUtDNkktQW5WZ3RaNGc3UGlpdmhtUGszRVM4MV9HQWlfcS1rREF1eTRhOHRHSFU4emVFWnp5MVdXM2hVcU55OGFoUHd3NXZacHVPNWZRMHJjUHVZSktBMG9GaFZaS3NTZlNMZ1VPS1UwTE4za3kwMzNK?oc=5",
+      "title": "Chinese oilfield service company Anton starts marketing Iraqi oil - Reuters",
+      "published_at": "Mon, 19 Oct 2026 09:07:31 GMT",
+      "candidate_id": 16,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 中国企業によるイラク原油販売開始の内容で、優先して掲載する対象に当たらない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxORXo3cnhIZDJzWmtCS3BfenR2LVNIbWYxQ2dfNTVOdFlnMm8wZGIwemtWUC1vdTlTd2V3SzhIUTJWRmY5cG1JbWg5QzJfUGQ5UlZ0aDlydmVQbTZWNURyWGtFWlY3NDY4Y215MnpVT0xMdFlBaWlBMllnd0h0Zjh6TzdDMk5UT1JxR1FQSHkxRlhJeE5qQjF6SzduTTVOMUdLTFdDSG9hOGVoY3BPY2t3eUVVa0g2MDV1SktDc2ljaUJzWUkycGhubEgxUl8?oc=5",
+      "title": "COMMENTARY: Asian refiners' pain is Middle East oil producers' problem - Reuters",
+      "published_at": "Mon, 19 Oct 2026 06:00:00 GMT",
+      "candidate_id": 17,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 中東産油国に関する論評記事のため、優先して掲載する対象に当たらない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE15Zk9kSXZkOVBJMWZjbXNlSmI2a2F6VG5EUFFfcHlMUjhaX25qaW1qWGNCVFpRaUlMN042UHdTNEh1eHY0MUFmS2RLZTJOd2VLRTlkX082UFNjTHdSZjBlQTB4b0hpeXlzY2UzZXlTNWoyX1pOVi1RTVV6UEhtOG8?oc=5",
+      "title": "Morning Bid: Markets left to figure out sanctions - Reuters",
+      "published_at": "Mon, 19 Oct 2026 04:31:00 GMT",
+      "candidate_id": 18,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 市場が制裁の影響を見極めている旨の市況コラムで、主要なポイントの順位により上限4項目に入らない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxQUVRkb2hsTDU1SE9pWjNla2I5RTYxUFJQZndkWkVIQ05EbzhUOWlfbGp5X2J2SHA0bTJpMGptenRDdXdWZ3E2VkthVVdBY2YxTFQ0SjhPc2xadGJWRFR2dENBZ1luZ1lEOUlsVTFxYnJxYmJ4ck9kZmtaQlg1bzFjemN5Rk1WdFhSb0tpT2c2OVVGd2lRenlBVnRud2E5S2ZsMlRucENKZ0hpLWJBd1dCX0R5VG10YkU?oc=5",
+      "title": "Global food inflation is expected to intensify as supply shocks pile up - Reuters",
+      "published_at": "Mon, 19 Oct 2026 04:04:00 GMT",
+      "candidate_id": 19,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 世界的な食料インフレ見通しの内容で、暗号通貨価格への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxOcHBoaXFtRmhELVpxR3BOYzNDX3IzS1Y1UHZaZUlWRnBiY0Y3WWxwa19vSlVRUENyTGtpZVJFSEFSLW9hVWhEaktYRTVhVWpObTFOYThBVXNRX19VY0phaUJjSkdSMjFZQ19FUFZGMm44UnNpZkZGSnNCeUc2SFZ4c1ZZUU9lV2tiUk1odm44Wmc2WGVjSG5pYUU3QnE2NGYx?oc=5",
+      "title": "Gold edges lower as firm dollar, elevated yields weigh - Reuters",
+      "published_at": "Mon, 19 Oct 2026 03:11:00 GMT",
+      "candidate_id": 20,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 金価格下落に関する内容だが、主要なポイントの順位により上限4項目に入らない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxPaVZOMUNTX2d1WHkyZTJ5TVZBNFBVQjAySjAwOXFyS2tIQ0lZbFlPdmhqLU5GcEpQUFZ3N241Q245MzBtUlk2QUZDbHRjSE9HQ3R4NlctbjdWajRZNHg3dV80S2lPMUQ0N2l5NVdVdXJHaVZhVTAzY09QNkNOeDlFc0VEY1EzV2NhaEVZb01pdjh6b2ZWSGY2cFBQTS14TTRJS0J2MGhJZzBucFdqLUE?oc=5",
+      "title": "Oil, foreign flows in focus for rupee; bond traders eye rate-hike bets - Reuters",
+      "published_at": "Mon, 19 Oct 2026 01:33:00 GMT",
+      "candidate_id": 21,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: インドルピーと原油・資金フローに関する内容で、暗号通貨価格への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxPTTZPWjBsMUN6Z3o1eE14ODc0ZTE4VnZVSEczSnlkRGM5ZVVYSld0UDNxTkRtWVdsbEFiSEZ1M1B1YW5FVGtyaUVTRXN5Zi1mb3h2bUd4a2wwOWItMW9vUXJoOE1oRGU2N0hEcGRlTkxhY0lJZkhUTktUbExYQjQxX0tXZFNVV3BMR3lVdG5DMzFqUE1zX2hqbTViTk04QTBQaHlDWmhTYnVDZ19TTnliMA?oc=5",
+      "title": "Australia central banker sees signs of labour market easing - Reuters",
+      "published_at": "Mon, 19 Oct 2026 01:18:00 GMT",
+      "candidate_id": 22,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 豪州中銀当局者の労働市場見通し発言で、主要なポイントの順位により上限4項目に入らない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxOOUlPaThzNFplTl9JQ0oxQjlBY1VFT0N4ZnBGY09mTXZRaG9yeko1M1pzXzNfZ0Zla1RpZlNrVUd1dHRDMzY2cGNmUU13VzNmY2RFTW1VTW5kdDI1NEJsZTBxZ2Y0MHcxTTQweThkSUpZbmRyV1pLMEtpcXc3VWxmd3FqWmhmbzYya1lvSnEwa0J3QXQtMllSTjlfMWlIWVlpQV9KZnFBcDVaRkMtM2R1M1hVb2VJejdUYWRR?oc=5",
+      "title": "BOJ chief says underlying inflation 'quite close' to price goal - Reuters",
+      "published_at": "Mon, 19 Oct 2026 00:17:00 GMT",
+      "candidate_id": 23,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 日銀総裁の物価目標に関する発言で、主要なポイントの順位により上限4項目に入らない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxNaWFjYmdlWlpxc2JxSGc1YnZhM3ptTFp2bHdQbUUwVS1XTnoyeFpMVXh5TjNINy0tWm5hMmViQ2xpdzRFZWRHZjRyMHF4TkhDY0l0ZXhjS2FUTWpaNlpGRjl0ZEFUTm9qR1B2bUpYTnpWQjVNWXhwZDR0OFo0V2RheDdobm5jMGFCNWZuXzQ5WUdzM20xQ2dkd3JkUW9PWFh3Z1JrREVxcnJyNG1UR0M5ZXM0SQ?oc=5",
+      "title": "UK housing market showing signs of mortgage rates impact, Rightmove says - Reuters",
+      "published_at": "Sun, 18 Oct 2026 23:06:08 GMT",
+      "candidate_id": 24,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 英国住宅市場の金利影響に関する内容で、暗号通貨価格への波及経路を説明できない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/crypto-pac-california-race-voters-special-election?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Crypto PAC pours $362K into California race voters essentially decided in August",
+      "published_at": "Mon, 19 Oct 2026 20:22:41 +0000",
+      "candidate_id": 25,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 暗号通貨業界PACの選挙支出に関する内容だが、主要なポイントの順位により上限4項目に入らない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/10/19/tether-senator-s-investigation-misses-positive-work-that-s-led-to-lower-iran-volumes",
+      "title": "Tether: Senator's investigation misses positive work that's led to lower Iran volumes",
+      "published_at": "Mon, 19 Oct 2026 20:21:13 +0000",
+      "candidate_id": 26,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: Tether CEOの上院調査への反論報道だが、相方の独立2ソース申告がなく単独報道のため不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/what-happened-in-crypto-today?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Here’s what happened in crypto today",
+      "published_at": "Mon, 19 Oct 2026 20:02:30 +0000",
+      "candidate_id": 27,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 暗号通貨の日次まとめ記事で個別事実の根拠にならず、tier3単独のため不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/public-comments-us-sec-proposed-crypto-rules?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Market participants weigh in on SEC’s proposed crypto regulations",
+      "published_at": "Mon, 19 Oct 2026 19:54:38 +0000",
+      "candidate_id": 28,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: SECの暗号資産規則案パブコメ締切に関する内容だが、tier3単独のため不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/visa-mesh-partner-crypto-spending-175m-merchant-locations?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Visa, Mesh partner to enable crypto spending at 175M merchant locations",
+      "published_at": "Mon, 19 Oct 2026 19:16:19 +0000",
+      "candidate_id": 29,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: Visa・Mesh提携報道だが、候補35とのタイトル重なり係数が閾値未満で独立2ソース不成立のため不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/mastercard-stablecoin-risk-screening-banks-payments?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Mastercard launches stablecoin risk screening for banks and payment providers",
+      "published_at": "Mon, 19 Oct 2026 19:03:23 +0000",
+      "candidate_id": 30,
+      "verified_by": "独立2ソース（Cointelegraph・The Block）",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: MastercardのStablecoin Security発表について、候補37と同一事実を独立2媒体が報道しているため採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/revolut-secures-gibraltar-crypto-license-to-support-global-expansion?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Revolut secures Gibraltar crypto license to support global expansion",
+      "published_at": "Mon, 19 Oct 2026 17:24:49 +0000",
+      "candidate_id": 31,
+      "verified_by": "独立2ソース（Cointelegraph・The Block）",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: RevolutのジブラルタルDLTライセンス取得について、候補40と同一事実を独立2媒体が報道しているため採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/10/19/u-s-cftc-rebuffs-cme-legal-stance-in-consequential-fight-over-perpetual-futures",
+      "title": "U.S. CFTC rebuffs CME legal stance in consequential fight over perpetual futures",
+      "published_at": "Mon, 19 Oct 2026 16:47:00 +0000",
+      "candidate_id": 32,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: CFTCとCMEの無期限先物を巡る法的対立だが、tier3単独のため不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/metaplanet-super-league-2100-btc-us-bitcoin-treasury-deal?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Metaplanet to take 93.7% stake in Super League through 2,100 BTC deal",
+      "published_at": "Mon, 19 Oct 2026 16:41:55 +0000",
+      "candidate_id": 33,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: MetaplanetによるSuper League株式取得だが、tier3単独のため不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/strive-buys-335m-in-bitcoin-boosting-holdings-to-36818-btc?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Strive buys $335M in Bitcoin, boosting holdings to 36,818 BTC",
+      "published_at": "Mon, 19 Oct 2026 16:30:18 +0000",
+      "candidate_id": 34,
+      "verified_by": "独立2ソース（Cointelegraph・The Block）",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: Striveの追加ビットコイン取得（約36,818BTC到達）について、候補41と同一事実を独立2媒体が報道しているため採用"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/business/2026-10-19-mesh-visa-partner-spend-crypto-stablecoins-421058",
+      "title": "Mesh taps Visa to let users spend crypto without a separate card",
+      "published_at": "Mon, 19 Oct 2026 16:10:02 +0000",
+      "candidate_id": 35,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: Visa・Mesh提携報道だが、候補29とのタイトル重なり係数が閾値未満で独立2ソース不成立のため不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/markets/bitcoin-is-rejected-at-83k-as-us-bond-yields-reverse-higher-with-equities?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bitcoin is rejected at $83K as US bond yields reverse higher with equities",
+      "published_at": "Mon, 19 Oct 2026 16:05:57 +0000",
+      "candidate_id": 36,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: BTCの83,000ドル付近での反落に関する市況解説記事で、tier3単独のため不採用"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/business/2026-10-19-mastercard-unveils-stablecoin-security-tool-to-screen-payments-for-fraud-and-sanctions-risks-420658",
+      "title": "Mastercard unveils Stablecoin Security tool to screen payments for fraud and sanctions risks",
+      "published_at": "Mon, 19 Oct 2026 16:00:00 +0000",
+      "candidate_id": 37,
+      "verified_by": "独立2ソース（Cointelegraph・The Block）",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: MastercardのStablecoin Security発表について、候補30と同一事実を独立2媒体が報道しているため採用"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/markets/2026-10-19-galaxy-digital-glxy-stonex-buy-coreweave-helios-ai-data-center-421045",
+      "title": "Galaxy’s AI data center business is undervalued amid CoreWeave debt concerns, StoneX says",
+      "published_at": "Mon, 19 Oct 2026 15:53:42 +0000",
+      "candidate_id": 38,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: Galaxy DigitalのAIデータセンター事業評価に関するアナリストレポートで、tier3単独のため不採用"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/business/2026-10-19-skyai-sells-off-entire-solana-treasury-launches-201-million-buyback-421037",
+      "title": "SkyAI sells off entire Solana treasury as it launches $201 million buyback",
+      "published_at": "Mon, 19 Oct 2026 15:28:43 +0000",
+      "candidate_id": 39,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: SkyAIのSOL売却と自社株買いに関する内容だが、tier3単独のため不採用"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/regulation/2026-10-19-revolut-secures-gibraltar-crypto-licence-to-support-international-expansion-plans-418889",
+      "title": "Revolut secures Gibraltar crypto licence to support international expansion plans",
+      "published_at": "Mon, 19 Oct 2026 10:42:07 +0000",
+      "candidate_id": 40,
+      "verified_by": "独立2ソース（Cointelegraph・The Block）",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: RevolutのジブラルタルDLTライセンス取得について、候補31と同一事実を独立2媒体が報道しているため採用"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/business/2026-10-19-strive-scoops-1223-bitcoin-100-million-total-holdings-reach-36818-btc-421020",
+      "title": "Strive scoops up another 1,223 bitcoin for $100 million as total holdings reach 36,818 BTC",
+      "published_at": "Mon, 19 Oct 2026 13:45:41 +0000",
+      "candidate_id": 41,
+      "verified_by": "独立2ソース（Cointelegraph・The Block）",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: Striveの追加ビットコイン取得（約36,818BTC到達）について、候補34と同一事実を独立2媒体が報道しているため採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/public-companies-object-okx-ice-tokenized-stock?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Public companies object to OKX-ICE’s tokenized stock plan",
+      "published_at": "Mon, 19 Oct 2026 13:13:53 +0000",
+      "candidate_id": 42,
+      "verified_by": "独立2ソース（Cointelegraph・CoinDesk）",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: 上場企業によるOKX-ICEトークン化株式計画への異議について、候補43と同一事実を独立2媒体が報道しているため採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/10/18/sec-tokenized-stock-framework-faces-issuer-pushback-as-broadcom-verizon-object-to-okx-ice-listing",
+      "title": "SEC tokenized stock framework faces issuer pushback as Broadcom, Verizon object to OKX-ICE listing",
+      "published_at": "Sun, 18 Oct 2026 23:28:06 +0000",
+      "candidate_id": 43,
+      "verified_by": "独立2ソース（Cointelegraph・CoinDesk）",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: 上場企業によるOKX-ICEトークン化株式計画への異議について、候補42と同一事実を独立2媒体が報道しているため採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/10/19/jpmorgan-s-jpm-coin-representing-dollar-deposits-is-coming-to-ethereum-bloomberg",
+      "title": "JPMorgan brings JPM Coin, representing dollar deposits, to Ethereum",
+      "published_at": "Mon, 19 Oct 2026 10:03:47 +0000",
+      "candidate_id": 44,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: JPMorganのJPM Coinイーサリアム展開について候補45と同一事実だが、主要なポイントの順位により上限4項目に入らない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/jpmorgan-jpm-coin-ethereum-institutional-clients?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "JPMorgan takes JPM Coin to Ethereum for institutional clients: Report",
+      "published_at": "Mon, 19 Oct 2026 08:58:45 +0000",
+      "candidate_id": 45,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: JPMorganのJPM Coinイーサリアム展開について候補44と同一事実だが、主要なポイントの順位により上限4項目に入らない"
+    }
+  ],
+  "reusable_for_summary": [
+    "ウクライナによるロシア石油施設への攻撃やホルムズ海峡を巡る緊張など地政学材料が報じられましたが、当日時点で新たな進展は確認できていません（Reuters、10月17日・18日）。"
+  ],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 1
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 0
+    },
+    "FRB（speeches）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "FRB（testimony）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 1
+    },
+    "米財務省": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "USTR": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 2
+    },
+    "ホワイトハウス": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 4
+    },
+    "ホワイトハウス（大統領令等）": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 1
+    },
+    "ADP": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 17
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 22
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "The Block": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 11
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 49
+    }
+  },
+  "news_candidate_count": 45,
+  "format_normalized": {
+    "part1_points": 0,
+    "part2_flow": 0
+  },
+  "flow_price_fragment": " #BTC +0.51%、 #ETH +0.93%（24時間比）",
+  "part1_md": "【対象日】2026年10月19日（月）\n\n【ヘッドライン】\nFRBがAIブームによる投資拡大がインフレ圧力を強める可能性があると指摘した一方、その負担は他主体が負う可能性もあるとReutersが報じました。金融政策の先行き観測は金利・ドルの動向を通じて暗号通貨市場の投資家心理にも波及し得る材料ですが、暗号通貨価格への直接因果は未確認です。\n\n【主要なポイント】\n・複数の暗号通貨専門媒体によると、ブロードコムやベライゾンなど複数の上場企業がOKXとICEによるトークン化株式計画に異議を唱え、発行体の同意なしにブロックチェーン上で市場を作れるかが問われていると報じられました。公式発表での確認は取れていません（Cointelegraph、CoinDesk、10月18日・19日）。\n・複数の暗号通貨専門媒体によると、MastercardがステーブルコインのリスクをスクリーニングするStablecoin Securityを発表し、北米で先行提供のうえ2027年に世界展開を計画していると報じられました。公式発表での確認は取れていません（Cointelegraph、The Block、10月19日）。\n・複数の暗号通貨専門媒体によると、英フィンテックのRevolutがジブラルタルで暗号通貨関連のライセンスを取得し、国際展開の計画を支える狙いがあると報じられました。公式発表での確認は取れていません（Cointelegraph、The Block、10月19日）。\n・複数の暗号通貨専門媒体によると、ビットコイン保有企業Striveが追加で約1,223BTCを取得し、保有総数が約36,818BTCに達したと報じられました。公式発表での確認は取れていません（Cointelegraph、The Block、10月19日）。\n",
+  "part2_md": "【市場のフロー】\n①【出来事・ニュース】FRBがAIブームによる投資拡大がインフレ圧力を強める可能性があると指摘した一方、その負担は他主体が負う可能性もあるとReutersが報じました → 【地政学・マクロの変化】金融政策の先行き観測が市場で意識された可能性があります → 【暗号通貨価格】 #BTC +0.51%、 #ETH +0.93%（24時間比）で、同時期は小幅な上昇となりましたが、因果は未確認です。\n②【出来事・ニュース】複数の暗号通貨専門媒体によると、ビットコイン保有企業Striveが追加のビットコイン取得を実施し、保有総数が拡大したと報じられました（Cointelegraph、The Block、10月19日） → 【暗号通貨価格】 #BTC +0.51%、 #ETH +0.93%（24時間比）で、同時期は堅調に推移する形となりましたが、因果は未確認です。\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から上昇しました。\nBase 0.05%プールの参考APRは27.04%→31.21%へ上昇しました（24時間出来高 +15.99%、TVL +0.48%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは48.76%→50.59%へ上昇しました（24時間出来高 +3.96%、TVL +0.20%）。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+0.93%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\nFRB高官の発言や企業・制度面の報道が相次ぐ中、地合いはやや不透明な状態が続いています。ウクライナ・ロシア情勢を巡る地政学材料については当日時点で新たな進展は確認できておらず、今後の金融政策や企業動向の続報が注目されます。\n",
+  "numeric_record_md": "【対象日】2026年10月19日（月）\n\n【主要指標】\n・市場全体：時価総額 $2.740兆（¥432.6兆）｜24時間取引高 $688.8億（¥10.88兆）\n・ #BTC：$81,975（約1,294.5万円）｜24時間比 +0.51%\n　（24時間レンジ $80,808〜$83,076）\n・ #ETH：$2,405（約38.0万円）｜24時間比 +0.93%\n　（24時間レンジ $2,348〜$2,444）\n・ #BNB：$730（約11.5万円）｜24時間比 +1.87%\n・市場心理：Fear & Greed 49（Neutral、CoinMarketCap API）\n・ドミナンス：BTC 60.14%｜ETH 10.72%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年10月20日07:37 JST、USD/JPY ¥157.91\n\n【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $4.96M vs Base上ETH/USDC $82.02M｜参考：Base上DEX全体 $7.585億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $61.71億（¥9,745億）｜24時間比 +2.31%｜USDCドミナンス 84.1%\n・ ETH/USDC（Base）参考APR：0.05% 31.21%（TVL $8.36M／24h出来高 $14.30M）｜0.3% 50.59%（TVL $146.57M／24h出来高 $67.72M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年10月20日07:37 JST\n"
+}
