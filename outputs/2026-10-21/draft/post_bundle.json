@@ -1,0 +1,510 @@
+{
+  "target_date_jst": "2026-10-21",
+  "level": "L0",
+  "sections": {
+    "part0_target_date": "2026年10月21日（水）",
+    "part1_headline": "米通貨監督庁（OCC）は、GENIUS法（ステーブルコインの連邦制度を定める法律）を実施するための最終規則を発表しました。ベッセント財務長官は、この規則が決済用ステーブルコインの発行や準備金管理に関する連邦レベルの枠組みを確立するものだと説明しています。",
+    "part1_points": "・米国がイラン向け海運を支援したとして、ギリシャ・パナマを拠点とする法律事務所に制裁を科したとReutersが報じました。イラン関連の海運を巡る制裁は地政学リスクの一端として市場心理に波及し得る材料ですが、暗号通貨価格への直接因果は未確認です（Reuters、10月21日）。\n・複数の暗号通貨専門媒体によると、ソラナの新しいコンセンサス機構「Alpenglow」がメインネットで稼働し、取引の確定時間が大幅に短縮されたと報じられました。公式発表での確認は取れていません（The Block、Cointelegraph、10月21日）。\n・複数の暗号通貨専門媒体によると、英スタンダードチャータード銀行がデジタル資産カストディ企業Zodia Custodyの買収で最終契約を締結したと報じられました。規制当局の承認が条件とされており、公式発表での確認は取れていません（The Block、Cointelegraph、10月21日）。",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.822兆（¥446.6兆）｜24時間取引高 $800.0億（¥12.66兆）\n・ #BTC：$84,583（約1,338.3万円）｜24時間比 +1.98%\n　（24時間レンジ $82,535〜$84,856）\n・ #ETH：$2,489（約39.4万円）｜24時間比 +1.42%\n　（24時間レンジ $2,434〜$2,524）\n・ #BNB：$750（約11.9万円）｜24時間比 +1.07%\n・市場心理：Fear & Greed 55（Neutral、CoinMarketCap API）\n・ドミナンス：BTC 60.25%｜ETH 10.78%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年10月22日07:37 JST、USD/JPY ¥158.22",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $5.83M vs Base上ETH/USDC $89.79M｜参考：Base上DEX全体 $9.820億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $63.66億（¥1.01兆）｜24時間比 +1.71%｜USDCドミナンス 84.5%\n・ ETH/USDC（Base）参考APR：0.05% 31.79%（TVL $8.88M／24h出来高 $15.47M）｜0.3% 51.61%（TVL $157.70M／24h出来高 $74.33M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年10月22日07:37 JST",
+    "part2_flow": "①【出来事・ニュース】米通貨監督庁（OCC）がGENIUS法を実施するための最終規則を発表し、ベッセント財務長官が決済用ステーブルコインの発行・準備金管理に関する連邦レベルの枠組みを確立するものだと説明しました → 【暗号通貨価格】 #BTC +1.98%、 #ETH +1.42%（24時間比）で、同時期は底堅さが意識される値動きとなりましたが、因果は未確認です。\n②【出来事・ニュース】米国がイラン向け海運を支援したとして、ギリシャ・パナマを拠点とする法律事務所に制裁を科したとReutersが報じました → 【地政学・マクロの変化】イラン関連の海運を巡る制裁が地政学リスクの一端として意識された可能性があります → 【暗号通貨価格】 #BTC +1.98%、 #ETH +1.42%（24時間比）で、同時期は小幅な上昇が確認されましたが、因果は未確認です。",
+    "lp_comment": "参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは35.26%→31.79%へ低下しました（24時間出来高 -7.10%、TVL +3.03%）。\nBase 0.3%プールの参考APRは75.04%→51.61%へ低下しました（24時間出来高 -26.91%、TVL +6.27%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+1.42%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "暗号通貨市場は、ステーブルコイン規制の制度整備や地政学リスクを巡る報道が交錯する中、総じて底堅い地合いとなりました。米国のビットコイン現物ETFを巡る資金動向も含め、今後の規制対応や関連する企業動向の進展が注目されます。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "BTC・ETH・BNBともに上昇基調",
+  "audit_ledger": [
+    {
+      "source": "OCC",
+      "url": "https://www.occ.gov/news-issuances/news-releases/2026/nr-occ-2026-92.html",
+      "title": "OCC Advances U.S. Digital Asset Leadership with Final Rule to Implement GENIUS Act",
+      "published_at": "21 Oct 2026 07:00:00 -0400",
+      "candidate_id": 1,
+      "verified_by": "OCC公式発表",
+      "decision": "採用",
+      "reason": "A: OCC公式発表によるGENIUS法実施のための最終規則で、暗号通貨に直接関わる制度材料のため採用"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/releases/2026/10/president-trump-secures-major-wins-for-south-carolina-workers-families-and-communities/",
+      "title": "President Trump Secures Major Wins for South Carolina Workers, Families, and Communities",
+      "published_at": "Wed, 21 Oct 2026 18:26:45 +0000",
+      "candidate_id": 2,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: サウスカロライナ州向けの国内政策広報で、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxPZFh4ZEdDSDhEcmZJWFR1VDVOUDVaYTR6aURwNjEzRnpsVGV4aTl1RFR3LVZpa1ZRZW5DY1ByTnBXZmk3RVl4VHRZM0x6UGRnUWp1dUJJUWItY3lYU3dmZ1RBYU1OLTdjc3JXOVB3V09mM051WGM1dEJsaW1WQXRmd3BmVXRaRUZMNzR4bkVBY3RTNWt1aXYxcGdWZVdUMy0xNUNzMlpJMkpyR0RaQVdKbUNENzFIdw?oc=5",
+      "title": "US sanctions Greece-, Panama-based law firm over aid to Iranian shipping - Reuters",
+      "published_at": "Wed, 21 Oct 2026 18:37:59 GMT",
+      "candidate_id": 3,
+      "verified_by": "Reuters報道",
+      "decision": "採用",
+      "reason": "B: 米国がイラン海運支援の法律事務所に制裁を科した事実で、地政学リスクの波及経路を説明できるため採用"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxPaTVZLWNRalc0ZzFmaXlERE8ySDhISTVTVjV0c0o2ZzU1UThTS2RMd0RRaVlsdmlNcFZfR3BiRHAwejM0dGFaUVA2V2JtVW4zMFZUVm1JMnViVGI1M2ZQa2VySHo2M3pJemxlRmJBanJSOTgwZko5VjFoeEFpTndNRHF4TGZNT25MMmRTMDRDdENwa3ZsZ1ZkY2NGOUo4a04wNmMxNk5OUE5nSXQ1TWxuZTNsQWF6U1JuX0FHcw?oc=5",
+      "title": "Sisi says Egypt would defend Saudi territory but rules out attack on Yemen - Reuters",
+      "published_at": "Wed, 21 Oct 2026 17:54:17 GMT",
+      "candidate_id": 4,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: エジプト大統領の発言で、サウジ領域防衛の表明にとどまり、攻撃の種類に当たらず優先対象外"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQOWJYd0NERVlESGhjUzBFQm1tQkdDMVZtbnZxXzByQkxIS29abXpTRXZqYXhyamV2b19FbUpCR2RoWW9aUGVvenh5Q20tVWpWQzhRYnQzTk1iaEtQZWxPTnJUZU5kUHR2NUxvMHlLS1JRR0g2dFktUEhCbDVvTGRUU2YybEk5SzFYRjRpZjFqUVhKQ0JQaElseUI2QjhGMmY1R3d1NGZxcmYwMVlyQ1dvWQ?oc=5",
+      "title": "Brookings paper offers broad plan to shrink Fed balance sheet - Reuters",
+      "published_at": "Wed, 21 Oct 2026 17:20:10 GMT",
+      "candidate_id": 5,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: FRBバランスシート縮小に関する研究論文の紹介で、主要なポイントの順位により上限4項目に入らない（順位外）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxOMG9KdWFSdV90N2s0bHM3d0xsTVlOMGduRE1RZ1FvSi1SbnU4MFlRQUIteDlZTC03TmNHVFl3Z2lhV2FrN1NwQjV5Wk1rU096X1pUNXB4M2c2bS1MdXlSeEZHaTJobmFsQzlvYTN6WHpyd2FkRzFqOFdkbzZUdjZoNzJCa1B6c2RxMzBmemg3RnBWdldpM0x0VEtCR0F0YXE3N3V2YXppNnN6ejBs?oc=5",
+      "title": "UK's FTSE 100 ticks higher on energy boost; hot inflation report limits gains - Reuters",
+      "published_at": "Wed, 21 Oct 2026 16:28:42 GMT",
+      "candidate_id": 6,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 英国株式市場の動向記事で、暗号通貨への波及経路が薄く順位外のため不採用"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxNMk5MTWU0OHd6RWtKSTFHNTZ4Q0Q0dFhaNnQzeHBHeTE4Q3BmY2FpaGdCbERYWVItcWE1ejJ2RUtMQ044Q1hGemNOY05vcDl1bHp0Z1pmbF81UW1nQnBCLThwYkh6LXhEOUQ4NGJGYmZ3WGRzTmxqWTV1NThkS3IzWGp4WXlUdjVUWFBlTnJQaw?oc=5",
+      "title": "Euro zone bond yields rise as French borrowing costs hit 24-year high - Reuters",
+      "published_at": "Wed, 21 Oct 2026 15:26:54 GMT",
+      "candidate_id": 7,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ユーロ圏国債利回りの動向記事で、順位外のため上限4項目に入らない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxQMXlFU3FvdEtaU3AxTmhWTm5iUHV1R1pLeWhhM3JFR0FUSm9ua3pod2x4WUdUWHZXMW5Mc1FaY0RMakFzNkN3akV5OE0tODVVRHp4QWlMS0ZiUTg3NkhuODdNVkdkR3RHRGh0Mkhaa2QzNl9aUEl0bVlvSWRoTjJfTnhxeEVpU0pzbE5lcjFUS0R5b2xTSTB2ZkdGX1VtcUxyOTRhejdLWmxVUmRFTElxV01JZXUtaUZWb2s1cTNlM1hyZ1ltUF82NkxVV3RZdw?oc=5",
+      "title": "COMMENTARY: China uses crude stockpiles, but rising oil imports may curtail draws - Reuters",
+      "published_at": "Wed, 21 Oct 2026 12:36:57 GMT",
+      "candidate_id": 8,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 中国の原油備蓄に関する論評記事で、波及経路を説明できる事実報道ではない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxNekotZUduQW5FQm0wOVZHbVlzT3U0OWxVdVhNNDRfUjZlVjlxZmNMWEh2M09yTGhwNUhSOGlGQWJDTkg4NDBxdVNSNC1oZWN5cldTZ0xBSzFlYTNXRjBUOVpuMlYzWUo1aWEyaDJSM2NlSURCSFhQWlRHallSdU43TUU0ckpkXzI0UWhINjZqbW9IU0FhcUZjdlhNbi15djVCSktpVEE0LXNXOGFITzluWDBTRQ?oc=5",
+      "title": "Saudi crude oil exports hit five-month high in August, data shows - Reuters",
+      "published_at": "Wed, 21 Oct 2026 12:17:43 GMT",
+      "candidate_id": 9,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: サウジ原油輸出統計の記事で、攻撃・制裁等の優先対象に当たらず順位外のため不採用"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxOcEtvRkhRd0FvaVprWHFsY2E0cUpBNGhvcmktbFdQZldPREgwbURQQjMyc1hSWmNBMG1rUExVNUFKdVpOeXY3Z3dYUFhCc2g3VzBtaUM1M3lBWTdHOGZYLWRLTWJ3TDhvdW93S0ZzMjFqaVhFdFpmVzczQ2lJc3RGNFM0aGc3QjRxa1dWb3N5cmNmUVJ6M213SnN4NUdDSWpxaDRvVUJ4OXFma0E?oc=5",
+      "title": "Russia says it will send first diesel cargo to US on Thursday - Reuters",
+      "published_at": "Wed, 21 Oct 2026 11:51:18 GMT",
+      "candidate_id": 10,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ロシアの対米ディーゼル輸出に関する記事で、優先して掲載する対象に当たらない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxQc2ZjQXV3eDBJb0ZSQVR6eGFkazItZW9IbnhpQVJESVNVekFRZzJNSFhSRFZjMlRLMmQ0TDFBMHlBQkJ0dlBUY1dVSEQ5Z204MVZ2ODJpQ2xuaVpNb2N3WGdVUExETTdTbXdnMGNYZmVUN1Y2ajZmRUc3ZmZvMFJpT2ozdW85bng5QnRhQVBtUjhocVZwVmt2Q3RIdDdRSU9RcXA1T2JlUmNvVk5vMVk0c21WcDhTbWhIdGdyWnh3?oc=5",
+      "title": "Yemen's Houthis deny launching drones towards Saudi Arabia's Medina - Reuters",
+      "published_at": "Wed, 21 Oct 2026 11:27:24 GMT",
+      "candidate_id": 11,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: フーシ派がドローン攻撃を否定したとの報道で、攻撃の事実が確認されておらず優先対象外"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPMHJDRTZkX1B0YlRMX1Yyby1BbThTYTBmanFWNjNxMmREUTRUSlJLQThGM19YdlJfRzY1S28wMEpVOVJHR1k3WmNOeDNoZkROeG5TVGMxaVRaOERoczYtRWVzaHlXQ0h5cEptYlFRNUU0SHRTbmR3a2tld2d3VUxJX2FpbmxYX1lBMUVUdjJlVXhXVTFNVEdmOUIxaDlnXy1NN1FOSE9fM29MRFhEQVR3?oc=5",
+      "title": "Nigeria's Dangote buys 25% stake in Kenya's oil pipeline network - Reuters",
+      "published_at": "Wed, 21 Oct 2026 11:21:46 GMT",
+      "candidate_id": 12,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ケニアの石油パイプライン株取得に関する企業動向で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxOampUMVFEMmRCN2JXOXg1dTR6aGdjaFVmRF9IeGF4Q3J4a05MQ2hpdmk3ZU04MU01dTFVQzZ6dGoxUGxTRktfbUpURUxtZmdMdWdid054OFJHWGVYVmI4eTdvWUlCak1LM0JZNjJTRDB5NWllNlI0TUZfOTZEMlhUbV9PMW1nWE5hNTV5ZUVHQjNnVkw5UU5oTUkzNVZPSWhNVkZPMV9fcTc?oc=5",
+      "title": "South African inflation rises modestly but bigger fuel-driven jump seen in October - Reuters",
+      "published_at": "Wed, 21 Oct 2026 10:21:00 GMT",
+      "candidate_id": 13,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 南アフリカのインフレ統計記事で、主要なポイントの順位により上限4項目に入らない（順位外）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxONEtnY2tIVF9OZTdBSTNUOHpQWjFKYzlBd1JYdEx6eXBBTGV3M0U1RGVQT08tT1o2NEdXTzUzZ3d4eGV4OVN2Ukc3c0h1RjRMNy02VHNpd3hiSl9fcFNnV2tyUjNyaVpzeWc0akVmVk94Z3VTU3VFZi1TMlp6S2xUR2habU5BYkVhWWtoMVhCNGlDMmFCa245OUJPWlFvRl9PcFdFdWo4VGEwVFNPalVITEkzYWZtT3pBMUNrT0hR?oc=5",
+      "title": "Pound gains against dollar, euro as inflation data cements future rate hike bets - Reuters",
+      "published_at": "Wed, 21 Oct 2026 09:54:38 GMT",
+      "candidate_id": 14,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 英ポンドの為替動向記事で、順位外のため上限4項目に入らない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxNY2dJZXdfdnptbDVvajUtNHBONy13T1Z5aEtVc3d2d2VDYUNpUEpTM1JxNGVZRFhiQmh1b1U2RWpOaW0zVndyQk9uSFZ6b0pQXzVvNUhRMFVXeEMzS3BrU1FkdE9tNEYxY21PdDFEWGplNkkwMkJ2Rkk5VVg2VUVDcXFIUmp4cUR4SnhqQ2h6b3hYTExtTkhCNGtqZWt6WUtUYURrc3owUUptdw?oc=5",
+      "title": "Gold edges higher as yields retreat, Fed decision in focus - Reuters",
+      "published_at": "Wed, 21 Oct 2026 03:45:00 GMT",
+      "candidate_id": 15,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 金価格動向の記事で、FOMC待ちの市場解説にとどまり順位外のため不採用"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxQMmhtRnJCbDhIc08yUUUxQnBOU0tmczBNT3JOTjBKVy1LY0VCUW1pdk9hNW83QXdqM3pKOGthelR0NldvLUx6ZHdfUWpTTnpHOVhVeG9nR0tUWjVqNlUyT09jbVp3eUZDb1RLbjhLakZYUXZfcXNoVndFSG50cUw5alpFRHVpNWdUMWtxLWpXMUZsdFE1RVhtX0RWVkVLazFFNUlIZi1fcHRJUjZYY090OVBwaTZMUnJ4TmdtbWFR?oc=5",
+      "title": "Dollar dips as traders wait on Fed; Aussie gains - Reuters",
+      "published_at": "Wed, 21 Oct 2026 01:20:00 GMT",
+      "candidate_id": 16,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ドル相場の動向記事で、順位外のため上限4項目に入らない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxPNTdIRmp3MTB3c3JZNGxXMUl1Wk5haXFwcjdJNXgtQnJkOEM4aWVVWG5tai03TmhHSWZidkliV1VlRkRvOVJCX3Q3QXhCWVdZeXlYQmViOUdOaU85anVWMXpSWFNCOHAtVU5id3Fad1BhX1BzVEt6S1A4N2s1YjJocFh6QXFTVXhHdDJJVzZBX21WUQ?oc=5",
+      "title": "Oil prices steady as investors weigh geopolitics, lower US stockpiles - Reuters",
+      "published_at": "Wed, 21 Oct 2026 00:50:00 GMT",
+      "candidate_id": 17,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 原油価格の地政学観測記事で、主要な海上輸送路の封鎖等に当たらず優先対象外"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/tether-backs-bolivian-fintech-bringing-usdt-payments-to-food-delivery-and-banking?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Tether backs Bolivian fintech bringing USDT payments to food delivery and banking",
+      "published_at": "Wed, 21 Oct 2026 20:26:07 +0000",
+      "candidate_id": 18,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: TetherのBolivia fintech出資の単独tier3報道で、独立2ソースの裏付けがなく不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/white-house-cybercrime-roundtable-donald-trump-crypto-ventures?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Trump didn‘t mention ‘crypto’ once in White House cybercrime roundtable",
+      "published_at": "Wed, 21 Oct 2026 20:19:39 +0000",
+      "candidate_id": 19,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: トランプ氏のサイバー犯罪円卓会議発言に関する単独tier3報道で、波及経路を説明できない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/what-happened-in-crypto-today?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Here’s what happened in crypto today",
+      "published_at": "Wed, 21 Oct 2026 20:10:47 +0000",
+      "candidate_id": 20,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 暗号通貨の日次まとめ記事で、個別事実の根拠に当たらない総集編のため不採用"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/business/2026-10-21-robinhood-single-stock-perpetual-futures-mizuho-survey-421639",
+      "title": "Robinhood single-stock perps could be a ‘strong positive’ for HOOD shares, Mizuho says",
+      "published_at": "Wed, 21 Oct 2026 18:54:36 +0000",
+      "candidate_id": 21,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: Robinhoodの単一株式永久先物に関する調査記事で、独立2ソースの裏付けがなく不採用"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/regulation/2026-10-21-american-bankers-association-accuses-occ-undermining-congress-stablecoin-rewards-rule-421629",
+      "title": "American Bankers Association accuses OCC of undermining Congress with final stablecoin rewards rule",
+      "published_at": "Wed, 21 Oct 2026 17:59:36 +0000",
+      "candidate_id": 22,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: OCCのステーブルコイン規則を巡る米銀行協会の批判記事で、独立2ソースの裏付けがなく不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/cardano-foundation-urges-eu-against-expanding-mica-rules-to-defi-and-staking?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Cardano Foundation urges EU against expanding MiCA rules to DeFi and staking",
+      "published_at": "Wed, 21 Oct 2026 17:57:39 +0000",
+      "candidate_id": 23,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: CardanoのEU規制に関する要望記事で、独立2ソースの裏付けがなく単独tier3のため不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/uk-fca-consultations-defi-crypto-laws?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "UK financial watchdog opens consultations for DeFi guidance, crypto laws",
+      "published_at": "Wed, 21 Oct 2026 17:25:00 +0000",
+      "candidate_id": 24,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 英FCAのDeFi相談開始の単独tier3報道で、独立2ソースの裏付けがなく不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/occ-finalizes-stablecoin-rules-genius-act-bessent?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Treasury Secretary Bessent likens GENIUS Act to Lincoln-era banking reform",
+      "published_at": "Wed, 21 Oct 2026 17:10:54 +0000",
+      "candidate_id": 25,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: tier1候補1（OCC公式発表）と同一の事実の裏取り記事のため、tier3側はuse:falseのまま"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/deals/2026-10-21-dataline-decentralized-data-network-ai-agents-funding-ico-421596",
+      "title": "Dataline raises $10.6 million for decentralized data network for AI agents, plans ICO",
+      "published_at": "Wed, 21 Oct 2026 16:44:01 +0000",
+      "candidate_id": 26,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: AIエージェント向けデータネットワークの資金調達記事で、波及経路を説明できない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/10/21/trump-to-throw-spotlight-on-overseas-crypto-abuses-in-white-house-event",
+      "title": "Trump to throw spotlight on overseas crypto abuses at White House event",
+      "published_at": "Wed, 21 Oct 2026 16:23:44 +0000",
+      "candidate_id": 27,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: トランプ氏主催のサイバー犯罪イベント予告記事で、独立2ソースの裏付けがなく不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/chainlink-cardano-and-other-blockchain-groups-push-sec-for-clearer-crypto-rules?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Chainlink, Cardano, other blockchain groups push SEC for clearer crypto rules",
+      "published_at": "Wed, 21 Oct 2026 16:09:26 +0000",
+      "candidate_id": 28,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: Chainlink等のSEC向け要望記事で、独立2ソースの裏付けがなく単独tier3のため不採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/10/21/how-a16z-backed-data-is-rethinking-its-blockchain-strategy-after-usd30-million-sui-deal",
+      "title": "How a16z-backed DATA is rethinking its blockchain strategy after $30 million Sui deal",
+      "published_at": "Wed, 21 Oct 2026 15:22:46 +0000",
+      "candidate_id": 29,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: a16z出資企業のSui移行に関する記事で、波及経路を説明できない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/markets/bitcoin-price-tags-846k-as-us-stocks-head-higher-on-spacex-q3-earnings-beat?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bitcoin price tags $84.6K as US stocks head higher on SpaceX Q3 earnings beat",
+      "published_at": "Wed, 21 Oct 2026 15:13:17 +0000",
+      "candidate_id": 30,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ビットコイン価格とSpaceX決算に関する単独tier3の値動き解説記事で、独立2ソースの裏付けがなく不採用"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/markets/2026-10-21-grayscale-expands-in-kind-subscriptions-10-crypto-etfs-421559",
+      "title": "Grayscale expands in-kind subscriptions to 10 crypto ETFs and trusts",
+      "published_at": "Wed, 21 Oct 2026 15:12:00 +0000",
+      "candidate_id": 31,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: Grayscaleの現物交換拡大に関する単独tier3報道で、独立2ソースの裏付けがなく不採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/10/16/bybit-will-look-for-big-broker-partnerships-to-take-on-robinhood-in-the-u-s",
+      "title": "Bybit will look for big broker partnerships to take on Robinhood in the U.S.",
+      "published_at": "Wed, 21 Oct 2026 15:09:22 +0000",
+      "candidate_id": 32,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: Bybitの米国提携戦略に関する単独tier3報道で、独立2ソースの裏付けがなく不採用"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/ecosystems/2026-10-21-anzas-alpenglow-goes-live-on-solana-cutting-finality-to-150-milliseconds-421508",
+      "title": "Anza’s Alpenglow goes live on Solana, cutting finality to 150 milliseconds",
+      "published_at": "Wed, 21 Oct 2026 14:24:39 +0000",
+      "candidate_id": 33,
+      "verified_by": "The Block・Cointelegraphの同一事実報道",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: ソラナのAlpenglow稼働という同一事実を独立したtier3媒体2社が報じており、独立2ソース規定に該当するため採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/solanas-alpenglow-launches-mainnet-99-faster-finality?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Solana’s Alpenglow launches on mainnet, targets 99% faster finality",
+      "published_at": "Wed, 21 Oct 2026 13:57:14 +0000",
+      "candidate_id": 34,
+      "verified_by": "The Block・Cointelegraphの同一事実報道",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: 候補33と同一事実（ソラナAlpenglowのメインネット稼働）を独立報道しており、独立2ソース規定に該当するため採用"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/business/2026-10-21-standard-chartered-signs-definitive-agreements-to-acquire-zodia-custody-421535",
+      "title": "Standard Chartered signs definitive agreements to acquire Zodia Custody",
+      "published_at": "Wed, 21 Oct 2026 12:44:53 +0000",
+      "candidate_id": 35,
+      "verified_by": "The Block・Cointelegraphの同一事実報道",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: スタンダードチャータードによるZodia Custody買収という同一事実を独立したtier3媒体2社が報じており、独立2ソース規定に該当するため採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/standard-chartered-acquire-zodia-custody-uk?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Standard Chartered signs definitive deal to acquire Zodia Custody",
+      "published_at": "Wed, 21 Oct 2026 12:06:23 +0000",
+      "candidate_id": 36,
+      "verified_by": "The Block・Cointelegraphの同一事実報道",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: 候補35と同一事実（Zodia Custody買収の最終契約）を独立報道しており、独立2ソース規定に該当するため採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/occ-finalizes-genius-act-rules-stablecoin-issuers-custody?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "OCC finalizes GENIUS Act rules for stablecoin issuers and custody",
+      "published_at": "Wed, 21 Oct 2026 12:26:58 +0000",
+      "candidate_id": 37,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: tier1候補1（OCC公式発表）と同一の事実の裏取り記事のため、tier3側はuse:falseのまま"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/10/21/occ-s-final-rule-to-start-fresh-in-weighing-stablecoin-rewards-against-genius-act-ban",
+      "title": "OCC's final rule to start fresh in weighing stablecoin rewards against GENIUS Act ban",
+      "published_at": "Wed, 21 Oct 2026 11:00:00 +0000",
+      "candidate_id": 38,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: tier1候補1（OCC公式発表）と同一の事実の裏取り記事のため、tier3側はuse:falseのまま"
+    }
+  ],
+  "reusable_for_summary": [
+    "米国のビットコイン現物ETFに大口の資金流入があったと複数の暗号通貨専門媒体が報じていました（CoinDesk、Cointelegraph、10月20日）。"
+  ],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 0
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 0
+    },
+    "FRB（speeches）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "FRB（testimony）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 1
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 0
+    },
+    "米財務省": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "USTR": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "ホワイトハウス": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 1
+    },
+    "ホワイトハウス（大統領令等）": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 0
+    },
+    "ADP": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 20
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 25
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "The Block": {
+      "status": "ok",
+      "raw_count": 18,
+      "kept_count": 11
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 49
+    }
+  },
+  "news_candidate_count": 38,
+  "format_normalized": {
+    "part1_points": 0,
+    "part2_flow": 0
+  },
+  "flow_price_fragment": " #BTC +1.98%、 #ETH +1.42%（24時間比）",
+  "part1_md": "【対象日】2026年10月21日（水）\n\n【ヘッドライン】\n米通貨監督庁（OCC）は、GENIUS法（ステーブルコインの連邦制度を定める法律）を実施するための最終規則を発表しました。ベッセント財務長官は、この規則が決済用ステーブルコインの発行や準備金管理に関する連邦レベルの枠組みを確立するものだと説明しています。\n\n【主要なポイント】\n・米国がイラン向け海運を支援したとして、ギリシャ・パナマを拠点とする法律事務所に制裁を科したとReutersが報じました。イラン関連の海運を巡る制裁は地政学リスクの一端として市場心理に波及し得る材料ですが、暗号通貨価格への直接因果は未確認です（Reuters、10月21日）。\n・複数の暗号通貨専門媒体によると、ソラナの新しいコンセンサス機構「Alpenglow」がメインネットで稼働し、取引の確定時間が大幅に短縮されたと報じられました。公式発表での確認は取れていません（The Block、Cointelegraph、10月21日）。\n・複数の暗号通貨専門媒体によると、英スタンダードチャータード銀行がデジタル資産カストディ企業Zodia Custodyの買収で最終契約を締結したと報じられました。規制当局の承認が条件とされており、公式発表での確認は取れていません（The Block、Cointelegraph、10月21日）。\n",
+  "part2_md": "【市場のフロー】\n①【出来事・ニュース】米通貨監督庁（OCC）がGENIUS法を実施するための最終規則を発表し、ベッセント財務長官が決済用ステーブルコインの発行・準備金管理に関する連邦レベルの枠組みを確立するものだと説明しました → 【暗号通貨価格】 #BTC +1.98%、 #ETH +1.42%（24時間比）で、同時期は底堅さが意識される値動きとなりましたが、因果は未確認です。\n②【出来事・ニュース】米国がイラン向け海運を支援したとして、ギリシャ・パナマを拠点とする法律事務所に制裁を科したとReutersが報じました → 【地政学・マクロの変化】イラン関連の海運を巡る制裁が地政学リスクの一端として意識された可能性があります → 【暗号通貨価格】 #BTC +1.98%、 #ETH +1.42%（24時間比）で、同時期は小幅な上昇が確認されましたが、因果は未確認です。\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは35.26%→31.79%へ低下しました（24時間出来高 -7.10%、TVL +3.03%）。\nBase 0.3%プールの参考APRは75.04%→51.61%へ低下しました（24時間出来高 -26.91%、TVL +6.27%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+1.42%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\n暗号通貨市場は、ステーブルコイン規制の制度整備や地政学リスクを巡る報道が交錯する中、総じて底堅い地合いとなりました。米国のビットコイン現物ETFを巡る資金動向も含め、今後の規制対応や関連する企業動向の進展が注目されます。\n",
+  "numeric_record_md": "【対象日】2026年10月21日（水）\n\n【主要指標】\n・市場全体：時価総額 $2.822兆（¥446.6兆）｜24時間取引高 $800.0億（¥12.66兆）\n・ #BTC：$84,583（約1,338.3万円）｜24時間比 +1.98%\n　（24時間レンジ $82,535〜$84,856）\n・ #ETH：$2,489（約39.4万円）｜24時間比 +1.42%\n　（24時間レンジ $2,434〜$2,524）\n・ #BNB：$750（約11.9万円）｜24時間比 +1.07%\n・市場心理：Fear & Greed 55（Neutral、CoinMarketCap API）\n・ドミナンス：BTC 60.25%｜ETH 10.78%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年10月22日07:37 JST、USD/JPY ¥158.22\n\n【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $5.83M vs Base上ETH/USDC $89.79M｜参考：Base上DEX全体 $9.820億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $63.66億（¥1.01兆）｜24時間比 +1.71%｜USDCドミナンス 84.5%\n・ ETH/USDC（Base）参考APR：0.05% 31.79%（TVL $8.88M／24h出来高 $15.47M）｜0.3% 51.61%（TVL $157.70M／24h出来高 $74.33M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年10月22日07:37 JST\n"
+}
