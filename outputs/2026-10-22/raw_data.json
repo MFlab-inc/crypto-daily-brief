@@ -1,0 +1,87 @@
+{
+  "run_id": "20261023T081039_JST",
+  "fetched_at": "2026-10-23T08:10:39.032319+09:00",
+  "cmc": {
+    "BTC": {
+      "price": 81271.58921742553,
+      "chg": -3.54033295
+    },
+    "ETH": {
+      "price": 2382.15476728118,
+      "chg": -3.89688679
+    },
+    "BNB": {
+      "price": 730.1777210529764,
+      "chg": -2.25554623
+    },
+    "global": {
+      "mcap": 2718711258018.9634,
+      "vol": 80300259093.11,
+      "btc_d": 60.103369554767,
+      "eth_d": 10.705680246006
+    },
+    "fg": {
+      "value": 48,
+      "label": "Neutral"
+    }
+  },
+  "fx": 158.100039,
+  "gecko_005": {
+    "apr": 29.323461759085006,
+    "tvl": 8658942.8247,
+    "vol": 13912886.5092709
+  },
+  "gecko_03": {
+    "apr": 50.52901527241899,
+    "tvl": 156303780.5466,
+    "vol": 72126722.5057167
+  },
+  "base_tvl": 6135687913.572978,
+  "base_tvl_chg": -3.6231518333282144,
+  "base_dex": 971589053.6100004,
+  "usdc_dominance": 84.46117469287148,
+  "bitflyer": {
+    "volume_eth": 3011.9471214,
+    "source": "bitFlyer公式API",
+    "field": "volume (rolling 24h)",
+    "retrieved_at": "2026-10-23T08:10:41.053685+09:00"
+  },
+  "coincheck": {
+    "volume_eth": 713.6143,
+    "source": "Coincheck公式API",
+    "field": "volume (24h)",
+    "retrieved_at": "2026-10-23T08:10:41.483829+09:00"
+  },
+  "intraday_range": {
+    "BTC": {
+      "high": "$84,780",
+      "low": "$80,790",
+      "source": "coinbase",
+      "retrieved_at": "2026-10-23T08:10:41.483960+09:00",
+      "representative": true,
+      "inconsistent": false,
+      "notable_move": true
+    },
+    "ETH": {
+      "high": "$2,500",
+      "low": "$2,357",
+      "source": "coinbase",
+      "retrieved_at": "2026-10-23T08:10:41.702808+09:00",
+      "representative": true,
+      "inconsistent": false,
+      "notable_move": true
+    },
+    "BNB": {
+      "high": "$751",
+      "low": "$725",
+      "source": "coinbase",
+      "retrieved_at": "2026-10-23T08:10:41.856325+09:00",
+      "representative": false,
+      "inconsistent": false
+    }
+  },
+  "intraday_window": {
+    "start": "2026-10-21T17:00:00-04:00",
+    "end": "2026-10-22T17:00:00-04:00"
+  }
+}
