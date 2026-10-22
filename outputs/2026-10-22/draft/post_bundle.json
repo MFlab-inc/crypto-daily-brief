@@ -1,0 +1,678 @@
+{
+  "target_date_jst": "2026-10-22",
+  "level": "L0",
+  "sections": {
+    "part0_target_date": "2026年10月22日（木）",
+    "part1_headline": "アイルランド中央銀行がコインベースのアイルランド法人に対し、顧客資産の分別管理や監督体制の不備を理由に制裁金を科したと複数の暗号通貨専門媒体が報じました（The Block、Cointelegraph、10月22日。公式発表は未確認）。",
+    "part1_points": "・複数の暗号通貨専門媒体によると、決済大手Visaが暗号資産カストディ企業Fireblocksを巨額で買収する交渉を進めていると一部で報じられたのに対し、Fireblocksはこれを否定したとされます。公式発表での確認は取れていません（The Block、Cointelegraph、10月22日）。\n・複数の暗号通貨専門媒体によると、フィンテック企業SoFiが預金保険（FDIC）対象のトークン化預金商品を開始し、ステーブルコインへの転換機能を備えると報じられました。公式発表での確認は取れていません（The Block、Cointelegraph、10月22日）。\n・Reutersによると、トランプ米大統領のイラン軍事行動に関する発言を受けて米国株が下落したとされ、同時期にビットコインも下落したとみられる。地政学的発言が市場心理に波及した可能性はありますが、暗号通貨価格への直接因果は未確認です（Reuters、10月22日）。",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.719兆（¥429.8兆）｜24時間取引高 $803.0億（¥12.70兆）\n・ #BTC：$81,272（約1,284.9万円）｜24時間比 -3.54%\n　（24時間レンジ $80,790〜$84,780）\n・ #ETH：$2,382（約37.7万円）｜24時間比 -3.90%\n　（24時間レンジ $2,357〜$2,500）\n・ #BNB：$730（約11.5万円）｜24時間比 -2.26%\n・市場心理：Fear & Greed 48（Neutral、CoinMarketCap API）\n・ドミナンス：BTC 60.10%｜ETH 10.71%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年10月23日08:10 JST、USD/JPY ¥158.10",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $8.87M vs Base上ETH/USDC $86.04M｜参考：Base上DEX全体 $9.716億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $61.36億（¥9,701億）｜24時間比 -3.62%｜USDCドミナンス 84.5%\n・ ETH/USDC（Base）参考APR：0.05% 29.32%（TVL $8.66M／24h出来高 $13.91M）｜0.3% 50.53%（TVL $156.30M／24h出来高 $72.13M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年10月23日08:10 JST",
+    "part2_flow": "①【出来事・ニュース】アイルランド中央銀行がコインベースのアイルランド法人に対し、顧客資産の分別管理や監督体制の不備を理由に制裁金を科したと複数の暗号通貨専門媒体が報じました（The Block、Cointelegraph、10月22日。公式発表は未確認） → 【暗号通貨価格】 #BTC -3.54%、 #ETH -3.90%（24時間比）で、同時期は一時的に下落したのち下げ幅を広げる場面もみられる展開でしたが、因果は未確認です。\n②【出来事・ニュース】トランプ米大統領のイラン軍事行動に関する発言を受けて米国株が下落したとReutersが報じました（Reuters、10月22日） → 【地政学・マクロの変化】地政学リスクの高まりが市場で意識された可能性があります → 【中間市場指標・市場心理】米国株の下落とともにリスク回避の心理が強まった可能性が報じられています → 【暗号通貨価格】 #BTC -3.54%、 #ETH -3.90%（24時間比）で、同時期は高値圏から下押しする値動きとなりましたが、因果は未確認です。",
+    "lp_comment": "参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは31.79%→29.32%へ低下しました（24時間出来高 -10.04%、TVL -2.46%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは51.61%→50.53%へ低下しました（24時間出来高 -2.96%、TVL -0.89%）。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比-3.90%と下落中のため、ETH偏り・下限側レンジ外・下落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "本日は規制当局による制裁報道や地政学リスクを意識した株安など複数の材料が重なり、市場心理はやや不透明な状態にあります。暗号通貨の価格変動とこれら材料との直接的な因果は確認されておらず、今後の報道や公式発表の有無を注視する必要があります。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "BTC・ETHは下落、値幅広がる",
+  "audit_ledger": [
+    {
+      "source": "OCC",
+      "url": "https://www.occ.gov/news-issuances/news-releases/2026/nr-occ-2026-93.html",
+      "title": "OCC Announces Enforcement Actions for October 2026",
+      "published_at": "22 Oct 2026 11:00:00 -0400",
+      "candidate_id": 1,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 銀行の個別執行措置で、暗号通貨・金利等への波及経路を説明できない"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/statistics/boj/other/mei/release/2026/mei261020.xlsx",
+      "title": "日本銀行が保有する国債の銘柄別残高",
+      "published_at": "Thu, 22 Oct 2026 17:00:00 +0900",
+      "candidate_id": 2,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 統計の技術的公表で波及経路を説明できない"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/research/wps_rev/rev_2026/rev26j14.htm",
+      "title": "（日銀レビュー）企業の決算説明会テキストを用いた経済政策不確実性の考察",
+      "published_at": "Thu, 22 Oct 2026 16:00:00 +0900",
+      "candidate_id": 3,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 学術レビューで市場への波及経路を説明できない"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/research/research_data/reri/index.htm",
+      "title": "実質輸出入の動向",
+      "published_at": "Thu, 22 Oct 2026 16:00:00 +0900",
+      "candidate_id": 4,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 定例統計データで波及経路を説明できない"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/statistics/boj/other/acmai/release/2026/ac261020.htm",
+      "title": "営業毎旬報告（10月20日現在）",
+      "published_at": "Thu, 22 Oct 2026 10:00:00 +0900",
+      "candidate_id": 5,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 定例の財務諸表公表で波及経路を説明できない"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/statistics/dl/loan/loos/release/loos2610.pdf",
+      "title": "主要銀行貸出動向アンケート調査（10月）",
+      "published_at": "Thu, 22 Oct 2026 08:50:00 +0900",
+      "candidate_id": 6,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 定例アンケート調査で波及経路を説明できない"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/statistics/bis/repo/index.htm",
+      "title": "FSBレポ統計の日本分集計結果",
+      "published_at": "Thu, 22 Oct 2026 08:50:00 +0900",
+      "candidate_id": 7,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: レポ市場統計の技術的公表で波及経路を説明できない"
+    },
+    {
+      "source": "USTR",
+      "url": "https://ustr.gov/about/policy-offices/press-office/press-releases/2026/october/ustr-announces-2026-award-recipients",
+      "title": "USTR Announces 2026 Award Recipients",
+      "published_at": "Wed, 21 Oct 2026 23:05:13 +0000",
+      "candidate_id": 8,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 職員表彰の式典で市場への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/10/national-seafood-month-2026/",
+      "title": "National Seafood Month, 2026",
+      "published_at": "Thu, 22 Oct 2026 20:51:22 +0000",
+      "candidate_id": 9,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 水産月間の宣言文で市場への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/10/decreasing-housing-costs-for-the-american-people/",
+      "title": "DECREASING HOUSING COSTS FOR THE AMERICAN PEOPLE",
+      "published_at": "Thu, 22 Oct 2026 20:48:38 +0000",
+      "candidate_id": 10,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 優先して掲載する対象に当たらない住宅政策で手続き的な発表"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/briefings-statements/2026/10/congressional-bills-h-r-952-and-h-r-7022-signed-into-law/",
+      "title": "Congressional Bills H.R. 952 and H.R. 7022 Signed into Law",
+      "published_at": "Thu, 22 Oct 2026 20:47:18 +0000",
+      "candidate_id": 11,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別法案の署名で暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/10/presidential-determination-pursuant-to-section-303-of-the-defense-production-act-of-1950-as-amended-on-domestic-petroleum-production-refining-and-logistics-capacity-c139/",
+      "title": "Presidential Determination Pursuant to Section 303 of the Defense Production Act of 1950, as Amended, on Domestic Petroleum Production, Refining, and Logistics Capacity",
+      "published_at": "Thu, 22 Oct 2026 20:41:16 +0000",
+      "candidate_id": 12,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 優先して掲載する対象に当たらない（国内石油生産体制の大統領決定）"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/10/adjusting-imports-of-wind-turbines-and-their-parts-and-components-into-the-united-states/",
+      "title": "Adjusting Imports of Wind Turbines and Their Parts and Components into the United States",
+      "published_at": "Thu, 22 Oct 2026 19:32:11 +0000",
+      "candidate_id": 13,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 風力タービン関税の措置で暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/fact-sheets/2026/10/fact-sheet-president-donald-j-trump-decreases-housing-costs-for-americans/",
+      "title": "Fact Sheet: President Donald J. Trump Decreases Housing Costs for Americans",
+      "published_at": "Thu, 22 Oct 2026 19:25:44 +0000",
+      "candidate_id": 14,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 候補10と同じ事実（住宅政策の大統領令）の重複"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/releases/2026/10/iowa-wins-big-under-president-trump-lower-taxes-new-investment-and-stronger-rural-communities/",
+      "title": "Iowa Wins Big Under President Trump: Lower Taxes, New Investment, and Stronger Rural Communities",
+      "published_at": "Thu, 22 Oct 2026 18:25:32 +0000",
+      "candidate_id": 15,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 地域向け広報発表で市場への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/releases/2026/10/new-analysis-president-trumps-pro-growth-policies-ignite-manufacturing-resurgence/",
+      "title": "New Analysis: President Trump’s Pro-Growth Policies Ignite Manufacturing Resurgence",
+      "published_at": "Thu, 22 Oct 2026 17:51:54 +0000",
+      "candidate_id": 16,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 政権の政策評価広報で市場への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス（大統領令等）",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/10/national-seafood-month-2026/",
+      "title": "National Seafood Month, 2026",
+      "published_at": "Thu, 22 Oct 2026 20:51:22 +0000",
+      "candidate_id": 17,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 候補9と同じ事実（水産月間宣言）の重複"
+    },
+    {
+      "source": "ホワイトハウス（大統領令等）",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/10/decreasing-housing-costs-for-the-american-people/",
+      "title": "DECREASING HOUSING COSTS FOR THE AMERICAN PEOPLE",
+      "published_at": "Thu, 22 Oct 2026 20:48:38 +0000",
+      "candidate_id": 18,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 候補10と同じ事実（住宅政策大統領令）の重複"
+    },
+    {
+      "source": "ホワイトハウス（大統領令等）",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/10/presidential-determination-pursuant-to-section-303-of-the-defense-production-act-of-1950-as-amended-on-domestic-petroleum-production-refining-and-logistics-capacity-c139/",
+      "title": "Presidential Determination Pursuant to Section 303 of the Defense Production Act of 1950, as Amended, on Domestic Petroleum Production, Refining, and Logistics Capacity",
+      "published_at": "Thu, 22 Oct 2026 20:41:16 +0000",
+      "candidate_id": 19,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 候補12と同じ事実（石油生産体制の大統領決定）の重複"
+    },
+    {
+      "source": "ホワイトハウス（大統領令等）",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/10/adjusting-imports-of-wind-turbines-and-their-parts-and-components-into-the-united-states/",
+      "title": "Adjusting Imports of Wind Turbines and Their Parts and Components into the United States",
+      "published_at": "Thu, 22 Oct 2026 19:32:11 +0000",
+      "candidate_id": 20,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 候補13と同じ事実（風力タービン関税）の重複"
+    },
+    {
+      "source": "ADP",
+      "url": "https://mediacenter.adp.com/adp-launches-new-ai-powered-tools-to-accelerate-intelligent-workforce-automation",
+      "title": "ADP Launches New AI-powered Tools to Accelerate Intelligent Workforce Automation",
+      "published_at": "Thu, 22 Oct 2026 09:51:00 -0400",
+      "candidate_id": 21,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: AI人事管理ツール発表で市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxOSjlqS1owcXdLQnhHZnV3Q3FSWUU4OXhFTkpxV1E3dVdnU1pEak1sSENZRnN5cEs1dE5YREx5NnZsODFFWm01T1FNMC0wVXF0dWhkTUl5MTZaRHhJcVVRNkdyVnh5ZFJKam9xMHYxMG42R3F3WDdyQ1lsSDBPTmJVMVJLSmhYeFRnamp1aVRWYmY0RlcwdmVibkZ2cWl6S21QS1JEOUt5UWd3M2RpTld2eVhFTjJ5bmpjX1RZX3BuaGNUZUU?oc=5",
+      "title": "Egypt calls for Yemen talks as parliament weighs military support to Saudi Arabia - Reuters",
+      "published_at": "Thu, 22 Oct 2026 18:09:35 GMT",
+      "candidate_id": 22,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 見出しだけでは被害・波及の具体内容を書けない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxPVy1xaDI3WlUteUFnVTZtUGRnbnlYRmRWREp5akpFX29zZGVhajhhUUpXUE1RVjUya3dvNFlVdVlTdmd4TkRNVWdELU5IQmV2U0d1Vk1MXy1teXEzSzhWSWtRU3pRNmpKYUpmQjdIZlV4WlRlbVJRZjhOS3V5TDZ2TFhsM1lXdlhYWF9fdmQ4Z1JhTXpvaVQ2WEdvTHB3R082YmZNVXBkeXktc2Y0SXhScGVnckVqU2xFZnlaZmpwVldxSWlDOGZTZzJLSUpQUQ?oc=5",
+      "title": "Swedish central bank revives e-krona debate as digital euro, stablecoin threat grows - Reuters",
+      "published_at": "Thu, 22 Oct 2026 16:56:46 GMT",
+      "candidate_id": 23,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 中銀デジタル通貨の議論で暗号通貨直接材料に当たらず、主要項目の順位外"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxPTXRDSVZqUlhiVXJHdV80OVNPVERRZDlMRWJXOTl4eEw3MWZ3ZVBFX2E3TGdhd2xWSWxkTkpVZkhRa3NlT0Jaa3JyTHNTMU9BaWxkeFV4SVVkZU1FV3Fockk4RWNKRW9fb3NZMHkzWVh5QndCRzVSUW54a09DM09vWEpMQVdTR2NQV0hmenlaZmxpdWJyN1Vuak15azFfU1gxb3RCQlFRb1BrTVZZTEFjMjlaZUJINkNmWW4yNm5YcWc3UTdnU0d6Nw?oc=5",
+      "title": "US refiners have run harder in 2026 as tight diesel supplies boost margins, EIA says - Reuters",
+      "published_at": "Thu, 22 Oct 2026 15:59:46 GMT",
+      "candidate_id": 24,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: EIAの精製マージン分析で、優先対象の種類に当たらない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxPY1lNaWxpcFZmNGx5cEFsQ25QUUNuM0ZkVzJXaGdxdDRFdXNpNGVyYlhhV3JLcnpoMHJKLTZhMWduY0hQYXFPM2xBRjl5TF8xaXAyNU40UUtnTl94TDl3eUVjSHlleXBtenZHVDNpUmw5LUxRMDJNNzF2VVlxYmVodVpWUE5PWEdtVHRSZmdzR2w?oc=5",
+      "title": "US weekly jobless claims near 57-year lows, underscore labor market stability - Reuters",
+      "published_at": "Thu, 22 Oct 2026 15:50:55 GMT",
+      "candidate_id": 25,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 米指標だが米指標の予定が無く、順位により上限に入らない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMi2AFBVV95cUxOeXZkVkhTMUxoaW8wOXZWUC1TbzdCbXlXbUVoWWVZdGZSN1FzdGdrb0VjcW1IZWtLR0JuUWx1RWdGNFpVTHgzYXVjeURmX3RPUVlxYVlNT1hvREZSLWVOR2NVN0sxZTZFMzNDcXFLbUQ2bjJVZUhzdGRSaFY4MTRKeGhuQ09fTFlfVVVVZmo3c24wTnBhZVlGckVPdXBodjF5UnR1RFFhRUtFXzZKVG56LTRoYlFja0pVbUV3OFFyX05zUTE4djJYUTYzQXVBY0s3TjlkdFk2cjA?oc=5",
+      "title": "P&G warns of bigger cost hit from oil prices, even as consumer demand holds up - Reuters",
+      "published_at": "Thu, 22 Oct 2026 15:44:37 GMT",
+      "candidate_id": 26,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別企業の原油コスト警告で波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxOakVZV3hhS1BtQ2puTC1WcVZBYXo2bEI3bE0xaS1keVpmVkduLTBFT2tvSkRiSUk3RTA2dDBXd3o5TDk1VjFJNFpWN2xXdmZGby1UWWl2MkFxMDZJd056WnpmRU1IUXhWaXZiR2JzWkQwaFBvcC04MGZjUUd6THZTd0c2TmZ4YjlwUHVxeWR6bzRnSDV6VW5jNDlDRDgyaTFoclFnQi02aXZUZnJKa1Q1OTlkaVdlQQ?oc=5",
+      "title": "Citi sees oil risks skewed to upside despite recovery in Gulf exports - Reuters",
+      "published_at": "Thu, 22 Oct 2026 14:37:44 GMT",
+      "candidate_id": 27,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: アナリスト見通し論評で、優先して掲載する対象に当たらない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxPUVhDZXVHTEtXNnJyeEx0a1ZvUS1iU3lGNV9Ia2dNTmljcm5PaVNvYUZ6ZkJsUGtoTjF6NDktS0FYeEstZEhOVkxvWUZmNU9VV05IUElNbTlHZk1iZGFNUVdzNXBXX01MVW03LXhnRTNVbzZRYlBKdExpeU5ZbHk3aldOVktTT2NRQmJ3Yjd4OEM4Q21JZU5GejMzRUhBbmxBamtBVmEzRGQtb1VnZ0E5dXJ5RUlfa1M2bHJvLTdWcDBjeWl0aFhSVzVn?oc=5",
+      "title": "Israeli settlers steal Palestinians' olives as attacks on harvest grow more violent - Reuters",
+      "published_at": "Thu, 22 Oct 2026 11:49:14 GMT",
+      "candidate_id": 28,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: パレスチナ入植者の件で金利・為替等への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxPOUlEOG9ERHY5N3FzaUVQV0c5WjBFM0QxaWJzcXhrd2RaRmUtdm9yd2RzZWtnbEtQUUpYSDdDdHIzRUtXb0ZXak1ST25RX1hNZFNwcnluSmQ0aDhYTXphT0RPWUw0N3FnRk9McTRjR0FjMnlVY29WVkpjVm5lci10YTdPNkQta1lNUHVtdW8wUXlFREhNUFZFWWMyR0VnQUd0YjA1SEhESzB3NDhnenJST2RxQzlzMDJMaE1YaQ?oc=5",
+      "title": "Uganda central bank sells FX after rate hike fails to stem shilling losses - Reuters",
+      "published_at": "Thu, 22 Oct 2026 08:24:09 GMT",
+      "candidate_id": 29,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ウガンダ中銀のFX介入で、主要項目の順位により上限に入らない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxQcnBIaFNpRTVBNGxoQnowWUV6YnVWQkMzUl9ENWo5ZG95djJvRVZsTHVsTmFoX1V1OEQxcEE1Qmo4azB1MDlxc1VIM2VKbGFWT3BCTS1paXlteFJMazdobHJXd1hOaUR2a01RN05fMThEYzVFU3R3RlNCcXkxOHduaUtWSGJRWGJ3WjFBbnpZYjRCcjV5eUpXaC12M0RLaVlfV2lvMGNjUHhoSFhoUFJ5UlNWVGZEM0lEOHhCelVfcEdDTlBDZEE?oc=5",
+      "title": "Saudi Aramco seeks to partner with countries to expand its oil stockpile, CEO says - Reuters",
+      "published_at": "Thu, 22 Oct 2026 08:17:45 GMT",
+      "candidate_id": 30,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: アラムコCEO発言の解説記事で、優先対象の種類に当たらない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxQMDBOS21jdVJsMGxUU1c0VTdmeWNURDhMbC03djhPeHZHMi1rR045dXpfWThxYkdFYzJhSlJkM1ZYRGRzYk5SSS1uNE5kMnl1Wkhra0tZdUlSdHRsQUhINUgxWUNQMWZuZG9YVTlyb2VyMzFfNU5QYWtRUVpCbVp2eXlFN2txZ0JRX1JqQ3MwaG85ZHFkMVVSUnktTWp2dDUyMWtsMDdVV3lGY1o0RHo0NkxiRE9tLTd1d0E5NF9MOA?oc=5",
+      "title": "Philippine central bank delivers larger-than-expected 50 bps hike to combat inflation - Reuters",
+      "published_at": "Thu, 22 Oct 2026 06:35:00 GMT",
+      "candidate_id": 31,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: フィリピン利上げで、主要項目の順位により上限に入らない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxOWFBSTnBrOGQ5c0tGLS13aFl3YTZ3RTVtNkxVcWpjRF84TUcxMHBwZnZpZkxZR29nTHNKQ3Y4U3NKNkRKNVJvVGFkclo1U183czhXcjNTaDFINzR0eFdpOExLZVVlT1g1S29TdnVSR001QjY2QUwxQ0JaRVhWenR1U2pmZzd1U2FQTzBuZnQ3Mlo5dmlGZVdjelpySk1sMWFacWpGbVdSbUtvc0RhemprbDZmSlMxUzdUcTZXdG5aT29oQQ?oc=5",
+      "title": "Using rupee as stabiliser can hurt real economy, ex-Indian central bank official says - Reuters",
+      "published_at": "Thu, 22 Oct 2026 05:56:00 GMT",
+      "candidate_id": 32,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: インド元当局者の論評で、優先して掲載する対象に当たらない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxPdWF1N1NOek9pQi1IYkRUMll1bHRXOFluVmtuYm9LR1dtMThlWlZDYXB5RlVwYko2MVFRS01SSnIwRGhMRnFULTZvdURKV0MxOHk1clF4NW1wTkJUOWkyMng4b2J5QjI4X2tLRkVMSGxDcTIxV0xXTThnZkxvQjVUajZBMmY4RURVTzQtcFN1T2gybVJWRkMwX0RCdkxGTVpLbUdlT0paVU80cWc0VS0xenk0QnZRYS1B?oc=5",
+      "title": "Gold falls to more than two-month low as oil-fuelled inflation fears weigh - Reuters",
+      "published_at": "Thu, 22 Oct 2026 04:03:00 GMT",
+      "candidate_id": 33,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 金価格下落の分析記事で、主要項目の順位により上限に入らない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxQZDhVMWdGc0J2bURPNnV2YnBaRXlMSkVqcXRGX1FBZ2lUOXQ4eVJyd3RsTE1CckJ4cjRuVEdPQVJLaGVXaVA5clJIZ0lQSTBsMm1iQ0xfeTZkNXhqWUtoX2ExQkNlRFVfSVhKckRtenZfWW41bDlxWWc0WVFuRTVTTHlIdEtPcEI2Z2hWR2pyd2NGOGRiNXNMUkM3OE5qcFV5VUxQUkVDem1HdXN4X0pKY3RrejhKeHcxRjdV?oc=5",
+      "title": "Indian shares extend losses as high oil prices heighten inflation worries - Reuters",
+      "published_at": "Thu, 22 Oct 2026 02:33:00 GMT",
+      "candidate_id": 34,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: インド株安の記事で、主要項目の順位により上限に入らない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxQNmlzbXFUNWNXc3U3RHRac2lYVEhXNjZmZGw0Q19yNVRORUEtak91QlJnTEVqcGhWT2xuT2RmOHdTVHlyN1JmSHRVZEpfMzgtNEVMT1RCWk1VNGswaVFYTXI4WlFpUE95aEJid1NxNVNBdzBGX0pzOUQwMnZnQ25kOVNXQQ?oc=5",
+      "title": "Stocks drop as Meta dampens AI optimism; Treasury yields fall - Reuters",
+      "published_at": "Thu, 22 Oct 2026 02:15:00 GMT",
+      "candidate_id": 35,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 米国株の個別材料で、主要項目の順位により上限に入らない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxOYzBEdGVKYmZ3VVpJajg0TW5DN2VHVEM2aDVTcFJKQVduMnVMTU5NbVcyMGxBanBHY3VvMzJQR1VrQWM4b0hLeG1YaTFWcldTeU9yTlBXc3FiR1FtcUp0SmxhRkJkWmpmZ2x6X3VGZHZEUDNLTE9LTFZNSlBWWjNJVGtaV3YwWkc4QVhxbHozYkx5THpZMVlYVDAtd0dqbUMyOUcyVk91NEYxaFFCZklRWWhjQm5qN2NvVHdWdnZIQVJSMk0?oc=5",
+      "title": "Oil prices hit five-month high as Houthi attacks stoke Middle East supply fears - Reuters",
+      "published_at": "Thu, 22 Oct 2026 00:46:00 GMT",
+      "candidate_id": 36,
+      "verified_by": "",
+      "decision": "採用",
+      "reason": "B: フーシ派攻撃による原油高を報じるReuters記事。順位の関係で項目化見送り"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/dune-launches-real-time-data-feeds-covering-200-onchain-trading-venues?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Dune launches real-time data feeds covering 200 onchain trading venues",
+      "published_at": "Thu, 22 Oct 2026 20:36:00 +0000",
+      "candidate_id": 37,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "候補52と同一だがヘッドライン等の主要材料に採らず、項目数の都合で不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/what-happened-in-crypto-today?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Here’s what happened in crypto today",
+      "published_at": "Thu, 22 Oct 2026 20:09:59 +0000",
+      "candidate_id": 38,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "日次まとめ記事で候補50と重なるが、内容が薄く不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/winklevoss-pac-texas-senate-race-media-paxton-talarico?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Winklevoss PAC moves into Texas Senate race with $81K ad buy",
+      "published_at": "Thu, 22 Oct 2026 19:29:53 +0000",
+      "candidate_id": 39,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "単独tier3で独立2ソースなし。項目数の都合で不採用"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/regulation/2026-10-22-jpmorgan-crypto-regulatory-moves-clarity-act-failure-risks-423473",
+      "title": "JPMorgan says crypto regulatory moves partly offset Clarity Act failure, but risks remain",
+      "published_at": "Thu, 22 Oct 2026 19:14:21 +0000",
+      "candidate_id": 40,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "単独tier3で独立2ソースなし。項目数の都合で不採用"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/regulation/2026-10-22-blockchain-association-pushes-crypto-tax-clarity-broader-bill-stalls-423475",
+      "title": "Blockchain Association pushes for crypto tax clarity as broader bill stalls",
+      "published_at": "Thu, 22 Oct 2026 18:59:25 +0000",
+      "candidate_id": 41,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "単独tier3で独立2ソースなし。項目数の都合で不採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/10/22/a16z-is-the-latest-vc-giant-to-widen-bets-beyond-crypto-and-into-ai-and-emerging-tech",
+      "title": "A16z is the latest VC giant to widen bets beyond crypto and into AI and emerging tech",
+      "published_at": "Thu, 22 Oct 2026 18:30:57 +0000",
+      "candidate_id": 42,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "単独tier3で独立2ソースなし。項目数の都合で不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/underdog-taps-zerohash-to-bring-crypto-deposits-to-prediction-markets?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Underdog taps zerohash to bring crypto deposits to prediction markets",
+      "published_at": "Thu, 22 Oct 2026 17:24:49 +0000",
+      "candidate_id": 43,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "単独tier3で独立2ソースなし。項目数の都合で不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/bitcoin-mining-difficulty-hashrate-recovery-ai-shift?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bitcoin hashrate hits seven-month high as AI shift fails to ease mining competition",
+      "published_at": "Thu, 22 Oct 2026 16:50:51 +0000",
+      "candidate_id": 44,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "単独tier3で独立2ソースなし。項目数の都合で不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/ireland-central-bank-coinbase-oversight-safeguard-failure?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Irish cenbank fines Coinbase arm $3.6M for oversight, safeguard failures",
+      "published_at": "Thu, 22 Oct 2026 16:48:00 +0000",
+      "candidate_id": 45,
+      "verified_by": "独立2ソース規定（The Block・Cointelegraph）",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: コインベース・アイルランド法人への制裁金。独立2ソースで確認、ヘッドライン採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/markets/bitcoin-circles-815k-etf-cost-basis-as-trump-iran-comments-send-stocks-lower?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bitcoin circles $81.5K ETF cost basis as Trump Iran comments send stocks lower",
+      "published_at": "Thu, 22 Oct 2026 16:20:35 +0000",
+      "candidate_id": 46,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "単独tier3で独立2ソースなし。主要材料はReutersの候補36で代替"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/10/22/irish-central-bank-fines-coinbase-ireland-usd3-6-million-over-fund-safeguarding-failures",
+      "title": "Irish central bank fines Coinbase Ireland $3.6 million over fund safeguarding failures",
+      "published_at": "Thu, 22 Oct 2026 15:40:25 +0000",
+      "candidate_id": 47,
+      "verified_by": "独立2ソース規定（The Block・Cointelegraph）",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: コインベース・アイルランド法人への制裁金。独立2ソースで確認、ヘッドライン採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/coindesk-indices/2026/10/22/crypto-for-advisors-stablecoins-are-ready-for-prime-time",
+      "title": "Crypto for Advisors: Stablecoins are ready for prime time",
+      "published_at": "Thu, 22 Oct 2026 14:58:31 +0000",
+      "candidate_id": 48,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "単独tier3の解説コラムで独立2ソースなし"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/fireblocks-disputes-report-of-25b-visa-acquisition-talks?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Fireblocks disputes report of $2.5B Visa acquisition talks",
+      "published_at": "Thu, 22 Oct 2026 14:41:00 +0000",
+      "candidate_id": 49,
+      "verified_by": "独立2ソース規定（Cointelegraph・The Block）",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: FireblocksがVisa買収交渉報道を否定した件。独立2ソースで確認"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/10/22/crypto-custody-specialist-fireblocks-denies-its-in-talks-to-be-acquired-by-visa",
+      "title": "Crypto custody specialist Fireblocks denies it's in talks to be acquired by Visa",
+      "published_at": "Thu, 22 Oct 2026 14:37:12 +0000",
+      "candidate_id": 50,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "候補49・53の組と同一事実だが、項目は候補49側で記述済み"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/regulation/2026-10-22-coinbase-ireland-fined-3-6-million-over-customer-fund-segregation-oversight-failures-421943",
+      "title": "Coinbase Ireland fined $3.6 million over customer fund segregation, oversight failures",
+      "published_at": "Thu, 22 Oct 2026 14:03:40 +0000",
+      "candidate_id": 51,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "候補45・47と同一事実のtier3重複。既にその組で記述済み"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/business/2026-10-22-dune-onchain-trading-data-feeds-421889",
+      "title": "Dune launches onchain trading data feeds as tokenized markets expand",
+      "published_at": "Thu, 22 Oct 2026 12:00:00 +0000",
+      "candidate_id": 52,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "候補37と同一事実だが単独tier3組で項目数の都合により不採用"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/deals/2026-10-22-visa-in-talks-acquire-crypto-custody-firm-fireblocks-around-2-5-billion-axios-421926",
+      "title": "Fireblocks denies report of $2.5 billion acquisition talks with Visa",
+      "published_at": "Thu, 22 Oct 2026 13:27:54 +0000",
+      "candidate_id": 53,
+      "verified_by": "独立2ソース規定（Cointelegraph・The Block）",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: FireblocksがVisa買収交渉報道を否定した件。独立2ソースで確認"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/sofi-bank-issued-tokenized-deposit-yield-bearing-crypto-funds?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "SoFi unveils bank-issued tokenized deposit for yield-bearing crypto funds",
+      "published_at": "Thu, 22 Oct 2026 13:13:45 +0000",
+      "candidate_id": 54,
+      "verified_by": "独立2ソース規定（Cointelegraph・The Block）",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: SoFiのFDIC保険付きトークン化預金商品の発表。独立2ソースで確認"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/business/2026-10-22-sofi-fdic-insured-tokenized-deposit-421916",
+      "title": "SoFi launches interest-bearing, FDIC-insured tokenized deposit for crypto users",
+      "published_at": "Thu, 22 Oct 2026 12:00:00 +0000",
+      "candidate_id": 55,
+      "verified_by": "独立2ソース規定（Cointelegraph・The Block）",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: SoFiのFDIC保険付きトークン化預金商品の発表。独立2ソースで確認"
+    }
+  ],
+  "reusable_for_summary": [],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 0
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 0
+    },
+    "FRB（speeches）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "FRB（testimony）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 1
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 6
+    },
+    "米財務省": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "USTR": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 1
+    },
+    "ホワイトハウス": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 8
+    },
+    "ホワイトハウス（大統領令等）": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 4
+    },
+    "ADP": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 1
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 16
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 21
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "The Block": {
+      "status": "ok",
+      "raw_count": 19,
+      "kept_count": 12
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 48
+    }
+  },
+  "news_candidate_count": 55,
+  "format_normalized": {
+    "part1_points": 0,
+    "part2_flow": 0
+  },
+  "flow_price_fragment": " #BTC -3.54%、 #ETH -3.90%（24時間比）",
+  "part1_md": "【対象日】2026年10月22日（木）\n\n【ヘッドライン】\nアイルランド中央銀行がコインベースのアイルランド法人に対し、顧客資産の分別管理や監督体制の不備を理由に制裁金を科したと複数の暗号通貨専門媒体が報じました（The Block、Cointelegraph、10月22日。公式発表は未確認）。\n\n【主要なポイント】\n・複数の暗号通貨専門媒体によると、決済大手Visaが暗号資産カストディ企業Fireblocksを巨額で買収する交渉を進めていると一部で報じられたのに対し、Fireblocksはこれを否定したとされます。公式発表での確認は取れていません（The Block、Cointelegraph、10月22日）。\n・複数の暗号通貨専門媒体によると、フィンテック企業SoFiが預金保険（FDIC）対象のトークン化預金商品を開始し、ステーブルコインへの転換機能を備えると報じられました。公式発表での確認は取れていません（The Block、Cointelegraph、10月22日）。\n・Reutersによると、トランプ米大統領のイラン軍事行動に関する発言を受けて米国株が下落したとされ、同時期にビットコインも下落したとみられる。地政学的発言が市場心理に波及した可能性はありますが、暗号通貨価格への直接因果は未確認です（Reuters、10月22日）。\n",
+  "part2_md": "【市場のフロー】\n①【出来事・ニュース】アイルランド中央銀行がコインベースのアイルランド法人に対し、顧客資産の分別管理や監督体制の不備を理由に制裁金を科したと複数の暗号通貨専門媒体が報じました（The Block、Cointelegraph、10月22日。公式発表は未確認） → 【暗号通貨価格】 #BTC -3.54%、 #ETH -3.90%（24時間比）で、同時期は一時的に下落したのち下げ幅を広げる場面もみられる展開でしたが、因果は未確認です。\n②【出来事・ニュース】トランプ米大統領のイラン軍事行動に関する発言を受けて米国株が下落したとReutersが報じました（Reuters、10月22日） → 【地政学・マクロの変化】地政学リスクの高まりが市場で意識された可能性があります → 【中間市場指標・市場心理】米国株の下落とともにリスク回避の心理が強まった可能性が報じられています → 【暗号通貨価格】 #BTC -3.54%、 #ETH -3.90%（24時間比）で、同時期は高値圏から下押しする値動きとなりましたが、因果は未確認です。\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは31.79%→29.32%へ低下しました（24時間出来高 -10.04%、TVL -2.46%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは51.61%→50.53%へ低下しました（24時間出来高 -2.96%、TVL -0.89%）。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比-3.90%と下落中のため、ETH偏り・下限側レンジ外・下落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\n本日は規制当局による制裁報道や地政学リスクを意識した株安など複数の材料が重なり、市場心理はやや不透明な状態にあります。暗号通貨の価格変動とこれら材料との直接的な因果は確認されておらず、今後の報道や公式発表の有無を注視する必要があります。\n",
+  "numeric_record_md": "【対象日】2026年10月22日（木）\n\n【主要指標】\n・市場全体：時価総額 $2.719兆（¥429.8兆）｜24時間取引高 $803.0億（¥12.70兆）\n・ #BTC：$81,272（約1,284.9万円）｜24時間比 -3.54%\n　（24時間レンジ $80,790〜$84,780）\n・ #ETH：$2,382（約37.7万円）｜24時間比 -3.90%\n　（24時間レンジ $2,357〜$2,500）\n・ #BNB：$730（約11.5万円）｜24時間比 -2.26%\n・市場心理：Fear & Greed 48（Neutral、CoinMarketCap API）\n・ドミナンス：BTC 60.10%｜ETH 10.71%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年10月23日08:10 JST、USD/JPY ¥158.10\n\n【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $8.87M vs Base上ETH/USDC $86.04M｜参考：Base上DEX全体 $9.716億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $61.36億（¥9,701億）｜24時間比 -3.62%｜USDCドミナンス 84.5%\n・ ETH/USDC（Base）参考APR：0.05% 29.32%（TVL $8.66M／24h出来高 $13.91M）｜0.3% 50.53%（TVL $156.30M／24h出来高 $72.13M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年10月23日08:10 JST\n"
+}
