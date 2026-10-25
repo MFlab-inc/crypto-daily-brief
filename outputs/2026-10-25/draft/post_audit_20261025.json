@@ -1,0 +1,136 @@
+{
+  "overall": "PASS",
+  "failed": 0,
+  "level": "L0",
+  "checks": [
+    {
+      "id": "C12_banned_terms",
+      "result": "PASS",
+      "detail": "禁止語なし",
+      "terms": []
+    },
+    {
+      "id": "C13_hashtag_boundary",
+      "result": "PASS",
+      "detail": "境界違反なし"
+    },
+    {
+      "id": "C14_no_table",
+      "result": "PASS",
+      "detail": "表形式なし"
+    },
+    {
+      "id": "C15_heading_order",
+      "result": "PASS",
+      "detail": "見出し順序OK"
+    },
+    {
+      "id": "C16_numeric_match",
+      "result": "PASS",
+      "detail": "テンプレート一致"
+    },
+    {
+      "id": "C16b_transcription_scan",
+      "result": "PASS",
+      "detail": "転記検知なし",
+      "hits": []
+    },
+    {
+      "id": "C17_lp_disclaimers",
+      "result": "PASS",
+      "detail": "定型文完全一致"
+    },
+    {
+      "id": "C18_causal_assertion",
+      "result": "PASS",
+      "detail": "断定表現なし"
+    },
+    {
+      "id": "C19_audit_ledger",
+      "result": "PASS",
+      "detail": "22件・全フィールド充足・渡した候補数と一致"
+    },
+    {
+      "id": "C20_image_headline",
+      "result": "PASS",
+      "detail": "全角換算29.0字・#なし"
+    },
+    {
+      "id": "C21_decision_tier_consistency",
+      "result": "PASS",
+      "detail": "22件・整合性OK"
+    },
+    {
+      "id": "C22_headline_tier1_basis",
+      "result": "PASS",
+      "detail": "tier1・tier2由来の採用が存在"
+    },
+    {
+      "id": "C23_summary_no_new_entities",
+      "result": "PASS",
+      "detail": "総括に固有名詞候補（ASCII表記）なし"
+    },
+    {
+      "id": "C24_flow_no_unadopted_material",
+      "result": "PASS",
+      "detail": "固有名詞候補1件・すべてpart1_headline・part1_pointsに存在"
+    },
+    {
+      "id": "C26_flow_role_separation",
+      "result": "PASS",
+      "detail": "役割分離の禁止語句なし",
+      "patterns": []
+    },
+    {
+      "id": "C27_summary_role_separation",
+      "result": "PASS",
+      "detail": "役割分離OK",
+      "patterns": [],
+      "prices": []
+    },
+    {
+      "id": "C28_headline_points_role_separation",
+      "result": "PASS",
+      "detail": "役割分離OK"
+    }
+  ],
+  "warnings": [
+    {
+      "id": "W_headline_repeat",
+      "detail": "主要なポイントの4番目が、ヘッドラインと同じ材料の繰り返しの可能性があります（共通語: サウジアラビア・フーシ・暗号通貨価格・産油地域）。ヘッドラインに載せた材料は主要なポイントでは繰り返さない規則です（v1.105・v1.107。語の重なりによる検知で、別の材料の可能性もあります）。 項目: 「サウジアラビアが、フーシ派による新たな威嚇が続く中でもリヤド空港の一部運用を再開したとReutersが報じました。産油地域の軍事情勢を巡る緊張が意識された可能性がありますが、暗号通貨価格への直接因果は…」",
+      "item_no": 4,
+      "shared": [
+        "サウジアラビア",
+        "フーシ",
+        "暗号通貨価格",
+        "産油地域"
+      ],
+      "sentence": "サウジアラビアが、フーシ派による新たな威嚇が続く中でもリヤド空港の一部運用を再開したとReutersが報じました。産油地域の軍事情勢を巡る緊張が意識された可能性がありますが、暗号通貨価格への直接因果は未確認です（Reuters、10月25日）。"
+    },
+    {
+      "id": "W_dup_weak",
+      "detail": "「重複」を理由に不採用にした候補のうち、根拠が弱いものが3件あります。同じ区分でも発言者や内容が違えば別の事実です（Bの扱いの基準の4(c)）。重複先と同じ事実かを確認してください（題名の語の重なりによる検知で、実際の重複でも言い換えで拾うことがあります）。 ・候補19「ECB official sees digital euro as key to protecting EU ‘sove…」（重複先の候補IDが書かれていない。理由: (f): tier3単独の内容で、独立2ソースの相方となる同一事実の候補が無く不採用） ・候補20「Latvia targets tokenization rules in 2027 with commercial pr…」（重複先の候補IDが書かれていない。理由: (f): tier3単独の内容で、独立2ソースの相方となる同一事実の候補が無く不採用） ・候補21「UK banks face 10,000 complaints in 3 months over crypto rest…」（重複先の候補IDが書かれていない。理由: (f): tier3単独の内容で、独立2ソースの相方となる同一事実の候補が無く不採用）",
+      "count": 3,
+      "entries": [
+        {
+          "candidate_id": 19,
+          "code": "no_ref",
+          "refs": [],
+          "title": "ECB official sees digital euro as key to protecting EU ‘sovereignty’"
+        },
+        {
+          "candidate_id": 20,
+          "code": "no_ref",
+          "refs": [],
+          "title": "Latvia targets tokenization rules in 2027 with commercial property in focus"
+        },
+        {
+          "candidate_id": 21,
+          "code": "no_ref",
+          "refs": [],
+          "title": "UK banks face 10,000 complaints in 3 months over crypto restrictions"
+        }
+      ]
+    }
+  ]
+}

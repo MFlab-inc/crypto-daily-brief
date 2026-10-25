@@ -1,0 +1,348 @@
+{
+  "target_date_jst": "2026-10-25",
+  "level": "L0",
+  "sections": {
+    "part0_target_date": "2026年10月25日（日）",
+    "part1_headline": "イエメンのフーシ派とサウジアラビアの衝突が続く中、Reutersによると紅海情勢の緊張を背景に湾岸の株式市場の多くが下落したと報じられました。産油地域を巡る軍事的緊張が意識された可能性がありますが、暗号通貨価格への直接因果は未確認です。",
+    "part1_points": "・Reutersによると、ウクライナによるロシアのエネルギー施設への攻撃が、トランプ政権との間の溝を深めているとされ、ロシア・ウクライナ情勢を巡るエネルギー関連の緊張が続いています。暗号通貨価格への直接因果は未確認です（Reuters、10月25日）。\n・イランの軍がバンダルアッバス上空で米国の無人機を撃墜したと主張していると、イラン国営通信を引用してReutersが報じました。被害・影響の詳細は未確認です（Reuters、10月25日）。\n・Reutersによると、イスラエルのネタニヤフ首相が制裁回避の手段として暗号資産・ブロックチェーンの活用に言及し、同国中央銀行総裁らから批判を受けたと報じられました。暗号資産が地政学的な制裁回避の文脈で言及された事例であり、価格への直接因果は未確認です（Reuters、10月25日）。\n・サウジアラビアが、フーシ派による新たな威嚇が続く中でもリヤド空港の一部運用を再開したとReutersが報じました。産油地域の軍事情勢を巡る緊張が意識された可能性がありますが、暗号通貨価格への直接因果は未確認です（Reuters、10月25日）。",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.693兆（¥422.4兆）｜24時間取引高 $376.8億（¥5.91兆）\n・ #BTC：$80,463（約1,262.0万円）｜24時間比 -0.07%\n　（24時間レンジ $79,973〜$80,925）\n・ #ETH：$2,345（約36.8万円）｜24時間比 +0.19%\n　（24時間レンジ $2,314〜$2,368）\n・ #BNB：$741（約11.6万円）｜24時間比 +0.93%\n・市場心理：Fear & Greed 45（Neutral、CoinMarketCap API）\n・ドミナンス：BTC 60.07%｜ETH 10.63%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年10月26日07:37 JST、USD/JPY ¥156.84",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $3.41M vs Base上ETH/USDC $53.51M｜参考：Base上DEX全体 $8.044億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $60.35億（¥9,466億）｜24時間比 -0.17%｜USDCドミナンス 84.5%\n・ ETH/USDC（Base）参考APR：0.05% 13.57%（TVL $8.47M／24h出来高 $6.30M）｜0.3% 32.54%（TVL $158.86M／24h出来高 $47.21M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年10月26日07:37 JST",
+    "part2_flow": "①【出来事・ニュース】イエメンのフーシ派とサウジアラビアの衝突が続く中、紅海情勢の緊張を背景に湾岸の株式市場の多くが下落したとReutersが報じました（Reuters、10月25日） → 【地政学・マクロの変化】産油地域を巡る軍事的緊張が市場で意識された可能性があります → 【暗号通貨価格】 #BTC -0.07%、 #ETH +0.19%（24時間比）で、同時期はBTC・ETHともに小幅な値動きにとどまりましたが、因果は未確認です。\n②【出来事・ニュース】ウクライナによるロシアのエネルギー施設への攻撃がトランプ政権との間の溝を深めているとReutersが報じたほか、イランの軍がバンダルアッバス上空で米国の無人機を撃墜したと主張していると同通信が伝えました（Reuters、10月25日） → 【地政学・マクロの変化】ロシア・ウクライナ情勢および中東を巡る地政学リスクの高まりが意識された可能性があります → 【暗号通貨価格】 #BTC -0.07%、 #ETH +0.19%（24時間比）で、同時期は目立った方向感のない推移でしたが、因果は未確認です。\n③【出来事・ニュース】イスラエルのネタニヤフ首相が制裁回避の手段として暗号資産・ブロックチェーンの活用に言及し、同国中央銀行総裁らから批判を受けたとReutersが報じました（Reuters、10月25日） → 【暗号通貨価格】 #BTC -0.07%、 #ETH +0.19%（24時間比）で、同時期は落ち着いた値動きでしたが、因果は未確認です。",
+    "lp_comment": "参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは27.17%→13.57%へ低下しました（24時間出来高 -49.95%、TVL +0.17%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは51.77%→32.54%へ低下しました（24時間出来高 -36.95%、TVL +0.31%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+0.19%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "中東・東欧を巡る地政学リスクの報道が相次ぎましたが、暗号通貨市場への直接的な影響は確認できず、地合いはやや不透明な状態が続いています。今後も地政学情勢の展開と市場心理の変化を注視する必要がありそうです。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "地政学リスクが意識される中、BTC・ETHは方向感に乏しい値動き",
+  "audit_ledger": [
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/releases/2026/10/president-trump-secures-major-deals-to-unleash-american-energy-and-cut-gas-prices-at-the-pump/",
+      "title": "President Trump Secures Major Deals to Unleash American Energy and Cut Gas Prices at the Pump",
+      "published_at": "Sun, 25 Oct 2026 14:56:24 +0000",
+      "candidate_id": 1,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 米国のエネルギー政策・ベネズエラ原油取引に関する政権発表だが、主要国の制裁等の優先対象には当たらず、他の採用材料があるため見送り（主要なポイントの順位により上限4項目に入らない）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxQdUt0ejc0NEtPd0U5enNlek5yek5Jak91bUlPdGtLY3FzQ2I3THJXTkhpVFYtdVZPUjZwRnY5ZnBGcmp3dGh1d2d2dlBvNExnTlRKZ2pPamp1X0ZBQzNib2ZGcFJZX3FBdWZsUEV6UkhNWG1WYzc1Y3ZBY1Y3X01qaURXejBwWUZIcHZrMDlWd3ptX2ZKX0wwTEJmci1fOWt5My1IZlY2cURXYVE?oc=5",
+      "title": "Britain will not join Canada's defence bank, source says - Reuters",
+      "published_at": "Sun, 25 Oct 2026 19:21:43 GMT",
+      "candidate_id": 2,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 英国のカナダ防衛銀行への不参加に関する内容で、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQS3JPM2RsSG1DcVg1NFh3Y3ljUXp3MmJSTU9QTWEycDVTN1lRelFGSEk5MWlxdjlBazcwRERzME9ieWFxRE5lbGZQZXA3WU5aMXdqTDctQ08yUkw3b243YnE1Vnp4bUxVLTZLQTJ0U21UemtpWURfSGNsa05mazRFVXIyLXQta0R4dGdqdDRXd3laMXFBLUNrSGNlVUNDUm5kM1Ytb3ZCQjhQVlJJdWpXWm9hWWYxalVQ?oc=5",
+      "title": "Venezuela opposition leader Machado returns home after fraught year away - Reuters",
+      "published_at": "Sun, 25 Oct 2026 19:18:49 GMT",
+      "candidate_id": 3,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ベネズエラ野党指導者の帰国に関する内容で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMifkFVX3lxTE52ZmptdHBlYU1Qc2RoMG15RXhZTFQ0SWxaWFdremtqQlVmVTVHQlFpaHpJUFI3V2hzUjlfZkE1bUtFaXZuZ201aEdrSFlBd1h4YTYyRnphTFVCU0xfVm5MWnlMMXItZHZqNkF5UlJTalAwM1ZPZEZaWEFQRy14QQ?oc=5",
+      "title": "'Full of excitement:' Sydney's new airport opens to passengers - Reuters",
+      "published_at": "Sun, 25 Oct 2026 19:12:20 GMT",
+      "candidate_id": 4,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: シドニー新空港の開港に関する内容で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTE8wRVlqMUxhR3pkcHNzZUpURUtlbG5FajZsMWowX0diNXk1OWZWcDMyeDIyNVJSVTVZX3RKcENmaHJ4WDJ5aGpNNE13Z3N2TkQ1YURDaU5HVVZjQko0MWJ3TUlMZXlBV3Z0WHhyMnBKdDlIc2JKYnNFLXNR?oc=5",
+      "title": "rino.pk - Reuters",
+      "published_at": "Sun, 25 Oct 2026 19:06:31 GMT",
+      "candidate_id": 5,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 見出しのみで内容不明であり、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxPd2pWdjRsTU03Q3V3eDJiLXZnMGVUZlBZOUtBdDlWN080bEZaYTN2UXVZdXdNR0x5ZkxWTjVfMjJnc1J0X1BDejNiY3pONTNzbzZOckF0TkotQmUwMTBBY2RPdExJVjVlMUZjNnJGTnRJc1IzdTNQWmNucFNMZGhDZFlrb0c0cHctOFVxQ3dxNlA1bGVC?oc=5",
+      "title": "What are Brazilian voters' main concerns? - Reuters",
+      "published_at": "Sun, 25 Oct 2026 18:57:43 GMT",
+      "candidate_id": 6,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ブラジル有権者の関心事に関する内容で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxPdjIzVzBiaEsyaTl2WGc4dC1ZV1BfRFRBUXg2TGdEMGFFTjZyaFZ0SmdUVEpFUGtKakZWU1hjSVRyd1cybUlvcmF3Vm5ndDNRLWlKUDVYTUtFWlpWUkNmb0FxZXZsaDFsdVJHMksxUUZsT2d3T1h6QkZlNEMzSVB6dllZcGRwOFFYVno1Mjhqbw?oc=5",
+      "title": "AMRX.B - Reuters",
+      "published_at": "Sun, 25 Oct 2026 18:18:49 GMT",
+      "candidate_id": 7,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別銘柄株価情報のみで、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxPS1Z5NGh4Q3VMcEJLM3pGUkU5TnZkUExtX0R4dDRzQzllLXVpejdOb1FiUTFMZy1xMnBuYi1HSXhKcWozWFRzWW1ZMzZaZVI1eUw0a2xuX3BqR29OT2tUb0loSTQxRjdmTGRHM0x0d3c4anF5dmpiM1NCZVhyYTFiT2I4M3pLTThLWk1YTXp5M2FGLUlhc0x4NWp0LXI2M2pVRkN6NTFGTnhfZDR3R2FkYVJBTTRNRFFJOVR1czRzSzhsanFETVI4?oc=5",
+      "title": "Magnitude 5.2 earthquake strikes Hindu Kush region in Afghanistan, EMSC says - Reuters",
+      "published_at": "Sun, 25 Oct 2026 18:13:33 GMT",
+      "candidate_id": 8,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: アフガニスタンの地震に関する内容で、金利・為替・原油等への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxNdkpfT3YtQXVCRlQ2RkU5d1JxQ1dSYUY5WXYydnVvN0lGWHB1NkR2MjIyb3BoZ250UVJfSEpTb05SRUx0VmFxS1pzWWNyVFhuZVRPVDRSVmVoTW9WSWFXWjQ2TlVoYTlNWTViSFRiZkMweWxnN2NzRWRUbjVHbFg2T3o4UDNzTmhlaEhTb3JSTDFVNTF4U2hJOE5ZVDFGV0VzR2U4UG1iN1c0cXhGYUsw?oc=5",
+      "title": "Brazil votes in tight runoff between Lula and Bolsonaro - Reuters",
+      "published_at": "Sun, 25 Oct 2026 17:48:41 GMT",
+      "candidate_id": 9,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ブラジル大統領選の決選投票に関する内容で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxOa3ZBWG5tbkZvcXJFc2xkcEs1SmhEcHAybDM1ZGN0T0ZCN3BIcTFyaF9laXlEYVA2N2ZsUmJjcmgxaS1aVW5jdFZSOFZrc2JnUWFJaFRwR25QS0pob0RTT0lONlJldzVxOFlidThrdm8zTVU4X1l4dFRPVUY5R0ZuX05aX2pibWg2VlNLUmlaVmFaWDg5bDlMQUVFWTh2bnZ3WFJ4MzA1RWVDMEtKOEE?oc=5",
+      "title": "Most Gulf shares close lower as Saudi-Houthi fighting rages on - Reuters",
+      "published_at": "Sun, 25 Oct 2026 13:20:32 GMT",
+      "candidate_id": 10,
+      "verified_by": "Reuters報道",
+      "decision": "採用",
+      "reason": "B: サウジ・フーシ派の衝突継続を受け湾岸株式市場の多くが下落したとの報道。産油地域の軍事的緊張に関わる材料で採用"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxPVTFxbDBEOEdFZFEwX29PZzd0QTNuYm11VXE5ekQ1bUgtQjVGeU1lbHdjVG9BR21DcENBLU5BeWFCeERYd2Y4bWp4OHFEclBuWlRUQ3ltUkduNFlQOXNwSTV6ZHJ4Qi02ZGQyakE1a0lfNldTM2RBQ3dVbEJHcWpSWE96b3FKUWstUjh6aExqcTdPMmdhMkRpbEhjcEtpak5YMmFfOThiTmh4ZGd5Z2lGMk1Ucjh0U2lDQjlRZQ?oc=5",
+      "title": "Jordan church attack survivor says her cousin died before her eyes - Reuters",
+      "published_at": "Sun, 25 Oct 2026 12:45:27 GMT",
+      "candidate_id": 11,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ヨルダンの教会襲撃事件の体験談で、個別事件の人的被害証言にとどまり、優先して掲載する対象に当たらない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxOdEZIYi1YYkZXSDlUeWN0cUgzdzdudTFUNlF5bHE1eVM4Z1NZeUFxVWZrVXp3d0N1dnRRWU5iYzZSc3J5QlJiQ3c4bllDUXFJcFFFdjNGeTFPbGhxc2VRZjYzV1dLSmtKX2JqQlpfd2U4RTFmWUhoRGFtVUVtVWRSc0NBZjc0NjhUdUVLNmM2dDVBYUxLOWRob3BwWkY2bnBKSlhnSGc0aXVfTEZ5RjBsTDJ3?oc=5",
+      "title": "Netanyahu rebuked for plan to use crypto to bypass economic sanctions - Reuters",
+      "published_at": "Sun, 25 Oct 2026 12:15:33 GMT",
+      "candidate_id": 12,
+      "verified_by": "Reuters報道",
+      "decision": "採用",
+      "reason": "A: ネタニヤフ首相の暗号資産による制裁回避発言とそれへの批判に関する報道。暗号資産が直接言及されており採用"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxQVXpULV9fUktZbnM0SlNnU1prS1RjMmp2b1FfakpycmpYU2pwelRVOWxsZTFVY1I5bUE3Wm82S1I4WG1kZHBIcExkeWhlRlV5Yjc2OWJnMDZDbnFSNnhLV3FlNUFBUnhxaDJ5b1ZjRVgwUHE1ZUVIYWwyNWdNR3J2ajMwWGlsTGRaX0tGOGFnOVE4ZVd3VGU3cEFmTGRGQWpyaDZjQ0hySnpaN2Nlc2hOR1VUT1VJYXBJSW4w?oc=5",
+      "title": "How Ukraine's strikes on Russian energy sites deepened the rift with Trump - Reuters",
+      "published_at": "Sun, 25 Oct 2026 11:03:18 GMT",
+      "candidate_id": 13,
+      "verified_by": "Reuters報道",
+      "decision": "採用",
+      "reason": "B: ウクライナによるロシアのエネルギー施設攻撃がトランプ政権との溝を深めているとの報道。エネルギー施設への攻撃に関わる材料で採用"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTFBrbVVJQ0FWNXRQT2lCdVZiNGtiZnBvWi1ycGN1Rnhab3dMN09nRHA1MkJxY0loYzhFdXJ4dVdidXQyRHdQLTJVMjU0MS1UOXYySGtpSmxudlZRU3ZxOThzYllEblhLd2FyclVN?oc=5",
+      "title": "Chumporn Palm Oil Industry PCL (CPI.BK) | Stock Price & Latest News - Reuters",
+      "published_at": "Sun, 25 Oct 2026 09:25:08 GMT",
+      "candidate_id": 14,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別銘柄（パーム油企業）の株価情報のみで、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxNNjlxWUNjczg2SHFQamFEZDV0SVhZaHA5bFdqaVQzT1oxSjd0b2ZQQjd6MldHeEhKcUstbGJEa1QxMmFBMFhad2VnREVIa2xoT0tPWlFXVW5lcXVEYjMwdUd5NTRIYm0zTFpabXUxY2pCakRGM3JnWE1iNHc3MmtlbWduRno3ZWVGVWVpa2JtRjF4VDh5TEFHN21hUV9sQUhxOWpJMVVPNlhFMDd5SkJMekZkTFdtQzlnYnBQNkd2MG1TNzZy?oc=5",
+      "title": "Iranian army says it shot down US drone over Bandar Abbas, Tasnim reports - Reuters",
+      "published_at": "Sun, 25 Oct 2026 07:22:39 GMT",
+      "candidate_id": 15,
+      "verified_by": "Reuters報道（イラン国営通信引用）",
+      "decision": "採用",
+      "reason": "B: イラン軍がバンダルアッバス上空で米無人機を撃墜したと主張との報道。当事者の主張であり帰属と被害未確認を明記して採用"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxNT0JBTVByRUdVWnYzNWpyRUlfbGRFR2RnQzZpbTgzR05tX1AzU2VkVC10RUswYWthSGtJa2FZamVSa2E2ckdSeG5FN3VGTFU5SVJfbjY4NEZjR2tQSWJfZmxtbTJvUU5YSEpKWHRQQWpHMGRfR29xeFhkR1BwcHA5NlA3MnJmRnloYzF6Q0tBZG92ZDgzWmRubVNpNi1CajBmdXdNZmNTYnkzLWFnMldvaQ?oc=5",
+      "title": "Saudis say Riyadh airport partly reopens despite renewed Houthi threats - Reuters",
+      "published_at": "Sat, 24 Oct 2026 23:56:00 GMT",
+      "candidate_id": 16,
+      "verified_by": "Reuters報道",
+      "decision": "採用",
+      "reason": "B: フーシ派の新たな威嚇が続く中でのリヤド空港一部再開に関する報道。産油地域の軍事情勢に関わる材料で採用"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/business/2026-10-25-coindcx-confirms-16-million-loss-from-retired-wallets-days-after-ceo-called-breach-reports-a-false-alarm-431617",
+      "title": "CoinDCX confirms $16 million loss from retired wallets days after CEO called breach reports a ‘false alarm’",
+      "published_at": "Sun, 25 Oct 2026 18:46:21 +0000",
+      "candidate_id": 17,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): tier3単独で独立2ソースの相方が成立せず、tier1・tier2の裏付けも無いため不採用"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/business/2026-10-25-keystone-customers-say-breach-exposed-data-the-hardware-wallet-maker-promised-to-delete-431613",
+      "title": "Keystone customers say breach exposed data the hardware wallet maker promised to delete",
+      "published_at": "Sun, 25 Oct 2026 15:56:30 +0000",
+      "candidate_id": 18,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): tier3単独で独立2ソースの相方が成立せず、tier1・tier2の裏付けも無いため不採用（固有名詞の関与は未確認のため名称使用も不可）"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/ecb-official-sees-digital-euro-tool-to-protect-eu-sovereignty?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "ECB official sees digital euro as key to protecting EU ‘sovereignty’",
+      "published_at": "Sun, 25 Oct 2026 15:11:00 +0000",
+      "candidate_id": 19,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): tier3単独の内容で、独立2ソースの相方となる同一事実の候補が無く不採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/10/25/latvia-targets-tokenization-rules-in-2027-with-commercial-property-in-focus",
+      "title": "Latvia targets tokenization rules in 2027 with commercial property in focus",
+      "published_at": "Sun, 25 Oct 2026 15:00:00 +0000",
+      "candidate_id": 20,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): tier3単独の内容で、独立2ソースの相方となる同一事実の候補が無く不採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/10/22/uk-banks-face-10-000-complaints-in-3-months-over-crypto-restrictions",
+      "title": "UK banks face 10,000 complaints in 3 months over crypto restrictions",
+      "published_at": "Sun, 25 Oct 2026 13:00:00 +0000",
+      "candidate_id": 21,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): tier3単独の内容で、独立2ソースの相方となる同一事実の候補が無く不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/netanyahu-floats-use-of-blockchain-as-solution-to-potential-financial-sanctions?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Netanyahu floats use of blockchain as solution to potential financial sanctions",
+      "published_at": "Sun, 25 Oct 2026 11:42:00 +0000",
+      "candidate_id": 22,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 候補12（Reuters報道）と同じ事実（ネタニヤフ首相の制裁回避のための暗号資産活用発言）の重複"
+    }
+  ],
+  "reusable_for_summary": [],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 0
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 0
+    },
+    "FRB（speeches）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "FRB（testimony）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 0
+    },
+    "米財務省": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "USTR": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "ホワイトハウス": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 1
+    },
+    "ホワイトハウス（大統領令等）": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 0
+    },
+    "ADP": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 2
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 2
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "The Block": {
+      "status": "ok",
+      "raw_count": 19,
+      "kept_count": 2
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 49
+    }
+  },
+  "news_candidate_count": 22,
+  "format_normalized": {
+    "part1_points": 0,
+    "part2_flow": 0
+  },
+  "flow_price_fragment": " #BTC -0.07%、 #ETH +0.19%（24時間比）",
+  "part1_md": "【対象日】2026年10月25日（日）\n\n【ヘッドライン】\nイエメンのフーシ派とサウジアラビアの衝突が続く中、Reutersによると紅海情勢の緊張を背景に湾岸の株式市場の多くが下落したと報じられました。産油地域を巡る軍事的緊張が意識された可能性がありますが、暗号通貨価格への直接因果は未確認です。\n\n【主要なポイント】\n・Reutersによると、ウクライナによるロシアのエネルギー施設への攻撃が、トランプ政権との間の溝を深めているとされ、ロシア・ウクライナ情勢を巡るエネルギー関連の緊張が続いています。暗号通貨価格への直接因果は未確認です（Reuters、10月25日）。\n・イランの軍がバンダルアッバス上空で米国の無人機を撃墜したと主張していると、イラン国営通信を引用してReutersが報じました。被害・影響の詳細は未確認です（Reuters、10月25日）。\n・Reutersによると、イスラエルのネタニヤフ首相が制裁回避の手段として暗号資産・ブロックチェーンの活用に言及し、同国中央銀行総裁らから批判を受けたと報じられました。暗号資産が地政学的な制裁回避の文脈で言及された事例であり、価格への直接因果は未確認です（Reuters、10月25日）。\n・サウジアラビアが、フーシ派による新たな威嚇が続く中でもリヤド空港の一部運用を再開したとReutersが報じました。産油地域の軍事情勢を巡る緊張が意識された可能性がありますが、暗号通貨価格への直接因果は未確認です（Reuters、10月25日）。\n",
+  "part2_md": "【市場のフロー】\n①【出来事・ニュース】イエメンのフーシ派とサウジアラビアの衝突が続く中、紅海情勢の緊張を背景に湾岸の株式市場の多くが下落したとReutersが報じました（Reuters、10月25日） → 【地政学・マクロの変化】産油地域を巡る軍事的緊張が市場で意識された可能性があります → 【暗号通貨価格】 #BTC -0.07%、 #ETH +0.19%（24時間比）で、同時期はBTC・ETHともに小幅な値動きにとどまりましたが、因果は未確認です。\n②【出来事・ニュース】ウクライナによるロシアのエネルギー施設への攻撃がトランプ政権との間の溝を深めているとReutersが報じたほか、イランの軍がバンダルアッバス上空で米国の無人機を撃墜したと主張していると同通信が伝えました（Reuters、10月25日） → 【地政学・マクロの変化】ロシア・ウクライナ情勢および中東を巡る地政学リスクの高まりが意識された可能性があります → 【暗号通貨価格】 #BTC -0.07%、 #ETH +0.19%（24時間比）で、同時期は目立った方向感のない推移でしたが、因果は未確認です。\n③【出来事・ニュース】イスラエルのネタニヤフ首相が制裁回避の手段として暗号資産・ブロックチェーンの活用に言及し、同国中央銀行総裁らから批判を受けたとReutersが報じました（Reuters、10月25日） → 【暗号通貨価格】 #BTC -0.07%、 #ETH +0.19%（24時間比）で、同時期は落ち着いた値動きでしたが、因果は未確認です。\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは27.17%→13.57%へ低下しました（24時間出来高 -49.95%、TVL +0.17%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは51.77%→32.54%へ低下しました（24時間出来高 -36.95%、TVL +0.31%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+0.19%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\n中東・東欧を巡る地政学リスクの報道が相次ぎましたが、暗号通貨市場への直接的な影響は確認できず、地合いはやや不透明な状態が続いています。今後も地政学情勢の展開と市場心理の変化を注視する必要がありそうです。\n",
+  "numeric_record_md": "【対象日】2026年10月25日（日）\n\n【主要指標】\n・市場全体：時価総額 $2.693兆（¥422.4兆）｜24時間取引高 $376.8億（¥5.91兆）\n・ #BTC：$80,463（約1,262.0万円）｜24時間比 -0.07%\n　（24時間レンジ $79,973〜$80,925）\n・ #ETH：$2,345（約36.8万円）｜24時間比 +0.19%\n　（24時間レンジ $2,314〜$2,368）\n・ #BNB：$741（約11.6万円）｜24時間比 +0.93%\n・市場心理：Fear & Greed 45（Neutral、CoinMarketCap API）\n・ドミナンス：BTC 60.07%｜ETH 10.63%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年10月26日07:37 JST、USD/JPY ¥156.84\n\n【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $3.41M vs Base上ETH/USDC $53.51M｜参考：Base上DEX全体 $8.044億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $60.35億（¥9,466億）｜24時間比 -0.17%｜USDCドミナンス 84.5%\n・ ETH/USDC（Base）参考APR：0.05% 13.57%（TVL $8.47M／24h出来高 $6.30M）｜0.3% 32.54%（TVL $158.86M／24h出来高 $47.21M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年10月26日07:37 JST\n"
+}
