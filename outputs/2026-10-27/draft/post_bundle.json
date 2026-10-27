@@ -1,0 +1,568 @@
+{
+  "target_date_jst": "2026-10-27",
+  "level": "L0",
+  "sections": {
+    "part0_target_date": "2026年10月27日（火）",
+    "part1_headline": "CFTCは、ユタ州が予測市場を州法で規制しようとする動きを阻止するため提訴したと発表しました。連邦が予測市場の管轄を独占すべきとの立場を改めて示す動きです。",
+    "part1_points": "・CoinDesk・The Blockによると、Ripple社がOCC（通貨監督庁）から全国信託銀行設立の最終承認を取得し、ステーブルコインRLUSDの準備金管理が連邦監督下に入る見通しとなりました。公式発表での確認は取れていません（CoinDesk、The Block、10月27日）。\n・Reutersによると、暗号通貨業界が米中間選挙に向けて多額の資金を同盟候補支援に投じているとの分析が報じられました。業界の政治的影響力拡大を示す動きとされますが、暗号通貨価格への直接因果は未確認です（Reuters、10月27日）。\n・イエメンのフーシ派がサウジアラビアのラスタヌラ製油所にミサイル攻撃を行ったと主張していると、Reutersが報じました。産油施設を巡る軍事的緊張が意識された可能性がありますが、被害・影響の詳細は未確認です（Reuters、10月27日）。\n・Reutersによると、米国が仲介した合意を受けてロシアの製油所へのドローン攻撃が停止し、同国の製油所が生産量を増やしているとされます。原油需給を巡る地政学リスクの後退が意識された可能性がありますが、暗号通貨価格への直接因果は未確認です（Reuters、10月27日）。",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.703兆（¥425.6兆）｜24時間取引高 $605.3億（¥9.53兆）\n・ #BTC：$80,728（約1,271.0万円）｜24時間比 +1.15%\n・ #ETH：$2,344（約36.9万円）｜24時間比 +1.64%\n　（24時間レンジ $2,294〜$2,355）\n・ #BNB：$744（約11.7万円）｜24時間比 +0.45%\n・市場心理：Fear & Greed 45（Neutral、CoinMarketCap API）\n・ドミナンス：BTC 60.03%｜ETH 10.60%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年10月28日07:37–07:38 JST、USD/JPY ¥157.44",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $3.82M vs Base上ETH/USDC $67.21M｜参考：Base上DEX全体 $10.012億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $60.81億（¥9,574億）｜24時間比 +1.09%｜USDCドミナンス 84.6%\n・ ETH/USDC（Base）参考APR：0.05% 20.24%（TVL $8.42M／24h出来高 $9.34M）｜0.3% 40.32%（TVL $157.20M／24h出来高 $57.88M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年10月28日07:37–07:38 JST",
+    "part2_flow": "①【出来事・ニュース】CFTCがユタ州による予測市場の州法規制の動きを阻止するため提訴したと発表しました（CFTC発表、10月27日） → 【暗号通貨価格】 #BTC +1.15%、 #ETH +1.64%（24時間比）で、同時期はBTC・ETHともに底堅い値動きでしたが、因果は未確認です。\n②【出来事・ニュース】CoinDesk・The Blockによると、Ripple社がOCCから全国信託銀行設立の最終承認を取得したとされ、ステーブルコインRLUSDの準備金管理が連邦監督下に入る見通しと報じられました（公式発表での確認は未取得、CoinDesk、The Block、10月27日） → 【暗号通貨価格】 #BTC +1.15%、 #ETH +1.64%（24時間比）で、同時期はBTC・ETHともにやや強含みの値動きでしたが、因果は未確認です。\n③【出来事・ニュース】Reutersによると、サウジアラビアの製油所へのミサイル攻撃をフーシ派が主張したと報じられました（Reuters、10月27日） → 【地政学・マクロの変化】産油施設を巡る地政学リスクが意識された可能性があります → 【暗号通貨価格】 #BTC +1.15%、 #ETH +1.64%（24時間比）で、同時期はBTC・ETHともに上昇基調でしたが、因果は未確認です。",
+    "lp_comment": "参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは38.12%→20.24%へ低下しました（24時間出来高 -46.24%、TVL +1.24%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは69.80%→40.32%へ低下しました（24時間出来高 -41.94%、TVL +0.53%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+1.64%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "暗号通貨市場は規制・制度面と地政学関連の材料が交錯し、方向感を見極めづらい地合いとなりました。今後はRipple社の信託銀行承認を巡る公式発表や、中東情勢の進展を確認したいところです。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "CFTCがユタ州を提訴、予測市場の管轄巡り攻防",
+  "audit_ledger": [
+    {
+      "source": "OCC",
+      "url": "https://www.occ.gov/news-issuances/news-releases/2026/nr-occ-2026-94.html",
+      "title": "Comptroller Gould Discusses Efforts to Support Community Banks",
+      "published_at": "27 Oct 2026 14:00:00 -0400",
+      "candidate_id": 1,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 地方銀行支援に関する講演内容で、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "CFTC",
+      "url": "https://www.cftc.gov/PressRoom/PressReleases/9317-26",
+      "title": "ICYMI: Agricultural Leaders and Market Participants Join CFTC Chairman Selig in Overland Park, Kansas for AgCon 2026",
+      "published_at": "Tue, 27 Oct 2026 19:22:28 +0000",
+      "candidate_id": 2,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 農業先物会議の開催報告で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "CFTC",
+      "url": "https://www.cftc.gov/PressRoom/PressReleases/9316-26",
+      "title": "CFTC Announces Semiweekly Publication of the COT Report",
+      "published_at": "Tue, 27 Oct 2026 17:47:15 +0000",
+      "candidate_id": 3,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: COTレポートの公表頻度変更に関する発表で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "CFTC",
+      "url": "https://www.cftc.gov/PressRoom/PressReleases/9315-26",
+      "title": "CFTC Sues to Block State Enforcement in Utah Amid Ongoing Efforts to Preserve Jurisdiction",
+      "published_at": "Tue, 27 Oct 2026 12:58:38 +0000",
+      "candidate_id": 4,
+      "verified_by": "candidate_id 4 (CFTC official release)",
+      "decision": "採用",
+      "reason": "A: CFTCがユタ州を予測市場規制を巡り提訴したとの公式発表。暗号資産業界の制度・規制材料として採用"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/research/research_data/cpi/index.htm",
+      "title": "消費者物価のコア指標",
+      "published_at": "Tue, 27 Oct 2026 14:00:00 +0900",
+      "candidate_id": 5,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 消費者物価コア指標の試算値公表で、暗号通貨市場への直接の波及経路を説明できない"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/about/release_2026/rel261027a.htm",
+      "title": "情報セキュリティ・セミナー「AIエージェント時代に求められるセキュリティ戦略と課題」開催のお知らせ",
+      "published_at": "Tue, 27 Oct 2026 13:00:00 +0900",
+      "candidate_id": 6,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: セキュリティセミナー開催案内で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/statistics/pi/cspi_release/sppi2609.pdf",
+      "title": "企業向けサービス価格指数（9月）",
+      "published_at": "Tue, 27 Oct 2026 08:50:00 +0900",
+      "candidate_id": 7,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 企業向けサービス価格指数の公表で、summaryが空欄のため内容を確認できない"
+    },
+    {
+      "source": "USTR",
+      "url": "https://ustr.gov/about/policy-offices/press-office/press-releases/2026/october/ambassador-greer-issues-statement-status-us-eu-detente-following-record-breaking-loan-european",
+      "title": "Ambassador Greer Issues Statement on the Status of the U.S.-EU Détente Following Record-Breaking Loan from the European Investment Bank to Airbus",
+      "published_at": "Mon, 26 Oct 2026 22:59:07 +0000",
+      "candidate_id": 8,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 米欧間の航空機産業補助金を巡る声明で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxNbGVzelluUlRtODRKTG5wazVoU01tTjQ5bkZxZGI2TWpkTDNSc01XZEJaQTJlaE1EREtyZ0lqR2RieHZZcWVHcUk3T0RMNTY2SkwzYmhLY0I3aFZhV3RVbEwtakpyYm1tZHpfMlU2VVBIa0RTRGNLVTZRUVRsajJBdkhybVd6Q2tldlAtZGVBT1lWUUxrN2c4eXlfN1FiRWZYZlpjUmEzd1lKVGlQbjRFSkpPOUstSFpabzNjRnhIeDFnWHNZYmRYWHpYN3Q1SUk?oc=5",
+      "title": "Insight: Crypto blitzes midterms with $176 million to support allies as it prepares for post-Trump era - Reuters",
+      "published_at": "Tue, 27 Oct 2026 20:29:48 GMT",
+      "candidate_id": 9,
+      "verified_by": "Reuters報道",
+      "decision": "採用",
+      "reason": "A: Reutersによる、暗号通貨業界が中間選挙に多額の資金を投じているとの報道。業界動向として採用"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxQS2xReG5IbDd2VEVRZXJ1VUtaNGtlSFhpa3paSkFQVWhLWVk3NzNkendFMXNTZ3p5b3R6aTJTUzluYk1PUGlySXNEaDZPdXN2ZEx2WTF0SlRZZ1lmRmtRZnpFSVU4WGp0ZkdfY18tQlYwck9GbVBRUXR0Q2x2bVlkWDdMbVNFSVVZNnh2bXpjMm9hRjd3eThsYXRqQ0JhT05hc2hIWG93U005R2pFOXlORmZmNV9uYW02cGM4?oc=5",
+      "title": "Trump says he will visit tanker in Texas with first oil from Venezuela deal - Reuters",
+      "published_at": "Tue, 27 Oct 2026 20:16:09 GMT",
+      "candidate_id": 10,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（順位外、個別の石油取引に関する内容）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxOTVZDTFViUjF0VS1rM2FQX1ZjYmpIQncyQi1pMldoZ1N2U2JXUjIydVFJUGN1dXV4STlvYlVEM3FPSEZaSEt3Rnkxc0R5c3JrOEg2b0g2d2pUemFMbXpKNjZ6M1NabkwxcmJrbE5sdWtnU2pDd3R0X3ZkakhTNTZraUU0ejJKdDVRR0NheWhzcXBLUnU2dGxGUXFURnJZaExIM1hTRW9LWE5KbkNJN2RZ?oc=5",
+      "title": "Bond investors are thinking less about the Fed and more about AI, deficits - Reuters",
+      "published_at": "Tue, 27 Oct 2026 19:55:40 GMT",
+      "candidate_id": 11,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 債券投資家の関心がFRBからAIや財政赤字に移っているとの分析記事で、具体的な波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxPMU9tRHdmbzQ2ZHlsQzBDVmpqUEhlTk9meXgzN1VMOWlUMnlKOU1ibFRMQ1VQNDNjTkloUG9lb054S2JXZ2YwMS1MMXM4b1pwczl2clNyTHM5RGZVdnd6bzJXTVl4bW4yZ0pGTEV2aEV4dlR2cDNkc0lvNjVMN2ZScklvRDE3S1VyS0FoaC02Z3BqTHJPeTJrekxhM0dONmN0VzdXTmE5QjNfM0pIZ1Q2SHMtSkZzbFNqSThaN2RybDFBdw?oc=5",
+      "title": "Yemen's Houthis say they hit Saudi Ras Tanura oil refinery with missile - Reuters",
+      "published_at": "Tue, 27 Oct 2026 19:17:53 GMT",
+      "candidate_id": 12,
+      "verified_by": "Reuters報道",
+      "decision": "採用",
+      "reason": "B: フーシ派がサウジのラスタヌラ製油所を攻撃したと主張したとの報道。産油施設への攻撃の主張であり優先対象に該当"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxORlpOQUJNZzFNTzV3SW1fSi1JZFJEdHFZWFVZZ0hiSnpLNjJPSFBxeGdSRmQtUmtBU1FjY21lMnBJazl1SVIyRngwNjZicjlIMHhvLWxKZVh3LXRrTjR5LTBrc0xwY0lYRjZSVTBGaVpqdFVaU3dZTEg5WGYwNmJfNmpCZGZRX2MtX2d4cGw5eTk1enFmZkY1TFFLdURQbGJfM0lQUGNjdFRGQmZPeUt0T3MtN1ZGU0V3UExZOWxuam5CVUwxUnk1VA?oc=5",
+      "title": "Russian oil refineries boost output as drone attacks halt after US-brokered deal, sources say - Reuters",
+      "published_at": "Tue, 27 Oct 2026 16:52:01 GMT",
+      "candidate_id": 13,
+      "verified_by": "Reuters報道",
+      "decision": "採用",
+      "reason": "B: 米仲介合意を受けロシア製油所へのドローン攻撃が停止し増産したとの報道。産油国の軍事情勢に関わる材料として採用"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxPZjJLZEFSMkx5WmRLY3pUdlRCVFlwNURqUkNEV2F6blQxU1NUemxWc052d3k5dU53UFVwZE9MVjdyMjlOQXhUc1dTS0M3Vk1lcGZVQjVtZEJOSVVKVFZsUTR1a29wVHNMQ2dveVQyWFZvSEc4Rkt0LV83NWxQYkNkNU0wMzl4Z1lfZlBKMTZ1SQ?oc=5",
+      "title": "US consumer confidence improves in October - Reuters",
+      "published_at": "Tue, 27 Oct 2026 14:24:05 GMT",
+      "candidate_id": 14,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（順位外、消費者信頼感指数の内容）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxQdl9uZnNNN3FkWnI1VG8xRkxyTXF5dnJwWEMxYVpXLWZIUUt5N0QwX3pYQWlzdzFRN3hlOXNHcmt6VmZCbTkyQnJnWF9yRXRxTDlPa1JuSFF0Vjk5VFZGRmZYdG5SRDdIcERBLWhrQVpaMmViU21uNXc1NkpDS0Y0Tmd0ZTgwTmFWQzIwaV8tM3JjNnhIQXJKRXU2Y3J2d24xVmp3Yk9ueV9WckhNT1JQbmNNZDQ?oc=5",
+      "title": "The ultra-wealthy crypto executives who are spending big on the midterms - Reuters",
+      "published_at": "Tue, 27 Oct 2026 10:11:44 GMT",
+      "candidate_id": 15,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 同じtierの候補9と同じ事実（暗号資産業界幹部の中間選挙への資金支出）の重複"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxQQWIyeWVhRnVBaHZfV05HanpZVFJzZDZiaC1MTEFVX0JEbWc5RVhRV3htMnJFMDNCVjBPWTJISkhha3ZWc3otaXBCTGloREJidmlqOWtXMTQ4Zks2aTA5czBzNC1OdGNuVXlqLVZ4TTk3M1VUSEZvdVdCLXV3bHJsZXBHSktGcXR0dk1wS2VYdWYxTm9ueGc?oc=5",
+      "title": "Gold gains on softer oil prices ahead of Fed meeting - Reuters",
+      "published_at": "Tue, 27 Oct 2026 05:46:00 GMT",
+      "candidate_id": 16,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（順位外、金価格と原油価格の動向）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxORGd3OVRlcl82RE5aMnZNb3FSZzVVZUxxN1oxVmFIOFJZZGdJb0toUDBmWXJEbGZuWWtJOFF6X3hJeFRQT0k2VlFnTk5kWFpod0kwRS1VMjRpb21qYlV1NzZTd2padUZzWVlJal9xb01kRnRNLVYwWGo1aUhRYThpYV9hclNDUWo1VElHNGotWTk2a3VGdER5b0p4d0N6RkVtVGRfUXF0MzU4YndydEkxLXZfZnlLNVJwODM2ZWEwVE5ic2dk?oc=5",
+      "title": "Ex-BOJ chief Kuroda backs more rate hikes, his former deputy urges caution - Reuters",
+      "published_at": "Tue, 27 Oct 2026 02:50:00 GMT",
+      "candidate_id": 17,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（順位外、日銀金融政策を巡る元総裁の見解）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxPcms4SkRwSDBJVER3QkV1VmoyX1pvTUlrcjRpSk4xSmNLNFZYNjh3Vi1LMGNfUnZPYnVscDdQZl9Xa0d4SHhKM1lDLXItNWh0aWMxNThJeVpMOEsxWXYwNUVXSWMtVWZRZjRRQlFUYk9tRUZxRUR1MWo0QUdPVE9TdzFnWDk0Qzd3NDZfYml4cGdSenVORGpfUTB6RTMyRV9BRmowWERaeWdsSFVLUU0zdFl3?oc=5",
+      "title": "Indian equity benchmarks muted as elevated oil, Fed in focus - Reuters",
+      "published_at": "Tue, 27 Oct 2026 02:28:00 GMT",
+      "candidate_id": 18,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（順位外、インド株式市場の動向）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxQbkE2MkVyd2dKcU5mTWp1VmY5c0pENUN0WjhPTHJDTXZQRENZU2JQa09JbWJaTUpicnN0RkFuTllzRHE0bUtOSjdrSDBiZ3FMYVVhdjVtVFRZLXJoRmRmNldVWXg0SjUxVFppSjQyYXhVajhydnFRRS0yRmNEcW9XWjJZWWpUYjBUR1NCSWFFa3AzNFhDWDVYeVU2VHdQd2ZMcHM1NDhLM3RrTnY5MVlPU0szSWN4ZUlVRmN1OERpcFM3UTBtNGxUNXBVNzltalU?oc=5",
+      "title": "Saudi-led coalition says it intercepted Houthi missiles, drones attacking kingdom - Reuters",
+      "published_at": "Tue, 27 Oct 2026 02:17:00 GMT",
+      "candidate_id": 19,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 優先して掲載する対象に当たらない（迎撃成功の報道で被害未確認、他材料を優先）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxPVDhUYWVaR1lyeGFScDAxOG1INFBuME5XaHhvOFNZTnhjUXFCTHVGX2k1cEJzSUMwUmpQblFZWE1WU2Z6Q0dnZTRmc2lCSEE1RklYN3VZdWV3aVRLblJ4aTFudW1aUkxUVWZXWUl6Ql8zQkVEaDBJakY4SnhyUmRwb1BQcHpKSHlOWG5DeDN3QVFIb1MyMU5mcDlESEdQS1BwdHhpaThFZjZDMDIweVVYX1VQX1VEdVdh?oc=5",
+      "title": "Dollar rises as markets eye central bank meetings - Reuters",
+      "published_at": "Tue, 27 Oct 2026 02:12:00 GMT",
+      "candidate_id": 20,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（順位外、ドル相場の動向）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxQdEdzTDdxbEtNX1l6VDJMdF9NTGpUNEJPYy1jaUo2SkllaGhJZnZvNzZOOTd5MkZHV3p5T2ZhcjlkcWduOXp5elFKREQ0bFBib0pXUzNKdGI2QmE3eWZxRlktZXhSZG0tQzQ4U1dXNWxOZktiZVZvc1pNUERsYUFLVUJYSQ?oc=5",
+      "title": "Stocks rise as oil slips with tech earnings, Fed ahead - Reuters",
+      "published_at": "Tue, 27 Oct 2026 01:46:00 GMT",
+      "candidate_id": 21,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（順位外、株式市場全般の動向）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMi1wFBVV95cUxNRWRKSlpLR3l4cENjelFuU0tPXzRLc21PTTZ4QUpCNHBnZDZ0MW85NFVpYnlvLXhiaFQ3SnZ3aDhEZXRfOXg3LURobjdQWHAtSGNKalZMcVNhWGRCeDRpYzVYb1BTOXZydlFJVVFqbXRaWDlsbUozS0lSc1BsUDdhaWRuV3dpUDFFT3VXRjg4cklMT3NvOEs4T1hOX0lvUC1Yek5kcXd0TmhIaUItS3RVRFUxejN1amZIMmJmcHE3M0k5VGVGOGs3LU5GTWk3R0ZCNzBURk41dw?oc=5",
+      "title": "USTR Greer tells EU that loan to Airbus threatens trade truce on aircraft financing - Reuters",
+      "published_at": "Tue, 27 Oct 2026 00:54:00 GMT",
+      "candidate_id": 22,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 米欧間の航空機産業補助金を巡る通商摩擦の内容で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxNclYtUXdmSlNpRWlCYkF0T3M1UEpKQTRlS3hyeXRBS3lmVms3cXZNSGl3NDl1dDZ1cUFpR1gtaW9NQ0lfaE1wSWd1ZUNsb0tkQ3JWUzdoVzJJSmd0UDUtXzFfdHhobnlfZ1A2bUFCSFZfVjVYNl9tYTR3WVlmSWRrQXFLSjFrdUcyV2sxTi1ET1NJZ3o3UXFBOEhuaDVyLS1zeHFPSVpXNkI2Y1V2Q1M0?oc=5",
+      "title": "Japan's trend inflation index hits 3-year high, cements case for BOJ rate hike - Reuters",
+      "published_at": "Tue, 27 Oct 2026 00:23:00 GMT",
+      "candidate_id": 23,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（順位外、日本の基調的インフレ指標）"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/business/2026-10-27-robinhood-chain-brings-in-26-million-crypto-revenue-rises-20-q2-431935",
+      "title": "Robinhood Chain brings in $26 million as crypto revenue rises 20% in Q3",
+      "published_at": "Tue, 27 Oct 2026 20:55:35 +0000",
+      "candidate_id": 24,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: tier3単独の決算報道で、tier1・tier2の裏付けまたは独立2ソースの組が無い"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/10/27/treasury-s-bessent-sees-crypto-as-america-s-next-tool-for-keeping-the-u-s-dollar-on-top",
+      "title": "Treasury's Bessent sees crypto as America's next tool for keeping the U.S. dollar on top",
+      "published_at": "Tue, 27 Oct 2026 20:41:33 +0000",
+      "candidate_id": 25,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: tier3単独の発言報道で、tier1・tier2の裏付けまたは独立2ソースの組が無い"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/quantum-fears-already-limiting-bitcoins-growth-stacks-founder-says?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Quantum fears already limiting Bitcoin’s growth, Stacks founder says",
+      "published_at": "Tue, 27 Oct 2026 20:33:19 +0000",
+      "candidate_id": 26,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: tier3単独の意見記事で、tier1・tier2の裏付けまたは独立2ソースの組が無い"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/10/27/robinhood-s-crypto-revenue-plunges-55-even-as-trading-platform-posts-record-sales",
+      "title": "Robinhood's crypto revenue fell 55% from last year, but topped Street forecasts",
+      "published_at": "Tue, 27 Oct 2026 20:32:21 +0000",
+      "candidate_id": 27,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: tier3単独の決算報道で、tier1・tier2の裏付けまたは独立2ソースの組が無い"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/ripple-robinhood-expand-partnership-rlusd-retail-institutional-markets?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Ripple, Robinhood expand partnership to bring RLUSD to retail and institutional markets",
+      "published_at": "Tue, 27 Oct 2026 19:54:05 +0000",
+      "candidate_id": 28,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: tier3単独の提携報道で、独立2ソースの組が成立しない（候補39はRipple OCC承認が主題で事実が異なる）"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/what-happened-in-crypto-today?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Here’s what happened in crypto today",
+      "published_at": "Tue, 27 Oct 2026 19:36:13 +0000",
+      "candidate_id": 29,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 日次まとめ記事で個別の事実報道ではなく、単独の主根拠にできない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/cftc-lawsuit-utah-action-prediction-markets?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "CFTC sues Utah to block action against prediction markets",
+      "published_at": "Tue, 27 Oct 2026 19:21:59 +0000",
+      "candidate_id": 30,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: tier1候補4と同じ事実（CFTCのユタ州提訴）の裏取りのためuse:falseのまま"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/10/27/u-s-agency-hits-utah-with-lawsuit-to-shield-kalshi-s-ability-to-offer-betting-there",
+      "title": "U.S. agency hits Utah with lawsuit to shield Kalshi's ability to offer betting there",
+      "published_at": "Tue, 27 Oct 2026 19:07:59 +0000",
+      "candidate_id": 31,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: tier1候補4と同じ事実（CFTCのユタ州提訴）の裏取りのためuse:falseのまま"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/regulation/2026-10-27-cftc-sues-utah-battle-over-prediction-market-regulation-intensifies-431922",
+      "title": "CFTC sues Utah as battle over prediction market regulation intensifies",
+      "published_at": "Tue, 27 Oct 2026 18:51:46 +0000",
+      "candidate_id": 32,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: tier1候補4と同じ事実（CFTCのユタ州提訴）の裏取りのためuse:falseのまま"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/10/27/intel-oracle-ibm-join-growing-list-of-firms-objecting-to-okx-ice-tokenized-stock-plans",
+      "title": "Intel, Oracle, IBM join growing list of firms objecting to OKX–ICE tokenized stock plans",
+      "published_at": "Tue, 27 Oct 2026 18:13:02 +0000",
+      "candidate_id": 33,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: tier3単独のOKX-ICE反対報道で、独立2ソースの相方が成立しないため不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/us-voters-candidates-support-financial-technology-poll?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Majority of Americans want candidates who support US-based financial technology: Poll",
+      "published_at": "Tue, 27 Oct 2026 18:08:00 +0000",
+      "candidate_id": 34,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: tier3単独の世論調査記事で、tier1・tier2の裏付けまたは独立2ソースの組が無い"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/markets/2026-10-27-crypto-com-og-com-launch-us-crypto-perps-up-to-5x-leverage-431902",
+      "title": "Crypto.com and OG.com launch US crypto perps with up to 5x leverage",
+      "published_at": "Tue, 27 Oct 2026 17:07:10 +0000",
+      "candidate_id": 35,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: tier3単独の商品ローンチ報道で、tier1・tier2の裏付けまたは独立2ソースの組が無い"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/deals/2026-10-27-canton-based-trading-platform-cancore-raises-7-2-million-60-million-token-valuation-431906",
+      "title": "Canton-based trading platform Cancore raises $7.2 million at $60 million token valuation",
+      "published_at": "Tue, 27 Oct 2026 16:59:10 +0000",
+      "candidate_id": 36,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: tier3単独の資金調達報道で、tier1・tier2の裏付けまたは独立2ソースの組が無い"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/10/27/brazilian-companies-turned-to-stablecoins-on-election-day-to-dodge-a-currency-crash",
+      "title": "Brazilian companies turned to stablecoins on election day to dodge a currency crash",
+      "published_at": "Tue, 27 Oct 2026 16:59:07 +0000",
+      "candidate_id": 37,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: tier3単独のブラジル市場報道で、tier1・tier2の裏付けまたは独立2ソースの組が無い"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/janus-henderson-centrifuge-launch-tokenized-nasdaq-100-fund-on-stellar?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Janus Henderson, Centrifuge launch tokenized Nasdaq-100 fund on Stellar",
+      "published_at": "Tue, 27 Oct 2026 16:37:15 +0000",
+      "candidate_id": 38,
+      "verified_by": "独立2ソース規定（Cointelegraph・CoinDesk）",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: Janus Henderson・CentrifugeがNasdaq-100連動トークン化ファンドをStellarで開始したとの、独立した2媒体の一致報道"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/regulation/2026-10-26-ripple-gains-final-occ-approval-rlusd-431810",
+      "title": "Ripple gains final OCC approval to launch national trust bank and bring RLUSD under federal oversight",
+      "published_at": "Tue, 27 Oct 2026 02:28:18 +0000",
+      "candidate_id": 39,
+      "verified_by": "独立2ソース規定（The Block・Cointelegraph）",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: RippleがOCCから全国信託銀行設立の最終承認を取得したとの、独立した2媒体の一致報道"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/10/27/nasdaq-100-comes-onchain-as-janus-henderson-and-centrifuge-launch-first-licensed-fund",
+      "title": "Nasdaq-100 comes onchain as Janus Henderson and Centrifuge launch first licensed fund",
+      "published_at": "Tue, 27 Oct 2026 14:21:10 +0000",
+      "candidate_id": 40,
+      "verified_by": "独立2ソース規定（CoinDesk・Cointelegraph）",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: Janus Henderson・CentrifugeがNasdaq-100連動トークン化ファンドをStellarで開始したとの、独立した2媒体の一致報道"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/ecosystems/2026-10-27-zcash-co-founder-proposes-ending-grants-subsidy-citing-125-million-treasury-431847",
+      "title": "Zcash co-founder proposes ending grants subsidy, citing $125 million treasury",
+      "published_at": "Tue, 27 Oct 2026 12:05:17 +0000",
+      "candidate_id": 41,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（順位外、Zcash財団内部の提案）"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/10/27/zcash-co-founder-proposes-ending-grants-funding-citing-usd125-million-treasury",
+      "title": "Zcash co-founder proposes ending grants funding, citing $125 million treasury",
+      "published_at": "Tue, 27 Oct 2026 06:14:41 +0000",
+      "candidate_id": 42,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 候補41と同じtierで同じ事実（Zcash共同創業者の助成金停止提案）の重複"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/10/27/ripple-gets-a-final-go-ahead-to-launch-its-own-u-s-national-trust-bank",
+      "title": "Ripple gets a final go-ahead to launch its own U.S. national trust bank",
+      "published_at": "Tue, 27 Oct 2026 04:28:49 +0000",
+      "candidate_id": 43,
+      "verified_by": "独立2ソース規定（CoinDesk・Cointelegraph）",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: RippleがOCCから全国信託銀行設立の最終承認を取得したとの、独立した2媒体の一致報道"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/ripple-wins-final-us-approval-for-national-trust-bank?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Ripple wins final US approval for national trust bank",
+      "published_at": "Tue, 27 Oct 2026 00:06:41 +0000",
+      "candidate_id": 44,
+      "verified_by": "独立2ソース規定（Cointelegraph・The Block・CoinDesk）",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: RippleがOCCから全国信託銀行設立の最終承認を取得したとの、独立した2媒体以上の一致報道"
+    }
+  ],
+  "reusable_for_summary": [],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 0
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 0
+    },
+    "FRB（speeches）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "FRB（testimony）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 1
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 3
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 3
+    },
+    "米財務省": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "USTR": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 1
+    },
+    "ホワイトハウス": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 0
+    },
+    "ホワイトハウス（大統領令等）": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 0
+    },
+    "ADP": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 21
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 20
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "The Block": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 15
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 48
+    }
+  },
+  "news_candidate_count": 44,
+  "format_normalized": {
+    "part1_points": 0,
+    "part2_flow": 0
+  },
+  "flow_price_fragment": " #BTC +1.15%、 #ETH +1.64%（24時間比）",
+  "part1_md": "【対象日】2026年10月27日（火）\n\n【ヘッドライン】\nCFTCは、ユタ州が予測市場を州法で規制しようとする動きを阻止するため提訴したと発表しました。連邦が予測市場の管轄を独占すべきとの立場を改めて示す動きです。\n\n【主要なポイント】\n・CoinDesk・The Blockによると、Ripple社がOCC（通貨監督庁）から全国信託銀行設立の最終承認を取得し、ステーブルコインRLUSDの準備金管理が連邦監督下に入る見通しとなりました。公式発表での確認は取れていません（CoinDesk、The Block、10月27日）。\n・Reutersによると、暗号通貨業界が米中間選挙に向けて多額の資金を同盟候補支援に投じているとの分析が報じられました。業界の政治的影響力拡大を示す動きとされますが、暗号通貨価格への直接因果は未確認です（Reuters、10月27日）。\n・イエメンのフーシ派がサウジアラビアのラスタヌラ製油所にミサイル攻撃を行ったと主張していると、Reutersが報じました。産油施設を巡る軍事的緊張が意識された可能性がありますが、被害・影響の詳細は未確認です（Reuters、10月27日）。\n・Reutersによると、米国が仲介した合意を受けてロシアの製油所へのドローン攻撃が停止し、同国の製油所が生産量を増やしているとされます。原油需給を巡る地政学リスクの後退が意識された可能性がありますが、暗号通貨価格への直接因果は未確認です（Reuters、10月27日）。\n",
+  "part2_md": "【市場のフロー】\n①【出来事・ニュース】CFTCがユタ州による予測市場の州法規制の動きを阻止するため提訴したと発表しました（CFTC発表、10月27日） → 【暗号通貨価格】 #BTC +1.15%、 #ETH +1.64%（24時間比）で、同時期はBTC・ETHともに底堅い値動きでしたが、因果は未確認です。\n②【出来事・ニュース】CoinDesk・The Blockによると、Ripple社がOCCから全国信託銀行設立の最終承認を取得したとされ、ステーブルコインRLUSDの準備金管理が連邦監督下に入る見通しと報じられました（公式発表での確認は未取得、CoinDesk、The Block、10月27日） → 【暗号通貨価格】 #BTC +1.15%、 #ETH +1.64%（24時間比）で、同時期はBTC・ETHともにやや強含みの値動きでしたが、因果は未確認です。\n③【出来事・ニュース】Reutersによると、サウジアラビアの製油所へのミサイル攻撃をフーシ派が主張したと報じられました（Reuters、10月27日） → 【地政学・マクロの変化】産油施設を巡る地政学リスクが意識された可能性があります → 【暗号通貨価格】 #BTC +1.15%、 #ETH +1.64%（24時間比）で、同時期はBTC・ETHともに上昇基調でしたが、因果は未確認です。\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは38.12%→20.24%へ低下しました（24時間出来高 -46.24%、TVL +1.24%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは69.80%→40.32%へ低下しました（24時間出来高 -41.94%、TVL +0.53%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+1.64%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\n暗号通貨市場は規制・制度面と地政学関連の材料が交錯し、方向感を見極めづらい地合いとなりました。今後はRipple社の信託銀行承認を巡る公式発表や、中東情勢の進展を確認したいところです。\n",
+  "numeric_record_md": "【対象日】2026年10月27日（火）\n\n【主要指標】\n・市場全体：時価総額 $2.703兆（¥425.6兆）｜24時間取引高 $605.3億（¥9.53兆）\n・ #BTC：$80,728（約1,271.0万円）｜24時間比 +1.15%\n・ #ETH：$2,344（約36.9万円）｜24時間比 +1.64%\n　（24時間レンジ $2,294〜$2,355）\n・ #BNB：$744（約11.7万円）｜24時間比 +0.45%\n・市場心理：Fear & Greed 45（Neutral、CoinMarketCap API）\n・ドミナンス：BTC 60.03%｜ETH 10.60%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年10月28日07:37–07:38 JST、USD/JPY ¥157.44\n\n【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $3.82M vs Base上ETH/USDC $67.21M｜参考：Base上DEX全体 $10.012億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $60.81億（¥9,574億）｜24時間比 +1.09%｜USDCドミナンス 84.6%\n・ ETH/USDC（Base）参考APR：0.05% 20.24%（TVL $8.42M／24h出来高 $9.34M）｜0.3% 40.32%（TVL $157.20M／24h出来高 $57.88M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年10月28日07:37–07:38 JST\n"
+}
