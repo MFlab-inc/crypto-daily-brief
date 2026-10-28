@@ -1,0 +1,205 @@
+{
+  "target_date_jst": "2026-10-28",
+  "weekday_jp": "水",
+  "date_title": "2026年10月28日（水）暗号通貨・DEX市場概況",
+  "summary": "（シャドー運用中：ヘッドラインはフェーズ2で生成）",
+  "assets": [
+    {
+      "asset": "BTC",
+      "usd": "$81,312",
+      "jpy": "約1,283.9万円",
+      "change_24h": "+0.60%",
+      "direction": "up"
+    },
+    {
+      "asset": "ETH",
+      "usd": "$2,361",
+      "jpy": "約37.3万円",
+      "change_24h": "+0.71%",
+      "direction": "up"
+    },
+    {
+      "asset": "BNB",
+      "usd": "$757",
+      "jpy": "約12.0万円",
+      "change_24h": "+1.64%",
+      "direction": "up"
+    }
+  ],
+  "intraday_range": {
+    "BTC": {
+      "high": "$81,715",
+      "low": "$80,271",
+      "source": "coinbase",
+      "retrieved_at": "2026-10-29T07:37:57.796550+09:00",
+      "representative": true,
+      "inconsistent": false,
+      "notable_move": false
+    },
+    "ETH": {
+      "high": "$2,390",
+      "low": "$2,319",
+      "source": "coinbase",
+      "retrieved_at": "2026-10-29T07:37:57.961215+09:00",
+      "representative": true,
+      "inconsistent": false,
+      "notable_move": false
+    },
+    "BNB": {
+      "high": "$761",
+      "low": "$741",
+      "source": "coinbase",
+      "retrieved_at": "2026-10-29T07:37:58.126307+09:00",
+      "representative": false,
+      "inconsistent": false
+    }
+  },
+  "scheduled_events": [
+    {
+      "title": "CPI m/m",
+      "country": "AUD",
+      "impact": "High",
+      "time_jst": "2026-10-28T09:30:00+09:00"
+    },
+    {
+      "title": "CPI y/y",
+      "country": "AUD",
+      "impact": "High",
+      "time_jst": "2026-10-28T09:30:00+09:00"
+    },
+    {
+      "title": "Trimmed Mean CPI m/m",
+      "country": "AUD",
+      "impact": "High",
+      "time_jst": "2026-10-28T09:30:00+09:00"
+    },
+    {
+      "title": "Official Cash Rate",
+      "country": "NZD",
+      "impact": "High",
+      "time_jst": "2026-10-28T10:00:00+09:00"
+    },
+    {
+      "title": "RBNZ Rate Statement",
+      "country": "NZD",
+      "impact": "High",
+      "time_jst": "2026-10-28T10:00:00+09:00"
+    },
+    {
+      "title": "RBNZ Press Conference",
+      "country": "NZD",
+      "impact": "High",
+      "time_jst": "2026-10-28T11:00:00+09:00"
+    },
+    {
+      "title": "Annual Budget Release",
+      "country": "GBP",
+      "impact": "High",
+      "time_jst": "2026-10-28T21:30:00+09:00"
+    },
+    {
+      "title": "BOC Monetary Policy Report",
+      "country": "CAD",
+      "impact": "High",
+      "time_jst": "2026-10-28T22:45:00+09:00"
+    },
+    {
+      "title": "BOC Rate Statement",
+      "country": "CAD",
+      "impact": "High",
+      "time_jst": "2026-10-28T22:45:00+09:00"
+    },
+    {
+      "title": "Overnight Rate",
+      "country": "CAD",
+      "impact": "High",
+      "time_jst": "2026-10-28T22:45:00+09:00"
+    },
+    {
+      "title": "BOC Press Conference",
+      "country": "CAD",
+      "impact": "High",
+      "time_jst": "2026-10-28T23:30:00+09:00"
+    },
+    {
+      "title": "Federal Funds Rate",
+      "country": "USD",
+      "impact": "High",
+      "time_jst": "2026-10-29T03:00:00+09:00"
+    },
+    {
+      "title": "FOMC Statement",
+      "country": "USD",
+      "impact": "High",
+      "time_jst": "2026-10-29T03:00:00+09:00"
+    },
+    {
+      "title": "FOMC Press Conference",
+      "country": "USD",
+      "impact": "High",
+      "time_jst": "2026-10-29T03:30:00+09:00"
+    }
+  ],
+  "market": {
+    "fear_greed": {
+      "value": 46,
+      "label": "Neutral"
+    },
+    "market_cap": "$2.721兆",
+    "market_cap_jpy": "¥429.6兆",
+    "volume_24h": "$667.2億",
+    "volume_24h_jpy": "¥10.53兆",
+    "btc_dominance": "60.05%",
+    "eth_dominance": "10.60%"
+  },
+  "base": {
+    "tvl": "$60.83億",
+    "tvl_jpy": "¥9,605億",
+    "tvl_change": "+0.03%",
+    "tvl_direction": "up",
+    "dex_volume": "$8.824億",
+    "dex_volume_jpy": "¥1,393億",
+    "dex_volume_eth_usdc": "$91.86M",
+    "dex_volume_eth_usdc_jpy": "¥145億",
+    "usdc_dominance": "84.7%"
+  },
+  "lp": {
+    "pools": [
+      {
+        "name": "Base 0.05%プール",
+        "apr": "26.45%",
+        "tvl": "$8.41M",
+        "volume_24h": "$12.19M",
+        "change_vs_prev": {
+          "apr_change": "+30.68%",
+          "volume_24h_change": "+30.56%",
+          "tvl_change": "-0.09%"
+        }
+      },
+      {
+        "name": "Base 0.3%プール",
+        "apr": "54.88%",
+        "tvl": "$158.97M",
+        "volume_24h": "$79.67M",
+        "change_vs_prev": {
+          "apr_change": "+36.12%",
+          "volume_24h_change": "+37.65%",
+          "tvl_change": "+1.12%"
+        }
+      }
+    ],
+    "check_message": "#ETHが上昇中。#USDC偏り・上限側レンジ外・反落耐性を確認"
+  },
+  "domestic": {
+    "bitflyer_eth_24h": "1,709.75 ETH",
+    "coincheck_eth_24h": "619.35 ETH",
+    "combined_eth": "2,329.09 ETH",
+    "combined_usd": "$5.50M",
+    "retrieved_at": "2026-10-29 07:37 JST"
+  },
+  "footer": {
+    "retrieved_at": "2026-10-29 07:37 JST",
+    "usd_jpy": "¥157.89",
+    "sources": "CoinMarketCap API / GeckoTerminal / DefiLlama / ExchangeRate-API / bitFlyer公式API / Coincheck公式API"
+  }
+}
