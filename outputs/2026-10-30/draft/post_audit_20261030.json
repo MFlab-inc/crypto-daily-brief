@@ -1,0 +1,150 @@
+{
+  "overall": "PASS",
+  "failed": 0,
+  "level": "L0",
+  "checks": [
+    {
+      "id": "C12_banned_terms",
+      "result": "PASS",
+      "detail": "禁止語なし",
+      "terms": []
+    },
+    {
+      "id": "C13_hashtag_boundary",
+      "result": "PASS",
+      "detail": "境界違反なし"
+    },
+    {
+      "id": "C14_no_table",
+      "result": "PASS",
+      "detail": "表形式なし"
+    },
+    {
+      "id": "C15_heading_order",
+      "result": "PASS",
+      "detail": "見出し順序OK"
+    },
+    {
+      "id": "C16_numeric_match",
+      "result": "PASS",
+      "detail": "テンプレート一致"
+    },
+    {
+      "id": "C16b_transcription_scan",
+      "result": "PASS",
+      "detail": "転記検知なし",
+      "hits": []
+    },
+    {
+      "id": "C17_lp_disclaimers",
+      "result": "PASS",
+      "detail": "定型文完全一致"
+    },
+    {
+      "id": "C18_causal_assertion",
+      "result": "PASS",
+      "detail": "断定表現なし"
+    },
+    {
+      "id": "C19_audit_ledger",
+      "result": "PASS",
+      "detail": "51件・全フィールド充足・渡した候補数と一致"
+    },
+    {
+      "id": "C20_image_headline",
+      "result": "PASS",
+      "detail": "全角換算20.5字・#なし"
+    },
+    {
+      "id": "C21_decision_tier_consistency",
+      "result": "PASS",
+      "detail": "51件・整合性OK"
+    },
+    {
+      "id": "C22_headline_tier1_basis",
+      "result": "PASS",
+      "detail": "tier1・tier2由来の採用が存在"
+    },
+    {
+      "id": "C23_summary_no_new_entities",
+      "result": "PASS",
+      "detail": "固有名詞候補1件・すべてpart1_headline/part1_points/reusable_for_summaryに存在"
+    },
+    {
+      "id": "C24_flow_no_unadopted_material",
+      "result": "PASS",
+      "detail": "固有名詞候補9件・すべてpart1_headline・part1_pointsに存在"
+    },
+    {
+      "id": "C26_flow_role_separation",
+      "result": "PASS",
+      "detail": "役割分離の禁止語句なし",
+      "patterns": []
+    },
+    {
+      "id": "C27_summary_role_separation",
+      "result": "PASS",
+      "detail": "役割分離OK",
+      "patterns": [],
+      "prices": []
+    },
+    {
+      "id": "C28_headline_points_role_separation",
+      "result": "PASS",
+      "detail": "役割分離OK"
+    }
+  ],
+  "warnings": [
+    {
+      "id": "W_dup_weak",
+      "detail": "「重複」を理由に不採用にした候補のうち、根拠が弱いものが4件あります。同じ区分でも発言者や内容が違えば別の事実です（Bの扱いの基準の4(c)）。重複先と同じ事実かを確認してください（題名の語の重なりによる検知で、実際の重複でも言い換えで拾うことがあります）。 ・候補7「経済・物価情勢の展望（10月、基本的見解）」（重複先の候補と題名に共通する語が無い。重複先: 候補6「当面の金融政策運営について」。理由: B: 候補6と同じ事実（金融政策決定会合の経済・物価情勢の展望）の重複） ・候補8「（参考）経済・物価情勢の展望と基調的な物価上昇率に関連する各種指標」（重複先の候補と題名に共通する語が無い。重複先: 候補6「当面の金融政策運営について」。理由: B: 候補6と同じ事実（経済・物価情勢展望の参考指標）の重複） ・候補20「Gone in 20 minutes: How the biggest heist in crypto history …」（重複先の候補と題名に共通する語が無い。重複先: 候補26「Bitcoin, cryptocurrency prices fall after Binance …」。理由: B: 候補26・51と同じ事実（Binanceハッキングの経緯の解説）の重複） ・候補25「BOJ keeps interest rates steady, signals further rate hikes …」（重複先の候補と題名に共通する語が無い。重複先: 候補6「当面の金融政策運営について」。理由: B: 候補6と同じ事実（日銀の金融政策決定）の重複（tier1を優先））",
+      "count": 4,
+      "entries": [
+        {
+          "candidate_id": 7,
+          "code": "no_shared",
+          "refs": [
+            6
+          ],
+          "title": "経済・物価情勢の展望（10月、基本的見解）",
+          "ref_titles": [
+            "当面の金融政策運営について"
+          ]
+        },
+        {
+          "candidate_id": 8,
+          "code": "no_shared",
+          "refs": [
+            6
+          ],
+          "title": "（参考）経済・物価情勢の展望と基調的な物価上昇率に関連する各種指標",
+          "ref_titles": [
+            "当面の金融政策運営について"
+          ]
+        },
+        {
+          "candidate_id": 20,
+          "code": "no_shared",
+          "refs": [
+            26
+          ],
+          "title": "Gone in 20 minutes: How the biggest heist in crypto history unfolded - Reuters",
+          "ref_titles": [
+            "Bitcoin, cryptocurrency prices fall after Binance reports security issue - Reuters"
+          ]
+        },
+        {
+          "candidate_id": 25,
+          "code": "no_shared",
+          "refs": [
+            6
+          ],
+          "title": "BOJ keeps interest rates steady, signals further rate hikes - Reuters",
+          "ref_titles": [
+            "当面の金融政策運営について"
+          ]
+        }
+      ]
+    }
+  ]
+}
