@@ -1,0 +1,457 @@
+{
+  "target_date_jst": "2026-10-31",
+  "level": "L0",
+  "sections": {
+    "part0_target_date": "2026年10月31日（土）",
+    "part1_headline": "Reutersによると、Binanceが約63億ドル規模のハッキング被害について損失の9割を補填したと公表し、日曜日の出金再開を目指していると報じられました。",
+    "part1_points": "・Reutersによると、米国とカナダが黒海における限定的な停戦への関心を強めていると報じられ、地政学リスクの後退が意識された可能性がありますが、暗号通貨価格への直接因果は未確認です（Reuters、10月31日）。\n・Reutersによると、イラン当局者が、カシム島沖で米国が漁船を攻撃したと国営メディアが伝えたと主張していると報じられました。ホルムズ海峡周辺の軍事的緊張が意識された可能性がありますが、主張の段階であり被害・影響は未確認です（Reuters、10月31日）。\n・Reutersによると、OPEC+が12月の産油目標を据え置く方向で基本合意したと関係者の話として報じられ、原油需給を巡る思惑が意識された可能性がありますが、暗号通貨価格への直接因果は未確認です（Reuters、10月31日）。\n・Reutersによると、暗号資産取引所各社がBinanceの大規模ハッキングを受けて防御態勢の早急な強化を呼びかけていると報じられました。暗号資産業界のセキュリティ対応を巡る動きですが、価格への直接因果は未確認です（Reuters、10月31日）。",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.605兆（¥410.3兆）｜24時間取引高 $400.5億（¥6.31兆）\n・ #BTC：$77,510（約1,220.7万円）｜24時間比 +0.90%\n　（24時間レンジ $76,438〜$77,645）\n・ #ETH：$2,256（約35.5万円）｜24時間比 +0.85%\n　（24時間レンジ $2,229〜$2,256）\n・ #BNB：$703（約11.1万円）｜24時間比 +0.67%\n・市場心理：Fear & Greed 36（Fear、CoinMarketCap API）\n・ドミナンス：BTC 59.83%｜ETH 10.58%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年11月1日07:37 JST、USD/JPY ¥157.49",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $2.32M vs Base上ETH/USDC $12.48M｜参考：Base上DEX全体 $12.686億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $58.76億（¥9,254億）｜24時間比 +1.40%｜USDCドミナンス 84.8%\n・ ETH/USDC（Base）参考APR：0.05% 8.18%（TVL $7.88M／24h出来高 $3.53M）｜0.3% 6.50%（TVL $150.77M／24h出来高 $8.95M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年11月1日07:37 JST",
+    "part2_flow": "①【出来事・ニュース】Reutersによると、Binanceが約63億ドル規模のハッキング被害について損失の9割を補填したと公表し、日曜日の出金再開を目指していると報じられました（Reuters、10月31日） → 【暗号通貨価格】 #BTC +0.90%、 #ETH +0.85%（24時間比）で、同時期はBTC・ETHともに底堅い値動きでしたが、因果は未確認です。\n②【出来事・ニュース】Reutersによると、米国とカナダが黒海における限定的な停戦への関心を強めていると報じられました（Reuters、10月31日） → 【地政学・マクロの変化】地政学リスクの後退が意識された可能性があります → 【暗号通貨価格】 #BTC +0.90%、 #ETH +0.85%（24時間比）で、同時期はBTC・ETHともに小幅な上昇でしたが、因果は未確認です。\n③【出来事・ニュース】Reutersによると、イラン当局者がカシム島沖での米国による漁船への攻撃を国営メディアが伝えたと主張していると報じられました（Reuters、10月31日） → 【地政学・マクロの変化】ホルムズ海峡周辺の軍事的緊張が意識された可能性がありますが、主張の段階であり被害・影響は未確認です → 【暗号通貨価格】 #BTC +0.90%、 #ETH +0.85%（24時間比）で、同時期はBTC・ETHともにやや上値の重い動きも見られましたが、因果は未確認です。",
+    "lp_comment": "参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは51.27%→8.18%へ低下しました（24時間出来高 -84.60%、TVL -3.51%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは85.15%→6.50%へ低下しました（24時間出来高 -92.33%、TVL +0.50%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+0.85%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "Binanceのハッキング被害補填や地政学リスクを巡る報道が相次ぎましたが、暗号通貨価格への直接的な因果関係は確認できておらず、地合いは不透明感を残しています。今後はBinanceの出金再開動向や中東情勢の推移が注目されます。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "Binanceハッキング補填進捗、BTC・ETHは底堅い値動き",
+  "audit_ledger": [
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/briefings-statements/2026/10/presidential-message-on-reformation-day/",
+      "title": "Presidential Message on Reformation Day",
+      "published_at": "Sat, 31 Oct 2026 13:00:00 +0000",
+      "candidate_id": 1,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 宗教行事に関する大統領メッセージで、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxQU2JIVVB6TndsbFNkS2Vma2ZRT2NBOHRyQTRkcEc2ZnNnRFc5R0JoT0hpem96RFMwalJGZFozdncxNmRBaE05ZU1hQXRsU0sxUDIyVHRWZzhlQXVfLW5GSGxBcHhscVRrLTlLSnFsOEZ0SnliUzhuQVhLeGc3VFBEWTI3ZjRfQU1uS2NWYjk2QVBEVldRVHZOUnZn?oc=5",
+      "title": "US, Canada see growing interest in limited ceasefire in Black Sea - Reuters",
+      "published_at": "Sat, 31 Oct 2026 20:10:06 GMT",
+      "candidate_id": 2,
+      "verified_by": "Reuters",
+      "decision": "採用",
+      "reason": "B: 黒海における限定的停戦への関心拡大を報じるtier2報道。停戦関連の地政学材料として優先対象に該当"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxQUmVTUWlGdkFmblZKTmJTRUZCLS01dWJocVZmVmd1UUtkR3ZLZlMyaG8wMVphRV83QU5RV3haOWlDeG50eG10cU80UkhaeWtnOXgyeHhXV3MzNktnNmgyY1BoMndvVzNTWGtLVnJYQVV3cER4eG93QXdEVWtsU1dnME1SdjJnMlEtSXBqcUlXR3A0MTV4RDE5cGQySHhJYUdUYWZUR3p0Z1J4SWoyeGJ4dlFScmJid2tVTG9lRkZ3?oc=5",
+      "title": "Rubio, Brazil's foreign minister to meet again as diplomatic tensions simmer - Reuters",
+      "published_at": "Sat, 31 Oct 2026 20:07:12 GMT",
+      "candidate_id": 3,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 米伯間の外交緊張に関する会談の報道で、産油・海上輸送路・停戦等の優先対象に当たらない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxOODBHZGo0TEhURWc2Rm9nLUJjaF9Hb09YLUpnU3JlTWJ0OHJKd3p0dFZEYWdpYUNPVlNJdFJoYXhGOVdOX29rdHhjQ2F0c2E2VjJRQndHcEtSY1JIdEFzTkJJd3RKX2lKYWxRMnRQYjZvVnpxNnJQTlBmUFY5TWMzZTJ4akRuS1pKNExQY2lCQTAzRVlWOG4wYnZRVV9tRWJQdDJKQ0owZVdZUS1ZQmZYbTlMR0xxbF9uZ3ZvWkRNNDJtX0JNclZhLQ?oc=5",
+      "title": "Iranian envoys meet Qatari mediators as threat looms of US strikes after midterms - Reuters",
+      "published_at": "Sat, 31 Oct 2026 20:00:36 GMT",
+      "candidate_id": 4,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 中間選挙後の対イラン攻撃の可能性を巡る外交の記事で、主要なポイントの順位により上限4項目に入らない（順位外）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxOTk80ZVBzRVczc0hyRHU0RkJiTWx5ZDUwdnBHb0FWSmJyQWJzWHRYR0hZd0MzTW1INnFtSWRISVVRb1RncDltYW16eTYxRU9NcWJzanRqMmp4LWFXUVNTV2tzT3JCM0doS01hWDdGeUhNdHZ3WTdYXy14Q0luZTRmOWdQNlp2ZThtYlQ0cWhNSVk0c0ZkOUFyMExMUWRHMXRKamU2ZHRLa2pPMG9heUhzN2YwTnpCZw?oc=5",
+      "title": "OPEC+ agrees in principle to keep oil output targets steady in December, sources say - Reuters",
+      "published_at": "Sat, 31 Oct 2026 18:05:10 GMT",
+      "candidate_id": 5,
+      "verified_by": "Reuters",
+      "decision": "採用",
+      "reason": "B: OPEC+の12月産油目標据え置きの基本合意を報じるtier2報道。原油需給への波及経路を説明できる"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxNLVJNVjgwa3JjQjJTZV9qaEtOR0hPeUVlUU5fVmg1NmpMcmtWR2QycWNERWphd21IckhyYnNQMllfLUtrSDhCV1p4cEV4RWhmYURFbW91dVJ0YzVUMUJPNFctZG5FX1ZSdS1KemxhbWdmRTRSX2R0TEZMbm5tdVVDSDNUbnBreFJrT0tlQXE1VzVmSllTdVZoVVpqOXV1WXh3ZGpaNmZqWmdlS010Zi1NcWxQai1WU2k0dE96SDVuUld0WkxhSm9VSlFR?oc=5",
+      "title": "Nigeria reports two suspected Ebola cases in northeast region - Reuters",
+      "published_at": "Sat, 31 Oct 2026 17:54:27 GMT",
+      "candidate_id": 6,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ナイジェリアのエボラ疑い症例の報道で、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNUnZYN3pDajdLZXp1ZVlXeF8xTDNIc04xR2tMRXFsUzZsZTh4ckszeDM0V3daV1haWE15THZRUU43QlhxUFZfLWp5Z05SQmVENzBEbGJEcHhRdDR2elJBM2ExRVN2NlNqRldidDJQdXBMLVBUc1BHY0JaZ25Yblpwd2hlRnF6ZEljb3p5d3VxVG9Ya0poeXJWZnEzUmZfclVwSTVROGdkZjJFdDIzczd3TzBja1UxUQ?oc=5",
+      "title": "Jordan stops armed group from attempting to enter from Syria, armed forces say - Reuters",
+      "published_at": "Sat, 31 Oct 2026 17:35:50 GMT",
+      "candidate_id": 7,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ヨルダンの越境武装集団阻止に関する報道で、原油・海上輸送路等への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE9vLXQyQUdBZ3hUQVhwd01LSUg5bVMxNG0zTXczTG1aQlFMMVg5OWRSYUpPVk8xMHdTQlJYZ0wxanJ1aWdCcnZtMGlrb2c2eFZsWkw4YmFwcXpwZ1JMZm5fT3pDUXMxQTBXMGUxcEJR?oc=5",
+      "title": "Franklin US Innovation Bitcoin DRIP Index ETF (FIBT.OQ) | Stock Price & Latest News - Reuters",
+      "published_at": "Sat, 31 Oct 2026 17:28:15 GMT",
+      "candidate_id": 8,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 個別ETF銘柄の株価情報ページで、見出しだけでは「誰が・何を・どこで」を書けない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxQV05QRmVQbjJDUTZkNzRFaTA5VVp5RE9Bd2ctMkxITEVaZnNLZVVzdkx5aHBUUFZYOTJCb19YRFJRM2I1RW5QS0JJUmowaUtsVjlnaTExaWJDM2NsLVJINlJQZ0JHdlUyb05LS0kyRGdRMHlyVWdYRHFJOTNlbFRZc0plbkc2SE1nOHB1SklPVVNUVnhFY3lYdWtR?oc=5",
+      "title": "Binance says it has covered 90% of losses from $6.3 billion hack so far - Reuters",
+      "published_at": "Sat, 31 Oct 2026 17:16:57 GMT",
+      "candidate_id": 9,
+      "verified_by": "Reuters",
+      "decision": "採用",
+      "reason": "A: Binanceが63億ドルハッキング被害の9割補填を公表したtier2報道で、主要材料として採用"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE9RMlhZNDhDUEw2cE82SF9iMHI4bW9vT2xfS0c4SGFWVEpyYTB4c01CbHlzN2I2cHBkVmphbktvSFV0c09XVnlPQ3lJc3BQWXNCdzNERHpjMS1lYkpsUVNMU1duRQ?oc=5",
+      "title": "EMAX.PK - | Stock Price & Latest News - Reuters",
+      "published_at": "Sat, 31 Oct 2026 16:41:57 GMT",
+      "candidate_id": 10,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 個別銘柄の株価情報ページで、見出しだけでは「誰が・何を・どこで」を書けない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTFBQbVRsMUlIVmtXOVFXcDNzcXFCWHFha0VJeHA3ZWJfNGRyN3IxQVI3VEc3MlAzN3NaUXJJRWVHZkNTakVyam9udkRTWXF3bUZqN1VCeWFhTUl3c3NGYzFkNE9aLUc?oc=5",
+      "title": "Franklin US Innovation Bitcoin DRIP Index ETF (FIBT.OQ) | Stock Price & Latest News - Reuters",
+      "published_at": "Sat, 31 Oct 2026 14:40:57 GMT",
+      "candidate_id": 11,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 候補8と同じ事実（Franklin US Innovation Bitcoin DRIP Index ETFの株価情報）の重複"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBHN0FRYzRTUzl4QjhGeExPMFhjYzBDQTZwQWo4WnYzeHY0ejdpbG1CZGRkRmZUOFIxbGxOT01Kb3hleFBKTzdvQ29JaGR6THE5RnVOQk12ZlNOZw?oc=5",
+      "title": "Franklin US Innovation Bitcoin DRIP Index ETF (FIBT.OQ) | Stock Price & Latest News - Reuters",
+      "published_at": "Sat, 31 Oct 2026 14:39:09 GMT",
+      "candidate_id": 12,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 候補8と同じ事実（Franklin US Innovation Bitcoin DRIP Index ETFの株価情報）の重複"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxONll1eGZDNWJMVXFsdzlXTEs4WnlXRGJONjZ4eUQ1eGlaWGs5bVB0SnR6cUlhd1U0ZHl1bUxpM0ItUUl3cEdxdEhjTHBfZHZIc3ZQY2xMM2g1eGNkbVNfanFmVFY4R0JUeFVtb0pyb3JzSllCTG05S19HdkVzVXFTVlRaaDZidS01UVJ5SVpvUC00SlNpNUxOZXIyTnFaMGVNMmJoOWpCZ1RKRWxqam9UbG9Yb1pYWERLTkR0OG0xOE9Vc0c1U0lvbGNQZzI?oc=5",
+      "title": "Iranian official says US attacked fishing boats off Qeshm Island, state media reports - Reuters",
+      "published_at": "Sat, 31 Oct 2026 12:12:26 GMT",
+      "candidate_id": 13,
+      "verified_by": "Reuters",
+      "decision": "採用",
+      "reason": "B: イラン当局者が、カシム島沖で米国が漁船を攻撃したと国営メディアが伝えたと主張している報道。ホルムズ海峡周辺の軍事行動に該当"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxQVUNZU3g2dW4xamJOV3lTQ251RzhyLXd4dHY5eTRvVFkwOXF6Vm4zUkxCdVEzaEE1R3BxQS16NlE2WlFQYlpsaUlxQkhNSHlTeGNzSmZGbXB1eFVGdUJkbExRZFUxcnJBZ0JXVklVaEpQdXExWWpyQ3FUSzg5alJFak9TSllUbUt4LWl6WHlMcWR3TU9kV3pXN3E1dUlyLUFnai1UdzhIY1RDdS1NWXQxQUU4X1FYalpRVUtWcWVBUGIwb0lNb3JrdENIVzYzdw?oc=5",
+      "title": "Egypt fears escalation in Iran war would be more destructive, foreign minister says - Reuters",
+      "published_at": "Sat, 31 Oct 2026 08:21:43 GMT",
+      "candidate_id": 14,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: エジプト外相の論評（イラン戦争拡大への懸念）で、優先して掲載する対象（解説・論評）に当たらない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxPR3JLSjZvamdLbG1LSWxKR0czYXlpN281cDZLZ0J6ZE1OdmYxNFdIUzVKQnMzQVdWMVlQRTVzdVh2OHFybGkwVy15STRoOGV3N3E3RXppU0pJS2poMTRlRWFaZVEtVUhjTkFMTjAyOFpLc19RWjEwS1BkTEdXWGtOel9qd1VuNXlzWDBUS1IzSHAtUUVHREFBWDVDNGQ4Vm9zMGRKRHB1VE5LbmN5QmZJZ2NZZ2Q1Y2h1c19ONV9HLXU?oc=5",
+      "title": "Crypto exchanges call for quick moves to bolster defenses after Binance heist - Reuters",
+      "published_at": "Sat, 31 Oct 2026 00:26:00 GMT",
+      "candidate_id": 15,
+      "verified_by": "Reuters",
+      "decision": "採用",
+      "reason": "A: 暗号資産取引所各社がBinanceハッキングを受け防御強化を呼びかけたとするtier2報道"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxOR193bXhXdHUzd3htNThrMm1NZGdhbXRQRk9PRW84NmZNakJaZ2QtTUlxUVdwMmZwenlnQ1JMUlNzTXF5WTh1VHR2Y2RodWIwc3NqMDZ6QUx6OS1GZU03TlJYUGViZDNoc01pTk9rVEsyUWhNU3lQWGZZclpjMlQ3RGo5SXZBR0g5d2FqQzZVa2Y2VjY3QnJtWlB4X3RPOUVNeS12NDNoeFFvRGhEX0JMY1ZEME9VeTdheEZ5ZFRMdUFiUmdQ?oc=5",
+      "title": "Alaska Air to cut about 200 jobs as fuel shock squeezes earnings - Reuters",
+      "published_at": "Fri, 30 Oct 2026 23:48:00 GMT",
+      "candidate_id": 16,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: アラスカ航空の人員削減に関する報道で、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/opinion/2026/10/31/bitcoin-s-white-paper-turns-18-and-small-businesses-are-still-paying-for-the-bailouts-it-answered",
+      "title": "Bitcoin's white paper turns 18, and small businesses are still paying for the bailouts it answered",
+      "published_at": "Sat, 31 Oct 2026 18:00:00 +0000",
+      "candidate_id": 17,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ビットコイン白書18周年に関する論評記事で、tier3単独の意見記事のため不採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/11/01/a-stolen-iphone-usd14-000-in-losses-and-london-s-crypto-theft-problem",
+      "title": "A stolen iPhone, $14,000 in losses and London's crypto theft problem",
+      "published_at": "Sat, 31 Oct 2026 16:09:30 +0000",
+      "candidate_id": 18,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ロンドンでの暗号資産盗難被害の個別事例記事で、tier3単独のため不採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/10/31/traders-are-already-placing-leveraged-bets-on-anthropic-s-ipo-using-crypto-contracts",
+      "title": "Traders are already placing leveraged bets on Anthropic’s IPO using crypto contracts",
+      "published_at": "Sat, 31 Oct 2026 16:00:00 +0000",
+      "candidate_id": 19,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: Anthropic IPOに絡むレバレッジ契約の記事で、tier3単独のため不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/binance-hack-90-percent-replenished?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Binance says 90% of stolen assets replenished, targets Sunday withdrawals",
+      "published_at": "Sat, 31 Oct 2026 15:36:01 +0000",
+      "candidate_id": 20,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 候補23（CoinDesk）と同一事実（Binance90%補填）だが、tier1・tier2（候補9）で裏付け済みのため、tier3側はuse:falseのまま"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/markets/bitcoin-binance-hack-strive-ceo?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bitcoin held up better than expected after Binance hack, Strive CEO says",
+      "published_at": "Sat, 31 Oct 2026 15:26:46 +0000",
+      "candidate_id": 21,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: Strive CEOの見解を伝える論評的記事で、tier3単独のため不採用"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/defi/2026-10-31-hackers-hijack-a-dozen-defi-websites-all-registered-with-name-com-and-steal-about-138000-432251",
+      "title": "Hackers hijack a dozen DeFi websites, all registered with Name.com, and steal about $138,000",
+      "published_at": "Sat, 31 Oct 2026 15:26:27 +0000",
+      "candidate_id": 22,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: DeFiサイトのドメインハイジャックに関する記事で、tier3単独のため不採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/10/31/binance-says-it-has-replaced-90-of-stolen-crypto-after-massive-usd6-3-billion-breach",
+      "title": "Binance says it has replaced 90% of stolen crypto after massive $6.3 billion breach",
+      "published_at": "Sat, 31 Oct 2026 15:24:10 +0000",
+      "candidate_id": 23,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 候補20と同一事実（Binance90%補填）だが、tier1・tier2（候補9）で裏付け済みのため、tier3側はuse:falseのまま"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/what-happened-in-crypto-today?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Here’s what happened in crypto today",
+      "published_at": "Sat, 31 Oct 2026 15:09:55 +0000",
+      "candidate_id": 24,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 暗号資産業界の日次まとめ記事で、見出しだけでは個別の「誰が・何を・どこで」を特定できない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/10/26/institutions-embrace-crypto-staking-despite-shrinking-yields",
+      "title": "Institutions embrace crypto staking despite shrinking yields",
+      "published_at": "Sat, 31 Oct 2026 15:00:00 +0000",
+      "candidate_id": 25,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 機関投資家のステーキング採用動向の記事で、tier3単独のため不採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/10/31/uber-tests-how-tokenization-can-put-idle-cash-to-work-with-hsbc-franklin-templeton",
+      "title": "Uber tests how tokenization can put idle cash to work with HSBC, Franklin Templeton",
+      "published_at": "Sat, 31 Oct 2026 14:40:29 +0000",
+      "candidate_id": 26,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: UberのトークナイゼーションPOCに関する記事で、tier3単独のため不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/magazine/bitcoin-turns-18-has-the-original-rebel-grown-up?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bitcoin turns 18: Has the original rebel grown up?",
+      "published_at": "Sat, 31 Oct 2026 14:27:52 +0000",
+      "candidate_id": 27,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ビットコイン18周年の特集記事で、tier3単独の解説記事のため不採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/tech/2026/10/31/as-big-bitcoin-miners-chase-ai-profits-individuals-get-another-shot-at-the-rewards",
+      "title": "As big bitcoin miners chase AI profits, individuals get another shot at the rewards",
+      "published_at": "Sat, 31 Oct 2026 14:00:00 +0000",
+      "candidate_id": 28,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 個人向けビットコインマイニングの機会に関する記事で、tier3単独のため不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/texas-brothers-sentenced-to-15-years-in-prison-for-armed-crypto-robbery-kidnapping?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Texas brothers sentenced to 15 years in prison for armed crypto robbery, kidnapping",
+      "published_at": "Sat, 31 Oct 2026 13:37:49 +0000",
+      "candidate_id": 29,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: テキサス州の強盗事件判決に関する記事で、tier3単独のため不採用"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/business/2026-10-31-chainalysis-says-hacker-using-offensive-agentic-techniques-accessed-its-customers-names-and-emails-432244",
+      "title": "Chainalysis says hacker using ‘offensive agentic techniques’ accessed its customers’ names and emails",
+      "published_at": "Sat, 31 Oct 2026 13:27:17 +0000",
+      "candidate_id": 30,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: Chainalysisの顧客情報漏えいに関する記事で、tier3単独のため不採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/opinion/2026/10/31/18-years-in-what-has-bitcoin-truly-done",
+      "title": "18 years in, what has Bitcoin truly done?",
+      "published_at": "Sat, 31 Oct 2026 13:00:00 +0000",
+      "candidate_id": 31,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ビットコイン18周年に関する論評記事で、tier3単独の意見記事のため不採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/10/31/the-usd6-3-billion-binance-hack-paradox-centralization-made-the-hack-possible-but-also-saved-usd3-billion",
+      "title": "The $6.3 billion Binance hack paradox: Centralization made the hack possible, but also saved $3 billion",
+      "published_at": "Sat, 31 Oct 2026 12:00:00 +0000",
+      "candidate_id": 32,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 候補33と同一事実（Binanceハッキングの背景分析）だが、分析的内容でありtier1・tier2で裏付け済みの基本事実の延長のため不採用"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/business/2026-10-30-binance-hack-largest-crypto-hack-north-korea-432225",
+      "title": "Inside the largest crypto hack on record: How attackers breached Binance for $6.3 billion",
+      "published_at": "Fri, 30 Oct 2026 21:20:23 +0000",
+      "candidate_id": 33,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 候補32と同一事実（Binanceハッキングの手口分析、北朝鮮関与）だが、tier1・tier2の基本事実を超える分析のため不採用"
+    }
+  ],
+  "reusable_for_summary": [],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 0
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 0
+    },
+    "FRB（speeches）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "FRB（testimony）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "failed",
+      "detail": "XML解析失敗: not well-formed (invalid token): line 51, column 120"
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 0
+    },
+    "米財務省": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "USTR": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "ホワイトハウス": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 1
+    },
+    "ホワイトハウス（大統領令等）": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 0
+    },
+    "ADP": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 12
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 8
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "The Block": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 4
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 48
+    }
+  },
+  "news_candidate_count": 33,
+  "format_normalized": {
+    "part1_points": 0,
+    "part2_flow": 0
+  },
+  "flow_price_fragment": " #BTC +0.90%、 #ETH +0.85%（24時間比）",
+  "part1_md": "【対象日】2026年10月31日（土）\n\n【ヘッドライン】\nReutersによると、Binanceが約63億ドル規模のハッキング被害について損失の9割を補填したと公表し、日曜日の出金再開を目指していると報じられました。\n\n【主要なポイント】\n・Reutersによると、米国とカナダが黒海における限定的な停戦への関心を強めていると報じられ、地政学リスクの後退が意識された可能性がありますが、暗号通貨価格への直接因果は未確認です（Reuters、10月31日）。\n・Reutersによると、イラン当局者が、カシム島沖で米国が漁船を攻撃したと国営メディアが伝えたと主張していると報じられました。ホルムズ海峡周辺の軍事的緊張が意識された可能性がありますが、主張の段階であり被害・影響は未確認です（Reuters、10月31日）。\n・Reutersによると、OPEC+が12月の産油目標を据え置く方向で基本合意したと関係者の話として報じられ、原油需給を巡る思惑が意識された可能性がありますが、暗号通貨価格への直接因果は未確認です（Reuters、10月31日）。\n・Reutersによると、暗号資産取引所各社がBinanceの大規模ハッキングを受けて防御態勢の早急な強化を呼びかけていると報じられました。暗号資産業界のセキュリティ対応を巡る動きですが、価格への直接因果は未確認です（Reuters、10月31日）。\n",
+  "part2_md": "【市場のフロー】\n①【出来事・ニュース】Reutersによると、Binanceが約63億ドル規模のハッキング被害について損失の9割を補填したと公表し、日曜日の出金再開を目指していると報じられました（Reuters、10月31日） → 【暗号通貨価格】 #BTC +0.90%、 #ETH +0.85%（24時間比）で、同時期はBTC・ETHともに底堅い値動きでしたが、因果は未確認です。\n②【出来事・ニュース】Reutersによると、米国とカナダが黒海における限定的な停戦への関心を強めていると報じられました（Reuters、10月31日） → 【地政学・マクロの変化】地政学リスクの後退が意識された可能性があります → 【暗号通貨価格】 #BTC +0.90%、 #ETH +0.85%（24時間比）で、同時期はBTC・ETHともに小幅な上昇でしたが、因果は未確認です。\n③【出来事・ニュース】Reutersによると、イラン当局者がカシム島沖での米国による漁船への攻撃を国営メディアが伝えたと主張していると報じられました（Reuters、10月31日） → 【地政学・マクロの変化】ホルムズ海峡周辺の軍事的緊張が意識された可能性がありますが、主張の段階であり被害・影響は未確認です → 【暗号通貨価格】 #BTC +0.90%、 #ETH +0.85%（24時間比）で、同時期はBTC・ETHともにやや上値の重い動きも見られましたが、因果は未確認です。\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは51.27%→8.18%へ低下しました（24時間出来高 -84.60%、TVL -3.51%）。24時間出来高の変化が主因です。\nBase 0.3%プールの参考APRは85.15%→6.50%へ低下しました（24時間出来高 -92.33%、TVL +0.50%）。24時間出来高の変化が主因です。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+0.85%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\nBinanceのハッキング被害補填や地政学リスクを巡る報道が相次ぎましたが、暗号通貨価格への直接的な因果関係は確認できておらず、地合いは不透明感を残しています。今後はBinanceの出金再開動向や中東情勢の推移が注目されます。\n",
+  "numeric_record_md": "【対象日】2026年10月31日（土）\n\n【主要指標】\n・市場全体：時価総額 $2.605兆（¥410.3兆）｜24時間取引高 $400.5億（¥6.31兆）\n・ #BTC：$77,510（約1,220.7万円）｜24時間比 +0.90%\n　（24時間レンジ $76,438〜$77,645）\n・ #ETH：$2,256（約35.5万円）｜24時間比 +0.85%\n　（24時間レンジ $2,229〜$2,256）\n・ #BNB：$703（約11.1万円）｜24時間比 +0.67%\n・市場心理：Fear & Greed 36（Fear、CoinMarketCap API）\n・ドミナンス：BTC 59.83%｜ETH 10.58%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年11月1日07:37 JST、USD/JPY ¥157.49\n\n【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $2.32M vs Base上ETH/USDC $12.48M｜参考：Base上DEX全体 $12.686億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $58.76億（¥9,254億）｜24時間比 +1.40%｜USDCドミナンス 84.8%\n・ ETH/USDC（Base）参考APR：0.05% 8.18%（TVL $7.88M／24h出来高 $3.53M）｜0.3% 6.50%（TVL $150.77M／24h出来高 $8.95M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年11月1日07:37 JST\n"
+}
