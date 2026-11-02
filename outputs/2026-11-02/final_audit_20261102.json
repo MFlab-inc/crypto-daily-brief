@@ -1,0 +1,73 @@
+{
+  "overall": "PASS",
+  "failed": 0,
+  "checked_at_jst": "2026-11-03T07:38:11.315414+09:00",
+  "checks": [
+    {
+      "id": "C1_schema",
+      "result": "PASS",
+      "detail": "全必須キーあり"
+    },
+    {
+      "id": "C2_date_internal",
+      "result": "PASS",
+      "detail": "weekday_ok=True title_ok=True"
+    },
+    {
+      "id": "C3_date_is_yesterday",
+      "result": "PASS",
+      "detail": "target=2026-11-02 expected=2026-11-02"
+    },
+    {
+      "id": "C4_change_format",
+      "result": "PASS",
+      "detail": "±N.NN% 形式・矢印整合"
+    },
+    {
+      "id": "C5_banned_terms",
+      "result": "PASS",
+      "detail": "禁止語・二重括弧なし"
+    },
+    {
+      "id": "C6_jpy_assets",
+      "result": "PASS",
+      "detail": "fx=157.53 で整合"
+    },
+    {
+      "id": "C7_jpy_macro",
+      "result": "PASS",
+      "detail": "整合"
+    },
+    {
+      "id": "C8_apr_recalc",
+      "result": "PASS",
+      "detail": "算式整合"
+    },
+    {
+      "id": "C9_fg_range",
+      "result": "PASS",
+      "detail": "value=34 label=Fear"
+    },
+    {
+      "id": "C10_image_size",
+      "result": "PASS",
+      "detail": "size=(2560, 1440)"
+    },
+    {
+      "id": "C11_domestic_recalc",
+      "result": "PASS",
+      "detail": "表示8,130,000 再計算8,134,226 ratio=0.9995"
+    },
+    {
+      "id": "C25_apr_capture",
+      "result": "PASS",
+      "detail": "apr_screenshot.jpg 撮影成功"
+    }
+  ],
+  "sha256": {
+    "daily_data.json": "7c3147d0671058cbe355270e11fc2ee1521f15fc61d2c087d27dfa160630664d",
+    "infographic.png": "62d84dbdf4fc628d6a4b52dfb25e61118ad83afc3d414f527e033b1c7e7a2bf3",
+    "raw_data.json": "be78aae746e1914a5cf14f0c2bd8bccd4fda18f16904be38ba4744cdcf14128f",
+    "apr_screenshot.jpg": "682b26d6b7b7fc9d025ccaa721640ab39fefd47c1a0a86380bdd6197f576f71a"
+  }
+}
