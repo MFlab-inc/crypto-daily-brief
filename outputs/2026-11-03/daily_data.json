@@ -1,0 +1,163 @@
+{
+  "target_date_jst": "2026-11-03",
+  "weekday_jp": "火",
+  "date_title": "2026年11月3日（火）暗号通貨・DEX市場概況",
+  "summary": "（シャドー運用中：ヘッドラインはフェーズ2で生成）",
+  "assets": [
+    {
+      "asset": "BTC",
+      "usd": "$77,656",
+      "jpy": "約1,226.2万円",
+      "change_24h": "+1.28%",
+      "direction": "up"
+    },
+    {
+      "asset": "ETH",
+      "usd": "$2,286",
+      "jpy": "約36.1万円",
+      "change_24h": "+1.79%",
+      "direction": "up"
+    },
+    {
+      "asset": "BNB",
+      "usd": "$699",
+      "jpy": "約11.0万円",
+      "change_24h": "+0.32%",
+      "direction": "up"
+    }
+  ],
+  "intraday_range": {
+    "BTC": {
+      "high": "$77,981",
+      "low": "$76,239",
+      "source": "coinbase",
+      "retrieved_at": "2026-11-04T07:38:30.066502+09:00",
+      "representative": true,
+      "inconsistent": false,
+      "notable_move": false
+    },
+    "ETH": {
+      "high": "$2,305",
+      "low": "$2,237",
+      "source": "coinbase",
+      "retrieved_at": "2026-11-04T07:38:30.137207+09:00",
+      "representative": true,
+      "inconsistent": false,
+      "notable_move": false
+    },
+    "BNB": {
+      "high": "$702",
+      "low": "$691",
+      "source": "coinbase",
+      "retrieved_at": "2026-11-04T07:38:30.199530+09:00",
+      "representative": false,
+      "inconsistent": false
+    }
+  },
+  "scheduled_events": [
+    {
+      "title": "Cash Rate",
+      "country": "AUD",
+      "impact": "High",
+      "time_jst": "2026-11-03T12:30:00+09:00"
+    },
+    {
+      "title": "RBA Monetary Policy Statement",
+      "country": "AUD",
+      "impact": "High",
+      "time_jst": "2026-11-03T12:30:00+09:00"
+    },
+    {
+      "title": "RBA Rate Statement",
+      "country": "AUD",
+      "impact": "High",
+      "time_jst": "2026-11-03T12:30:00+09:00"
+    },
+    {
+      "title": "RBA Press Conference",
+      "country": "AUD",
+      "impact": "High",
+      "time_jst": "2026-11-03T13:30:00+09:00"
+    },
+    {
+      "title": "Congressional Elections",
+      "country": "USD",
+      "impact": "High",
+      "time_jst": "2026-11-04T00:16:00+09:00"
+    },
+    {
+      "title": "Employment Change q/q",
+      "country": "NZD",
+      "impact": "High",
+      "time_jst": "2026-11-04T06:45:00+09:00"
+    },
+    {
+      "title": "Unemployment Rate",
+      "country": "NZD",
+      "impact": "High",
+      "time_jst": "2026-11-04T06:45:00+09:00"
+    }
+  ],
+  "market": {
+    "fear_greed": {
+      "value": 36,
+      "label": "Fear"
+    },
+    "market_cap": "$2.605兆",
+    "market_cap_jpy": "¥411.3兆",
+    "volume_24h": "$578.0億",
+    "volume_24h_jpy": "¥9.13兆",
+    "btc_dominance": "59.96%",
+    "eth_dominance": "10.73%"
+  },
+  "base": {
+    "tvl": "$59.78億",
+    "tvl_jpy": "¥9,439億",
+    "tvl_change": "+0.46%",
+    "tvl_direction": "up",
+    "dex_volume": "$16.549億",
+    "dex_volume_jpy": "¥2,613億",
+    "dex_volume_eth_usdc": "$49.82M",
+    "dex_volume_eth_usdc_jpy": "¥79億",
+    "usdc_dominance": "86.8%"
+  },
+  "lp": {
+    "pools": [
+      {
+        "name": "Base 0.05%プール",
+        "apr": "19.16%",
+        "tvl": "$8.05M",
+        "volume_24h": "$8.45M",
+        "change_vs_prev": {
+          "apr_change": "-36.19%",
+          "volume_24h_change": "-34.35%",
+          "tvl_change": "+2.89%"
+        }
+      },
+      {
+        "name": "Base 0.3%プール",
+        "apr": "30.09%",
+        "tvl": "$150.54M",
+        "volume_24h": "$41.37M",
+        "change_vs_prev": {
+          "apr_change": "-43.80%",
+          "volume_24h_change": "-43.43%",
+          "tvl_change": "+0.66%"
+        }
+      }
+    ],
+    "check_message": "#ETHが上昇中。#USDC偏り・上限側レンジ外・反落耐性を確認"
+  },
+  "domestic": {
+    "bitflyer_eth_24h": "1,955.07 ETH",
+    "coincheck_eth_24h": "333.37 ETH",
+    "combined_eth": "2,288.44 ETH",
+    "combined_usd": "$5.23M",
+    "retrieved_at": "2026-11-04 07:38 JST"
+  },
+  "footer": {
+    "retrieved_at": "2026-11-04 07:38 JST",
+    "usd_jpy": "¥157.90",
+    "sources": "CoinMarketCap API / GeckoTerminal / DefiLlama / ExchangeRate-API / bitFlyer公式API / Coincheck公式API"
+  }
+}
