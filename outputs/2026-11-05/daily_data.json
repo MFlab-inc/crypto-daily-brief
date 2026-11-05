@@ -1,0 +1,151 @@
+{
+  "target_date_jst": "2026-11-05",
+  "weekday_jp": "木",
+  "date_title": "2026年11月5日（木）暗号通貨・DEX市場概況",
+  "summary": "（シャドー運用中：ヘッドラインはフェーズ2で生成）",
+  "assets": [
+    {
+      "asset": "BTC",
+      "usd": "$75,813",
+      "jpy": "約1,200.7万円",
+      "change_24h": "-6.03%",
+      "direction": "down"
+    },
+    {
+      "asset": "ETH",
+      "usd": "$2,232",
+      "jpy": "約35.4万円",
+      "change_24h": "-8.42%",
+      "direction": "down"
+    },
+    {
+      "asset": "BNB",
+      "usd": "$688",
+      "jpy": "約10.9万円",
+      "change_24h": "-4.50%",
+      "direction": "down"
+    }
+  ],
+  "intraday_range": {
+    "BTC": {
+      "high": "$80,881",
+      "low": "$75,431",
+      "source": "coinbase",
+      "retrieved_at": "2026-11-06T07:38:27.633433+09:00",
+      "representative": true,
+      "inconsistent": false,
+      "notable_move": true
+    },
+    "ETH": {
+      "high": "$2,442",
+      "low": "$2,213",
+      "source": "coinbase",
+      "retrieved_at": "2026-11-06T07:38:27.712221+09:00",
+      "representative": true,
+      "inconsistent": false,
+      "notable_move": true
+    },
+    "BNB": {
+      "high": "$723",
+      "low": "$686",
+      "source": "coinbase",
+      "retrieved_at": "2026-11-06T07:38:27.767440+09:00",
+      "representative": false,
+      "inconsistent": false
+    }
+  },
+  "scheduled_events": [
+    {
+      "title": "BOE Monetary Policy Report",
+      "country": "GBP",
+      "impact": "High",
+      "time_jst": "2026-11-05T21:00:00+09:00"
+    },
+    {
+      "title": "Monetary Policy Summary",
+      "country": "GBP",
+      "impact": "High",
+      "time_jst": "2026-11-05T21:00:00+09:00"
+    },
+    {
+      "title": "MPC Official Bank Rate Votes",
+      "country": "GBP",
+      "impact": "High",
+      "time_jst": "2026-11-05T21:00:00+09:00"
+    },
+    {
+      "title": "Official Bank Rate",
+      "country": "GBP",
+      "impact": "High",
+      "time_jst": "2026-11-05T21:00:00+09:00"
+    },
+    {
+      "title": "BOE Gov Bailey Speaks",
+      "country": "GBP",
+      "impact": "High",
+      "time_jst": "2026-11-05T21:30:00+09:00"
+    }
+  ],
+  "market": {
+    "fear_greed": {
+      "value": 32,
+      "label": "Fear"
+    },
+    "market_cap": "$2.545兆",
+    "market_cap_jpy": "¥403.1兆",
+    "volume_24h": "$1043.0億",
+    "volume_24h_jpy": "¥16.52兆",
+    "btc_dominance": "59.92%",
+    "eth_dominance": "10.72%"
+  },
+  "base": {
+    "tvl": "$58.60億",
+    "tvl_jpy": "¥9,281億",
+    "tvl_change": "-4.79%",
+    "tvl_direction": "down",
+    "dex_volume": "$14.075億",
+    "dex_volume_jpy": "¥2,229億",
+    "dex_volume_eth_usdc": "$129.83M",
+    "dex_volume_eth_usdc_jpy": "¥206億",
+    "usdc_dominance": "86.6%"
+  },
+  "lp": {
+    "pools": [
+      {
+        "name": "Base 0.05%プール",
+        "apr": "42.96%",
+        "tvl": "$7.96M",
+        "volume_24h": "$18.74M",
+        "change_vs_prev": {
+          "apr_change": "-5.41%",
+          "volume_24h_change": "-10.30%",
+          "tvl_change": "-5.17%"
+        }
+      },
+      {
+        "name": "Base 0.3%プール",
+        "apr": "83.33%",
+        "tvl": "$145.97M",
+        "volume_24h": "$111.09M",
+        "change_vs_prev": {
+          "apr_change": "-10.50%",
+          "volume_24h_change": "-15.79%",
+          "tvl_change": "-5.91%"
+        }
+      }
+    ],
+    "check_message": "#ETHが下落中。#ETH偏り・下限側レンジ外・下落耐性を確認"
+  },
+  "domestic": {
+    "bitflyer_eth_24h": "4,549.09 ETH",
+    "coincheck_eth_24h": "1,115.80 ETH",
+    "combined_eth": "5,664.90 ETH",
+    "combined_usd": "$12.64M",
+    "retrieved_at": "2026-11-06 07:38 JST"
+  },
+  "footer": {
+    "retrieved_at": "2026-11-06 07:38 JST",
+    "usd_jpy": "¥158.38",
+    "sources": "CoinMarketCap API / GeckoTerminal / DefiLlama / ExchangeRate-API / bitFlyer公式API / Coincheck公式API"
+  }
+}
