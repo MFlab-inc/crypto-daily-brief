@@ -570,9 +570,10 @@ check("NEWS_SELECTIONにBの波及経路の例（金利・為替・流動性・�
 check("NEWS_SELECTIONに「直接因果が未確認」のみを不採用理由にしてはならない旨が明記されている",
       "「暗号通貨価格への直接因果が未確認である」ことを、" in generate_post.NEWS_SELECTION
       and "不採用の理由としてはならない" in generate_post.NEWS_SELECTION)
-check("NEWS_SELECTIONに因果未確認でも掲載したうえで明記する旨が明記されている",
-      "掲載したうえで" in generate_post.NEWS_SELECTION
-      and "暗号通貨価格への直接因果は未確認" in generate_post.NEWS_SELECTION)
+check("NEWS_SELECTIONに、因果が未確認でも不採用にせずそのまま掲載する旨・価格との関係の有無は項目文に書かない旨が明記されている（v1.115・2026-11-06オーナー指示で「掲載したうえで明記する」から変更）",
+      "そのまま掲載する" in generate_post.NEWS_SELECTION and "項目文に書かない" in generate_post.NEWS_SELECTION
+      and "「暗号通貨価格への直接因果が未確認である」ことを" in generate_post.NEWS_SELECTION
+      and "掲載したうえで" not in generate_post.NEWS_SELECTION)
 check("NEWS_SELECTIONにA/B/C分類がtierとは別軸である旨が明記されている（tier規律との混同防止）",
       "下記tier（情報源の信頼性）とは別の軸である" in generate_post.NEWS_SELECTION)
 check("NO_CANDIDATES_FALLBACKにaudit_ledgerのreason冒頭でA/B/C段階を明記する指示がある",
@@ -587,9 +588,10 @@ check("NO_CANDIDATES_FALLBACKにuse:falseのreason全角60字上限、use:true�
       and "reasonは、use:true・use:falseのどちらでも必ず書く" in generate_post.NO_CANDIDATES_FALLBACK
       and "全角120字以内で書く" in generate_post.NO_CANDIDATES_FALLBACK
       and "この字数制限を適用しない" not in generate_post.NO_CANDIDATES_FALLBACK)
-check("WRITES_Aのpart1_pointsがB分類材料に因果未確認の限定表現を含める旨を参照している",
+check("WRITES_Aのpart1_pointsがB分類材料について、不採用にせず掲載し、価格との関係の有無は項目文に書かない旨を参照している（v1.115・2026-11-06オーナー指示）",
       "重要性判定と因果表現の分離" in generate_post.WRITES_A
-      and "暗号通貨価格への直接因果は未確認" in generate_post.WRITES_A)
+      and "価格との関係を確認できないという記述）は項目文に書かない" in generate_post.WRITES_A
+      and "限定表現を項目文に含める" not in generate_post.WRITES_A)
 
 print("=== generate_post.py: part1_headline・part1_pointsの2軸決定"
       "（v1.44・オーナー指示。v1.82でnotable_move〈旧(iii)・旧③〉を除外・オーナー承認） ===")
@@ -3875,8 +3877,9 @@ check("CALL_B_INSTRUCTIONS: §3.3の4段階の書式（【出来事・ニュー�
       < _CBI.index("【中間市場指標・市場心理】"))
 check("CALL_B_INSTRUCTIONS: 複数の連鎖を①②③で区切る旨と最大3本の旨が明記される",
       "①②③" in _CBI and "最大3本" in _CBI)
-check("CALL_B_INSTRUCTIONS: 各連鎖の末尾に「可能性」「因果は未確認」等の限定を置く旨が明記される",
-      "各連鎖の末尾" in _CBI and "因果は未確認" in _CBI and "可能性" in _CBI)
+check("CALL_B_INSTRUCTIONS: 限定（「可能性」等）は中段の段階に置き、【暗号通貨価格】の行（連鎖の末尾）には「因果は未確認です」等を置かない旨が明記される（v1.115・2026-11-06オーナー指示。旧: 各連鎖の末尾に限定を必ず置く）",
+      "【暗号通貨価格】の行（連鎖の末尾）には、「因果は未確認です」" in _CBI and "可能性" in _CBI
+      and "各連鎖の末尾（句点の直前）に" not in _CBI)
 check("CALL_B_INSTRUCTIONS: 根拠が1系統の日は無理に数を埋めない旨が明記される",
       "無理に数を埋めず" in _CBI)
 check("CALL_B_INSTRUCTIONS: part2_summaryは1〜2文・価格等に触れない旨が明記される（提案どおり承認）",
@@ -6080,10 +6083,11 @@ check("フロー書式: ①②③の付け方（複数なら①から連番・1�
       and "numbering" in _reasons("②" + _ok_a + "\n①" + _ok_a)
       and _reasons("①" + _ok_a + "\n②" + _ok_a + "\n③" + _ok_a) == set()
       and "too_many_chains" in _reasons("\n".join(("①②③④"[i] if i < 3 else "・") + _ok_a for i in range(4))))
-check("フロー書式: 末尾（句点の直前45字以内）に限定表現が無い連鎖は違反（語幹で判定。「とみられます」「意識された可能性」等は許容）",
-      "no_limit_at_end" in _reasons("【出来事・ニュース】a → 【暗号通貨価格】BTCが上昇しました。")
-      and "no_limit_at_end" not in _reasons("【出来事・ニュース】a → 【暗号通貨価格】BTCが上昇したとみられます。")
-      and "no_limit_at_end" not in _reasons("【出来事・ニュース】a → 【暗号通貨価格】BTCが上昇し、断定はできません。"))
+check("フロー書式: 連鎖の末尾の限定表現は検査しない（v1.115・2026-11-06オーナー指示。旧 no_limit_at_end を廃止）。限定の有無で違反にならず、ラベルの一覧にも残らない",
+      "no_limit_at_end" not in _reasons("【出来事・ニュース】a → 【暗号通貨価格】BTCが上昇しました。")
+      and _reasons("【出来事・ニュース】a → 【暗号通貨価格】BTCが上昇しました。") == set()
+      and "no_limit_at_end" not in verify_post.FLOW_FORMAT_REASON_LABELS
+      and not hasattr(verify_post, "_FLOW_LIMITING_STEMS"))
 _au_f = verify_post.Audit()
 verify_post.check_flow_format_warn(_au_f, {"part2_flow": "①" + _OK1 + "\n②" + "【出来事・ニュース】a → 【暗号通貨価格】cでした。因果は未確認です。"})
 check("フロー書式のWARN: 違反のある連鎖ごとに1件（何本目か・理由・連鎖を含む）。FAILにしない",
@@ -6747,7 +6751,7 @@ check("v1.99: 主張の帰属が下流まで伝わる——主要なポイント
       "当事者の主張を掲載する場合は、「〜と主張しました」の帰属と" in generate_post.WRITES_A and "「被害・影響は未確認です」等の限定を含める" in generate_post.WRITES_A
       and "当事者の主張を材料にする場合は、「〜と主張」の帰属を付ける" in generate_post.WRITES_A
       and "確認済み事実\n    に書き直さず、「〜と主張しました」の帰属と「未確認」の限定を保つ" in generate_post.SYSTEM_B
-      and "暗号通貨価格への直接因果は未確認" in generate_post.WRITES_A)
+      and "価格との関係を確認できないという記述）は項目文に書かない" in generate_post.WRITES_A)
 check("v1.99: 変更していないもの——手続き的な発表（v1.93追補）は従来どおりuse:falseで定型文・A/B/C分類の定義と【厳守】・tier規律（tier3は独立2ソース／tier4は常に不採用）",
       "手続き的な発表: 暗号通貨との関係が薄い個別の申請の承認" in _NF99
       and "B：明確な波及経路があるマクロ・地政学材料" in _NS99 and "不採用の理由としてはならない" in _NS99
@@ -6971,11 +6975,11 @@ check("v1.101 プロンプト: マクロの変化が確認できない制度・�
 _ex101 = "【出来事・ニュース】〇〇が△△を発表しました（媒体名、日付） → 【暗号通貨価格】同時期は◇◇（値動きの形状）でしたが、因果は未確認です。"
 check("v1.101 プロンプト: 書式の例（プレースホルダー）が入り、その例自体が機械チェックの書式に適合する（誤った見本を示さない）。2段階（地政学・マクロの変化なし）の連鎖はWARNにならない",
       "書式の例（〇〇・△△は例示用のプレースホルダーであり" in _cbf and "【出来事・ニュース】〇〇が△△を発表しました（媒体名、日付）→【暗号通貨価格】" in _cbf
-      and "同時期は◇◇（値動きの形状）でしたが" in _cbf and "おおむね横ばい" not in _cbf
+      and "同時期は◇◇（値動きの形状）でした。" in _cbf and "でしたが、因果は未確認です。」" not in _cbf and "おおむね横ばい" not in _cbf
       and verify_post.find_flow_format_violations(_ex101) == []
       and verify_post.find_flow_format_violations("①" + _ex101 + "\n②" + _ex101) == [], "")
 check("v1.101 プロンプト: 変更していないもの——材料が無い日の定型文・「【出来事・ニュース】と【暗号通貨価格】は必ず置く」・限定表現の指示・①②③の指示・呼び出しBへの主張の帰属の1文（v1.99）",
-      "【出来事・ニュース】と【暗号通貨価格】は必ず置く" in _CB101 and generate_post.FIXED_FLOW in _CB101 and "各連鎖の末尾（句点の直前）に「可能性」" in _CB101
+      "【出来事・ニュース】と【暗号通貨価格】は必ず置く" in _CB101 and generate_post.FIXED_FLOW in _CB101 and "限定（「可能性」「意識された可能性」等）は、【出来事・ニュース】の次の段階" in _CB101
       and "先頭に①②③を付して区切る" in _CB101 and "「〜と主張しました」の帰属と「未確認」の限定を保つ（v1.99）" in _CB101)
 check("v1.101: 再生成の指示（_build_flow_regen_note）は、直前の連鎖・検出した違反の理由・直すべき点（ラベル・1文・限定表現）を含み、材料や事実は変えないよう指示する",
       all(t in generate_post._build_flow_regen_note(["x"], [{"chain_no": 2, "text": "T2", "reasons": ["no_event_label", "sentences"]}])
@@ -7490,7 +7494,7 @@ check("v1.105: 「材料の件数がそのまま項目数になる」を、「�
 check("v1.105: 指標日の規則（「①の中での主題の選び方」(2)で指標の材料を1番目に置く）は、順位より優先する。従来の1件だけの日の1項目の規定・「項目数を埋めるためにtier3単独ソースを採用しない」・Bの限定表現の指示は残る",
       "制度材料の例外（「①の中での主題の選び方」の規則(2)）で指標の材料を1番目に置く場合は、それを優先する" in _pf105
       and "採用した材料がヘッドラインの1件だけの日は、主要なポイントを定型文\n  とする（上記）" in _W105 and "項目数を埋めるためにtier3単独ソースを採用しない" in _pf105
-      and "暗号通貨価格への直接因果は未確認" in _p105 and generate_post.NO_CANDIDATES_FALLBACK.count("指標の材料はpart1_pointsの1番目に置く") == 1)
+      and "価格との関係を確認できないという記述）は項目文に書かない" in _p105 and generate_post.NO_CANDIDATES_FALLBACK.count("指標の材料はpart1_pointsの1番目に置く") == 1)
 check("v1.105: 上限4項目に収まらないときのuse:falseの対象は「重要度の低い（上記の優先順位で後ろの区分の）材料」。Bの扱いの基準4(d)の「重要度」も、この優先順位によると書く（見送りのreasonは「上限4項目のため見送り」）",
       "重要度の低い（上記の優先順位で後ろの区分の）\n  材料を use:false にする" in _W105
       and "順位は、下記「あなたが書くもの」のpart1_pointsの順位による" in generate_post.NEWS_SELECTION.replace("\n       ", ""))
@@ -7910,8 +7914,8 @@ check("v1.110 実データ（【暗号通貨価格】がある過去4日分）: 
 _cbf110 = generate_post.CALL_B_INSTRUCTIONS.replace("\n", "").replace(" ", "")
 check("v1.110 プロンプト（呼び出しB）: 【暗号通貨価格】はシステムが「 #BTC ±x.xx%、 #ETH ±x.xx%（24時間比）で、」を差し込む（実際の数値は例に使わず±x.xx%のプレースホルダー。v1.110追補）。モデルは数値・ハッシュタグを書かず、続きの句（形状と限定）だけを書く。連鎖の末尾にもタグを書かない。旧「数値は書かない」の単独の指示は、差し込みの説明に置き換わった",
       "ラベルの直後に、システムが「#BTC±x.xx%、#ETH±x.xx%（24時間比）で、」の形で、BTC・ETHの24時間比（daily_dataの値そのもの）を機械的に差し込む" in _cbf110
-      and "あなたは数値とハッシュタグを書かず（「24時間比」の表記は差し込み部分に入る）、差し込みに続く句として、同時期の値動きの形状（やや軟調・小幅な上昇など）と限定を書く" in _cbf110
-      and "「【暗号通貨価格】同時期は◇◇（値動きの形状）でしたが、因果は未確認です。」" in _cbf110 and "やや軟調に推移しましたが、因果は未確認です。」" not in _cbf110
+      and "あなたは数値とハッシュタグを書かず（「24時間比」の表記は差し込み部分に入る）、差し込みに続く句として、同時期の値動きの形状（やや軟調・小幅な上昇など）だけを書く" in _cbf110
+      and "「【暗号通貨価格】同時期は◇◇（値動きの形状）でした。」" in _cbf110 and "でしたが、因果は未確認です。」" not in _cbf110 and "やや軟調に推移しましたが、因果は未確認です。」" not in _cbf110
       and "-0.51%" not in generate_post.CALL_B_INSTRUCTIONS and "-0.76%" not in generate_post.CALL_B_INSTRUCTIONS and "-0.51%" not in generate_post.RULES_HASHTAG
       and "あなたは、本文にも連鎖の末尾にもハッシュタグを書かない（v1.110）" in _cbf110 and "形状のみ記述する（数値は書かない）" not in _cbf110
       and "ハッシュタグを付す場合は連鎖の末尾" not in _cbf110)
@@ -8383,6 +8387,48 @@ check("v1.114 実データ再現: 閾値0.4・tier3の上限15・救済の最大
       and generate_post.TIER3_CANDIDATE_LIMIT == 15 and generate_post.PAIR_RESCUE_MAX_PAIRS == 5 and generate_post.TIER2_CANDIDATE_LIMIT == 15)
 
 print()
+print("=== v1.115（2026-11-06・オーナー指示）: 自動下書きから「因果は未確認です」「価格との関係は確認できていません」「出来高の変化が主因です」を出さない ===")
+import compose_lp_comment as _clc115
+_pool115 = lambda vol, tvl: {"name": "Base 0.05%プール", "apr": "42.96%",
+                             "change_vs_prev": {"apr_change": "-5.41%", "volume_24h_change": vol, "tvl_change": tvl}}
+_prev115 = {"apr": "45.42%"}
+_s_vol = _clc115._pool_sentence("Base 0.05%プール", _pool115("-10.30%", "-5.17%"), _prev115)
+_s_tvl = _clc115._pool_sentence("Base 0.05%プール", _pool115("-1.00%", "-9.00%"), _prev115)
+_s_none = _clc115._pool_sentence("Base 0.05%プール", _pool115("-1.00%", "-1.50%"), _prev115)
+check("v1.115 LP定型文: 出来高とTVLの変化率の差が5ポイント以上でも「24時間出来高の変化が主因です。」「TVLの変化が主因です。」を出さない（変化率は括弧の中に残る）",
+      "主因" not in _s_vol and "主因" not in _s_tvl and "主因" not in _s_none
+      and _s_vol == "Base 0.05%プールの参考APRは45.42%→42.96%へ低下しました（24時間出来高 -10.30%、TVL -5.17%）。"
+      and _s_tvl.endswith("（24時間出来高 -1.00%、TVL -9.00%）。"), f"{_s_vol} | {_s_tvl}")
+_lp115 = _clc115.compose_lp_comment({"target_date_jst": "2026-11-05", "assets": [{"asset": "ETH", "change_24h": "-8.42%", "direction": "down"}],
+                                     "lp": {"pools": [_pool115("-10.30%", "-5.17%")]}})
+check("v1.115 LP定型文: 文全体でも「主因」を含まず、定型文（FIXED_2・FIXED_4・FIXED_5）とETHの確認事項は従来どおり残る",
+      "主因" not in _lp115 and _clc115.FIXED_2 in _lp115 and _clc115.FIXED_4 in _lp115 and _clc115.FIXED_5 in _lp115
+      and "ETHは24時間比-8.42%と下落中のため" in _lp115, _lp115)
+_cb115 = generate_post.CALL_B_INSTRUCTIONS
+_all_prompts115 = generate_post.SYSTEM_A + generate_post.SYSTEM_B + generate_post.NO_CANDIDATES_FALLBACK
+check("v1.115 プロンプト: 呼び出しA・Bの指示は、旧文言を書かせる例・規則を含まない（「でしたが、因果は未確認です。」の例・「各連鎖の末尾（句点の直前）に…限定を必ず置く」・「掲載したうえで…と明記する」・「限定表現を項目文に含める」）",
+      "でしたが、因果は未確認です" not in _all_prompts115 and "各連鎖の末尾（句点の直前）に" not in _all_prompts115
+      and "と明記する" not in generate_post.NEWS_SELECTION and "限定表現を項目文に含める" not in _all_prompts115
+      and "が、因果は未確認です。」（タグは" not in _all_prompts115 and "主因" not in _all_prompts115)
+check("v1.115 プロンプト: 呼び出しBは、【暗号通貨価格】の行（連鎖の末尾）に限定を書かず、限定は中段の「…可能性」に置く（旧規則より優先する旨も書く）",
+      "限定（「可能性」「意識された可能性」等）は、【出来事・ニュース】の次の段階" in _cb115
+      and "統合運用基準§3.3の\n  「各連鎖の末尾に限定を置く」より優先する" in _cb115)
+_regen115 = generate_post._build_flow_regen_note(["x"], [{"chain_no": 1, "text": "T", "reasons": ["sentences"]}])
+check("v1.115 再生成の指示: 末尾に「因果は未確認」等の限定を置くよう求めない（置かない側に変更）",
+      "末尾に「可能性」「因果は未確認」等の限定を置く" not in _regen115 and "【暗号通貨価格】の行には「因果は未確認」等の限定を書かない" in _regen115, _regen115[-600:])
+_rep115 = generate_post.REPAIR_SYSTEM_TEMPLATE.format(limiting_expressions="可能性、未確認")
+check("v1.115 C18の局所修正の指示: 「因果は未確認です」「価格との関係は確認できていません」は使わず、他の限定表現で限定させる。テンプレートの波括弧は壊れない",
+      "「因果は未確認です」「暗号通貨価格との関係は確認できていません」「価格との因果関係は確認できていません」" in _rep115
+      and "可能性、未確認" in _rep115 and '{"rewritten_sentence"' in _rep115)
+_flow115 = "①【出来事・ニュース】a（Reuters、11月5日） → 【地政学・マクロの変化】bが意識された可能性 → 【暗号通貨価格】 #BTC -6.03%、 #ETH -8.42%（24時間比）で、同時期は下落しました。"
+check("v1.115 フロー書式: 【暗号通貨価格】の行を値動きの事実で終える連鎖（「因果は未確認です」なし）は、書式の警告にならない。C18（断定の検知）は従来どおり働く",
+      verify_post.find_flow_format_violations(_flow115.replace("①", "")) == []
+      and verify_post.find_flow_format_violations(
+          "【出来事・ニュース】a → 【暗号通貨価格】 #BTC -6.03%、 #ETH -8.42%（24時間比）で、同時期は下落しました。", require_price_fragment=True) == [])
+_b115 = json.loads(json.dumps(b_ok)); _b115["sections"]["part2_flow"] = "規制強化が原因で下落した。"
+check("v1.115 C18は変わらない: 因果を示す語と価格の語が同じ文にあり限定表現が無ければ、従来どおりFAIL",
+      any(x["id"].startswith("C18") and x["result"] == "FAIL" for x in verify_post.run_all(_b115, DAILY_DATA).checks))
+
 print(f"PASS: {len(PASS)}  FAIL: {len(FAIL)}")
 if FAIL:
     print("FAILED CASES:")

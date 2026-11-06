@@ -26,6 +26,7 @@ FIXED_4 = "V3では価格が設定レンジを外れると手数料が発生し�
 FIXED_5 = "APR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。"
 
 # §11 未確定事項4: 実データ蓄積後に見直す前提の仮置き値。
+# 2026-11-06（v1.115）: 主因の1文を出さなくなったため、現在は使われていない（元に戻すときのために残す）。
 MAIN_FACTOR_THRESHOLD_PT = 5.0
 
 NO_PREV_DAY = "前日データが利用できないため、参考APRの変化は比較できません。"
@@ -71,14 +72,8 @@ def _pool_sentence(name: str, pool: dict, prev_pool: dict | None) -> str:
     # 1-b: 3指標すべて利用可能。
     sentence = (f"{name}の参考APRは{prev_apr}→{curr_apr}へ{direction}しました"
                 f"（24時間出来高 {vol_raw}、TVL {tvl_raw}）。")
-    # 主因の判定（台本 §6.2 の記述どおり）。テンプレート本文に主因の挿入位置が
-    # 明示されていなかったため、算出結果を末尾に1文追加する形で実装した
-    # （v0.3レビュー時に要確認としてユーザーへ報告する）。
-    diff = abs(vol_chg) - abs(tvl_chg)
-    if diff >= MAIN_FACTOR_THRESHOLD_PT:
-        sentence += "24時間出来高の変化が主因です。"
-    elif -diff >= MAIN_FACTOR_THRESHOLD_PT:
-        sentence += "TVLの変化が主因です。"
+    # 2026-11-06（オーナー指示・v1.115）: 「24時間出来高の変化が主因です。」「TVLの変化が主因です。」の1文（台本 §6.2 の主因の判定）は
+    # 出さない。出来高とTVLの変化率は、上の括弧の中に残る。判定の考え方を戻すときは、DESIGN_CHANGES.md v1.115を参照。
     return sentence
 
 

@@ -1281,7 +1281,6 @@ def check_indicator_headline_warn(au: Audit, sections: dict, audit_ledger, sched
 # 【地政学・マクロの変化】に書く等）は検出できない。
 _FLOW_LABELS = ("【出来事・ニュース】", "【地政学・マクロの変化】", "【中間市場指標・市場心理】", "【暗号通貨価格】")
 _FLOW_NUMBERS = "①②③"
-_FLOW_LIMITING_STEMS = ("可能性", "未確認", "意識され", "とみられ", "考えられ", "確認できません", "確認できない", "断定")
 FLOW_FORMAT_REASON_LABELS = {
     "no_event_label": "【出来事・ニュース】が無い",
     "no_price_label": "【暗号通貨価格】が無い",
@@ -1296,7 +1295,6 @@ FLOW_FORMAT_REASON_LABELS = {
     "tag_not_after_period": "ハッシュタグが句点の後に無い",
     "numbering": "①②③の付け方が違う（複数なら①から連番、1本なら付けない）",
     "too_many_chains": "連鎖が4本以上ある（最大3本）",
-    "no_limit_at_end": "末尾に限定表現（可能性・未確認等）が無い",
     "no_price_number": "【暗号通貨価格】に「 #BTC ±x.xx%、 #ETH ±x.xx%（24時間比）」の数値が無い（システムの差し込み漏れ）",
 }
 
@@ -1339,9 +1337,8 @@ def _flow_chain_violations(raw: str, idx: int, n: int, require_price_fragment: b
         r.append("no_arrows")
     if re.sub(r"（[^（）]*）", "", core).count("。") != 1 or not core.rstrip().endswith("。"):
         r.append("sentences")
-    last = core.rstrip().rstrip("。")
-    if not any(w in last[-45:] for w in _FLOW_LIMITING_STEMS):
-        r.append("no_limit_at_end")
+    # v1.115（2026-11-06・オーナー指示）: 連鎖の末尾の限定表現（旧 no_limit_at_end）は検査しない。「因果は未確認です」等を
+    # 【暗号通貨価格】の行に書かなくなったため。断定の検知は、C18（因果を示す語と価格の語が同じ文にあり、限定表現が無い場合）が引き続き行う。
     if require_price_fragment and _FLOW_LABELS[3] in core and not generate_post.FLOW_PRICE_FRAGMENT_RE.search(core):
         r.append("no_price_number")
     return r
