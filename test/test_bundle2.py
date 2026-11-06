@@ -571,7 +571,7 @@ check("NEWS_SELECTIONに「直接因果が未確認」のみを不採用理由�
       "「暗号通貨価格への直接因果が未確認である」ことを、" in generate_post.NEWS_SELECTION
       and "不採用の理由としてはならない" in generate_post.NEWS_SELECTION)
 check("NEWS_SELECTIONに、因果が未確認でも不採用にせずそのまま掲載する旨・価格との関係の有無は項目文に書かない旨が明記されている（v1.115・2026-11-06オーナー指示で「掲載したうえで明記する」から変更）",
-      "そのまま掲載する" in generate_post.NEWS_SELECTION and "項目文に書かない" in generate_post.NEWS_SELECTION
+      "そのまま掲載する" in generate_post.NEWS_SELECTION and "のどの文にも書かない" in generate_post.NEWS_SELECTION.replace("\n", "").replace(" ", "")
       and "「暗号通貨価格への直接因果が未確認である」ことを" in generate_post.NEWS_SELECTION
       and "掲載したうえで" not in generate_post.NEWS_SELECTION)
 check("NEWS_SELECTIONにA/B/C分類がtierとは別軸である旨が明記されている（tier規律との混同防止）",
@@ -590,7 +590,7 @@ check("NO_CANDIDATES_FALLBACKにuse:falseのreason全角60字上限、use:true�
       and "この字数制限を適用しない" not in generate_post.NO_CANDIDATES_FALLBACK)
 check("WRITES_Aのpart1_pointsがB分類材料について、不採用にせず掲載し、価格との関係の有無は項目文に書かない旨を参照している（v1.115・2026-11-06オーナー指示）",
       "重要性判定と因果表現の分離" in generate_post.WRITES_A
-      and "価格との関係を確認できないという記述）は項目文に書かない" in generate_post.WRITES_A
+      and "価格との因果・関係を確認できないという記述）は、ヘッドライン・主要なポイントのどの文にも書かない" in generate_post.WRITES_A.replace("\n", "").replace(" ", "")
       and "限定表現を項目文に含める" not in generate_post.WRITES_A)
 
 print("=== generate_post.py: part1_headline・part1_pointsの2軸決定"
@@ -3878,7 +3878,7 @@ check("CALL_B_INSTRUCTIONS: §3.3の4段階の書式（【出来事・ニュー�
 check("CALL_B_INSTRUCTIONS: 複数の連鎖を①②③で区切る旨と最大3本の旨が明記される",
       "①②③" in _CBI and "最大3本" in _CBI)
 check("CALL_B_INSTRUCTIONS: 限定（「可能性」等）は中段の段階に置き、【暗号通貨価格】の行（連鎖の末尾）には「因果は未確認です」等を置かない旨が明記される（v1.115・2026-11-06オーナー指示。旧: 各連鎖の末尾に限定を必ず置く）",
-      "【暗号通貨価格】の行（連鎖の末尾）には、「因果は未確認です」" in _CBI and "可能性" in _CBI
+      "【暗号通貨価格】の段階には、「因果は未確認です」" in _CBI.replace("\n", "").replace(" ", "") and "可能性" in _CBI
       and "各連鎖の末尾（句点の直前）に" not in _CBI)
 check("CALL_B_INSTRUCTIONS: 根拠が1系統の日は無理に数を埋めない旨が明記される",
       "無理に数を埋めず" in _CBI)
@@ -6751,7 +6751,7 @@ check("v1.99: 主張の帰属が下流まで伝わる——主要なポイント
       "当事者の主張を掲載する場合は、「〜と主張しました」の帰属と" in generate_post.WRITES_A and "「被害・影響は未確認です」等の限定を含める" in generate_post.WRITES_A
       and "当事者の主張を材料にする場合は、「〜と主張」の帰属を付ける" in generate_post.WRITES_A
       and "確認済み事実\n    に書き直さず、「〜と主張しました」の帰属と「未確認」の限定を保つ" in generate_post.SYSTEM_B
-      and "価格との関係を確認できないという記述）は項目文に書かない" in generate_post.WRITES_A)
+      and "価格との因果・関係を確認できないという記述）は、ヘッドライン・主要なポイントのどの文にも書かない" in generate_post.WRITES_A.replace("\n", "").replace(" ", ""))
 check("v1.99: 変更していないもの——手続き的な発表（v1.93追補）は従来どおりuse:falseで定型文・A/B/C分類の定義と【厳守】・tier規律（tier3は独立2ソース／tier4は常に不採用）",
       "手続き的な発表: 暗号通貨との関係が薄い個別の申請の承認" in _NF99
       and "B：明確な波及経路があるマクロ・地政学材料" in _NS99 and "不採用の理由としてはならない" in _NS99
@@ -6979,7 +6979,7 @@ check("v1.101 プロンプト: 書式の例（プレースホルダー）が入�
       and verify_post.find_flow_format_violations(_ex101) == []
       and verify_post.find_flow_format_violations("①" + _ex101 + "\n②" + _ex101) == [], "")
 check("v1.101 プロンプト: 変更していないもの——材料が無い日の定型文・「【出来事・ニュース】と【暗号通貨価格】は必ず置く」・限定表現の指示・①②③の指示・呼び出しBへの主張の帰属の1文（v1.99）",
-      "【出来事・ニュース】と【暗号通貨価格】は必ず置く" in _CB101 and generate_post.FIXED_FLOW in _CB101 and "限定（「可能性」「意識された可能性」等）は、【出来事・ニュース】の次の段階" in _CB101
+      "【出来事・ニュース】と【暗号通貨価格】は必ず置く" in _CB101 and generate_post.FIXED_FLOW in _CB101 and "限定（「可能性」「意識された可能性」等）は、【地政学・マクロの変化】の段階" in _CB101.replace("\n", "").replace(" ", "")
       and "先頭に①②③を付して区切る" in _CB101 and "「〜と主張しました」の帰属と「未確認」の限定を保つ（v1.99）" in _CB101)
 check("v1.101: 再生成の指示（_build_flow_regen_note）は、直前の連鎖・検出した違反の理由・直すべき点（ラベル・1文・限定表現）を含み、材料や事実は変えないよう指示する",
       all(t in generate_post._build_flow_regen_note(["x"], [{"chain_no": 2, "text": "T2", "reasons": ["no_event_label", "sentences"]}])
@@ -7494,7 +7494,7 @@ check("v1.105: 「材料の件数がそのまま項目数になる」を、「�
 check("v1.105: 指標日の規則（「①の中での主題の選び方」(2)で指標の材料を1番目に置く）は、順位より優先する。従来の1件だけの日の1項目の規定・「項目数を埋めるためにtier3単独ソースを採用しない」・Bの限定表現の指示は残る",
       "制度材料の例外（「①の中での主題の選び方」の規則(2)）で指標の材料を1番目に置く場合は、それを優先する" in _pf105
       and "採用した材料がヘッドラインの1件だけの日は、主要なポイントを定型文\n  とする（上記）" in _W105 and "項目数を埋めるためにtier3単独ソースを採用しない" in _pf105
-      and "価格との関係を確認できないという記述）は項目文に書かない" in _p105 and generate_post.NO_CANDIDATES_FALLBACK.count("指標の材料はpart1_pointsの1番目に置く") == 1)
+      and "価格との因果・関係を確認できないという記述）は、ヘッドライン・主要なポイントのどの文にも書かない" in _pf105 and generate_post.NO_CANDIDATES_FALLBACK.count("指標の材料はpart1_pointsの1番目に置く") == 1)
 check("v1.105: 上限4項目に収まらないときのuse:falseの対象は「重要度の低い（上記の優先順位で後ろの区分の）材料」。Bの扱いの基準4(d)の「重要度」も、この優先順位によると書く（見送りのreasonは「上限4項目のため見送り」）",
       "重要度の低い（上記の優先順位で後ろの区分の）\n  材料を use:false にする" in _W105
       and "順位は、下記「あなたが書くもの」のpart1_pointsの順位による" in generate_post.NEWS_SELECTION.replace("\n       ", ""))
@@ -7517,7 +7517,7 @@ check("v1.105追補→v1.107 帰属の例外: ヘッドラインの主題が独�
       and "ヘッドラインに従として併記した材料も同じ" in _pf105
       and "公式発表での確認が取れていない」旨の但し書きはpart1_headlineに\n書かず" not in generate_post.NO_CANDIDATES_FALLBACK)
 check("v1.105追補 C18の補強: Bの限定表現は、因果を示す語と価格の語を含む文と同じ文の中に書く。別の文に書いてもC18では限定にならない（verify_postのC18は文単位で、限定語が同じ文に無いとFAIL）",
-      "限定表現（未確認・可能性・とみられる等）もその同じ文の中に書く（別の文に書いても、システムの確認C18では限定にならない）" in _pf105
+      "限定表現（可能性・とみられる・考えられる等。価格との関係を述べる「未確認」の形は使わない。金利・原油など暗号通貨以外の価格の動きを書く場合も同じ）もその同じ文の中に書く（別の文に書いても、システムの確認C18では限定にならない）" in _pf105
       and all(w in verify_post.LIMITING_EXPRESSIONS for w in ("未確認", "可能性", "とみられる")))
 # C18が実際に文単位で判定すること（プロンプトの記述が実装と一致していることの確認）
 _same = "米雇用統計の結果を受けて金利が上昇しました。ただし暗号通貨価格への直接因果は未確認です。"
@@ -8411,20 +8411,34 @@ check("v1.115 プロンプト: 呼び出しA・Bの指示は、旧文言を書�
       and "と明記する" not in generate_post.NEWS_SELECTION and "限定表現を項目文に含める" not in _all_prompts115
       and "が、因果は未確認です。」（タグは" not in _all_prompts115 and "主因" not in _all_prompts115)
 check("v1.115 プロンプト: 呼び出しBは、【暗号通貨価格】の行（連鎖の末尾）に限定を書かず、限定は中段の「…可能性」に置く（旧規則より優先する旨も書く）",
-      "限定（「可能性」「意識された可能性」等）は、【出来事・ニュース】の次の段階" in _cb115
-      and "統合運用基準§3.3の\n  「各連鎖の末尾に限定を置く」より優先する" in _cb115)
+      "限定（「可能性」「意識された可能性」等）は、【地政学・マクロの変化】の段階（この段階を書かない連鎖では【中間市場指標・市場心理】の段階）の文中に置く" in _cb115.replace("\n", "").replace(" ", "")
+      and "中段が無い2段階の連鎖には限定を置かなくてよいが" in _cb115.replace("\n", "").replace(" ", "")
+      and "統合運用基準§3.3の「各連鎖の末尾に限定を置く」より優先する" in _cb115.replace("\n", "").replace(" ", ""))
 _regen115 = generate_post._build_flow_regen_note(["x"], [{"chain_no": 1, "text": "T", "reasons": ["sentences"]}])
 check("v1.115 再生成の指示: 末尾に「因果は未確認」等の限定を置くよう求めない（置かない側に変更）",
       "末尾に「可能性」「因果は未確認」等の限定を置く" not in _regen115 and "【暗号通貨価格】の行には「因果は未確認」等の限定を書かない" in _regen115, _regen115[-600:])
 _rep115 = generate_post.REPAIR_SYSTEM_TEMPLATE.format(limiting_expressions="可能性、未確認")
 check("v1.115 C18の局所修正の指示: 「因果は未確認です」「価格との関係は確認できていません」は使わず、他の限定表現で限定させる。テンプレートの波括弧は壊れない",
-      "「因果は未確認です」「暗号通貨価格との関係は確認できていません」「価格との因果関係は確認できていません」" in _rep115
+      "暗号通貨価格との因果・関係の有無を述べる文言（「因果は未確認です」「暗号通貨価格との関係は確認できていません」" in _rep115.replace("\n", "").replace(" ", "")
       and "可能性、未確認" in _rep115 and '{"rewritten_sentence"' in _rep115)
 _flow115 = "①【出来事・ニュース】a（Reuters、11月5日） → 【地政学・マクロの変化】bが意識された可能性 → 【暗号通貨価格】 #BTC -6.03%、 #ETH -8.42%（24時間比）で、同時期は下落しました。"
 check("v1.115 フロー書式: 【暗号通貨価格】の行を値動きの事実で終える連鎖（「因果は未確認です」なし）は、書式の警告にならない。C18（断定の検知）は従来どおり働く",
       verify_post.find_flow_format_violations(_flow115.replace("①", "")) == []
       and verify_post.find_flow_format_violations(
           "【出来事・ニュース】a → 【暗号通貨価格】 #BTC -6.03%、 #ETH -8.42%（24時間比）で、同時期は下落しました。", require_price_fragment=True) == [])
+_flat115 = lambda t: t.replace("\n", "").replace(" ", "")
+check("v1.115 プロンプト（総括）: 呼び出しBの総括の指示に、暗号通貨価格との因果・関係の有無を述べる文（「いずれも価格との因果関係は確認できていません」等、言い換えを含む）を書かない旨がある（総括は過去67日のうち19日にこの種の文を書いていた）",
+      "暗号通貨価格との因果・関係の有無を述べる文（「いずれも価格との因果関係は確認できていません」" in _flat115(generate_post.CALL_B_INSTRUCTIONS)
+      and "言い換えを含む）は書かない" in _flat115(generate_post.CALL_B_INSTRUCTIONS))
+check("v1.115 プロンプト（前日以前の投稿）: 前日以前の投稿本文にある旧文言は真似て書かない旨がある（previous_postsの本文は呼び出しAの入力に入るため）",
+      "previous_postsの本文にある「価格への直接因果は未確認です」" in _flat115(generate_post.SYSTEM_A)
+      and "真似て書かない" in generate_post.SYSTEM_A)
+check("v1.115 プロンプト（断定の禁止の規則）: 「…のいずれかで文を締め」の候補から「未確認」「断定（できない/できません）」を外し、価格との因果・関係の有無を述べる文言は書かない旨がある",
+      "「未確認」「断定（できない/" not in generate_post.RULES_CAUSAL and "いずれかを同じ文の中に含めて" in _flat115(generate_post.RULES_CAUSAL)
+      and "「因果は未確認です」「断定できません」等は書かない" in _flat115(generate_post.RULES_CAUSAL))
+check("v1.115 プロンプト: 材料が無い日の定型文（FIXED_HEADLINE・FIXED_FLOW）は禁止の対象外で、そのまま使う旨がある。「被害・影響は未確認です」は事案そのものの被害・影響であり価格への影響ではない旨がある",
+      "材料が無い日の定型文はこの禁止の対象外で、そのまま使う" in _flat115(generate_post.NEWS_SELECTION)
+      and "価格への影響ではない" in _flat115(generate_post.WRITES_A))
 _b115 = json.loads(json.dumps(b_ok)); _b115["sections"]["part2_flow"] = "規制強化が原因で下落した。"
 check("v1.115 C18は変わらない: 因果を示す語と価格の語が同じ文にあり限定表現が無ければ、従来どおりFAIL",
       any(x["id"].startswith("C18") and x["result"] == "FAIL" for x in verify_post.run_all(_b115, DAILY_DATA).checks))
