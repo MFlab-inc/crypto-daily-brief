@@ -7517,7 +7517,7 @@ check("v1.105追補→v1.107 帰属の例外: ヘッドラインの主題が独�
       and "ヘッドラインに従として併記した材料も同じ" in _pf105
       and "公式発表での確認が取れていない」旨の但し書きはpart1_headlineに\n書かず" not in generate_post.NO_CANDIDATES_FALLBACK)
 check("v1.105追補 C18の補強: Bの限定表現は、因果を示す語と価格の語を含む文と同じ文の中に書く。別の文に書いてもC18では限定にならない（verify_postのC18は文単位で、限定語が同じ文に無いとFAIL）",
-      "限定表現（可能性・とみられる・考えられる等。価格との関係を述べる「未確認」の形は使わない。金利・原油など暗号通貨以外の価格の動きを書く場合も同じ）もその同じ文の中に書く（別の文に書いても、システムの確認C18では限定にならない）" in _pf105
+      "限定表現（「…可能性があります」「…意識された可能性があります」が確実。「とみられます」「考えられます」と丁寧形にすると限定と認められない。価格との関係を述べる「未確認」の形は使わない。金利・原油など暗号通貨以外の価格の動きを書く場合も同じ）もその同じ文の中に書く（別の文に書いても、システムの確認C18では限定にならない）" in _pf105
       and all(w in verify_post.LIMITING_EXPRESSIONS for w in ("未確認", "可能性", "とみられる")))
 # C18が実際に文単位で判定すること（プロンプトの記述が実装と一致していることの確認）
 _same = "米雇用統計の結果を受けて金利が上昇しました。ただし暗号通貨価格への直接因果は未確認です。"
@@ -8439,6 +8439,40 @@ check("v1.115 プロンプト（断定の禁止の規則）: 「…のいずれ�
 check("v1.115 プロンプト: 材料が無い日の定型文（FIXED_HEADLINE・FIXED_FLOW）は禁止の対象外で、そのまま使う旨がある。「被害・影響は未確認です」は事案そのものの被害・影響であり価格への影響ではない旨がある",
       "材料が無い日の定型文はこの禁止の対象外で、そのまま使う" in _flat115(generate_post.NEWS_SELECTION)
       and "価格への影響ではない" in _flat115(generate_post.WRITES_A))
+check("v1.115 前日以前の投稿（previous_posts）から旧文言を除く: 実際の10/25〜11/5の言い方（「…ですが、暗号通貨価格への直接因果は未確認です（Reuters、…）。」「…可能性がありますが、価格への直接因果は未確認です」「…であり、…」「単独の文」）で、文の他の部分と出典は残る",
+      generate_post._strip_legacy_causal_clause("市場のリスク選好に影響し得る材料ですが、暗号通貨価格への直接因果は未確認です（Reuters、10月26日）。") == "市場のリスク選好に影響し得る材料です（Reuters、10月26日）。"
+      and generate_post._strip_legacy_causal_clause("原油市場への波及が意識された可能性がありますが、価格への直接因果は未確認です（Reuters、11月5日）。") == "原油市場への波及が意識された可能性があります（Reuters、11月5日）。"
+      and generate_post._strip_legacy_causal_clause("制裁回避の文脈で言及された事例であり、価格への直接因果は未確認です（Reuters、10月25日）。") == "制裁回避の文脈で言及された事例であり（Reuters、10月25日）。"
+      and generate_post._strip_legacy_causal_clause("FRBは利上げを決めました（FRB、11月5日）。") == "FRBは利上げを決めました（FRB、11月5日）。")
+import tempfile as _tf115
+with _tf115.TemporaryDirectory() as _td115:
+    _root115 = Path(_td115)
+    _d115 = _root115 / "2026-11-04" / "draft"
+    _d115.mkdir(parents=True)
+    (_d115 / "post_bundle.json").write_text(json.dumps({"sections": {
+        "part1_headline": "米当局が規則案を公表しました。暗号通貨価格への直接因果は未確認です（SEC、2026年11月4日）。",
+        "part1_points": "・労働市場の底堅さが金融政策の先行き観測に影響した可能性がありますが、暗号通貨価格への直接因果は未確認です（Reuters、11月3日）。"}}), encoding="utf-8")
+    _pp115 = generate_post._load_previous_posts("2026-11-05", outputs_root=_root115)
+    _blob115 = json.dumps(_pp115, ensure_ascii=False)
+    check("v1.115 _load_previous_posts: AIへ渡す前日以前の投稿の写しから旧文言を除く（見出し・主要なポイントの両方）。元のファイルは変えない",
+          len(_pp115) == 1 and "直接因果" not in _blob115 and "未確認" not in _blob115
+          and _pp115[0]["part1_points"] == ["労働市場の底堅さが金融政策の先行き観測に影響した可能性があります（Reuters、11月3日）。"]
+          and "直接因果は未確認です" in json.loads((_d115 / "post_bundle.json").read_text(encoding="utf-8"))["sections"]["part1_headline"], _blob115)
+check("v1.115 プロンプト（です・ます調の限定）: 「…可能性があります」が確実で、「とみられます」「考えられます」の丁寧形はC18で限定と認められない旨を、断定の禁止の規則・主要なポイントの指示・C18の局所修正の指示に書く",
+      "「…可能性があります」「…意識された可能性があります」とするのが確実" in _flat115(generate_post.RULES_CAUSAL).replace("、", "、")
+      and "丁寧形にすると、システムの確認C18では限定と認められない" in _flat115(generate_post.RULES_CAUSAL)
+      and "「とみられます」「考えられます」と丁寧形にすると限定と認められない" in _flat115(generate_post.WRITES_A)
+      and "「とみられます」「考えられます」と丁寧形にすると、システムの確認では限定と認められません" in _flat115(generate_post.REPAIR_SYSTEM_TEMPLATE))
+check("v1.115 C18の局所修正の指示: 渡される候補のうち「未確認」「確認できません」「断定」は価格との因果・関係の有無を述べる文言になるため使わない旨がある（候補の一覧と指示の食い違いを避ける）",
+      "上の候補のうち「未確認」「確認できません」「断定」は、価格との因果・関係の有無を述べる文言になるため使わないこと" in _flat115(generate_post.REPAIR_SYSTEM_TEMPLATE))
+check("v1.115 プロンプト（2段階の連鎖）: C18の因果を示す語7つ（verify_post.CAUSAL_MARKERS）がすべて、中段が無い連鎖で使わない語として書かれている",
+      all(f"「{m}」" in _flat115(generate_post.CALL_B_INSTRUCTIONS) for m in verify_post.CAUSAL_MARKERS) and len(verify_post.CAUSAL_MARKERS) == 7
+      and "中段が無い2段階の連鎖には限定を置かなくてよいが、その場合は「により」「を受けて」「が原因で」「のため」「によって」「せいで」「を機に」を使わない（C18）" in _flat115(generate_post.CALL_B_INSTRUCTIONS))
+check("v1.115 プロンプト（そのほかの追記）: 絶対規則5・十分な材料がない日・【暗号通貨価格】は値動きの形状だけ・再生成の指示（【暗号通貨価格】の「因果は未確認」等は削除）に、価格との因果・関係の有無を含めない旨がある",
+      "ただし、暗号通貨価格との因果・関係の有無は書かない" in _flat115(generate_post.RULES_ABSOLUTE)
+      and "確認できなかった範囲を明記する（価格との因果・関係の有無は含めない" in _flat115(generate_post.NEWS_SELECTION)
+      and "【暗号通貨価格】は「同時期」の値動きの形状だけを述べる" in _flat115(generate_post.CALL_B_INSTRUCTIONS)
+      and "ただし【暗号通貨価格】の段階にある「因果は未確認」等は削除する" in _flat115(generate_post._build_flow_regen_note(["x"], [{"chain_no": 1, "text": "T", "reasons": ["sentences"]}])))
 _b115 = json.loads(json.dumps(b_ok)); _b115["sections"]["part2_flow"] = "規制強化が原因で下落した。"
 check("v1.115 C18は変わらない: 因果を示す語と価格の語が同じ文にあり限定表現が無ければ、従来どおりFAIL",
       any(x["id"].startswith("C18") and x["result"] == "FAIL" for x in verify_post.run_all(_b115, DAILY_DATA).checks))
