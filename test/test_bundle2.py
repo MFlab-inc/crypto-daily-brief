@@ -5898,6 +5898,8 @@ check("STATUS: call_Aが失敗した日はreusable_for_summaryの行を出さな
 # 前日以前の投稿との対応確認を当てはめると、ほぼすべて除外される
 _tot_items = _kept_items = 0
 for _bp in sorted((REPO / "outputs").glob("2026-*/draft/post_bundle.json")):
+    if _bp.parent.parent.name > "2026-10-10":
+        continue  # 試算した期間（〜10/10）に固定する。日が進んで実データが増えると、比率が変わって落ちるため（11/6に12/57=21%で落ちた）
     _bb = json.loads(_bp.read_text(encoding="utf-8"))
     _items = _bb.get("reusable_for_summary") or []
     if not _items:
