@@ -1,0 +1,163 @@
+{
+  "target_date_jst": "2026-11-06",
+  "weekday_jp": "金",
+  "date_title": "2026年11月6日（金）暗号通貨・DEX市場概況",
+  "summary": "（シャドー運用中：ヘッドラインはフェーズ2で生成）",
+  "assets": [
+    {
+      "asset": "BTC",
+      "usd": "$75,909",
+      "jpy": "約1,198.1万円",
+      "change_24h": "+0.08%",
+      "direction": "up"
+    },
+    {
+      "asset": "ETH",
+      "usd": "$2,239",
+      "jpy": "約35.3万円",
+      "change_24h": "+0.21%",
+      "direction": "up"
+    },
+    {
+      "asset": "BNB",
+      "usd": "$694",
+      "jpy": "約11.0万円",
+      "change_24h": "+0.83%",
+      "direction": "up"
+    }
+  ],
+  "intraday_range": {
+    "BTC": {
+      "high": "$76,306",
+      "low": "$74,722",
+      "source": "coinbase",
+      "retrieved_at": "2026-11-07T07:37:56.591347+09:00",
+      "representative": true,
+      "inconsistent": false,
+      "notable_move": false
+    },
+    "ETH": {
+      "high": "$2,247",
+      "low": "$2,202",
+      "source": "coinbase",
+      "retrieved_at": "2026-11-07T07:37:56.746175+09:00",
+      "representative": true,
+      "inconsistent": false,
+      "notable_move": false
+    },
+    "BNB": {
+      "high": "$698",
+      "low": "$683",
+      "source": "coinbase",
+      "retrieved_at": "2026-11-07T07:37:56.823946+09:00",
+      "representative": false,
+      "inconsistent": false
+    }
+  },
+  "scheduled_events": [
+    {
+      "title": "Employment Change",
+      "country": "CAD",
+      "impact": "High",
+      "time_jst": "2026-11-06T22:30:00+09:00"
+    },
+    {
+      "title": "Unemployment Rate",
+      "country": "CAD",
+      "impact": "High",
+      "time_jst": "2026-11-06T22:30:00+09:00"
+    },
+    {
+      "title": "Average Hourly Earnings m/m",
+      "country": "USD",
+      "impact": "High",
+      "time_jst": "2026-11-06T22:30:00+09:00"
+    },
+    {
+      "title": "Non-Farm Employment Change",
+      "country": "USD",
+      "impact": "High",
+      "time_jst": "2026-11-06T22:30:00+09:00"
+    },
+    {
+      "title": "Unemployment Rate",
+      "country": "USD",
+      "impact": "High",
+      "time_jst": "2026-11-06T22:30:00+09:00"
+    },
+    {
+      "title": "BOJ Gov Ueda Speaks",
+      "country": "JPY",
+      "impact": "High",
+      "time_jst": "2026-11-07T01:00:00+09:00"
+    },
+    {
+      "title": "Parliamentary Elections",
+      "country": "NZD",
+      "impact": "High",
+      "time_jst": "2026-11-07T06:45:00+09:00"
+    }
+  ],
+  "market": {
+    "fear_greed": {
+      "value": 31,
+      "label": "Fear"
+    },
+    "market_cap": "$2.549兆",
+    "market_cap_jpy": "¥402.3兆",
+    "volume_24h": "$762.4億",
+    "volume_24h_jpy": "¥12.03兆",
+    "btc_dominance": "59.87%",
+    "eth_dominance": "10.73%"
+  },
+  "base": {
+    "tvl": "$57.92億",
+    "tvl_jpy": "¥9,143億",
+    "tvl_change": "-1.15%",
+    "tvl_direction": "down",
+    "dex_volume": "$19.008億",
+    "dex_volume_jpy": "¥3,000億",
+    "dex_volume_eth_usdc": "$90.31M",
+    "dex_volume_eth_usdc_jpy": "¥143億",
+    "usdc_dominance": "86.0%"
+  },
+  "lp": {
+    "pools": [
+      {
+        "name": "Base 0.05%プール",
+        "apr": "35.96%",
+        "tvl": "$8.01M",
+        "volume_24h": "$15.78M",
+        "change_vs_prev": {
+          "apr_change": "-16.30%",
+          "volume_24h_change": "-15.84%",
+          "tvl_change": "+0.55%"
+        }
+      },
+      {
+        "name": "Base 0.3%プール",
+        "apr": "56.08%",
+        "tvl": "$145.53M",
+        "volume_24h": "$74.54M",
+        "change_vs_prev": {
+          "apr_change": "-32.70%",
+          "volume_24h_change": "-32.90%",
+          "tvl_change": "-0.30%"
+        }
+      }
+    ],
+    "check_message": "#ETHが上昇中。#USDC偏り・上限側レンジ外・反落耐性を確認"
+  },
+  "domestic": {
+    "bitflyer_eth_24h": "4,092.10 ETH",
+    "coincheck_eth_24h": "667.42 ETH",
+    "combined_eth": "4,759.51 ETH",
+    "combined_usd": "$10.66M",
+    "retrieved_at": "2026-11-07 07:37 JST"
+  },
+  "footer": {
+    "retrieved_at": "2026-11-07 07:37 JST",
+    "usd_jpy": "¥157.84",
+    "sources": "CoinMarketCap API / GeckoTerminal / DefiLlama / ExchangeRate-API / bitFlyer公式API / Coincheck公式API"
+  }
+}
