@@ -1,0 +1,108 @@
+{
+  "overall": "PASS",
+  "failed": 0,
+  "level": "L0",
+  "checks": [
+    {
+      "id": "C12_banned_terms",
+      "result": "PASS",
+      "detail": "禁止語なし",
+      "terms": []
+    },
+    {
+      "id": "C13_hashtag_boundary",
+      "result": "PASS",
+      "detail": "境界違反なし"
+    },
+    {
+      "id": "C14_no_table",
+      "result": "PASS",
+      "detail": "表形式なし"
+    },
+    {
+      "id": "C15_heading_order",
+      "result": "PASS",
+      "detail": "見出し順序OK"
+    },
+    {
+      "id": "C16_numeric_match",
+      "result": "PASS",
+      "detail": "テンプレート一致"
+    },
+    {
+      "id": "C16b_transcription_scan",
+      "result": "PASS",
+      "detail": "転記検知なし",
+      "hits": []
+    },
+    {
+      "id": "C17_lp_disclaimers",
+      "result": "PASS",
+      "detail": "定型文完全一致"
+    },
+    {
+      "id": "C18_causal_assertion",
+      "result": "PASS",
+      "detail": "断定表現なし"
+    },
+    {
+      "id": "C19_audit_ledger",
+      "result": "PASS",
+      "detail": "27件・全フィールド充足・渡した候補数と一致"
+    },
+    {
+      "id": "C20_image_headline",
+      "result": "PASS",
+      "detail": "全角換算15.0字・#なし"
+    },
+    {
+      "id": "C21_decision_tier_consistency",
+      "result": "PASS",
+      "detail": "27件・整合性OK"
+    },
+    {
+      "id": "C22_headline_tier1_basis",
+      "result": "PASS",
+      "detail": "tier1・tier2由来の採用が存在"
+    },
+    {
+      "id": "C23_summary_no_new_entities",
+      "result": "PASS",
+      "detail": "総括に固有名詞候補（ASCII表記）なし"
+    },
+    {
+      "id": "C24_flow_no_unadopted_material",
+      "result": "PASS",
+      "detail": "固有名詞候補1件・すべてpart1_headline・part1_pointsに存在"
+    },
+    {
+      "id": "C26_flow_role_separation",
+      "result": "PASS",
+      "detail": "役割分離の禁止語句なし",
+      "patterns": []
+    },
+    {
+      "id": "C27_summary_role_separation",
+      "result": "PASS",
+      "detail": "役割分離OK",
+      "patterns": [],
+      "prices": []
+    },
+    {
+      "id": "C28_headline_points_role_separation",
+      "result": "PASS",
+      "detail": "役割分離OK"
+    }
+  ],
+  "warnings": [
+    {
+      "id": "W_flow_format",
+      "detail": "市場のフローの1本目が書式（統合運用基準§3.3）から外れています: 1文でない（句点が末尾の1つだけでない。全角括弧内は除く）。 連鎖: 「①【出来事・ニュース】Reutersによると、フーシ派によるとみられる攻撃でサウジアラムコ関連ビルがリヤドの金融街で損傷したと報じられました。被害・影響の詳細は未確認です（Reuters、11月8日）…」",
+      "chain_no": 1,
+      "reasons": [
+        "sentences"
+      ],
+      "sentence": "①【出来事・ニュース】Reutersによると、フーシ派によるとみられる攻撃でサウジアラムコ関連ビルがリヤドの金融街で損傷したと報じられました。被害・影響の詳細は未確認です（Reuters、11月8日） → 【地政学・マクロの変化】中東情勢の緊迫化が市場で意識された可能性があります → 【中間市場指標・市場心理】イランを巡る緊張を背景に湾岸地域の株式市場が軟調に推移したと報じられ、リスク回避の心理が広がった可能性があります → 【暗号通貨価格】 #BTC -2.03%、 #ETH -5.13%（24時間比）で、同時期はやや軟調な値動きでした。"
+    }
+  ]
+}

@@ -1,0 +1,398 @@
+{
+  "target_date_jst": "2026-11-08",
+  "level": "L0",
+  "sections": {
+    "part0_target_date": "2026年11月8日（日）",
+    "part1_headline": "Reutersによると、フーシ派によるとみられる攻撃でサウジアラムコ関連ビルがリヤドの金融街で損傷したと報じられました。被害・影響の詳細は未確認です。",
+    "part1_points": "・Reutersによると、イラクがホルムズ海峡経由の原油輸出継続について米国と理解に達したと同国石油相が述べたと報じられました。原油供給への影響が意識される可能性があります（Reuters、11月8日）。\n・Reutersによると、イラクは米国の要請を受けイラン国境検問所の大半を閉鎖する方針と同国外相が述べたと報じられました（Reuters、11月8日）。\n・Reutersによると、トランプ米大統領は交渉が進展すればイランへの攻撃を命じる可能性は低いと述べたと報じられました（Reuters、11月8日）。\n・Reutersによると、イランを巡る緊張を背景に湾岸地域の株式市場が軟調に推移したと報じられました（Reuters、11月8日）。",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.478兆（¥392.3兆）｜24時間取引高 $409.9億（¥6.49兆）\n・ #BTC：$74,146（約1,173.9万円）｜24時間比 -2.03%\n　（24時間レンジ $73,477〜$76,095）\n・ #ETH：$2,117（約33.5万円）｜24時間比 -5.13%\n　（24時間レンジ $2,089〜$2,243）\n・ #BNB：$681（約10.8万円）｜24時間比 -2.11%\n・市場心理：Fear & Greed 29（Fear、CoinMarketCap API）\n・ドミナンス：BTC 60.18%｜ETH 10.44%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年11月9日07:38 JST、USD/JPY ¥158.32",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $3.02M vs Base上ETH/USDC $54.77M｜参考：Base上DEX全体 $5.311億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $58.52億（¥9,265億）｜24時間比 -0.12%｜USDCドミナンス 84.0%\n・ ETH/USDC（Base）参考APR：0.05% 21.08%（TVL $8.25M／24h出来高 $9.52M）｜0.3% 35.87%（TVL $138.14M／24h出来高 $45.25M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年11月9日07:38 JST",
+    "part2_flow": "①【出来事・ニュース】Reutersによると、フーシ派によるとみられる攻撃でサウジアラムコ関連ビルがリヤドの金融街で損傷したと報じられました。被害・影響の詳細は未確認です（Reuters、11月8日） → 【地政学・マクロの変化】中東情勢の緊迫化が市場で意識された可能性があります → 【中間市場指標・市場心理】イランを巡る緊張を背景に湾岸地域の株式市場が軟調に推移したと報じられ、リスク回避の心理が広がった可能性があります → 【暗号通貨価格】 #BTC -2.03%、 #ETH -5.13%（24時間比）で、同時期はやや軟調な値動きでした。\n②【出来事・ニュース】Reutersによると、イラクがホルムズ海峡経由の原油輸出継続について米国と理解に達したと同国石油相が述べ、またイラクは米国の要請を受けイラン国境検問所の大半を閉鎖する方針と同国外相が述べたと報じられました（Reuters、11月8日） → 【地政学・マクロの変化】原油供給への影響が意識される可能性がある一方、トランプ米大統領が交渉進展を背景にイランへの攻撃を命じる可能性は低いと述べたとも報じられ、緊張緩和への思惑も意識された可能性があります → 【暗号通貨価格】 #BTC -2.03%、 #ETH -5.13%（24時間比）で、同時期はETHが上下に振れる場面を伴いつつ、全体としてやや軟調な値動きでした。",
+    "lp_comment": "参考APRは両プールとも前日から上昇しました。\nBase 0.05%プールの参考APRは5.71%→21.08%へ上昇しました（24時間出来高 +277.65%、TVL +2.28%）。\nBase 0.3%プールの参考APRは5.65%→35.87%へ上昇しました（24時間出来高 +503.11%、TVL -5.08%）。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比-5.13%と下落中のため、ETH偏り・下限側レンジ外・下落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "中東情勢を巡る緊張と緩和の思惑が交錯し、地合いはやや不透明な状況です。原油供給や地政学リスクの帰趨について、今後の報道を見極める必要があります。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "ホルムズ海峡など中東情勢が緊迫",
+  "audit_ledger": [
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/releases/2026/11/icymi-ag-todd-blanche-dismantles-democrats-oversight-charade-on-the-sunday-shows/",
+      "title": "ICYMI: AG Todd Blanche Dismantles Democrats’ “Oversight” Charade on the Sunday Shows",
+      "published_at": "Sun, 08 Nov 2026 19:10:42 +0000",
+      "candidate_id": 1,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 国内政治の論評で波及経路なし"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/briefings-statements/2026/11/presidential-message-on-diwali-1f71/",
+      "title": "Presidential Message on Diwali",
+      "published_at": "Sun, 08 Nov 2026 17:47:27 +0000",
+      "candidate_id": 2,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 祝日メッセージで波及経路なし"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/briefings-statements/2026/11/presidential-message-on-honoring-the-american-flag/",
+      "title": "Presidential Message on Honoring the American Flag",
+      "published_at": "Sat, 07 Nov 2026 22:00:00 +0000",
+      "candidate_id": 3,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 国旗に関する声明で波及経路なし"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxNYV8wSU00NXg1Q0xRcmpIZWxTdkhGYV8zZmZuZ1pxdWpwQWpabFdGQVFQY1VSUkY5cUdNd1lnQWJjV3VkYy11Sk1nUHdkeGdnbFZ3bXRTNGxaeE9XWnVHRHlMVEF2T0I3QjVEX2dLY054QlZWUi1aTnBzc01RY21GUG1MYXhTcXhmZTl2UF9XZDh5WHlrNjk4ZXZ0OU16UkNhdnBjUi1mSDAwSkpxTnRMQjBLa3BVaWs?oc=5",
+      "title": "Pope Leo arrives in Milei's Argentina as tensions loom over austerity, Iran - Reuters",
+      "published_at": "Sun, 08 Nov 2026 20:38:49 GMT",
+      "candidate_id": 4,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 教皇のアルゼンチン訪問で波及経路なし"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxOVy1vV3ZMZnhzdHk0bVk1VTM0eWVGQWVJRjRVUkp4ZzVJcW93NW5wT2xMSzhpYjZtQ3gyWkk4X19EQXprTU1pUlVMT19qcnFxNGh6UENvTE1qZF8yS294T2t3d0NYak5vcEFCZVVnQU5JUnVxaHREeWRaRkZhb0NHQ1ZHRjQ?oc=5",
+      "title": "JP3164800009.TRE - | Stock Price & Latest News - Reuters",
+      "published_at": "Sun, 08 Nov 2026 19:59:10 GMT",
+      "candidate_id": 5,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別株価情報のみで内容なし"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxORkE4VEFBVF9KWlRaRk9HRmtvVGh4cTlxanVleGY5WXZtVnNVSF9LTEQtd0NvbW9YbnE0TndLS052dU5kaUZtRjJrUzZiMXVhVFdWTlNBT2xGV203cTdOREg1YmZDMGRkM081d1hzbjJJWlR4ZG9tTVpSX19rZkVHdGhhRVVmbHVFRVhfVTJnVWFvRVlSYTdLSGRmTHd2WGxMZm15RTNGQ05DLVRXVm1jMDh1Rms?oc=5",
+      "title": "Power restored to Zaporizhzhia nuclear plant, IAEA says - Reuters",
+      "published_at": "Sun, 08 Nov 2026 19:53:39 GMT",
+      "candidate_id": 6,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 原発復旧の個別事案で優先対象に当たらない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxOWmQzODFGOGhxQm03QkJ4NWdNaHZndzgtUEFKVTZWX09EOEppWjBOTHVwMmpQZlF4ZERhRTQ5eHVyNzZBSUZHOXNFaTkzUjhrVWROaFFKbDhKYkJQdEZCZjJaVkxyYkp0RDhFUXF2dmVUV3hNaGVEZFhfYjZqWS1HRDZMZ0Jyc19UYUNOQUlLc0tVZw?oc=5",
+      "title": "DDRYY.AX - | Stock Price & Latest News - Reuters",
+      "published_at": "Sun, 08 Nov 2026 19:28:32 GMT",
+      "candidate_id": 7,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別株価情報のみで内容なし"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQcVp2dDBwekFJVEtlai1lemtaZVNTb2FaallsZHhyT2FHTlZHdmpwY3B0SU9HRUpQV2JQQ3E0NWo0VEJpS3B4N1JCTGhkTUhJTHFYUUY3ZkttWmc2RUl1V2dicHdLODBaUEFQSmdySXdHcTJ2VGpIeUlOTlZZd05LZ29wYVdWajhrMzVYa1ZJQl9FTnNjZjFQRmNGc1FoV1dmOFZyOWYzTE1pRndvaGxzSTg1S1B1Z1lxSDZNM3hZWEZmZw?oc=5",
+      "title": "Iraq has reached understandings with US to allow oil exports through Hormuz, minister says - Reuters",
+      "published_at": "Sun, 08 Nov 2026 19:26:09 GMT",
+      "candidate_id": 8,
+      "verified_by": "",
+      "decision": "採用",
+      "reason": "B: イラク石油相、ホルムズ海峡経由の原油輸出継続で米国と理解に達したと発言"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxQQTVkajR2S0QtUzdnUVhFVGh6b3JRdjFaOWx1VGVySUdhcjVYck1Sbm54emJiZy1XX3RNbkFDTDdPcDI0UGYyUjZWczVWNW5lOEVKekpLOF9hbkNHWXdmUG5wdFFTODRMSlhLV09LX3Q1d1BMdjZjTVBocUcwdFpYS0ZvWkoyc3lnakN4QXY2N05LbFQzb1JqYy1KWjNWOGIwd3MwbC1PZmgyd0o5NS1ZWmtLU0FaUktSSHRCOWtsaG1mcHc?oc=5",
+      "title": "Train collision in Egypt kills at least 7, injures dozens, health ministry says - Reuters",
+      "published_at": "Sun, 08 Nov 2026 19:18:30 GMT",
+      "candidate_id": 9,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 鉄道事故で波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxOaVVxWlAwOFI0ZGd4TUdTNFozbzE5TXN5UGx3R0NnX0JRdExfcVhSb21iYklFOXJ2QUpncXdoSFB3eE1NS0FFeHljZXQxeWlEVTNKVWd1eFVLWTZmbVpsSUs5Q3NqNUk2b1JYQVNxSFIyTTMxZERFdDBWVUFfUFZ2MkFtOUlIYm5VbE9kQ2kzVmdUTV9pZHFxNWNvUVFhYkI1WHc5LTZSS0JMR1Nka3gwSjgzWWFZZXN6OFFTRHB5Rzk1THIz?oc=5",
+      "title": "US asks Iraq to shut most Iran border crossings, Iraqi foreign minister says - Reuters",
+      "published_at": "Sun, 08 Nov 2026 19:01:43 GMT",
+      "candidate_id": 10,
+      "verified_by": "",
+      "decision": "採用",
+      "reason": "B: イラク外相、米要請でイラン国境検問所大半閉鎖の方針と発言"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxONWFPcDhpSjcwTEozRGRNdHFnWWpzb1pCYXIzdnVOUWhJQ3JvaGVTcjItLWNwNktieTVDcTk0WlpKbDRiMHB3Tkl0R19Mb1NUckllcVYwenlvNUV2QTBLcjlNdGtZdFI2NEJxbnhVbmZieXg2SnNTUXNPTFZVZjFnX2o3Q3lBbC1kRzlWcnNNU3VXdFNYNW5YTTJ4SFdBaDVfai1CRU50cm1VMHBkeWd4Zkc0Q2UxTlBJcmZ6TnJR?oc=5",
+      "title": "Trump says he is highly unlikely to order Iran strikes if talks progress - Reuters",
+      "published_at": "Sun, 08 Nov 2026 18:58:48 GMT",
+      "candidate_id": 11,
+      "verified_by": "",
+      "decision": "採用",
+      "reason": "B: トランプ氏、交渉進展ならイラン攻撃命令の可能性低いと発言"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxQbV96cm81eEtLUU91T0xKaWxycHdBV3c4VGNZb2dCbzA0M2M0V2ZPZXp2R1NRcmJ1Wl9TLUxZZWtQRDRtazg2dHVzRWlIdGpmWVRJTUl3cU95cUNheHJtMFJFU2lKM2c2cndGc2ZTbmFqZUpaT0hWRFRyZ1VPYzFFbXlSZUVCR1NuLWFqM0dFaUo2UHI4dWFKZlRoUHEwZ2UwNF95T0NzUGNHME15MFQtMWpMeXZaWDhGQnNkZDNRYnQyTjlQcUE?oc=5",
+      "title": "Trump says he is unlikely to order Iran attack if talks progress, CNN reports - Reuters",
+      "published_at": "Sun, 08 Nov 2026 18:00:09 GMT",
+      "candidate_id": 12,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 候補11と同じ事実の重複"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPNEhqejQxdWF5MFpVWjduZHVuY1l1VmxKYm9CN3F4aC1qWkFIWFJqZDJEZ1VoWmthUW1NaWdWQUY4UUprUGsyWFA2a0trUE5HUjEtUHpPNFV1UnBpMHRrR2RlQWo1c2xvY1J2QnprNnNkbHNpY3ZtUWxMQkRzTVpKcktuZjhJdW5zSHdsZUhxYmxBVy00UWVnbndnOEc2WWplMEEwREVib0VyZ3BzZWlR?oc=5",
+      "title": "Gulf markets retreat as traders await Trump's next move on Iran - Reuters",
+      "published_at": "Sun, 08 Nov 2026 13:14:08 GMT",
+      "candidate_id": 13,
+      "verified_by": "",
+      "decision": "採用",
+      "reason": "B: イラン情勢を背景に湾岸株式市場が軟調と報道"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE9OTmRuLTFGYUhsNnF2WDRuSjZCNHRkTEFlaXY3QWNSUW1xTFF2MmJ6NmlEMUVJalZwTmxvcHRkSnBGSDgxcmx6SXZReVFMYVgwWXRmVnVWQWsxX1I5ck5uZG1nckkyeWN5MmVzcXRn?oc=5",
+      "title": "Fuji Oil Co Ltd (Osaka) (2607.T) | Stock Price & Latest News - Reuters",
+      "published_at": "Sun, 08 Nov 2026 10:18:10 GMT",
+      "candidate_id": 14,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別株価情報のみで内容なし"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBqOUxwMjFSWUY5M3dFbXlnRmhDM3BRV3UzXzQ2aHJfc2FNWThDM2ctRzVWSm5hNjhwMFlzdWdERzI0a2s3NjJNcENLdnNfd0Q1aGRCSlZTU2FaZw?oc=5",
+      "title": "Is Wti Oil Yield Etp (WOIY.DE) | Stock Price & Latest News - Reuters",
+      "published_at": "Sun, 08 Nov 2026 09:20:32 GMT",
+      "candidate_id": 15,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別銘柄情報のみで内容なし"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE83SE83T1UzSkdvSmxGMUE0WjN5eHZ6a3E2VktzenliSllUU0hXdFV1WWRRSWNVTXhWNXByeW10SDJqejF2LXNnb2NzX3RhT1F1VUZOaXVocEhoM3NTUXpCcHpqNElhYWt5eVRN?oc=5",
+      "title": "Invesco DB Oil Fund (DBO.P) | Stock Price & Latest News - Reuters",
+      "published_at": "Sun, 08 Nov 2026 07:41:24 GMT",
+      "candidate_id": 16,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別銘柄情報のみで内容なし"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxOMEd1Mi1tMEV0cUFGYkd2V01lQ1NkczNNYzZXTlpTOXByR3BaSk82N21DOEpTeEtNMlJ1bFJ3S2pLTVZBOUp5cDFwOUpGakNxMTR1a2RyaHJBcDNOZUJqR1dDZllfejBPWGZ3UVYyT2s3Uk9XaFE3LW1qQkxtNHhlcmFRcGk0bDlWeHZyQmNNOEJyT1lWeVZlTEJlZ0xpRHF6UUs0RnRTWExlbEJ4eDc4YTY4d0VfM2x3dllKUGhZa1Z4QQ?oc=5",
+      "title": "Houthi attack damages Aramco building in Riyadh's financial district - Reuters",
+      "published_at": "Sun, 08 Nov 2026 05:24:00 GMT",
+      "candidate_id": 17,
+      "verified_by": "",
+      "decision": "採用",
+      "reason": "B: フーシ派によるとみられる攻撃でアラムコ関連ビルが損傷、産油関連施設への攻撃に該当"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTFA0VUNHSjZBQW1GZS04MUU0NVFmRURkUmdaQmJ1NW1JYnpMX3YzLW5FVkZpaXZINHd4SVlKcmZCaERKdzd3bTM1cGpZbFJoOTVFTnFOYndUcE9NOExHMEs2SXVBUUoxR0hUajZPLQ?oc=5",
+      "title": "Quest Oil Corp (QOIL.PK) | Stock Price & Latest News - Reuters",
+      "published_at": "Sun, 08 Nov 2026 03:17:43 GMT",
+      "candidate_id": 18,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別銘柄情報のみで内容なし"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/11/08/what-the-election-results-mean-for-crypto-state-of-crypto",
+      "title": "What the election results mean for crypto: State of Crypto",
+      "published_at": "Sun, 08 Nov 2026 19:30:00 +0000",
+      "candidate_id": 19,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: tier3単独で意見・分析記事のため不採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/11/08/stablecoin-growth-has-stalled-the-payments-boom-hasn-t",
+      "title": "Stablecoin growth has stalled. The payments boom hasn't",
+      "published_at": "Sun, 08 Nov 2026 19:16:42 +0000",
+      "candidate_id": 20,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: tier3単独かつ上限4項目超過のため不採用"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/defi/2026-11-08-web3auth-says-it-frontran-hackers-by-moving-5-6-million-out-of-exposed-keplr-wallets-436029",
+      "title": "Web3Auth says it frontran hackers by moving $5.6 million out of exposed Keplr wallets",
+      "published_at": "Sun, 08 Nov 2026 18:32:11 +0000",
+      "candidate_id": 21,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: tier3単独で独立2ソース未成立のため不採用"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/ecosystems/2026-11-08-vitalik-buterin-says-eth-should-be-valued-as-a-store-of-value-not-a-fee-burning-token-436022",
+      "title": "Vitalik Buterin says ETH should be valued as a store of value, not a fee-burning token",
+      "published_at": "Sun, 08 Nov 2026 15:52:17 +0000",
+      "candidate_id": 22,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: tier3単独の発言記事で独立2ソース未成立"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/what-happened-in-crypto-today?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Here’s what happened in crypto today",
+      "published_at": "Sun, 08 Nov 2026 13:33:00 +0000",
+      "candidate_id": 23,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 日次まとめ記事でtier3単独のため不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/binance-france-emails-announce-closure-of-its-users-accounts-on-dec-31?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Binance France emails announce closure of its users’ accounts on Dec. 31",
+      "published_at": "Sun, 08 Nov 2026 12:57:51 +0000",
+      "candidate_id": 24,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: tier3単独で独立2ソース未成立のため不採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/11/08/these-finland-homes-get-free-heat-from-bitcoin-miners-as-long-as-btc-stays-above-usd70-000",
+      "title": "These Finland homes get free heat from bitcoin miners (as long as BTC stays above $70,000)",
+      "published_at": "Sun, 08 Nov 2026 12:55:59 +0000",
+      "candidate_id": 25,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別事例紹介で波及経路を説明できない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/amsterdam-data-center-protesters-break-into-construction-site-report?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Amsterdam protesters break into Microsoft data center construction site: Report",
+      "published_at": "Sun, 08 Nov 2026 09:48:48 +0000",
+      "candidate_id": 26,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 抗議活動の記事で波及経路を説明できない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/binances-finance-chief-kaiser-ng-to-leave-company-report-says?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Binance’s  finance chief Kaiser Ng to leave company, report says",
+      "published_at": "Sun, 08 Nov 2026 08:12:56 +0000",
+      "candidate_id": 27,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: tier3単独の人事報道で独立2ソース未成立"
+    }
+  ],
+  "reusable_for_summary": [],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 0
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 0
+    },
+    "FRB（speeches）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "FRB（testimony）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 0
+    },
+    "米財務省": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "USTR": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "ホワイトハウス": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 3
+    },
+    "ホワイトハウス（大統領令等）": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 0
+    },
+    "ADP": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 3
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 4
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "The Block": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 2
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 48
+    }
+  },
+  "news_candidate_count": 27,
+  "format_normalized": {
+    "part1_points": 0,
+    "part2_flow": 0
+  },
+  "flow_price_fragment": " #BTC -2.03%、 #ETH -5.13%（24時間比）",
+  "part1_md": "【対象日】2026年11月8日（日）\n\n【ヘッドライン】\nReutersによると、フーシ派によるとみられる攻撃でサウジアラムコ関連ビルがリヤドの金融街で損傷したと報じられました。被害・影響の詳細は未確認です。\n\n【主要なポイント】\n・Reutersによると、イラクがホルムズ海峡経由の原油輸出継続について米国と理解に達したと同国石油相が述べたと報じられました。原油供給への影響が意識される可能性があります（Reuters、11月8日）。\n・Reutersによると、イラクは米国の要請を受けイラン国境検問所の大半を閉鎖する方針と同国外相が述べたと報じられました（Reuters、11月8日）。\n・Reutersによると、トランプ米大統領は交渉が進展すればイランへの攻撃を命じる可能性は低いと述べたと報じられました（Reuters、11月8日）。\n・Reutersによると、イランを巡る緊張を背景に湾岸地域の株式市場が軟調に推移したと報じられました（Reuters、11月8日）。\n",
+  "part2_md": "【市場のフロー】\n①【出来事・ニュース】Reutersによると、フーシ派によるとみられる攻撃でサウジアラムコ関連ビルがリヤドの金融街で損傷したと報じられました。被害・影響の詳細は未確認です（Reuters、11月8日） → 【地政学・マクロの変化】中東情勢の緊迫化が市場で意識された可能性があります → 【中間市場指標・市場心理】イランを巡る緊張を背景に湾岸地域の株式市場が軟調に推移したと報じられ、リスク回避の心理が広がった可能性があります → 【暗号通貨価格】 #BTC -2.03%、 #ETH -5.13%（24時間比）で、同時期はやや軟調な値動きでした。\n②【出来事・ニュース】Reutersによると、イラクがホルムズ海峡経由の原油輸出継続について米国と理解に達したと同国石油相が述べ、またイラクは米国の要請を受けイラン国境検問所の大半を閉鎖する方針と同国外相が述べたと報じられました（Reuters、11月8日） → 【地政学・マクロの変化】原油供給への影響が意識される可能性がある一方、トランプ米大統領が交渉進展を背景にイランへの攻撃を命じる可能性は低いと述べたとも報じられ、緊張緩和への思惑も意識された可能性があります → 【暗号通貨価格】 #BTC -2.03%、 #ETH -5.13%（24時間比）で、同時期はETHが上下に振れる場面を伴いつつ、全体としてやや軟調な値動きでした。\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から上昇しました。\nBase 0.05%プールの参考APRは5.71%→21.08%へ上昇しました（24時間出来高 +277.65%、TVL +2.28%）。\nBase 0.3%プールの参考APRは5.65%→35.87%へ上昇しました（24時間出来高 +503.11%、TVL -5.08%）。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比-5.13%と下落中のため、ETH偏り・下限側レンジ外・下落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\n中東情勢を巡る緊張と緩和の思惑が交錯し、地合いはやや不透明な状況です。原油供給や地政学リスクの帰趨について、今後の報道を見極める必要があります。\n",
+  "numeric_record_md": "【対象日】2026年11月8日（日）\n\n【主要指標】\n・市場全体：時価総額 $2.478兆（¥392.3兆）｜24時間取引高 $409.9億（¥6.49兆）\n・ #BTC：$74,146（約1,173.9万円）｜24時間比 -2.03%\n　（24時間レンジ $73,477〜$76,095）\n・ #ETH：$2,117（約33.5万円）｜24時間比 -5.13%\n　（24時間レンジ $2,089〜$2,243）\n・ #BNB：$681（約10.8万円）｜24時間比 -2.11%\n・市場心理：Fear & Greed 29（Fear、CoinMarketCap API）\n・ドミナンス：BTC 60.18%｜ETH 10.44%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年11月9日07:38 JST、USD/JPY ¥158.32\n\n【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $3.02M vs Base上ETH/USDC $54.77M｜参考：Base上DEX全体 $5.311億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $58.52億（¥9,265億）｜24時間比 -0.12%｜USDCドミナンス 84.0%\n・ ETH/USDC（Base）参考APR：0.05% 21.08%（TVL $8.25M／24h出来高 $9.52M）｜0.3% 35.87%（TVL $138.14M／24h出来高 $45.25M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年11月9日07:38 JST\n"
+}
