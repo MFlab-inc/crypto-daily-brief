@@ -1,0 +1,558 @@
+{
+  "target_date_jst": "2026-11-11",
+  "level": "L0",
+  "sections": {
+    "part0_target_date": "2026年11月11日（水）",
+    "part1_headline": "Reutersによると、サウジアラビアが自国領内に向けたフーシ派のミサイル・ドローンを迎撃したと発表し、同派はメッカを標的にしたとの見方を否定したと報じられました。被害・影響の詳細は未確認です。",
+    "part1_points": "・Reutersによると、イランがオマンのディダマル島周辺で船舶の航行システムを攻撃したと関係者の話として報じられました。被害・影響の詳細は未確認です（Reuters、11月11日）。\n・Reutersによると、ロシア・バルト海のウスチルガ港でドローン攻撃により火災が発生したと州知事が発表したと報じられました。被害・影響の詳細は未確認です（Reuters、11月11日）。\n・Reutersによると、10月のインフレ指標の上振れを受け、ゴールドマン・サックスがFRBの利上げ見通しに追加の利上げを織り込んだと報じられました。市場では12月のFRB追加利上げ観測が意識されている可能性があります（Reuters、11月11日）。\n・クロスチェーンプロトコルのAcrossが、ドメイン登録業者を狙った不正アクセスによりドメインを乗っ取られた後、システムを復旧したと報じられています（The Block、Cointelegraph、11月11日。公式発表は未確認）。",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.460兆（¥390.1兆）｜24時間取引高 $599.8億（¥9.51兆）\n・ #BTC：$74,067（約1,174.4万円）｜24時間比 +0.62%\n　（24時間レンジ $73,110〜$74,737）\n・ #ETH：$2,061（約32.7万円）｜24時間比 +0.68%\n　（24時間レンジ $2,040〜$2,102）\n・ #BNB：$683（約10.8万円）｜24時間比 +0.85%\n・市場心理：Fear & Greed 27（Fear、CoinMarketCap API）\n・ドミナンス：BTC 60.55%｜ETH 10.25%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年11月12日07:38 JST、USD/JPY ¥158.56",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $5.30M vs Base上ETH/USDC $78.44M｜参考：Base上DEX全体 $11.029億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $58.29億（¥9,242億）｜24時間比 +1.42%｜USDCドミナンス 84.5%\n・ ETH/USDC（Base）参考APR：0.05% 23.40%（TVL $7.11M／24h出来高 $9.12M）｜0.3% 56.28%（TVL $134.87M／24h出来高 $69.32M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年11月12日07:38 JST",
+    "part2_flow": "①【出来事・ニュース】Reutersによると、サウジアラビアが自国領内に向けたフーシ派のミサイル・ドローンを迎撃したと発表し、同派はメッカを標的にしたとの見方を否定したと報じられました。被害・影響の詳細は未確認です（Reuters、11月11日） → 【地政学・マクロの変化】中東情勢を巡る緊張が意識された可能性があります → 【暗号通貨価格】 #BTC +0.62%、 #ETH +0.68%（24時間比）で、小幅な上昇となりました。\n②【出来事・ニュース】Reutersによると、10月のインフレ指標の上振れを受け、ゴールドマン・サックスがFRBの利上げ見通しに追加の利上げを織り込んだと報じられました（Reuters、11月11日） → 【地政学・マクロの変化】12月のFRB追加利上げ観測が市場で意識された可能性があります → 【中間市場指標・市場心理】インフレ再燃への警戒から、金融引き締め長期化を見込む市場心理が強まった可能性があります → 【暗号通貨価格】 #BTC +0.62%、 #ETH +0.68%（24時間比）で、底堅い値動きとなりました。\n③【出来事・ニュース】クロスチェーンプロトコルのAcrossが、ドメイン登録業者を狙った不正アクセスによりドメインを乗っ取られた後、システムを復旧したと報じられています（The Block、Cointelegraph、11月11日。公式発表は未確認） → 【暗号通貨価格】 #BTC +0.62%、 #ETH +0.68%（24時間比）で、落ち着いた値動きとなりました。",
+    "lp_comment": "参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは43.49%→23.40%へ低下しました（24時間出来高 -45.58%、TVL +1.13%）。\nBase 0.3%プールの参考APRは71.65%→56.28%へ低下しました（24時間出来高 -20.55%、TVL +1.16%）。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+0.68%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "中東情勢や金融政策見通しを巡る報道が相次ぎ、地合いはやや不透明感を伴う展開です。インフレ指標やFRBの金融政策スタンスを巡る見極めが引き続き必要な状況です。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "BTC・ETH・BNBともに小幅上昇",
+  "audit_ledger": [
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/statistics/money/ms/ms2610.pdf",
+      "title": "マネーストック（10月）",
+      "published_at": "Wed, 11 Nov 2026 08:50:00 +0900",
+      "candidate_id": 1,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: マネーストック統計の公表で、金利・為替・流動性等への波及経路を直接説明できる記載がない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/briefings-statements/2026/11/presidential-message-on-victory-day-for-world-war-i-dd1e/",
+      "title": "Presidential Message on Victory Day for World War I",
+      "published_at": "Wed, 11 Nov 2026 19:30:08 +0000",
+      "candidate_id": 2,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 第一次大戦戦勝記念日に関する大統領声明で、金融・暗号通貨への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/briefings-statements/2026/11/presidential-message-on-national-diabetes-month-a726/",
+      "title": "Presidential Message on National Diabetes Month",
+      "published_at": "Wed, 11 Nov 2026 03:17:54 +0000",
+      "candidate_id": 3,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 糖尿病月間に関する大統領声明で、金融・暗号通貨への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/briefings-statements/2026/11/presidential-message-on-the-birthday-of-the-united-states-marine-corps/",
+      "title": "Presidential Message on the Birthday of the United States Marine Corps",
+      "published_at": "Wed, 11 Nov 2026 03:16:22 +0000",
+      "candidate_id": 4,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 海兵隊記念日に関する大統領声明で、金融・暗号通貨への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/briefings-statements/2026/11/presidential-message-on-national-alzheimers-disease-awareness-month-59dc/",
+      "title": "Presidential Message on National Alzheimer’s Disease Awareness Month",
+      "published_at": "Wed, 11 Nov 2026 03:14:47 +0000",
+      "candidate_id": 5,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: アルツハイマー病啓発月間に関する大統領声明で、金融・暗号通貨への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/briefings-statements/2026/11/presidential-message-on-critical-infrastructure-security-and-resilience-month-aa39/",
+      "title": "Presidential Message on Critical Infrastructure Security and Resilience Month",
+      "published_at": "Wed, 11 Nov 2026 03:12:55 +0000",
+      "candidate_id": 6,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 重要インフラ安全保障月間に関する大統領声明で、金融・暗号通貨への波及経路を説明できない"
+    },
+    {
+      "source": "ADP",
+      "url": "https://mediacenter.adp.com/2026-11-11-ADP-Increases-Cash-Dividend-Marks-52nd-Consecutive-Year-of-Dividend-Increases",
+      "title": "ADP Increases Cash Dividend; Marks 52nd Consecutive Year of Dividend Increases",
+      "published_at": "Wed, 11 Nov 2026 08:00:00 -0500",
+      "candidate_id": 7,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ADPの配当増額発表で、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxNa0VablB0SWViZWpCRFg4bC0yX2ZTM19HNmFFVUdqVVlwbWRuRjdpSnNXZ3liU04zeTYyZWJPSlhLeEVRTUlMS0N2SnlPdEpINzVHUTJjRXJjd3RKdEZMLS14czdZSlpjcWlJWm95bFpTNHgxblNSVlFyLWhsQ0JncVFZRGRmQ0p6cDZQRGRtNlh6LWxnVXlLRkJyelFzdTFoM285d2tQZTJvS1BkYkRzLVZwUERKc2pHbVBqOUZDSmFRbGJ4TmpmQVExbnEzOTQ?oc=5",
+      "title": "Saudi Arabia intercepts Houthi missiles, drones; group denies targeting Mecca - Reuters",
+      "published_at": "Wed, 11 Nov 2026 20:57:51 GMT",
+      "candidate_id": 8,
+      "verified_by": "",
+      "decision": "採用",
+      "reason": "B: サウジがフーシ派のミサイル・ドローンを迎撃したとの報道。主張の帰属と被害未確認を付しヘッドラインの主題として採用"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxQdnhxM01CN0U2eGllSHh2eHY1RUs2NFY0b25xczg3T1VMSEtobE40amxmZS1XVHN4YkcybG91dk5ZeEVoRzN3Y1kyb09GTnd4aGlQbmJvTWF0VjZ6N3VGTFRLb190U1AtVkVmMFg1bmlqc1JqODF5YlhSWUNVbEhtRmpPd240ZXJ5WVZ5UkpHUmJyNERwbDRRYTYyY21BX0hxbkJIWVY4dDVTa252R2pjdVBUVVhIT1RDMTFwbmdR?oc=5",
+      "title": "Mexico says crackdown on Asian steel shipments is paying off as US tariff talks advance - Reuters",
+      "published_at": "Wed, 11 Nov 2026 20:06:00 GMT",
+      "candidate_id": 9,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（順位外）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxQY3daRUlqRDl6MHVCYUhiS0tlUWV3d2xOX1BLWGtRazZCaVE1RWVqWDdoTENEX04yc3doSzhHM0wzQS1ibjd6cC1QZFoyaGNUVmY4bzlfcHdkX0dSVEpXVmQ4TTQ5RE1sWnVPbWkwb2ZWUE1fSWdVTkpTM1BjUFk5XzExLURsSUlQMjlvcERJQ2J0Vno5SlByRTBBMGFhd3RmdHRMTVBxMXV0b0pkOW1ZTXMxTVpLQnY4SHNSMW5Pd2ZFaUZZY29TdF93?oc=5",
+      "title": "US companies shunning Russian diesel as tanker carrying that fuel idles off East Coast - Reuters",
+      "published_at": "Wed, 11 Nov 2026 18:25:40 GMT",
+      "candidate_id": 10,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（順位外）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxQOEIxQ0NiTEZIUUZhUnFpZ25sTkN2SnBPd21rai1WWFlPRVg3Tkx4TWpqcXF5dzZTR3JVbHpXdFQ4NWliUkRIWkZVcDVZRFNRemdvWEd6N3gxcG1maTkxcWRzODhmdHRnTy1nbGs4OU1odFUwMWduSHZ2dGV0b0kybVY2SUgwZHVmTVBmQ2xyU3lENkQwUUtQb19VR1g5NG9IX2dhdFpWM25hUQ?oc=5",
+      "title": "Global watchdog urges Turkey to strengthen crypto rules - Reuters",
+      "published_at": "Wed, 11 Nov 2026 18:20:55 GMT",
+      "candidate_id": 11,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: 暗号通貨規制に関する内容だが、見出し程度で詳細記載が無く、主要なポイントの順位により上限4項目に入らない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxQMFB3XzM5cVFXcFdvTWhfdVJSY21DLVNHRE81YXh1Ykt3MlY0M29GY05FbFEwd2hMT3lTR1duaVV6UGdac003SWM2cTJpb1FqX2UzdnZqNW5YSEpEOGd2dmZ2VW5XOTZzcGlSNGl5dENGNFQ4c2JGYU9yaXV2RU84QXVRQVVtR3EtYmpaNXRKM3d2ZHJVdzlzOWxrMktEVVZYZzJVeVVzcmtMM0JLYmxsZVQ5YlRWN2tRd0UyM2dUXy04eW5PWlE?oc=5",
+      "title": "Iran attacks shipping navigation systems on Oman's Didamar island, sources say - Reuters",
+      "published_at": "Wed, 11 Nov 2026 17:59:02 GMT",
+      "candidate_id": 12,
+      "verified_by": "",
+      "decision": "採用",
+      "reason": "B: イランがオマン沖で船舶の航行システムを攻撃したとの関係者情報。産油地域に関わる軍事行動として採用、被害未確認を明記"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxPalZrZE4zekRsSWZIS2FZNkZ4SG5JcGRDdlptSlNnNGJvR1luV1I5cHFtcEN0RFB5VkpSMjZRSXlOcU5oekFVbDNXSXBhSWYzMzRQcTUwTmF0Sm1LUTA5RjdUSHJPMXhTQ0h4RElvaFpXeGloaUNzQVJVQWZqaGNsanpOSWMzQVpNQ1hLOVBTcHFWZXZCWHpvbzBULTlJaU9uM2dxTjlDLVNpWkplUDlHYQ?oc=5",
+      "title": "Binance hack reveals crypto's uphill battle against hackers - Reuters",
+      "published_at": "Wed, 11 Nov 2026 16:56:07 GMT",
+      "candidate_id": 13,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "A: Binanceハッキングに関する解説記事で、同じtierのcandidate_id42・43と事実関係が重複する内容のため見送り"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxNUzg4MHZTVlV3MUMxM1NaWk0yQU41NlYzNW0xWTNvdUFnQy1vRlFQTHJPakQya1ZaNWZ4OVptNUFDamFSM0xQUWNSVWJtYlpBUlJQVExBRlBWcFoyeVVvaWJMNXZsM2RUU2g5YjM3SjhKTHp0aHpMeHRHU0dIbjRhMHRJX1ZIdUI3NVJKLU5IYzR5NzdIb3VoSzJreVRpQ0xYR1Y4Ulg1dENuZUUtdzJGNWRpSFQ?oc=5",
+      "title": "German economic adviser sees higher US tariff risks after midterms - Reuters",
+      "published_at": "Wed, 11 Nov 2026 14:27:32 GMT",
+      "candidate_id": 14,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（順位外）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxOSDZlTWwtdThPTnp0UjFXeXowU3I2SzZTbDA1Zk9BZUJER0dMV1o3S2oza0sxUmxlT2xhb2k4Ykx1TDlORm5zNVdJSk8wVzZBM2VRV2xFUlpJQTdiTTJJY1ZULXJNbjIyaWVudGx5UUNjZWlMaGRJcXZHVjBmUkUxVmVxZC1FUWk0SUFmZkFQZGhaeFVPdWtkV2xIQ0hRT1ZDWGYySlk3RHdRTDloMDlLdQ?oc=5",
+      "title": "OPEC+ oil output in October nears pre-Iran war rate, led by Saudi Arabia - Reuters",
+      "published_at": "Wed, 11 Nov 2026 14:14:31 GMT",
+      "candidate_id": 15,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（順位外、優先対象の原油増産統計記事）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxOVmdEZENBbDFmNjBmQ1lkUUdxbTUwZlZCZDF0MUo5cXZCTzMxNmdORWpkWl9WX1RucHdsR0VuSWhLOXhSYjZTYUstRFl6WWJ6V3JYallmel9vc0xhS2VGa0EwVGRkdE95MEVlU3RLb3owb0cweERFQUxXaFRqNXJiYURqN2F0WEVWSVY1SzkxbzVqN2V1NlMyMUxXTG1SQ0VEZUZZQm43SUxlbWpRSG15TVhRdUJDdXF5Q1laUmV1MGg?oc=5",
+      "title": "COMMENTARY: A 50 bps rate hike? Warsh's Fed has a comms problem - Reuters",
+      "published_at": "Wed, 11 Nov 2026 14:02:23 GMT",
+      "candidate_id": 16,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 金融政策に関する論評記事のため不採用（論評）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxOTTlFNjVidGtEa2NTMGcyZ0VaUnhIQ003dnFtaHFKZG80bVlpdk91dlZwN0I1VU84ZWF4RXNjY1YyMmE3cHhweUhsNmxkeVluOF9nR3BMcy1Ec2dHckN4aEJlT3kweGd3WEdFZmlhRzJqODlTY28xb1VtUVE1LXhlM0lzcU1RQUtZX3RWS0dVVVlFTEpmZ3hn?oc=5",
+      "title": "COMMENTARY: Morning Bid: Jumbo Fed hike hits radar - Reuters",
+      "published_at": "Wed, 11 Nov 2026 11:42:18 GMT",
+      "candidate_id": 17,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 市場動向の論評記事（Morning Bid）のため不採用（論評）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxOYjFDc3h6QkRMb0t4U0JwZHlBa2Q0YVVLWHNtOXpreHkwVVFxRWpGbFJkdGhZVE9Yd2lTbENBVFJFUThodi1oVUR4dnYtUHF0RThkYmFZdkZ6Y0xEZDhKRVhBMDRid2hzbGFacWhIWnNZcVpPZXdlbEUwMy1nekpmSGg4dzhEV3ptTkRxRWFHeTl2Mkx1a08wQWtYQk9GY2hQUFo1dw?oc=5",
+      "title": "South African rand steady despite hawkish Fed signals - Reuters",
+      "published_at": "Wed, 11 Nov 2026 06:48:00 GMT",
+      "candidate_id": 18,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 南アフリカランドの動向記事で、候補19と同じFRBの利上げ観測の事実の重複"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPaGZrcC11RmpmMVp3a09iZl9aR2N6TDVFV2d1eE50MzBMT0hkZFMtbXFteWFvcDBnSEM0MXdhWFJmM0d4eXZNVFMtNDA2VHozS0UyeEdWcGtQanctN3pxdVVVeWRacnFxS2d3N1I1MktUbUVISWhwZ0VibFgtTWVUX0ZtelYwSmJMQXdUbDJqZmxPMklpS2c?oc=5",
+      "title": "Goldman adds another rate hike to Fed outlook after hot inflation data - Reuters",
+      "published_at": "Wed, 11 Nov 2026 04:58:00 GMT",
+      "candidate_id": 19,
+      "verified_by": "",
+      "decision": "採用",
+      "reason": "B: ゴールドマン・サックスがインフレ指標を受けFRB利上げ見通しを追加したとの報道。波及経路を説明できるため採用"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxQY2ZuM1hLajgyNkhZc3BNV3BsUzZyNi1tWU1CcmZCb1hZeTNXYml6YkFNRWlRaXdzdGlzRWxUVlRsZTcxY2dqUHlDWXFrWHNHSUhSWTFtaXpreGtkWUN0SE50YnpUdDRHWF9EMTliTTBJMkFxQ1E1NE1kZkZQOHpxYXlMNmhWbWZhckNpXzZyRkRjVlA5dUxBa1lQdEx6LXZnbHQ5ci1Id1BEOFRzWFIxOHBNcw?oc=5",
+      "title": "Drone attack causes fire in Russia's Baltic Sea port of Ust-Luga, governor says - Reuters",
+      "published_at": "Wed, 11 Nov 2026 04:18:00 GMT",
+      "candidate_id": 20,
+      "verified_by": "",
+      "decision": "採用",
+      "reason": "B: ロシア・バルト海の港でドローン攻撃による火災発生との知事発表。産油・輸送施設の被害報道として採用、被害未確認"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxOVUM1V3d2azVfSFlud1E3Z05veEpjMmxwYzhBWkc1NTgxRktLS25sQWVlbWVWUGxCdVBXR3dmbzMxeDNYUzFJVi1aTTZIcWQ0X3kteU55dWdKeEN0ZGhvNlBHc2cwMFY4a1Q3R2VxQS1BdUcwMkRMYlc4VFltaFZxekxGVHg3ZVhhRE92WXNwb3JkMXFKeExZUlppZ2dnaHVmcjJMLTVUM1BXLUVXSlNn?oc=5",
+      "title": "Dollar advances as markets price in December Fed rate hike - Reuters",
+      "published_at": "Wed, 11 Nov 2026 00:54:00 GMT",
+      "candidate_id": 21,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 候補19・候補22と同じ12月FRB利上げ観測の事実の重複"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxOc1l4X293em5tbkV6SmFadllsbWlmU25jQmxZeWtMRHFDREhLcE5wVXZiM29uVnZ6eGRPUnAtWmVMcndFTmZkUVhERG1yQVpKQTFlNzlWNy1TalhycGcyb01xOFFzWnZwLWhYRWZ4UkZ0LU5hV3V0Z0UzbFV5RE5DOFdYVEdHN0liaktqTlNfdWxuekZ4Rk1tOGFIMUp1OVZlbGpIa3Mzamc2Y1NxRWZZ?oc=5",
+      "title": "Fed's Paulson calls for gradual rate hikes amid ongoing high inflation - Reuters",
+      "published_at": "Tue, 10 Nov 2026 23:34:02 GMT",
+      "candidate_id": 22,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: FRBウォルシュ総裁の発言報道だが、主要なポイントの順位により上限4項目に入らない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/nomura-sale-crypto-unit-laser-digital?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Nomura explores sale of crypto unit Laser Digital: Bloomberg",
+      "published_at": "Wed, 11 Nov 2026 21:36:01 +0000",
+      "candidate_id": 23,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3単独のため不採用（独立2ソースの相手候補なし）"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/us-data-center-restrictions-bitcoin-miners-edge-ai?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "US data center restrictions could give Bitcoin miners an edge in AI, though challenges remain",
+      "published_at": "Wed, 11 Nov 2026 20:43:19 +0000",
+      "candidate_id": 24,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3単独のため不採用（独立2ソースの相手候補なし）"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/defi/2026-11-11-dogeos-very-very-close-launching-defi-features-app-layer-dogecoin-ceo-438392",
+      "title": "DogeOS ‘very, very close’ to launching DeFi features, app layer for Dogecoin: CEO",
+      "published_at": "Wed, 11 Nov 2026 20:32:19 +0000",
+      "candidate_id": 25,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3単独のため不採用（独立2ソースの相手候補なし）"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/regulation/2026-11-11-sen-warren-merkley-raise-ethics-concerns-over-trump-aides-prediction-market-bets-438394",
+      "title": "Sen. Warren, Merkley raise ethics concerns over Trump aide’s prediction market bets",
+      "published_at": "Wed, 11 Nov 2026 19:48:46 +0000",
+      "candidate_id": 26,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3単独のため不採用（独立2ソースの相手候補なし）"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/okxice-tokenized-stocks-blue-chips-push-back?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "OKXICE moves ahead with tokenized stocks as blue chips push back",
+      "published_at": "Wed, 11 Nov 2026 18:30:43 +0000",
+      "candidate_id": 27,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3単独のため不採用（独立2ソースの相手候補なし）"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/ecosystems/2026-11-11-stablecoin-supply-drops-14-2-billion-largest-contraction-since-2022-bear-market-437907",
+      "title": "Stablecoin supply drops $14.2 billion in largest contraction since 2022 bear market",
+      "published_at": "Wed, 11 Nov 2026 17:23:10 +0000",
+      "candidate_id": 28,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3単独のため不採用（独立2ソースの相手候補なし）"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/deals/2026-11-11-apex-group-joins-hedera-council-tokenization-437917",
+      "title": "Apex Group joins Hedera Council to explore tokenization and settlement",
+      "published_at": "Wed, 11 Nov 2026 17:07:22 +0000",
+      "candidate_id": 29,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3単独のため不採用（独立2ソースの相手候補なし）"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/web3/2026-11-11-pyth-network-nyse-data-437928",
+      "title": "Pyth Network adds NYSE stock and ETF data to its marketplace",
+      "published_at": "Wed, 11 Nov 2026 16:56:54 +0000",
+      "candidate_id": 30,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3単独のため不採用（独立2ソースの相手候補なし）"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/markets/bitcoin-74k-stocks-us-bond-yield-inflation-cpi?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bitcoin hovers near $74K as stocks rise despite US bond yield rebound",
+      "published_at": "Wed, 11 Nov 2026 16:26:00 +0000",
+      "candidate_id": 31,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3単独のため不採用（独立2ソースの相手候補なし）"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/markets/2026-11-11-stonex-sees-111-upside-for-securitize-shares-as-tokenization-revenue-rebounds-437910",
+      "title": "StoneX sees 111% upside for Securitize shares as tokenization revenue rebounds",
+      "published_at": "Wed, 11 Nov 2026 16:22:13 +0000",
+      "candidate_id": 32,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3単独のため不採用（独立2ソースの相手候補なし）"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/coindesk-indices/2026/11/11/crypto-long-and-short-the-genius-act-s-guarantees-don-t-cover-defi-lending",
+      "title": "Crypto Long & Short: The GENIUS Act’s guarantees don’t cover DeFi lending",
+      "published_at": "Wed, 11 Nov 2026 16:00:45 +0000",
+      "candidate_id": 33,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3単独のため不採用（独立2ソースの相手候補なし）"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/markets/2026-11-11-bitcoin-ripe-for-squeeze-options-traders-raise-odds-sub-70000-christmas-437897",
+      "title": "Bitcoin ‘ripe for a squeeze’ as options traders raise odds of sub-$70,000 Christmas",
+      "published_at": "Wed, 11 Nov 2026 14:44:31 +0000",
+      "candidate_id": 34,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3単独のため不採用（独立2ソースの相手候補なし）"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/deutsche-bank-debuts-digital-asset-custody-services-eu?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Deutsche Bank launches crypto custody for companies and institutions",
+      "published_at": "Wed, 11 Nov 2026 14:02:18 +0000",
+      "candidate_id": 35,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3単独のため不採用（独立2ソースの相手候補なし）"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/markets/2026-11-11-nomuras-laser-digital-helps-launch-saudi-sme-credit-vault-targeting-100-million-on-bnb-chain-437824",
+      "title": "Nomura’s Laser Digital helps launch Saudi SME credit vault targeting $100 million on BNB Chain",
+      "published_at": "Wed, 11 Nov 2026 13:35:02 +0000",
+      "candidate_id": 36,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3単独のため不採用（独立2ソースの相手候補なし）"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/magazine/paraguay-bank-collapse-shows-stablecoins-can-offer-a-lifeline-of-sorts?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Paraguay bank collapse shows stablecoins can offer a lifeline... of sorts",
+      "published_at": "Wed, 11 Nov 2026 13:30:00 +0000",
+      "candidate_id": 37,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3単独のため不採用（独立2ソースの相手候補なし）"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/research/bitcoin-covenants-part-5-matt-op-ccv?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bitcoin Covenants Part 5: MATT and OP_CHECKCONTRACTVERIFY — How Bitcoin could carry state across transactions",
+      "published_at": "Wed, 11 Nov 2026 13:26:18 +0000",
+      "candidate_id": 38,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "機械検出の候補39とは同一事実でない（技術解説と基礎解説で内容が異なる）ため不採用"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/learn/bitcoin/bitcoin-and-blockchain-basics-434447",
+      "title": "Bitcoin and Blockchain Basics",
+      "published_at": "Wed, 11 Nov 2026 11:43:50 +0000",
+      "candidate_id": 39,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "機械検出の候補38とは同一事実でない（基礎解説記事）ため不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/kraken-xstocks-200-tokenized-uk-eu-equities?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Kraken parent adds over 200 tokenized UK and EU stocks to xStocks",
+      "published_at": "Wed, 11 Nov 2026 11:30:36 +0000",
+      "candidate_id": 40,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3候補41と同一事実の組だが、主要なポイントの順位（業界動向）により上限4項目に入らない"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/business/2026-11-11-kraken-parent-payward-adds-200-tokenized-uk-and-european-equities-to-xstocks-offering-437837",
+      "title": "Kraken parent Payward adds 200 tokenized UK and European equities to xStocks offering",
+      "published_at": "Wed, 11 Nov 2026 10:54:02 +0000",
+      "candidate_id": 41,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "tier3候補40と同一事実の組だが、主要なポイントの順位（業界動向）により上限4項目に入らない"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/defi/2026-11-11-crosschain-protocol-across-restores-systems-after-domain-hijack-437843",
+      "title": "Crosschain protocol Across restores systems after domain hijack",
+      "published_at": "Wed, 11 Nov 2026 10:55:24 +0000",
+      "candidate_id": 42,
+      "verified_by": "独立2ソース規定（The Block・Cointelegraphが同一事実を報道）",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: Acrossプロトコルがドメイン乗っ取り後にシステムを復旧した事実。The BlockとCointelegraphの独立2ソースで確認し採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/across-protocol-restores-website-after-hackers-hijack-domain?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Across Protocol restores website after hackers hijack domain",
+      "published_at": "Wed, 11 Nov 2026 04:42:30 +0000",
+      "candidate_id": 43,
+      "verified_by": "独立2ソース規定（The Block・Cointelegraphが同一事実を報道）",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: 候補42と同一事実（Acrossのドメイン乗っ取り復旧）を報じる独立2ソースの一つとして採用"
+    }
+  ],
+  "reusable_for_summary": [],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 0
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 0
+    },
+    "FRB（speeches）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "FRB（testimony）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 1
+    },
+    "米財務省": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "USTR": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "ホワイトハウス": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 5
+    },
+    "ホワイトハウス（大統領令等）": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 0
+    },
+    "ADP": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 1
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 8
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 24
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "The Block": {
+      "status": "ok",
+      "raw_count": 19,
+      "kept_count": 18
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 50
+    }
+  },
+  "news_candidate_count": 43,
+  "format_normalized": {
+    "part1_points": 0,
+    "part2_flow": 0
+  },
+  "flow_price_fragment": " #BTC +0.62%、 #ETH +0.68%（24時間比）",
+  "part1_md": "【対象日】2026年11月11日（水）\n\n【ヘッドライン】\nReutersによると、サウジアラビアが自国領内に向けたフーシ派のミサイル・ドローンを迎撃したと発表し、同派はメッカを標的にしたとの見方を否定したと報じられました。被害・影響の詳細は未確認です。\n\n【主要なポイント】\n・Reutersによると、イランがオマンのディダマル島周辺で船舶の航行システムを攻撃したと関係者の話として報じられました。被害・影響の詳細は未確認です（Reuters、11月11日）。\n・Reutersによると、ロシア・バルト海のウスチルガ港でドローン攻撃により火災が発生したと州知事が発表したと報じられました。被害・影響の詳細は未確認です（Reuters、11月11日）。\n・Reutersによると、10月のインフレ指標の上振れを受け、ゴールドマン・サックスがFRBの利上げ見通しに追加の利上げを織り込んだと報じられました。市場では12月のFRB追加利上げ観測が意識されている可能性があります（Reuters、11月11日）。\n・クロスチェーンプロトコルのAcrossが、ドメイン登録業者を狙った不正アクセスによりドメインを乗っ取られた後、システムを復旧したと報じられています（The Block、Cointelegraph、11月11日。公式発表は未確認）。\n",
+  "part2_md": "【市場のフロー】\n①【出来事・ニュース】Reutersによると、サウジアラビアが自国領内に向けたフーシ派のミサイル・ドローンを迎撃したと発表し、同派はメッカを標的にしたとの見方を否定したと報じられました。被害・影響の詳細は未確認です（Reuters、11月11日） → 【地政学・マクロの変化】中東情勢を巡る緊張が意識された可能性があります → 【暗号通貨価格】 #BTC +0.62%、 #ETH +0.68%（24時間比）で、小幅な上昇となりました。\n②【出来事・ニュース】Reutersによると、10月のインフレ指標の上振れを受け、ゴールドマン・サックスがFRBの利上げ見通しに追加の利上げを織り込んだと報じられました（Reuters、11月11日） → 【地政学・マクロの変化】12月のFRB追加利上げ観測が市場で意識された可能性があります → 【中間市場指標・市場心理】インフレ再燃への警戒から、金融引き締め長期化を見込む市場心理が強まった可能性があります → 【暗号通貨価格】 #BTC +0.62%、 #ETH +0.68%（24時間比）で、底堅い値動きとなりました。\n③【出来事・ニュース】クロスチェーンプロトコルのAcrossが、ドメイン登録業者を狙った不正アクセスによりドメインを乗っ取られた後、システムを復旧したと報じられています（The Block、Cointelegraph、11月11日。公式発表は未確認） → 【暗号通貨価格】 #BTC +0.62%、 #ETH +0.68%（24時間比）で、落ち着いた値動きとなりました。\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは43.49%→23.40%へ低下しました（24時間出来高 -45.58%、TVL +1.13%）。\nBase 0.3%プールの参考APRは71.65%→56.28%へ低下しました（24時間出来高 -20.55%、TVL +1.16%）。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+0.68%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\n中東情勢や金融政策見通しを巡る報道が相次ぎ、地合いはやや不透明感を伴う展開です。インフレ指標やFRBの金融政策スタンスを巡る見極めが引き続き必要な状況です。\n",
+  "numeric_record_md": "【対象日】2026年11月11日（水）\n\n【主要指標】\n・市場全体：時価総額 $2.460兆（¥390.1兆）｜24時間取引高 $599.8億（¥9.51兆）\n・ #BTC：$74,067（約1,174.4万円）｜24時間比 +0.62%\n　（24時間レンジ $73,110〜$74,737）\n・ #ETH：$2,061（約32.7万円）｜24時間比 +0.68%\n　（24時間レンジ $2,040〜$2,102）\n・ #BNB：$683（約10.8万円）｜24時間比 +0.85%\n・市場心理：Fear & Greed 27（Fear、CoinMarketCap API）\n・ドミナンス：BTC 60.55%｜ETH 10.25%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年11月12日07:38 JST、USD/JPY ¥158.56\n\n【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $5.30M vs Base上ETH/USDC $78.44M｜参考：Base上DEX全体 $11.029億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $58.29億（¥9,242億）｜24時間比 +1.42%｜USDCドミナンス 84.5%\n・ ETH/USDC（Base）参考APR：0.05% 23.40%（TVL $7.11M／24h出来高 $9.12M）｜0.3% 56.28%（TVL $134.87M／24h出来高 $69.32M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年11月12日07:38 JST\n"
+}
