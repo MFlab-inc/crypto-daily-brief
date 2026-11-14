@@ -1,0 +1,438 @@
+{
+  "target_date_jst": "2026-11-14",
+  "level": "L0",
+  "sections": {
+    "part0_target_date": "2026年11月14日（土）",
+    "part1_headline": "FRBのジェファーソン理事は講演で、生産性動向を踏まえた金融政策運営上の論点に言及しました。",
+    "part1_points": "・Reutersによると、FRBのコリンズ・ボストン連銀総裁は段階的な利上げが経済リスク管理に最も適切との見方を示し、ジェファーソン理事もインフレ動向を政策判断の手がかりにしていると述べたと報じられました（Reuters、11月14日）。\n・Reutersによると、イラン海軍はホルムズ海峡で石油タンカーが機雷に接触し火災が発生したと発表したと報じられました。被害・影響の詳細は未確認です（Reuters、11月14日）。\n・Reutersによると、トランプ米大統領は新たな挑発がない限りイランへの攻撃を当面見送る意向を周辺に伝えたと関係者の話として報じられました（Reuters、11月14日）。",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.150兆（¥343.5兆）｜24時間取引高 $965.2億（¥15.42兆）\n・ #BTC：$63,600（約1,016.3万円）｜24時間比 -6.85%\n・ #ETH：$1,747（約27.9万円）｜24時間比 -9.29%\n・ #BNB：$576（約9.20万円）｜24時間比 -8.68%\n・市場心理：Fear & Greed 14（Extreme fear、CoinMarketCap API）\n・ドミナンス：BTC 59.65%｜ETH 9.96%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年11月15日07:38 JST、USD/JPY ¥159.80",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $12.84M vs Base上ETH/USDC $178.86M｜参考：Base上DEX全体 $14.214億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $51.41億（¥8,215億）｜24時間比 -6.28%｜USDCドミナンス 83.5%\n・ ETH/USDC（Base）参考APR：0.05% 94.80%（TVL $5.75M／24h出来高 $29.85M）｜0.3% 147.33%（TVL $110.74M／24h出来高 $149.01M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年11月15日07:38 JST",
+    "part2_flow": "①【出来事・ニュース】Reutersによると、FRBのコリンズ・ボストン連銀総裁は段階的な利上げが経済リスク管理に最も適切との見方を示し、ジェファーソン理事もインフレ動向を政策判断の手がかりにしていると述べたと報じられました（Reuters、11月14日） → 【地政学・マクロの変化】金融政策の運営姿勢を巡り、引き締め継続への警戒が市場で意識された可能性があります → 【暗号通貨価格】 #BTC -6.85%、 #ETH -9.29%（24時間比）で、同時期は、一時的に上値を試す場面があったものの、その後下落に転じ下げ幅を拡大する展開でした。\n②【出来事・ニュース】Reutersによると、イラン海軍はホルムズ海峡で石油タンカーが機雷に接触し火災が発生したと発表したと報じられました。被害・影響の詳細は未確認です（Reuters、11月14日） → 【地政学・マクロの変化】原油供給の要衝における緊張の高まりが、リスク回避姿勢を強める材料として意識された可能性があります → 【暗号通貨価格】 #BTC -6.85%、 #ETH -9.29%（24時間比）で、同時期は、変動幅を伴いながら下落する展開でした。\n③【出来事・ニュース】Reutersによると、トランプ米大統領は新たな挑発がない限りイランへの攻撃を当面見送る意向を周辺に伝えたと関係者の話として報じられました（Reuters、11月14日） → 【地政学・マクロの変化】軍事的緊張の当面の沈静化期待が、一方でリスクの先行き不透明感と併存する形で意識された可能性があります → 【暗号通貨価格】 #BTC -6.85%、 #ETH -9.29%（24時間比）で、同時期は、下げ幅を拡大したのち一部で下げ渋る場面も見られました。",
+    "lp_comment": "参考APRは両プールとも前日から上昇しました。\nBase 0.05%プールの参考APRは49.74%→94.80%へ上昇しました（24時間出来高 +64.72%、TVL -13.57%）。\nBase 0.3%プールの参考APRは108.33%→147.33%へ上昇しました（24時間出来高 +20.62%、TVL -11.31%）。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比-9.29%と下落中のため、ETH偏り・下限側レンジ外・下落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "FRB高官の発言や中東情勢を巡る報道が相次ぎ、市場の不確実性は高い状態が続いています。今後も金融政策や地政学情勢の進展を見極める必要がありそうです。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "FRB高官発言と中東情勢に注目",
+  "audit_ledger": [
+    {
+      "source": "FRB（speeches）",
+      "url": "https://www.federalreserve.gov/newsevents/speech/jefferson20261113a.htm",
+      "title": "Jefferson, New Technology, Old Questions: Productivity Puzzles  and the Macroeconomy",
+      "published_at": "Sat, 14 Nov 2026 00:00:00 GMT",
+      "candidate_id": 1,
+      "verified_by": "FRB公式speeches",
+      "decision": "採用",
+      "reason": "A/B: FRBジェファーソン理事の講演を公式発表（tier1）で確認し、区分(2)の最上位としてヘッドラインの主題に採用"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxPNHV6OEE3TG9DMmR2b2N2OEpUX2IxMlZLTHUyc3FwaTRZbDZ1RWtPaUl3Q2N6c1JOYl9FQ1k4OGxFeTM1czMzV3R2TE5ueXdQdThyZXhWTHJPUEJVLXh4aVhRVGI5Ri1VcEhMREJWbGdtdVcxNjlBYjRsVHhkYktoU2JERjBmRUctUTkzdm9JcTZLdEpwSFM2TXV5WU5LbV9hZlhNMS1ZdXY4QQ?oc=5",
+      "title": "A new 'Yalta'? Trump and Putin push for a meeting that Xi is wary of hosting - Reuters",
+      "published_at": "Sat, 14 Nov 2026 20:23:56 GMT",
+      "candidate_id": 2,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: トランプ・プーチン会談と米中関係の論評で、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9yUGZEdklDMFVGeHNrY2xhVElyN1FqWW1la2FZeGVQNVl1R2IzeXIwSFFZRGI0SlJIb2xzX0duZlhmeGotaVlJVkVBcEo2aUE?oc=5",
+      "title": "Unclear if equipment or contractor error caused flight shutdown, says Duffy - Reuters",
+      "published_at": "Sat, 14 Nov 2026 19:15:06 GMT",
+      "candidate_id": 3,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 航空機の運航停止原因に関する内容で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMimAJBVV95cUxQaUkzVVlFS0lQVzB3aTFqY0VmRHVRMnQxNmRPazFudlFibnpqYjBjXzdfMmg4UkxrTlV2eU1fM0xPZklnQzZQMFFGX1poemRKNHJFVWpQWDVzdUF2MkxYaWJ6THlYcUYwWVVjLXNfYTdFRXVkLUpjb1FkTkxFR19paXJ1WDRNY3MtQW9jdDFiaEszdUp2SEhyR2pyXzY0Y19iQU1rT25tTkhLcXZPUktlYkFkNGEzQzV4a3VBcEdUejBfc2RUeFcwdzcybVBHemZxeEF2S0EwTjdNSDNHcUN2TThUNzljUHZJZlk4eWI5bG9xTHdqWEJBRkJycm8zNWlmRXRTNFBVRzR4Nmx2T0FucElDRjJPUGd6?oc=5",
+      "title": "Reuters Misinformation Monitor - Reuters",
+      "published_at": "Sat, 14 Nov 2026 18:21:10 GMT",
+      "candidate_id": 4,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 誤情報モニターに関する内容で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE1ja1hDNnVER0NCS1BoamRKdEQxMmV3M0VYRkg2XzJObm8wVmVSSGcyYXZtSzgzdHEwTFpTRmRwMG5YWU5jYWJNM3lFbzdOZXlRd1lZZUJMcl9fb05mU3ZHZmhXMDkyVXJtdElDbQ?oc=5",
+      "title": "Ishares Bitcoin Premium Income ETF (BITA.N) | Stock Price & Latest News - Reuters",
+      "published_at": "Sat, 14 Nov 2026 17:25:29 GMT",
+      "candidate_id": 5,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別ETF銘柄の株価情報のみで、見出し程度の情報しかなく誰が何をしたか書けない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxPbHZfX3JqempNenlnSUpVcTd4dXY4djdJU1c2VkZ2Um5fYXkyVTMtYUxBZlBrcXVqQXJkQ0RjejZRQTdBLWxPYzcyRDBfTGxmdUVTekN0TFFWdHNfZFh6ckt0c1RCTVBwZzZjZ3NacWJWSDhvMVRGVDNpR0o2YTBwdmJILTE4eWs2SlQ5YnVHN0ctMFM3bWJsQkhtblRUMjI0amRHcFZLaXNaWWJz?oc=5",
+      "title": "Fed's Collins says gradual rate hikes best to manage economic risks - Reuters",
+      "published_at": "Sat, 14 Nov 2026 15:47:44 GMT",
+      "candidate_id": 6,
+      "verified_by": "Reuters報道",
+      "decision": "採用",
+      "reason": "B: FRBコリンズ総裁の段階的利上げ発言をReuters報道（tier2）で確認し、候補16とまとめて主要なポイントに掲載"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxNMUdMa3BVSk45alRMRFZoSmM0ZllsLVVMcEdKaDZpbzh5UW5EeGR2WHVmYTh5aE1KRnlleEIwMEVyc1o0VVVael9pMHVaa25BSmpZYUpENWxCZ09aOW1VRlJqZkhMcjVSWnlXcFNBaGFzSUkwbG85SlpZZF9jYlltMHkzRC1fSUxVSFNRQ2hfVEdUMzdXSHc4TzBzZnFFZFhtSU1fNjJVcFppZ1Z2REp6bFdDV0NGbGlRVHc?oc=5",
+      "title": "UN climate chief urges speed as COP31 confronts fossil fuel divide - Reuters",
+      "published_at": "Sat, 14 Nov 2026 15:31:46 GMT",
+      "candidate_id": 7,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: COP31気候会議の論評で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE1BMU1lZkRDOVQ2WGdTaXM2cEhzV1RQTlg5VWx6Z1I0QkdwYUQ4TnBsa3llWlZBYjRVZ1hoNkxfVlJSbGkxaTh4dDFDV3AtVHVjdjZLSG9yUkEtUHZsRm5ZeUFySHhaU2s?oc=5",
+      "title": "Migrant caravan marches through Mexico amid Trump tariff threat - Reuters",
+      "published_at": "Sat, 14 Nov 2026 14:00:39 GMT",
+      "candidate_id": 8,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 移民キャラバンの関税を巡る一般記事で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxNWTBuTDhTdGdEdV9TQVRYbEJ0NE12TzAyRU9BLXNuOVRDNmgxUml5TUVvT1ZTX1l6eGJ0U3Foc3VmTi1OUUNiLTFMSDdnWTB5cEpxNG5ubkU5QlJGWjNHV0UwaW82bDBCTFp2MnlDX2J5S0locEVUYjc1NFUtZ0IyQ003NUJNTmV4azZBSklreWNGZ0duNUNDdzA0b2VBMEF2SzBCcUxnTEtlVjJBc1p4cA?oc=5",
+      "title": "Oklahoma AD: SEC said to accept postponement vs. Ole Miss or forfeit - Reuters",
+      "published_at": "Sat, 14 Nov 2026 13:30:47 GMT",
+      "candidate_id": 9,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 大学スポーツの日程延期に関する内容で、波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxNM0szVHlEQVpiTXpBWkZXclIxQ0ZXaDdjQnhSdlZVdUt1N0ZXUjdLaXo5a3Y2TG10a3p5d2w0czgwSGcxTjl6a2ZnR0Znd0hrc0dDajZDV21ZX2tDcnRScUswd29RWlFRSl9PNTJjRzVRd2JyT0Z5NHp4ZWhSdDg2b2d1Z1RmNTJMLWZKM0g4NE4xYTlIYzYxNTR2V0NoWE5wenhxXzM0UzBBQXhCV0RaMTdXQXJKeThRTHItZU9kZWpQT0F6cVdZMWl3?oc=5",
+      "title": "BoE's Greene says acting proactively now on inflation would 'screw' things up the least - Reuters",
+      "published_at": "Sat, 14 Nov 2026 12:58:19 GMT",
+      "candidate_id": 10,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 英中銀高官の発言だが、主要なポイントの順位により上限4項目に入らない（順位外）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxPR2NiU2RGMHprbUFIMnNuTGJheHdpTzhuZFRCSWVGcl9HZF9raUd2VXQxNHE1WldRVzNaZWx6YnlRZFpueGZlb05DMElhZ3FEOVdLakpQWkNLaGktQWh6THRxT3V0aGVPaXI0dW9LVm9DeTJRekF1enJaamZ5bEd2SFZtSVNtTFd5VEp0WFl6U2VWX3BCRkYzbnB1c25QRnU2M3FBbDJBMHRTVWU5T0hyZG5sWFRPWUFIYVhuT1BMWTBkUVdNbDlF?oc=5",
+      "title": "Trump tells advisers he may hold off on Iran attacks barring new provocations, sources say - Reuters",
+      "published_at": "Sat, 14 Nov 2026 11:04:10 GMT",
+      "candidate_id": 11,
+      "verified_by": "Reuters報道",
+      "decision": "採用",
+      "reason": "B: トランプ氏のイラン攻撃見送り方針をReuters報道（tier2）で確認し、地政学材料として主要なポイントに掲載"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxPZWt1cHFualJEVktnTTVvd21uVnljc0FqR2dRaWpaRnYwZ3luZ2t1dUlJNVUtLTVlWHJFOS1ocDBlaVZsTFNZdjRMeldFVFE1Q0Jqem9FbU9fMmp1YTBUTUhqTmYzR3FJN1Z1Y1dHY2d0Yjlzb2lBR0JvNllyT3pScjI2SEpkbkhiYzZSWW9Tb3dwemdWaVVmMjBPbXZqd0hOZzdpRDVSZlVlbzBnV1BjMQ?oc=5",
+      "title": "Iran's navy says oil tanker on fire after hitting mine in Hormuz - Reuters",
+      "published_at": "Sat, 14 Nov 2026 10:31:30 GMT",
+      "candidate_id": 12,
+      "verified_by": "Reuters報道",
+      "decision": "採用",
+      "reason": "B: ホルムズ海峡でのタンカー機雷接触・火災をReuters報道（tier2）で確認し、優先対象の地政学材料として掲載"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQSXM1eUw2ajFCSktRVnp3Sm5fY0ZteUJnclFnemswOWZRSV8tOUVsczh5c3pZSW5OeEdid0RBVXhVQkhWc0EtOUNjTHk0eURRY1Axa2xXblF1cVhPSmVEQVZXT3Q2ZjI5aXVURGVqSV9wc1NzOGg5bWxhWlZWTEt2dGUzUUtoeVFFeFlmMUVzMk1tZmZaM2daWDliXzQzZXdZTmFWMHdXeVQ0Wnl0b3hObQ?oc=5",
+      "title": "China, US discuss tariffs, farm trade ahead of Xi-Trump meeting - Reuters",
+      "published_at": "Sat, 14 Nov 2026 07:13:00 GMT",
+      "candidate_id": 13,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 米中通商協議だが、主要なポイントの順位により上限4項目に入らない（順位外）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxNT2ducEF3N0xMWVJrb1FlVXpqcEZURldrX0dKNUZlWHI1akMtZmNyNTQtUkNCc3AxSVY4b09hY0QtM3J2QVdpWmE2TXdidUZOcDFBa0JfSFpndWlKUzFqZjFlN1V5MW5XckNHcVF1M1J2NGNvSHRqOGpGMU92Z2dsSU1fNTZIdnJSMXg2cmVfMU5Jd01sVDBsUGp3?oc=5",
+      "title": "BOE likely to raise rates further in 2027, Pill tells FT - Reuters",
+      "published_at": "Sat, 14 Nov 2026 06:59:00 GMT",
+      "candidate_id": 14,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 英中銀の利上げ見通しだが、主要なポイントの順位により上限4項目に入らない（順位外）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE5kemt6QzZDUTdTdjZsRWppQ3NqN3hNaElmWEVTTUM3ZXhqS205ZmtwZUlwZG5hdWNIandWYnZkN1RXTWZkcF9PUFlzSlViNGF5dHVQMVBHbVc2Q2ZqTjRJYUFLNGs5QTlHNWwyRQ?oc=5",
+      "title": "Bitcoin Fund (7T9u.SG) | Stock Price & Latest News - Reuters",
+      "published_at": "Sat, 14 Nov 2026 06:37:41 GMT",
+      "candidate_id": 15,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別ファンド銘柄の株価情報のみで、誰が何をしたか書けない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxQZW1TY0lTUklmN2JmVC0zMm5qMUdfOUFjWk43S1NTS1RpcGx1Ni0tWkJCX1NXWDg1cHdzazZsQUZlREpWRkl2UER3S2t0TjFON1lXeTNNLXA4SXZYYjFjbXh0SnJzcXFGV2FPZkhoc1dNc1ZhUXNTRjdmX3R2SUR0ZlZwcHlnT2F2ZzdLdnNkQ1I5Sy1tRmVGTS1GTEpUTmRTWVlkYXRR?oc=5",
+      "title": "Fed's Jefferson says he is taking his policy cues from inflation - Reuters",
+      "published_at": "Sat, 14 Nov 2026 00:03:00 GMT",
+      "candidate_id": 16,
+      "verified_by": "Reuters報道",
+      "decision": "採用",
+      "reason": "B: FRBジェファーソン理事のインフレ重視発言をReuters報道（tier2）で確認し、候補6とまとめて主要なポイントに掲載"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/regulation/2026-11-14-louisiana-ag-calls-cftc-chair-an-obsequious-standard-bearer-for-prediction-markets-following-agency-lawsuit-440342",
+      "title": "Louisiana AG calls CFTC chair an ‘obsequious standard bearer’ for prediction markets following agency lawsuit",
+      "published_at": "Sat, 14 Nov 2026 19:06:59 +0000",
+      "candidate_id": 17,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): tier3単独で独立2ソースの相方が無く、単独では掲載不可"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/markets/2026-11-14-bitcoin-etfs-lose-1-billion-for-the-second-week-in-a-row-as-crypto-funds-except-one-continue-bleeding-440337",
+      "title": "Bitcoin ETFs lose $1 billion for the second week in a row as crypto funds, except one, continue bleeding",
+      "published_at": "Sat, 14 Nov 2026 17:50:41 +0000",
+      "candidate_id": 18,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): 候補28との重なり係数が閾値未満で独立2ソース不成立、単独では掲載不可"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/11/14/bitcoin-drifts-back-to-usd65-000-deep-value-zone-says-analyst",
+      "title": "Bitcoin slides to 3-month low below $64,000 as analyst flags fourth capitulation wave",
+      "published_at": "Sat, 14 Nov 2026 16:33:29 +0000",
+      "candidate_id": 19,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): tier3単独で独立2ソースの相方が無く、単独では掲載不可"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/11/14/ethereum-scaling-project-megaeth-slashes-staff-by-20-as-it-pursues-ai-business",
+      "title": "Ethereum scaling project MegaETH slashes staff by 20% as it pursues AI business",
+      "published_at": "Sat, 14 Nov 2026 16:33:23 +0000",
+      "candidate_id": 20,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): machine_pair_hintの相手候補27と重なりはあるが企業の人員削減という同一事実で独立2ソース成立とまでは判断せず、他材料優先のため上限4項目に入らない（順位外）"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/11/14/kazakhstan-plans-tokenized-government-bonds-in-first-quarter-after-usd22-million-note-sale",
+      "title": "Kazakhstan plans tokenized government bonds in first quarter after $22 million note sale",
+      "published_at": "Sat, 14 Nov 2026 15:38:27 +0000",
+      "candidate_id": 21,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): tier3単独で独立2ソースの相方が無く、単独では掲載不可"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/11/14/uk-singapore-and-thailand-central-banks-test-cross-border-fx-settlement-as-stablecoins-gain-ground",
+      "title": "UK, Singapore, and Thailand central banks test cross-border FX settlement as stablecoins gain ground",
+      "published_at": "Sat, 14 Nov 2026 15:00:00 +0000",
+      "candidate_id": 22,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): tier3単独で独立2ソースの相方が無く、単独では掲載不可"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/11/13/britain-could-turn-wasted-scottish-wind-power-into-bitcoin-to-cut-its-usd1-3-billion-grid-bill",
+      "title": "Britain could turn wasted Scottish wind power into bitcoin to cut its $1.3 billion grid bill",
+      "published_at": "Sat, 14 Nov 2026 13:00:00 +0000",
+      "candidate_id": 23,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): tier3単独で独立2ソースの相方が無く、単独では掲載不可"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/11/14/a-behind-the-scenes-force-may-amplify-bitcoin-and-ether-price-volatility",
+      "title": "A behind the scenes force may amplify bitcoin and ether price volatility",
+      "published_at": "Sat, 14 Nov 2026 12:57:00 +0000",
+      "candidate_id": 24,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): tier3単独の分析記事で独立2ソースの相方が無く、単独では掲載不可"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/what-happened-in-crypto-today?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Here’s what happened in crypto today",
+      "published_at": "Sat, 14 Nov 2026 11:28:12 +0000",
+      "candidate_id": 25,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): tier3単独の日次まとめ記事で独立2ソースの相方が無く、単独では掲載不可"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/microsoft-365-outage-resolved-cyberattack-ruled-out?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Microsoft confirms global outage resolved, rules out cyberattack",
+      "published_at": "Sat, 14 Nov 2026 10:34:06 +0000",
+      "candidate_id": 26,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: Microsoft障害復旧の内容で、波及経路を説明できない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/megaeth-parent-cuts-20-percent-staff-ai-push?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "MegaETH parent cuts 20% of staff amid restructuring, AI push",
+      "published_at": "Sat, 14 Nov 2026 08:12:30 +0000",
+      "candidate_id": 27,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): tier3単独で独立2ソースの相方が無く、単独では掲載不可"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/markets/bitcoin-etf-outflows-2-35-billion-blackrock-11-session-streak?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bitcoin ETFs shed $2.35B in 2 weeks, BlackRock’s losing streak hits 11",
+      "published_at": "Sat, 14 Nov 2026 06:33:13 +0000",
+      "candidate_id": 28,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): 候補18との重なり係数が閾値未満で独立2ソース不成立、単独では掲載不可"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/newsletters/the-daily/2026-11-14-meta-prediction-market-app-doj-binance-hack-more-crypto-news-440304",
+      "title": "Meta tests prediction-market app, DOJ moves to seize $1.2 billion from Binance hack, and more",
+      "published_at": "Sat, 14 Nov 2026 05:40:00 +0000",
+      "candidate_id": 29,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): tier3単独のニュースレターまとめで独立2ソースの相方が無く、単独では掲載不可"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/11/13/satoshi-era-wallet-served-in-a-usd260-billion-lawsuit-moves-75-btc-it-held-since-2011",
+      "title": "Satoshi-era wallet served in a $260 billion lawsuit moves 75 BTC it held since 2011",
+      "published_at": "Sat, 14 Nov 2026 04:30:00 +0000",
+      "candidate_id": 30,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): tier3単独で独立2ソースの相方が無く、単独では掲載不可"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/tech/2026/11/13/bitcoin-miners-pay-paraguay-usd350-million-a-year-but-ai-is-pushing-them-out",
+      "title": "Bitcoin miners pay Paraguay $350 million a year, but AI is pushing them out",
+      "published_at": "Fri, 13 Nov 2026 23:30:00 +0000",
+      "candidate_id": 31,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f): tier3単独で独立2ソースの相方が無く、単独では掲載不可"
+    }
+  ],
+  "reusable_for_summary": [],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 0
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 0
+    },
+    "FRB（speeches）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 1
+    },
+    "FRB（testimony）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 0
+    },
+    "米財務省": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "USTR": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "ホワイトハウス": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 0
+    },
+    "ホワイトハウス（大統領令等）": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 0
+    },
+    "ADP": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 8
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 5
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "The Block": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 3
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 49
+    }
+  },
+  "news_candidate_count": 31,
+  "format_normalized": {
+    "part1_points": 0,
+    "part2_flow": 0
+  },
+  "flow_price_fragment": " #BTC -6.85%、 #ETH -9.29%（24時間比）",
+  "part1_md": "【対象日】2026年11月14日（土）\n\n【ヘッドライン】\nFRBのジェファーソン理事は講演で、生産性動向を踏まえた金融政策運営上の論点に言及しました。\n\n【主要なポイント】\n・Reutersによると、FRBのコリンズ・ボストン連銀総裁は段階的な利上げが経済リスク管理に最も適切との見方を示し、ジェファーソン理事もインフレ動向を政策判断の手がかりにしていると述べたと報じられました（Reuters、11月14日）。\n・Reutersによると、イラン海軍はホルムズ海峡で石油タンカーが機雷に接触し火災が発生したと発表したと報じられました。被害・影響の詳細は未確認です（Reuters、11月14日）。\n・Reutersによると、トランプ米大統領は新たな挑発がない限りイランへの攻撃を当面見送る意向を周辺に伝えたと関係者の話として報じられました（Reuters、11月14日）。\n",
+  "part2_md": "【市場のフロー】\n①【出来事・ニュース】Reutersによると、FRBのコリンズ・ボストン連銀総裁は段階的な利上げが経済リスク管理に最も適切との見方を示し、ジェファーソン理事もインフレ動向を政策判断の手がかりにしていると述べたと報じられました（Reuters、11月14日） → 【地政学・マクロの変化】金融政策の運営姿勢を巡り、引き締め継続への警戒が市場で意識された可能性があります → 【暗号通貨価格】 #BTC -6.85%、 #ETH -9.29%（24時間比）で、同時期は、一時的に上値を試す場面があったものの、その後下落に転じ下げ幅を拡大する展開でした。\n②【出来事・ニュース】Reutersによると、イラン海軍はホルムズ海峡で石油タンカーが機雷に接触し火災が発生したと発表したと報じられました。被害・影響の詳細は未確認です（Reuters、11月14日） → 【地政学・マクロの変化】原油供給の要衝における緊張の高まりが、リスク回避姿勢を強める材料として意識された可能性があります → 【暗号通貨価格】 #BTC -6.85%、 #ETH -9.29%（24時間比）で、同時期は、変動幅を伴いながら下落する展開でした。\n③【出来事・ニュース】Reutersによると、トランプ米大統領は新たな挑発がない限りイランへの攻撃を当面見送る意向を周辺に伝えたと関係者の話として報じられました（Reuters、11月14日） → 【地政学・マクロの変化】軍事的緊張の当面の沈静化期待が、一方でリスクの先行き不透明感と併存する形で意識された可能性があります → 【暗号通貨価格】 #BTC -6.85%、 #ETH -9.29%（24時間比）で、同時期は、下げ幅を拡大したのち一部で下げ渋る場面も見られました。\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から上昇しました。\nBase 0.05%プールの参考APRは49.74%→94.80%へ上昇しました（24時間出来高 +64.72%、TVL -13.57%）。\nBase 0.3%プールの参考APRは108.33%→147.33%へ上昇しました（24時間出来高 +20.62%、TVL -11.31%）。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比-9.29%と下落中のため、ETH偏り・下限側レンジ外・下落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\nFRB高官の発言や中東情勢を巡る報道が相次ぎ、市場の不確実性は高い状態が続いています。今後も金融政策や地政学情勢の進展を見極める必要がありそうです。\n",
+  "numeric_record_md": "【対象日】2026年11月14日（土）\n\n【主要指標】\n・市場全体：時価総額 $2.150兆（¥343.5兆）｜24時間取引高 $965.2億（¥15.42兆）\n・ #BTC：$63,600（約1,016.3万円）｜24時間比 -6.85%\n・ #ETH：$1,747（約27.9万円）｜24時間比 -9.29%\n・ #BNB：$576（約9.20万円）｜24時間比 -8.68%\n・市場心理：Fear & Greed 14（Extreme fear、CoinMarketCap API）\n・ドミナンス：BTC 59.65%｜ETH 9.96%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年11月15日07:38 JST、USD/JPY ¥159.80\n\n【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $12.84M vs Base上ETH/USDC $178.86M｜参考：Base上DEX全体 $14.214億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $51.41億（¥8,215億）｜24時間比 -6.28%｜USDCドミナンス 83.5%\n・ ETH/USDC（Base）参考APR：0.05% 94.80%（TVL $5.75M／24h出来高 $29.85M）｜0.3% 147.33%（TVL $110.74M／24h出来高 $149.01M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年11月15日07:38 JST\n"
+}
