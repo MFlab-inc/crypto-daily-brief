@@ -4,15 +4,23 @@
 
 ## BTCは64,128ドルへ。11月14日末までの下落と、同じ時期に確認された材料を整理します
 
-情報基準日 2026年11月15日 ｜ 価格は米ドル建て・UTC日末（11月14日末＝日本時間11月15日午前9時）
-
-> 下書き。公開前に、末尾の「公開前に確認する項目」を確認してください。
+情報基準日 2026年11月14日末 ｜ 価格は米ドル建て・UTC日末（11月14日末＝日本時間11月15日午前9時）
 
 ### 今回の要点
 
 - **価格**　11月14日末のBTCは64,128.05ドルでした。10月31日末から17.18%、11月1〜14日の日末で最も高かった11月4日末（80,405.29ドル）から20.24%下落しました。ETHは1,769.12ドルで、10月31日末から21.47%下落しました。
 - **下落の速さ**　11月12日から14日の3日間で、BTCの24時間変化率は−3.54%、−4.34%、−6.04%と、下げ幅が広がりました。13日と14日のBTCの24時間出来高は、約430億ドルと約440億ドルでした。11月5日は約484億ドル、7日は約94億ドルでした。
-- **同じ時期に確認された材料**　米国の利上げ観測と長期金利の上昇、米株・ハイテク株の動揺、現物ETFからの資金流出、レバレッジ取引の強制決済（清算）、ストラテジーの株価指数除外の決定（実施は11月末）、暗号資産業界の個別材料の6つです。これらの材料と価格の動きの関係は、本稿では判断していません。
+- **同じ時期に確認された材料**　米国の利上げ観測と長期金利の上昇、米株・ハイテク株の動揺、現物ETFからの資金流出、レバレッジ取引の強制決済（清算）、ストラテジーの株価指数除外の決定（実施は11月末）、暗号資産業界の個別材料の6つです。
+
+### 追記　11月15日末の値
+
+公開が11月16日以降になるため、11月15日末の値を追記します。本文の基準日は11月14日末のままです。
+
+- 11月15日末：BTC 65,305.06ドル（前日末比+1.84%、10月31日末比−15.66%）
+- 11月15日末：ETH 1,835.50ドル（前日末比+3.75%、10月31日末比−18.52%）
+- ETHは±10%と±18%のレンジ下限（約2,027ドル、約1,847ドル）を引き続き下回っています。
+
+出典 [CoinMarketCap・11月15日のHistorical Snapshot](https://coinmarketcap.com/historical/20261115/)
 
 ## 01　主要5銘柄の動き
 
@@ -28,7 +36,7 @@
 
 各日の価格はCoinMarketCapがUTC日末に集計した値です。日付の切り替わりは日本時間の翌朝9時です。下落率は「11月14日末価格 ÷ 比較日の末価格 − 1」で計算しました。
 
-出典 CoinMarketCap・10月31日 ／ CoinMarketCap・11月4日 ／ CoinMarketCap・11月11日 ／ CoinMarketCap・11月14日
+出典 CoinMarketCap・Historical Snapshot（[10月31日](https://coinmarketcap.com/historical/20261031/) ／ [11月4日](https://coinmarketcap.com/historical/20261104/) ／ [11月11日](https://coinmarketcap.com/historical/20261111/) ／ [11月14日](https://coinmarketcap.com/historical/20261114/)）
 
 ### 日次の価格
 
@@ -51,13 +59,13 @@
 
 BTCの24時間変化率と24時間出来高は、CoinMarketCapの各日末のスナップショットに表示された値です。11月7日のBTCの24時間変化率は、同サイトの表示では「0.01%未満の上昇」でした。
 
-出典 CoinMarketCap・11月1日〜14日の各日末のスナップショット
+出典 CoinMarketCap・11月1日〜14日の各日末のHistorical Snapshot（URLは各日付 `https://coinmarketcap.com/historical/2026MMDD/`）
 
 ### 投資家心理
 
-CoinMarketCapの恐怖・強欲指数は、11月1日朝の36（Fear）から、11月15日朝は14（Extreme fear）になりました。取得時刻は、価格の基準時点（日本時間9時）の約1〜1.5時間前です。
+CoinMarketCapの恐怖・強欲指数は、投資家心理を0〜100で表す指標で、低いほど恐怖が強いことを示します。11月1日朝の36（Fear）から、11月15日朝は14（Extreme fear）になりました。取得時刻は、価格の基準時点（日本時間9時）の約1〜1.5時間前です。
 
-出典 当社の日次データ（CoinMarketCap・取得時刻 11月1日7:37／11月15日7:38 JST）
+出典 CoinMarketCap・恐怖・強欲指数（取得時刻 11月1日7:37／11月15日7:38 JST）
 
 ## 02　同じ時期に確認された6つの材料
 
@@ -65,60 +73,66 @@ CoinMarketCapの恐怖・強欲指数は、11月1日朝の36（Fear）から、1
 
 ### ① 米国の利上げ観測と長期金利の上昇
 
-FRBは10月28日のFOMC（米連邦公開市場委員会）で、政策金利を3.75〜4.00%に据え置きました。採決は10対2で、反対した2人（クック理事とハマック・クリーブランド連銀総裁）は0.25ポイントの利上げを求めました。その後、物価と雇用の指標が続きました。
+FRB（米連邦準備制度理事会）は10月28日のFOMC（米連邦公開市場委員会。政策金利を決める会合）で、政策金利を3.75〜4.00%に据え置きました。採決は10対2で、反対した2人（クック理事とハマック・クリーブランド連銀総裁）は0.25ポイントの利上げを求めました。その後、物価と雇用の指標が続きました。
 
 - 11月6日　10月の雇用統計で、非農業部門雇用者数は16.5万人増、失業率は4.1%でした（米労働統計局）。
-- 11月10日　10月の消費者物価指数（CPI）は前月比0.4%上昇（9月は0.6%上昇）、食品とエネルギーを除くコアは0.3%上昇でした（米労働統計局）。市場予想はそれぞれ0.3%と0.2%でした（当社の日次収集。Reuters、CoinDeskの報道）。
-- 11月13日　10月の卸売物価指数（PPI）は前月比0.3%上昇（9月は1.4%上昇）で、前年同月比は6.5%上昇と、2022年11月以来の大きな伸びでした（米労働統計局）。
-- FRB当局者の発言　ウォラー理事は10日の講演で、12月のFOMCで少なくとも0.25ポイントの利上げを支持し、0.5ポイントの利上げもあり得ると述べたと報じられました（Reuters、CoinDesk）。ハマック総裁（12日）とコリンズ・ボストン連銀総裁（14日）は緩やかな利上げの継続を支持し、ウィリアムズ・ニューヨーク連銀総裁（12日）とジェファーソン副議長（13日）はインフレ率が目標を大きく上回っているとの認識を示したと報じられました（Reuters）。
-- 米国債の利回り（米財務省の公表値）　10年物は6日に4.86%、10日に4.98%、12日に5.10%、13日に5.15%と上昇しました。
-- 利上げの織り込み　12月8〜9日のFOMCで0.25ポイントの利上げが行われる確率は、6日に約78%（5日は約67%）と報じられました（Reuters）。10日付のCointelegraphは、ウォラー氏の講演後に利上げの織り込みが96%に達したと、14日付の24/7 Wall St.は12月9日の決定で0.25ポイントの追加利上げを89%織り込んでいると伝えています。数字は時点と提供元で異なります。
-- ドル　ドル指数が19か月ぶりの高値をつけたと報じられました（CoinDesk・11月13日）。
+- 11月10日　10月の消費者物価指数（CPI。物価の動きを示す統計）は前月比0.4%上昇（9月は0.6%上昇）、食品とエネルギーを除くコアは0.3%上昇でした（米労働統計局）。Motley Foolは、この発表を予想を上回るインフレ指標と伝えています。
+- 11月13日　10月の卸売物価指数（PPI。企業どうしで取引されるモノやサービスの価格）は前月比0.3%上昇（9月は1.4%上昇）で、前年同月比は6.5%上昇と、2022年11月以来の大きな伸びでした（米労働統計局）。
+- FRB当局者の発言　ウォラー理事は11月10日の講演で、10月のCPIの発表を数時間後に控え、物価が想定どおり改善しても12月のFOMCで0.25ポイントの利上げを支持すると述べました。また、CPIが直近2か月と同程度（コアCPIが0.3%前後かそれ以上）なら、12月に0.5ポイントの利上げを検討すべきだとしました（FRB）。ジェファーソン副議長は11月13日の講演で、インフレ率はFOMCの目標の2%を著しく上回っているとし、エネルギー価格の上昇が物価上昇を幅広く長引かせるリスクに懸念を示しました（FRB）。
+- 米国債の利回り（米財務省の公表値）　10年物は11月6日に4.86%、10日に4.98%、12日に5.10%、13日に5.15%と上昇しました。
+- 利上げの織り込み　「織り込み」とは、先物価格から計算した、市場が見込む確率のことです。24/7 Wall St.（11月14日）は、12月9日の決定で0.25ポイントの追加利上げが行われる確率を89%としています。Motley Fool（11月13日）は、0.25ポイントの利上げは「ほぼ確実」と書いています。
+- ドル　ドル指数（主要通貨に対するドルの強さを示す指数）が19か月ぶりの高値をつけたと、CoinDeskは11月13日の記事の見出しで伝えました。Motley Foolも、ドル高に触れています。
 
-出典 FRB・10月声明、ウォラー理事の講演（11月10日） ／ BLS・10月雇用統計 ／ BLS・10月CPI ／ BLS・10月PPI ／ 米財務省・日次の利回り（当社の日次収集で確認） ／ Reuters・11月6日〜14日 ／ CoinDesk・11月13日 ／ Cointelegraph・11月10日 ／ 24/7 Wall St.・11月14日
+出典 [FRB・10月28日FOMC声明](https://federalreserve.gov/newsevents/pressreleases/monetary20261028a.htm) ／ FRB・ウォラー理事の講演（[11月10日](https://www.federalreserve.gov/newsevents/speech/waller20261110a.htm)）、[ジェファーソン副議長の講演（11月13日）](https://www.federalreserve.gov/newsevents/speech/jefferson20261113a.htm) ／ 米労働統計局（BLS）・[雇用統計](https://www.bls.gov/news.release/empsit.nr0.htm)（公表時点の版：[2026年10月分](https://www.bls.gov/news.release/archives/empsit_11062026.htm)）、[CPI](https://www.bls.gov/news.release/archives/cpi_11102026.htm)、[PPI](https://www.bls.gov/news.release/ppi.nr0.htm)（公表時点の版：[2026年10月分](https://www.bls.gov/news.release/archives/ppi_11132026.htm)） ／ [米財務省・日次の米国債利回り](https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve&field_tdr_date_value_month=202611) ／ [24/7 Wall St.・2026年11月14日](https://247wallst.com/investing/cryptocurrency/2026/11/14/why-is-bitcoin-crashing-this-week/) ／ [Motley Fool・2026年11月13日](https://www.fool.com/investing/2026/11/13/why-bitcoin-is-falling-today/) ／ [CoinDesk・2026年11月13日](https://www.coindesk.com/markets/2026/11/13/bitcoin-dips-below-usd70-000-as-selloff-gathers-pace)
 
 ### ② 米株・ハイテク株の動揺
 
-- 11月5日　米株は大きく下げ、CoinDeskは「2025年4月以来の最悪の日」と伝えました。ReutersもナスダックがAI関連の支出への懸念から調整局面入りしそうだと伝えました。同じ日の動きとして、BTCは日末ベースで5.55%下落しました。The Blockは、この株安の局面で暗号資産の清算が10億ドルを超えたと伝えました。
-- 11月12日　NVIDIAのジェンセン・フアン氏が社長・CEO・取締役を同日付で退き、CFOのコレット・クレス氏が暫定CEOを務めると報じられました（NVIDIA発表、CoinDesk、Cointelegraph）。株価は一時大きく下落したと報じられました。
-- 11月13日　米株は下落し、NVIDIAをめぐる不透明感がハイテク株の重しになったと報じられました（Reuters）。Anthropicの新規株式公開（IPO）が近いことも、市場の話題になっています（CoinDesk、Reuters）。
+- 11月5日　CoinDeskは、ライブ記事の見出しで、米株が「2025年4月以来の最悪の日」を終えたと伝えました。同じ日の動きとして、BTCは日末ベースで5.55%下落しました。
+- 11月12日　NVIDIAの取締役会は、創業者のジェンセン・フアン氏の社長・CEO・取締役の辞任を11月11日に受理し（即日発効）、同社は11月12日に発表しました。CFOのコレット・クレス氏が暫定CEOを務めます（SEC提出書類・Form 8-K）。Cointelegraphによると、株価は寄り付き直後に一時13%超下落し、その後、下落幅は約5%に縮まりました。Cointelegraphは、BTCもNVIDIA株と並んで下落し、最大3.5%下げて数か月ぶりの安値をつけたと伝えています。同社は四半期決算を11月17日に発表する予定です（Cointelegraph）。
+- 11月13日　Motley Foolによると、米東部時間13時11分の時点で、S&P500種指数は0.8%、ナスダック総合指数は1.2%下落していました。CoinDeskは見出しで、AnthropicのIPO（新規株式公開）をめぐる熱狂が市場の不安材料になっていると伝えました。
 
-出典 CoinDesk・11月5日、12日、13日 ／ Reuters・11月5日、13日 ／ The Block・11月5日 ／ Cointelegraph・11月12日 ／ NVIDIA発表（当社の日次収集で確認）
+出典 [CoinDesk・11月5日](https://www.coindesk.com/business/2026/11/05/live-updates-bitcoin-steady-around-usd80-000-as-markets-rally-after-democra) ／ [SEC・NVIDIA Form 8-K](https://www.sec.gov/Archives/edgar/data/0001045810/000104581026000082/nvda-20261111.htm) ／ [Cointelegraph・11月12日（NVIDIA）](https://cointelegraph.com/news/jensen-huang-resigns-nvidia-ceo-board-member) ／ [Motley Fool・11月13日](https://www.fool.com/investing/2026/11/13/why-bitcoin-is-falling-today/) ／ [CoinDesk・11月13日（Anthropic）](https://www.coindesk.com/markets/2026/11/13/bitcoin-slides-to-usd68k-as-nvidia-turmoil-anthropic-ipo-fuel-broader-market-sell-off)
 
 ### ③ 現物ETFからの資金流出
 
-- 11月13日の米国の現物BTC ETFは、1.854億ドルの純流出でした。そのうちブラックロックのIBITが1.435億ドルでした（Cointelegraph・11月14日）。
-- IBITの流出は11営業日連続とCointelegraphは伝えています。米国の現物BTC ETF全体では、13日まで7営業日連続の流出と24/7 Wall St.は伝えています。対象が異なります。
-- 週ごとの流出額は、11月6日までの週が約12.8億ドル（The Block・11月7日）、13日までの週が約10.7億ドル（24/7 Wall St.）です。Cointelegraphは2週間で23.5億ドルとし、The Blockは2週連続で10億ドル規模の流出としています（11月14日）。
-- CoinDeskは、BTC ETFの2026年の累計が15億ドルを超える純流出になったと伝えました（11月13日）。
+現物ETFは、暗号資産の現物を裏付けとする上場投資信託で、株のように証券取引所で売買できます。IBITは、ブラックロックが運用するビットコインの現物ETFです。Cointelegraphは、Farside Investorsのデータとして、次のように伝えています（11月14日）。
 
-出典 Cointelegraph・11月14日 ／ The Block・11月7日、14日 ／ CoinDesk・11月13日 ／ 24/7 Wall St.・11月14日
+- 11月13日の米国の現物BTC ETFは、1.854億ドルの純流出でした。そのうちIBITが1.435億ドル、フィデリティのFBTCが4,190万ドルでした。11月12日は2.841億ドル、11月11日は2.998億ドルの純流出でした。
+- 純流出は11月13日まで7営業日連続で、11月5日以降の累計は約17.1億ドルです。IBITの流出は10月30日から11営業日連続で、11月の流出額は21.2億ドルと、市場全体の純流出の約9割を占めます。
+- 週ごとでは、11月9〜13日が約10.7億ドル、その前の週が約12.8億ドル（6月下旬以来の大きさ）で、2週間で23.5億ドルです。
+- 24/7 Wall St.も、13日までの7営業日連続の流出と、その週の約10.7億ドルの流出を伝えています。
+
+CoinDeskは、11月13日の記事の見出しで、BTC ETFの2026年の累計が15億ドルを超える純流出になったと伝えました。
+
+出典 [Cointelegraph・2026年11月14日](https://cointelegraph.com/markets/bitcoin-etf-outflows-2-35-billion-blackrock-11-session-streak)（Farside Investorsのデータ） ／ [24/7 Wall St.・2026年11月14日](https://247wallst.com/investing/cryptocurrency/2026/11/14/why-is-bitcoin-crashing-this-week/) ／ [CoinDesk・2026年11月13日](https://www.coindesk.com/markets/2026/11/13/bitcoin-etfs-are-now-down-over-usd1-5-billion-in-net-outflows-for-the-year)
 
 ### ④ レバレッジ取引の強制決済（清算）
 
-- The Blockは、11月13日（UTC）6時台の記事で、過去4時間に暗号資産全体で7.98億ドルが清算されたと伝えました。
-- CoinDeskは、11月13日付の記事で、清算額が16億ドルを超えたとしています。
+レバレッジ取引は、資金を借りて元手より大きな金額を取引する方法です。損失が預けた証拠金を超えそうになると、取引所が強制的に決済します。これが清算です。買い持ち（ロング）は、価格が上がると利益が出る取引です。
+
 - 24/7 Wall St.は、24時間でビットコインのレバレッジ取引6.37億ドルが清算され、91%が買い持ちだったとしています（11月14日）。
+- CoinDeskは、11月13日の記事の見出しで、清算額が16億ドルを超えたと伝えました。
+- The Blockは、11月13日の記事の書き出しで、過去4時間に暗号資産全体で7.98億ドルが清算されたと伝えました。
 
 集計の対象（BTCのみ／暗号資産全体）と時間帯が出典ごとに異なる、または不明なため、金額は合算できません。
 
-出典 The Block・11月13日 ／ CoinDesk・11月13日 ／ 24/7 Wall St.・11月14日
+出典 [24/7 Wall St.・2026年11月14日](https://247wallst.com/investing/cryptocurrency/2026/11/14/why-is-bitcoin-crashing-this-week/) ／ [CoinDesk・2026年11月13日](https://www.coindesk.com/markets/2026/11/13/bitcoin-hits-12-week-low-as-dollar-rallies-on-interest-rate-outlook-liquidations-top-usd1-6-billion) ／ [The Block・2026年11月13日](https://www.theblock.co/news/markets/2026-11-13-bitcoin-tumbles-below-69000-439643)
 
 ### ⑤ ストラテジーの株価指数からの除外
 
-MSCIが、ビットコインを大量に保有する米ストラテジーを、11月末（11月30日）に世界の株価指数から外すことを確認したと報じられました（Cointelegraph、The Block、24/7 Wall St.）。メタプラネットもMSCIの指数から外れると報じられました。ストラテジーの株価は12日に5%下落しました（Cointelegraph）。CoinDeskは、この除外が同社のビットコイン購入の余力を損なう可能性があると伝えました（記事の冒頭のみ確認）。
+MSCIは、世界の株価指数を算出する会社です。多くの投資信託が、この指数に連動するように運用されています。MSCIは、ビットコインを大量に保有する米ストラテジーを、11月30日の取引終了後に世界の株価指数から外すことを確認しました。メタプラネットなども外れます。除外されると、指数に連動するファンドが株を売る可能性があります。JPモルガンは以前、約28億ドルの売りにつながりうると試算しました。一方、ストラテジーは、MSCIに連動するファンドの保有は発行済み株式の約3.1%だと説明しています。ストラテジーの株価は11月12日に6.49%下落し、終値は114.41ドルでした（Cointelegraph）。
 
-出典 Cointelegraph・11月12日 ／ The Block・11月13日 ／ CoinDesk・11月12日 ／ 24/7 Wall St.・11月14日
+出典 [Cointelegraph・11月12日（MSCI）](https://cointelegraph.com/news/msci-confirms-strategys-removal-from-indexes-end-november) ／ [Cointelegraph・11月12日（ストラテジーの株価）](https://cointelegraph.com/markets/strategy-shares-fall-5-msci-index-removal-bitcoin)
 
 ### ⑥ 暗号資産業界の個別材料
 
-- バイナンスの約63億ドルの不正流出（10月29日）　FBIが北朝鮮の関与を指摘したと報じられました（CoinDesk、Cointelegraph・11月1日）。米司法省は11月12日、盗まれた資産のうち12億ドル超の差し押さえ・凍結を裁判所から認められたと発表しました。バイナンスは11月14日、今週87のネットワークで出金を再開したと公表し、残りも来週末までの再開を目指すとしています（Reuters）。
-- 11月6日　米財務省のFinCENは、取引所MEXC Globalをめぐる取引について、米国の金融機関が関連の送金を扱うことを禁じる命令を出しました。
-- 同時期のその他の材料　Coinbaseの信託会社が、条件付きではない正式な国法信託銀行の認可を得たと11月9日に明らかにしました（米通貨監督庁の記録では効力は11月6日付）。開発企業のAva Labsは、NYSEが計画するトークン化証券の取引の場でアバランチの技術が使われると発表しました（11月9日。規制当局の承認が前提）。ホワイトハウスは12日、SEC・CFTCの委員候補を上院に送りました。
+- **バイナンスの約63億ドルの不正流出（10月29日）**　FBIは、北朝鮮のハッカー集団「TraderTraitor」による犯行だと指摘しました。北朝鮮は関与を否定しています。米司法省は11月12日、盗まれた資産のうち12億ドル超の差し押さえ・凍結について、裁判所の許可を得たと発表しました。米当局と民間の協力先が凍結した資産は、27億ドル超にのぼります。バイナンスは、影響を受けた資産を自社の資金で補填したと説明しています。
+- **11月6日**　米財務省のFinCEN（金融犯罪取締ネットワーク）は、取引所MEXC Globalが、制裁回避やサイバー犯罪などの不正に関わる少なくとも160億ドルの取引（イラン、ロシア、北朝鮮の制裁対象との取引を含む）に関与したとして、米国の金融機関が同社との送金を扱うことを禁じる命令を出しました。命令は、連邦官報への掲載から30日後に発効します。
+- **同時期のその他の材料**　Coinbaseの国法信託銀行の認可が、米通貨監督庁（OCC）の記録で11月6日に有効になりました。NYSEは11月9日、トークン化株式の取引の場（24時間取引を目指す計画）の決済に、アバランチのブロックチェーンを使うと発表しました。The Blockの見出しによると、ホワイトハウスは11月12日、SECとCFTCの委員候補を上院に送りました。
 
-出典 米司法省の発表（当社の日次収集で確認） ／ CoinDesk・11月1日、13日 ／ Cointelegraph・11月1日 ／ FinCEN ／ 米通貨監督庁 ／ Ava Labs ／ Reuters・The Block
+出典 [米司法省](https://www.justice.gov/usao-cdca/pr/justice-department-announces-actions-disrupt-north-koreas-massive-theft-cryptocurrency) ／ [Cointelegraph・11月1日（FBI）](https://cointelegraph.com/news/fbi-blames-north-korea-for-record-63b-binance-hack)、[11月3日（北朝鮮の否定）](https://cointelegraph.com/news/north-korea-denies-role-in-63b-binance-hack-points-finger-at-us)、[11月13日（司法省）](https://cointelegraph.com/news/doj-12b-north-korean-crypto-seizure-400m-facestealer-scheme)、[11月6日（FinCEN）](https://cointelegraph.com/news/us-treasury-bans-mexc-over-alleged-16b-illicit-transactions)、[Coinbase](https://cointelegraph.com/news/coinbase-occ-approval-national-trust-bank-charter)、[NYSEとアバランチ](https://cointelegraph.com/news/avalanche-avax-crypto-nyse-tokenization-deal) ／ [The Block・11月12日](https://www.theblock.co/news/regulation/2026-11-12-white-house-crypto-picks-sec-cftc-439175)
 
-なお、中東情勢（ホルムズ海峡でのタンカー被害の主張、イエメンの武装組織フーシ派によるサウジアラビアへの攻撃の主張）も、同じ時期に報じられました。被害の詳細は確認されていません（Reuters・11月12日〜14日）。
+なお、Reutersは11月12日〜14日に、ホルムズ海峡でのタンカー被害をイランが主張したことや、イエメンの武装組織フーシ派によるサウジアラビアへの攻撃の主張を報じました。被害の詳細は確認されていません。
 
 ## 03　市場関係者の見方
 
@@ -126,46 +140,29 @@ MSCIが、ビットコインを大量に保有する米ストラテジーを、1
 
 - 24/7 Wall St.（11月14日）は、6つの要因を挙げ、金利、ETFの流出、強制決済の3つが特に重いとしました。4番目がストラテジーの指数除外、5番目がマイナー（ビットコインの採掘企業）で、ハイテク株は「根拠が薄い」として最後に置いています。清算は早く落ち着きやすい一方、ETFの流れは純流入の日が出れば変わりうると述べています。
 - Motley Foolの寄稿者ジョニー・ライス氏（11月13日）は、予想を上回ったインフレ指標が主な要因で、ドル高と長期金利の上昇も圧力になり、清算が下げを加速させたと説明しました。12月に利上げがあれば圧力が続くと「考えている」と書いています。
-- CoinDeskは11月13日の記事で、アナリストらがNVIDIAとビットコインの下落に直接の関連は見ておらず、Anthropicの新規株式公開に向かう資金の動きを指摘したと伝えました（見出しと冒頭のみ確認）。The Blockは11月12日の記事の見出しと副見出しで、フアン氏の退任とMSCIのストラテジー除外確認が重なった局面で、BTCが12週間ぶりの安値をつけたと伝えています。
+- CoinDeskは11月13日の記事の見出しと書き出しで、アナリストらがNVIDIAとビットコインの下落に直接の関連は見ておらず、Anthropicの新規株式公開に向かう資金の動きを指摘したと伝えました。The Blockは11月12日の記事の見出しで、フアン氏の退任が市場を動揺させたとし、書き出しでMSCIのストラテジー除外確認にも触れています。
 - CoinDeskは11月14日、アナリストのジェームズ・チェック氏が「（売り手は）3か月前に活用したかったまさにその価格で今売っている」と書いたと伝え、見出しで「4回目の降参売り（キャピチュレーション）」に触れています。
 - Bespoke Investment Groupは、XでBTCが「売られすぎの領域の深く（deep into oversold territory）」にあると述べたと、24/7 Wall St.が伝えています。
 
-出典 24/7 Wall St.・11月14日 ／ Motley Fool・11月13日 ／ CoinDesk・11月13日、14日 ／ The Block・11月12日
+出典 [24/7 Wall St.・11月14日](https://247wallst.com/investing/cryptocurrency/2026/11/14/why-is-bitcoin-crashing-this-week/) ／ [Motley Fool・11月13日](https://www.fool.com/investing/2026/11/13/why-bitcoin-is-falling-today/) ／ [CoinDesk・11月13日](https://www.coindesk.com/markets/2026/11/13/bitcoin-slides-to-usd68k-as-nvidia-turmoil-anthropic-ipo-fuel-broader-market-sell-off)、[11月14日](https://www.coindesk.com/markets/2026/11/14/bitcoin-drifts-back-to-usd65-000-deep-value-zone-says-analyst) ／ [The Block・11月12日](https://www.theblock.co/news/markets/2026-11-12-bitcoin-12-week-low-jensen-huang-exit-nvidia-438992)
 
 ## 04　LPで確認したいこと
 
-10月31日末のETH価格（2,252.75ドル）を中心に機械的に計算すると、±10%のレンジは約2,027〜2,478ドル、±18%は約1,847〜2,658ドル、±25%は約1,690〜2,816ドルです。11月14日末のETHは1,769.12ドルで、±10%と±18%の下限を下回り、±25%の下限は上回っています。
+LPは、ETHとUSDCなどを交換用に預けて手数料を得る、流動性提供のことです。Uniswap V3では、価格帯（レンジ）を決めて資金を預けます。価格がそのレンジの外に出ると、手数料が発生しません。
 
-V3では、価格が設定したレンジの外に出ると、手数料が発生しません。価格がレンジの下限を下回ると、保有資産はETHに偏ります。保有しているETHの量、再設定の費用、待機資金の余力を、現在の価格で確認します。
+10月31日末のETH価格（2,252.75ドル）を中心に機械的に計算すると、±10%のレンジは約2,027〜2,478ドル、±18%は約1,847〜2,658ドル、±25%は約1,690〜2,816ドルです。11月14日末のETHは1,769.12ドルで、±10%と±18%の下限を下回り、±25%の下限は上回っています。価格がレンジの下限を下回ると、保有資産はすべてETHになります。保有しているETHの量、再設定の費用、待機資金の余力を、現在の価格で確認します。これは10月31日末の価格を中心にした試算で、各自の実際のレンジとは異なります。
 
-出典 CoinMarketCap・10月31日、11月14日 ／ Uniswap・集中流動性
+出典 CoinMarketCap・10月31日、11月14日 ／ [Uniswap・集中流動性](https://developers.uniswap.org/docs/get-started/concepts/liquidity-providers/concentrated-liquidity)
 
 ## 05　今後の確認点
 
-- 11月17日（米国時間）　NVIDIAの四半期決算（予定とされています。当社の日次収集）
-- 11月30日　ストラテジーとメタプラネットのMSCI指数からの除外
-- 12月8〜9日　FOMC（FRBの金融政策会合）
+- 11月17日（米国時間）　NVIDIAの四半期決算
+- 11月30日の取引終了後　ストラテジーとメタプラネットなどのMSCI指数からの除外
+- 12月8〜9日　FOMC
 - 随時　現物ETFの資金流出入、清算の規模、恐怖・強欲指数
 
-## 出典・計算資料
+出典 Cointelegraph・11月12日 ／ FRB・FOMC会合日程
 
-CoinMarketCap：2026年10月31日、11月1日〜14日のHistorical Snapshot
-FRB：2026年10月28日FOMC声明、FOMC会合日程
-米労働統計局（BLS）：2026年10月の雇用統計（11月6日公表）、10月CPI（11月10日公表）、10月PPI（11月13日公表）
-米財務省：日次の米国債利回り（当社の日次収集）
-Reuters、CoinDesk、The Block、Cointelegraph：各日付の記事
-24/7 Wall St.（2026年11月14日）、Motley Fool（2026年11月13日）
-米司法省、FinCEN、米通貨監督庁、NVIDIA、Ava Labs：各発表（当社の日次収集）
+## 注記
 
-本記事は2026年11月15日時点の市場動向を、同じ時期に確認できた材料とともに整理するものです。これらの材料と価格の動きの関係は判断していません。市場関係者の見方は、各媒体や寄稿者の見解です。投資の助言ではありません。
-
----
-
-## 公開前に確認する項目（公開しない）
-
-1. **基準点**　「昨日の市場締め」を、CoinMarketCapのUTC日末（11月14日末＝日本時間11月15日9時）としています。CoinMarketCapのスナップショットには時刻の記載がなく、貴社の月次レポートと同じ扱いです。当社の日次データ（11月15日7:38の取得値、BTC 63,600ドル）とは時刻が違うため、数値も違います。恐怖・強欲指数の取得時刻は、価格の基準時点とずれています。
-2. **本文を読めていない出典**　Reuters、CoinDesk、The Block、Cointelegraphの記事は、当社の日次収集に残る見出しと冒頭（200字前後）だけを確認しています。ETFと清算の金額、FRB当局者の発言、ドル指数、Anthropicの新規株式公開に関する記述が該当します。本文は、CoinMarketCap、BLS、FRB、Motley Fool、24/7 Wall St.を通読しました。
-3. **一次情報を直接確認できなかったもの**　Farside Investors（ETF。サイトの接続制限で取得できませんでした）、CoinGlass（清算）、米財務省（利回り）、MSCI、NVIDIA（SEC提出書類）、米司法省、FinCEN、米通貨監督庁、バイナンス公式X、FBI。ETFと清算は、複数の媒体の報道を並べ、集計の違いを明記しています。
-4. **NVIDIA**　退任の内容（フアン氏の退任、クレス氏の暫定CEO就任）は、SEC提出書類（Form 8-K）の内容を検索結果の要約で確認しました。決算日（11月17日）は当社の日次収集の記載です。公開前にSEC EDGARの原文とNVIDIAの発表を確認してください。
-5. **利上げ確率**　報道の数字で、時点と提供元が異なります。公開時点のCME FedWatchの値で更新してください。
-6. **LPの記述**　10月31日末のCoinMarketCapの価格を中心にした機械的な計算で、貴社の10月号と同じ考え方です。「レンジ外では手数料が発生しない」という仕組みの説明は、貴社の10月号と同じ出典（Uniswap・集中流動性）に基づきます。公開前に出典の原文を確認してください。
+本記事は2026年11月14日末の市場動向を、同じ時期に確認できた材料とともに整理するものです。これらの材料と価格の動きの関係は判断していません。市場関係者の見方は、各媒体や寄稿者の見解です。LPの数値は条件を固定した理論試算です。投資の助言ではありません。
