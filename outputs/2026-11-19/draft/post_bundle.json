@@ -1,0 +1,558 @@
+{
+  "target_date_jst": "2026-11-19",
+  "level": "L0",
+  "sections": {
+    "part0_target_date": "2026年11月19日（木）",
+    "part1_headline": "SECはコロラド拠点の8事業体を、偽の暗号資産取引プラットフォームで米国の投資家から3,700万ドル超をだまし取ったとして提訴したと発表しました。",
+    "part1_points": "・FRBのジェファーソン副議長はブラジルでの国際会議講演で、頻発する複雑なショックのもとでの金融政策運営について見解を述べました（FRB、11月19日）。\n・Reutersによると、J.P.モルガンはインフレの粘着性が続く中、FRBが次の3回の会合で利上げを行うとの見通しを示したと報じられました（Reuters、11月19日）。\n・Reutersによると、ロシアはタタールスタン地域の石油施設に対するウクライナのドローン攻撃を撃退したと地元当局が発表したと報じられました。被害・影響は未確認です（Reuters、11月19日）。\n・Reutersによると、フーシ派によるサウジアラビアへの攻撃が相次いでおり、同国の政府系ファンド本部が入る高層ビルが着弾を受けたと報じられました。被害・影響は未確認です（Reuters、11月19日）。",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.131兆（¥339.5兆）｜24時間取引高 $751.5億（¥11.98兆）\n・ #BTC：$62,200（約991.2万円）｜24時間比 -0.50%\n　（24時間レンジ $61,350〜$64,024）\n・ #ETH：$1,763（約28.1万円）｜24時間比 -0.04%\n　（24時間レンジ $1,734〜$1,816）\n・ #BNB：$581（約9.26万円）｜24時間比 +0.42%\n・市場心理：Fear & Greed 10（Extreme fear、CoinMarketCap API）\n・ドミナンス：BTC 58.71%｜ETH 10.11%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年11月20日07:37 JST、USD/JPY ¥159.36",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $6.82M vs Base上ETH/USDC $273.57M｜参考：Base上DEX全体 $9.939億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $48.65億（¥7,753億）｜24時間比 -3.29%｜USDCドミナンス 83.9%\n・ ETH/USDC（Base）参考APR：0.05% 137.61%（TVL $25.63M／24h出来高 $193.28M）｜0.3% 102.57%（TVL $85.71M／24h出来高 $80.29M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年11月20日07:37 JST",
+    "part2_flow": "①【出来事・ニュース】SECはコロラド拠点の8事業体を、偽の暗号資産取引プラットフォームで米国の投資家から資金をだまし取ったとして提訴したと発表しました（SEC、11月19日） → 【暗号通貨価格】 #BTC -0.50%、 #ETH -0.04%（24時間比）で、同時期はETHが高値から安値まで下押す場面も見られる中、BTC・ETHともに小幅な下落となりました。\n②【出来事・ニュース】Reutersによると、J.P.モルガンはインフレの粘着性が続く中、FRBが次の3回の会合で利上げを行うとの見通しを示したと報じられました（Reuters、11月19日） → 【地政学・マクロの変化】金融引き締めの長期化が市場で意識された可能性があります → 【中間市場指標・市場心理】利上げ観測を背景にリスク資産への警戒感が強まったとの報道が確認できます → 【暗号通貨価格】 #BTC -0.50%、 #ETH -0.04%（24時間比）で、同時期はETHが日中に下押す場面を交えつつ、BTC・ETHともに小幅な下落となりました。",
+    "lp_comment": "参考APRは両プールとも前日から上昇しました。\nBase 0.05%プールの参考APRは104.21%→137.61%へ上昇しました（24時間出来高 +40.10%、TVL +6.10%）。\nBase 0.3%プールの参考APRは73.12%→102.57%へ上昇しました（24時間出来高 +37.32%、TVL -2.11%）。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比-0.04%と下落中のため、ETH偏り・下限側レンジ外・下落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "暗号資産詐欺を巡る規制当局の摘発やFRBの金融政策見通しを巡る報道が相次ぎ、市場心理は不透明感を帯びやすい局面です。インフレの粘着性や地政学リスクの帰趨については、今後の報道や指標の確認が必要です。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "ETH一時上下動も概ね横ばい、BTC・BNBは小動き",
+  "audit_ledger": [
+    {
+      "source": "SEC",
+      "url": "https://www.sec.gov/newsroom/press-releases/2026-115-sec-eight-entities-used-fake-crypto-asset-trading-platforms-steal-more-37-million-us-investors",
+      "title": "SEC: Eight Entities Used Fake Crypto Asset Trading Platforms to Steal More Than $37 Million From U.S. Investors",
+      "published_at": "Thu, 19 Nov 2026 09:39:02 -0500",
+      "candidate_id": 1,
+      "verified_by": "SEC公式発表",
+      "decision": "採用",
+      "reason": "A: SECが偽の暗号資産取引プラットフォームによる詐欺で8事業体を提訴した公式発表。暗号通貨への直接材料として採用"
+    },
+    {
+      "source": "FRB",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20261119a.htm",
+      "title": "Federal Reserve Board issues enforcement action with former employee of First Security Bancorp",
+      "published_at": "Thu, 19 Nov 2026 16:00:00 GMT",
+      "candidate_id": 2,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 特定の元銀行員に対するFRBの個別執行措置で、金融政策・金利への波及経路を説明できない"
+    },
+    {
+      "source": "FRB（speeches）",
+      "url": "https://www.federalreserve.gov/newsevents/speech/jefferson20261119a.htm",
+      "title": "Jefferson, Monetary Policy amid Frequent and Complex Shocks",
+      "published_at": "Thu, 19 Nov 2026 14:25:00 GMT",
+      "candidate_id": 3,
+      "verified_by": "FRB公式発表",
+      "decision": "採用",
+      "reason": "B: FRBジェファーソン副議長の金融政策に関する講演。金融政策・金利の波及経路があり採用"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/research/research_data/reri/index.htm",
+      "title": "実質輸出入の動向",
+      "published_at": "Thu, 19 Nov 2026 16:00:00 +0900",
+      "candidate_id": 4,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 日銀の実質輸出入データの定期公表で、個別の経済ショックに関する内容がなく波及経路を説明できない"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/mopo/diet/d_state/dst261119a.htm",
+      "title": "【概要説明】植田総裁「通貨及び金融の調節に関する報告書」（参議院財政金融委員会）",
+      "published_at": "Thu, 19 Nov 2026 10:13:00 +0900",
+      "candidate_id": 5,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 国会答弁の概要説明のみで、summaryが空欄であり具体的内容を書けない"
+    },
+    {
+      "source": "USTR",
+      "url": "https://ustr.gov/about/policy-offices/press-office/press-releases/2026/november/united-states-seeks-mexicos-review-alleged-denial-workers-rights-polygroup-industrias-mexico",
+      "title": "United States Seeks Mexico’s Review of Alleged Denial of Workers’ Rights at Polygroup Industrias México",
+      "published_at": "Thu, 19 Nov 2026 21:12:37 +0000",
+      "candidate_id": 6,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: メキシコの個別工場の労働者権利に関するUSTRの手続きで、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/releases/2026/11/icymi-president-trump-talks-china-iran-super-intelligence-and-the-path-ahead-in-exclusive-interview-from-shenzhen/",
+      "title": "ICYMI: President Trump Talks China, Iran, Super Intelligence, and the Path Ahead in Exclusive Interview from Shenzhen",
+      "published_at": "Thu, 19 Nov 2026 19:20:20 +0000",
+      "candidate_id": 7,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 大統領のインタビュー内容の紹介で、金利・為替・流動性等の波及経路を説明できない"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/briefings-statements/2026/11/u-s-russia-china-heads-of-state-declaration-toward-peace/",
+      "title": "U.S.-Russia-China Heads of State Declaration toward Peace",
+      "published_at": "Thu, 19 Nov 2026 13:53:04 +0000",
+      "candidate_id": 8,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 米露中首脳の平和に向けた宣言だが、優先して掲載する対象（産油施設攻撃等）に当たらない"
+    },
+    {
+      "source": "ADP",
+      "url": "https://mediacenter.adp.com/2026-11-19-ADP-Acquires-ZenBusiness",
+      "title": "ADP Acquires ZenBusiness",
+      "published_at": "Thu, 19 Nov 2026 14:34:00 -0500",
+      "candidate_id": 9,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ADPによる企業買収の発表で、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxPMEJnU0FpNlBIQVVrY3RZWkxwVzV5a0RJajBPLWpIZW5DX1Y1cDBuZnJsWU14dHBGcGV3aE9LRkx6aVg4VDRjVHB1UmphaWN1VVJCQVQ1bEhnel9rTnNzSmZVZUJlTHZsTHVsdWpmZjM2aHQ1R09mZEZTUVpqbV9VZ18tMC15WkhxOW5PN2FtNHRXMHkwUndMV3NBQVZtaGNKajVzZkZfMWNwd0pYS21Ea0ZBNkZtUQ?oc=5",
+      "title": "EXCLUSIVE: Canada's BMO returning to US oil and gas investment banking, sources say - Reuters",
+      "published_at": "Thu, 19 Nov 2026 19:00:02 GMT",
+      "candidate_id": 10,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（区分4・順位外）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxNWkZwc3MzeGxPMldOWGxwZnk4UFBSWGtfVC1pTnBnQXVRZzBrNTBzdGxCc05WSU5KNjVoTk1XSm82Q2UxSms1WnhkT05tTG5xU3JULWRtUTVOSlpmeXgyNTFWRVVOX1BTS3ZNaDZEendqbkJJNXlMSndLb0JiQjJ0dEhnMWs3bm5RX0hDNTZ4SVlaamJTU2ZDZVJ1VG8ycVpNdXR3NFdKMHhDVjdlUWMyWmhwVQ?oc=5",
+      "title": "J.P. Morgan sees Fed rate hikes at next three meetings as inflation persists - Reuters",
+      "published_at": "Thu, 19 Nov 2026 18:53:15 GMT",
+      "candidate_id": 11,
+      "verified_by": "Reuters報道",
+      "decision": "採用",
+      "reason": "B: J.P.モルガンがFRBの3回連続利上げを見込むとの報道。金融政策・金利の波及経路があり採用"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxPM1MwV2ozaGIyVFI2bjZBRjRFRFdtXzNPRHpIWWdBWHdFcy1Ja0NHanZxamluT2daeTcxSjRYQzFRaDVtOVlRd3ItT3JFRXlXSjI4dTA2U0h3M0ZiVDN6QWxTUGZCektOMXpQYUY2UzRnV1BFM3BseDF6X20wanlFSlNyVG5aTWdrV1ZHcFo3UUh3WWE3R29DckZ3VzljVWpu?oc=5",
+      "title": "Trump nominees to lead SEC pledge independence on Capitol Hill - Reuters",
+      "published_at": "Thu, 19 Nov 2026 18:49:35 GMT",
+      "candidate_id": 12,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（区分1相当だがSEC長官候補の議会証言で手続き的な発表のため不採用）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxQdm9rYVJJOTRRR3ZKTUw2NnZmX3RQeGp1aVdXTnBza3RsSmhqZktMSzlMNDZpYkREQ2k4YTVYT3ZCQW1SSWRMV0VFVGlFa1U3NnZGZ3l1V1VXVmNMMlpaVlZuRjdiUHNEOG1Iazl1VG5iT1FNbkhHY1I2Y01uaVUzQ3hwWUlPVGQwdzZpR1BxeEhrZUY1ZEdXNWotTkJsYTFzS1FTRXdR?oc=5",
+      "title": "German growth and inflation set to accelerate, Bundesbank says - Reuters",
+      "published_at": "Thu, 19 Nov 2026 18:27:52 GMT",
+      "candidate_id": 13,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（ドイツの成長・インフレ見通し、順位外）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxPUXY4SS1DQy01LTV4VDEwYTVCV2hCeThSemNINHhHNFk2Zk1ZNGpIWVk1MFlyMUJwWGFlS1otZGRYSHpYYUlqQlZOMjRrQURxU29GNlhkTmJVU1l3VE1TTkR1dWhCM2dJT2QyUnRkR0dlRVE5eHhiUHBVSUVaa0ppOFJDb0I1M081eHhNQUd4WXhlWnJ6d0RYTVhWamRONXVFZmpjVGFuYmtTeG5FYXVkcXRFaVY1RnhobzYzZjNB?oc=5",
+      "title": "Russia repels Ukrainian drones attack on oil facility in Tatarstan region, local authorities say - Reuters",
+      "published_at": "Thu, 19 Nov 2026 18:08:24 GMT",
+      "candidate_id": 14,
+      "verified_by": "Reuters報道",
+      "decision": "採用",
+      "reason": "B: ロシアがタタールスタンの石油施設へのウクライナのドローン攻撃を撃退したと発表。産油施設への攻撃で優先対象に該当し採用"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxNd2tVS3ktQThQZmhzbFBGVmwzRDlycmtudVhLTk1vLWpJeDlQMFBqV1J3bFZXNGtTT0VfRGJaWUxBeWNWck0tblgzbTJsQmM4SXNRbUVXZEo1Nk1UdWpONURjY1I5RnJsVmRuRzdra2VFSVlyYnJUTnhjUXNjNUJKU2YtWDBfQkZuWFV2d3FJZTdFSzZKdHgyM242QzVReUJENE52TEtXaWlfMnNlNGZkejlzRGR3TnM?oc=5",
+      "title": "Bank of Japan to raise interest rates in December and again by end-March, economists say - Reuters",
+      "published_at": "Thu, 19 Nov 2026 17:17:27 GMT",
+      "candidate_id": 15,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（日銀利上げ見通し、順位外）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxPUjdpV0lCY3lUWlhjZzVkdTNNa1hrazREdFRCMjFSRlpzYmpXNlpYeXdOeXJyZk44NGQwT0FuN1cxdWRyUWtLenNCTGNDSVM0NERhNW5PemtfbTI1UkFtcDdvUklKdjZZM2c4NTZlUVBlYVF5SVBubVFnbkhueHNTWDhLd1c4MVJLM2g1ekQ3bHo?oc=5",
+      "title": "US weekly jobless claims edge up, but labor market remains resilient - Reuters",
+      "published_at": "Thu, 19 Nov 2026 17:06:57 GMT",
+      "candidate_id": 16,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（米新規失業保険申請、順位外）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxOTXVIQUMwVTA5TllQb203X3V6XzNUVlNqaHhXd3NlNjJ0VF9rVUp1OTdRRjBWaVFMREswSVlfNjVESFAwb2w0NGMyVk5LeWNjTU42RnBIOWRsR05kWFktNFhrNnJtMm84cGNmekdUYmlvREJLQkt6NjUxMEZ2Sy1wUjVQbnhMS2JG?oc=5",
+      "title": "Houthi attacks on Saudi Arabia - Reuters",
+      "published_at": "Thu, 19 Nov 2026 16:20:38 GMT",
+      "candidate_id": 17,
+      "verified_by": "Reuters報道",
+      "decision": "採用",
+      "reason": "B: フーシ派によるサウジアラビアへの攻撃。主要な海上輸送路・産油地域に関わる軍事行動で優先対象に該当し採用"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxOOXdpYkFVdXpMMHdtZk9Cdld4YjZyUnlieS1mZXZXT1VrTHM5SzhMR0k5dU56S1NiTWdlaVR0NHVBVVpqUXpqYW94RW11eWhYTkRHMmhEZ19VcjZDMS1nXzFRajZKdmpqZkNCc2dscm1DVjFhaVU4WmdodFRKSm0xU0lVRzZOME8xV25TRjVKQm8td1Jsd3R3RjVhVmJGQk03ZkdVUjctVy1uTGlBeUpN?oc=5",
+      "title": "Oil tanker loads Iranian crude in Gulf, TankerTrackers.com says - Reuters",
+      "published_at": "Thu, 19 Nov 2026 12:47:33 GMT",
+      "candidate_id": 18,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 同じ事実区分だが見出しのみでタンカーの積荷状況の詳細を書けず、他候補と重複する範囲のため不採用"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxNRlVLekJsV1lXTGsxOWFDNkJLTDZhV3JSeFRQWS1zNXlobWJ6cDB0dXdhUE5IZ2VBY3N1THJOdVFtNmhEcnVTcUpWS2x4cVJRV1BscHJ2cVRmbGxtUEJLd0xvRUhkYlpUZU1PcnZpUzJ5cWx5R3ZnWFN5VXdiWmkwczJpci1yQkpVWWtMNV9yY3JHc3NfNzc0V2R2ZWlkSDVaa3V1MUhJVUNoSV9MQl91ckE5c2J4c1c2VFlPSHBIYzAxX2RZYXpZ?oc=5",
+      "title": "Energy-security response to Iran war could cut oil demand by 4% by 2035, IEA says - Reuters",
+      "published_at": "Thu, 19 Nov 2026 05:05:00 GMT",
+      "candidate_id": 19,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（IEAの石油需要見通し、順位外）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxQRlZTUGFRRV83M0NrdXJpRzAyMGNjZVBDX1lobElUOGhSQk9TQzFnSGpWYUh6cW0zZGpIQmZaenF2Ny1JbXZhcGt5WG5CSzU4LWNwN0owbXRlRWNnTHNHY2ZSZ3RwWWNjRXdWWEVwaFE2NzF5c1A5LVExOWhOWm02SXhzVlRIMkZlMkg0NEZXOWN0RVI4UVBCMmV1a1JjWk10cXN5d3A2U3R2VzlSSGJVUUJfdFFHM3lyVUpocWx4ME5UdkZ6Vmc?oc=5",
+      "title": "Explosion at Indonesia oil refinery kills one worker, investigation underway - Reuters",
+      "published_at": "Thu, 19 Nov 2026 04:30:00 GMT",
+      "candidate_id": 20,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: インドネシアの製油所爆発だが地政学・エネルギーの優先対象（産油・輸送施設攻撃等）に当たらない事故のため不採用"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxOUUVVMURmUjNxMHVQNThNQkRiUElQbkhnNVJNdkdVejBqLVVIRU1hUl9DWDhpYlFVWUtFZlo5dGNOSnFqTFU5VE93bXdGY3NaOEVmSERoWlJNOWhQN25NN3E1bGF1MEprczBsWFlkOHBDTUVLM21CSFJydjFzUFFaM2ozQU8wSTdnSENadVQ2UTNmSWhOMFBHNE1ZaDB5MURkMFM0cHZuU1BySDl0ZlQ2aDBEUEdmNUE5MnNzTnl2T2VBaV9sWUQ2Zg?oc=5",
+      "title": "Riyadh’s tallest skyscraper hit in Houthi strike on Saudi wealth fund HQ - Reuters",
+      "published_at": "Thu, 19 Nov 2026 03:19:00 GMT",
+      "candidate_id": 21,
+      "verified_by": "Reuters報道",
+      "decision": "採用",
+      "reason": "B: 候補17と同一の事実（フーシ派によるサウジアラビアへの攻撃、政府系ファンド本部ビルへの着弾）の重複として統合採用"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxOMnV0bXBXX1ZzNHpkcHFmanlPQ2FmczM3Z2xCcXRqRjYwTVB6SlFhZ29vbGcyM3V5a3lOMHZ3OXprMDM0ang4RVEwQmhFMTZ2QU1GT2lQN0ZPUXQyZWJ4MHR1S0JQTmE5Y0Z5dkZlemdFU0V6TWFId0pZZlFtbHVzaU1EeVl1S2RiSFdrcE95d1ZqQW9NRWlZUFNHWU9QVHNXRlZiTmEtckdWZEpScFREcVpPQ0x3MDNQeFhiZHJHMUlVQXFRNkE?oc=5",
+      "title": "Oil settles flat as Hormuz disruptions offset global surplus fears - Reuters",
+      "published_at": "Thu, 19 Nov 2026 02:47:00 GMT",
+      "candidate_id": 22,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（ホルムズ海峡の混乱を受けた原油市況、順位外）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxNek12QlczdG01emR1MWtEdU8zWXFZalNKUWE3cDR4Vm9YbFNVaU51Y3RxT0Ywak8yV2FrSUQxelVFRDBRZlFwblRqMWctbmw5TUFja2xjSEh3UW1PQUJtTEVmb0FkMVpoYkg0UWVFYkNOZXhSSU54RUJxOTVOdDNQaEk4N2FqUjdWQjNpSk1yZndSZjhzcURKc2dUT2RLOUVqb3dwUGExZG1KUm4tdk05VzBDN0N4SGhvbFdxZg?oc=5",
+      "title": "Global inflation calls for monetary policy tightening in many economies, IMF head says - Reuters",
+      "published_at": "Thu, 19 Nov 2026 02:43:00 GMT",
+      "candidate_id": 23,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（IMF専務理事の金融引き締め発言、順位外）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxPZDZwZlgxbWlzQVM2T25wT25PVUNnUHVoa3F6YndBaVVkUHZXRVdRM2JoVG1tSk5jVzBjU01NemtjakhTYXF0ek9vVlhtUVEwWU1fYjBGdk9FU2ZhMnJyUU92NWNmcnNlTEhqeFpybGROMmg1WkZyamc1dmN6dXdRWk9UMHN2bjh5eUNwM0lKME1ZZ1RxRjJOVHppQ25EUjVlT3RxRkZVaG1pWTRhX3hTclpfTEtlUQ?oc=5",
+      "title": "BOJ chief plays down soft consumption data, signals near-term rate hike - Reuters",
+      "published_at": "Thu, 19 Nov 2026 01:34:00 GMT",
+      "candidate_id": 24,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（日銀総裁の消費データ発言、順位外）"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/what-happened-in-crypto-today?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Here’s what happened in crypto today",
+      "published_at": "Thu, 19 Nov 2026 21:42:20 +0000",
+      "candidate_id": 25,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 暗号資産業界の総括記事で個別の事実報道ではなく、独立2ソース規定の対象にもならない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/moonpay-seeks-us-bank-charter-for-stablecoin-custody-services?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "MoonPay seeks US bank charter for stablecoin, custody services",
+      "published_at": "Thu, 19 Nov 2026 21:01:42 +0000",
+      "candidate_id": 26,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（MoonPayの銀行免許申請、順位外）"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/markets/hyperliquid-anthropic-futures-nasdaq-opening-price?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Hyperliquid Anthropic futures priced within 1% of Nasdaq opening price",
+      "published_at": "Thu, 19 Nov 2026 20:33:24 +0000",
+      "candidate_id": 27,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: Hyperliquid上のAnthropic先物価格の話で、暗号通貨市場全体への波及経路を説明できない"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/markets/2026-11-19-kalshi-quintenz-insider-trading-prediction-markets-stocks-444133",
+      "title": "Kalshi’s Quintenz says insider trading is ‘just easier to see’ in prediction markets than stocks",
+      "published_at": "Thu, 19 Nov 2026 20:20:59 +0000",
+      "candidate_id": 28,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 予測市場のインサイダー取引に関する発言内容で、tier3単独であり独立2ソースの相手もない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/sec-nominees-johnson-levine-tokenized-stocks?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Trump’s SEC nominee Johnson backs formal rulemaking for tokenized stock trading",
+      "published_at": "Thu, 19 Nov 2026 20:06:34 +0000",
+      "candidate_id": 29,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（SEC指名候補のトークン化株式規則への言及、順位外）"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/11/19/sky-s-usds-stablecoin-shrinks-35-as-usd1-5-billion-exits-reserves-after-illicit-finance-report",
+      "title": "Sky's USDS stablecoin shrinks 35% as $1.5 billion exits reserves after illicit-finance report",
+      "published_at": "Thu, 19 Nov 2026 19:53:42 +0000",
+      "candidate_id": 30,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ステーブルコインの準備金縮小に関する単独tier3報道で、独立2ソースの相手もない"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/regulation/2026-11-19-ripple-alderoty-elizabeth-warren-wont-set-crypto-policy-backs-durable-agency-rules-444105",
+      "title": "Ripple’s Alderoty doubts Elizabeth Warren will ‘set crypto policy in this country,’ backs durable agency rules",
+      "published_at": "Thu, 19 Nov 2026 18:47:30 +0000",
+      "candidate_id": 31,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: machine_pair_hintの候補25とは内容が異なる別事実（Ripple幹部の発言）で独立2ソースに該当せず不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/ethereum-glamsterdam-could-slip-to-may-2027?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Ethereum’s Glamsterdam upgrade could slip to May 2027 over compatibility concerns",
+      "published_at": "Thu, 19 Nov 2026 18:20:49 +0000",
+      "candidate_id": 32,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: イーサリアムのアップグレード延期観測の単独tier3報道で、独立2ソースの相手もない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/11/19/trump-s-democratic-sec-pick-suggests-tokenization-policy-deserves-full-rule-process",
+      "title": "Trump's Democratic SEC pick suggests tokenization policy deserves full rule process",
+      "published_at": "Thu, 19 Nov 2026 18:15:56 +0000",
+      "candidate_id": 33,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: SEC指名候補の議会証言に関する単独tier3報道で、独立2ソースの相手もない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/why-higher-rates-could-slow-bitcoin-buying-at-treasury-firms?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Why higher rates could slow Bitcoin buying at treasury firms",
+      "published_at": "Thu, 19 Nov 2026 18:09:32 +0000",
+      "candidate_id": 34,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ビットコイン財務会社の分析記事で、意見・予想であり事実報道ではない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/markets/bitcoin-price-ignores-anthropic-debut-ant-share-price-dips-below-100?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bitcoin price ignores Anthropic debut as ANT share price dips below $100",
+      "published_at": "Thu, 19 Nov 2026 18:06:50 +0000",
+      "candidate_id": 35,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ビットコイン価格とAnthropic上場の関係を論じる分析記事で、独立2ソースの事実報道に当たらない"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/regulation/2026-11-19-cftc-chair-selig-hyperliquid-onchain-venues-the-us-444106",
+      "title": "CFTC Chair Selig outlines how Hyperliquid and other onchain venues could enter the US",
+      "published_at": "Thu, 19 Nov 2026 18:04:15 +0000",
+      "candidate_id": 36,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: CFTC委員長の発言に関する単独tier3報道で、独立2ソースの相手もない"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/newsletters/tokenization-briefing/2026-11-19-tokenized-stocks-shrug-off-crypto-selloff-442829",
+      "title": "Tokenized Stocks Shrug Off the Crypto Selloff",
+      "published_at": "Thu, 19 Nov 2026 17:12:00 +0000",
+      "candidate_id": 37,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: トークン化株式に関するニュースレター記事で、意見・分析であり事実報道ではない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/11/19/anthropic-opens-for-trade-at-usd11-50-up-34-from-ipo-price",
+      "title": "Anthropic gains after IPO, but pulls off highest levels",
+      "published_at": "Thu, 19 Nov 2026 17:01:47 +0000",
+      "candidate_id": 38,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: Anthropic株価の動向に関する単独tier3報道で、独立2ソースの相手もない"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/coindesk-indices/2026/11/19/crypto-for-advisors-falling-prices-drove-october-s-10-drop-in-institutional-crypto-exposure",
+      "title": "Crypto for Advisors: Falling prices drove October’s 10% drop in institutional crypto exposure",
+      "published_at": "Thu, 19 Nov 2026 16:09:28 +0000",
+      "candidate_id": 39,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: machine_pair_hintの候補25とは内容が異なる別事実（機関投資家の暗号資産エクスポージャー低下）で独立2ソースに該当せず不採用"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/11/19/singapore-settles-usd77-5-million-tokenized-bill-sale-in-local-cbdc",
+      "title": "Singapore settles $77.5 million tokenized bill sale in local CBDC",
+      "published_at": "Thu, 19 Nov 2026 10:39:36 +0000",
+      "candidate_id": 40,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（シンガポールのトークン化債券CBDC決済、候補41と独立2ソース該当も順位外）"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/mas-issues-77m-tokenized-bills-singapore-dollar-test-network?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Singapore settles $77.5M tokenized bill sale with wholesale CBDC",
+      "published_at": "Thu, 19 Nov 2026 08:54:58 +0000",
+      "candidate_id": 41,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（候補40と同一事実の独立2ソースだが順位外のため不採用）"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/markets/sygnum-bitcoin-carry-trades-2027?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bitcoin carry trades could beat Treasury bills in 2027, Sygnum predicts",
+      "published_at": "Thu, 19 Nov 2026 06:00:00 +0000",
+      "candidate_id": 42,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ビットコインキャリートレードの2027年予想に関する分析記事で、意見・予想であり事実報道ではない"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/markets/2026-11-19-sygnum-bitcoin-carry-trades-beating-treasury-bills-2027-443547",
+      "title": "Sygnum sees bitcoin carry trades beating Treasury bills in 2027 as funding recovers",
+      "published_at": "Thu, 19 Nov 2026 06:00:00 +0000",
+      "candidate_id": 43,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 候補42と同じ予想記事（Sygnumの見通し）で、意見・予想であり事実報道ではない"
+    }
+  ],
+  "reusable_for_summary": [],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 1
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 1
+    },
+    "FRB（speeches）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 1
+    },
+    "FRB（testimony）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 2
+    },
+    "米財務省": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "USTR": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 1
+    },
+    "ホワイトハウス": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 2
+    },
+    "ホワイトハウス（大統領令等）": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 0
+    },
+    "ADP": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 1
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 21
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 22
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "The Block": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 16
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 49
+    }
+  },
+  "news_candidate_count": 43,
+  "format_normalized": {
+    "part1_points": 0,
+    "part2_flow": 0
+  },
+  "flow_price_fragment": " #BTC -0.50%、 #ETH -0.04%（24時間比）",
+  "part1_md": "【対象日】2026年11月19日（木）\n\n【ヘッドライン】\nSECはコロラド拠点の8事業体を、偽の暗号資産取引プラットフォームで米国の投資家から3,700万ドル超をだまし取ったとして提訴したと発表しました。\n\n【主要なポイント】\n・FRBのジェファーソン副議長はブラジルでの国際会議講演で、頻発する複雑なショックのもとでの金融政策運営について見解を述べました（FRB、11月19日）。\n・Reutersによると、J.P.モルガンはインフレの粘着性が続く中、FRBが次の3回の会合で利上げを行うとの見通しを示したと報じられました（Reuters、11月19日）。\n・Reutersによると、ロシアはタタールスタン地域の石油施設に対するウクライナのドローン攻撃を撃退したと地元当局が発表したと報じられました。被害・影響は未確認です（Reuters、11月19日）。\n・Reutersによると、フーシ派によるサウジアラビアへの攻撃が相次いでおり、同国の政府系ファンド本部が入る高層ビルが着弾を受けたと報じられました。被害・影響は未確認です（Reuters、11月19日）。\n",
+  "part2_md": "【市場のフロー】\n①【出来事・ニュース】SECはコロラド拠点の8事業体を、偽の暗号資産取引プラットフォームで米国の投資家から資金をだまし取ったとして提訴したと発表しました（SEC、11月19日） → 【暗号通貨価格】 #BTC -0.50%、 #ETH -0.04%（24時間比）で、同時期はETHが高値から安値まで下押す場面も見られる中、BTC・ETHともに小幅な下落となりました。\n②【出来事・ニュース】Reutersによると、J.P.モルガンはインフレの粘着性が続く中、FRBが次の3回の会合で利上げを行うとの見通しを示したと報じられました（Reuters、11月19日） → 【地政学・マクロの変化】金融引き締めの長期化が市場で意識された可能性があります → 【中間市場指標・市場心理】利上げ観測を背景にリスク資産への警戒感が強まったとの報道が確認できます → 【暗号通貨価格】 #BTC -0.50%、 #ETH -0.04%（24時間比）で、同時期はETHが日中に下押す場面を交えつつ、BTC・ETHともに小幅な下落となりました。\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から上昇しました。\nBase 0.05%プールの参考APRは104.21%→137.61%へ上昇しました（24時間出来高 +40.10%、TVL +6.10%）。\nBase 0.3%プールの参考APRは73.12%→102.57%へ上昇しました（24時間出来高 +37.32%、TVL -2.11%）。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比-0.04%と下落中のため、ETH偏り・下限側レンジ外・下落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\n暗号資産詐欺を巡る規制当局の摘発やFRBの金融政策見通しを巡る報道が相次ぎ、市場心理は不透明感を帯びやすい局面です。インフレの粘着性や地政学リスクの帰趨については、今後の報道や指標の確認が必要です。\n",
+  "numeric_record_md": "【対象日】2026年11月19日（木）\n\n【主要指標】\n・市場全体：時価総額 $2.131兆（¥339.5兆）｜24時間取引高 $751.5億（¥11.98兆）\n・ #BTC：$62,200（約991.2万円）｜24時間比 -0.50%\n　（24時間レンジ $61,350〜$64,024）\n・ #ETH：$1,763（約28.1万円）｜24時間比 -0.04%\n　（24時間レンジ $1,734〜$1,816）\n・ #BNB：$581（約9.26万円）｜24時間比 +0.42%\n・市場心理：Fear & Greed 10（Extreme fear、CoinMarketCap API）\n・ドミナンス：BTC 58.71%｜ETH 10.11%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年11月20日07:37 JST、USD/JPY ¥159.36\n\n【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $6.82M vs Base上ETH/USDC $273.57M｜参考：Base上DEX全体 $9.939億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $48.65億（¥7,753億）｜24時間比 -3.29%｜USDCドミナンス 83.9%\n・ ETH/USDC（Base）参考APR：0.05% 137.61%（TVL $25.63M／24h出来高 $193.28M）｜0.3% 102.57%（TVL $85.71M／24h出来高 $80.29M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年11月20日07:37 JST\n"
+}
