@@ -1,0 +1,127 @@
+{
+  "target_date_jst": "2026-11-21",
+  "level": "L1",
+  "sections": {
+    "part0_target_date": "2026年11月21日（土）",
+    "part1_headline": "直近24時間に暗号通貨市場との関係を確認できる主要なマクロ材料は確認できない。",
+    "part1_points": "補足できる検証済み材料は確認できない。",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.058兆（¥328.8兆）｜24時間取引高 $1123.0億（¥17.94兆）\n・ #BTC：$60,131（約960.6万円）｜24時間比 +1.96%\n　（24時間レンジ $55,106〜$60,883）\n・ #ETH：$1,679（約26.8万円）｜24時間比 +3.70%\n　（24時間レンジ $1,535〜$1,714）\n・ #BNB：$548（約8.75万円）｜24時間比 +1.52%\n・市場心理：Fear & Greed 8（Extreme fear、CoinMarketCap API）\n・ドミナンス：BTC 58.76%｜ETH 9.97%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年11月22日07:37 JST、USD/JPY ¥159.75",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $11.23M vs Base上ETH/USDC $149.51M｜参考：Base上DEX全体 $13.794億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $46.54億（¥7,434億）｜24時間比 +1.07%｜USDCドミナンス 88.1%\n・ ETH/USDC（Base）参考APR：0.05% 58.61%（TVL $10.13M／24h出来高 $32.52M）｜0.3% 157.65%（TVL $81.26M／24h出来高 $116.99M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年11月22日07:37 JST",
+    "part2_flow": "価格変動との関係を確認できる主要材料は確認できない。",
+    "lp_comment": "参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは112.09%→58.61%へ低下しました（24時間出来高 -48.93%、TVL -2.33%）。\nBase 0.3%プールの参考APRは164.12%→157.65%へ低下しました（24時間出来高 +1.10%、TVL +5.25%）。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+3.70%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "本日はニュース材料が確認できず、確認可能な市場データのみに基づく概況となります。地合いの見極めには今後の材料確認が必要です。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "11月21日（土）の市況｜BTC 上昇・ETH 上昇",
+  "audit_ledger": null,
+  "reusable_for_summary": [],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 0
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 0
+    },
+    "FRB（speeches）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "FRB（testimony）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 0
+    },
+    "米財務省": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "USTR": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "ホワイトハウス": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 6
+    },
+    "ホワイトハウス（大統領令等）": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 2
+    },
+    "ADP": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 8
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 4
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "The Block": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 4
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 49
+    }
+  },
+  "news_candidate_count": 38,
+  "format_normalized": {
+    "part1_points": 0,
+    "part2_flow": 0
+  },
+  "flow_price_fragment": null,
+  "part1_md": "【対象日】2026年11月21日（土）\n\n【ヘッドライン】\n直近24時間に暗号通貨市場との関係を確認できる主要なマクロ材料は確認できない。\n\n【主要なポイント】\n補足できる検証済み材料は確認できない。\n",
+  "part2_md": "【市場のフロー】\n価格変動との関係を確認できる主要材料は確認できない。\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは112.09%→58.61%へ低下しました（24時間出来高 -48.93%、TVL -2.33%）。\nBase 0.3%プールの参考APRは164.12%→157.65%へ低下しました（24時間出来高 +1.10%、TVL +5.25%）。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+3.70%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\n本日はニュース材料が確認できず、確認可能な市場データのみに基づく概況となります。地合いの見極めには今後の材料確認が必要です。\n",
+  "numeric_record_md": "【対象日】2026年11月21日（土）\n\n【主要指標】\n・市場全体：時価総額 $2.058兆（¥328.8兆）｜24時間取引高 $1123.0億（¥17.94兆）\n・ #BTC：$60,131（約960.6万円）｜24時間比 +1.96%\n　（24時間レンジ $55,106〜$60,883）\n・ #ETH：$1,679（約26.8万円）｜24時間比 +3.70%\n　（24時間レンジ $1,535〜$1,714）\n・ #BNB：$548（約8.75万円）｜24時間比 +1.52%\n・市場心理：Fear & Greed 8（Extreme fear、CoinMarketCap API）\n・ドミナンス：BTC 58.76%｜ETH 9.97%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年11月22日07:37 JST、USD/JPY ¥159.75\n\n【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $11.23M vs Base上ETH/USDC $149.51M｜参考：Base上DEX全体 $13.794億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $46.54億（¥7,434億）｜24時間比 +1.07%｜USDCドミナンス 88.1%\n・ ETH/USDC（Base）参考APR：0.05% 58.61%（TVL $10.13M／24h出来高 $32.52M）｜0.3% 157.65%（TVL $81.26M／24h出来高 $116.99M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年11月22日07:37 JST\n"
+}
