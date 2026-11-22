@@ -1,0 +1,368 @@
+{
+  "target_date_jst": "2026-11-22",
+  "level": "L0",
+  "sections": {
+    "part0_target_date": "2026年11月22日（日）",
+    "part1_headline": "Reutersによると、イエメンのフーシ派はサウジアラビアのラビグ製油所を攻撃したと主張したと報じられました。被害・影響は未確認です。",
+    "part1_points": "・補足できる検証済み材料は確認できない。",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.076兆（¥329.5兆）｜24時間取引高 $553.7億（¥8.79兆）\n・ #BTC：$60,720（約963.9万円）｜24時間比 +0.98%\n　（24時間レンジ $58,636〜$61,568）\n・ #ETH：$1,710（約27.1万円）｜24時間比 +1.87%\n　（24時間レンジ $1,645〜$1,730）\n・ #BNB：$555（約8.80万円）｜24時間比 +1.27%\n・市場心理：Fear & Greed 8（Extreme fear、CoinMarketCap API）\n・ドミナンス：BTC 58.85%｜ETH 10.07%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年11月23日07:37 JST、USD/JPY ¥158.75",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $6.63M vs Base上ETH/USDC $63.21M｜参考：Base上DEX全体 $12.873億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $51.27億（¥8,139億）｜24時間比 +10.16%｜USDCドミナンス 88.2%\n・ ETH/USDC（Base）参考APR：0.05% 30.23%（TVL $10.13M／24h出来高 $16.78M）｜0.3% 61.78%（TVL $82.29M／24h出来高 $46.43M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年11月23日07:37 JST",
+    "part2_flow": "・【出来事・ニュース】Reutersによると、イエメンのフーシ派はサウジアラビアのラビグ製油所を攻撃したと主張したと報じられました（被害・影響は未確認） → 【地政学・マクロの変化】中東情勢の緊迫化が意識された可能性がある変化として受け止められました → 【暗号通貨価格】 #BTC +0.98%、 #ETH +1.87%（24時間比）で、同時期は小幅な上昇でした。",
+    "lp_comment": "参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは58.61%→30.23%へ低下しました（24時間出来高 -48.39%、TVL +0.06%）。\nBase 0.3%プールの参考APRは157.65%→61.78%へ低下しました（24時間出来高 -60.32%、TVL +1.26%）。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+1.87%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "暗号通貨市場は総じて落ち着いた地合いとなりましたが、中東情勢を巡る報道の真偽や影響範囲は依然として不透明であり、今後の続報が注目されます。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "BTC・ETHともに上昇基調",
+  "audit_ledger": [
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxPV0NtOW83bnNaeXNoY0g0REh2Ym8yMU52U0FCaGVTRy1oeTRrM1dPclNpZTF4QWVtVE95eG9TUXJkT3JBZldRWDNjejBRcFpiWTVPV1ZqeEVZdS1qMVZ6QzVvNUtSRXY0RUxLX05pdlB3V0tvLXA1Nk0wQXhxT1dQYVNyMm1YYTZtX0pRZFI4VWNDTHctYVk2NnJMdDlWSmhxbWlzbVg5OWFacVhQUzdHSU5lNDdJTlBRZVhlVXZaUQ?oc=5",
+      "title": "Israel's Eisenkot condemns arson attacks by Jewish settlers in West Bank - Reuters",
+      "published_at": "Sun, 22 Nov 2026 21:54:56 GMT",
+      "candidate_id": 1,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: イスラエル国内の政治家による入植者の放火非難で、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxNSHNFQ2hvQUxyR05zYXIyVjczNjE3eEVLWWhMdk1mS01BQV91dy03OU5SSzVzbzlvVk1ManQ2TFhqU2xkRkhZcGthVlZad0E1aVRKU1E5ZWxJTWRQVG5UYmFYYmcxZGJ1TFc1YzE0a2E4XzQ4SGJLNjNlc0otTGhGRnRWTHpmeW1mWnVBLTNhYmFLU3JOUTVfSTliN19fMG9rRWlmeFdKNHFSU1JVTTdnQUNhUlBUWmRSTDVXUUJuUW9fNEV2cjNWdTlPZw?oc=5",
+      "title": "Libya's eastern government suspects drone attack caused explosion on Russian ship - Reuters",
+      "published_at": "Sun, 22 Nov 2026 21:44:25 GMT",
+      "candidate_id": 2,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ロシア船舶の爆発疑惑で、優先して掲載する対象（産油・輸送施設攻撃等）に当たらない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxQQ1RyOVZKTlV6bndHdTJhb3ZfZkI5R081UGttS1pZMDB4T0s0ekRPNGRQLW5FUERHRGVFLUxLQTFEcnFKSHpwVDBOQThBRGVaZkJfVTlMUzZPOFc3b3dZZllkVUVuRF9Lbnc3d3pzd01KQTE5WFpzR1h4alU4dUF1ZW0yYkpFeHF1RjRvbklfbWJqdDNXV1lkVkFCQnlRZw?oc=5",
+      "title": "Can climate diplomacy build on the collapse of COP31? - Reuters",
+      "published_at": "Sun, 22 Nov 2026 21:19:25 GMT",
+      "candidate_id": 3,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 気候外交の論評記事で、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxQc3loZzVPSEw4YTN0RXZEdEpveVFkV0JoU0dtRTktZXR6LS1XVGRNVElxWHpWVUQ3eEhOMllBam9jYlNIX29HeW9ncUwyWkNhenBPcmRZeTNBNmt6MF96SkU5TS1zWUVBSEFOS0FMV1gwVmJoS3c3bGw4TjgwLUU5NTFOUEtzOWx3dy04NkhLMW9CMmJxM1dLeVRBRWMyVl9SY1A3THFB?oc=5",
+      "title": "Countries react as COP31 climate talks collapse - Reuters",
+      "published_at": "Sun, 22 Nov 2026 21:11:03 GMT",
+      "candidate_id": 4,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: COP31決裂への各国反応で、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxQX0ItQ1JnUkNlVzIyRVhPMWNrdWVSX0pNMVRQbUNHQUN1X19QTWxEcHE3d0U2THpOdXdFMlVRTVdUZnBJT0JobGJsdmIzdmtoX0JHcnZNWXllemZQRHdrdmZndGIyczRaTzlmR21UeUFXeUlmOHdSc09CbmpJNWFqVTFYZmhYZW9vRkdMWmIybXJ0T3ZWYmhYaEcyLV9aZXk3R2FEYW1WUFdvb0hCdUQ1T05pOWcwSFZfQzZ3?oc=5",
+      "title": "Bank of Israel to keep rates on hold amid uncertainty about new government - Reuters",
+      "published_at": "Sun, 22 Nov 2026 20:57:49 GMT",
+      "candidate_id": 5,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（イスラエル中銀の金利据え置きは国内政局要因）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxOaTNOT0xoMUxOWXZ1cDNvME80cHBkWU5TZTFJbXhNQlB3VnVxQmtoVTZvM1BfZVBoZTZ0TGZmNmZDMGRacmpNa2FGd29IWjhyVllDYVhHOXJ2Wk9Nc0lXN3p3b1hOVkNDN085bWl1SVBNanBlQ3B0Y3pqNmhldUlfQmh3Z2M1dE1fUkhRTjNDZHhiR3p2RExEZTdjRzN4SmZJX1E?oc=5",
+      "title": "Chinese player Liu suspended amid match-fixing probe - Reuters",
+      "published_at": "Sun, 22 Nov 2026 19:45:32 GMT",
+      "candidate_id": 6,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 中国人選手の八百長疑惑による出場停止で、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQX1ZQQTFqN0xpOERieUhlT0puQ0pnQnNnRnQtaW8yb3VGWkFvM3hGeTA3QlBrR1VCNUhjS21TQ1JISlNWMG5mdlc3NVVmOUZ0LWZrMTB4R3h4YlpIVnJObWVQcmhLUDFiRnhCY1c1RTE5NzhwQzIwTXQ3MkxfN1hQSU9ZbkVidFZCWE1PWWxHMWgtem5ZSzBoOU1oYUVuZ0NEOW00V0Jlb1pEUVdrNUF3blEtSEw4dkpsYU9ya0w0N3UxTmRE?oc=5",
+      "title": "US intelligence chief predicts more tech outages as systems undergo upgrades - Reuters",
+      "published_at": "Sun, 22 Nov 2026 18:14:09 GMT",
+      "candidate_id": 7,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 米情報当局者による技術障害予測で、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxQcm1fbVJENmFGZU81bGR4WXVfeDMwdWdaY0xNbmVBN3hmaXVVeVBLelJxT3dubnROYnVkM2NCRXRfcFFvMGNtZ0FlM3c5LWt1WUVGclQzY1ZJTVBCR2d2dXozSXRqN0VIM1NsV0d2YVJLRjJpRnlIcVRNSlZqeURwLWhKa1V4dUNvWDdlZmNoMnQxQ1d6WlVGalNpdjVSZm9PMXRzUA?oc=5",
+      "title": "US seeks answers on Nvidia's sale of chips to China, Bessent says - Reuters",
+      "published_at": "Sun, 22 Nov 2026 17:53:07 GMT",
+      "candidate_id": 8,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（対中半導体輸出の通商政策は順位外）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxQSjZLZW5ua05hQkRTLVhvZnNHZnpUM05mT3ZxNl9FUUoyMEhMN0gtTUVfT0Zhb0g2eUxaeHlvZWlIWXNTVGlSMlczMHdBUERvRjVsQVZVSW92MlFESWlmTGxVaWM2aXYwZ0NtUTlna3k4ZkV2S0k4YkhVOFRjaWRrcmhZeWg5NHpQaW9pRGIybUFpalV3U2lzdlZ5QzYteENUSWpWdm90SXNFWVU4OWxBaGx3?oc=5",
+      "title": "Yemen's Houthis say they attacked Saudi Rabigh oil refinery - Reuters",
+      "published_at": "Sun, 22 Nov 2026 17:52:15 GMT",
+      "candidate_id": 9,
+      "verified_by": "Reuters報道（tier2単独で採用可）",
+      "decision": "採用",
+      "reason": "B: フーシ派がサウジの産油・精製施設（ラビグ製油所）を攻撃したと主張した報道で、優先して掲載する対象の産油施設攻撃に該当するため採用"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxNM1VMUS1oUkxlYzRWaDg5WjNPbGJoV2t1LTlRNkVMWnF6a3Q3aUljXzlCal9hWmdhWnlkYzdKNjdFVGdwVk1WUFFucGdfbUlnY3RtUjBsdFBxVTdmTGNjcnJ1a0VDNnk5eFh5NDdWaGNWcjNWcFI2WkoxZnFUbkI5UHZ6YTdYZUVMa19Ldk5YTERtX3ZialpvbjI4eFVoQ0Eyd2l0NGxoVQ?oc=5",
+      "title": "Three Russian missiles flew into Poland Friday, prosecutors say - Reuters",
+      "published_at": "Sun, 22 Nov 2026 17:19:43 GMT",
+      "candidate_id": 10,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ロシアミサイルのポーランド着弾に関する検察発表で、主要なポイントの順位により上限4項目に入らない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxPTXUxa0FLT1o3Tzh4MUR0MV9ZenU1LU9PZl9QSzhsQXlOQThFNUxWbWFXRXZTOHFpb1lJdG1GTV9hOUZsc2x4YzBOSzV3ZHZkV2pyNjNIaTVWZEViQ2lLb3JkcjJsbGhVNXFmWXQ5c0pDTkVXeG9IbmlKV3AxYUtfNE5DVnhWX3lvNmg0SF9SZ1lHQzEtSnY1REsycUlvWFVEOFlBSXR3?oc=5",
+      "title": "Russia starts towing ship hit by drones in Baltic, Finland says - Reuters",
+      "published_at": "Sun, 22 Nov 2026 16:01:29 GMT",
+      "candidate_id": 11,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ロシア・ウクライナの一般的な戦況の記事で、優先して掲載する対象に当たらない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxPUmFwN2pYTHZEVndFX2hfN3VOQnduN3pEYnZXa2tfT1d1UGZDejk3ZU11dkwwLTdsUTltdm0taU8wTnpNTkZVV045Z3pkc0czd2FSS1lEZDhyLVVCNFJvNk9xUHR2ZUxydnAyYTJDVzd3RWIwQ1E0YjAyc2R6bkpkbkt1aThfVldjUGRKbkhXanhraVo3SkJHcHBuMmxBcXJreDhQSEx1QV9ZUXhDOHdhbmZMRkZoeVBOXzJ5ag?oc=5",
+      "title": "At least 4 killed in Russian drone attacks on Kyiv region, officials say - Reuters",
+      "published_at": "Sun, 22 Nov 2026 15:56:55 GMT",
+      "candidate_id": 12,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ロシア・ウクライナの一般的な戦況の記事で、優先して掲載する対象に当たらない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNc0hpdmdTS3ZXeDhNM1FWWTVwV0JRQkFQOHBkQUxGOW1NMVJmQmxKM1RXbmpPaHVWX1JJczhkWjBLMEs5aHVFVU40TUhOMS1vcXc3am52WEQ0bTIxQ0U5TDFHVFhXRmVnNmpaTHFZRTVoSVBMYnNLT25rc0RGZ3BYeUhScGd3RGEwdUpCWExOXzc0a3NZOXRoZTc5eUo5Tk1LMnBuaE9lQmE?oc=5",
+      "title": "Most Gulf bourses retreat as regional flare-ups continue - Reuters",
+      "published_at": "Sun, 22 Nov 2026 13:16:33 GMT",
+      "candidate_id": 13,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 湾岸株式市場の下落記事で、主要なポイントの順位により上限4項目に入らない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxOd20zVmVWWWtOalczYzVfN2dsU0o0T3ZCN2xULVRDNEUzdTFfb01vc1lhT0VMLWZzQUhCTkU1R1ZOQ2U4TW51U2JrazYxSmxjdkx4MkpYbHktNF9qZ0tOSEYxY3FST2hWTEE4bGlmUHlJNzNsNjRQeFBnemFNRkpja1ZseEhHSHZXOFh4bFUtLVZjWGdKRjA5dk9DR2tRRHBiZkFHU0o4RWJoNmsxTVNzVzkwVG9PY2hEREV1UmpoNU02ZHB1UXlwYk9R?oc=5",
+      "title": "SNB closely watching for second-round inflation effects, vice chairman tells paper - Reuters",
+      "published_at": "Sun, 22 Nov 2026 08:25:43 GMT",
+      "candidate_id": 14,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: スイス中銀副総裁のインフレ発言で、主要なポイントの順位により上限4項目に入らない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTFBuR1pidi1YU05jbGU0S0ctbEp1U2lEcDR6dlpZTGcwR21TTnZoSkVyNThtcnBkdE1JejFZS0NPbG9DbXJ1R2xIY09ESzNjNFVtUGNSMDZsSVM?oc=5",
+      "title": "IncomeSTKd 1x US Stocks & 1x Bitcoin Premium ETF (ISSB.N) | Stock Price & Latest News - Reuters",
+      "published_at": "Sun, 22 Nov 2026 06:55:19 GMT",
+      "candidate_id": 15,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 個別ETF銘柄の株価情報ページで、誰が・何を・どこでを書けない見出しのみの内容"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/ecosystems/2026-11-22-trump-to-host-second-memecoin-dinner-tonight-with-trump-down-99-from-peak-444828",
+      "title": "Trump to host second memecoin dinner tonight with TRUMP down 99% from peak",
+      "published_at": "Sun, 22 Nov 2026 20:58:33 +0000",
+      "candidate_id": 16,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "f: tier3単独ソースで独立2ソース規定の相方が無く、単独では掲載不可"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/",
+      "title": "More on the pending oversight hearings: State of Crypto",
+      "published_at": "Sun, 22 Nov 2026 19:30:00 +0000",
+      "candidate_id": 17,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "f: tier3単独ソースで独立2ソース規定の相方が無く、単独では掲載不可"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/defi/2026-11-22-chainflips-losses-climb-to-12-million-after-protocol-discloses-122-9-btc-theft-offers-hacker-bounty-444829",
+      "title": "Chainflip’s losses climb to $12 million after protocol discloses 122.9 BTC theft, offers hacker bounty",
+      "published_at": "Sun, 22 Nov 2026 18:58:57 +0000",
+      "candidate_id": 18,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "f: tier3候補でID24との重なり係数が独立2ソース規定の閾値に届かず単独では掲載不可"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/opinion/future-onchain-fx-could-start-with-users-not-institutional-liquidity?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "The future of onchain FX could start with users, not institutional liquidity",
+      "published_at": "Sun, 22 Nov 2026 14:30:00 +0000",
+      "candidate_id": 19,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: オンチェーンFXに関する論評・意見記事で、事実報道ではなく独立2ソース規定の対象外"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/tech/2026/11/22/bitcoin-s-quantum-security-challenge-extends-to-bridges-custodians-and-millions-of-coins",
+      "title": "Bitcoin's quantum security challenge extends to bridges, custodians and millions of coins",
+      "published_at": "Sun, 22 Nov 2026 14:00:00 +0000",
+      "candidate_id": 20,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "f: tier3単独ソースで独立2ソース規定の相方が無く、単独では掲載不可（量子耐性に関する解説記事）"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/what-happened-in-crypto-today?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Here’s what happened in crypto today",
+      "published_at": "Sun, 22 Nov 2026 11:25:27 +0000",
+      "candidate_id": 21,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "f: tier3のまとめ記事で、内容が総覧的であり独立2ソース規定の対象外"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/bitcoin-17k-kraken-canadian-dollar-market-trades-stand?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bitcoin briefly drops to $17K on Kraken, exchange upholds trades",
+      "published_at": "Sun, 22 Nov 2026 09:33:06 +0000",
+      "candidate_id": 22,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "f: tier3単独ソースで独立2ソース規定の相方が無く、単独では掲載不可（Kraken一時的な価格異常）"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/upbit-bithumb-suspend-cyber-transfers-bridge-exploit?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "South Korean exchanges halt CYBER transfers amid suspected bridge exploit",
+      "published_at": "Sun, 22 Nov 2026 07:24:05 +0000",
+      "candidate_id": 23,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "f: tier3単独ソースで独立2ソース規定の相方が無く、単独では掲載不可（CYBERブリッジ疑惑）"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/chainflip-12m-crypto-hack-10-percent-bounty?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Chainflip confirms $12M hack, offers attacker 10% bounty",
+      "published_at": "Sun, 22 Nov 2026 05:28:43 +0000",
+      "candidate_id": 24,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "f: tier3候補でID18との重なり係数が独立2ソース規定の閾値に届かず単独では掲載不可"
+    }
+  ],
+  "reusable_for_summary": [],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 0
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 0
+    },
+    "FRB（speeches）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "FRB（testimony）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 0
+    },
+    "米財務省": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "USTR": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "ホワイトハウス": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 0
+    },
+    "ホワイトハウス（大統領令等）": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 0
+    },
+    "ADP": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 2
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 5
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "The Block": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 2
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 50
+    }
+  },
+  "news_candidate_count": 24,
+  "format_normalized": {
+    "part1_points": 0,
+    "part2_flow": 0
+  },
+  "flow_price_fragment": " #BTC +0.98%、 #ETH +1.87%（24時間比）",
+  "part1_md": "【対象日】2026年11月22日（日）\n\n【ヘッドライン】\nReutersによると、イエメンのフーシ派はサウジアラビアのラビグ製油所を攻撃したと主張したと報じられました。被害・影響は未確認です。\n\n【主要なポイント】\n・補足できる検証済み材料は確認できない。\n",
+  "part2_md": "【市場のフロー】\n・【出来事・ニュース】Reutersによると、イエメンのフーシ派はサウジアラビアのラビグ製油所を攻撃したと主張したと報じられました（被害・影響は未確認） → 【地政学・マクロの変化】中東情勢の緊迫化が意識された可能性がある変化として受け止められました → 【暗号通貨価格】 #BTC +0.98%、 #ETH +1.87%（24時間比）で、同時期は小幅な上昇でした。\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは58.61%→30.23%へ低下しました（24時間出来高 -48.39%、TVL +0.06%）。\nBase 0.3%プールの参考APRは157.65%→61.78%へ低下しました（24時間出来高 -60.32%、TVL +1.26%）。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比+1.87%と上昇中のため、USDC偏り・上限側レンジ外・反落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\n暗号通貨市場は総じて落ち着いた地合いとなりましたが、中東情勢を巡る報道の真偽や影響範囲は依然として不透明であり、今後の続報が注目されます。\n",
+  "numeric_record_md": "【対象日】2026年11月22日（日）\n\n【主要指標】\n・市場全体：時価総額 $2.076兆（¥329.5兆）｜24時間取引高 $553.7億（¥8.79兆）\n・ #BTC：$60,720（約963.9万円）｜24時間比 +0.98%\n　（24時間レンジ $58,636〜$61,568）\n・ #ETH：$1,710（約27.1万円）｜24時間比 +1.87%\n　（24時間レンジ $1,645〜$1,730）\n・ #BNB：$555（約8.80万円）｜24時間比 +1.27%\n・市場心理：Fear & Greed 8（Extreme fear、CoinMarketCap API）\n・ドミナンス：BTC 58.85%｜ETH 10.07%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年11月23日07:37 JST、USD/JPY ¥158.75\n\n【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $6.63M vs Base上ETH/USDC $63.21M｜参考：Base上DEX全体 $12.873億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $51.27億（¥8,139億）｜24時間比 +10.16%｜USDCドミナンス 88.2%\n・ ETH/USDC（Base）参考APR：0.05% 30.23%（TVL $10.13M／24h出来高 $16.78M）｜0.3% 61.78%（TVL $82.29M／24h出来高 $46.43M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年11月23日07:37 JST\n"
+}
