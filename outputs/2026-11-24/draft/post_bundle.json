@@ -1,0 +1,638 @@
+{
+  "target_date_jst": "2026-11-24",
+  "level": "L0",
+  "sections": {
+    "part0_target_date": "2026年11月24日（火）",
+    "part1_headline": "CFTC（米商品先物取引委員会）は、スワップ実行施設や清算機関等が財務要件を満たす際にビットコインやイーサ等の暗号資産を一定の割引率のもとで算入できるとするスタッフ勧告を発表しました。",
+    "part1_points": "・Reutersによると、FRB（米連邦準備制度理事会）のウィリアムズ氏はインフレが依然高止まりしており、追加利上げの可能性を示唆したと報じられました（Reuters、11月24日）。\n・Reutersによると、ホルムズ海峡付近でのタンカー攻撃が続く中、原油価格は上昇して取引を終えたと報じられました（Reuters、11月24日）。\n・Cointelegraph・CoinDeskによると、ユタ州は予測市場運営企業Kalshiに対する刑事告発の取り下げに動いたものの、州は再開時の再提訴の構えを維持していると報じられました（Cointelegraph、CoinDesk、11月24日。公式発表は未確認）。\n・Reutersによると、米国は工場の過剰生産能力に関する調査を経て新たな関税措置を発表する見通しだと報じられました（Reuters、11月24日）。",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.057兆（¥327.1兆）｜24時間取引高 $742.0億（¥11.80兆）\n・ #BTC：$59,990（約954.2万円）｜24時間比 -1.81%\n　（24時間レンジ $59,190〜$61,603）\n・ #ETH：$1,685（約26.8万円）｜24時間比 -1.40%\n　（24時間レンジ $1,662〜$1,722）\n・ #BNB：$550（約8.74万円）｜24時間比 -1.13%\n・市場心理：Fear & Greed 9（Extreme fear、CoinMarketCap API）\n・ドミナンス：BTC 58.67%｜ETH 10.01%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年11月25日07:38 JST、USD/JPY ¥159.06",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $7.01M vs Base上ETH/USDC $97.68M｜参考：Base上DEX全体 $12.079億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $49.94億（¥7,944億）｜24時間比 -2.75%｜USDCドミナンス 88.9%\n・ ETH/USDC（Base）参考APR：0.05% 56.40%（TVL $7.11M／24h出来高 $21.97M）｜0.3% 86.53%（TVL $95.80M／24h出来高 $75.71M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年11月25日07:38 JST",
+    "part2_flow": "①【出来事・ニュース】CFTC（米商品先物取引委員会）は、スワップ実行施設や清算機関等が財務要件を満たす際にビットコインやイーサ等の暗号資産を一定の割引率のもとで算入できるとするスタッフ勧告を発表しました（複数媒体、11月24日） → 【暗号通貨価格】 #BTC -1.81%、 #ETH -1.40%（24時間比）で、同時期は軟調な値動きでした。\n②【出来事・ニュース】Reutersによると、FRB（米連邦準備制度理事会）のウィリアムズ氏はインフレが依然高止まりしており、追加利上げの可能性を示唆したと報じられました（Reuters、11月24日） → 【地政学・マクロの変化】金融引き締めの長期化が意識された可能性があります → 【中間市場指標・市場心理】ホルムズ海峡付近でのタンカー攻撃を受けて原油価格が上昇して取引を終えたと報じられ、リスク回避の心理が意識されました → 【暗号通貨価格】 #BTC -1.81%、 #ETH -1.40%（24時間比）で、同時期は軟調な値動きでした。\n③【出来事・ニュース】Reutersによると、米国は工場の過剰生産能力に関する調査を経て新たな関税措置を発表する見通しだと報じられました（Reuters、11月24日） → 【地政学・マクロの変化】通商政策の不確実性が意識された可能性があります → 【暗号通貨価格】 #BTC -1.81%、 #ETH -1.40%（24時間比）で、同時期は軟調な値動きでした。",
+    "lp_comment": "参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは84.54%→56.40%へ低下しました（24時間出来高 -51.97%、TVL -28.00%）。\nBase 0.3%プールの参考APRは112.23%→86.53%へ低下しました（24時間出来高 -10.66%、TVL +15.88%）。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比-1.40%と下落中のため、ETH偏り・下限側レンジ外・下落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "FRB高官による追加利上げ示唆や通商政策を巡る報道が重なり、市場心理はやや慎重な方向に傾いた可能性があります。CFTCの暗号資産担保算入を巡る勧告の実務的な影響については、今後の制度化の進展を見極める必要があります。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "CFTCが暗号資産の財務要件算入を容認",
+  "audit_ledger": [
+    {
+      "source": "FRB",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261124a.htm",
+      "title": "Minutes of the Board's discount rate meetings on October 19 and October 28, 2026",
+      "published_at": "Tue, 24 Nov 2026 19:00:00 GMT",
+      "candidate_id": 1,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: FRB討論金利会合議事録の定例公表で波及経路薄い"
+    },
+    {
+      "source": "OCC",
+      "url": "https://www.occ.gov/news-issuances/news-releases/2026/nr-occ-2026-104.html",
+      "title": "OCC Announces Enforcement Actions for November 2026",
+      "published_at": "24 Nov 2026 16:00:00 -0500",
+      "candidate_id": 2,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: OCC執行措置の個別事案で暗号資産と無関係"
+    },
+    {
+      "source": "OCC",
+      "url": "https://www.occ.gov/news-issuances/news-releases/2026/nr-occ-2026-103.html",
+      "title": "OCC Issues First and Second Quarter 2027 CRA Evaluation Schedule",
+      "published_at": "24 Nov 2026 13:00:00 -0500",
+      "candidate_id": 3,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: CRA評価日程の定例発表で波及経路なし"
+    },
+    {
+      "source": "CFTC",
+      "url": "https://www.cftc.gov/PressRoom/PressReleases/9331-26",
+      "title": "CFTC Staff Issues Advisory Concerning the Use of Crypto Assets to Satisfy Financial Resources Requirements",
+      "published_at": "Mon, 23 Nov 2026 22:00:00 +0000",
+      "candidate_id": 4,
+      "verified_by": "tier1公式発表",
+      "decision": "採用",
+      "reason": "A: CFTCスタッフがBTC・ETH等を財務要件に算入可とする勧告を公式発表、ヘッドライン主題"
+    },
+    {
+      "source": "日本銀行",
+      "url": "https://www.boj.or.jp/finsys/intlact_fs/kisei/kis261124a.htm",
+      "title": "バーゼル銀行監督委員会による議事要旨の公表について",
+      "published_at": "Tue, 24 Nov 2026 17:00:00 +0900",
+      "candidate_id": 5,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: バーゼル委の議事要旨で暗号資産への直接言及なし"
+    },
+    {
+      "source": "日本銀行",
+      "url": "https://www.boj.or.jp/about/organization/policyboard/pb_geppo/pbgp2610.htm",
+      "title": "日本銀行政策委員会月報（令和8年10月号）",
+      "published_at": "Tue, 24 Nov 2026 16:30:00 +0900",
+      "candidate_id": 6,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 日銀政策委員会月報の定例公表"
+    },
+    {
+      "source": "日本銀行",
+      "url": "https://www.boj.or.jp/about/bcp/fso/fso261124a.pdf",
+      "title": "令和8年11月20日からの大雪に係る災害等に対する金融上の措置について（福島県）",
+      "published_at": "Tue, 24 Nov 2026 13:30:00 +0900",
+      "candidate_id": 7,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 大雪災害に関する金融措置で無関係"
+    },
+    {
+      "source": "日本銀行",
+      "url": "https://www.boj.or.jp/statistics/bis/repo/index.htm",
+      "title": "FSBレポ統計の日本分集計結果",
+      "published_at": "Tue, 24 Nov 2026 08:50:00 +0900",
+      "candidate_id": 8,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: レポ統計の定例公表で波及経路なし"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/releases/2026/11/gas-prices-plunge-ahead-of-thanksgiving-just-as-president-trump-predicted/",
+      "title": "Gas Prices Plunge Ahead of Thanksgiving — Just as President Trump Predicted",
+      "published_at": "Tue, 24 Nov 2026 17:18:40 +0000",
+      "candidate_id": 9,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ガソリン価格の広報的発表で波及経路薄い"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/briefings-statements/2026/11/congressional-bills-h-r-1550-h-r-4930-and-h-r-8552-signed-into-law/",
+      "title": "Congressional Bills H.R. 1550, H.R. 4930, and H.R. 8552 Signed into Law",
+      "published_at": "Mon, 23 Nov 2026 23:39:52 +0000",
+      "candidate_id": 10,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 法案署名の内容が暗号資産・マクロと無関係"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/11/expeditious-enforcement-of-capital-sentences-and-the-pursuit-of-justice-for-victims-of-heinous-crimes/",
+      "title": "Expeditious Enforcement of Capital Sentences and the Pursuit of Justice for Victims of Heinous Crimes",
+      "published_at": "Mon, 23 Nov 2026 23:36:12 +0000",
+      "candidate_id": 11,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 死刑執行に関する大統領覚書で無関係"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/fact-sheets/2026/11/fact-sheet-president-donald-j-trump-ensures-expeditious-enforcements-of-capital-sentences-and-the-pursuit-of-justice-for-victims-of-heinous-crimes/",
+      "title": "Fact Sheet: President Donald J. Trump Ensures Expeditious Enforcements of Capital Sentences and the Pursuit of Justice for Victims of Heinous Crimes",
+      "published_at": "Mon, 23 Nov 2026 23:33:57 +0000",
+      "candidate_id": 12,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 候補11と同内容のファクトシートで無関係"
+    },
+    {
+      "source": "ホワイトハウス",
+      "url": "https://www.whitehouse.gov/releases/2026/11/president-trump-stands-with-victims-families-as-newsom-grants-mass-clemency-to-depraved-killers/",
+      "title": "President Trump Stands with Victims’ Families as Newsom Grants Mass Clemency to Depraved Killers",
+      "published_at": "Mon, 23 Nov 2026 22:33:50 +0000",
+      "candidate_id": 13,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 州知事の恩赦に対する声明で無関係"
+    },
+    {
+      "source": "ホワイトハウス（大統領令等）",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/11/expeditious-enforcement-of-capital-sentences-and-the-pursuit-of-justice-for-victims-of-heinous-crimes/",
+      "title": "Expeditious Enforcement of Capital Sentences and the Pursuit of Justice for Victims of Heinous Crimes",
+      "published_at": "Mon, 23 Nov 2026 23:36:12 +0000",
+      "candidate_id": 14,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 候補11と同一の大統領覚書の重複"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxQbU02anladzhtMHNRSjU4cmRGa2o1dHV0RVVVOERwaVdjUU9OdXFXUEw4cEh3TVBuUHBkUXdWSzh5Tl9VRWcybDBGRldhWmhYeXRqVnV6aWE3S2NhVUhZRkhNZV9FcjNrU25UVGhxQ1VLa2J2aHNuRG80RWhuenh5TVI0M25XOGFWOENmQ3FtNlAyRUNMdkM5SVhFZnpNRGRzNVBDSEFQSGJFUQ?oc=5",
+      "title": "Houthis won't seize Aden, Yemeni government forces say - Reuters",
+      "published_at": "Tue, 24 Nov 2026 20:46:15 GMT",
+      "candidate_id": 15,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 優先対象の軍事行動ではなくアデン非制圧の報道で順位外"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxNT2lRbHFjYmphSTFEMlhhRmVYd0dzWklmWmxFZFhMVG41LTJWdEZpNW9oYU5JUy1NS1ZORl80Wml6clJ6UnJOenN2TDBjSUpDbHRlVTdWNWpkdXZGejZwdTM4U1J3UWZyYnUzMzhMSGRKZWFwdjZUSFVLdTlRSWlMVVFtQ05kUDlQVGtEY1FXTHRXQmVfSmgzSndIWGxqZ2NRWXM4WjluTTgyallieG9JOXdISmlacFRUUDFiOUplaUZmNC1vUkJLSzZn?oc=5",
+      "title": "Houthis hit Riyadh's tallest tower, 11 wounded, Saudi Civil defense says - Reuters",
+      "published_at": "Tue, 24 Nov 2026 20:42:15 GMT",
+      "candidate_id": 16,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（順位外）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxQT0ttY1ZZa0d3ajhmMUVZYmhrdHNGd0E4aC0wQWswZzc0UkFrcndsZ3pJUkJQMVF3Rlp0cjdGdkc2bG5XY093OWx6QWdtQVlJMVpRN2QzUUZicGRBZEROT2JUZEdQUTRpWHBpYzNXMVVwN1FQbmZpVmZfTm1leHQzclpZSkdsRk9MWHBzZEpaSlFoVjd0QzZQMnl2SDladHhlTzFmYkhmT2xPSlRTc2o2VmY2ZThoQ0dxbl94NXAxaXFWTHBNb1V6bzhXRTFPQQ?oc=5",
+      "title": "Iraqi PM cracks down on Kurds' control of oilfields, Kurds reject risky move - Reuters",
+      "published_at": "Tue, 24 Nov 2026 19:42:27 GMT",
+      "candidate_id": 17,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: イラク国内のクルド油田統制問題で優先対象外"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxQZmpVNVoyQi1td29TalNHby02a0tSU1ZBMng2Y1BTemxZWkExU2VPLXdTeUpURUtrd1BremtnTG53eDhzeXlwMndrRWdNa1dDTVE5VExXLVpBY251X205UVhSU28xeDc2bjBfMFBiYU5ubGN6NU5YdTJlX1J5amtqaVNEX0VKb1dzaWhqaGNNazZXTkVpOWVBOVFQZXBlX0U1dGx3d1ZBdFptaXZJQmNuc2pFUTRncG9oRndTZTU2WUFIdDhqLUE?oc=5",
+      "title": "Putin says Ukraine hits Russian oil plants despite Trump's requests, promises retaliation - Reuters",
+      "published_at": "Tue, 24 Nov 2026 19:41:02 GMT",
+      "candidate_id": 18,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ロシア・ウクライナの一般的戦況で優先対象外"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxQenFOcnIxTVk4RGhvcVZBTzl5NFpZWGIzWnYtai1QdEVicGl5bjR5N2IzZzUtUVdvdldyMHM3NzVkclUtVl9UZmVrTXZEd0o2Tjh3QWJpemNwaVF3R3JtZzFVQnpGdHppMFM1Tl8zZ1hjNEJ0S2xoRlpjenhXRjR0czItcWRBcEVXZE04VG9qQ2FnYl9GWW1Ydjk2OUFycnVhcm4zeGRCZHVwT1h3aDZXODlaX3Vqdw?oc=5",
+      "title": "WHO chief calls on US to lift oil blockade on Cuba, citing health impact - Reuters",
+      "published_at": "Tue, 24 Nov 2026 19:27:43 GMT",
+      "candidate_id": 19,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: WHOのキューバ石油封鎖解除要請で優先対象外"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxNNklFaE54bEV6OGdKT29ScUxHUlZwRDNyREJ0MzBSZzZGdnptTkVxaXNHeWx2WjFWYVMzMzdMeU92dC1PVmYyZ1BTT3lCTWVRVnJ5ODFEb0NXYWpDd1ZQUlg4bkZ5QVAyck9KQUhMbldjY2FqMmtsZGs3MTFUY0xLZm9wMWRRTFAyS3VvZUZ6Wnk0VzlxTjR3VS1GSkJ1S3VCU2xmZ09FX1E5dUVjTUhfR21wMG1pcktxdGc?oc=5",
+      "title": "Trump administration set to unveil new tariffs after probe on excess factory capacity, sources say - Reuters",
+      "published_at": "Tue, 24 Nov 2026 18:48:05 GMT",
+      "candidate_id": 20,
+      "verified_by": "tier2(Reuters)",
+      "decision": "採用",
+      "reason": "B: Reuters報道の関税発表見通しで通商波及材料として採用"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxPSlNZMXlsT1hncHloZ0owYU5ZTlZmbFVsTlFtSFRNdGNhTVFia0RMVGVEeE4wbHVYalhxWkl1WkdJNzRGajN4cVN2N2N6YU1Kc3N0dWo3RGVRQXBpel9sSUNFNDVRMDYyeHhHczQ0RkVNbnF5d3pBMTAzTVQ3WjZ1cVFvSWZEcnpSSWR1cDl5MElSNm54ek9UbER6ZE51Q1BTT28tR25Ya3A?oc=5",
+      "title": "US consumer confidence jumps to highest level in nearly two years - Reuters",
+      "published_at": "Tue, 24 Nov 2026 17:25:47 GMT",
+      "candidate_id": 21,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（順位外）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxQUHJBa1I4ckctdE9mNTh4RTVHZHdqazBiR0pZVG1iUVlSUl9vWUdvVEJpdHA3ejUxQkxIRnpCeFl4YkY4YjNBU2ZSYnpBYUNWVDEzUXVHbXEwUFgtaFhnUFRxbWdLM2x3UXpwLTdVMFJJdWNkTlZ6RXVLcGhSV0Qxb1dtU3FnUDZZaE5JRWVJRDJfZ0JXNXQtZk9qLUxIU2E5ekE?oc=5",
+      "title": "Narrow majority of Germans oppose military aid to Ukraine in survey - Reuters",
+      "published_at": "Tue, 24 Nov 2026 11:25:47 GMT",
+      "candidate_id": 22,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: 独世論調査で波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxQLTBqVnllWWdXMThBVk1EbTYyUVgwVW9RYTR6TW1faTkwM2R3eV9yRVQ4VUkteFBMbS1TdDRCb2VzZXNCT0kySThGTUg2d3EyalZpMHZrZEltcko1Ui1lTGdlSS1PZUpiQlo1WGlxbG1hclV2NC1pUU5YU01GbjB2R2dPMFZQUVBoSGRBMXBhNnRDZ1JUdURuamtRWkpTdw?oc=5",
+      "title": "AI boom looms over Warsh's Fed as inflation worries grow - Reuters",
+      "published_at": "Tue, 24 Nov 2026 11:25:29 GMT",
+      "candidate_id": 23,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 候補29と同じ事実（FRB高官のインフレ発言）の重複"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxPVzZpMHFTclFHbWV5MGFQbmJCOHhtaS02NUQyVmFmU09tZHVJRXZCeHRNWTFNQ0hVenFvQ1JnS2p0aHd0LVFjRE5KTi0tQkVZdElhcko2YXRmWnpkbGtkc0lJX0JjVGtXSE1TbWwyVklTcHVrSWNaTExxT1hYV3JEdG92Ny03TEFNWEJ0Q1hIY2lReVVlZHhkRS0zUUlkZkFiTHhiV0UwVF9RMVdxS2RlS1pseXBJQ3ZwaDBqak5zd29Hd3NGYW5nNUVfZERkR0pI?oc=5",
+      "title": "COMMENTARY: Middle East crude oil exports trend lower amid fake Iran stalemate - Reuters",
+      "published_at": "Tue, 24 Nov 2026 03:00:49 GMT",
+      "candidate_id": 24,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 中東原油輸出動向の論評で優先対象外"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxQMDQ4RU9qMFd6TWl0WkFDUGVsdk5Gb3Q1dURMcjcwbGxUV3ItdjhZUGdQUTBZOVUyZEZlRzdmSEtjM3EwQTNUam1nRVZNdXFRbmNfeHhpUnNVQjNPbjNyOGtSZHVnNEZmbnpJdC1VdVA5X25rWndhMnZqemNGVWdVU1Y5OE8ybExyT2xLelF6dnZsNkM0OU55b1dKc1NuNF9sWkVGSGZJaUNxLXc4eEdGZTl3LUtFTDFuUUE?oc=5",
+      "title": "Oil settles up $2 as traders weigh continued Hormuz ship attacks - Reuters",
+      "published_at": "Tue, 24 Nov 2026 02:56:00 GMT",
+      "candidate_id": 25,
+      "verified_by": "tier2(Reuters)",
+      "decision": "採用",
+      "reason": "B: Reuters報道のホルムズ海峡タンカー攻撃継続と原油上昇、優先対象に該当"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxOX2lLRXdXdmpCM0FsdHVpNkdYTWttMDRZd294U3VSZGtqczloSEN5N1VfTzBpbjJLZGYwWm55RDlXSmY0b2tod0tBUl9lbkl4TW13VDBuWEVDYjgxamc4anBNdGhtWTdvUUNiYUp5MDlJVU81Sl9qa283bUIzTUNCU0lZZ1VBdXo2UW5hQmoyT191dFpWODY2aldnOVJmRzVaaV9tZDF2U0hKbmRubUg0TllIendaRzg?oc=5",
+      "title": "Gold falls 2% on hawkish Fed bets, US inflation data in focus - Reuters",
+      "published_at": "Tue, 24 Nov 2026 00:57:00 GMT",
+      "candidate_id": 26,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（順位外）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxNVjR1WG9RTVdfSTNnS1RTOWcwVlhpeGMtaUdMZGVIU1I0ZWt1ZlhtQ2F1ODJZOEwxVzB2ZHBYNDIxMkEtdjdMY1Z2X050QjY2VjYwR1VmTDZSbWxiQTNwZ09nZTRHYzdweXEzajYxcnZxTUp3eWdSdEtvX2RMTllnY205N3VoTlJnTEQtOEYySEVHNDZMa0p5bHdPWG9KTUw1Zzg3VnZuVEVGV3czanhjQUJxdDNqTXFvMXlZT1k4bmlQYkJfYXUya0lsbzRoUQ?oc=5",
+      "title": "US eyes Iran as possible culprit in dozens of new cyberattacks against ships, WSJ reports - Reuters",
+      "published_at": "Tue, 24 Nov 2026 00:18:00 GMT",
+      "candidate_id": 27,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: イランのサイバー攻撃疑惑で「誰が・何を」確定せず"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxOMGdtXzJGbG9QYjU5RldwcWlTUHg4bkUtb3hlUmhZcGVJSXQxTmdUakZHR2hsanZaR3BXVVcxVndWWVJudVcyQ3ZFa0ZoLWlRaC1IU2VHN3RNRVFfVGJ3b25EVmV3ZkIwdjNwOUpITFgxZjlRSUhFT2lXdHdOQ2lHZkx5US11VzEtcXZlczh5MkVGOWNoeUhzUHVKQVBmX3ZJQ2tkSFZrRThUWHd1Vm50ZmFzNTlfcE1fSzFNU3BzVkRVcEJPYTdIQw?oc=5",
+      "title": "CFTC staff advisory says crypto can count toward reserves, not liquidity rule - Reuters",
+      "published_at": "Tue, 24 Nov 2026 00:10:00 GMT",
+      "candidate_id": 28,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 候補4と同じ事実（CFTC勧告）の重複"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxNa3lvbHFTMGFKUm9paUJYVzFoQzd1QnQtSzAtTlZmSlFyRW5Sc1hic3p2MVV0VWVrYjFkNDdQZlFTUWMzZGFueG5yMTVMcGhLWUxwQi16Ujk5b2ppMVRWTGowaHlMZDQ4Z19xbWpCQTRFVzFHSHhxeW9kbG80OTVtSEZsb3REX29FRFFPR0xzTnFjYXh6?oc=5",
+      "title": "Fed's Williams says inflation still too high, signals more rate hikes possible - Reuters",
+      "published_at": "Mon, 23 Nov 2026 23:38:48 GMT",
+      "candidate_id": 29,
+      "verified_by": "tier2(Reuters)",
+      "decision": "採用",
+      "reason": "B: Reuters報道のウィリアムズ総裁インフレ高止まり発言を採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/europol-crypto-trail-streaming-piracy-crackdown?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Europol follows $28.5M crypto trail in streaming piracy crackdown",
+      "published_at": "Tue, 24 Nov 2026 21:50:25 +0000",
+      "candidate_id": 30,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（順位外）"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/regulation/2026-11-24-sec-staff-gives-molecule-no-action-relief-scientific-research-tokens-446067",
+      "title": "SEC staff gives Molecule no-action relief for scientific research tokens",
+      "published_at": "Tue, 24 Nov 2026 20:53:14 +0000",
+      "candidate_id": 31,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（順位外）"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/utah-moves-to-dismiss-criminal-charges-against-kalshi-after-trading-halt?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Utah moves to dismiss criminal charges against Kalshi after trading halt",
+      "published_at": "Tue, 24 Nov 2026 20:48:27 +0000",
+      "candidate_id": 32,
+      "verified_by": "独立2ソース(Cointelegraph/CoinDesk)",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: ユタ州のKalshi刑事告発取り下げ動向を独立2ソースで確認、主要なポイントに採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/bitcoin-selloff-weak-demand-forced-liquidations-21shares?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bitcoin sell-off driven by weak demand, forced liquidations: 21Shares",
+      "published_at": "Tue, 24 Nov 2026 19:44:23 +0000",
+      "candidate_id": 33,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（順位外）"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/coldcard-how-security-reviews-missed-bitcoin-wallet-flaw-years?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Coldcard reveals how Bitcoin wallet flaw went undetected for over 5 years",
+      "published_at": "Tue, 24 Nov 2026 19:04:26 +0000",
+      "candidate_id": 34,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（順位外）"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/business/2026-11-24-kraken-krak-early-2027-launch-us-credit-cards-bitcoin-cashback-usdc-collateral-445498",
+      "title": "Payward’s Krak plans early 2027 launch of US credit cards with bitcoin cashback, including one secured by USDC",
+      "published_at": "Tue, 24 Nov 2026 18:35:02 +0000",
+      "candidate_id": 35,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（順位外）"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/cftc-new-prediction-market-rules-firms-seek-us-entry?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "CFTC sets new prediction market rules as more firms seek US entry",
+      "published_at": "Tue, 24 Nov 2026 18:31:42 +0000",
+      "candidate_id": 36,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（順位外）"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/blackrock-launches-tokenized-money-market-fund-stablecoins-hong-kong?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "BlackRock launches tokenized money market fund accepting stablecoins in Hong Kong",
+      "published_at": "Tue, 24 Nov 2026 18:07:22 +0000",
+      "candidate_id": 37,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（順位外）"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/regulation/2026-11-24-rep-raskin-probes-trump-jr-s-firms-investments-polymarket-juul-suspiciously-well-timed-government-favors-446052",
+      "title": "Rep. Raskin probes Trump Jr.’s firm’s investments into Polymarket and Juul over ‘suspiciously well-timed government favors’",
+      "published_at": "Tue, 24 Nov 2026 18:05:03 +0000",
+      "candidate_id": 38,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（順位外）"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/policy/2026/11/24/utah-moves-to-drop-criminal-pursuit-of-kalshi-after-the-firm-halted-services-there",
+      "title": "Utah moves to drop criminal pursuit of Kalshi after the firm halted services there",
+      "published_at": "Tue, 24 Nov 2026 17:50:08 +0000",
+      "candidate_id": 39,
+      "verified_by": "独立2ソース(Cointelegraph/CoinDesk)",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: 候補32と同一事実、ユタ州Kalshi告発取り下げの独立2ソース報道"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/newsletters/data-and-insights/2026-11-24-weve-entered-peak-fear-sky-falls-445476",
+      "title": "We’ve Entered Peak FEAR; SKY Falls",
+      "published_at": "Tue, 24 Nov 2026 17:42:29 +0000",
+      "candidate_id": 40,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: Fear&Greed解説記事で単独tier3のため不採用"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/markets/bitcoin-slides-us-tariff-nerves-anthropic-falls-ipo-price?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bitcoin slides amid US tariff nerves as Anthropic falls below IPO price",
+      "published_at": "Tue, 24 Nov 2026 17:09:11 +0000",
+      "candidate_id": 41,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 単独tier3のビットコイン下落論評で不採用"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/deals/2026-11-24-robinhood-onchain-trading-platform-rialto-funding-446030",
+      "title": "Robinhood co-leads $5 million seed round for onchain trading platform Rialto",
+      "published_at": "Tue, 24 Nov 2026 17:00:02 +0000",
+      "candidate_id": 42,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（順位外）"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/defi/2026-11-24-ansem-denies-involvement-2-57-million-wallet-drain-black-bull-creator-coin-plummets-55-445705",
+      "title": "Ansem denies involvement in $2.57 million wallet drain; Black Bull creator coin plummets 55%",
+      "published_at": "Tue, 24 Nov 2026 16:51:21 +0000",
+      "candidate_id": 43,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 単独tier3のウォレット流出事案で不採用"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/regulation/2026-11-24-europol-operation-binance-coinbase-chainalysis-traces-28-5-million-crypto-illegal-streaming-services-446019",
+      "title": "Europol operation involving Binance, Coinbase and Chainalysis traces more than $28.5 million in crypto behind illegal streaming services",
+      "published_at": "Tue, 24 Nov 2026 16:45:33 +0000",
+      "candidate_id": 44,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: tier1・tier2の裏付けなし単独事例で不採用"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/business/2026-11-24-blackrock-opens-tokenized-money-market-fund-with-100-million-in-assets-to-hong-kong-investors-445524",
+      "title": "BlackRock opens tokenized money market fund with $100 million in assets to Hong Kong investors",
+      "published_at": "Tue, 24 Nov 2026 13:17:35 +0000",
+      "candidate_id": 45,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（順位外）"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/business/2026-11-24-ethereum-treasury-firm-btcs-sells-43-8-million-eth-cut-aave-debt-ceo-says-we-do-not-take-this-lightly-445562",
+      "title": "Ethereum treasury firm BTCS sells $43.8 million in ETH to cut Aave debt, CEO says ‘we do not take this lightly’",
+      "published_at": "Tue, 24 Nov 2026 15:27:50 +0000",
+      "candidate_id": 46,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（順位外）"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/11/24/btcs-sells-more-than-half-its-ether-to-repay-usd43-8-million-in-aave-debt",
+      "title": "BTCS sells more than half its ether to repay $43.8 million in Aave debt",
+      "published_at": "Tue, 24 Nov 2026 10:55:30 +0000",
+      "candidate_id": 47,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 候補46と同一事実の重複"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/south-korea-draft-bill-crypto-innovation-user-protection?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "South Korea proposes bank-led stablecoins, 20% cap on crypto exchange stakes",
+      "published_at": "Tue, 24 Nov 2026 12:04:16 +0000",
+      "candidate_id": 48,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（順位外）"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/regulation/2026-11-24-south-korea-new-crypto-bill-445494",
+      "title": "South Korea’s draft crypto bill sets path for domestic ICOs while capping exchange shareholder stakes at 20%",
+      "published_at": "Tue, 24 Nov 2026 11:25:24 +0000",
+      "candidate_id": 49,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 候補48と同一事実の重複"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/ecosystems/2026-11-24-ethereum-foundation-doubles-protocol-security-team-calls-ai-a-more-urgent-risk-than-quantum-445497",
+      "title": "Ethereum Foundation doubles protocol security team, calls AI a ‘more urgent risk’ than quantum",
+      "published_at": "Tue, 24 Nov 2026 11:53:31 +0000",
+      "candidate_id": 50,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（順位外）"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/ethereum-foundation-doubles-protocol-security-team-amid-ai-quantum-overhaul?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Ethereum Foundation doubles protocol security team ahead of overhaul",
+      "published_at": "Tue, 24 Nov 2026 00:36:26 +0000",
+      "candidate_id": 51,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 候補50と同一事実の重複"
+    }
+  ],
+  "reusable_for_summary": [],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 0
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 1
+    },
+    "FRB（speeches）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "FRB（testimony）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 2
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 1
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 4
+    },
+    "米財務省": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "USTR": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "ホワイトハウス": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 5
+    },
+    "ホワイトハウス（大統領令等）": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 1
+    },
+    "ADP": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 15
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 20
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "The Block": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 19
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 49
+    }
+  },
+  "news_candidate_count": 51,
+  "format_normalized": {
+    "part1_points": 0,
+    "part2_flow": 0
+  },
+  "flow_price_fragment": " #BTC -1.81%、 #ETH -1.40%（24時間比）",
+  "part1_md": "【対象日】2026年11月24日（火）\n\n【ヘッドライン】\nCFTC（米商品先物取引委員会）は、スワップ実行施設や清算機関等が財務要件を満たす際にビットコインやイーサ等の暗号資産を一定の割引率のもとで算入できるとするスタッフ勧告を発表しました。\n\n【主要なポイント】\n・Reutersによると、FRB（米連邦準備制度理事会）のウィリアムズ氏はインフレが依然高止まりしており、追加利上げの可能性を示唆したと報じられました（Reuters、11月24日）。\n・Reutersによると、ホルムズ海峡付近でのタンカー攻撃が続く中、原油価格は上昇して取引を終えたと報じられました（Reuters、11月24日）。\n・Cointelegraph・CoinDeskによると、ユタ州は予測市場運営企業Kalshiに対する刑事告発の取り下げに動いたものの、州は再開時の再提訴の構えを維持していると報じられました（Cointelegraph、CoinDesk、11月24日。公式発表は未確認）。\n・Reutersによると、米国は工場の過剰生産能力に関する調査を経て新たな関税措置を発表する見通しだと報じられました（Reuters、11月24日）。\n",
+  "part2_md": "【市場のフロー】\n①【出来事・ニュース】CFTC（米商品先物取引委員会）は、スワップ実行施設や清算機関等が財務要件を満たす際にビットコインやイーサ等の暗号資産を一定の割引率のもとで算入できるとするスタッフ勧告を発表しました（複数媒体、11月24日） → 【暗号通貨価格】 #BTC -1.81%、 #ETH -1.40%（24時間比）で、同時期は軟調な値動きでした。\n②【出来事・ニュース】Reutersによると、FRB（米連邦準備制度理事会）のウィリアムズ氏はインフレが依然高止まりしており、追加利上げの可能性を示唆したと報じられました（Reuters、11月24日） → 【地政学・マクロの変化】金融引き締めの長期化が意識された可能性があります → 【中間市場指標・市場心理】ホルムズ海峡付近でのタンカー攻撃を受けて原油価格が上昇して取引を終えたと報じられ、リスク回避の心理が意識されました → 【暗号通貨価格】 #BTC -1.81%、 #ETH -1.40%（24時間比）で、同時期は軟調な値動きでした。\n③【出来事・ニュース】Reutersによると、米国は工場の過剰生産能力に関する調査を経て新たな関税措置を発表する見通しだと報じられました（Reuters、11月24日） → 【地政学・マクロの変化】通商政策の不確実性が意識された可能性があります → 【暗号通貨価格】 #BTC -1.81%、 #ETH -1.40%（24時間比）で、同時期は軟調な値動きでした。\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から低下しました。\nBase 0.05%プールの参考APRは84.54%→56.40%へ低下しました（24時間出来高 -51.97%、TVL -28.00%）。\nBase 0.3%プールの参考APRは112.23%→86.53%へ低下しました（24時間出来高 -10.66%、TVL +15.88%）。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比-1.40%と下落中のため、ETH偏り・下限側レンジ外・下落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\nFRB高官による追加利上げ示唆や通商政策を巡る報道が重なり、市場心理はやや慎重な方向に傾いた可能性があります。CFTCの暗号資産担保算入を巡る勧告の実務的な影響については、今後の制度化の進展を見極める必要があります。\n",
+  "numeric_record_md": "【対象日】2026年11月24日（火）\n\n【主要指標】\n・市場全体：時価総額 $2.057兆（¥327.1兆）｜24時間取引高 $742.0億（¥11.80兆）\n・ #BTC：$59,990（約954.2万円）｜24時間比 -1.81%\n　（24時間レンジ $59,190〜$61,603）\n・ #ETH：$1,685（約26.8万円）｜24時間比 -1.40%\n　（24時間レンジ $1,662〜$1,722）\n・ #BNB：$550（約8.74万円）｜24時間比 -1.13%\n・市場心理：Fear & Greed 9（Extreme fear、CoinMarketCap API）\n・ドミナンス：BTC 58.67%｜ETH 10.01%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年11月25日07:38 JST、USD/JPY ¥159.06\n\n【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $7.01M vs Base上ETH/USDC $97.68M｜参考：Base上DEX全体 $12.079億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $49.94億（¥7,944億）｜24時間比 -2.75%｜USDCドミナンス 88.9%\n・ ETH/USDC（Base）参考APR：0.05% 56.40%（TVL $7.11M／24h出来高 $21.97M）｜0.3% 86.53%（TVL $95.80M／24h出来高 $75.71M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年11月25日07:38 JST\n"
+}
