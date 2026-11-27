@@ -1,0 +1,481 @@
+{
+  "target_date_jst": "2026-11-27",
+  "level": "L0",
+  "sections": {
+    "part0_target_date": "2026年11月27日（金）",
+    "part1_headline": "Reutersによると、米国はイランから出航しようとした船舶を無力化し、イラン側は封鎖への対抗を表明したと報じられました。詳しい被害・影響は未確認です。",
+    "part1_points": "・The Block・Cointelegraphによると、イーサリアム開発者らはGlamsterdamアップグレードのHoodiテストネットでの実施を12月15日に予定していると報じられました（The Block、Cointelegraph、11月27日。公式発表は未確認）。\n・CoinDesk・Cointelegraphによると、ブラジルの証券取引所B3は大手金融機関6社と共同でレアル連動のステーブルコインを2027年に開始する計画だと報じられました（CoinDesk、Cointelegraph、11月27日。公式発表は未確認）。",
+    "part1_numeric": "【主要指標】\n・市場全体：時価総額 $2.052兆（¥326.8兆）｜24時間取引高 $729.7億（¥11.62兆）\n・ #BTC：$59,654（約950.2万円）｜24時間比 -1.37%\n　（24時間レンジ $58,700〜$62,140）\n・ #ETH：$1,655（約26.4万円）｜24時間比 -2.29%\n　（24時間レンジ $1,632〜$1,753）\n・ #BNB：$552（約8.79万円）｜24時間比 -0.32%\n・市場心理：Fear & Greed 9（Extreme fear、CoinMarketCap API）\n・ドミナンス：BTC 58.50%｜ETH 9.87%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年11月28日07:37 JST、USD/JPY ¥159.28",
+    "part2_numeric": "【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $9.90M vs Base上ETH/USDC $97.41M｜参考：Base上DEX全体 $9.385億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $46.23億（¥7,364億）｜24時間比 -0.63%｜USDCドミナンス 89.2%\n・ ETH/USDC（Base）参考APR：0.05% 50.48%（TVL $7.01M／24h出来高 $19.38M）｜0.3% 90.16%（TVL $94.77M／24h出来高 $78.04M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年11月28日07:37 JST",
+    "part2_flow": "①【出来事・ニュース】Reutersによると、米国はイランから出航しようとした船舶を無力化し、イラン側は封鎖への対抗を表明したと報じられました（Reuters、11月27日） → 【地政学・マクロの変化】中東情勢の緊迫化が意識された可能性があります → 【暗号通貨価格】 #BTC -1.37%、 #ETH -2.29%（24時間比）で、BTCは一時上値を試す場面もありましたが上げ幅を縮小し、ETHも高値圏から値を崩す展開でした。\n②【出来事・ニュース】The Block・Cointelegraphによると、イーサリアム開発者らはGlamsterdamアップグレードのHoodiテストネットでの実施を12月15日に予定していると報じられました（The Block、Cointelegraph、11月27日。公式発表は未確認） → 【暗号通貨価格】 #BTC -1.37%、 #ETH -2.29%（24時間比）で、ETHは軟調な値動きとなりました。",
+    "lp_comment": "参考APRは両プールとも前日から上昇しました。\nBase 0.05%プールの参考APRは30.26%→50.48%へ上昇しました（24時間出来高 +63.32%、TVL -2.10%）。\nBase 0.3%プールの参考APRは57.04%→90.16%へ上昇しました（24時間出来高 +57.73%、TVL -0.22%）。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比-2.29%と下落中のため、ETH偏り・下限側レンジ外・下落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。",
+    "part2_summary": "地政学リスクへの警戒感から市場心理はやや不透明な状態が続いており、今後の情勢推移が見極めのポイントとなりそうです。米議会での戦略的ビットコイン準備を巡る法案の審議動向も、引き続き注目材料となっています。"
+  },
+  "llm_section_keys": [
+    "part1_headline",
+    "part1_points",
+    "part2_flow",
+    "part2_summary"
+  ],
+  "headline_for_image": "BTC・ETHは一時下落も値を戻す展開",
+  "audit_ledger": [
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/about/press/kaiken_2026/kk261127a.pdf",
+      "title": "【記者会見】田村審議委員（山梨、11月26日分）",
+      "published_at": "Fri, 27 Nov 2026 16:00:00 +0900",
+      "candidate_id": 1,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: summaryが空欄で「誰が・何を」を具体的に書けない手続き的告知"
+    },
+    {
+      "source": "日本銀行",
+      "url": "http://www.boj.or.jp/about/press/koen_2026/ko261127a.htm",
+      "title": "【講演】神山理事「デジタルマネーと決済：新たなパラダイムへの移行」（IMF MCM-OAP Seminar in Tokyo）",
+      "published_at": "Fri, 27 Nov 2026 10:15:00 +0900",
+      "candidate_id": 2,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: summaryが空欄で講演内容の具体的事実を書けない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxPbzhtZElCdnJJN0hCYkdsQ1lTWHc5UDRtNGE4cF9sWE14dlpacmk2blU5cXJMTHp0MGNaMElaQzdSem91dXNpNVRtd1k4ekZza09jVEpubTh3cjlpbE9CNWdMSU1seV9vNDFEeGQ1aDZBY1J1R0JoNVdlcjJaQnlWcU5Ib3ZISHVmNHA4eklQclI2WDIzR0VtNVp0NEJjaDZfcTlKNHRNbW54bGF2TExrR1NaSFJvLUxRcnc?oc=5",
+      "title": "US disables ship trying to leave Iran, as Tehran vows to confront blockade - Reuters",
+      "published_at": "Fri, 27 Nov 2026 20:06:57 GMT",
+      "candidate_id": 3,
+      "verified_by": "Reuters",
+      "decision": "採用",
+      "reason": "B: イラン沖で米国が船舶を無力化しイランが封鎖対抗を主張。海上輸送路関連の優先対象に該当"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxOYmlHdGhKd3RFRUNYajhTdlVqdUdrckt5RmtIZEltNjE0OTVPMDhaSS1DTFlGQTU5Z19LRFpLRmpXdVJkcVpRY19iLU40eXpEWUhYdDNjMXhfRkJqckxleW8tY25rOVJFTzlGeGVaUTlwb1M1NVBXSzQwSG9hX2VQR1JiMVhXYk1mdG01ei1nR1ZmOFY5RWpnejVHRkJSa2RVTHRLeURHS3hCSHJMcGluWG1fQWNjS19wTy1RejVTWE5BMW8?oc=5",
+      "title": "EXCLUSIVE: Russian military flotilla bound for Libya turns around after warship sunk on November 22, sources say - Reuters",
+      "published_at": "Fri, 27 Nov 2026 19:17:56 GMT",
+      "candidate_id": 4,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ロシアの艦隊が引き返したという一般的な軍事動向で、優先して掲載する対象に当たらない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxOdndaSmMtcnZ2OU41SkZNYnNtNlU5ZnRWTFlOamJLb0x6eHRhRHJuQkNMY1oybHlpOUFkRWdncURJcUc0eGZvM2JNZUc4SGdvZG0yeTJFY0llZWJUeGtMRzQxaHFZNmZ0OS1YWFloelk4eDBVenhkQlotREpzR2F1cFgxbkZaT18zRWtGbHd2aTZENWFDMmhKaU13WnpSQkhIaUZGTDZtMFkwa2ZxUjdpTkRfTXRZMkNUcW1FM3hn?oc=5",
+      "title": "Iraq in talks with OPEC for higher oil quota, minister says before OPEC+ meeting - Reuters",
+      "published_at": "Fri, 27 Nov 2026 16:37:43 GMT",
+      "candidate_id": 5,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: OPEC増産協議の見通し記事で、攻撃・封鎖・制裁に当たらず優先対象外"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxNLUh5OURIMC1MRmNIM3pMa2ZMUnBhZjl4TjRVUWl6QTg4Mk9FdXluQWVubzNSOUNMUmROMGdnWGp2Wlp3Y1NxdFdaQ0tubFFoZTVlS3hydlBkcDJUWURvLVZKamppQTlvSm8yYkV0NE5rRlp6TVUtSzNsOUtGYUJtR1pWMl94TjA5UFRta3lPVldBaGtxQm95Wng2UVlwckszVVhaTHFYQ044cjNPQUE?oc=5",
+      "title": "Global diesel market to run into deficit in second quarter of 2027 - Reuters",
+      "published_at": "Fri, 27 Nov 2026 12:25:44 GMT",
+      "candidate_id": 6,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ディーゼル需給見通しの市況解説で、優先して掲載する対象に当たらない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxOejY1RlpWWUNJQ1pHQWZfUkxfU3FybGZPNExUWDB0THc2clVWOU5feklBT3ZFeTFyRm1GQzZRTDdkaVVRVW9id1gtelpiQXJXdXlibjRVZVBYeHJiQVhtbW5aUzlkWl9ZUUdfMlBFTWtqS1NqZ1hYVkZTZ2JQeUVNUnVEaEliOGEtVzAzS08yajNtM3ROQ2I2dXhuTFVQRExZZ2dCVQ?oc=5",
+      "title": "Russia is in contact with US on diesel supply, Novak says - Reuters",
+      "published_at": "Fri, 27 Nov 2026 10:23:43 GMT",
+      "candidate_id": 7,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: ロシア・米国のディーゼル供給協議で、優先して掲載する対象に当たらない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxPQ3FHY0lKeGNiU2dYNEtfT1JlNFBqZDZVUFMwNHJ0WUI2MllTNF84dFprX1hYcG1oZThOeVoya0VXcnZWS2E0MnBXdUtqaXUzRGg2RGw2RHVmeG42VERkUkl5Y2dIRkF3VjUyeHI2XzlxclN1Nmc2ZjBEZUU5SFNId0FCVEdYVmxPWHBzNlVqeWZsQm9SRHE0eU5TSjNyMll1ZTJzSEp5NUtHMHhJWmg3N1pKTl9fdlBQcEtlRUYzcEpTUmZRbjRMSw?oc=5",
+      "title": "Indonesia considers subsidised fuel price hike as fiscal pressure mounts, sources say - Reuters",
+      "published_at": "Fri, 27 Nov 2026 05:48:00 GMT",
+      "candidate_id": 8,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: インドネシアの燃料補助金見直しで、金利・為替・流動性等への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxNNjgyMVEwOUJRYll3NXdiU29vVVlmcGMxc3VhTGdEZ3BaZzZ0bUFtemt1c01oMXhjcHlJMEoxVWppTFV2YU12Qk4xRjlzVTNZaEVyR0dBZGtRNEdvaGhCTHhPY2VEVTUtZUw3a3dGekV4VTZkYmp3ZzFjVmxMRnliRmhwZmJOdkZhS3dBNWVfVkU4SjdObjF4WFY4Mmo4ZDlGWFcxYTZnMmVDUXN3NTVPY2lObHZlRFd0aXhjbTR0NXkwWkFkSHVr?oc=5",
+      "title": "Iran warns on Gulf military presence as South Korea readies expanded naval role - Reuters",
+      "published_at": "Fri, 27 Nov 2026 05:12:00 GMT",
+      "candidate_id": 9,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 候補3と同じ事実（イラン・ホルムズ海峡周辺の緊張）の重複"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxPaktQNmpwalZ6MUN4ZFF0OG14aGVqRVh3OWl5MHlLTHNFd3FJNi10U1I1UGI1bjJqRm15NGR3UXJtcFRKcjZtbmlZZF9tVFdub0N0Zl85RTBodGE0OHFyVWM5M1BESkE5Y1JwRV8xaWc2a1owN05TSUw5aGE2UFMta0l3dURQRllvZkM4NUZ5UGI3dWpZeDFxbDB5enJUWWpfMDJnWll6SGczVXpjanVkMFJ3NzVrdw?oc=5",
+      "title": "Indian central bank lets rupee rise to break one-way bets on depreciation - Reuters",
+      "published_at": "Fri, 27 Nov 2026 04:30:00 GMT",
+      "candidate_id": 10,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: インドルピー相場の中銀対応で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxOYW55b1BZTkM4emFaZmljMEIzZlBhd2duLWJnRlpMaVA1UnBMaXpEQTdYU0JQUF93QWRkMEV0ZHlaUFhJM3JwTkVLSFNQcDhJSW43VEJ3ME9uQmVvaXpaVkV6eG1CWnBISXFncTVTQjI0NElBcUZDTXlNZEw0S0RCSGxFa25EX29sYzJVZHJmREFnckNW?oc=5",
+      "title": "Gold pares gains as Fed-hike risks linger, eyes first weekly rise in three weeks - Reuters",
+      "published_at": "Fri, 27 Nov 2026 03:28:00 GMT",
+      "candidate_id": 11,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（順位外）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxNVDF2UTZXY0ZrSVVuYktpbG1TWVI0aU5wZENOV1Y4YlZZV1NiTmhyeWYxMDB6MGl1cWR3ZllHTWF3YkxIT1BhbDRjQjd6SUZvaTRybUZPZDBtSjMySTlqMVdZMklDWEtKUzI3OGQ4R0l4WjlDcWRNemtmY3dUV25kYThKRVNXWmZ0am4zenFldkZvNk8yWHZQRnMzR0pfUzg1OUxGRlkxMmtIVWtkNEw4aE5rQU5KOGZjOTd0ZFNGcw?oc=5",
+      "title": "Indian shares snap blistering rally after four weeks as oil prices climb - Reuters",
+      "published_at": "Fri, 27 Nov 2026 02:30:00 GMT",
+      "candidate_id": 12,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: インド株式市場の反発記事で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxPTzVQVzE5aGdzbGVhNEUtVl94M0V3RjN5Rks4UDU0U0plazFDcjFnUTBMMHBvdk9BRzFaVHljSXk1ZFdzSjlRTVRXNGZ0cnRyUWRRbFJaRjBsVWNFbDZqSnQ0cHo0TW5fRDlwMWlKWDI3V2ROcnlXczVET1RqSXR6UGtZSTZ0OTQtY1YwaG1yYTRwQnZ6TW43azNGNTFqMmpkNFhtbVJwRnVkVERhR1NnSlFIMzExZw?oc=5",
+      "title": "Oil notches first weekly gain in November on supply fears - Reuters",
+      "published_at": "Fri, 27 Nov 2026 01:55:00 GMT",
+      "candidate_id": 13,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 原油週間上昇の市況解説で、優先して掲載する対象に当たらない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxQQXlld0FmMFoxdUVjNlhmNURVMmZwLXJNcXZrVkhEQWxOLS14ajJFb2VQZzBOOUZKM1Z1VGwzLURERG9lUWdGczh0bTZGTGJqdC00Nk9tYjZLR21iN1ZRbEtmTHhnRFAzV3lYRzVRN2txb3h0TUxoeENQbmNTeHlmN1AtNnBnTE1rYTRnYmxxTXNBUkh1WTdZVHpBN3h2XzNYMXlUaWVLRmlOR051bTIwbE9BWVhJRjRHSWxVd0pXQy1tdnc?oc=5",
+      "title": "IAEA working with Russia, Ukraine on ceasefire to repair power link at Zaporizhzhia nuclear plant - Reuters",
+      "published_at": "Fri, 27 Nov 2026 00:29:00 GMT",
+      "candidate_id": 14,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 原発の停戦修復協議で、優先して掲載する対象に当たらない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxNXzUyQUp1enhRcjVIdWlBejd2XzFsdXVwaFF1SUswaVBuTzBKMkE2cU5GdnVSX2tiMjVIYnQzLXFKN3E2UWZ0bVZkX3dvdjEzaHRQRUdsM1pBOF9vaG0wYWVKZ2JNam5zWXZmT25QcVhPcWIwcDQ5cEx2U3QyQW1LcE43UEpGQVhpMF94bjVid21hYm9YbEZ0UnhBTnhPdlBJRFpzbFhsbWxBNndmeGNjcHptNXhJMnlQNk94TQ?oc=5",
+      "title": "Shoppers look for respite in big Black Friday discounts as inflation bites - Reuters",
+      "published_at": "Fri, 27 Nov 2026 00:03:00 GMT",
+      "candidate_id": 15,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ブラックフライデー商戦の記事で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxNbUU2UTdMSzhabVJEYUYzN1Y1SGk3MWdLeVo4cV9iWDVCd3RZWDVDR2lFZ0dtUTRlUUxxbExIRlJDeGx3dEVVLVBuRU1qaDlrXzd6aHpwUHVWTEhMemE2ZzdaSjROTy1HQUF2dkdDcFhNYWtnMU51a2dsSURKSmlfdjlkTnMzeDdySmZLbWotTnR2clUxR0hrQ255ekNnM3dR?oc=5",
+      "title": "Tokyo core inflation at 16-month high, bolsters case for BOJ hike - Reuters",
+      "published_at": "Thu, 26 Nov 2026 23:42:00 GMT",
+      "candidate_id": 16,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "B: 主要なポイントの順位により上限4項目に入らない（順位外）"
+    },
+    {
+      "source": "Reuters",
+      "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxQY25OMnN4NU9UMkpqZXcxWk5oMkdHRnR3alJpWVZfMnZVOEN2U1k3Z0xkVTdEZTFoSm9KdXExUnVReGhGeDl5SnprUncxOXpzSGpOazRVOEMzREczYzF2ODNaTkh4b2l4Q1dCU1JhekJIVXFNX1J1eTdlNmFpbTVSYU5BRUQwRmZzU3BvMjEyTmhOd3JXZlRjY1cwUjV0LWl0QkhVTVUzQmFKYmlJaEtQdXZORUdnZ25GZnZHcU04UEMtWDg?oc=5",
+      "title": "Brazil's Embraer criticizes new US tariffs, warns of air travel inflation - Reuters",
+      "published_at": "Thu, 26 Nov 2026 22:54:36 GMT",
+      "candidate_id": 17,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "C: ブラジル企業の米関税批判で、暗号通貨市場への波及経路を説明できない"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/franklin-templeton-hype-crypto-index-etf?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Franklin Templeton makes room for HYPE in crypto index ETF",
+      "published_at": "Fri, 27 Nov 2026 21:15:29 +0000",
+      "candidate_id": 18,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f) tier3単独で独立2ソースに該当する組が無い"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/markets/bitcoin-whales-pile-btc-despite-shrinking-profit-cushion?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bitcoin whales pile into BTC despite shrinking profit cushion",
+      "published_at": "Fri, 27 Nov 2026 19:23:00 +0000",
+      "candidate_id": 19,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f) tier3単独で独立2ソースに該当する組が無い"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/markets/2026-11-27-cryptoquant-bitcoin-price-recovery-usdt-supply-growth-447560",
+      "title": "CryptoQuant says bitcoin price recovery needs USDT supply growth",
+      "published_at": "Fri, 27 Nov 2026 18:13:45 +0000",
+      "candidate_id": 20,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f) tier3単独で独立2ソースに該当する組が無い"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/china-march-2027-rollout-blockchain-identity-regulations?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "China sets March 2027 rollout for blockchain identity regulations",
+      "published_at": "Fri, 27 Nov 2026 17:37:23 +0000",
+      "candidate_id": 21,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f) tier3単独で独立2ソースに該当する組が無い"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/markets/bitcoin-price-below-59k-anthropic-tech-stock-rebound?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Bitcoin price drops below $59K as Anthropic joins tech stock rebound",
+      "published_at": "Fri, 27 Nov 2026 16:48:51 +0000",
+      "candidate_id": 22,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f) tier3単独の値動き解説で独立2ソース該当の組が無い"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/business/2026-11-27-tether-buys-10-million-of-bitdeer-shares-as-stock-hovers-near-all-time-low-447554",
+      "title": "Tether buys $10 million of Bitdeer shares as stock hovers near all-time low",
+      "published_at": "Fri, 27 Nov 2026 15:00:21 +0000",
+      "candidate_id": 23,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f) tier3単独で独立2ソースに該当する組が無い"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/what-was-coinbase-worth-while-nasdaq-was-closed?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "What was Coinbase worth while Nasdaq was closed?",
+      "published_at": "Fri, 27 Nov 2026 14:40:54 +0000",
+      "candidate_id": 24,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f) tier3単独の論評記事で独立2ソース該当の組が無い"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/ecosystems/2026-11-27-ai-math-breakthroughs-revive-bitcoin-security-fears-but-practical-threat-remains-unproven-k33-447549",
+      "title": "AI math breakthroughs revive Bitcoin security fears, but practical threat remains unproven: K33",
+      "published_at": "Fri, 27 Nov 2026 14:24:21 +0000",
+      "candidate_id": 25,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f) tier3単独の分析記事で独立2ソース該当の組が無い"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/binance-ipo-program-regulatory-approval-yi-he?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Binance to launch tokenized IPO program after regulatory approval: Yi He",
+      "published_at": "Fri, 27 Nov 2026 13:44:00 +0000",
+      "candidate_id": 26,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f) tier3単独で独立2ソースに該当する組が無い"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/11/27/kalshi-turns-to-small-businesses-as-legal-battles-threaten-forecasts-on-sports",
+      "title": "Kalshi turns to small businesses as legal battles threaten forecasts on sports",
+      "published_at": "Fri, 27 Nov 2026 13:19:10 +0000",
+      "candidate_id": 27,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f) tier3単独で独立2ソースに該当する組が無い"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/brazil-b3-stablecoin-tokenization-launch-2027?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Brazil’s stock exchange pushes stablecoin launch back to 2027",
+      "published_at": "Fri, 27 Nov 2026 12:39:54 +0000",
+      "candidate_id": 28,
+      "verified_by": "Cointelegraph, CoinDesk",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: B3のレアル連動ステーブルコイン計画をCointelegraphとCoinDeskが共に報道。独立2ソース規定に該当"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/austria-supervised-crypto-firms-report-204b-h1-volume?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Austria-supervised crypto firms report 20.4B euros in H1 trading volume",
+      "published_at": "Fri, 27 Nov 2026 12:20:00 +0000",
+      "candidate_id": 29,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f) tier3単独で独立2ソースに該当する組が無い"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/daybook-us/2026/11/27/bitcoin-death-cross-is-coming-here-s-what-happened-after-previous-13",
+      "title": "Bitcoin 'death cross' is coming. Here's what happened after previous 13.",
+      "published_at": "Fri, 27 Nov 2026 12:16:07 +0000",
+      "candidate_id": 30,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f) tier3単独の分析記事で独立2ソース該当の組が無い"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/markets/2026/11/27/bitcoin-on-course-to-end-seven-week-losing-streak-while-trailing-stock-rebound",
+      "title": "Bitcoin on course to end seven-week losing streak while trailing stock rebound",
+      "published_at": "Fri, 27 Nov 2026 11:45:47 +0000",
+      "candidate_id": 31,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f) tier3単独の値動き解説で独立2ソース該当の組が無い"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/tech/2026/11/27/live-news-bitcoin-rebounds-above-usd61-000-as-ai-stocks-lead-premarket-gains",
+      "title": "Live updates: Bitcoin's Thanksgiving gains prove fleeting",
+      "published_at": "Fri, 27 Nov 2026 11:34:37 +0000",
+      "candidate_id": 32,
+      "verified_by": "",
+      "decision": "不採用",
+      "reason": "(f) tier3単独の値動き速報で独立2ソース該当の組が無い"
+    },
+    {
+      "source": "CoinDesk",
+      "url": "https://www.coindesk.com/business/2026/11/27/brazil-s-stock-exchange-teams-up-with-major-banks-to-launch-real-pegged-stablecoin",
+      "title": "Brazil’s stock exchange teams up with major banks to launch real-pegged stablecoin",
+      "published_at": "Fri, 27 Nov 2026 10:51:27 +0000",
+      "candidate_id": 33,
+      "verified_by": "CoinDesk, Cointelegraph",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: B3のレアル連動ステーブルコイン計画をCoinDeskとCointelegraphが共に報道。独立2ソース規定に該当"
+    },
+    {
+      "source": "The Block",
+      "url": "https://www.theblock.co/news/ecosystems/2026-11-27-ethereum-devs-schedule-glamsterdam-upgrade-hoodi-447051",
+      "title": "Ethereum devs schedule Glamsterdam upgrade for Hoodi testnet on Dec. 15",
+      "published_at": "Fri, 27 Nov 2026 07:51:14 +0000",
+      "candidate_id": 34,
+      "verified_by": "The Block, Cointelegraph",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: イーサリアムGlamsterdamアップグレードのHoodiテストネット実施予定をThe BlockとCointelegraphが共に報道。独立2ソース規定に該当"
+    },
+    {
+      "source": "Cointelegraph",
+      "url": "https://cointelegraph.com/news/ethereum-devs-set-glamsterdams-hoodi-rollout-for-mid-december-after-delays?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "title": "Ethereum devs set Glamsterdam’s Hoodi rollout for mid-December after delays",
+      "published_at": "Fri, 27 Nov 2026 04:47:36 +0000",
+      "candidate_id": 35,
+      "verified_by": "Cointelegraph, The Block",
+      "decision": "採用（独立2ソース）",
+      "reason": "A: 同上のGlamsterdamアップグレード日程をCointelegraphとThe Blockが共に報道。独立2ソース規定に該当"
+    }
+  ],
+  "reusable_for_summary": [
+    "米議会では、トランプ政権の戦略的ビットコイン準備を法制化する法案が下院委員会を通過したと報じられています（CoinDesk、11月26日）。",
+    "イエメンのフーシ派はサウジアラビアの製油所を攻撃したと主張しており、原油価格への影響が注目されています（Reuters、11月25日）。"
+  ],
+  "news_source_status": {
+    "SEC": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 0
+    },
+    "FRB": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 0
+    },
+    "FRB（speeches）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "FRB（testimony）": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "BLS": {
+      "status": "failed",
+      "detail": "HTTP 403"
+    },
+    "OCC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CFTC": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "金融庁": {
+      "status": "ok",
+      "raw_count": 15,
+      "kept_count": 0
+    },
+    "日本銀行": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 2
+    },
+    "米財務省": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "USTR": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "ホワイトハウス": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 0
+    },
+    "ホワイトハウス（大統領令等）": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 0
+    },
+    "ADP": {
+      "status": "ok",
+      "raw_count": 10,
+      "kept_count": 0
+    },
+    "CoinDesk": {
+      "status": "ok",
+      "raw_count": 25,
+      "kept_count": 13
+    },
+    "Cointelegraph": {
+      "status": "ok",
+      "raw_count": 30,
+      "kept_count": 17
+    },
+    "Cointelegraph Japan": {
+      "status": "failed",
+      "detail": "HTTP 410"
+    },
+    "The Block": {
+      "status": "ok",
+      "raw_count": 20,
+      "kept_count": 7
+    },
+    "Google News (Reuters検索)": {
+      "status": "ok",
+      "raw_count": 50,
+      "kept_count": 50
+    }
+  },
+  "news_candidate_count": 35,
+  "format_normalized": {
+    "part1_points": 0,
+    "part2_flow": 0
+  },
+  "flow_price_fragment": " #BTC -1.37%、 #ETH -2.29%（24時間比）",
+  "part1_md": "【対象日】2026年11月27日（金）\n\n【ヘッドライン】\nReutersによると、米国はイランから出航しようとした船舶を無力化し、イラン側は封鎖への対抗を表明したと報じられました。詳しい被害・影響は未確認です。\n\n【主要なポイント】\n・The Block・Cointelegraphによると、イーサリアム開発者らはGlamsterdamアップグレードのHoodiテストネットでの実施を12月15日に予定していると報じられました（The Block、Cointelegraph、11月27日。公式発表は未確認）。\n・CoinDesk・Cointelegraphによると、ブラジルの証券取引所B3は大手金融機関6社と共同でレアル連動のステーブルコインを2027年に開始する計画だと報じられました（CoinDesk、Cointelegraph、11月27日。公式発表は未確認）。\n",
+  "part2_md": "【市場のフロー】\n①【出来事・ニュース】Reutersによると、米国はイランから出航しようとした船舶を無力化し、イラン側は封鎖への対抗を表明したと報じられました（Reuters、11月27日） → 【地政学・マクロの変化】中東情勢の緊迫化が意識された可能性があります → 【暗号通貨価格】 #BTC -1.37%、 #ETH -2.29%（24時間比）で、BTCは一時上値を試す場面もありましたが上げ幅を縮小し、ETHも高値圏から値を崩す展開でした。\n②【出来事・ニュース】The Block・Cointelegraphによると、イーサリアム開発者らはGlamsterdamアップグレードのHoodiテストネットでの実施を12月15日に予定していると報じられました（The Block、Cointelegraph、11月27日。公式発表は未確認） → 【暗号通貨価格】 #BTC -1.37%、 #ETH -2.29%（24時間比）で、ETHは軟調な値動きとなりました。\n\n【LP運用者向けに一言】\n参考APRは両プールとも前日から上昇しました。\nBase 0.05%プールの参考APRは30.26%→50.48%へ上昇しました（24時間出来高 +63.32%、TVL -2.10%）。\nBase 0.3%プールの参考APRは57.04%→90.16%へ上昇しました（24時間出来高 +57.73%、TVL -0.22%）。\nなお参考APRはプール全体の単純年率換算であり、個別ポジションの実現収益とは異なります。\nETHは24時間比-2.29%と下落中のため、ETH偏り・下限側レンジ外・下落耐性を確認してください。\nV3では価格が設定レンジを外れると手数料が発生しません。\nAPR単独ではレンジ幅を判断できないため、出来高の持続性・レンジ外リスク・ILとあわせた確認が必要です。\n\n【総括】\n地政学リスクへの警戒感から市場心理はやや不透明な状態が続いており、今後の情勢推移が見極めのポイントとなりそうです。米議会での戦略的ビットコイン準備を巡る法案の審議動向も、引き続き注目材料となっています。\n",
+  "numeric_record_md": "【対象日】2026年11月27日（金）\n\n【主要指標】\n・市場全体：時価総額 $2.052兆（¥326.8兆）｜24時間取引高 $729.7億（¥11.62兆）\n・ #BTC：$59,654（約950.2万円）｜24時間比 -1.37%\n　（24時間レンジ $58,700〜$62,140）\n・ #ETH：$1,655（約26.4万円）｜24時間比 -2.29%\n　（24時間レンジ $1,632〜$1,753）\n・ #BNB：$552（約8.79万円）｜24時間比 -0.32%\n・市場心理：Fear & Greed 9（Extreme fear、CoinMarketCap API）\n・ドミナンス：BTC 58.50%｜ETH 9.87%\n・出典・取得時刻：CoinMarketCap API／ExchangeRate-API、2026年11月28日07:37 JST、USD/JPY ¥159.28\n\n【主要指標（詳細）】\n・国内大手2社とBase上ETH/USDCの比較（24時間出来高・参考値）：\n国内2社のETH/JPY現物 $9.90M vs Base上ETH/USDC $97.41M｜参考：Base上DEX全体 $9.385億｜集計範囲・市場構造・取得時刻が異なるため、優劣や倍率の評価は行いません\n・Baseチェーン：TVL $46.23億（¥7,364億）｜24時間比 -0.63%｜USDCドミナンス 89.2%\n・ ETH/USDC（Base）参考APR：0.05% 50.48%（TVL $7.01M／24h出来高 $19.38M）｜0.3% 90.16%（TVL $94.77M／24h出来高 $78.04M）※24時間データの単純年率換算\n・出典・取得時刻：CoinMarketCap API／GeckoTerminal／DefiLlama／ExchangeRate-API／bitFlyer公式API／Coincheck公式API、2026年11月28日07:37 JST\n"
+}
